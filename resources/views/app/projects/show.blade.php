@@ -96,40 +96,6 @@
                               </li>
                             @endforeach
                           </ul>
-
-                          {{-- <table class="table">
-                            <thead>
-                              <tr>
-                                <th>No</th>
-                                <th>Sub Task Name</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @foreach ($task->subtask as $subtask)
-                                <tr>
-                                  <td></td>
-                                  <td>
-                                    {{ $subtask->task_name }}<br>
-                                    <span class="badge bg-primary">{{ \Helper::date($subtask->task_start_date) }}</span>
-                                    <span class="badge bg-primary">{{ \Helper::date($subtask->task_end_date) }}</span>
-                                    @if ($subtask->contract->count() > 0)
-                                      <span class="badge bg-warning">{{ $subtask->contract->count() }} สัญญา</span>
-                                    @endif
-                                  </td>
-                                  <td class="text-end">
-                                    <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary text-white"><i class="cil-folder-open "></i></a>
-                                    <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning text-white"> <i class="cil-cog"></i> </a>
-                                    <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
-                                      @method('DELETE')
-                                      @csrf
-                                      <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
-                                    </form>
-                                  </td>
-                                </tr>
-                              @endforeach
-                            </tbody>
-                          </table> --}}
                         @endif
                       </td>
                       <td>
