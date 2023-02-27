@@ -74,7 +74,7 @@ class Taskscon extends Model
     }
 
 
-    public function taskc()
+    public function taskcon()
     {
         return $this->belongsToMany('App\Models\contrast', 'contract_has_taskscon', 'taskcon_id', 'task_id');
     }

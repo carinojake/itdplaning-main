@@ -7,6 +7,8 @@
             <x-card title="สัญญาทั้งหมด">
               <x-slot:toolbar>
                 <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
+                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
+
               </x-slot:toolbar>
 
               <table class="table table-responsive-sm table-striped" id="datatables">

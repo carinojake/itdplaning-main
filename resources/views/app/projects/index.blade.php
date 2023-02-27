@@ -6,7 +6,7 @@
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="โครงการทั้งหมด">
               <x-slot:toolbar>
-
+                <a href="{{ route('project.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
               </x-slot:toolbar>
               <table class="table table-responsive-sm table-striped" id="datatables">
                 <thead>

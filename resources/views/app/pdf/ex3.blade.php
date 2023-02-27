@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="{{ asset('bootstrap3/css/custom-bootstrap.min.css') }}" />
+    <title>Ex3</title>
     <style>
         @font-face {
             font-family: 'THSarabunNew';
@@ -105,26 +106,20 @@
                 <th class="text-center">หมายเหตุ</th>
             </tr>
         </thead>
-
         @php
-            $combined = array_combine($project->pluck('id')->toArray(), $taskcosttotals->pluck('total_cost')->toArray());
+$combined = array_combine($project->pluck('id')->toArray(), $taskcosttotals->pluck('total_cost')->toArray());
         @endphp
         @foreach ($project as $p)
             <tr>
                 <td class="text-center">{{ $p->id }}</td>
-                <td class="text-center">{{ $p->name }}</td>
+                <td class="text-center">{{ $p->text }}</td>
                 <td class="text-center">{{ number_format($p->total_budgot, 2, '.', ',') }}</td>
-                <td class="text-center">{{ number_format($combined[$p->id], 2, '.', ',') ?? 0 }}</td>
-
-                <td class="text-center">{{ $p->total_budgot != 0 ? round($combined[$p->id] / $p->total_budgot * 100,2)  : 0 }}%</td>
+                <td class="text-center">{{ number_format($p->total_budgot, 2, '.', ',') }}</td>
+                <td class="text-center">{{ number_format($p->total_budgot, 2, '.', ',') }}</td>
                 <td class="text-center">{{ $p->year }}</td>
                 <td class="text-center"></td>
             </tr>
-
         @endforeach
-
-
-
     </table>
 </body>
 

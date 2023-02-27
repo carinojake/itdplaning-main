@@ -106,7 +106,7 @@
                     <?php
                     echo isset($duration_p) && $duration_p < 3
                     ? '<span style="color:red;">'.$duration_p.'</span>'
-              : '<span style="color:green;">'.$duration_p.'</span>';
+              : '<span style="color:rgb(5, 255, 5);">'.$duration_p.'</span>';
                     ?> เดือน
 
 

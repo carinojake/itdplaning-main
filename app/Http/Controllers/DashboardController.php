@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\ContractHasTask;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Mail\Mailables\Content;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,6 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-
       ($contracts = Contract::where('contract_fiscal_year',2566)->count());
         $projects  = Project::where('project_fiscal_year', 2566)->count();
         ($project_type_j  = Project::where('project_type', 'J')->where('project_fiscal_year', 2566)->count());
@@ -54,20 +54,9 @@ class DashboardController extends Controller
         ($budgetsgov =  Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
         ($budgetsict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
 
-        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
-        ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
+      ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
+       ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
         ($budgetsut  = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
-
-
-
-
-
-
-
-
-
-
-
         ///จ่ายงบict
         ($taskcostict = DB::table('tasks')
             ->selectRaw('sum(
@@ -212,7 +201,7 @@ as c')
 
 
 
-        ($project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
+        ($project_groupby= Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
             + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budgot')
             ->where('project_fiscal_year', 2566)
@@ -222,7 +211,7 @@ as c')
             ->toJson(JSON_NUMERIC_CHECK));
 
 
-        ($taskcosttotals = DB::table('tasks')
+      ($taskcosttotals = DB::table('tasks')
             ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
             + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
             + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
@@ -235,25 +224,49 @@ as c')
         );
 
 
+// Calculate total budget by fiscal year and reguiar_id
+$project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
+            sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
+            + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
+            ->where('project_fiscal_year', 2566)
+            ->groupBy('reguiar_id')
+            ->orderBy('reguiar_id', 'ASC')
+            ->get()
+            ->toJson(JSON_NUMERIC_CHECK);
+
+// Calculate total cost by fiscal year and reguiar_id
+$costtotals = DB::table('tasks')
+            ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
+            + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
+            + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
+             as total_cost')
+            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->where('project_fiscal_year', 2566)
+            ->groupBy('reguiar_id')
+            ->get()
+            ->toJson(JSON_NUMERIC_CHECK);
+
+// Calculate percentage value for each reguiar_id
+  ($taskcosttotals2 = collect(json_decode($costtotals, true))->map(function ($item) use ($project_groupby_reguiar) {
+            $total_budget = collect(json_decode($project_groupby_reguiar, true))->where('fiscal_year_b', $item['fiscal_year_b'])->pluck('total_budget')->first();
+            $percentage = $total_budget != 0 ? round($item['total_cost'] / $total_budget * 100, 2) : 0;
+            return array_merge($item, ['percentage' => $percentage]);
+        }));
+
+        // Convert the result to JSON format
+ ($taskcosttotals2_json = $taskcosttotals2->toJson(JSON_NUMERIC_CHECK));
 
 
 
 
-        ($total_ut = $budgetsut - $coats_ut);
+
+
+
+
+       ($total_ut = $budgetsut - $coats_ut);
         ($total_budgets = $budgets - $coats);
-
         $total_ict = $budgetscentralict - $coats_ict;
-
-
-
         $total_inv = $budgetsinvestment - $coats_inv;
-
-
-
-
-
-
-
 
 
 
@@ -262,32 +275,16 @@ as c')
         //+ COALESCE(task_cost_it_operating,0) + COALESCE(task_cost_it_investment,0)) as total')
         //->GroupBy('project_id')
         //->get()->toJson());
-
-
-
-
-
-
-
         //  $project = Project::get()->toArray();
-
-
-
 
         $project =  Project::where('project_fiscal_year', 2566)->get();
         foreach ($project as $project) {
-
-
-
             ((int) $__budget_gov = (int) $project['budget_gov_operating'] + (int) $project['budget_gov_utility'] + (int) $project['budget_gov_investment']);
             ((int) $__budget_it  = (int) $project['budget_it_operating'] + (int) $project['budget_it_investment']);
             ((int) $__budget    = $__budget_gov + $__budget_it);
             (int) $__cost       = (int) $project['project_cost'];
             (int) $__balance    = $__budget + (int) $project['project_cost'];
             $__project_cost     = [];
-
-
-
             $gantt[] = [
                 'id'                    => $project['project_id'],
                 'text'                  => $project['project_name'],
@@ -307,22 +304,11 @@ as c')
                 'project_fiscal_year'   => $project['project_fiscal_year'],
 
             ];
-
-
-
-
-
             ($budget['total'] = $__budget);
-
             foreach ($project->task as $task) {
-
                 (int) $__budget_gov = (int) $task['task_budget_gov_operating'] + (int) $task['task_budget_gov_utility'] + (int) $task['task_budget_gov_investment'];
                 (int) $__budget_it  = (int) $task['task_budget_it_operating'] + (int) $task['task_budget_it_investment'];
                 (int) $__budget     = $__budget_gov + $__budget_it;
-
-
-
-
                 (int) $__cost = array_sum([
                     $task['task_cost_gov_operating'],
                     $task['task_cost_gov_investment'],
@@ -330,10 +316,7 @@ as c')
                     $task['task_cost_it_operating'],
                     $task['task_cost_it_investment'],
                 ]);
-
-
                 (int) $__balance = $__budget - $__cost;
-
                 $gantt[] = [
                     'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                     'text'                  => $task['task_name'],
@@ -349,9 +332,7 @@ as c')
                     'budget_it_operating'   => $task['task_budget_it_operating'],
                     'budget_it_investment'  => $task['task_budget_it_investment'],
                     'budget_it'             => $__budget_it,
-
                     'budget'                => $__budget,
-
                     'cost'                  => $__cost,
                     'balance'               => $__balance,
 
@@ -362,28 +343,10 @@ as c')
 
                 $__project_cost[] = $__cost;
             }
-
-
-
             //    $gantt[0]['cost']    = array_sum($__project_cost);
-
-
-
-
-
             $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
-
-
             ($budget['cost']    = $gantt[0]['cost']);
             $budget['balance'] = $gantt[0]['balance'];
-
-
-
-
-
-
-
-
             // $tasks = Task::get()->toArray();
             // foreach($tasks as $task) {
             //     // (Int) $__budget_gov = (Int) $project['budget_gov_operating'] + (Int) $project['budget_gov_utility'] + (Int) $project['budget_gov_investment'];
@@ -414,17 +377,41 @@ as c')
         }
 
         // dd ($costsum = ($__project_cost))  ;
-
-
-
-
-
         $gantt = json_encode($gantt);
+
+        $contractsstart = Contract::all();
+
+        foreach ($contractsstart as $contractdr) {
+            $start_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_start_date);
+            $end_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_end_date);
+           ($duration = $end_date->diff($start_date)->days);
+
+
+            ($duration_p =  \Carbon\Carbon::parse($contractdr->contract_end_date)
+            ->diffInMonths(\Carbon\Carbon::parse($contractdr->contract_start_date))
+                    -  \Carbon\Carbon::parse($contractdr->contract_start_date)
+                    ->diffInMonths(\Carbon\Carbon::parse())) ;
+            // do something with $duration and $duration_p
+        ($contractsstart = Contract::paginate(10));
+
+
+
+
+
+
+
 
 
         return view(
             'app.dashboard.index',
             compact(
+
+                'taskcosttotals2_json',
+                'taskcosttotals2',
+                'project_groupby',
+                'duration_p',
+                'contractsstart',
+
                 'project_type_p',
                 'project_type_j',
                 'total_ict',
@@ -462,4 +449,5 @@ as c')
             )
         );
     }
+}
 }

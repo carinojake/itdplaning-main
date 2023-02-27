@@ -41,42 +41,42 @@
         }
 
         body {
-            border: 1px solid black;
-            font-family: 'THSarabunNew';
-        }
 
-        h1 {
-            color: red;
-            font-family: 'THSarabunNew';
-            text-align: center;
-        }
+font-family: 'THSarabunNew';
+}
 
-        img {
-            width: 150px;
-            height: 30px;
-        }
+h1 {
+color: red;
+font-family: 'THSarabunNew';
+text-align: center;
+font-size: 16;
+}
 
-        .my-text {
-            text-align: justify;
-            word-spacing: -0.15em;
-            line-height: 1;
-            text-indent: 24px;
-        }
 
-        .page-break {
-            page-break-after: always;
-        }
+h2 {
+font-family: 'thsarabunnew';
+font-weight: bold;
+font-size: 30px;
+color: orange;
+margin: 10px;
+text-align: center;
+}
 
-        #customer-table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 24px;
-        }
+table {
+border-collapse: collapse;
+width: 100%;
+}
 
-        #customer-table th,
-        #customer-table td {
-            border: 1px solid black;
-        }
+table td {
+border: 1px solid black;
+padding: 8x;
+}
+
+table th {
+border: 1px solid black;
+text-align: center;
+font-size: 16;
+}
 
     </style>
 </head>
@@ -88,16 +88,47 @@
     <table class="table table-bordered">
         <thead style="border-top: 1px solid #ddd">
             <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center">CODE</th>
+                <th class="text-center">เลขที่สัญญา</th>
+                <th class="text-center">ชื่อบริษัทฯ /  ห้างหุ้นส่วนฯ</th>
+                <th class="text-center">วิธีการ</th>
+                <th class="text-center">รายละเอียดการทำสัญญา</th>
+                <th class="text-center">ลำดับแผนงาน<b>โครงการ</th>
+                <th class="text-center">  ประเภทงาน</th>
+                <th class="text-center">MM บันทึกข้อความ</th>
+                <th class="text-center">เลขที่ PR</th>
+                <th class="text-center">จำนวนเงิน PR</th>
+                <th class="text-center">เลขที่ PA</th>
+                <th class="text-center">จำนวนเงิน PA</th>
+                <th class="text-center">CN</th>
+                <th class="text-center">เริ่ม-สิ้นสุดสัญญา</th>
+                <th class="text-center">สถานะ</th>
+                <th class="text-center">ลงนามสัญญา</th>
+                <th class="text-center">ตรวจรับ(งวด)</th>
+                <th class="text-center">ระยะเวลารับประกัน (ปี)</th>
+                <th class="text-center">ลำดับที่แผนงานฯ</th>
+                <th class="text-center">งวดงาน</th>
 
             </tr>
         </thead>
         @foreach ($contract as $contract)
             <tr>
-                <td class="text-center">{{ $contract->contract_id }}</td>
 
-                <td>{{ $contract->contract_name }}</td>
+                <td>{{ $contract->contract_number }}</td>
+                <td>{{ $contract->contract_juristic_id }}</td>
+                <td>{{ $contract->contract_type }}</td>
+                <td>{{ $contract->contract_description }}</td>
+                <td>{{ $contract->contract_type }}</td>
+                <td>{{ $contract->contract_type }}</td>
+                <td>{{ $contract->contract_mm }}</td>
+
+                <td>{{ $contract->contract_pr }}</td>
+                <td>{{ $contract->contract_pr_budget }}</td>
+                <td>{{ $contract->contract_pa }}</td>
+                <td>{{ $contract->contract_pa_budget }}</td>
+                <td>{{ $contract->contract_order_no }}</td>
+                <td>{{ \Helper::date($contract->contract_start_date) }}-{{ \Helper::date($contract->contract_end_date) }}</td>
+                <td>{{ $contract->contract_sign_date ? \Helper::date($contract->contract_sign_date) : '' }}</td>
+                <td>{{ $contract->contract_projectplan }}</td>
             </tr>
         @endforeach
     </table>
@@ -111,6 +142,7 @@
                         $size = 10;
                         $font = $fontMetrics->getFont("THSarabunNew");
                         $width = $fontMetrics->get_text_width($text, $font, $size) / 2;
+
 
                         // old footer
                         /*$x = ($pdf->get_width() - $width) / 2;

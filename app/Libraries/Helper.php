@@ -66,6 +66,13 @@ class Helper
         $timestamp = strtotime($date);
         return date( $timestamp);
     }
+
+    public static function Date3(String $date)
+    {
+        return ( $date);
+    }
+
+
     public static function Attachment(Object $attachment)
     {
         switch ($attachment->file_extension) {
