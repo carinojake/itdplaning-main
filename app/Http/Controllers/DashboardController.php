@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-      ($contracts = Contract::where('contract_fiscal_year',2566)->count());
+        ($contracts = Contract::where('contract_fiscal_year', 2566)->count());
         $projects  = Project::where('project_fiscal_year', 2566)->count();
         ($project_type_j  = Project::where('project_type', 'J')->where('project_fiscal_year', 2566)->count());
         ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', 2566)->count());
@@ -54,8 +54,8 @@ class DashboardController extends Controller
         ($budgetsgov =  Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
         ($budgetsict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
 
-      ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
-       ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
+        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
+        ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
         ($budgetsut  = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
         ///จ่ายงบict
         ($taskcostict = DB::table('tasks')
@@ -76,6 +76,16 @@ class DashboardController extends Controller
         ($b = $json[0]->b);
         ($coats_ict = (float) $b);
 
+        ///จ่ายงบict หลัก pa
+        ($taskconcostict = DB::table('taskcons')
+            ->selectRaw('sum(
+  COALESCE(taskcon_cost_it_operating, 0)
+  + COALESCE(taskcon_cost_gov_operating, 0)) as b')
+            ->get()
+            ->toJson());
+        ($json = json_decode($taskconcostict));
+        ($b = $json[0]->b);
+        ($coatcons_ict = (float) $b);
 
 
         //จ่ายงบดำการดำเนิน
@@ -97,7 +107,25 @@ as c')
         ($json = json_decode($taskcostinvestment));
         ($c = $json[0]->c);
         ($coats_inv = (float) $c);
+        //pa
+        ($taskconcostinvestment = DB::table('taskcons')
+            ->selectRaw('sum(COALESCE(taskcon_cost_it_investment, 0)
++ COALESCE(taskcon_cost_gov_investment, 0))
 
+as c')
+            //->whereExists(
+            //  function ($query) {
+            //    $query->select('*')
+            //      ->from('projects')
+            //    ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+            //  ->GroupBy('reguiar_id');
+            //}
+            //)
+            ->get()
+            ->toJson());
+        ($json = json_decode($taskconcostinvestment));
+        ($c = $json[0]->c);
+        ($coatcons_inv = (float) $c);
 
 
         ///////////////////
@@ -120,6 +148,28 @@ as c')
         ($c = $json[0]->c);
         ($coats_gov = (float) $c);
 
+
+
+
+        ($taskconcostgov = DB::table('taskcons')
+            ->selectRaw('sum(COALESCE(taskcon_cost_gov_operating, 0)
+     + COALESCE(taskcon_cost_gov_investment, 0))
+
+   as c')
+            // ->whereExists(
+            //   function ($query) {
+            //     $query->select('*')
+            //       ->from('projects')
+            //     ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+            //   ->GroupBy('reguiar_id');
+            //}
+            //)
+            ->get()
+            ->toJson());
+        ($json = json_decode($taskconcostgov));
+        ($c = $json[0]->c);
+        ($coatcons_gov = (float) $c);
+
         ///////////
 
         ($taskcostut = DB::table('tasks')
@@ -138,7 +188,26 @@ as c')
             ->toJson());
         ($json = json_decode($taskcostut));
         ($d = $json[0]->d);
+
         ($coats_ut = (float) $d);
+
+        ($taskconcostut = DB::table('taskcons')
+            ->selectRaw('sum( COALESCE(taskcon_cost_gov_utility, 0))
+
+as d')
+            // ->whereExists(
+            //   function ($query) {
+            //     $query->select('*')
+            //       ->from('projects')
+            //     ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+            //   ->GroupBy('reguiar_id');
+            //}
+            //)
+            ->get()
+            ->toJson());
+        ($json = json_decode($taskconcostut));
+        ($d = $json[0]->d);
+        ($coatcons_ut = (float) $d);
 
         //($coatstotal = $coats_ut+$coats_ict+$coats_gov)
 
@@ -161,6 +230,27 @@ as c')
         ($json = json_decode($taskcosttotal));
         ($a = $json[0]->a);
         ($coats = (float)$a);
+
+
+        ($taskconcosttotal = DB::table('taskcons')
+            ->selectRaw('sum(COALESCE(taskcon_cost_gov_operating, 0)
+     + COALESCE(taskcon_cost_gov_investment, 0)
+     + COALESCE(taskcon_cost_gov_utility, 0)
+     + COALESCE(taskcon_cost_it_operating, 0)
+     + COALESCE(taskcon_cost_it_investment, 0)) as a')
+            // ->whereExists(
+            //   function ($query) {
+            //     $query->select('*')
+            //       ->from('projects')
+            //     ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+            //   ->GroupBy('reguiar_id');
+            // }
+            //)
+            ->get()
+            ->toJson(JSON_NUMERIC_CHECK));
+        ($json = json_decode($taskconcosttotal));
+        ($a = $json[0]->a);
+        dd($coatcons = (float)$a);
 
 
 
@@ -201,7 +291,7 @@ as c')
 
 
 
-        ($project_groupby= Project::selectRaw('reguiar_id as fiscal_year_b,
+        ($project_groupby = Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
             + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budgot')
             ->where('project_fiscal_year', 2566)
@@ -211,7 +301,7 @@ as c')
             ->toJson(JSON_NUMERIC_CHECK));
 
 
-      ($taskcosttotals = DB::table('tasks')
+        ($taskcosttotals = DB::table('tasks')
             ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
             + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
             + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
@@ -224,8 +314,8 @@ as c')
         );
 
 
-// Calculate total budget by fiscal year and reguiar_id
-$project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
+        // Calculate total budget by fiscal year and reguiar_id
+        $project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
             + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
             ->where('project_fiscal_year', 2566)
@@ -234,8 +324,8 @@ $project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
             ->get()
             ->toJson(JSON_NUMERIC_CHECK);
 
-// Calculate total cost by fiscal year and reguiar_id
-$costtotals = DB::table('tasks')
+        // Calculate total cost by fiscal year and reguiar_id
+        $costtotals = DB::table('tasks')
             ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
             + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
             + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
@@ -246,15 +336,15 @@ $costtotals = DB::table('tasks')
             ->get()
             ->toJson(JSON_NUMERIC_CHECK);
 
-// Calculate percentage value for each reguiar_id
-  ($taskcosttotals2 = collect(json_decode($costtotals, true))->map(function ($item) use ($project_groupby_reguiar) {
+        // Calculate percentage value for each reguiar_id
+        ($taskcosttotals2 = collect(json_decode($costtotals, true))->map(function ($item) use ($project_groupby_reguiar) {
             $total_budget = collect(json_decode($project_groupby_reguiar, true))->where('fiscal_year_b', $item['fiscal_year_b'])->pluck('total_budget')->first();
             $percentage = $total_budget != 0 ? round($item['total_cost'] / $total_budget * 100, 2) : 0;
             return array_merge($item, ['percentage' => $percentage]);
         }));
 
         // Convert the result to JSON format
- ($taskcosttotals2_json = $taskcosttotals2->toJson(JSON_NUMERIC_CHECK));
+        ($taskcosttotals2_json = $taskcosttotals2->toJson(JSON_NUMERIC_CHECK));
 
 
 
@@ -263,7 +353,7 @@ $costtotals = DB::table('tasks')
 
 
 
-       ($total_ut = $budgetsut - $coats_ut);
+        ($total_ut = $budgetsut - $coats_ut);
         ($total_budgets = $budgets - $coats);
         $total_ict = $budgetscentralict - $coats_ict;
         $total_inv = $budgetsinvestment - $coats_inv;
@@ -384,15 +474,15 @@ $costtotals = DB::table('tasks')
         foreach ($contractsstart as $contractdr) {
             $start_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_start_date);
             $end_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_end_date);
-           ($duration = $end_date->diff($start_date)->days);
+            ($duration = $end_date->diff($start_date)->days);
 
 
             ($duration_p =  \Carbon\Carbon::parse($contractdr->contract_end_date)
-            ->diffInMonths(\Carbon\Carbon::parse($contractdr->contract_start_date))
-                    -  \Carbon\Carbon::parse($contractdr->contract_start_date)
-                    ->diffInMonths(\Carbon\Carbon::parse())) ;
+                ->diffInMonths(\Carbon\Carbon::parse($contractdr->contract_start_date))
+                -  \Carbon\Carbon::parse($contractdr->contract_start_date)
+                ->diffInMonths(\Carbon\Carbon::parse()));
             // do something with $duration and $duration_p
-        ($contractsstart = Contract::paginate(10));
+            ($contractsstart = Contract::paginate(10));
 
 
 
@@ -402,52 +492,57 @@ $costtotals = DB::table('tasks')
 
 
 
-        return view(
-            'app.dashboard.index',
-            compact(
+            return view(
+                'app.dashboard.index',
+                compact(
 
-                'taskcosttotals2_json',
-                'taskcosttotals2',
-                'project_groupby',
-                'duration_p',
-                'contractsstart',
+                    'taskcosttotals2_json',
+                    'taskcosttotals2',
+                    'project_groupby',
+                    'duration_p',
+                    'contractsstart',
 
-                'project_type_p',
-                'project_type_j',
-                'total_ict',
-                'total_inv',
-                'total_ut',
-                'taskcostict',
-                'taskcostinvestment',
-                'budgetscentralict',
-                'budgetsinvestment',
-                'taskcosttotals',
-                'project_bu_fiscal_years',
-                'coats_inv',
-                'coats_gov',
-                'coats_ict',
-                'coats_ut',
-                'budgetsgov',
-                'budgetsict',
-                'budgetsut',
-                'total_budgets',
-                'coats',
-                'taskcosttotal',
-                '__cost',
-                'budget',
-                'budgets2',
-                'budgets',
-                'gantt',
-                'project_groupby_reguiar',
-                'project_groupby_task',
-                'tasks',
-                'projects_amount',
-                'contracts',
-                'contract_groupby_fiscal_years',
-                'projects',
-                'project_groupby_fiscal_years'
-            )
-        );
+                    'project_type_p',
+                    'project_type_j',
+                    'total_ict',
+                    'total_inv',
+                    'total_ut',
+                    'taskcostict',
+                    'taskcostinvestment',
+                    'budgetscentralict',
+                    'budgetsinvestment',
+                    'taskcosttotals',
+                    'project_bu_fiscal_years',
+                    'coats_inv',
+                    'coats_gov',
+                    'coats_ict',
+                    'coats_ut',
+                    'coatcons_inv',
+                    'coatcons_gov',
+                    'coatcons_ict',
+                    'coatcons_ut',
+                    'coatcons',
+                    'budgetsgov',
+                    'budgetsict',
+                    'budgetsut',
+                    'total_budgets',
+                    'coats',
+                    'taskcosttotal',
+                    '__cost',
+                    'budget',
+                    'budgets2',
+                    'budgets',
+                    'gantt',
+                    'project_groupby_reguiar',
+                    'project_groupby_task',
+                    'tasks',
+                    'projects_amount',
+                    'contracts',
+                    'contract_groupby_fiscal_years',
+                    'projects',
+                    'project_groupby_fiscal_years'
+                )
+            );
+        }
     }
-}
 }

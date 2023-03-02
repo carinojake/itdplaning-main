@@ -320,7 +320,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold"><span
-                                                                        style="color:rgb(247, 10, 10);">{{ Helper::millionFormat($coats) }}
+                                                                        style="color:rgb(247, 10, 10);">{{ Helper::millionFormat($coatcons) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -345,7 +345,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold">
-                                                                    {{ Helper::millionFormat($coats_ict) }} </div>
+                                                                    {{ Helper::millionFormat($coatcons_ict) }} </div>
 
                                                                 <svg class="icon icon-xl">
                                                                     <use
@@ -369,7 +369,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_inv) }}</div>
+                                                                    {{ Helper::millionFormat($coatcons_inv) }}</div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
@@ -390,7 +390,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_ut) }}</div>
+                                                                    {{ Helper::millionFormat($coatcons_ut) }}</div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
