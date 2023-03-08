@@ -93,6 +93,10 @@
 
                                                         </div>
                                                     </div>
+
+
+
+
                                                 </div>
                                             </div>
                                         </div>
@@ -108,8 +112,8 @@
                                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
                                             aria-labelledby="panelsStayOpen-headingTwo">
                                             <div class="accordion-body">
-                                                <div class="mb-2 row ">
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                <div class="mb-1 row ">
+                                                    <div class="col-sm-5 col-md-4 col-lg-2">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
@@ -124,16 +128,13 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                                    style="width: 22%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"> 21%</div>
-                                                            </div>
+
+
                                                         </div>
                                                     </div>
 
 
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                    <div class="col-sm-5 col-md-4 col-lg-2">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
@@ -147,15 +148,11 @@
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
                                                                     ict</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                                    style="width: 11%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100">11%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                    <div class="col-sm-5 col-md-4 col-lg-2">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
@@ -168,14 +165,10 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                                    style="width: 22%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100">22%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                    <div class="col-sm-4 col-md-4 col-lg-2">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
@@ -188,19 +181,45 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                                    style="width: 99.5%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100">99.5%</div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-5 col-md-4 col-lg-2">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="dropdown">
+                                                                    <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                                                      <div class="fs-4 fw-semibold ">
+                                                                        {{ Helper::millionFormat($coats_ut) }}</div>
+                                                                    <svg class="icon icon-xl text-end">
+                                                                        <use
+                                                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                        </use>
+                                                                    </svg>
+                                                                    <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืน</small>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                      <li><a class="dropdown-item" href="#">คืนงบกลาง ICT   {{ Helper::millionFormat($coats_ut) }}</a></li>
+                                                                      <li><a class="dropdown-item" href="#">คืนงบดำเนินงาน  {{ Helper::millionFormat($coats_ut) }}</a></li>
+                                                                      <li><a class="dropdown-item" href="#"> คืนค่าสาธารณูปโภค  {{ Helper::millionFormat($coats_ut) }}</a></li>
+                                                                    </ul>
+                                                                  </div>
+
+
                                                             </div>
                                                         </div>
                                                     </div>
+
+
+
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color:green;">{{ Helper::millionFormat($total_budgets) }}
+                                                                        style="color:green;">{{ Helper::millionFormat($totals_budgets) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -211,19 +230,14 @@
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">
                                                                     รวมทั้งหมด</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success "
-                                                                    role="progressbar" style="width: 79%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100"> 79%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($total_ict) }} </div>
+                                                                    {{ Helper::millionFormat($totals_ict) }} </div>
 
                                                                     <svg class="icon icon-xl">
                                                                         <use
@@ -234,13 +248,7 @@
                                                                         class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
                                                                         ICT</small>
                                                                 </div>
-                                                                <div class="progress progress-thin">
-                                                                    <div class="progress-bar bg-success"
-                                                                        role="progressbar" style="width: 89%"
-                                                                        aria-valuenow="25" aria-valuemin="0"
-                                                                        aria-valuemax="100"> 89%</div>
 
-                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -248,7 +256,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($total_inv) }}</div>
+                                                                    {{ Helper::millionFormat($totals_inv) }}</div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
@@ -257,12 +265,7 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 78%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100">78%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -278,11 +281,7 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                                    style="width: 99.5%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100">99.5%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -308,7 +307,7 @@
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
                                                 aria-controls="panelsStayOpen-collapseThree">
-                                                <span style="color: #ec1616 "> สถานะงบประมาณที่ใช้จ่าย (หลัง PA แล้ว) </span>
+                                                <span style="color: #ec1616 "> สถานะการเบิกจ่าย </span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
@@ -331,12 +330,7 @@
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">
                                                                     รวมทั้งหมด</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success "
-                                                                    role="progressbar" style="width: 79%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100"> 79%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -356,12 +350,7 @@
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
                                                                     ICT</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 89%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100"> 89%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -378,12 +367,7 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 78%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100">78%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -399,15 +383,10 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 0.5%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100">0.5</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
-
+-------------------------------------------------------------------------------------------------------------
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
@@ -423,12 +402,7 @@
                                                                 class="text-medium-emphasis text-uppercase fw-semibold">
                                                                 รวมทั้งหมด</small>
                                                         </div>
-                                                        <div class="progress progress-thin">
-                                                            <div class="progress-bar bg-success "
-                                                                role="progressbar" style="width: 79%"
-                                                                aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100"> 79%</div>
-                                                        </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -446,12 +420,7 @@
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
                                                                     ICT</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 89%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100"> 89%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -467,12 +436,7 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 78%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100">78%</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -488,12 +452,7 @@
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
                                                             </div>
-                                                            <div class="progress progress-thin">
-                                                                <div class="progress-bar bg-success"
-                                                                    role="progressbar" style="width: 0.5%"
-                                                                    aria-valuenow="25" aria-valuemin="0"
-                                                                    aria-valuemax="100">0.5</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>

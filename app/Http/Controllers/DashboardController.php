@@ -250,7 +250,7 @@ as d')
             ->toJson(JSON_NUMERIC_CHECK));
         ($json = json_decode($taskconcosttotal));
         ($a = $json[0]->a);
-        dd($coatcons = (float)$a);
+        ($coatcons = (float)$a);
 
 
 
@@ -348,15 +348,19 @@ as d')
 
 
 
+        ($totals_ut = $budgetsut - $coats_ut);
+        ($totals_budgets = $budgets - $coats);
+        $totals_ict = $budgetscentralict - $coats_ict;
+        $totals_inv = $budgetsinvestment - $coats_inv;
 
 
 
 
 
-        ($total_ut = $budgetsut - $coats_ut);
-        ($total_budgets = $budgets - $coats);
-        $total_ict = $budgetscentralict - $coats_ict;
-        $total_inv = $budgetsinvestment - $coats_inv;
+        ($total_ut = $budgetsut - $coatcons_ut);
+        ($total_budgets = $budgets - $coatcons);
+        $total_ict = $budgetscentralict - $coatcons_ict;
+        $total_inv = $budgetsinvestment - $coatcons_inv;
 
 
 
@@ -504,6 +508,10 @@ as d')
 
                     'project_type_p',
                     'project_type_j',
+                    'totals_budgets',
+                    'totals_ict',
+                    'totals_inv',
+                    'totals_ut',
                     'total_ict',
                     'total_inv',
                     'total_ut',

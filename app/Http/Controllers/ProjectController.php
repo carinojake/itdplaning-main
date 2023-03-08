@@ -412,7 +412,7 @@ class ProjectController extends Controller
         $id_project = Hashids::decode($project)[0];
         $id_task    = Hashids::decode($task)[0];
         $project    = Project::find($id_project);
-        $task       = task::find($id_task);
+        $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
             ->get();

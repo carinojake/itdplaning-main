@@ -160,7 +160,8 @@
                         <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_end_date) }}</span>
                       </td>
                       <td class="text-end">
-
+                        <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> ข้อมูล</a>
+                        <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Taske</a>
                         <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}" class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
                         <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
                         {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>

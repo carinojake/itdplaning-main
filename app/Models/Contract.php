@@ -120,9 +120,9 @@ class Contract extends Model
         return $this->belongsToMany('App\Models\Task', 'contract_has_tasks', 'contract_id', 'task_id');
     }
 
-    public function contrast()
+    public function contract()
     {
-        return $this->belongsToMany('App\Models\Taskcon', 'contract_has_taskcons', 'taskcon_id', 'contract_id');
+        return $this->belongsToMany('App\Models\Taskcon', 'contract_has_taskscon', 'taskcon_id', 'task_id');
     }
 
 

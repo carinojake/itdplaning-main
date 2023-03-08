@@ -1,0 +1,4 @@
+[{"taskcon_id":1,"contract_id":1,
+"taskcon_name":"\u0e07\u0e27\u0e14\u0e17\u0e35\u0e48
+1","taskcon_description":"","taskcon_parent":null,"taskcon_start_date":1664557200,"taskcon_end_date":1672419600,"taskcon_budget_gov_operating":null,"taskcon_budget_gov_investment":null,"taskcon_budget_gov_utility":"345000.00","taskcon_budget_it_operating":null,"taskcon_budget_it_investment":null,"created_at":1676418011,"updated_at":1676418011,"taskcon_cost_gov_operating":null,"taskcon_cost_gov_investment":null,"taskcon_cost_gov_utility":"345000.00","taskcon_cost_it_operating":"0.00","taskcon_cost_it_investment":null,"taskcon_status":null,"deleted_at":null,"task_status":null,"taskcon_projectplan":null,"taskcon_mm":null,"taskcon_pr":null,"taskcon_pa":null,"taskcon_pr_budget":null,"taskcon_pa_budget":null,"disbursement_taskcons_status":"PP21006600056","disbursement_taskcons_date":"2023-02-27
+15:51:50"}]

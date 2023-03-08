@@ -84,7 +84,7 @@ class Taskcon extends Model
      * @var array
      */
     protected $dates = [
-        'task_start_date', 'task_end_date', 'created_at', 'updated_at', 'deleted_at',
+        'taskcon_start_date', 'taskcon_end_date', 'created_at', 'updated_at', 'deleted_at',
     ];
 
  /**
@@ -107,6 +107,19 @@ class Taskcon extends Model
         return Hashids::encode($this->project_id);
     }
 
+
+
+    public function getContractHashidAttribute($value)
+    {
+        return Hashids::encode($this->contract_id);
+    }
+
+
+    public function gettaskHashidAttribute($value)
+    {
+        return Hashids::encode($this->task_id);
+    }
+
     // Relations ...
     public function subtaskcon()
     {
@@ -118,9 +131,21 @@ class Taskcon extends Model
         return $this->belongsTo('App\Models\Project');
     }
 
-    public function contract()
+
+
+    public function task()
     {
-        return $this->belongsToMany('App\Models\Contract', 'contract_has_taskcons', 'taskcon_id', 'contract_id');
+        return $this->belongsTo('App\Models\Task');
     }
 
+    public function contract()
+    {
+        return $this->belongsToMany('App\Models\Contract', 'contract_has_taskcons', 'taskcon_id', 'task_id');
+    }
+
+
+    public function taskconsend()
+    {
+        return $this->belongsToMany('App\Models\Taskcon', 'task_has_taskcons', 'taskcon_id', 'task_id');
+    }
 }
