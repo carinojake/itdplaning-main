@@ -51,7 +51,7 @@ class Contract extends Model
         'contract_name', 'contract_number', 'contract_year',
         'contract_description', 'contract_type', 'contract_status',
         'contract_start_date', 'contract_end_date', 'created_at', 'updated_at', 'deleted_at',
-        'contract_owner',
+        'contract_owner','contract_refund_pa_budget',
         'contract_projectplan', 'contract_mm', 'contract_pr', 'contract_pa', 'contract_pr_budget', 'contract_pa_butget'
     ];
 
@@ -115,20 +115,41 @@ class Contract extends Model
     }
 
     // Relations ...
-    public function task()
+    public function taskcont()
     {
         return $this->belongsToMany('App\Models\Task', 'contract_has_tasks', 'contract_id', 'task_id');
     }
-
     public function contract()
     {
         return $this->belongsToMany('App\Models\Taskcon', 'contract_has_taskscon', 'taskcon_id', 'task_id');
     }
-
+    //public function taskcon()
+    //{
+      //  return $this->hasMany('App\Models\Taskcon', 'contract_id');
+    //}
 
 
     public function taskcon()
     {
         return $this->hasMany('App\Models\Taskcon', 'contract_id');
     }
+    public function main_taskcon()
+    {
+        return $this->taskcon()->whereNull('taskcon_parent');
+    }
+
+    public function task()
+    {
+        // return $this->hasMany('App\Models\ContractHasTask', 'project_id');
+        return $this->hasManyThrough(
+            'App\Models\ContractHasTaskcon',
+            'App\Models\Taskcon',
+            'contract_id',
+            'taskcon_id',
+            'contract_id',
+            'taskcon_id',
+        );
+    }
+
+
 }

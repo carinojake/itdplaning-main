@@ -137,13 +137,17 @@
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0">
                   </div>
+
                   <div class="col-md-6">
                     <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> <span class="text-danger">*</span>
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" >
                   </div>
 
-
+                  <div class="col-md-6">
+                    <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" >
+                  </div>
                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
               </form>
@@ -156,6 +160,24 @@
   <x-slot:css>
   </x-slot:css>
   <x-slot:javascript>
+    <script>
+        // Get references to the input fields
+        var prInput = document.getElementById('contract_pr_budget');
+        var paInput = document.getElementById('contract_pa_budget');
+        var refundInput = document.getElementById('contract_refund_pa_budget');
 
+        // Add event listeners to the input fields to detect changes
+        prInput.addEventListener('input', updateRefund);
+        paInput.addEventListener('input', updateRefund);
+
+        // Function to update the refund input field based on the PR and PA input fields
+        function updateRefund() {
+          // Calculate the difference between the PR and PA input fields
+          var refund = prInput.value - paInput.value;
+
+          // Update the refund input field with the calculated value
+          refundInput.value = refund;
+        }
+      </script>
   </x-slot:javascript>
 </x-app-layout>

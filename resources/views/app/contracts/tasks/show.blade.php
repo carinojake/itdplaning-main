@@ -83,6 +83,15 @@
                 <div class="col-3">{{ __('จำนวนเงิน PA') }}</div>
                 <div class="col-9">{{ $taskcon->taskcon_cost_gov_investment}}</div>
               </div>
+              <div class="row">
+                <div class="col-3">{{ __('บันทึก PP') }}</div>
+                <div class="col-9">{{ $taskcon->disbursement_taskcons_status}}</div>
+              </div>
+              <div class="row">
+                <div class="col-3">{{ __('เวลา PP') }}</div>
+                <div class="col-9">{{ $taskcon->disbursement_taskcons_date}}</div>
+              </div>
+
 
             </div>
 

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->decimal('taskcon_refund_gov_investment', 11, 2)->nullable();
             $table->decimal('taskcon_refund_gov_utility', 11, 2)->nullable();
             $table->decimal('taskcon_refund_it_operating', 11, 2)->nullable();
-            $table->decimal('taskcon_refund_it_investment', 11, 2)->nullable();  //
+            $table->decimal('taskcon_refund_it_investment', 11, 2)->nullable();
+             //
         });
     }
 

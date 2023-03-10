@@ -78,6 +78,20 @@ class ContractHasTaskcon extends Model
         return Hashids::encode($this->getKey());
     }
 
+    public function getContractHashidAttribute($value)
+    {
+        return Hashids::encode($this->contract_id);
+    }
+
+
+    public function gettaskHashidAttribute($value)
+    {
+        return Hashids::encode($this->task_id);
+    }
+
+
+
+
     // Relations ...
     public function contract()
     {

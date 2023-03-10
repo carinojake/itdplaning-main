@@ -11,6 +11,55 @@
 
                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
               </x-slot:toolbar>
+              <div class="row mb-3">
+                <div class="col-sm-6 col-md-3 col-lg-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="text-medium-emphasis text-end mb-4">
+                        <i class="cil-money icon icon-xxl"></i>
+                      </div>
+                      <div class="fs-4 fw-semibold">{{ number_format($contract->contract_pa_budget) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
+                      <div class="progress progress-thin mt-3 mb-0">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="text-medium-emphasis text-end mb-4">
+                        <i class="cil-money icon icon-xxl"></i>
+                      </div>
+                      <div class="fs-4 fw-semibold"></div><small class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
+                      <div class="progress progress-thin mt-3 mb-0">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="text-medium-emphasis text-end mb-4">
+                        <i class="cil-money icon icon-xxl"></i>
+                      </div>
+                      <div class="fs-4 fw-semibold"></div><small class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
+                      <div class="progress progress-thin mt-3 mb-0">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
               <table class="table">
                 <thead>
                   <tr>
@@ -21,7 +70,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($contract->task as $task)
+                  @foreach ($contract->taskcont as $task)
                     <tr>
                       <td></td>
                       <td>
@@ -117,32 +166,42 @@
             </div>
               <div class="col-sm">
               <div class="row">
-                <div class="col-3">{{ __('บันทึกข้อความ') }}</div>
-                <div class="col-9">{{ $contract->contract_projectplan }}</div>
+                <div class="col-6">{{ __('บันทึกข้อความ') }}</div>
+                <div class="col-6">{{ $contract->contract_projectplan }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('เลขที่ PR') }}</div>
-                <div class="col-9">{{ $contract->contract_pr }}</div>
+                <div class="col-6">{{ __('เลขที่ PR') }}</div>
+                <div class="col-6">{{ $contract->contract_pr }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('จำนวนเงิน PR') }}</div>
-                <div class="col-9">{{ $contract->contract_pr_budget }}</div>
+                <div class="col-6">{{ __('จำนวนเงิน PR') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pr_budget) }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('เลขที่ PA') }}</div>
-                <div class="col-9">{{ $contract->contract_pa }}</div>
+                <div class="col-6">{{ __('เลขที่ PA') }}</div>
+                <div class="col-6">{{ $contract->contract_pa }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('จำนวนเงิน PA') }}</div>
-                <div class="col-9">{{ $contract->contract_pa_budget }}</div>
+                <div class="col-6">{{ __('จำนวนเงิน PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pa_budget) }}</div>
               </div>
               <div class="row">
-                <div class="col-4">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
-                <div class="col-9">{{ $contract->contract_owner }}</div>
+                <div class="col-6">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pr_budget-$contract->contract_pa_budget) }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">{{ __('จำนวนคงเหลือหลังเงิน PA(2)') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_refund_pa_budget)}}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
+                <div class="col-6">{{ $contract->contract_owner }}</div>
               </div>
             </div>
          </div>
-              <table class="table">
+          {{--    <table class="table">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -164,25 +223,107 @@
                         <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Taske</a>
                         <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}" class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
                         <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
-                        {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
+                         <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
                         <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                           @method('DELETE')
                           @csrf
                           <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
-                        </form> --}}
+                        </form>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>   --}}
+
+
+
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="50">No</th>
+                    <th>Task Name</th>
+                    <th>Date</th>
+                    <th width="200"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($contract->main_taskcon as $taskcon)
+                    <tr>
+                      <td></td>
+                      <td>
+                        {{ $taskcon->taskcon_name }} {!! $taskcon->taskcon_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+
+                        @if ($taskcon->subtaskcon->count() > 0)
+                          <h6>Sub task</h6>
+                          <ul>
+                            @foreach ($taskcon->subtaskcon as $subtaskcon)
+                              <li>
+                                {{ $subtaskcon->taskcon_name }}
+                                <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" class="btn-sm btn btn-primary text-white"><i class="cil-folder-open "></i></a>
+                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i> </a>
+                                <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" method="POST" style="display:inline">
+
+                                  @method('DELETE')
+                                  @csrf
+                                  <button class="btn-sm btn btn-danger text-white"><i class="cil-trash"></i></button>
+                                </form>
+                              </li>
+                            @endforeach
+                          </ul>
+                        @endif
+                      </td>
+                      <td>
+                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_start_date) }}</span> -
+                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_end_date) }}</span>
+                      </td>
+                      <td class="text-end">
+
+                        <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="btn-sm btn btn-primary text-white"><i class="cil-folder-open "></i></a>
+                        <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i> </a>
+                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" method="POST" style="display:inline">
+                          @method('DELETE')
+                          @csrf
+                          <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
+                        </form>
                       </td>
                     </tr>
                   @endforeach
                 </tbody>
               </table>
-              <div class="mb-3 row">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">Project</div>
-                        <div id="gantt_here" style='width:100%; height:100vh;'></div>
-                    </div>
-                </div>
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div id="gantt_here" style='width:100%; height:100vh;'></div>
 
 
             </x-card>

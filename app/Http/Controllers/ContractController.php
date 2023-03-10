@@ -7,6 +7,7 @@ use App\Models\Contract;
 use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Project;
 use App\Models\Task;
 use App\Models\Taskcon;
 use App\Models\ContractHasTask;
@@ -102,6 +103,20 @@ class ContractController extends Controller
         // dd(Hashids::encode($contract->task->task_id));
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $gantt[] = [
             'id'                    => $contract['contract_id'],
             'text'                  => $contract['contract_name'],
@@ -189,7 +204,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $contract = new Contract;
-
+       ;
         $request->validate([
             'contract_name'                   => 'required',
             'contract_number'                 => 'required',
@@ -292,6 +307,7 @@ class ContractController extends Controller
         $contract->contract_pa        = $request->input('contract_pa');
         $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         $contract->contract_pa_budget        = $request->input('contract_pa_budget');
+        $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -383,7 +399,7 @@ public function taskconCreate(Request $request, $contract)
 
 
 
-public function taskconStore(Request $request, $contract ,$taskcon)
+public function taskconStore(Request $request, $contract)
 {
     $id   = Hashids::decode($contract)[0];
     $taskcon = new Taskcon;
@@ -398,7 +414,7 @@ public function taskconStore(Request $request, $contract ,$taskcon)
     $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
     $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
 
-    $taskcon->taskcon_id       = $id;
+    $taskcon->contract_id       = $id;
     $taskcon->taskcon_name        = $request->input('taskcon_name');
     $taskcon->taskcon_description = trim($request->input('taskcon_description'));
     $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
@@ -430,7 +446,7 @@ public function taskconStore(Request $request, $contract ,$taskcon)
             $contract_has_taskscon->save();
         }
 
-        return redirect()->route('contract.show', $contract ,$taskcon);
+        return redirect()->route('contract.show', $contract );
     }
 }
 
@@ -440,24 +456,34 @@ public function taskconStore(Request $request, $contract ,$taskcon)
      * @param  int  $contract
      * @return \Illuminate\Http\Response
      */
-    public function taskconEdit(Request $request, $taskcon,$contract)
+    public function taskconEdit(Request $request, $contract, $taskcon )
     {
-        ( $id_contract = Hashids::decode($contract)[0]);
+        $id_contract = Hashids::decode($contract)[0];
         $id_taskcon    = Hashids::decode($taskcon)[0];
         $contract    = Contract::find($id_contract);
-        $taskcon       = taskcon::find($id_taskcon);
-        $taskcons = Taskcon::where('contract_id', $id_contract)
-        ->where('taskcon_id', $id_taskcon)
-        ->get();
+        $taskcon       = Taskcon::find($id_taskcon);
+        $taskcons      = Taskcon::where('contract_id', $id_contract)
+            ->whereNot('taskcon_id', $id_taskcon)
+            ->get();
+        $tasks = task::get();
+        $contractcons = Contract::get();
+
+        //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
+        // $id_contract = Hashids::decode($contract)[0];
+        //$taskcon       = taskcon::find($id_taskcon);
+        //$contract    = Contract::find($id_contract);
+        //$taskcons = Taskcon::where('taskcon_id', $id_taskcon)
+        //->where('contract_id', $id_contract)
+       // ->get();
 
        // $taskcons      = Taskcon::where('contract_id', $id_contract)
          //   ->where('taskcon_id', $id_taskcon)
            // ->get();
           // $taskcon = Taskcon::first()->toArray();
-          $task= Task::get();
+         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
 
 
-        return view('app.contracts.tasks.edit', compact('contract', 'taskcon','taskcons','task'));
+        return view('app.contracts.tasks.edit', compact('contractcons','tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
     /**
@@ -508,12 +534,12 @@ public function taskconStore(Request $request, $contract ,$taskcon)
 
             //update contract
             if ($request->input('taskcon_contract')) {
-                ContractHasTaskcon::where('contract_id', $id_contract)->delete();
+                ContractHasTaskcon::where('taskcon_id', $id_taskcon)->delete();
                 ContractHasTaskcon::Create([
                    // 'contract_id' => $request->input('taskcon_task'),
                     //'taskcon_id'     => $id_taskcon,
-                    'taskcon_id' => $request->input('taskcon_contract'),
-                    'contract_id'     => $id_contract,
+                    'task_id' => $request->input('taskcon_contract'),
+                    'taskcon_id'     => $id_taskcon,
                 ]);
             } else {
                 ContractHasTaskcon::where('taskcon_id', $id_taskcon)->delete();

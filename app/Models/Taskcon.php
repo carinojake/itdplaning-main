@@ -138,10 +138,10 @@ class Taskcon extends Model
         return $this->belongsTo('App\Models\Task');
     }
 
-    public function contract()
-    {
-        return $this->belongsToMany('App\Models\Contract', 'contract_has_taskcons', 'taskcon_id', 'task_id');
-    }
+  //  public function contract()
+    //{
+      //  return $this->belongsToMany('App\Models\Contract', 'contract_has_taskcons', 'taskcon_id', 'task_id');
+    //}
 
 
     public function taskconsend()

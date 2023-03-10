@@ -147,11 +147,7 @@
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pr_budget" name="contract_pr_budget" min="0" value="{{ $contract->contract_pr_budget }}">
-                  </div>
+
                   <div class="col-md-6">
                     <label for="contract_pa" class="form-label">{{ __('เลขที่ PA') }}</label> <span class="text-danger">*</span>
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
@@ -160,15 +156,33 @@
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0" value="{{ $contract->contract_pa_budget }}">
-                  </div>
+
+
+
                   <div class="col-md-6">
                     <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> <span class="text-danger">*</span>
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
+                  </div>
+
+
+
+
+
+
+
+
+                  <div class="col-md-6">
+                    <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pr_budget" name="contract_pr_budget" min="0" value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}" readonly>
                   </div>
                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
@@ -182,6 +196,13 @@
   <x-slot:css>
   </x-slot:css>
   <x-slot:javascript>
-
+    <script>
+        function calculateRefund() {
+          var pr_budget = parseFloat(document.getElementById("contract_pr_budget").value);
+          var pa_budget = parseFloat(document.getElementById("contract_pa_budget").value);
+          var refund = pr_budget - pa_budget;
+          document.getElementById("contract_refund_pa_budget").value = refund.toFixed(2);
+        }
+      </script>
   </x-slot:javascript>
 </x-app-layout>
