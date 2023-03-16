@@ -13,7 +13,7 @@
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                                                 aria-controls="panelsStayOpen-collapseOne">
-                                                <span style="color: #0d6efd "> งบประมาณ ประจำปี 2566 </span>
+                                                <span style="color: #0dfd0d "> งบประมาณ ประจำปี 2566 </span>
                                             </button>
                                         </h2>
 
@@ -106,19 +106,19 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
                                                 aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                                <span style="color: #6f42c1 ">การใช้จ่ายงบประมาณ PA</span>
+                                                <span style="color: #f81919 ">การใช้จ่ายงบประมาณ PA</span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
                                             aria-labelledby="panelsStayOpen-headingTwo">
                                             <div class="accordion-body">
                                                 <div class="mb-1 row ">
-                                                    <div class="col-sm-5 col-md-4 col-lg-2">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #dc3545 ">{{ Helper::millionFormat($coats) }}</span>
+                                                                        style="color: #dc3545 ">{{ Helper::millionFormat($cpb) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -126,100 +126,18 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
-                                                            </div>
-
-
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="col-sm-5 col-md-4 col-lg-2">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_ict) }}</div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
-                                                                    ict</small>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-5 col-md-4 col-lg-2">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_inv) }}</div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4 col-md-4 col-lg-2">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_ut) }}</div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-5 col-md-4 col-lg-2">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="dropdown">
-                                                                    <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                                                      <div class="fs-4 fw-semibold ">
-                                                                        {{ Helper::millionFormat($coats_ut) }}</div>
-                                                                    <svg class="icon icon-xl text-end">
-                                                                        <use
-                                                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                        </use>
-                                                                    </svg>
-                                                                    <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืน</small>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu">
-                                                                      <li><a class="dropdown-item" href="#">คืนงบกลาง ICT   {{ Helper::millionFormat($coats_ut) }}</a></li>
-                                                                      <li><a class="dropdown-item" href="#">คืนงบดำเนินงาน  {{ Helper::millionFormat($coats_ut) }}</a></li>
-                                                                      <li><a class="dropdown-item" href="#"> คืนค่าสาธารณูปโภค  {{ Helper::millionFormat($coats_ut) }}</a></li>
-                                                                    </ul>
-                                                                  </div>
-
-
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PR</small>
                                                             </div>
                                                         </div>
                                                     </div>
-
-
 
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color:green;">{{ Helper::millionFormat($totals_budgets) }}
+                                                                        style="color: #3591dc ">{{ Helper::millionFormat($cpa) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -227,28 +145,43 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">
-                                                                    รวมทั้งหมด</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PA</small>
                                                             </div>
-
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($totals_ict) }} </div>
-
-                                                                    <svg class="icon icon-xl">
-                                                                        <use
-                                                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                        </use>
-                                                                    </svg>
-                                                                    <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
-                                                                        ICT</small>
+                                                                    <span
+                                                                        style="color: #94ee1f ">{{ Helper::millionFormat($cpb - $cpa) }}</span>
                                                                 </div>
-
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">เหลือ</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืนเงิน</small>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -256,39 +189,36 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($totals_inv) }}</div>
+                                                                    <span style="color: "></span>
+                                                                </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"></small>
                                                             </div>
-
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($coats_ut) }}</div>
+                                                                    <span
+                                                                        style="color: #94ee1f ">{{ Helper::millionFormat($totals_budgets) }}</span>
+                                                                </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณคงเหลือ</small>
                                                             </div>
-
                                                         </div>
                                                     </div>
-
-
-
-
-
                                                 </div>
 
 
@@ -307,7 +237,7 @@
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
                                                 aria-controls="panelsStayOpen-collapseThree">
-                                                <span style="color: #ec1616 "> สถานะการเบิกจ่าย </span>
+                                                <span style="color: #5610f8 "> สถานะการเบิกจ่าย </span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
@@ -319,7 +249,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold"><span
-                                                                        style="color:rgb(247, 10, 10);">{{ Helper::millionFormat($coatcons) }}
+                                                                        style="color:   #700ef0">{{ Helper::millionFormat($coatcons) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -328,7 +258,7 @@
                                                                 </svg>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">
-                                                                    รวมทั้งหมด</small>
+                                                                    รวมจ่ายทั้งหมด</small>
                                                             </div>
 
                                                         </div>
@@ -348,7 +278,7 @@
                                                                 </svg>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
-                                                                    ICT</small>
+                                                                   จ่าย ICT</small>
                                                             </div>
 
                                                         </div>
@@ -365,7 +295,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">จ่ายดำเนินงาน</small>
                                                             </div>
 
                                                         </div>
@@ -381,27 +311,27 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">จ่ายค่าสาธารณูปโภค</small>
                                                             </div>
 
                                                         </div>
                                                     </div>
--------------------------------------------------------------------------------------------------------------
+                                                    -------------------------------------------------------------------------------------------------------------
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold"><span
-                                                                    style="color:green;">{{ Helper::millionFormat($total_budgets) }}
+                                                                        style="color:green;">{{ Helper::millionFormat($total_budgets) }}
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">
+                                                                    รวมทั้งหมด</small>
                                                             </div>
-                                                            <svg class="icon icon-xl text-end">
-                                                                <use
-                                                                    xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                </use>
-                                                            </svg>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">
-                                                                รวมทั้งหมด</small>
-                                                        </div>
 
                                                         </div>
                                                     </div>
@@ -531,7 +461,7 @@
         </div>
 
         <!-- Widget Chart yaer -->
-      <!--  <div class="mb-3 row">
+        <!--  <div class="mb-3 row">
             <div class="col-sm-6 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -556,17 +486,17 @@
 
                     <ul class="list-group list-group-flush">
                         @foreach ($contractsstart as $contractdr)
-                            <?php
-                            $start_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_start_date);
-                            $end_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_end_date);
-                            $duration_p = \Carbon\Carbon::parse($contractdr->contract_end_date)->diffInMonths(\Carbon\Carbon::parse($contractdr->contract_start_date)) - \Carbon\Carbon::parse($contractdr->contract_start_date)->diffInMonths(\Carbon\Carbon::parse());
-                            $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
-                            ?>
+<?php
+$start_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_start_date);
+$end_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_end_date);
+$duration_p = \Carbon\Carbon::parse($contractdr->contract_end_date)->diffInMonths(\Carbon\Carbon::parse($contractdr->contract_start_date)) - \Carbon\Carbon::parse($contractdr->contract_start_date)->diffInMonths(\Carbon\Carbon::parse());
+$color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
+?>
                             <li class="list-group-item">
                                 {{ $contractdr->contract_number }}/
                                 <span style="color: {{ $color }}">{{ $duration_p }} เดือน</span>
                             </li>
-                        @endforeach
+@endforeach
                     </ul>
 
                     <div class="mt-3">
@@ -578,19 +508,19 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="card">
                 <div class="card-body">
-        <table class="table table-responsive-sm table-striped" id="datatables">
-            <thead>
-              <tr>
+                    <table class="table table-responsive-sm table-striped" id="datatables">
+                        <thead>
+                            <tr>
 
-                <th>{{ __('ลำดับ') }}</th>
-                <th>{{ __('สัญญาที่') }}</th>
-                <th></th>
-                <th>{{ __('กี่เดีอนเหลือ') }}</th>
-                <th>{{ __('กี่เดีอนเหลือ2') }}</th>
-                <th></th>
-              </tr>
-            </thead>
-          </table>
+                                <th>{{ __('ลำดับ') }}</th>
+                                <th>{{ __('สัญญาที่') }}</th>
+                                <th></th>
+                                <th>{{ __('กี่เดีอนเหลือ') }}</th>
+                                <th>{{ __('กี่เดีอนเหลือ2') }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
 
                 </div>
             </div>
@@ -1408,25 +1338,25 @@
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                      <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                      <td colspan="2">งบกลาง IT</td>\
-                                                      <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                    </tr>';
+                                                              <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                              <td colspan="2">งบกลาง IT</td>\
+                                                              <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                            </tr>';
                     html += '<tr>\
-                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                      <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                      <td>ค่าสาธารณูปโภค</td>\
-                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                      <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                    </tr>';
+                                                              <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                              <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                              <td>ค่าสาธารณูปโภค</td>\
+                                                              <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                              <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                            </tr>';
                     html += '<tr class="text-end">\
-                                                      <td>' + budget_gov_operating + '</td>\
-                                                      <td>' + budget_gov_investment + '</td>\
-                                                      <td>' + budget_gov_utility + '</td>\
-                                                      <td>' + budget_it_operating + '</td>\
-                                                      <td>' + budget_it_investment + '</td>\
-                                                      <td class="text-success">' + budget + '</td>\
-                                                    </tr>';
+                                                              <td>' + budget_gov_operating + '</td>\
+                                                              <td>' + budget_gov_investment + '</td>\
+                                                              <td>' + budget_gov_utility + '</td>\
+                                                              <td>' + budget_it_operating + '</td>\
+                                                              <td>' + budget_it_investment + '</td>\
+                                                              <td class="text-success">' + budget + '</td>\
+                                                            </tr>';
                     html += '</table>';
                 }
 
@@ -1569,6 +1499,12 @@
                 var data = {!! $project_groupby !!}
                 var data1 = {!! $taskcosttotals !!}
                 var date2 = {!! $taskcosttotals2_json !!}
+                var date3 = {!! $taskconcosttotals !!}
+
+
+
+
+
                 // Create axes
                 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
                 var xRenderer = am5xy.AxisRendererX.new(root, {
@@ -1605,52 +1541,52 @@
                     })
                 }));
 
+//eee
 
                 // Add series
                 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
                 function makeSeries(name, fieldName) {
-  var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-    name: name,
-    xAxis: xAxis,
-    yAxis: yAxis,
-    valueYField: fieldName,
-    categoryXField: "fiscal_year_b",
+                    var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                        name: name,
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: fieldName,
+                        categoryXField: "fiscal_year_b",
 
-  }));
+                    }));
 
-  series.columns.template.setAll({
-    tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}",
-    width: am5.percent(100),
+                    series.columns.template.setAll({
+                        tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}",
+                        width: am5.percent(100),
 
-    stacked: true,
-    fill: am5.color(0x68dc76),
+                        stacked: true,
+                        fill: am5.color(0x68dc76),
 
-  });
+                    });
 
-  series.data.setAll(data);
-  // Make stuff animate on load
-  // https://www.amcharts.com/docs/v5/concepts/animations/
-  series.appear();
+                    series.data.setAll(data);
+                    // Make stuff animate on load
+                    // https://www.amcharts.com/docs/v5/concepts/animations/
+                    series.appear();
 
-  series.bullets.push(function() {
-    return am5.Bullet.new(root, {
-      locationY: 0,
-      sprite: am5.Label.new(root, {
-        text: "{valueY}",
-        populateText: true,
-        fill: root.interfaceColors.get("alternativeText"),
-        centerY: 0,
-        centerX: am5.p50,
-        populateText: true
-      })
-    });
-  });
+                    series.bullets.push(function() {
+                        return am5.Bullet.new(root, {
+                            locationY: 0,
+                            sprite: am5.Label.new(root, {
+                                text: "{valueY}",
+                                populateText: true,
+                                fill: root.interfaceColors.get("alternativeText"),
+                                centerY: 0,
+                                centerX: am5.p50,
+                                populateText: true
+                            })
+                        });
+                    });
 
-  legend.data.push(series);
-};
-              //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                 makeSeries("งบประมาณ", "total_budgot")
-                ;
+                    legend.data.push(series);
+                };
+                //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
+                makeSeries("งบประมาณ", "total_budgot");
 
 
                 function makeSeries2(name, fieldName) {
@@ -1694,12 +1630,55 @@
                     legend.data.push(series);
                 };
 
-              //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                 makeSeries2("การใช้จ่ายประมาณ", "total_cost")
-                ;
+                //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
+                makeSeries2("การใช้จ่ายประมาณ", "total_cost");
 
 
 
+//jjjjjjjjjjjjjjjjjj
+function makeSeries3(name, fieldName) {
+                    var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                        name: name,
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: fieldName,
+
+
+                        categoryXField: "fiscal_year_b"
+                    }));
+
+                    series.columns.template.setAll({
+                        tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}[/]\n:{percentage}%",
+                        width: am5.percent(100),
+                        fill: am5.color(0x6771dc),
+                        tooltipY: 0,
+                        strokeOpacity: 0
+                    });
+
+                    series.data.setAll(date3);
+                    // Make stuff animate on load
+                    // https://www.amcharts.com/docs/v5/concepts/animations/
+                    series.appear();
+
+                    series.bullets.push(function() {
+                        return am5.Bullet.new(root, {
+                            locationY: 0,
+                            sprite: am5.Label.new(root, {
+                                text: "{valueY}",
+                                populateText: true,
+                                fill: root.interfaceColors.get("alternativeText"),
+                                centerY: 0,
+                                centerX: am5.p50,
+                                populateText: true
+                            })
+                        });
+                    });
+
+                    legend.data.push(series);
+                };
+
+                //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
+                makeSeries3("สถานะการเบิกจ่าย", "totalcon_cost");
 
 
 
@@ -1710,11 +1689,11 @@
                             xAxis: xAxis,
                             yAxis: yAxis,
                             valueYField: field,
-                            stroke:  am5.color(0xb30000),
+                            stroke: am5.color(0xb30000),
                             categoryXField: "fiscal_year_b",
                             tooltip: am5.Tooltip.new(root, {
                                 pointerOrientation: "horizontal",
-                               labelText: "[bold]{name}[/]\nแผน{categoryX}\n: {valueY} บาท\n: {percentage} %"
+                                labelText: "[bold]{name}[/]\nแผน{categoryX}\n: {valueY} บาท\n: {percentage} %"
                             })
                         })
                     );
@@ -1754,7 +1733,7 @@
 
                 }
                 chart.set("cursor", am5xy.XYCursor.new(root, {}));
-               // createSeries("งบประมาณ", "total_budgot");
+                // createSeries("งบประมาณ", "total_budgot");
                 createSeries("ภาพรวมค่าใช้จ่าย ", "total_cost")
 
 
@@ -1765,121 +1744,182 @@
                 // https://www.amcharts.com/docs/v5/concepts/animations/
                 chart.appear(1000, 100);
 
+//kkk
+function createSeries2(name, field) {
+                    var series = chart.series.push(
+                        am5xy.LineSeries.new(root, {
+                            name: name,
+                            xAxis: xAxis,
+                            yAxis: yAxis,
+                            valueYField: field,
+                            stroke: am5.color(0x6771dc),
+                            categoryXField: "fiscal_year_b",
+                            tooltip: am5.Tooltip.new(root, {
+                                pointerOrientation: "horizontal",
+                                labelText: "[bold]{name}[/]\nแผน{categoryX}\n: {valueY} บาท\n: {percentage} %"
+                            })
+                        })
+                    );
+                    series.bullets.push(function() {
+                        return am5.Bullet.new(root, {
+                            sprite: am5.Circle.new(root, {
+                                text: "{valueY}",
+                                strokeWidth: 3,
+                                stroke: series.get("stroke"),
+                                radius: 5,
 
+                                fill: am5.color(0x6771dc),
+
+                            })
+                        });
+                    });
+
+                    // create hover state for series and for mainContainer, so that when series is hovered,
+                    // the state would be passed down to the strokes which are in mainContainer.
+
+
+
+                    series.set("setStateOnChildren", true);
+                    series.states.create("hover", {});
+
+                    series.mainContainer.set("setStateOnChildren", true);
+                    series.mainContainer.states.create("hover", {});
+
+                    series.strokes.template.states.create("hover", {
+                        strokeWidth: 4,
+
+
+
+                    });
+                    series.data.setAll(date3);
+
+
+                }
+                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                // createSeries("งบประมาณ", "total_budgot");
+                createSeries2("ภาพรวมสถานะการเบิกจ่าย ", "totalcon_cost")
+
+
+
+                legend.data.setAll(chart.series.values);
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                chart.appear(1000, 100);
 
             }); // end am5.ready()
         </script>
 
 
 
-<script src="{{ asset('vendors/DataTables/datatables.min.js') }}"></script>
-    <script>
-      $(document).ready(function() {
-        var token = $('meta[name="csrf-token"]').attr('content');
-        var modal = $('.modal')
-        var form = $('.form')
-        var btnAdd = $('.add'),
-          btnSave = $('.btn-save'),
-          btnUpdate = $('.btn-update');
-        var table = $('#datatables').DataTable({
-          autoWidth: false,
-          processing: true,
-          serverSide: true,
-          responsive: true,
-          ajax: "{{ route('contract.index') }}",
-          language: {
-            processing: "กำลังประมวลผล...",
-            search: "ค้นหา:",
-            lengthMenu: "แสดง _MENU_ รายการ",
-            info: "แสดงรายที่ _START_ ถึง _END_ ทั้งหมด _TOTAL_ รายการ",
-            infoEmpty: "แสดงรายที่ 0 ถึง 0 ทั้งหมด 0 รายการ",
-            infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-            infoPostFix: "",
-            loadingRecords: "Chargement en cours...",
-            zeroRecords: "ไม่พบข้อมูล",
-            emptyTable: "ไม่พบข้อมูล",
-            paginate: {
-              first: "หน้าแรก",
-              previous: "ย้อนกลับ",
-              next: "ถัดไป",
-              last: "หน้าสุดท้าย"
-            },
-            aria: {
-              sortAscending: ": เรียงจากน้อยไปหามาก",
-              sortDescending: ": เรียงจากมากไปหาน้อย"
-            }
-          },
-          columns: [{
-            data: 'DT_RowIndex',
-              name: 'DT_RowIndex',
-              orderable: false,
-              searchable: false
-            },
-            {
-              data: 'contract_number_output',
-              name: 'contract_number'
-            },
-            {
-              data: 'contract_name_output',
-              name: 'contract_name'
-            },
-            {
-              data: 'contract_fiscal_year'
-            },
-            {
-              className: "text-end",
-              data: 'action',
-              orderable: false,
-              searchable: false
-            }
-          ]
-        });
+        <script src="{{ asset('vendors/DataTables/datatables.min.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                var token = $('meta[name="csrf-token"]').attr('content');
+                var modal = $('.modal')
+                var form = $('.form')
+                var btnAdd = $('.add'),
+                    btnSave = $('.btn-save'),
+                    btnUpdate = $('.btn-update');
+                var table = $('#datatables').DataTable({
+                    autoWidth: false,
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    ajax: "{{ route('contract.index') }}",
+                    language: {
+                        processing: "กำลังประมวลผล...",
+                        search: "ค้นหา:",
+                        lengthMenu: "แสดง _MENU_ รายการ",
+                        info: "แสดงรายที่ _START_ ถึง _END_ ทั้งหมด _TOTAL_ รายการ",
+                        infoEmpty: "แสดงรายที่ 0 ถึง 0 ทั้งหมด 0 รายการ",
+                        infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+                        infoPostFix: "",
+                        loadingRecords: "Chargement en cours...",
+                        zeroRecords: "ไม่พบข้อมูล",
+                        emptyTable: "ไม่พบข้อมูล",
+                        paginate: {
+                            first: "หน้าแรก",
+                            previous: "ย้อนกลับ",
+                            next: "ถัดไป",
+                            last: "หน้าสุดท้าย"
+                        },
+                        aria: {
+                            sortAscending: ": เรียงจากน้อยไปหามาก",
+                            sortDescending: ": เรียงจากมากไปหาน้อย"
+                        }
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'contract_number_output',
+                            name: 'contract_number'
+                        },
+                        {
+                            data: 'contract_name_output',
+                            name: 'contract_name'
+                        },
+                        {
+                            data: 'contract_fiscal_year'
+                        },
+                        {
+                            className: "text-end",
+                            data: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ]
+                });
 
-        btnUpdate.click(function() {
-          if (!confirm("Are you sure?")) return;
-          var formData = form.serialize() + '&_method=PUT&_token=' + token
-          var updateId = form.find('input[name="id"]').val()
-          $.ajax({
-            type: "POST",
-            url: "/" + updateId,
-            data: formData,
-            success: function(data) {
-              if (data.success) {
-                table.draw();
-                modal.modal('hide');
-              }
-            }
-          }); //end ajax
-        })
-
-
-        $(document).on('click', '.btn-delete', function() {
-          if (!confirm("Are you sure?")) return;
-
-          var rowid = $(this).data('rowid')
-          var el = $(this)
-          if (!rowid) return;
+                btnUpdate.click(function() {
+                    if (!confirm("Are you sure?")) return;
+                    var formData = form.serialize() + '&_method=PUT&_token=' + token
+                    var updateId = form.find('input[name="id"]').val()
+                    $.ajax({
+                        type: "POST",
+                        url: "/" + updateId,
+                        data: formData,
+                        success: function(data) {
+                            if (data.success) {
+                                table.draw();
+                                modal.modal('hide');
+                            }
+                        }
+                    }); //end ajax
+                })
 
 
-          $.ajax({
-            type: "POST",
-            dataType: 'JSON',
-            url: "{{ url('contract') }}/" + rowid,
-            data: {
-              _method: 'delete',
-              _token: token
-            },
-            success: function(data) {
-              if (data.success) {
-                table.row(el.parents('tr'))
-                  .remove()
-                  .draw();
-              }
-            }
-          }); //end ajax
-        })
-      });
-    </script>
+                $(document).on('click', '.btn-delete', function() {
+                    if (!confirm("Are you sure?")) return;
+
+                    var rowid = $(this).data('rowid')
+                    var el = $(this)
+                    if (!rowid) return;
+
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'JSON',
+                        url: "{{ url('contract') }}/" + rowid,
+                        data: {
+                            _method: 'delete',
+                            _token: token
+                        },
+                        success: function(data) {
+                            if (data.success) {
+                                table.row(el.parents('tr'))
+                                    .remove()
+                                    .draw();
+                            }
+                        }
+                    }); //end ajax
+                })
+            });
+        </script>
 
 
 

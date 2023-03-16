@@ -45,11 +45,11 @@
                     <div data-coreui-toggle="date-picker" id="disbursement_taskcons_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', strtotime($taskcon->disbursement_taskcons_date)) }}"></div>
 
                     <div class="form-group">
-                        <label for="taskcon_budget_gov_utility">Budget (Govt. Utility)</label>
+                        <label for="taskcon_budget_gov_utility">Budget </label>
                         <input type="text" class="form-control" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" value="{{ $taskcon->taskcon_budget_gov_utility }}">
                     </div>
                     <div class="form-group">
-                        <label for="taskcon_cost_gov_utility">Cost (Govt. Utility)</label>
+                        <label for="taskcon_cost_gov_utility">Cost </label>
                         <input type="text" class="form-control" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" value="{{ $taskcon->taskcon_cost_gov_utility }}">
                     </div>
 

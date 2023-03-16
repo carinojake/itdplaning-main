@@ -269,6 +269,25 @@ class Helper
         }
     }
 
+    public static function contractRePa($repa_id = null)
+    {
+        $pastatus = [
+            "1" => "คืน",
+            "2" => "ไม่ได้คืน",
+
+        ];
+
+        if ($repa_id && array_key_exists($repa_id, $pastatus)) {
+            return $pastatus[$repa_id];
+        } elseif (!$repa_id) {
+            return $pastatus;
+        } else {
+            return 'Unknown';
+        }
+    }
+
+
+
     public static function JuristicType($juristic_type_id = null)
     {
         $juristic_types = [

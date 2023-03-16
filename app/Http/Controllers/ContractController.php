@@ -38,7 +38,8 @@ class ContractController extends Controller
                     })
                     ->addColumn('contract_name_output', function ($row) {
                         $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
-                        $html        = $row->contract_name . ' ' . $flag_status;
+                        $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
+                        $html        = $row->contract_name . ' ' . $flag_status ;
                         $html .= '<br><span class="badge bg-info">' . Helper::date($row->contract_start_date) . '</span> -';
                         $html .= ' <span class="badge bg-info">' . Helper::date($row->contract_end_date) . '</span>';
 
@@ -58,11 +59,15 @@ class ContractController extends Controller
                             $html .= ' <span class="badge bg-warning">' . $row->task->count() . ' กิจกรรม</span>';
                         }
 
+
+
                         return $html;
                     })
                     ->addColumn('contract_fiscal_year', function ($row) {
                         return $row->contract_fiscal_year;
                     })
+
+
                     ->addColumn('action', function ($row) {
                         $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
                         $html .= '<a href="' . route('contract.show', $row->hashid) . '" class="btn btn-success text-white"><i class="cil-folder-open "></i></a>';
@@ -101,18 +106,6 @@ class ContractController extends Controller
        // $gantt = '';
 
         // dd(Hashids::encode($contract->task->task_id));
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -236,7 +229,7 @@ class ContractController extends Controller
         $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
-
+        $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -309,6 +302,7 @@ class ContractController extends Controller
         $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
+        $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
 

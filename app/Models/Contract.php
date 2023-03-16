@@ -51,7 +51,7 @@ class Contract extends Model
         'contract_name', 'contract_number', 'contract_year',
         'contract_description', 'contract_type', 'contract_status',
         'contract_start_date', 'contract_end_date', 'created_at', 'updated_at', 'deleted_at',
-        'contract_owner','contract_refund_pa_budget',
+        'contract_owner','contract_refund_pa_budget','contract_refund_pa_status','contract_peryear_pa_budget',
         'contract_projectplan', 'contract_mm', 'contract_pr', 'contract_pa', 'contract_pr_budget', 'contract_pa_butget'
     ];
 

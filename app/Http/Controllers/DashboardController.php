@@ -38,6 +38,7 @@ class DashboardController extends Controller
         ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', 2566)->count());
 
 
+       // $rebuts = contract::count($contract->taskcont);
 
         $tasks = Task::count();
 
@@ -258,6 +259,71 @@ as d')
 
 
 
+
+
+
+
+
+        $contracts_pr_budget = DB::table('contracts')
+        ->selectRaw('SUM(COALESCE(contract_pr_budget, 0)) AS cp')
+        ->get()
+        ->toJson(JSON_NUMERIC_CHECK);
+        ($json = json_decode($contracts_pr_budget));
+        ($cp = $json[0]->cp);
+       ($cpb = (float)$cp);
+
+
+       // ->get()
+       // ->toJson(JSON_NUMERIC_CHECK);
+       // ($json = json_decode($contracts_pr_budget));
+       // ($cp = $json[0]->cp);
+     //   ($cpb = (float)$cp);
+    // $contracts_pr_budget is now a collection containing a single object
+    // with a 'cb' property representing the sum of the contract_pr_budget column
+    // If the contracts table is empty, the value of 'cb' will be null
+    $contract_peryear_pa_budget = DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_peryear_pa_budget, 0)) AS cby')
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK);
+    ($json = json_decode($contract_peryear_pa_budget));
+    ($cby = $json[0]->cby);
+   ($cpy = (float)$cby);
+
+    ($contracts_pa_budget = DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_pa_budget, 0)) AS cb')
+    ->where('contract_fiscal_year', '=', 2566)
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK));
+    ($json = json_decode($contracts_pa_budget));
+    ($cb = $json[0]->cb);
+    ($cpa = (float)$cb);
+
+
+    ($contract_refund_pa_budget =  DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
+    ->where('contract_fiscal_year', '=', 2566)
+    ->where('contract_refund_pa_status', '=', 1)
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK));
+    ($json = json_decode($contract_refund_pa_budget));
+    ($cbrr = $json[0]->cbr);
+    ($cpre = (float)$cbrr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         ($project_bu_fiscal_years = Project::selectRaw('project_fiscal_year as fiscal_year, sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
 
             ->groupBy('project_fiscal_year')
@@ -313,6 +379,26 @@ as d')
             ->toJson(JSON_NUMERIC_CHECK)
         );
 
+       ($taskconcosttotals = DB::table('taskcons')
+       ->select(
+           DB::raw('reguiar_id as fiscal_year_b,SUM(
+
+               + COALESCE(taskcon_cost_gov_utility, 0)
+
+           ) AS totalcon_cost'),
+
+       )
+       ->join('contracts', 'taskcons.contract_id', '=', 'contracts.contract_id')
+       ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+       ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+       ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+
+       ->groupBy('projects.reguiar_id')
+       ->get()
+       ->toJson(JSON_NUMERIC_CHECK)
+);
+
+
 
         // Calculate total budget by fiscal year and reguiar_id
         $project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
@@ -349,7 +435,9 @@ as d')
 
 
         ($totals_ut = $budgetsut - $coats_ut);
-        ($totals_budgets = $budgets - $coats);
+
+
+        ($totals_budgets = $budgets - $cpb);
         $totals_ict = $budgetscentralict - $coats_ict;
         $totals_inv = $budgetsinvestment - $coats_inv;
 
@@ -358,9 +446,16 @@ as d')
 
 
         ($total_ut = $budgetsut - $coatcons_ut);
-        ($total_budgets = $budgets - $coatcons);
+       ($total_budgets = $budgets - $coatcons);
         $total_ict = $budgetscentralict - $coatcons_ict;
         $total_inv = $budgetsinvestment - $coatcons_inv;
+
+
+
+
+
+
+
 
 
 
@@ -499,7 +594,13 @@ as d')
             return view(
                 'app.dashboard.index',
                 compact(
-
+                    'taskconcosttotals',
+                    'cpy',
+                    'cpre',
+                    'cpa',
+                    'cpb',
+                    'contracts_pa_budget',
+                    'contracts_pr_budget',
                     'taskcosttotals2_json',
                     'taskcosttotals2',
                     'project_groupby',

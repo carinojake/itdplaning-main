@@ -191,10 +191,14 @@
               </div>
 
               <div class="row">
-                <div class="col-6">{{ __('จำนวนคงเหลือหลังเงิน PA(2)') }}</div>
-                <div class="col-6">{{ number_format($contract->contract_refund_pa_budget)}}</div>
+                <div class="col-6">{{ __('จำนวนเงินคงต่อปี PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget)}}</div>
               </div>
 
+              <div class="row">
+                <div class="col-6">{{ __('refund_pa_status') }}</div>
+                <div class="col-6">{{($contract->contract_refund_pa_status)}}</div>
+              </div>
               <div class="row">
                 <div class="col-6">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
                 <div class="col-6">{{ $contract->contract_owner }}</div>

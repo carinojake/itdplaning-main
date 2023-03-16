@@ -137,6 +137,12 @@
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0">
                   </div>
+                  <div class="col-md-6">
+                    <label for="contract_peryear_pa_budget" class="form-label">{{ __('จำนวนเงินต่อปี PA') }}</label> <span class="text-danger">*</span>
+                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0">
+                  </div>
+
 
                   <div class="col-md-6">
                     <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> <span class="text-danger">*</span>
