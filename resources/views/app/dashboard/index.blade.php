@@ -26,7 +26,7 @@
                                                             <div class="card-body">
 
                                                                 <div class="fs-4 fw-semibold "><span
-                                                                        style="color: green ">{{ Helper::millionFormat($budgets) }}
+                                                                        style="color: green ">{{ number_format($budgets,2) }}
                                                                     </span></div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -45,7 +45,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold "><span
-                                                                        style="color: rgb(10, 10, 10) ">{{ Helper::millionFormat($budgetscentralict) }}</span>
+                                                                        style="color: rgb(10, 10, 10) ">{{ number_format($budgetscentralict,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -64,7 +64,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($budgetsinvestment) }}
+                                                                    {{number_format ($budgetsinvestment,2) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -81,7 +81,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ Helper::millionFormat($budgetsut) }}</div>
+                                                                    {{ number_format($budgetsut,2) }}</div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
@@ -118,7 +118,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #dc3545 ">{{ Helper::millionFormat($cpb) }}</span>
+                                                                        style="color: #3591dc ">{{ number_format($cpb,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -137,7 +137,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #3591dc ">{{ Helper::millionFormat($cpa) }}</span>
+                                                                        style="color: #dc3535 ">{{ number_format($cpa,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -155,9 +155,14 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
+
+
+
                                                                     <span
-                                                                        style="color: #94ee1f ">{{ Helper::millionFormat($cpb - $cpa) }}</span>
+                                                                        style="color: #94ee1f ">{{ number_format($cpb - $cpa,2) }}</span>
                                                                 </div>
+
+
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
@@ -207,7 +212,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #94ee1f ">{{ Helper::millionFormat($totals_budgets) }}</span>
+                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -549,6 +554,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
         <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
+
         <!-- Chart code -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
@@ -556,7 +562,18 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      />
+      <link
+        href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
+        rel="stylesheet"
+      />
         <script>
+
+
+
             am5.ready(function() {
 
                 // Create root element

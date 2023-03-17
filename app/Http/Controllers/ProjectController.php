@@ -8,6 +8,7 @@ use App\Models\ContractHasTask;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -137,11 +138,11 @@ class ProjectController extends Controller
 
         $project = Project::find($id);
 
-        (Int) $__budget_gov = (Int) $project['budget_gov_operating'] + (Int) $project['budget_gov_utility'] + (Int) $project['budget_gov_investment'];
-        (Int) $__budget_it  = (Int) $project['budget_it_operating'] + (Int) $project['budget_it_investment'];
-        (Int) $__budget     = $__budget_gov + $__budget_it;
-        (Int) $__cost       = (Int) $project['project_cost'];
-        (Int) $__balance    = $__budget + (Int) $project['project_cost'];
+        (Double) $__budget_gov = (Double) $project['budget_gov_operating'] + (Double) $project['budget_gov_utility'] + (Double) $project['budget_gov_investment'];
+        (Double) $__budget_it  = (Double) $project['budget_it_operating'] + (Double) $project['budget_it_investment'];
+        (Double) $__budget     = $__budget_gov + $__budget_it;
+        (Double) $__cost       = (Double) $project['project_cost'];
+        (Double) $__balance    = $__budget + (Double) $project['project_cost'];
         $__project_cost     = [];
 
         $gantt[] = [
@@ -168,11 +169,11 @@ class ProjectController extends Controller
         $budget['total'] = $__budget;
 
         foreach ($project->task as $task) {
-            (Int) $__budget_gov = (Int) $task['task_budget_gov_operating'] + (Int) $task['task_budget_gov_utility'] + (Int) $task['task_budget_gov_investment'];
-            (Int) $__budget_it  = (Int) $task['task_budget_it_operating'] + (Int) $task['task_budget_it_investment'];
-            (Int) $__budget     = $__budget_gov + $__budget_it;
+            (Double) $__budget_gov = (Double) $task['task_budget_gov_operating'] + (Double) $task['task_budget_gov_utility'] + (Double) $task['task_budget_gov_investment'];
+            (Double) $__budget_it  = (Double) $task['task_budget_it_operating'] + (Double) $task['task_budget_it_investment'];
+            (Double) $__budget     = $__budget_gov + $__budget_it;
 
-            (Int) $__cost = array_sum([
+            (Double) $__cost = array_sum([
                 $task['task_cost_gov_operating'],
                 $task['task_cost_gov_investment'],
                 $task['task_cost_gov_utility'],
@@ -180,7 +181,7 @@ class ProjectController extends Controller
                 $task['task_cost_it_investment'],
             ]);
 
-            (Int) $__balance = $__budget - $__cost;
+            (Double) $__balance = $__budget - $__cost;
 
             $gantt[] = [
                 'id'                    => 'T' . $task['task_id'] . $task['project_id'],
@@ -249,7 +250,7 @@ class ProjectController extends Controller
         $project->budget_gov_utility    = $request->input('budget_gov_utility');
         $project->budget_it_operating   = $request->input('budget_it_operating');
         $project->budget_it_investment  = $request->input('budget_it_investment');
-
+ $project->reguiar_id            = $request->input('reguiar_id');
         if ($project->save()) {
             return redirect()->route('project.index');
         }
@@ -306,7 +307,7 @@ class ProjectController extends Controller
         $project->budget_gov_utility    = $request->input('budget_gov_utility');
         $project->budget_it_operating   = $request->input('budget_it_operating');
         $project->budget_it_investment  = $request->input('budget_it_investment');
-
+        $project->reguiar_id            = $request->input('reguiar_id');
         if ($project->save()) {
             return redirect()->route('project.index');
         }

@@ -23,7 +23,7 @@ class DashboardController extends Controller
      * Create a new controller instance.
      *
      * @return void
-     * @var int $taskcosttotal
+     * @var double $taskcosttotal
      */
     public function __construct()
     {
@@ -299,6 +299,37 @@ as d')
     ($cpa = (float)$cb);
 
 
+
+    ($contractsre = DB::table('contracts')
+   ->select('contracts.contract_name',
+            'contracts.contract_number',
+            'contracts.contract_pr_budget',
+            'contracts.contract_pa_budget',
+            DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget AS remaining_amount'),
+            'contracts.contract_id',
+            'contract_has_tasks.contract_id',
+            'contract_has_tasks.task_id',
+            'tasks.task_id',
+            'tasks.project_id',
+            'projects.project_id',
+            'projects.project_name')
+   ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+   ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+   ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+   ->where('contracts.contract_fiscal_year', '=', 2566)
+   ->where('contracts.contract_pa_budget', '!=', null)
+   ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
+
+   ->get()
+   ->toJson()
+
+
+
+
+);
+
+
+
     ($contract_refund_pa_budget =  DB::table('contracts')
     ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
     ->where('contract_fiscal_year', '=', 2566)
@@ -400,6 +431,7 @@ as d')
 
 
 
+
         // Calculate total budget by fiscal year and reguiar_id
         $project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
@@ -468,11 +500,11 @@ as d')
 
         $project =  Project::where('project_fiscal_year', 2566)->get();
         foreach ($project as $project) {
-            ((int) $__budget_gov = (int) $project['budget_gov_operating'] + (int) $project['budget_gov_utility'] + (int) $project['budget_gov_investment']);
-            ((int) $__budget_it  = (int) $project['budget_it_operating'] + (int) $project['budget_it_investment']);
-            ((int) $__budget    = $__budget_gov + $__budget_it);
-            (int) $__cost       = (int) $project['project_cost'];
-            (int) $__balance    = $__budget + (int) $project['project_cost'];
+            ((double) $__budget_gov = (double) $project['budget_gov_operating'] + (double) $project['budget_gov_utility'] + (double) $project['budget_gov_investment']);
+            ((double) $__budget_it  = (double) $project['budget_it_operating'] + (double) $project['budget_it_investment']);
+            ((double) $__budget    = $__budget_gov + $__budget_it);
+            (double) $__cost       = (double) $project['project_cost'];
+            (double) $__balance    = $__budget + (double) $project['project_cost'];
             $__project_cost     = [];
             $gantt[] = [
                 'id'                    => $project['project_id'],
@@ -495,17 +527,17 @@ as d')
             ];
             ($budget['total'] = $__budget);
             foreach ($project->task as $task) {
-                (int) $__budget_gov = (int) $task['task_budget_gov_operating'] + (int) $task['task_budget_gov_utility'] + (int) $task['task_budget_gov_investment'];
-                (int) $__budget_it  = (int) $task['task_budget_it_operating'] + (int) $task['task_budget_it_investment'];
-                (int) $__budget     = $__budget_gov + $__budget_it;
-                (int) $__cost = array_sum([
+                (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
+                (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
+                (double) $__budget     = $__budget_gov + $__budget_it;
+                (double) $__cost = array_sum([
                     $task['task_cost_gov_operating'],
                     $task['task_cost_gov_investment'],
                     $task['task_cost_gov_utility'],
                     $task['task_cost_it_operating'],
                     $task['task_cost_it_investment'],
                 ]);
-                (int) $__balance = $__budget - $__cost;
+                (double) $__balance = $__budget - $__cost;
                 $gantt[] = [
                     'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                     'text'                  => $task['task_name'],
@@ -536,6 +568,8 @@ as d')
             $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
             ($budget['cost']    = $gantt[0]['cost']);
             $budget['balance'] = $gantt[0]['balance'];
+
+
             // $tasks = Task::get()->toArray();
             // foreach($tasks as $task) {
             //     // (Int) $__budget_gov = (Int) $project['budget_gov_operating'] + (Int) $project['budget_gov_utility'] + (Int) $project['budget_gov_investment'];
@@ -594,6 +628,7 @@ as d')
             return view(
                 'app.dashboard.index',
                 compact(
+                    'contractsre',
                     'taskconcosttotals',
                     'cpy',
                     'cpre',

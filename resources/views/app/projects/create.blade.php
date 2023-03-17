@@ -54,6 +54,12 @@
                   <div class="invalid-feedback">
                     {{ __('ชื่องาน/โครงการ ซ้ำ') }}
                   </div>
+                  <div class="col-md-12">
+                    <label for="reguiar_id" class="form-label">{{ __('no') }}</label> <span class="text-danger"></span>
+                    <input type="text" class="form-control" id="reguiar_id" name="reguiar_id" >
+                    <div class="invalid-feedback">
+                      {{ __('no.ชื่องาน/โครงการ ') }}
+                    </div>
                 </div>
                 <div class="col-md-6">
                   <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>

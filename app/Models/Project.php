@@ -95,7 +95,7 @@ class Project extends Model
     // Relations ...
     public function task()
     {
-        return $this->hasMany('App\Models\Task', 'project_id');
+        return $this->hasMany('App\Models\Task', 'project_id')->OrderBy('created_at');
     }
     public function main_task()
     {
