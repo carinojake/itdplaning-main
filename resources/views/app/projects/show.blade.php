@@ -151,7 +151,9 @@
 
       //Template
       var leftGridColumns = {
-        columns: [{
+        columns: [
+
+        {
             name: "",
             width: 60,
             resize: false,
@@ -167,7 +169,7 @@
             resize: true,
             template(task) {
               if (gantt.getState().selected_task == task.id) {
-                return "<b>" + task.text + "</b>";
+                return "<b>"  + task.text + "</b>";
               } else {
                 return task.text;
               };
@@ -180,10 +182,14 @@
         ]
       };
       var rightGridColumns = {
-        columns: [{
+        columns: [
+
+
+        {
             name: "budget",
             width: 100,
             label: "งบประมาณ",
+            tree: true,
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
               if (task.budget) {
@@ -192,10 +198,12 @@
                   currency: 'THB'
                 }).format(task.budget);
               } else {
-                return '';
+                return 'fyty';
               }
             }
           },
+
+
           {
             name: "cost",
             width: 100,
@@ -208,7 +216,10 @@
                   currency: 'THB'
                 }).format(task.cost) + '</span>';
               } else {
-                return '';
+                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                  style: 'currency',
+                  currency: 'THB'
+                }).format(task.balance) + '</span>';
               }
             }
           },
@@ -339,7 +350,9 @@
       gantt.config.layout = {
         css: "gantt_container",
         rows: [{
-            cols: [{
+            cols: [
+
+            {
                 view: "grid",
                 width: 500,
                 scrollX: "scrollHor",
