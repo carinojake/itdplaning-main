@@ -206,13 +206,12 @@ class ProjectController extends Controller
             $__project_cost[] = $__cost;
         }
         $gantt[0]['cost']    = array_sum($__project_cost);
-        ($gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost']);
-        ($gantt[1]['balance'] = $gantt[5]['cost']);
+        $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
 
         $budget['cost']    = $gantt[0]['cost'];
         $budget['balance'] = $gantt[0]['balance'];
 
-        ($gantt = json_encode($gantt));
+        $gantt = json_encode($gantt);
 
         return view('app.projects.show', compact('project', 'gantt', 'budget'));
     }

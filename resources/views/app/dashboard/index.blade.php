@@ -13,7 +13,7 @@
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                                                 aria-controls="panelsStayOpen-collapseOne">
-                                                <span style="color: green "> งบประมาณ ประจำปี 2566 </span>
+                                                <span style="color: #0dfd0d "> งบประมาณ ประจำปี 2566 </span>
                                             </button>
                                         </h2>
 
@@ -113,7 +113,7 @@
                                             aria-labelledby="panelsStayOpen-headingTwo">
                                             <div class="accordion-body">
                                                 <div class="mb-1 row ">
-                                                   {{-- <div class="col-sm-6 col-md-4 col-lg-3">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
@@ -131,14 +131,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        --}}
 
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #dc3535 ">{{ number_format($cpa,2) }}</span>
+                                                                        style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -152,35 +151,33 @@
                                                         </div>
                                                     </div>
 
-                                                        <div class="col-sm-6 col-md-4 col-lg-3">
-                                                            <div class="card ">
-                                                                <div class="card-body">
-                                                                    <div class="fs-4 fw-semibold ">
-
-
-
-                                                                        <span
-                                                                            style="color: green ">{{ number_format($cpa+$totals_budgets+$cpb-$cpa ,2) }}</span>
-                                                                    </div>
-
-
-                                                                    <svg class="icon icon-xl text-end">
-                                                                        <use
-                                                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                        </use>
-                                                                    </svg>
-                                                                    <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
+
+
+
                                                                     <span
-                                                                        style="color: #dc3535 ">{{ number_format($cpa,2) }}</span>
+                                                                        style="color: #94ee1f ">{{ number_format($cpb - $cpa,2) }}</span>
+                                                                </div>
+
+
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">เหลือ</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -188,19 +185,34 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
-                                                                    PA</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืนเงิน</small>
                                                             </div>
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets+$cpb-$cpa  ,2) }}</span>
+                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -212,8 +224,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
+
+
+
+
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -237,7 +254,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold"><span
-                                                                        style="color:   #700ef0">{{ Helper::millionFormat($coatcons) }}
+                                                                        style="color:   #f70f0f">{{ Helper::millionFormat($coatcons) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -304,7 +321,7 @@
 
                                                         </div>
                                                     </div>
-
+                                                    -------------------------------------------------------------------------------------------------------------
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
@@ -443,12 +460,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title fs-5 fw-semibold">Project</div>
-
                     <div id="gantt_here" style='width:100%; height:100vh;'></div>
-
                 </div>
             </div>
-
         </div>
 
         <!-- Widget Chart yaer -->
@@ -532,6 +546,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
     <x-slot:css>
 
         <link href="{{ asset('vendors/DataTables/datatables.css') }}" rel="stylesheet" />
+        <!--<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>-->
+        <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+        <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
 
     </x-slot:css>
     <x-slot:javascript>
@@ -541,7 +558,6 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <script src="{{ asset('vendors/amcharts5/xy.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
-        <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
 
         <!-- Chart code -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -583,35 +599,13 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 title: "Today: " + date_to_str(today)
             });
 
+
+
+
             //Template
             var leftGridColumns = {
-                columns: [{
-                        name: "",
-                        width: 60,
-                        resize: false,
-                        template: function(task) {
-                            return "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
-                        }
-                    },
+                columns: [
 
-                    {
-                        name: "text",
-                        width: 50,
-                        label: "ปี",
-                        template: function(task) {
-                            if (task.project_fiscal_year) {
-                                return new Intl.NumberFormat(
-                                    'th-TH', {
-
-                                        useGrouping: false
-                                    }
-                                ).format(task.project_fiscal_year);
-                            } else {
-                                return '';
-                            }
-
-                        }
-                    },
                     {
                         name: "text",
                         width: 300,
@@ -636,7 +630,6 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 columns: [{
                         name: "budget",
                         width: 100,
-                        tree: true,
                         label: "งบประมาณ",
                         tree: true,
                         template: function(task) {
@@ -671,7 +664,8 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     {
                         name: "cost",
                         width: 100,
-                        label: "ใช้จ่ายแล้ว",
+                        label: "เบิกจ่าย",
+
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.cost) {
@@ -818,11 +812,10 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
             gantt.config.grid_resize = true;
             gantt.config.layout = {
                 css: "gantt_container",
-                rows: [
-                    {
+                rows: [{
                         cols: [{
                                 view: "grid",
-                                width: 500,
+                                width: 900,
                                 scrollX: "scrollHor",
                                 scrollY: "scrollVer",
                                 config: leftGridColumns
@@ -842,7 +835,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                             },
                             {
                                 view: "grid",
-                                width: 300,
+                                width: 900,
                                 bind: "task",
                                 scrollY: "scrollVer",
                                 config: rightGridColumns

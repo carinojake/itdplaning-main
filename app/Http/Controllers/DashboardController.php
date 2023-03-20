@@ -38,7 +38,7 @@ class DashboardController extends Controller
         ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', 2566)->count());
 
 
-        // $rebuts = contract::count($contract->taskcont);
+       // $rebuts = contract::count($contract->taskcont);
 
         $tasks = Task::count();
 
@@ -265,82 +265,80 @@ as d')
 
 
         $contracts_pr_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_pr_budget, 0)) AS cp')
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK);
+        ->selectRaw('SUM(COALESCE(contract_pr_budget, 0)) AS cp')
+        ->get()
+        ->toJson(JSON_NUMERIC_CHECK);
         ($json = json_decode($contracts_pr_budget));
         ($cp = $json[0]->cp);
-        ($cpb = (float)$cp);
+       ($cpb = (float)$cp);
 
 
-        // ->get()
-        // ->toJson(JSON_NUMERIC_CHECK);
-        // ($json = json_decode($contracts_pr_budget));
-        // ($cp = $json[0]->cp);
-        //   ($cpb = (float)$cp);
-        // $contracts_pr_budget is now a collection containing a single object
-        // with a 'cb' property representing the sum of the contract_pr_budget column
-        // If the contracts table is empty, the value of 'cb' will be null
-        $contract_peryear_pa_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_peryear_pa_budget, 0)) AS cby')
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK);
-        ($json = json_decode($contract_peryear_pa_budget));
-        ($cby = $json[0]->cby);
-        ($cpy = (float)$cby);
+       // ->get()
+       // ->toJson(JSON_NUMERIC_CHECK);
+       // ($json = json_decode($contracts_pr_budget));
+       // ($cp = $json[0]->cp);
+     //   ($cpb = (float)$cp);
+    // $contracts_pr_budget is now a collection containing a single object
+    // with a 'cb' property representing the sum of the contract_pr_budget column
+    // If the contracts table is empty, the value of 'cb' will be null
+    $contract_peryear_pa_budget = DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_peryear_pa_budget, 0)) AS cby')
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK);
+    ($json = json_decode($contract_peryear_pa_budget));
+    ($cby = $json[0]->cby);
+   ($cpy = (float)$cby);
 
-        ($contracts_pa_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_pa_budget, 0)) AS cb')
-            ->where('contract_fiscal_year', '=', 2566)
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK));
-        ($json = json_decode($contracts_pa_budget));
-        ($cb = $json[0]->cb);
-        ($cpa = (float)$cb);
+    ($contracts_pa_budget = DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_pa_budget, 0)) AS cb')
+    ->where('contract_fiscal_year', '=', 2566)
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK));
+    ($json = json_decode($contracts_pa_budget));
+    ($cb = $json[0]->cb);
+    ($cpa = (float)$cb);
 
 
 
-        ($contractsre = DB::table('contracts')
-            ->select(
-                'contracts.contract_name',
-                'contracts.contract_number',
-                'contracts.contract_pr_budget',
-                'contracts.contract_pa_budget',
-                DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget AS remaining_amount'),
-                'contracts.contract_id',
-                'contract_has_tasks.contract_id',
-                'contract_has_tasks.task_id',
-                'tasks.task_id',
-                'tasks.project_id',
-                'projects.project_id',
-                'projects.project_name'
-            )
-            ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
-            ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('contracts.contract_fiscal_year', '=', 2566)
-            ->where('contracts.contract_pa_budget', '!=', null)
-            ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
+    ($contractsre = DB::table('contracts')
+   ->select('contracts.contract_name',
+            'contracts.contract_number',
+            'contracts.contract_pr_budget',
+            'contracts.contract_pa_budget',
+            DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget AS remaining_amount'),
+            'contracts.contract_id',
+            'contract_has_tasks.contract_id',
+            'contract_has_tasks.task_id',
+            'tasks.task_id',
+            'tasks.project_id',
+            'projects.project_id',
+            'projects.project_name')
+   ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+   ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+   ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+   ->where('contracts.contract_fiscal_year', '=', 2566)
+   ->where('contracts.contract_pa_budget', '!=', null)
+   ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
-            ->get()
-            ->toJson()
+   ->get()
+   ->toJson()
 
 
 
 
-        );
+);
 
 
 
-        ($contract_refund_pa_budget =  DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
-            ->where('contract_fiscal_year', '=', 2566)
-            ->where('contract_refund_pa_status', '=', 1)
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK));
-        ($json = json_decode($contract_refund_pa_budget));
-        ($cbrr = $json[0]->cbr);
-        ($cpre = (float)$cbrr);
+    ($contract_refund_pa_budget =  DB::table('contracts')
+    ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
+    ->where('contract_fiscal_year', '=', 2566)
+    ->where('contract_refund_pa_status', '=', 1)
+    ->get()
+    ->toJson(JSON_NUMERIC_CHECK));
+    ($json = json_decode($contract_refund_pa_budget));
+    ($cbrr = $json[0]->cbr);
+    ($cpre = (float)$cbrr);
 
 
 
@@ -412,24 +410,24 @@ as d')
             ->toJson(JSON_NUMERIC_CHECK)
         );
 
-        ($taskconcosttotals = DB::table('taskcons')
-            ->select(
-                DB::raw('reguiar_id as fiscal_year_b,SUM(
+       ($taskconcosttotals = DB::table('taskcons')
+       ->select(
+           DB::raw('reguiar_id as fiscal_year_b,SUM(
 
                + COALESCE(taskcon_cost_gov_utility, 0)
 
            ) AS totalcon_cost'),
 
-            )
-            ->join('contracts', 'taskcons.contract_id', '=', 'contracts.contract_id')
-            ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
-            ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+       )
+       ->join('contracts', 'taskcons.contract_id', '=', 'contracts.contract_id')
+       ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+       ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+       ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
 
-            ->groupBy('projects.reguiar_id')
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK)
-        );
+       ->groupBy('projects.reguiar_id')
+       ->get()
+       ->toJson(JSON_NUMERIC_CHECK)
+);
 
 
 
@@ -480,7 +478,7 @@ as d')
 
 
         ($total_ut = $budgetsut - $coatcons_ut);
-        ($total_budgets = $budgets - $coatcons);
+       ($total_budgets = $budgets - $coatcons);
         $total_ict = $budgetscentralict - $coatcons_ict;
         $total_inv = $budgetsinvestment - $coatcons_inv;
 
@@ -502,11 +500,11 @@ as d')
 
         $project =  Project::where('project_fiscal_year', 2566)->get();
         foreach ($project as $project) {
-            ((float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] + (float) $project['budget_gov_investment']);
-            ((float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment']);
-            ((float) $__budget    = $__budget_gov + $__budget_it);
-            (float) $__cost       = (float) $project['project_cost'];
-            (float) $__balance    = $__budget + (float) $project['project_cost'];
+            ((double) $__budget_gov = (double) $project['budget_gov_operating'] + (double) $project['budget_gov_utility'] + (double) $project['budget_gov_investment']);
+            ((double) $__budget_it  = (double) $project['budget_it_operating'] + (double) $project['budget_it_investment']);
+            ((double) $__budget    = $__budget_gov + $__budget_it);
+            (double) $__cost       = (double) $project['project_cost'];
+            (double) $__balance    = $__budget + (double) $project['project_cost'];
             $__project_cost     = [];
             $gantt[] = [
                 'id'                    => $project['project_id'],
@@ -529,17 +527,17 @@ as d')
             ];
             ($budget['total'] = $__budget);
             foreach ($project->task as $task) {
-                (float) $__budget_gov = (float) $task['task_budget_gov_operating'] + (float) $task['task_budget_gov_utility'] + (float) $task['task_budget_gov_investment'];
-                (float) $__budget_it  = (float) $task['task_budget_it_operating'] + (float) $task['task_budget_it_investment'];
-                (float) $__budget     = $__budget_gov + $__budget_it;
-                (float) $__cost = array_sum([
+                (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
+                (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
+                (double) $__budget     = $__budget_gov + $__budget_it;
+                (double) $__cost = array_sum([
                     $task['task_cost_gov_operating'],
                     $task['task_cost_gov_investment'],
                     $task['task_cost_gov_utility'],
                     $task['task_cost_it_operating'],
                     $task['task_cost_it_investment'],
                 ]);
-                (float) $__balance = $__budget - $__cost;
+                (double) $__balance = $__budget - $__cost;
                 $gantt[] = [
                     'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                     'text'                  => $task['task_name'],
