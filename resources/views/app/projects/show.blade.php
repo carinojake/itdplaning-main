@@ -152,9 +152,14 @@
 
       //Template
       var leftGridColumns = {
-        columns: [
-
-
+        columns: [{
+            name: "",
+            width: 60,
+            resize: false,
+            template: function(task) {
+              return "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
+            }
+          },
           {
             name: "text",
             width: 300,
@@ -163,7 +168,7 @@
             resize: true,
             template(task) {
               if (gantt.getState().selected_task == task.id) {
-                return "<b>" + task.text + "</b>";
+                return "<b>"  + task.text + "</b>";
               } else {
                 return task.text;
               };
@@ -176,10 +181,14 @@
         ]
       };
       var rightGridColumns = {
-        columns: [{
+        columns: [
+
+
+        {
             name: "budget",
             width: 100,
             label: "งบประมาณ",
+            tree: true,
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
               if (task.budget) {
@@ -188,63 +197,26 @@
                   currency: 'THB'
                 }).format(task.budget);
               } else {
+                return 'fyty';
+              }
+            }
+          },
+          {
+            name: "cost",
+            width: 100,
+            label: "ใช้จ่ายแล้ว",
+            template: function(task) {
+              //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+              if (task.cost) {
+                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                  style: 'currency',
+                  currency: 'THB'
+                }).format(task.cost) + '</span>';
+              } else {
                 return '';
               }
             }
           },
-
-          {
-                        name: "cost",
-                        width: 120,
-                        label: "PA",
-                        tree: true,
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        name: "cost",
-                        width: 100,
-                        label: "เบิกจ่าย",
-
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        name: "cost",
-                        width: 100,
-                        label: "รอการเบิกจ่าย",
-
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-
           {
             name: "balance",
             width: 100,
@@ -372,7 +344,9 @@
       gantt.config.layout = {
         css: "gantt_container",
         rows: [{
-            cols: [{
+            cols: [
+
+            {
                 view: "grid",
                 width: 600,
                 scrollX: "scrollHor",
