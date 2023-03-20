@@ -125,10 +125,11 @@
   </x-slot:content>
 
   <x-slot:css>
-    <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
+    <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+    <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
   </x-slot:css>
   <x-slot:javascript>
-    <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
+
     <script>
       gantt.plugins({
         marker: true,
@@ -151,17 +152,12 @@
 
       //Template
       var leftGridColumns = {
-        columns: [{
-            name: "",
-            width: 60,
-            resize: false,
-            template: function(task) {
-              return "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
-            }
-          },
+        columns: [
+
+
           {
             name: "text",
-            width: 400,
+            width: 300,
             label: "โครงการ/งานประจำ",
             tree: true,
             resize: true,
@@ -196,22 +192,59 @@
               }
             }
           },
+
           {
-            name: "cost",
-            width: 100,
-            label: "ใช้จ่ายแล้ว",
-            template: function(task) {
-              //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-              if (task.cost) {
-                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                  style: 'currency',
-                  currency: 'THB'
-                }).format(task.cost) + '</span>';
-              } else {
-                return '';
-              }
-            }
-          },
+                        name: "cost",
+                        width: 120,
+                        label: "PA",
+                        tree: true,
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+                    {
+                        name: "cost",
+                        width: 100,
+                        label: "เบิกจ่าย",
+
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+                    {
+                        name: "cost",
+                        width: 100,
+                        label: "รอการเบิกจ่าย",
+
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+
           {
             name: "balance",
             width: 100,
@@ -341,7 +374,7 @@
         rows: [{
             cols: [{
                 view: "grid",
-                width: 500,
+                width: 600,
                 scrollX: "scrollHor",
                 scrollY: "scrollVer",
                 config: leftGridColumns
@@ -361,7 +394,7 @@
               },
               {
                 view: "grid",
-                width: 300,
+                width: 500,
                 bind: "task",
                 scrollY: "scrollVer",
                 config: rightGridColumns
