@@ -118,16 +118,16 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #3591dc ">{{ number_format($cpb,2) }}</span>
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
-                                                                    PR</small>
+                                                                    style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
+                                                            </div>
+                                                            <svg class="icon icon-xl text-end">
+                                                                <use
+                                                                    xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                </use>
+                                                            </svg>
+                                                            <small
+                                                                class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                PA</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -137,7 +137,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
+                                                                        style="color: #ec3939 ">{{ number_format($,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -145,64 +145,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
-                                                                    PA</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-
-
-
-                                                                    <span
-                                                                        style="color: #94ee1f ">{{ number_format($cpb - $cpa,2) }}</span>
-                                                                </div>
-
-
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">เหลือ</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    <span style="color: "></span>
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืนเงิน</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    <span style="color: "></span>
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"></small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"> ict</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -212,7 +155,43 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets,2) }}</span>
+                                                                        style="color: #ec3939 ">{{ number_format($totals_budgets+($cpr - $cpa),2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">กำ</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #ec3939 ">{{ number_format($totals_budgets+($cpr - $cpa),2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ดดด</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #64a80b ">{{ number_format($totals_budgets+($cpr - $cpa),2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -224,8 +203,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
+                                                </div>
 
 
 
@@ -321,7 +300,7 @@
 
                                                         </div>
                                                     </div>
-                                                    -------------------------------------------------------------------------------------------------------------
+
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
