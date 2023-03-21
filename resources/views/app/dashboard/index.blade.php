@@ -137,7 +137,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #ec3939 ">{{ number_format($,2) }}</span>
+                                                                        style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use

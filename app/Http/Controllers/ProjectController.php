@@ -1,30 +1,3 @@
-Skip to content
-Product
-Solutions
-Open Source
-Pricing
-Search
-Sign in
-Sign up
-carinojake
-/
-itdplaning-main
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-Insights
-itdplaning-main/app/Http/Controllers/ProjectController.php /
-@carinojake
-carinojake 20032023
-Latest commit fc77bf8 18 hours ago
- History
- 1 contributor
-512 lines (435 sloc)  22.5 KB
-
 <?php
 
 namespace App\Http\Controllers;
@@ -393,8 +366,6 @@ class ProjectController extends Controller
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
 
-        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
-
         $task->project_id       = $id;
         $task->task_name        = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
@@ -414,8 +385,6 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
-        $task->task_pay                 = $request->input('task_pay');
-        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
@@ -470,14 +439,11 @@ class ProjectController extends Controller
             'task_name'                   => 'required',
             'date-picker-task_start_date' => 'required',
             'date-picker-task_end_date'   => 'required',
-
         ]);
 
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
-        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
-
 
         $task->project_id       = $id_project;
         $task->task_name        = $request->input('task_name');
@@ -499,8 +465,6 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
-        $task->task_pay                 = $request->input('task_pay');
-        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
