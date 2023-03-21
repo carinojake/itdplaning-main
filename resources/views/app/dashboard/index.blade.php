@@ -106,7 +106,7 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
                                                 aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                                <span style="color:  #5610f8 ">การใช้จ่ายงบประมาณ PA</span>
+                                                <span style="color: #f81919 ">การใช้จ่ายงบประมาณ PA</span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
@@ -221,7 +221,7 @@
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
                                                 aria-controls="panelsStayOpen-collapseThree">
-                                                <span style="color: #f81010 "> สถานะการเบิกจ่าย </span>
+                                                <span style="color: #5610f8 "> สถานะการเบิกจ่าย </span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
@@ -233,7 +233,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold"><span
-                                                                        style="color:   #f70f0f">{{ Helper::millionFormat($coatcons) }}
+                                                                        style="color:   #700ef0">{{ Helper::millionFormat($coatcons) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -517,17 +517,12 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 width: 100%;
                 height: 250px;
             }
-
-
         </style>
     </x-slot:content>
 
     <x-slot:css>
-
+        <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
         <link href="{{ asset('vendors/DataTables/datatables.css') }}" rel="stylesheet" />
-        <!--<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>-->
-        <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
-        <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
 
     </x-slot:css>
     <x-slot:javascript>
@@ -537,6 +532,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <script src="{{ asset('vendors/amcharts5/xy.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
+        <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
 
         <!-- Chart code -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -545,9 +541,6 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
-
         <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -556,6 +549,618 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
         rel="stylesheet"
       />
+        <script>
+
+
+
+            am5.ready(function() {
+
+                // Create root element
+                // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                var root = am5.Root.new("chart-project-div");
+
+                root._logo.dispose();
+
+
+                // Set themes
+                // https://www.amcharts.com/docs/v5/concepts/themes/
+                root.setThemes([
+                    am5themes_Animated.new(root)
+                ]);
+
+
+                // Create chart
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                    panX: true,
+                    panY: true,
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    pinchZoomX: true
+                }));
+
+                // Add cursor
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+                var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                cursor.lineY.set("visible", false);
+
+
+                // Create axes
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                var xRenderer = am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30
+                });
+                xRenderer.labels.template.setAll({
+                    rotation: -90,
+                    centerY: am5.p50,
+                    centerX: am5.p100,
+                    paddingRight: 15
+                });
+
+                var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                    maxDeviation: 0.3,
+                    categoryField: "fiscal_year",
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(root, {})
+                }));
+
+                var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                    maxDeviation: 0.3,
+                    renderer: am5xy.AxisRendererY.new(root, {})
+                }));
+
+
+                // Create series
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Series 1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "total_budget",
+                    sequencedInterpolation: true,
+                    categoryXField: "fiscal_year",
+                    tooltip: am5.Tooltip.new(root, {
+                        labelText: "{valueY}"
+                    })
+                }));
+
+                series.columns.template.setAll({
+                    cornerRadiusTL: 5,
+                    cornerRadiusTR: 5
+                });
+                series.columns.template.adapters.add("fill", function(fill, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+                series.columns.template.adapters.add("stroke", function(stroke, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+
+                // Set data
+                // var data = {!! $project_bu_fiscal_years !!}
+                var data = {!! $project_bu_fiscal_years !!}
+
+                //[{"fiscal_year":2566,"total_budget":110131828.00}
+                //,{"fiscal_year":2565,"total_budget":92362300.00}
+                //,{"fiscal_year":2564,"total_budget":97323835.00}]
+                xAxis.data.setAll(data);
+                series.data.setAll(data);
+
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                series.appear(1000);
+                chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+        <script>
+            am5.ready(function() {
+
+                // Create root element
+                // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                var root = am5.Root.new("chart-contract-div");
+                root._logo.dispose();
+
+
+                // Set themes
+                // https://www.amcharts.com/docs/v5/concepts/themes/
+                root.setThemes([
+                    am5themes_Animated.new(root)
+                ]);
+
+
+                // Create chart
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                    panX: true,
+                    panY: true,
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    pinchZoomX: true
+                }));
+
+                // Add cursor
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+                var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                cursor.lineY.set("visible", false);
+
+
+                // Create axes
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                var xRenderer = am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30
+                });
+                xRenderer.labels.template.setAll({
+                    rotation: -90,
+                    centerY: am5.p50,
+                    centerX: am5.p100,
+                    paddingRight: 15
+                });
+
+                var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                    maxDeviation: 0.3,
+                    categoryField: "fiscal_year",
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(root, {})
+                }));
+
+                var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                    maxDeviation: 0.3,
+                    renderer: am5xy.AxisRendererY.new(root, {})
+                }));
+
+
+                // Create series
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Series 1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "total",
+                    sequencedInterpolation: true,
+                    categoryXField: "fiscal_year",
+                    tooltip: am5.Tooltip.new(root, {
+                        labelText: "{valueY}"
+                    })
+                }));
+
+                series.columns.template.setAll({
+                    cornerRadiusTL: 5,
+                    cornerRadiusTR: 5
+                });
+                series.columns.template.adapters.add("fill", function(fill, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+                series.columns.template.adapters.add("stroke", function(stroke, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+
+                // Set data
+                var data = {!! $contract_groupby_fiscal_years !!}
+
+                xAxis.data.setAll(data);
+                series.data.setAll(data);
+
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                series.appear(1000);
+                chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+
+
+        <script>
+            am5.ready(function() {
+
+                // Create root element
+                // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                var root = am5.Root.new("chart-task-div");
+                root._logo.dispose();
+
+
+                // Set themes
+                // https://www.amcharts.com/docs/v5/concepts/themes/
+                root.setThemes([
+                    am5themes_Animated.new(root)
+                ]);
+
+
+                // Create chart
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                    panX: true,
+                    panY: true,
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    pinchZoomX: true
+                }));
+
+                // Add cursor
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+                var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                cursor.lineY.set("visible", false);
+
+
+                // Create axes
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                var xRenderer = am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30
+                });
+                xRenderer.labels.template.setAll({
+                    rotation: -90,
+                    centerY: am5.p50,
+                    centerX: am5.p100,
+                    paddingRight: 15
+                });
+
+                var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                    maxDeviation: 0.3,
+                    categoryField: "fiscal_year",
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(root, {})
+                }));
+
+                var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                    maxDeviation: 0.3,
+                    renderer: am5xy.AxisRendererY.new(root, {})
+                }));
+
+
+                // Create series
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Series1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "total",
+                    sequencedInterpolation: true,
+                    categoryXField: "fiscal_year",
+                    tooltip: am5.Tooltip.new(root, {
+                        labelText: "{valueY}"
+                    })
+                }));
+
+                series.columns.template.setAll({
+                    cornerRadiusTL: 5,
+                    cornerRadiusTR: 5
+                });
+                series.columns.template.adapters.add("fill", function(fill, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+                series.columns.template.adapters.add("stroke", function(stroke, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+
+                // Set data $project_groupby_reguiar   project_groupby_fiscal_years
+                var data = {!! $project_groupby_reguiar !!}
+
+
+                xAxis.data.setAll(data);
+                series.data.setAll(data);
+
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                series.appear(1000);
+                chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+
+        <script>
+            am5.ready(function() {
+
+                // Create root element
+                // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                var root = am5.Root.new("chart-d-div");
+                root._logo.dispose();
+
+
+                // Set themes
+                // https://www.amcharts.com/docs/v5/concepts/themes/
+                root.setThemes([
+                    am5themes_Animated.new(root)
+                ]);
+
+
+                // Create chart
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                    panX: true,
+                    panY: true,
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    pinchZoomX: true
+                }));
+
+                // Add cursor
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+                var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                cursor.lineY.set("visible", false);
+
+
+                // Create axes
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                var xRenderer = am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30
+                });
+                xRenderer.labels.template.setAll({
+                    rotation: -90,
+                    centerY: am5.p50,
+                    centerX: am5.p100,
+                    paddingRight: 15
+                });
+
+                var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                    maxDeviation: 0.3,
+                    categoryField: "fiscal_year",
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(root, {})
+                }));
+
+                var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                    maxDeviation: 0.3,
+                    renderer: am5xy.AxisRendererY.new(root, {})
+                }));
+
+
+                // Create series
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Series1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "total",
+                    sequencedInterpolation: true,
+                    categoryXField: "fiscal_year",
+                    tooltip: am5.Tooltip.new(root, {
+                        labelText: "{name}, {categoryX}: {valueY}"
+                    })
+                }));
+
+                series.columns.template.setAll({
+                    cornerRadiusTL: 5,
+                    cornerRadiusTR: 5
+                });
+                series.columns.template.adapters.add("fill", function(fill, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+                series.columns.template.adapters.add("stroke", function(stroke, target) {
+                    return chart.get("colors").getIndex(series.columns.indexOf(target));
+                });
+
+
+                // Set data $project_groupby_reguiar   project_groupby_fiscal_years
+                var data = {!! $taskcosttotals !!}
+
+                xAxis.data.setAll(data);
+                series.data.setAll(data);
+
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                series.appear(1000);
+                chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
+
+
+
+        <!-- Chart code -->
+        <script>
+            am5.ready(function() {
+
+                // Create root element
+                // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                var root = am5.Root.new("chart-totalbot-div");
+
+
+                // Set themes
+                // https://www.amcharts.com/docs/v5/concepts/themes/
+                root.setThemes([
+                    am5themes_Animated.new(root)
+                ]);
+
+
+                // Create chart
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                    panX: false,
+                    panY: false,
+
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    layout: root.verticalLayout
+                }));
+
+
+                // Add legend
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+                var legend = chart.children.push(am5.Legend.new(root, {
+                    centerX: am5.p50,
+                    x: am5.p50
+                }));
+
+                var data = {!! $project_bu_fiscal_years !!}
+
+                [{
+                        "year": "1",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+
+                    },
+
+                    {
+                        "year": "2",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+
+                    {
+                        "year": "3",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "4",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "5",
+                        "งบการ ICT": 1380000,
+                        "งบดำเนินงาน": 10053592,
+                        "ค่าสาธารณูปโภค": null,
+
+                    },
+                    {
+                        "year": "6",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+
+                    {
+                        "year": "7",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": 10250000,
+
+                    },
+                    {
+                        "year": "8",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "9",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "10",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "11",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+                    {
+                        "year": "12",
+                        "งบการ ICT": null,
+                        "งบดำเนินงาน": null,
+                        "ค่าสาธารณูปโภค": null,
+                    },
+
+                ];
+
+
+                // Create axes
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                var xRenderer = am5xy.AxisRendererX.new(root, {
+                    cellStartLocation: 0.1,
+                    cellEndLocation: 0.9
+                });
+
+                var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                    categoryField: "year",
+
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(root, {})
+                }));
+
+                xRenderer.grid.template.setAll({
+                    location: 1
+                })
+
+                xAxis.data.setAll(data);
+
+                var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                    min: 0,
+
+                    calculateTotals: true,
+                    extraMax: 0.1,
+                    renderer: am5xy.AxisRendererY.new(root, {
+                        strokeOpacity: 0.1
+                    })
+                }));
+
+
+                // Add series
+                // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                function makeSeries(name, fieldName, stacked) {
+                    var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                        stacked: stacked,
+                        name: name,
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: fieldName,
+                        categoryXField: "year",
+                        stacked: true,
+                        maskBullets: false
+
+                    }));
+
+                    series.columns.template.setAll({
+                        tooltipText: "{name}, {categoryX}:{valueY}",
+                        width: am5.percent(90),
+                        tooltipY: am5.percent(10)
+                    });
+                    series.data.setAll(data);
+
+                    // Make stuff animate on load
+                    // https://www.amcharts.com/docs/v5/concepts/animations/
+                    series.appear();
+
+                    series.bullets.push(function() {
+                        return am5.Bullet.new(root, {
+                            locationY: 0.5,
+                            sprite: am5.Label.new(root, {
+                                text: "{valueY}",
+                                fill: root.interfaceColors.get("alternativeText"),
+                                centerY: am5.percent(50),
+                                centerX: am5.percent(50),
+                                populateText: true
+                            })
+                        });
+                    });
+
+                    legend.data.push(series);
+                }
+                makeSeries("งบกลาง ICT", "งบการ ICT", true);
+                makeSeries("งบดำเนินงาน", "งบดำเนินงาน", true);
+                makeSeries("ค่าสาธารณูปโภค", "ค่าสาธารณูปโภค", true);
+
+
+
+
+
+                // Make stuff animate on load
+                // https://www.amcharts.com/docs/v5/concepts/animations/
+                chart.appear(1000, 100);
+
+            }); // end am5.ready()
+        </script>
 
         <!-- HTML -->
         <script>
@@ -563,9 +1168,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 marker: true,
                 fullscreen: true,
                 critical_path: true,
-                 auto_scheduling: true,
+                // auto_scheduling: true,
                 tooltip: true,
-                 undo: true
+                // undo: true
             });
 
             //Marker
@@ -583,8 +1188,35 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
 
             //Template
             var leftGridColumns = {
-                columns: [
+                columns: [{
+                        name: "",
+                        width: 60,
+                        resize: false,
+                        template: function(task) {
+                            return "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
+                        }
+                    },
 
+
+
+                    {
+                        name: "text",
+                        width: 50,
+                        label: "ปี",
+                        template: function(task) {
+                            if (task.project_fiscal_year) {
+                                return new Intl.NumberFormat(
+                                    'th-TH', {
+
+                                        useGrouping: false
+                                    }
+                                ).format(task.project_fiscal_year);
+                            } else {
+                                return '';
+                            }
+
+                        }
+                    },
                     {
                         name: "text",
                         width: 300,
@@ -610,7 +1242,6 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         name: "budget",
                         width: 100,
                         label: "งบประมาณ",
-                        tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.budget) {
@@ -625,26 +1256,8 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     },
                     {
                         name: "cost",
-                        width: 120,
-                        label: "PA",
-                        tree: true,
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        name: "cost",
                         width: 100,
-                        label: "เบิกจ่าย",
-
+                        label: "ใช้จ่ายแล้ว",
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.cost) {
@@ -657,24 +1270,6 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                             }
                         }
                     },
-                    {
-                        name: "cost",
-                        width: 100,
-                        label: "รอการเบิกจ่าย",
-
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-
                     {
                         name: "balance",
                         width: 100,
@@ -784,17 +1379,17 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
             //Config
             gantt.config.date_format = "%Y-%m-%d";
 
-            gantt.config.drag_links = true;
-            gantt.config.drag_move = true;
-            gantt.config.drag_progress = true;
-            gantt.config.drag_resize = true;
+            gantt.config.drag_links = false;
+            gantt.config.drag_move = false;
+            gantt.config.drag_progress = false;
+            gantt.config.drag_resize = false;
             gantt.config.grid_resize = true;
             gantt.config.layout = {
                 css: "gantt_container",
                 rows: [{
                         cols: [{
                                 view: "grid",
-                                width: 900,
+                                width: 500,
                                 scrollX: "scrollHor",
                                 scrollY: "scrollVer",
                                 config: leftGridColumns
@@ -814,7 +1409,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                             },
                             {
                                 view: "grid",
-                                width: 900,
+                                width: 300,
                                 bind: "task",
                                 scrollY: "scrollVer",
                                 config: rightGridColumns
@@ -1004,7 +1599,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     series.columns.template.setAll({
                         tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}[/]\n:{percentage}%",
                         width: am5.percent(100),
-                        fill: am5.color(0x6771dc),
+                        fill: am5.color(0xb30000),
                         tooltipY: 0,
                         strokeOpacity: 0
                     });
@@ -1032,7 +1627,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 };
 
                 //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                makeSeries2("PA", "total_cost");
+                makeSeries2("การใช้จ่ายประมาณ", "total_cost");
 
 
 
@@ -1051,7 +1646,7 @@ function makeSeries3(name, fieldName) {
                     series.columns.template.setAll({
                         tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}[/]\n:{percentage}%",
                         width: am5.percent(100),
-                        fill: am5.color(0xb30000),
+                        fill: am5.color(0x6771dc),
                         tooltipY: 0,
                         strokeOpacity: 0
                     });
@@ -1090,7 +1685,7 @@ function makeSeries3(name, fieldName) {
                             xAxis: xAxis,
                             yAxis: yAxis,
                             valueYField: field,
-                            stroke: am5.color(0x6771dc),
+                            stroke: am5.color(0xb30000),
                             categoryXField: "fiscal_year_b",
                             tooltip: am5.Tooltip.new(root, {
                                 pointerOrientation: "horizontal",
@@ -1106,7 +1701,7 @@ function makeSeries3(name, fieldName) {
                                 stroke: series.get("stroke"),
                                 radius: 5,
 
-                                fill: am5.color(0x6771dc),
+                                fill: am5.color(0xb30000),
 
                             })
                         });
@@ -1135,7 +1730,7 @@ function makeSeries3(name, fieldName) {
                 }
                 chart.set("cursor", am5xy.XYCursor.new(root, {}));
                 // createSeries("งบประมาณ", "total_budgot");
-                createSeries("PA ", "total_cost")
+                createSeries("ภาพรวมค่าใช้จ่าย ", "total_cost")
 
 
 
@@ -1153,7 +1748,7 @@ function createSeries2(name, field) {
                             xAxis: xAxis,
                             yAxis: yAxis,
                             valueYField: field,
-                            stroke: am5.color(0xb30000),
+                            stroke: am5.color(0x6771dc),
                             categoryXField: "fiscal_year_b",
                             tooltip: am5.Tooltip.new(root, {
                                 pointerOrientation: "horizontal",
@@ -1169,7 +1764,7 @@ function createSeries2(name, field) {
                                 stroke: series.get("stroke"),
                                 radius: 5,
 
-                                fill: am5.color(0xb30000),
+                                fill: am5.color(0x6771dc),
 
                             })
                         });
