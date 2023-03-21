@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Models;
@@ -40,7 +39,6 @@ class Task extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id', 'task_name', 'task_start_date', 'task_end_date', 'created_at', 'updated_at', 'deleted_at',
         'project_id', 'task_name', 'task_start_date', 'task_end_date', 'created_at', 'updated_at', 'deleted_at','task_pay','task_pay_date',
         'task_parent', 'task_description', 'task_budget_gov_operating', 'task_budget_gov_investment', 'task_budget_gov_utility', 'task_budget_it_operating', 'task_budget_it_investment',
     ];
@@ -60,7 +58,6 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'task_id' => 'int', 'project_id' => 'int', 'task_name' => 'string', 'task_start_date' => 'timestamp', 'task_end_date' => 'timestamp', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'deleted_at' => 'timestamp',
         'task_id' => 'int', 'project_id' => 'int', 'task_name' => 'string', 'task_start_date' => 'timestamp', 'task_end_date' => 'timestamp', 'created_at' => 'timestamp', 'updated_at' => 'timestamp', 'deleted_at' => 'timestamp','task_pay_date' => 'timestamp',
     ];
 
@@ -70,7 +67,6 @@ class Task extends Model
      * @var array
      */
     protected $dates = [
-        'task_start_date', 'task_end_date', 'created_at', 'updated_at', 'deleted_at',
         'task_start_date', 'task_end_date', 'created_at', 'updated_at', 'deleted_at','task_pay_date',
     ];
 

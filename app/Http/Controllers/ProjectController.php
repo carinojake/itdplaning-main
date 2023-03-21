@@ -160,10 +160,11 @@ class ProjectController extends Controller
             'budget'                => $__budget,
             'balance'               => $__balance,
             'cost'                  => $project['project_cost'],
+            'pay'                   => 'pay',
             'owner'                 => $project['project_owner'],
             'open'                  => true,
             'type'                  => 'project',
-            'duration'              => 360,
+           // 'duration'              => 360,
         ];
 
         $budget['total'] = $__budget;
@@ -183,7 +184,7 @@ class ProjectController extends Controller
 
             (Double) $__balance = $__budget - $__cost;
 
-            $gantt[] = [
+           ($gantt[] = [
                 'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                 'text'                  => $task['task_name'],
                 'start_date'            => date('Y-m-d', $task['task_start_date']),
@@ -201,16 +202,22 @@ class ProjectController extends Controller
                 'budget'                => $__budget,
                 'balance'               => $__balance,
                 'cost'                  => $__cost,
+                'pay'                   => $task['task_pay']
                 // 'owner' => $project['project_owner'],
-            ];
+            ]);
             $__project_cost[] = $__cost;
+           ($__project_pay[] = $task['task_pay']);
         }
-        $gantt[0]['cost']    = array_sum($__project_cost);
+      ($gantt[0]['cost']    = array_sum($__project_cost));
+       ($gantt[0]['pay']    = ($__project_pay));
+
         $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
 
         $budget['cost']    = $gantt[0]['cost'];
         $budget['balance'] = $gantt[0]['balance'];
 
+
+        dd($gantt);
         $gantt = json_encode($gantt);
 
         return view('app.projects.show', compact('project', 'gantt', 'budget'));
@@ -366,6 +373,8 @@ class ProjectController extends Controller
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
 
+        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
+
         $task->project_id       = $id;
         $task->task_name        = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
@@ -385,6 +394,8 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+        $task->task_pay                 = $request->input('task_pay');
+        $task->task_pay_date            = $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
@@ -439,11 +450,14 @@ class ProjectController extends Controller
             'task_name'                   => 'required',
             'date-picker-task_start_date' => 'required',
             'date-picker-task_end_date'   => 'required',
+
         ]);
 
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
+        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
+
 
         $task->project_id       = $id_project;
         $task->task_name        = $request->input('task_name');
@@ -465,6 +479,8 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+        $task->task_pay                 = $request->input('task_pay');
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 

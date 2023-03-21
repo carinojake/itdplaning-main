@@ -17,7 +17,7 @@
                       <div class="text-medium-emphasis text-end mb-4">
                         <i class="cil-money icon icon-xxl"></i>
                       </div>
-                      <div class="fs-4 fw-semibold">{{ number_format($budget['total']) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
+                      <div class="fs-4 fw-semibold">{{ number_format($budget['total'],2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
                       <div class="progress progress-thin mt-3 mb-0">
                         <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -30,7 +30,7 @@
                       <div class="text-medium-emphasis text-end mb-4">
                         <i class="cil-money icon icon-xxl"></i>
                       </div>
-                      <div class="fs-4 fw-semibold">{{ number_format($budget['cost']) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
+                      <div class="fs-4 fw-semibold">{{ number_format($budget['cost'],2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
                       <div class="progress progress-thin mt-3 mb-0">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -43,7 +43,7 @@
                       <div class="text-medium-emphasis text-end mb-4">
                         <i class="cil-money icon icon-xxl"></i>
                       </div>
-                      <div class="fs-4 fw-semibold">{{ number_format($budget['balance']) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
+                      <div class="fs-4 fw-semibold">{{ number_format($budget['balance'],2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
                       <div class="progress progress-thin mt-3 mb-0">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -125,10 +125,11 @@
   </x-slot:content>
 
   <x-slot:css>
-    <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
+    <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+    <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
   </x-slot:css>
   <x-slot:javascript>
-    <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
+
     <script>
       gantt.plugins({
         marker: true,
@@ -151,17 +152,12 @@
 
       //Template
       var leftGridColumns = {
-        columns: [{
-            name: "",
-            width: 60,
-            resize: false,
-            template: function(task) {
-              return "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
-            }
-          },
+        columns: [
+
+
           {
             name: "text",
-            width: 400,
+            width: 300,
             label: "โครงการ/งานประจำ",
             tree: true,
             resize: true,
@@ -196,22 +192,59 @@
               }
             }
           },
+
           {
-            name: "cost",
-            width: 100,
-            label: "ใช้จ่ายแล้ว",
-            template: function(task) {
-              //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-              if (task.cost) {
-                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                  style: 'currency',
-                  currency: 'THB'
-                }).format(task.cost) + '</span>';
-              } else {
-                return '';
-              }
-            }
-          },
+                        name: "cost",
+                        width: 120,
+                        label: "PA",
+                        tree: true,
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+                    {
+                        name: "pay",
+                        width: 100,
+                        label: "การเบิกจ่าย",
+
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.pay) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+                    {
+                        name: "-",
+                        width: 100,
+                        label: "รอการเบิกจ่าย",
+
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.pay) {
+                                return '<span  class="btn-warning ";">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost-task.pay) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+
           {
             name: "balance",
             width: 100,
@@ -341,7 +374,7 @@
         rows: [{
             cols: [{
                 view: "grid",
-                width: 500,
+                width: 600,
                 scrollX: "scrollHor",
                 scrollY: "scrollVer",
                 config: leftGridColumns
@@ -361,7 +394,7 @@
               },
               {
                 view: "grid",
-                width: 300,
+                width: 500,
                 bind: "task",
                 scrollY: "scrollVer",
                 config: rightGridColumns

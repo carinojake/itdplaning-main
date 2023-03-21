@@ -102,14 +102,14 @@
                         <strong>ค่าใช้จ่าย</strong>
                         <div class="col-md-12">
                             <label for="task_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                            <input type="number" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">
+                            <input type="number"placeholder="0.00" step="0.01" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">
                             <div class="invalid-feedback">
-                              {{ __('งบกลาง ICT') }}}
+                              {{ __('งบกลาง ICT') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                             <label for="task_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                            <input type="number" class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0">
+                            <input type="number" placeholder="0.00" step="0.01"class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0">
                             <div class="invalid-feedback">
                               {{ __('งบดำเนินงาน') }}
                           </div>
@@ -125,8 +125,23 @@
 
                     </div>
 
-                </div>
 
+
+
+                </div>
+  <div class="col-md-12">
+                    <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span class="text-danger">*</span>
+                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                    <div data-coreui-toggle="date-picker" id="task_pay_date" data-coreui-format="dd/MM/yyyy" ></div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
+                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_pay" name="task_pay" min="0" >
+                    <div class="invalid-feedback">
+                      {{ __('เบิกจ่าย') }}
+                    </div>
+                  </div>
 
 
 
