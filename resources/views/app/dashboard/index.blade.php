@@ -26,7 +26,7 @@
                                                             <div class="card-body">
 
                                                                 <div class="fs-4 fw-semibold "><span
-                                                                        style="color: green ">{{ number_format($budgets,2) }}
+                                                                        style="color: green ">{{ number_format($budgetscentralict+$budgetsinvestment+$budgetsut,2) }}
                                                                     </span></div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -137,7 +137,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #ec3939 ">{{ number_format($,2) }}</span>
+                                                                        style="color: #ec3939 "></span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -145,7 +145,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"> ict</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">PA ict</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -163,7 +163,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">กำ</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">PA ดำเนินงาน</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -181,7 +181,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ดดด</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">PA สา</small>
                                                             </div>
                                                         </div>
                                                     </div>

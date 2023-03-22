@@ -55,7 +55,7 @@ class DashboardController extends Controller
         ($budgetsgov =  Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
         ($budgetsict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
 
-        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
+        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_it_operating,0)')));
         ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
         ($budgetsut  = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
         ///จ่ายงบict
@@ -300,6 +300,13 @@ as d')
 
 
 
+
+
+
+
+
+
+
     ($contractsre = DB::table('contracts')
    ->select('contracts.contract_name',
             'contracts.contract_number',
@@ -326,16 +333,20 @@ as d')
    ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
    ->get()
-
-
-
-
-
 );
 
+$remaining_amounts = [];
+
+foreach ($contractsre as $contract) {
+    $combined_properties = $contract->task_cost_it_operating . ',' . $contract->task_cost_it_investment. ',' . $contract->task_cost_gov_utility. ',' . $contract->remaining_amount;
+    $remaining_amounts[] = $combined_properties;
+}
+
+($remaining_amounts);
 
 
-    ($contract_refund_pa_budget =  DB::table('contracts')
+
+($contract_refund_pa_budget =  DB::table('contracts')
     ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
     ->where('contract_fiscal_year', '=', 2566)
     ->where('contract_refund_pa_status', '=', 1)
