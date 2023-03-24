@@ -13,6 +13,7 @@ use App\Models\Taskcon;
 use App\Models\ContractHasTask;
 use App\Models\ContractHasTaskcon;
 use Carbon\Carbon;
+
 class ContractController extends Controller
 {
     /**
@@ -28,60 +29,59 @@ class ContractController extends Controller
     public function index(Request $request)
     {
 
-            if ($request->ajax()) {
-                $records = contract::orderBy('contract_end_date', 'desc');
+        if ($request->ajax()) {
+            $records = contract::orderBy('contract_end_date', 'desc');
 
-                return Datatables::eloquent($records)
-                    ->addIndexColumn()
-                    ->addColumn('contract_number_output', function ($row) {
-                        return $row->contract_number;
-                    })
-                    ->addColumn('contract_name_output', function ($row) {
-                        $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
-                        $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
-                        $html        = $row->contract_name . ' ' . $flag_status ;
-                        $html .= '<br><span class="badge bg-info">' . Helper::date($row->contract_start_date) . '</span> -';
-                        $html .= ' <span class="badge bg-info">' . Helper::date($row->contract_end_date) . '</span>';
-
-
-                        $startDate = Carbon::parse($row->contract_start_date);
-                        $endDate = Carbon::parse($row->contract_end_date);
-                        $diffInMonths = $endDate->diffInMonths($startDate);
-                        $diffInMonthsend = $endDate->diffInMonths($startDate) - \Carbon\Carbon::parse($row->contract_start_date)->diffInMonths(\Carbon\Carbon::parse());
-                        $diffInDays = $endDate->diffInDays($startDate);
-                        $diffInDaysend = $endDate->diffInDays($startDate)- \Carbon\Carbon::parse($row->contract_start_date)->diffInDays(\Carbon\Carbon::parse());;
-
-                        $html .= '<span>'. (isset($diffInMonthsend) && $diffInMonthsend < 3
-                        ? '<span class="badge bg-danger style="color:red;">เหลือเวลา '.$diffInMonthsend.'  เดือน / เหลือ '.$diffInDaysend.' วัน</span>'
-                        : '<span class="badge bg-success  style="color:rgb(5, 255, 5);">เหลือเวลา '.$diffInMonthsend.' เดือน</span>')
-                . ' ' . ' </span>';
-                        if ($row->task->count() > 0) {
-                            $html .= ' <span class="badge bg-warning">' . $row->task->count() . ' กิจกรรม</span>';
-                        }
+            return Datatables::eloquent($records)
+                ->addIndexColumn()
+                ->addColumn('contract_number_output', function ($row) {
+                    return $row->contract_number;
+                })
+                ->addColumn('contract_name_output', function ($row) {
+                    $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
+                    $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
+                    $html        = $row->contract_name . ' ' . $flag_status;
+                    $html .= '<br><span class="badge bg-info">' . Helper::date($row->contract_start_date) . '</span> -';
+                    $html .= ' <span class="badge bg-info">' . Helper::date($row->contract_end_date) . '</span>';
 
 
+                    $startDate = Carbon::parse($row->contract_start_date);
+                    $endDate = Carbon::parse($row->contract_end_date);
+                    $diffInMonths = $endDate->diffInMonths($startDate);
+                    $diffInMonthsend = $endDate->diffInMonths($startDate) - \Carbon\Carbon::parse($row->contract_start_date)->diffInMonths(\Carbon\Carbon::parse());
+                    $diffInDays = $endDate->diffInDays($startDate);
+                    $diffInDaysend = $endDate->diffInDays($startDate) - \Carbon\Carbon::parse($row->contract_start_date)->diffInDays(\Carbon\Carbon::parse());;
 
-                        return $html;
-                    })
-                    ->addColumn('contract_fiscal_year', function ($row) {
-                        return $row->contract_fiscal_year;
-                    })
+                    $html .= '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
+                        ? '<span class="badge bg-danger style="color:red;">เหลือเวลา ' . $diffInMonthsend . '  เดือน / เหลือ ' . $diffInDaysend . ' วัน</span>'
+                        : '<span class="badge bg-success  style="color:rgb(5, 255, 5);">เหลือเวลา ' . $diffInMonthsend . ' เดือน</span>')
+                        . ' ' . ' </span>';
+                    if ($row->task->count() > 0) {
+                        $html .= ' <span class="badge bg-warning">' . $row->task->count() . ' กิจกรรม</span>';
+                    }
 
 
-                    ->addColumn('action', function ($row) {
-                        $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
-                        $html .= '<a href="' . route('contract.show', $row->hashid) . '" class="btn btn-success text-white"><i class="cil-folder-open "></i></a>';
-                        //if (Auth::user()->hasRole('admin')) {
-                        $html .= '<a href="' . route('contract.edit', $row->hashid) . '" class="btn btn-warning btn-edit text-white"><i class="cil-pencil "></i></a>';
-                        $html .= '<button data-rowid="' . $row->hashid . '" class="btn btn-danger btn-delete text-white"><i class="cil-trash "></i></button>';
-                        //}
-                        $html .= '</div>';
 
-                        return $html;
-                    })
-                    ->rawColumns(['contract_name_output', 'action'])
-                    ->toJson();
+                    return $html;
+                })
+                ->addColumn('contract_fiscal_year', function ($row) {
+                    return $row->contract_fiscal_year;
+                })
 
+
+                ->addColumn('action', function ($row) {
+                    $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
+                    $html .= '<a href="' . route('contract.show', $row->hashid) . '" class="btn btn-success text-white"><i class="cil-folder-open "></i></a>';
+                    //if (Auth::user()->hasRole('admin')) {
+                    $html .= '<a href="' . route('contract.edit', $row->hashid) . '" class="btn btn-warning btn-edit text-white"><i class="cil-pencil "></i></a>';
+                    $html .= '<button data-rowid="' . $row->hashid . '" class="btn btn-danger btn-delete text-white"><i class="cil-trash "></i></button>';
+                    //}
+                    $html .= '</div>';
+
+                    return $html;
+                })
+                ->rawColumns(['contract_name_output', 'action'])
+                ->toJson();
         }
 
         return view('app.contracts.index');
@@ -99,11 +99,11 @@ class ContractController extends Controller
         ($duration = $contract_end_date->diff($contract_start_date)->days);
 
         ($duration_p =  \Carbon\Carbon::parse($contract->contract_end_date)
-        ->diffInMonths(\Carbon\Carbon::parse($contract->contract_start_date))
-                -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse())) ;
+            ->diffInMonths(\Carbon\Carbon::parse($contract->contract_start_date))
+            -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()));
 
 
-       // $gantt = '';
+        // $gantt = '';
 
         // dd(Hashids::encode($contract->task->task_id));
 
@@ -134,7 +134,6 @@ class ContractController extends Controller
 
                 // 'owner' => $project['project_owner'],
             ];
-
         }
 
 
@@ -186,7 +185,7 @@ class ContractController extends Controller
 
 
 
-        return view('app.contracts.show', compact('contract', 'gantt','duration_p'));
+        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p'));
     }
 
     public function create(Request $request)
@@ -196,8 +195,7 @@ class ContractController extends Controller
 
     public function store(Request $request)
     {
-        $contract = new Contract;
-       ;
+        $contract = new Contract;;
         $request->validate([
             'contract_name'                   => 'required',
             'contract_number'                 => 'required',
@@ -332,10 +330,10 @@ class ContractController extends Controller
         }
         return redirect()->route('contract.index');
     }
-//////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////
 
 
-public function taskstorestore(Request $request, Contract $contract)
+    public function taskstorestore(Request $request, Contract $contract)
     {
         $request->validate([
             'taskcon_name' => 'required|string',
@@ -355,102 +353,99 @@ public function taskstorestore(Request $request, Contract $contract)
 
 
 
-public function taskstore(Request $request, $contract)
-{
-    ($id        = Hashids::decode($contract)[0]);
-    ($taskcons     = Taskcon::where('contract_id', $id)->get());
-       ( $contractcons = Contract::get());
+    public function taskstore(Request $request, $contract)
+    {
+        ($id        = Hashids::decode($contract)[0]);
+        ($taskcons     = Taskcon::where('contract_id', $id)->get());
+        ($contractcons = Contract::get());
 
-        return view('app.contracts.tasks.create', compact('contractcons', 'taskcons','contract'));
-
-
-
-}
-
-
-
-public function taskconShow(Request $request, $contract, $taskcon)
-{
-   ( $id_contract = Hashids::decode($contract)[0]);
-    $id_taskcon    = Hashids::decode($taskcon)[0];
-    $contract    = Contract::find($id_contract);
-   $taskcon       = taskcon::find($id_taskcon);
-
-    // echo 'contract' . $task->contract->count();
-    // dd($task->contract);
-    return view('app.contracts.tasks.show', compact('contract', 'taskcon'));
-   // return 'app.contracts.tasks.show';
-}
-
-public function taskconCreate(Request $request, $contract)
-{
-    ($id        = Hashids::decode($contract)[0]);
-($taskcons     = Taskcon::where('contract_id', $id)->get());
-   ( $contractcons = Contract::get());
-
-    return view('app.contracts.tasks.create', compact('contractcons', 'taskcons','contract'));
-}
-
-
-
-public function taskconStore(Request $request, $contract)
-{
-    $id   = Hashids::decode($contract)[0];
-    $taskcon = new Taskcon;
-
-    $request->validate([
-        'taskcon_name'                   => 'required',
-        'date-picker-taskcon_start_date' => 'required',
-        'date-picker-taskcon_end_date'   => 'required',
-    ]);
-
-    //convert date
-    $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
-    $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
-
-    $taskcon->contract_id       = $id;
-    $taskcon->taskcon_name        = $request->input('taskcon_name');
-    $taskcon->taskcon_description = trim($request->input('taskcon_description'));
-    $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
-    $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-
-    $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
-
-    $taskcon->taskcon_budget_gov_operating  = $request->input('taskcon_budget_gov_operating');
-    $taskcon->taskcon_budget_gov_investment = $request->input('taskcon_budget_gov_investment');
-    $taskcon->taskcon_budget_gov_utility    = $request->input('taskcon_budget_gov_utility');
-    $taskcon->taskcon_budget_it_operating   = $request->input('taskcon_budget_it_operating');
-    $taskcon->taskcon_budget_it_investment  = $request->input('taskcon_budget_it_investment');
-
-    $taskcon->taskcon_cost_gov_operating  = $request->input('taskcon_cost_gov_operating');
-    $taskcon->taskcon_cost_gov_investment = $request->input('taskcon_cost_gov_investment');
-    $taskcon->taskcon_cost_gov_utility    = $request->input('taskcon_cost_gov_utility');
-    $taskcon->taskcon_cost_it_operating   = $request->input('taskcon_cost_it_operating');
-    $taskcon->taskcon_cost_it_investment  = $request->input('taskcon_cost_it_investment');
-
-    if ($taskcon->save()) {
-
-        //insert contract
-        if ($request->input('taskcon_contract')) {
-            //insert contract
-            $contract_has_taskscon = new ContractHasTaskcon;
-
-            $contract_has_taskscon->taskcon_id = $request->input('taskcon_contract');
-            $contract_has_taskscon->task_id     = $taskcon->taskcon_id;
-            $contract_has_taskscon->save();
-        }
-
-        return redirect()->route('contract.show', $contract );
+        return view('app.contracts.tasks.create', compact('contractcons', 'taskcons', 'contract'));
     }
-}
 
-/**
+
+
+    public function taskconShow(Request $request, $contract, $taskcon)
+    {
+        ($id_contract = Hashids::decode($contract)[0]);
+        $id_taskcon    = Hashids::decode($taskcon)[0];
+        $contract    = Contract::find($id_contract);
+        $taskcon       = taskcon::find($id_taskcon);
+
+        // echo 'contract' . $task->contract->count();
+        // dd($task->contract);
+        return view('app.contracts.tasks.show', compact('contract', 'taskcon'));
+        // return 'app.contracts.tasks.show';
+    }
+
+    public function taskconCreate(Request $request, $contract)
+    {
+        ($id        = Hashids::decode($contract)[0]);
+        ($taskcons     = Taskcon::where('contract_id', $id)->get());
+        ($contractcons = Contract::get());
+
+        return view('app.contracts.tasks.create', compact('contractcons', 'taskcons', 'contract'));
+    }
+
+
+
+    public function taskconStore(Request $request, $contract)
+    {
+        $id   = Hashids::decode($contract)[0];
+        $taskcon = new Taskcon;
+
+        $request->validate([
+            'taskcon_name'                   => 'required',
+            'date-picker-taskcon_start_date' => 'required',
+            'date-picker-taskcon_end_date'   => 'required',
+        ]);
+
+        //convert date
+        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
+        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
+
+        $taskcon->contract_id       = $id;
+        $taskcon->taskcon_name        = $request->input('taskcon_name');
+        $taskcon->taskcon_description = trim($request->input('taskcon_description'));
+        $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
+        $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
+
+        $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
+
+        $taskcon->taskcon_budget_gov_operating  = $request->input('taskcon_budget_gov_operating');
+        $taskcon->taskcon_budget_gov_investment = $request->input('taskcon_budget_gov_investment');
+        $taskcon->taskcon_budget_gov_utility    = $request->input('taskcon_budget_gov_utility');
+        $taskcon->taskcon_budget_it_operating   = $request->input('taskcon_budget_it_operating');
+        $taskcon->taskcon_budget_it_investment  = $request->input('taskcon_budget_it_investment');
+
+        $taskcon->taskcon_cost_gov_operating  = $request->input('taskcon_cost_gov_operating');
+        $taskcon->taskcon_cost_gov_investment = $request->input('taskcon_cost_gov_investment');
+        $taskcon->taskcon_cost_gov_utility    = $request->input('taskcon_cost_gov_utility');
+        $taskcon->taskcon_cost_it_operating   = $request->input('taskcon_cost_it_operating');
+        $taskcon->taskcon_cost_it_investment  = $request->input('taskcon_cost_it_investment');
+
+        if ($taskcon->save()) {
+
+            //insert contract
+            if ($request->input('taskcon_contract')) {
+                //insert contract
+                $contract_has_taskscon = new ContractHasTaskcon;
+
+                $contract_has_taskscon->taskcon_id = $request->input('taskcon_contract');
+                $contract_has_taskscon->task_id     = $taskcon->taskcon_id;
+                $contract_has_taskscon->save();
+            }
+
+            return redirect()->route('contract.show', $contract);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $contract
      * @return \Illuminate\Http\Response
      */
-    public function taskconEdit(Request $request, $contract, $taskcon )
+    public function taskconEdit(Request $request, $contract, $taskcon)
     {
         $id_contract = Hashids::decode($contract)[0];
         $id_taskcon    = Hashids::decode($taskcon)[0];
@@ -468,16 +463,16 @@ public function taskconStore(Request $request, $contract)
         //$contract    = Contract::find($id_contract);
         //$taskcons = Taskcon::where('taskcon_id', $id_taskcon)
         //->where('contract_id', $id_contract)
-       // ->get();
+        // ->get();
 
-       // $taskcons      = Taskcon::where('contract_id', $id_contract)
-         //   ->where('taskcon_id', $id_taskcon)
-           // ->get();
-          // $taskcon = Taskcon::first()->toArray();
-         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
+        // $taskcons      = Taskcon::where('contract_id', $id_contract)
+        //   ->where('taskcon_id', $id_taskcon)
+        // ->get();
+        // $taskcon = Taskcon::first()->toArray();
+        // $task= Task::get();  'contract', 'taskcon','taskcons','task'
 
 
-        return view('app.contracts.tasks.edit', compact('contractcons','tasks', 'contract', 'taskcon', 'taskcons'));
+        return view('app.contracts.tasks.edit', compact('contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
     /**
@@ -530,7 +525,7 @@ public function taskconStore(Request $request, $contract)
             if ($request->input('taskcon_contract')) {
                 ContractHasTaskcon::where('taskcon_id', $id_taskcon)->delete();
                 ContractHasTaskcon::Create([
-                   // 'contract_id' => $request->input('taskcon_task'),
+                    // 'contract_id' => $request->input('taskcon_task'),
                     //'taskcon_id'     => $id_taskcon,
                     'task_id' => $request->input('taskcon_contract'),
                     'taskcon_id'     => $id_taskcon,
@@ -561,7 +556,7 @@ public function taskconStore(Request $request, $contract)
     }
 
 
-/////////
+    /////////
 
 
 
@@ -569,8 +564,3 @@ public function taskconStore(Request $request, $contract)
 
 
 }
-
-
-
-
-
