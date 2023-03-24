@@ -43,7 +43,7 @@
                       <div class="text-medium-emphasis text-end mb-4">
                         <i class="cil-money icon icon-xxl"></i>
                       </div>
-                      <div class="fs-4 fw-semibold">{{ number_format($budget['balance'],2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
+                      <div class="fs-4 fw-semibold">{{ number_format($budget['balance']-$budget['cost'],2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
                       <div class="progress progress-thin mt-3 mb-0">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -176,13 +176,17 @@
         ]
       };
       var rightGridColumns = {
-        columns: [{
+        columns: [
+
+        {
             name: "budget",
-            width: 100,
+            width: 120,
             label: "งบประมาณ",
+            tree: true,
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-              if (task.budget) {
+              if (task.budget)
+              {
                 return new Intl.NumberFormat('th-TH', {
                   style: 'currency',
                   currency: 'THB'
@@ -195,7 +199,7 @@
 
           {
                         name: "cost",
-                        width: 120,
+                        width: 150,
                         label: "PA",
                         tree: true,
                         template: function(task) {
@@ -205,11 +209,13 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
                             }
-                        }
-                    },
+                            else {
+                return '';
+              }
+
+                    }
+                },
                     {
                         name: "pay",
                         width: 100,

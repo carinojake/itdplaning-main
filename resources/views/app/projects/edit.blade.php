@@ -94,6 +94,70 @@
                 </div>
 
                 <div class="row">
+                    <h4>งบประมาณ</h4>
+
+                    <div class="row">
+                      <div class="col-6">
+                        <strong>เงินงบประมาณ </strong>
+                        <div class="col-md-12">
+                          <label for="budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
+                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_it_operating" name="budget_it_operating"
+                           min="0" value="{{ $project->budget_it_operating }}">
+                          <div class="invalid-feedback">
+                            {{ __('ระบุงบกลาง ICT') }}
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="project_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
+                          id="task_budget_it_investment" name="_budget_it_investment" min="0"  value="{{ $project->project_budget_it_investment }}">
+                          <div class="invalid-feedback">
+                            {{ __('ระบุงบดำเนินงาน') }}
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="project_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
+                           id="project_budget_gov_utility" name="project_budget_gov_utility" min="0" value="{{ $project->project_budget_gov_utility }}">
+                          <div class="invalid-feedback">
+                            {{ __('ระบุค่าสาธารณูปโภค') }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-6">
+                        <strong>ค่าใช้จ่าย</strong>
+                        <div class="col-md-12">
+                            <label for="project_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
+                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="project_cost_it_operating" name="project_cost_it_operating" min="0"  value="{{ $project->project_cost_it_operating }}" >
+                            <div class="invalid-feedback">
+                              {{ __('งบกลาง ICT') }}
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="project_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                            <input type="number"  placeholder="0.00" step="0.01" class="form-control" id="project_cost_it_investment" name="project_cost_it_investment" min="0"  value="{{ $project->project_cost_it_investment }}">
+                            <div class="invalid-feedback">
+                              {{ __('งบดำเนินงาน') }}
+                          </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-12">
+                            <label for="project_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="project_cost_gov_utility" name="project_cost_gov_utility" min="0"  value="{{ $project->project_cost_gov_utility }}">
+                            <div class="invalid-feedback">
+                              {{ __('ระบุค่าสาธารณูปโภค') }}
+                            </div>
+                          </div>
+                        </div>
+
+                    </div>
+
+
+          {{-- <div class="row">
                   <h4>งบประมาณ</h4>
 
                   <div class="row">
@@ -140,7 +204,7 @@
                       </div>
 
                     </div>
-                  </div>
+                  </div>--}}
                 </div>
 
 
