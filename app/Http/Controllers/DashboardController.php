@@ -342,7 +342,8 @@ foreach ($contractsre as $contract) {
     $remaining_amounts[] = $combined_properties;
 }
 
-($remaining_amounts);
+
+      ($remaining_amounts);
 
 
 
@@ -515,6 +516,19 @@ foreach ($contractsre as $contract) {
         //  $project = Project::get()->toArray();
 
         $project =  Project::where('project_fiscal_year', 2566)->get();
+
+        ($project = Project::select('projects.*', 'a.cost_disbursement')
+        ->leftJoin(DB::raw('(select tasks.project_id, sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
+as cost_disbursement from tasks  group by tasks.project_id) as a'), 'a.project_id', '=', 'projects.project_id')
+       // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+       //->groupBy('projects.project_id')
+        //->where('projects.project_id', $id)
+        ->where('project_fiscal_year', 2566)
+        ->get());
+
+
+
         foreach ($project as $project) {
             ((double) $__budget_gov = (double) $project['budget_gov_operating'] + (double) $project['budget_gov_utility'] + (double) $project['budget_gov_investment']);
             ((double) $__budget_it  = (double) $project['budget_it_operating'] + (double) $project['budget_it_investment']);
@@ -536,13 +550,27 @@ foreach ($contractsre as $contract) {
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
+                'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'cost_disbursement'     => $project['cost_disbursement'],
                 'cost'                  => $project['project_cost'],
                 'owner'                 => $project['project_owner'],
                 'project_fiscal_year'   => $project['project_fiscal_year'],
 
             ];
             ($budget['total'] = $__budget);
-            foreach ($project->task as $task) {
+
+
+            ($tasks = DB::table('tasks')
+        ->select('tasks.*', 'a.cost_disbursement')
+        ->leftJoin(DB::raw('(select tasks.task_parent, sum(COALESCE(tasks.task_cost_gov_utility,0))
+           +sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
+           as cost_disbursement from tasks  group by tasks.task_parent) as a'), 'a.task_parent', '=', 'tasks.task_id')
+           ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->where('projects.project_fiscal_year', 2566)
+        ->get()
+        ->toArray());
+        $tasks = json_decode(json_encode($tasks), true);
+            foreach ($tasks as $task) {
                 (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
                 (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
                 (double) $__budget     = $__budget_gov + $__budget_it;
@@ -554,11 +582,14 @@ foreach ($contractsre as $contract) {
                     $task['task_cost_it_investment'],
                 ]);
                 (double) $__balance = $__budget - $__cost;
+
+
+
                 $gantt[] = [
                     'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                     'text'                  => $task['task_name'],
-                    'start_date'            => date('Y-m-d', $task['task_start_date']),
-                    'end_date'              => date('Y-m-d', $task['task_end_date']),
+                    'start_date'            => date('Y-m-d', strtotime($task['task_start_date'])),
+                    'end_date'              => date('Y-m-d', strtotime($task['task_end_date'])),
                     'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
                     'type'                  => 'task',
                     'open'                  => true,
@@ -572,6 +603,7 @@ foreach ($contractsre as $contract) {
                     'budget'                => $__budget,
                     'cost'                  => $__cost,
                     'balance'               => $__balance,
+                    'cost_disbursement'     => $task['cost_disbursement'],
 
                     // 'owner' => $project['project_owner'],
                 ];
@@ -580,10 +612,10 @@ foreach ($contractsre as $contract) {
 
                 $__project_cost[] = $__cost;
             }
-            //    $gantt[0]['cost']    = array_sum($__project_cost);
-            $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
-            ($budget['cost']    = $gantt[0]['cost']);
-            $budget['balance'] = $gantt[0]['balance'];
+             //   $gantt[0]['cost']    = array_sum($__project_cost);
+           // $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
+            //($budget['cost']    = $gantt[0]['cost']);
+            //$budget['balance'] = $gantt[0]['balance'];
 
 
             // $tasks = Task::get()->toArray();
