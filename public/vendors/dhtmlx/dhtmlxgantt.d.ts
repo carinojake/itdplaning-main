@@ -1017,7 +1017,7 @@ export interface GanttConfigOptions {
 	task_date: string;
 
 	/**
-	 * 
+	 *
 	*/
 	task_grid_row_resizer_attribute: any;
 

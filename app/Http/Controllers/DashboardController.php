@@ -270,7 +270,7 @@ as d')
         ->toJson(JSON_NUMERIC_CHECK);
         ($json = json_decode($contracts_pr_budget));
         ($cp = $json[0]->cp);
-       ($cpr = (float)$cp);
+       ($cpb = (float)$cp);
 
 
        // ->get()
@@ -318,11 +318,6 @@ as d')
             'contract_has_tasks.task_id',
             'tasks.task_id',
             'tasks.project_id',
-            'task_cost_gov_operating',
-            'task_cost_gov_investment',
-            'task_cost_gov_utility',
-            'task_cost_it_operating',
-            'task_cost_it_investment',
             'projects.project_id',
             'projects.project_name')
    ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
@@ -486,7 +481,7 @@ foreach ($contractsre as $contract) {
         ($totals_ut = $budgetsut - $coats_ut);
 
 
-        ($totals_budgets = $budgets - $cpr);
+        ($totals_budgets = $budgets - $cpb);
         $totals_ict = $budgetscentralict - $coats_ict;
         $totals_inv = $budgetsinvestment - $coats_inv;
 
@@ -681,7 +676,7 @@ as cost_disbursement from tasks  group by tasks.project_id) as a'), 'a.project_i
                     'cpy',
                     'cpre',
                     'cpa',
-                    'cpr',
+                    'cpb',
                     'contracts_pa_budget',
                     'contracts_pr_budget',
                     'taskcosttotals2_json',
