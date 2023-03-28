@@ -118,7 +118,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                    style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
+                                                                    style="color: #2e0775 ">{{ number_format($cpa,2) }}</span>
                                                             </div>
                                                             <svg class="icon icon-xl text-end">
                                                                 <use
@@ -616,34 +616,32 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         name: "cost",
                         width: 120,
                         label: "PA",
+
+
+                    },
+                    {
+                        name: "cost",
+                        width: 150,
+                        label: "PA",
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.cost) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
                             }
-                        }
-                    },
-                    {
-                        name: "cost",
-                        width: 100,
-                        label: "เบิกจ่าย",
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost_disbursement) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                            else {
+
+
+                                return  '<span style="color:#6010f6;">' +new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost_disbursement) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
+              }
+
+                    }
                     },
                   //  {
                     //    name: "cost",

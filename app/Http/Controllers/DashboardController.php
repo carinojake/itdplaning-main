@@ -324,7 +324,7 @@ as d')
    ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
    ->get()
-   ->toJson()
+
 
 
 
@@ -501,7 +501,17 @@ as d')
         //->get()->toJson());
         //  $project = Project::get()->toArray();
 
-        $project =  Project::where('project_fiscal_year', 2566)->get();
+        //$project =  Project::where('project_fiscal_year', 2566)->get();
+        ($project = Project::select('projects.*', 'a.cost_disbursement')
+        ->leftJoin(DB::raw('(select tasks.project_id, sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
+   as cost_disbursement from tasks  group by tasks.project_id) as a'), 'a.project_id', '=', 'projects.project_id')
+       // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+       //->groupBy('projects.project_id')
+        //->where('projects.project_id', $id)
+        ->get());
+
+
         foreach ($project as $project) {
             ((double) $__budget_gov = (double) $project['budget_gov_operating'] + (double) $project['budget_gov_utility'] + (double) $project['budget_gov_investment']);
             ((double) $__budget_it  = (double) $project['budget_it_operating'] + (double) $project['budget_it_investment']);
@@ -520,6 +530,8 @@ as d')
                 'budget_gov'            => $__budget_gov,
                 'budget_it_operating'   => $project['budget_it_operating'],
                 'budget_it_investment'  => $project['budget_it_investment'],
+                'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+                'cost_disbursement'     => $project['cost_disbursement'],
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
