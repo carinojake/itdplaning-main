@@ -12,439 +12,1051 @@
                                     class="btn btn-success text-white">Add Task</a>
                                 <a href="{{ route('project.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
-                            <div class="row mb-3">
-                                <div class="col-sm-12 col-md-3 ">
-                                    <div class="container">
-                                        <div>
-                                            <div>
-                                                <div class="card">
-                                                    <div class="card-body">
+                            <div class="d-flex align-items-start">
+                                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                                    aria-orientation="vertical">
+
+                                    <button class="nav-link active "  id="v-pills-home-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-home" type="button" role="tab"
+                                        aria-controls="v-pills-home" aria-selected="true">งาน{{ $project->project_id }} </button>
+                                        @if ($project['budget_it_operating'] > 0)
+                                    <button class="nav-link" style="color:   #d51649"  id="v-pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-profile" type="button" role="tab"
+                                        aria-controls="v-pills-profile" aria-selected="false">งบกลาง ICT</button>
+
+                                        @endif
+                                        @if ($project['budget_it_investment'] > 0)
+                                    <button class="nav-link" style="color:   #39b70b" id="v-pills-messages-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-messages" type="button" role="tab"
+                                        aria-controls="v-pills-messages" aria-selected="false">งบดำเนินงาน</button>
+                                        @endif
+                                        @if ($project['budget_gov_utility'] > 0)
+
+                                    <button class="nav-link" style="color:   #ff9409"id="v-pills-settings-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-settings" type="button" role="tab"
+                                        aria-controls="v-pills-settings" aria-selected="false">งบสาธารณูปโภค</button>
+                                        @endif
+                                </div>
+                                <div class="tab-content" id="v-pills-tabContent">
+                                    <!-- 1 งาน -->
+                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                                        aria-labelledby="v-pills-home-tab">
+                                        <div class="row">
+                                            <div class="col">
+                                                <!--งบประมาณ-->
+                                                <div class="container">
+                                                    <div>
                                                         <div>
-                                                            <i class="cil-money icon icon-xxl"></i>
-                                                        </div>
-                                                        <button class="btn " data-bs-toggle="collapse"
-                                                            href="#collapseExample" role="button" aria-expanded="false"
-                                                            aria-controls="collapseExample">
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budget['total'], 2) }}</div>
+                                                            <div class="card">
+                                                                <div class="card-body">
 
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="collapse" id="collapseExample">
-                                            <div class="row" >
+                                                                    <button class="btn " data-bs-toggle="collapse"
+                                                                        href="#collapseExample2" role="button"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold">
+                                                                            {{ number_format($budget['total'], 2) }}
+                                                                        </div>
 
-                                                <div>
-                                                    <div class="card"   >
-                                                        <div class="card-body" >
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_it_operating'], 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold" >งบกลาง
-                                                                ICT</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        <small
+                                                                            class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                        </small>
+                                                                              <!--          <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_it_investment'], 2) }}
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                -
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">
-                                                                งบดำเนินงาน</small>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold"></small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_gov_utility'], 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">งบสาธารณูปโภค</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
+
+                                            <div class="col">
+                                                <!--เบิกจ่าย--> <!--1.1.2-->
+                                                <div class="container">
+                                                    <div >
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " data-bs-toggle="collapse"
+                                                                        href="#collapseExample2" role="button"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold text-success">
+                                                                            {{ number_format($budget['balance'], 2) }}
+                                                                        </div>
+
+                                                                        <small
+                                                                            class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
+                                                                          <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- end1 งาน -->
+                                    <!-- 2 งาน -->
+                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                                        aria-labelledby="v-pills-profile-tab">
+ <!-- 2 งาน -->
+
+    <!-- 2 งาน -->
+    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="row">
+            <div class="col">
+                <!--งบประมาณ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            {{ number_format($ospa) }}
+
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบมี PA
+                                        </small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
                                 </div>
-
-
-
-
-                                <!--<div class="col-sm-6 col-md-3 col-lg-4">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="text-medium-emphasis text-end mb-4">
-                        <i class="cil-money icon icon-xxl"></i>
-                      </div>
-                      <div class="fs-4 fw-semibold">{{ number_format($budget['cost'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
-                      <div class="progress progress-thin mt-3 mb-0">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div> -->
-                                <div class="col-sm-12 col-md-3 ">
-                                    <div class="container">
-                                        <div>
-                                            <div>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div>
-                                                            <i class="cil-money icon icon-xxl"></i>
-                                                        </div>
-                                                        <button class="btn " data-bs-toggle="collapse"
-                                                            href="#collapseExample" role="button" aria-expanded="false"
-                                                            aria-controls="collapseExample">
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budget['cost'], 2) }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!--1.1.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
 
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย</small>
-                                                                <div class="progress progress-thin mt-3 mb-0">
-                                                                    <div class="progress-bar bg-primary"
-                                                                        role="progressbar" style="width: 25%"
-                                                                        aria-valuenow="25" aria-valuemin="0"
-                                                                        aria-valuemax="100"></div>
-                                                                </div>
-                                                        </button>
-
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold" style="color:   #05ba1a">
+                                            <!--การเบิกจ่าย PA -->  {{ number_format($otpsa1) }}
                                         </div>
-                                        <div class="collapse" id="collapseExample">
-                                            <div class="row">
-                                                <div >
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($ospa, 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย PA
-                                                                งบกลาง ICT</small>
-                                                                <div class="fs-4 fw-semibold">
-                                                                    {{ number_format($osa, 2) }}
-                                                                </div>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย
-                                                                    งบกลาง ICT</small>
 
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($ispa, 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย PA
-                                                                งบดำเนินงาน</small>
-                                                                <div class="fs-4 fw-semibold">
-                                                                    {{ number_format($isa, 2) }}
-                                                                </div>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย
-                                                                    งบดำเนินงาน</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold" >การเบิกจ่าย PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
 
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($utsc, 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย
-                                                                งบสาธารณูปโภค</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+                                            <!--รอการเบิกจ่าย pa-->  {{ number_format($ospa-$otpsa1) }}
                                         </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row"><!-- 1.2-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                      <!--จำนวนเงินแบบไม่มี PA-->{{ number_format( ($utsc), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบไม่มี PA
+                                        </small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!-- 1.2.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--การเบิกเงิน ไม่มี PA--> {{ number_format( ($utsc_pay), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">การเบิกเงิน ไม่มี PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col">
+                <!--รอการเบิกจ่าย-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+
+
+                                            <!--คงเหลือ-->   {{ number_format( ($utsc-$utsc_pay), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย ไม่มี PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--ont-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--ont-->
+        <div class="row"><!-- 1.3-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+
                                     </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--qw-->
+                                        </div>
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">
+                                        </small>
+
+                                    </button>
+
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!-- 1.3.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
 
-                                <div class="col-sm-12 col-md-3 ">
-                                    <div class="container">
-                                        <div>
-                                            <div>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div>
-                                                            <i class="cil-money icon icon-xxl"></i>
-                                                        </div>
-                                                        <button class="btn " data-bs-toggle="collapse"
-                                                            href="#collapseExample" role="button" aria-expanded="false"
-                                                            aria-controls="collapseExample">
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budget['balance'], 2) }}</div>
-
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
-                                                                <div class="progress progress-thin mt-3 mb-0">
-                                                                    <div class="progress-bar bg-primary"
-                                                                        role="progressbar" style="width: 25%"
-                                                                        aria-valuenow="25" aria-valuemin="0"
-                                                                        aria-valuemax="100"></div>
-                                                                </div>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="collapse" id="collapseExample">
-                                            <div class="row">
-                                                <div >
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_it_operating']-($ospa+$osa), 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ
-                                                                งบกลาง ICT</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_it_investment']-($isa+$ispa), 2) }}
-                                                            </div>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ
-                                                                    งบดำเนินงาน</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="text-medium-emphasis text-end mb-4">
-                                                                <i class="cil-money icon icon-xxl"></i>
-                                                            </div>
-                                                            <div class="fs-4 fw-semibold">
-                                                                {{ number_format($project['budget_gov_utility']-$utsc, 2) }}
-                                                            </div>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ
-                                                                งบสาธารณูปโภค</small>
-                                                            <div class="progress progress-thin mt-3 mb-0">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 25%" aria-valuenow="25"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+                                            <!--รวมเบิกจ่ายทั้งหมด-->    <!--รอการเบิกจ่าย pa-->  {{ number_format($ospa-$otpsa1) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รวมเบิกจ่ายทั้งหมด</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
                                 </div>
-
-
-
-
-
-
-
-
-
-
-                                <!--
-                <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold">{{ number_format($project['budget_it_operating'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง ICT</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--รอการเบิกจ่าย-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
 
-                  <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+                                    </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+
+
+                                            <!--รอการเบิกจ่ายทั้งหมด-->
+
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่ายทั้งหมด</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold">{{ number_format($project['budget_it_investment'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                  <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+
+
+
+
+
+
+
+ <!-- 2 งาน จบ-->
+                                    </div>
+                                    <!-- 3 งาน -->
+                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                                        aria-labelledby="v-pills-messages-tab">
+                                         <!-- 3 งาน -->
+                                         <div class="row">
+                                            <div class="col">
+                                                <!--งบประมาณ-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " style="color:   #06268e" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" >
+                                                                            {{number_format($ispa,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold" >จำนวนเงินแบบมี PA
+                                                                        </small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--เบิกจ่าย--> <!--1.1.2-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #05ba1a">
+                                                                            <!--การเบิกจ่าย PA --> {{number_format($itpsa1,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย PA</small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--คงเหลือ-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+                                                                            <!--รอการเบิกจ่าย pa--> {{number_format($ispa-$itpsa1,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย PA </small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"><!-- 1.2-->
+                                            <div class="col">
+                                                <!--คงเหลือ-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #72a008">
+                                                                      <!--จำนวนเงินแบบไม่มี PA-->{{number_format($isa,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบ ไม่มี PA
+                                                                        </small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--เบิกจ่าย--> <!-- 1.2.2-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #05ba1a">
+                                                                            <!--การเบิกเงิน ไม่มี PA--> {{number_format($itpsa2,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย ไม่มี PA </small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--รอการเบิกจ่าย-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+
+
+                                                                            <!--คงเหลือ-->  {{number_format($itpsa2-$isa,2)}}
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย ไม่มี PA</small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--ont-->
+                                            <div class="col">
+                                                <!--คงเหลือ-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--ont-->
+                                        <div class="row"><!-- 1.3-->
+                                            <div class="col">
+                                                <!--คงเหลือ-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div>
+
+                                                                    </div>
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold">
+                                                                            <!--qw-->
+                                                                        </div>
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold">
+                                                                        </small>
+
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--เบิกจ่าย--> <!-- 1.3.2-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div>
+
+                                                                    </div>
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #0a4ac1" >
+                                                                            <!--รวมเบิกจ่ายทั้งหมด-->  {{number_format(($itpsa1+$itpsa2),2)}}
+
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold" style="text-decoration-line: underline;">รวมเบิกจ่ายทั้งหมด</small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <!--รอการเบิกจ่าย-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div>
+
+                                                                    </div>
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold"   style="color:   #c1bd0a"  style="text-decoration-line: underline;">
+
+
+                                                                            <!--รอการเบิกจ่ายทั้งหมด-->  {{number_format(($ispa-$itpsa1)-($itpsa2-$isa),2)}}
+
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold" style="text-decoration-line: underline;">รอการเบิกจ่ายทั้งหมด</small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col">
+                                                <!--รอการเบิกจ่าย PP-->
+                                                <div class="container">
+                                                    <div>
+                                                        <div>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div>
+
+                                                                    </div>
+                                                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold" style="color:   #06ea11">
+
+
+                                                                            <!--รอการเบิกจ่ายทั้งหมด-->  {{ number_format($project['budget_it_investment']-($ispa + $isa), 2) }}
+
+                                                                        </div>
+
+                                                                        <small class="text-medium-emphasis text-uppercase fw-semibold" style="text-decoration-line: underline;" >ยอดงบประเมิน คงเหลือทังหมด</small>
+                                                                           <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- end3 งาน -->
+                                    </div>
+                                    <!-- 4 งาน -->
+                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                                        aria-labelledby="v-pills-settings-tab">
+                                    <!-- ------------------------- -->
+
+
+    <!-- 4 งาน -->
+    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="row">
+            <div class="col">
+                <!--งบประมาณ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบมี PA
+                                        </small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold">{{ number_format($project['budget_gov_utility'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold">งบสาธารณูปโภค</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                -->
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!--1.1.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
 
-                                <!--  <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--การเบิกจ่าย PA -->
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold"></div><small class="text-medium-emphasis text-uppercase fw-semibold">PA จำนวนเงิน</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
+
                     </div>
-                  </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--รอการเบิกจ่าย pa-->
+                                        </div>
 
-                  <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold">{{ number_format($project['task_budget_it_investment'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold"> PA เบิกจ่าย</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-sm-6 col-md-3 col-lg-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="text-medium-emphasis text-end mb-4">
-                          <i class="cil-money icon icon-xxl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row"><!-- 1.2-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                      <!--จำนวนเงินแบบไม่มี PA-->{{ number_format( ($utsc), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบไม่มี PA
+                                        </small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="fs-4 fw-semibold">{{ number_format($project['budget_gov_utility'], 2) }}</div><small class="text-medium-emphasis text-uppercase fw-semibold"> PA รอการเบิกจ่าย</small>
-                        <div class="progress progress-thin mt-3 mb-0">
-                          <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!-- 1.2.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
 
-                -->
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--การเบิกเงิน ไม่มี PA--> {{ number_format( ($utsc_pay), 2) }}
+                                        </div>
 
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">การเบิกเงิน ไม่มี PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col">
+                <!--รอการเบิกจ่าย-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold" style="color:   #ba0505">
+
+
+                                            <!--คงเหลือ-->   {{ number_format( ($utsc-$utsc_pay), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย ไม่มี PA</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--ont-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--ont-->
+        <div class="row"><!-- 1.3-->
+            <div class="col">
+                <!--คงเหลือ-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+
+                                    </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--qw-->
+                                        </div>
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">
+                                        </small>
+
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--เบิกจ่าย--> <!-- 1.3.2-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+
+                                    </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+                                            <!--รวมเบิกจ่ายทั้งหมด-->{{ number_format( ($utsc_pay), 2) }}
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รวมเบิกจ่ายทั้งหมด</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!--รอการเบิกจ่าย-->
+                <div class="container">
+                    <div>
+                        <div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+
+                                    </div>
+                                    <button class="btn " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold">
+
+
+                                            <!--รอการเบิกจ่ายทั้งหมด-->
+
+                                        </div>
+
+                                        <small class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่ายทั้งหมด</small>
+                                         <!--    <div class="progress progress-thin mt-3 mb-0">
+                                                                            <div class="progress-bar bg-primary"
+                                                                                role="progressbar" style="width: 25%"
+                                                                                aria-valuenow="25" aria-valuemin="0"
+                                                                                aria-valuemax="100"></div>
+                                                                        </div> -->
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                    <!-- ------------------------- -->
+                                    </div>
+
+
+
+                                    <!-- nav end -->
+                                </div>
                             </div>
 
+
+
+
+
+                            <div id="gantt_here" style='width:100%; height:100vh;'></div>
 
                             <table class="table">
                                 <thead>
@@ -532,13 +1144,14 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
-                            <div id="gantt_here" style='width:100%; height:100vh;'></div>
                         </x-card>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
     </x-slot:content>
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
@@ -637,7 +1250,32 @@
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
+                            if (task.task_type == 1) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+
+
+                            } else {
+
+
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost_pa_1) + '</span>';
+                            }
+
+                        }
+                    },
+                    {
+                        name: "cost",
+                        width: 150,
+                        label: "ไม่มี PA",
+                        tree: true,
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.task_type == 2) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -645,10 +1283,10 @@
                             } else {
 
 
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost_pa) + '</span>';
+                                }).format(task.cost_pa_2) + '</span>';
                             }
 
                         }
@@ -666,20 +1304,12 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
-                            }
-
-
-
-                            else  if (task.task_type == 2) {
+                            } else if (task.task_type == 2) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
-                            }
-
-
-                            else
-                            {
+                            } else {
 
                                 return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -702,26 +1332,22 @@
                         tree: true,
 
                         template: function(task) {
-                            if (task.total_pay < 0) {
+                            if (task.total_pay > 0) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost_pa-task.total_pay) + '</span>';
-                            }
-                            else if (task.pay) {
+                                }).format(task.cost_pa - task.total_pay) + '</span>';
+                            } else if (task.pay) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost-task.pay) + '</span>';
-                            }
-
-                            else if (task.cost_disbursement) {
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else if (task.cost_disbursement) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost_disbursement-task.total_pay) + '</span>';
-                            }
-                            {
+                                }).format(task.cost_disbursement - task.total_pay) + '</span>';
+                            } {
 
                                 return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -749,7 +1375,7 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.balance) + '</span>';
-                            } else   if (task.balance = 0) {
+                            } else if (task.balance = 0) {
                                 return '-';
                             } else
 
@@ -809,35 +1435,35 @@
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                <td colspan="2">งบกลาง IT</td>\
-                                <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                              </tr>';
+                                                <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                <td colspan="2">งบกลาง IT</td>\
+                                                <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                              </tr>';
                     html += '<tr>\
-                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                <td>ค่าสาธารณูปโภค</td>\
-                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                              </tr>';
+                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                <td>ค่าสาธารณูปโภค</td>\
+                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                              </tr>';
                     if (task.type == 'task') {
                         html += '<tr class="text-end">\
-                                <td>-' + budget_gov_operating + '</td>\
-                                <td>' + budget_gov_investment + '</td>\
-                                <td>' + budget_gov_utility + '</td>\
-                                <td>' + budget_it_operating + '</td>\
-                                <td>' + budget_it_investment + '</td>\
-                                <td class="text-success">' + budget + '</td>\
-                              </tr>';
+                                                <td>-' + budget_gov_operating + '</td>\
+                                                <td>' + budget_gov_investment + '</td>\
+                                                <td>' + budget_gov_utility + '</td>\
+                                                <td>' + budget_it_operating + '</td>\
+                                                <td>' + budget_it_investment + '</td>\
+                                                <td class="text-success">' + budget + '</td>\
+                                              </tr>';
                     } else {
                         html += '<tr class="text-end">\
-                                <td>' + budget_gov_operating + '</td>\
-                                <td>' + budget_gov_investment + '</td>\
-                                <td>' + budget_gov_utility + '</td>\
-                                <td>' + budget_it_operating + '</td>\
-                                <td>' + budget_it_investment + '</td>\
-                                <td class="text-success">' + budget + '</td>\
-                              </tr>';
+                                                <td>' + budget_gov_operating + '</td>\
+                                                <td>' + budget_gov_investment + '</td>\
+                                                <td>' + budget_gov_utility + '</td>\
+                                                <td>' + budget_it_operating + '</td>\
+                                                <td>' + budget_it_investment + '</td>\
+                                                <td class="text-success">' + budget + '</td>\
+                                              </tr>';
                     }
                     html += '</table>';
                 }

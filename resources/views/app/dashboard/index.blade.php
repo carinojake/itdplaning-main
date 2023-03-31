@@ -106,7 +106,7 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
                                                 aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                                <span style="color:  #5610f8 ">การใช้จ่ายงบประมาณ PA</span>
+                                                <span style="color:  #5610f8 ">การใช้จ่ายงบประมาณ PA/ไม่สัญญา</span>
                                             </button>
                                         </h2>
                                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
@@ -138,6 +138,7 @@
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
                                                                         style="color: #ec3939 "></span>
+                                                                        {{ number_format($ospa + $osa, 2) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -145,7 +146,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"> PA ict</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #ee7b7b"> PA ict</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -156,6 +157,7 @@
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
                                                                         style="color: #ec3939 "></span>
+                                                                        {{ number_format($ispa+$isa, 2) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -163,7 +165,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">PA ดำเนินงาน</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #48f7ae"> ดำเนินงาน</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -172,7 +174,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-
+                                                                    {{ number_format($utpcs + $utsc, 2) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -180,7 +182,7 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">PA สาธารรูปโภค</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #c0bd09"> สาธารรูปโภค</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -190,7 +192,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #64a80b ">{{ number_format($totals_budgets+($cpb-$cpa),2) }}</span>
+                                                                        style="color: #64a80b ">{{ number_format(($budgetscentralict-($ospa + $osa))+($budgetsinvestment-($ispa+$isa))+($budgetsut-($utpcs + $utsc)),2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -202,6 +204,46 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #64a80b ">{{ number_format((($ospa ))+(($ispa))+(($utpcs )),2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">มี PA</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #64a80b ">{{ number_format((($osa)+ ($isa)+($utsc)),2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">มีไม่ PA</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
 
                                                 </div>
 
