@@ -80,7 +80,7 @@
                                                             @php
                                                             $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                           @endphp
-                                                        <div class="fs-4 fw-semibold text-{{ $tmp_class_bal }}">
+                                                        <div class="fs-4 fw-semibold text-success">
                                                             {{ number_format(floatval($budget['balance']), 2) }}
                                                             </div>
 
@@ -199,7 +199,7 @@
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($otpsa2, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">การเบิกเงิน
+                                                                        class="text-medium-emphasis fw-semibold">การเบิกเงิน
                                                                         แบบ
                                                                         ไม่มี PA
                                                                     </small>
@@ -272,8 +272,8 @@
                                                             <button class="btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample" role="button"
                                                                 aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold"
-                                                                    style="color:   #06ea11">
+                                                                <div class="fs-4 fw-semibold btn btn-success"
+                                                                    style="btn btn-success">
                                                                     <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                                                     {{ number_format($project['budget_it_operating'] - ($ospa + $osa), 2) }}
                                                                 </div>
@@ -336,7 +336,7 @@
                                                                     {{ number_format($project['budget_it_investment'], 2) }}
                                                                 </div>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">
+                                                                    class="text-medium-emphasis fw-semibold">
                                                                     งบประมาณ
                                                                 </small>
                                                             </button>
@@ -344,7 +344,7 @@
                                                         <div class="collapse" id="collapseExample1">
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="color:   #06268e"
+                                                                <button class="btn "
                                                                     data-bs-toggle="collapse" href="#collapseExample2"
                                                                     role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
@@ -352,7 +352,7 @@
                                                                         {{ number_format($ispa, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงินแบบมี
+                                                                        class="text-medium-emphasis  fw-semibold">จำนวนเงินแบบมี
                                                                         PA
                                                                     </small>
                                                                 </button>
@@ -364,7 +364,7 @@
                                                                     aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <div class="fs-4 fw-semibold"
-                                                                        style="color:   #72a008">
+                                                                        >
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($isa, 2) }}
                                                                     </div>
                                                                     <small
@@ -384,25 +384,25 @@
                                                             <button class="btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample2" role="button"
                                                                 aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold"
-                                                                    style="color:   #0a4ac1">
+                                                                <div class="fs-4 fw-semibold   btn btn-primary"
+                                                                    >
                                                                     <!--รวมเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($itpsa1 + $itpsa2, 2) }}
 
                                                                 </div>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold"
-                                                                    style="text-decoration-line: underline;">รวมเบิกจ่ายทั้งหมด</small>
+                                                                   >รวมเบิกจ่ายทั้งหมด</small>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseExample2">
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="color:   #06268e"
+                                                                <button class="btn "
                                                                     data-bs-toggle="collapse" href="#collapseExample2"
                                                                     role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold">
+                                                                    <div class="fs-4 fw-semibold  text-primary">
                                                                         {{ number_format($itpsa1, 2) }}
                                                                     </div>
                                                                     <small
@@ -418,12 +418,12 @@
                                                                     href="#collapseExample2" role="button"
                                                                     aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold"
-                                                                        style="color:   #72a008">
+                                                                    <div class="fs-4 fw-semibold text-primary"
+                                                                        >
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($itpsa2, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">การเบิกเงิน
+                                                                        class="text-medium-emphasis fw-semibold">การเบิกเงิน
                                                                         แบบ
                                                                         ไม่มี PA
                                                                     </small>
@@ -439,14 +439,13 @@
                                                             <button class="btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample3" role="button"
                                                                 aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold" style="color:   #c1bd0a"
-                                                                    style="text-decoration-line: underline;">
+                                                                <div class="fs-4 fw-semibold btn btn-warning">
                                                                     <!--รอการเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
                                                                 </div>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold"
-                                                                    style="text-decoration-line: underline;">รอการเบิกจ่ายทั้งหมด</small>
+>รอการเบิกจ่ายทั้งหมด</small>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseExample3">
@@ -456,8 +455,8 @@
                                                                     href="#collapseExample2" role="button"
                                                                     aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold"
-                                                                        style="color:   #05ba1a">
+                                                                    <div class="fs-4 fw-semibold text-warning"
+                                                                        >
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($ispa - $itpsa1, 2) }}
                                                                     </div>
@@ -474,13 +473,13 @@
                                                                     href="#collapseExample2" role="button"
                                                                     aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold"
-                                                                        style="color:   #05ba1a">
+                                                                    <div class="fs-4 fw-semibold  text-pay"
+                                                                       >
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($isa - $itpsa2, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย
+                                                                        class="text-medium-emphasis fw-semibold">รอการเบิกจ่าย
                                                                         แบบมีไม่ PA
                                                                     </small>
 
@@ -496,43 +495,23 @@
                                                             <button class="btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample" role="button"
                                                                 aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold"
-                                                                    style="color:   #06ea11">
+                                                                <div class="fs-4 fw-semibold btn btn-success"
+                                                                   >
                                                                     <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                                                     {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
                                                                 </div>
+                                                                <div>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold"
-                                                                    style="text-decoration-line: underline;">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                                    >ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                                </div>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
 
-                                                    <div class="col">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                                <button class="btn " data-bs-toggle="collapse"
-                                                                    href="#collapseExample" role="button"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold"
-                                                                        style="color:   #06ea11">
-                                                                        <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                                        {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
-                                                                    </div>
-                                                                    <small
-                                                                        class="text-medium-emphasis text-uppercase fw-semibold"
-                                                                        style="text-decoration-line: underline;">ยอดงบประมาณคงเหลือทั้งหมด</small>
-                                                                </button>
 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <!-- end3 งาน -->
@@ -725,7 +704,7 @@
                                                                     <div class="fs-4 fw-semibold"
                                                                         style="color:   #06ea11">
                                                                         <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                                        {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
+                                                                        {{ number_format($project['budget_gov_utility'] - ($utsc_pay + $utsc_pay_pa), 2) }}
                                                                     </div>
                                                                     <small
                                                                         class="text-medium-emphasis text-uppercase fw-semibold"
@@ -748,7 +727,7 @@
                                                                         <div class="fs-4 fw-semibold"
                                                                             style="color:   #06ea11">
                                                                             <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                                            {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
+                                                                            {{ number_format($project['budget_gov_utility'] - ($utsc_pay + $utsc_pay_pa), 2) }}
                                                                         </div>
                                                                         <small
                                                                             class="text-medium-emphasis text-uppercase fw-semibold"
@@ -886,6 +865,7 @@
     </x-slot:content>
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
+
 
         <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
 
