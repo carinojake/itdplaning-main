@@ -26,7 +26,7 @@
                                                             <div class="card-body">
 
                                                                 <div class="fs-4 fw-semibold "><span
-                                                                        style="color: green ">{{ number_format($budgets,2) }}
+                                                                        style="color: green ">{{ number_format($budgetscentralict + $budgetsinvestment + $budgetsut, 2) }}
                                                                     </span></div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -45,7 +45,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold "><span
-                                                                        style="color: rgb(10, 10, 10) ">{{ number_format($budgetscentralict,2) }}</span>
+                                                                        style="color: rgb(10, 10, 10) ">{{ number_format($budgetscentralict, 2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -64,7 +64,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{number_format ($budgetsinvestment,2) }}
+                                                                    {{ number_format($budgetsinvestment, 2) }}
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -81,7 +81,7 @@
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
-                                                                    {{ number_format($budgetsut,2) }}</div>
+                                                                    {{ number_format($budgetsut, 2) }}</div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
                                                                         xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
@@ -118,16 +118,16 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                    style="color: #2e0775 ">{{ number_format($cpa,2) }}</span>
-                                                            </div>
-                                                            <svg class="icon icon-xl text-end">
-                                                                <use
-                                                                    xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                </use>
-                                                            </svg>
-                                                            <small
-                                                                class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
-                                                                PA</small>
+                                                                        style="color: #3591dc ">{{ number_format($cpb,2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PR</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -137,8 +137,7 @@
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #ec3939 "></span>
-                                                                        {{ number_format($ospa + $osa, 2) }}
+                                                                        style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -146,53 +145,73 @@
                                                                     </use>
                                                                 </svg>
                                                                 <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #ee7b7b"> PA ict</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PA</small>
                                                             </div>
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+
+
+
+                                                                    <span
+                                                                        style="color: #94ee1f ">{{ number_format($cpb - $cpa,2) }}</span>
+                                                                </div>
+
+
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">เหลือ</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืนเงิน</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3">
                                                         <div class="card ">
                                                             <div class="card-body">
                                                                 <div class="fs-4 fw-semibold ">
                                                                     <span
-                                                                        style="color: #ec3939 "></span>
-                                                                        {{ number_format($ispa+$isa, 2) }}
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #48f7ae"> ดำเนินงาน</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    {{ number_format($utpcs + $utsc, 2) }}
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold"><span style="color:   #c0bd09"> สาธารรูปโภค</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    <span
-                                                                        style="color: #64a80b ">{{ number_format(($budgetscentralict-($ospa + $osa))+($budgetsinvestment-($ispa+$isa))+($budgetsut-($utpcs + $utsc)),2) }}</span>
+                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets,2) }}</span>
                                                                 </div>
                                                                 <svg class="icon icon-xl text-end">
                                                                     <use
@@ -204,48 +223,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    <span
-                                                                        style="color: #64a80b ">{{ number_format((($ospa ))+(($ispa))+(($utpcs )),2) }}</span>
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">มี PA</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3">
-                                                        <div class="card ">
-                                                            <div class="card-body">
-                                                                <div class="fs-4 fw-semibold ">
-                                                                    <span
-                                                                        style="color: #64a80b ">{{ number_format((($osa)+ ($isa)+($utsc)),2) }}</span>
-                                                                </div>
-                                                                <svg class="icon icon-xl text-end">
-                                                                    <use
-                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
-                                                                    </use>
-                                                                </svg>
-                                                                <small
-                                                                    class="text-medium-emphasis text-uppercase fw-semibold">มีไม่ PA</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-
-
-
-
-
                                                 </div>
+
 
 
 
@@ -303,7 +282,7 @@
                                                                 </svg>
                                                                 <small
                                                                     class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
-                                                                   จ่าย ICT</small>
+                                                                    จ่าย ICT</small>
                                                             </div>
 
                                                         </div>
@@ -585,14 +564,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 
-        <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
-        rel="stylesheet"
-      />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet" />
+        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
 
         <!-- HTML -->
         <script>
@@ -600,9 +574,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 marker: true,
                 fullscreen: true,
                 critical_path: true,
-                 auto_scheduling: true,
+                auto_scheduling: true,
                 tooltip: true,
-                 undo: true
+                undo: true
             });
             //Marker
             var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
@@ -658,32 +632,52 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         name: "cost",
                         width: 120,
                         label: "PA",
-
-
-                    },
-                    {
-                        name: "cost",
-                        width: 150,
-                        label: "PA",
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.cost) {
-                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
                             }
-                            else {
+                        }
+                    },
+                    {
+                        name: "cost",
+                        width: 100,
+                        label: "เบิกจ่าย",
 
-
-                                return  '<span style="color:#6010f6;">' +new Intl.NumberFormat('th-TH', {
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost_disbursement) + '</span>';
-              }
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+                    {
+                        name: "cost",
+                        width: 100,
+                        label: "รอการเบิกจ่าย",
 
-                    }
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.cost) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+                            } else {
+                                return '';
+                            }
+                        }
                     },
                   //  {
                     //    name: "cost",
@@ -762,25 +756,25 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                              <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                              <td colspan="2">งบกลาง IT</td>\
-                                                              <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                            </tr>';
+                                                                      <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                                      <td colspan="2">งบกลาง IT</td>\
+                                                                      <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                                    </tr>';
                     html += '<tr>\
-                                                              <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                              <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                              <td>ค่าสาธารณูปโภค</td>\
-                                                              <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                              <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                            </tr>';
+                                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                      <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                      <td>ค่าสาธารณูปโภค</td>\
+                                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                      <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                    </tr>';
                     html += '<tr class="text-end">\
-                                                              <td>' + budget_gov_operating + '</td>\
-                                                              <td>' + budget_gov_investment + '</td>\
-                                                              <td>' + budget_gov_utility + '</td>\
-                                                              <td>' + budget_it_operating + '</td>\
-                                                              <td>' + budget_it_investment + '</td>\
-                                                              <td class="text-success">' + budget + '</td>\
-                                                            </tr>';
+                                                                      <td>' + budget_gov_operating + '</td>\
+                                                                      <td>' + budget_gov_investment + '</td>\
+                                                                      <td>' + budget_gov_utility + '</td>\
+                                                                      <td>' + budget_it_operating + '</td>\
+                                                                      <td>' + budget_it_investment + '</td>\
+                                                                      <td class="text-success">' + budget + '</td>\
+                                                                    </tr>';
                     html += '</table>';
                 }
                 if (task.cost) {
@@ -931,7 +925,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         strokeOpacity: 0.1
                     })
                 }));
+
 //eee
+
                 // Add series
                 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
                 function makeSeries(name, fieldName) {
@@ -1005,6 +1001,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 };
                 //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
                 makeSeries2("PA", "total_cost");
+
+
+
 //jjjjjjjjjjjjjjjjjj
 function makeSeries3(name, fieldName) {
                     var series = chart.series.push(am5xy.ColumnSeries.new(root, {
@@ -1086,6 +1085,7 @@ function makeSeries3(name, fieldName) {
                 // Make stuff animate on load
                 // https://www.amcharts.com/docs/v5/concepts/animations/
                 chart.appear(1000, 100);
+
 //kkk
 function createSeries2(name, field) {
                     var series = chart.series.push(

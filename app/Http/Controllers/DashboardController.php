@@ -331,9 +331,19 @@ as d')
 
 );
 
+//$remaining_amounts = [];
+
+//foreach ($contractsre as $contract) {
+  //  $combined_properties = $contract->task_cost_it_operating . ',' . $contract->task_cost_it_investment. ',' . $contract->task_cost_gov_utility. ',' . $contract->remaining_amount;
+    //$remaining_amounts[] = $combined_properties;
+//}
 
 
-    ($contract_refund_pa_budget =  DB::table('contracts')
+  //    ($remaining_amounts);
+
+
+
+($contract_refund_pa_budget =  DB::table('contracts')
     ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
     ->where('contract_fiscal_year', '=', 2566)
     ->where('contract_refund_pa_status', '=', 1)
@@ -535,6 +545,8 @@ as d')
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
+                'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'cost_disbursement'     => $project['cost_disbursement'],
                 'cost'                  => $project['project_cost'],
                 'owner'                 => $project['project_owner'],
                 'project_fiscal_year'   => $project['project_fiscal_year'],
@@ -572,6 +584,9 @@ as d')
                     $task['task_cost_it_investment'],
                 ]);
                 (double) $__balance = $__budget - $__cost;
+
+
+
                 $gantt[] = [
                     'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                     'text'                  => $task['task_name'],
@@ -738,13 +753,17 @@ as d')
             ($ut_pay_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay')
             ->where('tasks.task_type',2)
-            ->where('tasts.task_cost_gov_utility')
+            ->where('tass.task_cost_gov_utility')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('project_fiscal_year', 2566)
             ->get());
             ($json = json_decode($ut_pay_sum));
             ($utsc_pay = $json[0]->utsc_pay);
              ($utsc_pay = (float)$utsc_pay);
+
+
+
+
 
             ($total_expenses = (($osa)+ ($isa)+($utsc)));
 

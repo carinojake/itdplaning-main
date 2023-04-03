@@ -136,27 +136,39 @@ class ProjectController extends Controller
     public function show(Request $request, $project)
     {
         $id = Hashids::decode($project)[0];
+// Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
+        ($project = Project::select('projects.*', 'a.total_cost','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
 
+        ->leftJoin(DB::raw('(select tasks.project_id,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+    from tasks  group by tasks.project_id) as a'),
+     'a.project_id', '=', 'projects.project_id')
 
-     ($project = Project::select('projects.*', 'a.cost_pa','a.total_pay','ab.cost_pa_1','ac.cost_pa_2')
-     ->leftJoin(DB::raw('(select tasks.project_id, sum(COALESCE(tasks.task_cost_gov_utility,0))
-+sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
-as cost_pa ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  group by tasks.project_id) as a'), 'a.project_id', '=', 'projects.project_id')
-    ->leftJoin(DB::raw('(select tasks.project_id, sum(COALESCE(tasks.task_cost_gov_utility,0))
-+sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
-as cost_pa_1 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'), 'ab.project_id', '=', 'projects.project_id')
-->leftJoin(DB::raw('(select tasks.project_id, sum(COALESCE(tasks.task_cost_gov_utility,0))
-+sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
-as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'), 'ac.project_id', '=', 'projects.project_id')
+       ->leftJoin(DB::raw('(select tasks.project_id,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
+    'ab.project_id', '=', 'projects.project_id')
 
-// ->join('tasks', 'tasks.project_id', '=', 'projects.id')
-    //->groupBy('projects.project_id')
-     ->where('projects.project_id', $id)
+   ->leftJoin(DB::raw('(select tasks.project_id,
+   sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
+   'ac.project_id', '=', 'projects.project_id')
 
-     ->first());
+   // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+       //->groupBy('projects.project_id')
+        ->where('projects.project_id', $id)
+        ->first());
 
-
-
+// คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
 
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] ;
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
@@ -180,11 +192,12 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
             'budget'                => $__budget,
             'balance'               => $__balance,
             'project_cost_disbursement'     => $project['project_cost_disbursemen'],
-            'cost_pa'     => $project['cost_pa'],
-            'cost_disbursement'     => $project['cost_disbursement'],
+            'total_cost'                => $project['total_cost'],
             'cost'                  => $project['project_cost'],
             'cost_pa_1'             => $project['cost_pa_1'],
-            'cost_pa_2'             => $project['cost_pa_2'],
+            'cost_no_pa_2'             => $project['cost_no_pa_2'],
+            'cost_disbursement'     => $project['cost_disbursement'],
+
             'pay'                   => $project['pay'],
             'total_pay'              => $project['total_pay'],
             'owner'                 => $project['project_owner'],
@@ -197,26 +210,38 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
         $tasks =  Project::find($id);
 
 
+
         ($tasks = DB::table('tasks')
-        ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_pa_2')
-        ->leftJoin(DB::raw('(select tasks.task_parent, sum( COALESCE(tasks.task_cost_gov_utility,0))
-        +sum( COALESCE(tasks.task_cost_it_operating,0))+sum( COALESCE(tasks.task_cost_it_investment,0))
-        as cost_disbursement,sum( COALESCE(tasks.task_pay,0))  as total_pay  from tasks  group by tasks.task_parent) as a'), 'a.task_parent', '=', 'tasks.task_id')
+        ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as cost_disbursement,
+        sum( COALESCE(tasks.task_pay,0))  as total_pay
+        from tasks  group by tasks.task_parent) as a'),
+         'a.task_parent', '=', 'tasks.task_id')
 
-        ->leftJoin(DB::raw('(select tasks.task_parent, sum(COALESCE(tasks.task_cost_gov_utility,0))
-        +sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
-        as cost_pa_1 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where tasks.task_type=1 group by tasks.task_parent) as ab'), 'ab.task_parent', '=', 'tasks.task_id')
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_pa_1 ,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay
+        from tasks
+        where tasks.task_type=1 group by tasks.task_parent) as ab'),
+        'ab.task_parent', '=', 'tasks.task_id')
 
 
-        ->leftJoin(DB::raw('(select tasks.task_parent, sum(COALESCE(tasks.task_cost_gov_utility,0))
-        +sum(COALESCE(tasks.task_cost_it_operating,0))+sum(COALESCE(tasks.task_cost_it_investment,0))
-        as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'), 'ac.task_parent', '=', 'tasks.task_id')
-
-
-
-
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
+        as total_pay
+        from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+        'ac.task_parent', '=', 'tasks.task_id')
         ->where('project_id',($id))
-
         ->get()
         ->toArray());
        ($tasks = json_decode(json_encode($tasks), true));
@@ -255,11 +280,15 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
                 'budget'                => $__budget,
                 'balance'               => $__balance,
                 'cost'                  => $__cost,
+
+
+
+            'cost_pa_1'             => $task['cost_pa_1'],
+            'cost_no_pa_2'             => $task['cost_no_pa_2'],
+            'cost_disbursement'     => $project['cost_disbursement'],
                 'pay'                   => $task['task_pay'],
                 'cost_disbursement'     => $task['cost_disbursement'],
-                'cost_pa_1'             => $task['cost_pa_1'],
-                'cost_pa_2'             => $task['cost_pa_2'],
-                'total_pay'             => $task['total_pay'],
+                'task_total_pay'             => $task['total_pay'],
                 'task_type'             => $task['task_type']
                 // 'owner' => $project['project_owner'],
             ]);
@@ -271,13 +300,29 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
         }
    // ($gntt[0]['cost']    =array_sum($__project_cost));
     //  ($gantt[0]['pay']    = array_sum($__project_pay));
-    $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost_pa'];
+    $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
 
 
 
 
-        $budget['cost']    = $gantt[0]['cost_pa'];
+        $budget['cost']    = $gantt[0]['total_cost'];
         $budget['balance'] = $gantt[0]['balance'];
+
+        $labels = [
+            'project' => 'โครงการ/งานประจำ',
+            'budget' => 'งบประมาณ',
+            'budget_it_operating' => 'งบกลาง ICT',
+            'budget_it_investment' => 'งบดำเนินงาน',
+            'budget_gov_utility' => 'งบสาธารณูปโภค',
+        ];
+
+        $fields = [
+            'cost' => 'ค่าใช้จ่าย',
+            'cost_pa_1' => 'PA',
+            'cost_no_pa_2' => 'ไม่มี PA',
+            'task_pay' => 'การเบิกจ่าย',
+
+        ];
 
 
 
@@ -313,6 +358,17 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
        ($otpsa1 = $json[0]->iv);
       ($otpsa1 = (float)$otpsa1);
 
+
+
+     ($operating_pay_sum_2 = DB::table('tasks')
+      ->selectRaw('SUM(COALESCE(task_pay,0)) as iv2')
+      ->where ('tasks.task_cost_it_operating','>', 2)
+      ->where('tasks.task_type', 2)
+      ->where('project_id',($id))
+      ->get());
+      ($json = json_decode($operating_pay_sum_2));
+     ($otpsa2 = $json[0]->iv2);
+     ($otpsa2 = (float)$otpsa2);
 
 
 
@@ -402,6 +458,17 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
         ($utsc_pay = $json[0]->utsc_pay);
          ($utsc_pay = (float)$utsc_pay);
 
+
+         ($ut_pay_pa_sum = DB::table('tasks')
+->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay_pa  ')
+->where('tasks.task_type',1)
+->whereNotNull('task_cost_gov_utility')
+->where('project_id',($id))
+->get());
+($json = json_decode($ut_pay_pa_sum));
+($utsc_pay_pa = $json[0]->utsc_pay_pa);
+ ($utsc_pay_pa = (float)$utsc_pay_pa);
+
        $parent_sum_pa = DB::table('tasks')
         ->select('tasks.task_parent', 'a.cost_a')
 
@@ -428,7 +495,7 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
 
         return view('app.projects.show', compact('project','itpsa1','itpsa2','otpsa1',
         'gantt', 'budget', 'parent_sum_pa', 'parent_sum_cd','task',
-        'ispa','isa','utsc','utpcs','ospa','osa','itpsa','utsc_pay'));
+        'ispa','isa','utsc','utpcs','ospa','osa','itpsa','utsc_pay','utsc_pay_pa','otpsa2'));
     }
 
     public function create(Request $request)
@@ -550,11 +617,15 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
         $id_task    = Hashids::decode($task)[0];
         $project    = Project::find($id_project);
         $task       = task::find($id_task);
+        $contracts = Contract::get();
+
+
+
 
         // echo 'contract' . $task->contract->count();
         // dd($task->contract);
 
-        return 'Under Construction';
+        return view('app.projects.tasks.show', compact('contracts', 'project', 'task'));
     }
 
     public function taskCreate(Request $request, $project)
@@ -603,7 +674,7 @@ as cost_pa_2 ,sum( COALESCE(tasks.task_pay,0)) as total_pay   from tasks  where 
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
         $task->task_pay                 = $request->input('task_pay');
-        $task->task_pay_date            = $pay_date ?? date('Y-m-d 00:00:00');
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
