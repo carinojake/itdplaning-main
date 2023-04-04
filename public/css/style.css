@@ -51,6 +51,7 @@
   --cui-body-line-height: 1.5;
   --cui-body-color: rgba(44, 56, 74, 0.95);
   --cui-body-bg: #fff;
+  --cui-pay-rgb: 244,217,16;
 }
 
 *,
@@ -10435,6 +10436,11 @@ html:not([dir=rtl]) .text-center {
   --cui-text-opacity: 1;
   color: rgba(var(--cui-warning-rgb), var(--cui-text-opacity)) !important;
 }
+
+.text-pay {
+    --cui-text-opacity: 1;
+    color: rgba(var(--cui-pay-rgb), var(--cui-text-opacity)) !important;
+  }
 
 .text-danger {
   --cui-text-opacity: 1;

@@ -17,6 +17,12 @@
               <form method="POST" action="{{ route('project.store') }}" class="row g-3">
                 @csrf
                 <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
+                        <input type="text" class="form-control" id="project_fiscal_year" name="project_fiscal_year" required>
+                        <div class="invalid-feedback">
+                          {{ __('ชื่องาน/โครงการ ซ้ำ') }}
+                        </div>
                   <label for="project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
                   <div class="form-check form-check-inline ms-5">
                     <input class="form-check-input" type="radio" name="project_type" id="project_type1" value="J" checked>
@@ -48,12 +54,7 @@
                     {{ __('รายละเอียดงาน/โครงการ') }}
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="project_fiscal_year" name="project_fiscal_year" required>
-                  <div class="invalid-feedback">
-                    {{ __('ชื่องาน/โครงการ ซ้ำ') }}
-                  </div>
+
                   <div class="col-md-12">
                     <label for="reguiar_id" class="form-label">{{ __('no') }}</label> <span class="text-danger"></span>
                     <input type="text" class="form-control" id="reguiar_id" name="reguiar_id" >

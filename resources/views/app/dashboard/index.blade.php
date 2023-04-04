@@ -569,15 +569,17 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
 
         <!-- HTML -->
+
         <script>
             gantt.plugins({
                 marker: true,
                 fullscreen: true,
                 critical_path: true,
-                auto_scheduling: true,
+                // auto_scheduling: true,
                 tooltip: true,
-                undo: true
+                // undo: true
             });
+
             //Marker
             var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
             var today = new Date();
@@ -587,9 +589,12 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 text: "Today",
                 title: "Today: " + date_to_str(today)
             });
+
             //Template
             var leftGridColumns = {
                 columns: [
+
+
                     {
                         name: "text",
                         width: 300,
@@ -611,9 +616,11 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 ]
             };
             var rightGridColumns = {
-                columns: [{
+                columns: [
+
+                    {
                         name: "budget",
-                        width: 100,
+                        width: 120,
                         label: "งบประมาณ",
                         tree: true,
                         template: function(task) {
@@ -627,93 +634,170 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                 return '';
                             }
                         }
+
                     },
+
                     {
-                        name: "cost",
-                        width: 120,
+                        name: "cost_pa",
+                        width: 150,
                         label: "PA",
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
+                            if (task.task_type == 1) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost) + '</span>';
+
+
+                            } else {
+
+
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost_pa_1) + '</span>';
+                            }
+
+                        }
+                    },
+                    {
+                        name: "cost_no_pa",
+                        width: 150,
+                        label: "ไม่มี PA",
+                        tree: true,
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                            if (task.task_type == 2) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost);
+                            } else {
+
+
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost_no_pa_2) + '</span>';
+                            }
+                        }
+                    },
+                    {
+                        name: "pay",
+                        width: 100,
+                        label: "การเบิกจ่าย",
+                        tree: true,
+
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+
+                            if (task.task_total_pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.task_total_pay) + '</span>';
+
+
+
+                            } else
+
+                            if (task.task_type == 1) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else if (task.task_type == 2) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+
+
+
+
+
+
+
+                            } else {
+
                                 return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        name: "cost",
-                        width: 100,
-                        label: "เบิกจ่าย",
+                                }).format(task.total_pay) + '</span>';
 
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
+
+
+
                             }
                         }
                     },
+
                     {
-                        name: "cost",
+
+
+
+                        name: "-",
                         width: 100,
                         label: "รอการเบิกจ่าย",
+                        tree: true,
 
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.cost) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                            if (task.total_pay > 0) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_cost-task.total_pay) + '</span>';
+                            }
+                            else if (task.task_total_pay > 0) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost-task.task_total_pay) + '</span>';
+                            }
+
+                            else if (task.pay == 0) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost) + '</span>';
-                            } else {
-                                return '';
                             }
+
+
+
                         }
                     },
-                  //  {
-                    //    name: "cost",
-                      //  width: 100,
-                       // label: "รอการเบิกจ่าย",
-                        //template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                          //  if (task.cost) {
-                            //    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                              //      style: 'currency',
-                                //    currency: 'THB'
-                                //}).format(task.cost) + '</span>';
-                          //  } else {
-                              //  return '';
-                            //}
-                        //}
-                    //},
                     {
                         name: "balance",
                         width: 100,
                         label: "คงเหลือ",
+                        tree: true,
+
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.balance) {
-                                var tmp_class = task.balance > 0 ? 'green' : 'red';
+                            if (task.balance > 0) {
+                                var tmp_class = task.balance < 1000000 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.balance) + '</span>';
-                            } else {
+                            } else if (task.balance = 0) {
+                                return '-';
+                            } else
+
+
+
+
+                            {
+
                                 return '';
                             }
                         }
                     }
                 ]
             };
+
             gantt.templates.tooltip_text = function(start, end, task) {
                 var budget_gov = task.budget_gov ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
@@ -751,32 +835,46 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.cost) : '';
+
                 var html = '<b>โครงการ/งาน:</b> ' + task.text + '<br/>';
                 html += task.owner ? '<b>เจ้าของ:</b> ' + task.owner + '<br/>' : '';
+
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                                      <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                                      <td colspan="2">งบกลาง IT</td>\
-                                                                      <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                                    </tr>';
+                                                        <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                        <td colspan="2">งบกลาง IT</td>\
+                                                        <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                      </tr>';
                     html += '<tr>\
-                                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                      <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                      <td>ค่าสาธารณูปโภค</td>\
-                                                                      <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                      <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                    </tr>';
-                    html += '<tr class="text-end">\
-                                                                      <td>' + budget_gov_operating + '</td>\
-                                                                      <td>' + budget_gov_investment + '</td>\
-                                                                      <td>' + budget_gov_utility + '</td>\
-                                                                      <td>' + budget_it_operating + '</td>\
-                                                                      <td>' + budget_it_investment + '</td>\
-                                                                      <td class="text-success">' + budget + '</td>\
-                                                                    </tr>';
+                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                        <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                        <td>ค่าสาธารณูปโภค</td>\
+                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                        <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                      </tr>';
+                    if (task.type == 'task') {
+                        html += '<tr class="text-end">\
+                                                        <td>-' + budget_gov_operating + '</td>\
+                                                        <td>' + budget_gov_investment + '</td>\
+                                                        <td>' + budget_gov_utility + '</td>\
+                                                        <td>' + budget_it_operating + '</td>\
+                                                        <td>' + budget_it_investment + '</td>\
+                                                        <td class="text-success">' + budget + '</td>\
+                                                      </tr>';
+                    } else {
+                        html += '<tr class="text-end">\
+                                                        <td>' + budget_gov_operating + '</td>\
+                                                        <td>' + budget_gov_investment + '</td>\
+                                                        <td>' + budget_gov_utility + '</td>\
+                                                        <td>' + budget_it_operating + '</td>\
+                                                        <td>' + budget_it_investment + '</td>\
+                                                        <td class="text-success">' + budget + '</td>\
+                                                      </tr>';
+                    }
                     html += '</table>';
                 }
+
                 if (task.cost) {
                     html += '<b>ค่าใช้จ่าย:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                         style: 'currency',
@@ -790,24 +888,26 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         currency: 'THB'
                     }).format(task.balance) + '</span><br/>';
                 }
+
                 return html;
             };
+
             gantt.ext.fullscreen.getFullscreenElement = function() {
                 return document.querySelector("#gantt_here");
             };
             //Config
             gantt.config.date_format = "%Y-%m-%d";
-            gantt.config.drag_links = true;
-            gantt.config.drag_move = true;
-            gantt.config.drag_progress = true;
-            gantt.config.drag_resize = true;
+            gantt.config.drag_links = false;
+            gantt.config.drag_move = false;
+            gantt.config.drag_progress = false;
+            gantt.config.drag_resize = false;
             gantt.config.grid_resize = true;
             gantt.config.layout = {
                 css: "gantt_container",
                 rows: [{
                         cols: [{
                                 view: "grid",
-                                width: 900,
+                                width: 600,
                                 scrollX: "scrollHor",
                                 scrollY: "scrollVer",
                                 config: leftGridColumns
@@ -827,7 +927,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                             },
                             {
                                 view: "grid",
-                                width: 900,
+                                width: 500,
                                 bind: "task",
                                 scrollY: "scrollVer",
                                 config: rightGridColumns
@@ -837,6 +937,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                 id: "scrollVer"
                             }
                         ]
+
                     },
                     {
                         view: "scrollbar",
@@ -859,6 +960,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 // {unit: "day", step: 3, format: "%D %M, %Y"},
             ];
             //ganttModules.zoom.setZoom("months");
+
             gantt.init("gantt_here");
             gantt.parse({
                 data: {!! $gantt !!}

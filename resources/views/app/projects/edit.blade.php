@@ -110,7 +110,7 @@
                         <div class="col-md-12">
                           <label for="project_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
                           <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                          id="task_budget_it_investment" name="_budget_it_investment" min="0"  value="{{ $project->project_budget_it_investment }}">
+                          id="task_budget_it_investment" name="_budget_it_investment" min="0"  value="{{ $project->budget_it_investment }}">
                           <div class="invalid-feedback">
                             {{ __('ระบุงบดำเนินงาน') }}
                           </div>
@@ -118,7 +118,7 @@
                         <div class="col-md-12">
                           <label for="project_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                           <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                           id="project_budget_gov_utility" name="project_budget_gov_utility" min="0" value="{{ $project->project_budget_gov_utility }}">
+                           id="project_budget_gov_utility" name="project_budget_gov_utility" min="0" value="{{ $project->budget_gov_utility }}">
                           <div class="invalid-feedback">
                             {{ __('ระบุค่าสาธารณูปโภค') }}
                           </div>
