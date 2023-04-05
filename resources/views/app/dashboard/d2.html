@@ -3,418 +3,448 @@
         <div class="mb-3 row container-fluid">
             <div class="animated fadeIn">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-10">
                         <div class="row">
-                            <div class="card-title fs-5 fw-semibold">ปีงบประมาณ 2566 </div>
                             <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col">
-                                        <!--งบประมาณ-->
-                                        <div class="card">
-                                            <div class="card-body">
 
-                                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample" role="button" aria-expanded="false"
-                                                    aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold">
-                                                        {{ number_format($budgets, 2) }}
+                                <div class="accordion " id="accordionPanelsStayOpenExample">
+                                    <div class="accordion-item ">
+                                        <h2 class="accordion-header " id="panelsStayOpen-headingOne">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                                aria-controls="panelsStayOpen-collapseOne">
+                                                <span style="color: #099509 "> งบประมาณ ประจำปี 2566 </span>
+                                            </button>
+                                        </h2>
+
+                                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                                            aria-labelledby="panelsStayOpen-headingOne">
+                                            <div class="accordion-body">
+                                                <div class="mb-2 row ">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+
+                                                                <div class="fs-4 fw-semibold "><span
+                                                                        style="color: green ">{{ number_format($budgetscentralict + $budgetsinvestment + $budgetsut, 2) }}
+                                                                    </span></div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ</small>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
 
-                                                    <small
-                                                        class="text-xl">
-                                                        งบประมาณ
-                                                    </small>
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseExample">
-                                                <div class="card-body">
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetscentralict, 2) }}
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold "><span
+                                                                        style="color: rgb(10, 10, 10) ">{{ number_format($budgetscentralict, 2) }}</span>
                                                                 </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบกลาง ICT
-                                                                </small>
-                                                            </button>
-                                                </div>
-                                                <div class="card-body">
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
+                                                                    ict</small>
+                                                            </div>
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
                                                                     {{ number_format($budgetsinvestment, 2) }}
                                                                 </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบดำเนินงาน
-                                                                </small>
-                                                            </button>
-                                                </div>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
+                                                            </div>
 
-                                                <div class="card-body">
-
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetsut, 2) }}
-                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    {{ number_format($budgetsut, 2) }}</div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบสาธารณูปโภค
-                                                                </small>
-                                                            </button>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> <!--จบปี-->
-
-                                    <div class="col ">
-                                        <!--งบประมาณ-->
-                                        <div class="card ">
-                                            <div class="card-body ">
-
-                                                <button class="btn btn btn-danger " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample" role="button" aria-expanded="false"
-                                                    aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold ">
-
-                                                        {{ number_format((($ospa) )+(($ispa ) )+(($utpcs) ), 2) }}
-                                                    </div>
-
-                                                    <small
-                                                        class="text-xl">
-                                                        รวม PA
-                                                    </small>
-
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseExample">
-                                                <div class="card-body">
-
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format((($ospa +$osa)), 2) }}
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                                                aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                <span style="color:  #5610f8 ">การใช้จ่ายงบประมาณ PA/ไม่สัญญา</span>
+                                            </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                                            aria-labelledby="panelsStayOpen-headingTwo">
+                                            <div class="accordion-body">
+                                                <div class="mb-1 row ">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #3591dc ">{{ number_format($cpb,2) }}</span>
                                                                 </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบกลาง ICT
-                                                                </small>
-                                                            </button>
-                                                </div>
-                                                <div class="card-body">
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PR</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold " >
-                                                                    {{ number_format((($ispa ) + ($isa)), 2) }}
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #6010f6 ">{{ number_format($cpa,2) }}</span>
                                                                 </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบดำเนินงาน
-                                                                </small>
-                                                            </button>
-                                                </div>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณ
+                                                                    PA</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                                <div class="card-body">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($utpcs + $utsc, 2) }}
+
+
+                                                                    <span
+                                                                        style="color: #94ee1f ">{{ number_format($cpb - $cpa,2) }}</span>
                                                                 </div>
+
+
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
                                                                 <small
-                                                                    class="text-xl">
-                                                                    งบสาธารณูปโภค
-                                                                </small>
-                                                            </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> <!--จบปี-->
-                                    <div class="col">
-                                        <div class="card">
-                                            <div class="card-body ">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold btn btn-primary"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($otpsa1 + $otpsa2 +$itpsa1 + $itpsa2 +$utsc_pay_pa + $utsc_pay, 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รวมเบิกจ่ายทั้งหมด</small>
-                                                    </div>
-                                                </button>
-
-                                            </div>
-                                            <div class="collapse" id="collapseExample2">
-                                                <div class="card-body">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($otpsa1 + $otpsa2, 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >เบิก งบกลางICT จ่ายทั้งหมด</small>
-                                                    </div>
-                                                </button>
-                                                </div>
-                                                <div class="card-body">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($itpsa1 + $itpsa2, 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >เบิก งบดำเนินจ่าย ทั้งหมด</small>
-                                                    </div>
-                                                </button>
-                                                    </button>
-                                                </div>
-                                                <div class="card-body">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format(($utsc_pay_pa +  $utsc_pay), 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >เบิก สาธารณูปโภค จ่ายทั้งหมด</small>
-                                                    </div>
-                                                </button>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> <!-- รวยเบิกจบ-->
-                                    <!--รอการเบิน-->
-                                    <div class="col">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample3" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold btn btn-warning">
-                                                        <!--รอการเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)), 2) }}
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl "
-
-                                                        >รอการเบิกจ่ายทั้งหมด</small>
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">เหลือ</small>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
-                                                </button>
-                                            </div>
-
-                                            <div class="collapse" id="collapseExample3">
-                                                <div class="card-body ">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
-
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">คืนเงิน</small>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิก งบกลางICTจ่าย</small>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span style="color: "></span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold"></small>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </button>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    <span
+                                                                        style="color: #94ee1f ">{{ number_format($totals_budgets,2) }}</span>
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบประมาณคงเหลือ</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div class="card-body">
 
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
 
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิก งบดำเนินจ่าย </small>
-                                                    </div>
-                                                </button>
-                                                </div>
-                                                <div class="card-body">
 
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay), 2) }}
 
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิก สาธารณูปโภคจ่าย</small>
-                                                    </div>
-                                                </button>
-                                                    </button>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
 
 
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                                                aria-controls="panelsStayOpen-collapseThree">
+                                                <span style="color: #f81010 "> สถานะการเบิกจ่าย </span>
+                                            </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                                            aria-labelledby="panelsStayOpen-headingThree">
+                                            <div class="accordion-body">
+                                                <div class="mb-2 row ">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
 
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold"><span
+                                                                        style="color:   #f70f0f">{{ number_format($coatcons) }}
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">
+                                                                    รวมจ่ายทั้งหมด</small>
+                                                            </div>
 
-
-
-
-
-
-
-
-
-                                    <div class="col">
-                                        <!--คงเหลือ-->
-                                        <div class="card  ">
-                                            <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
-                                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
-                                                <div class="fs-4 fw-semibold btn btn-success">
-                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utsc_pay_pa + $utsc_pay) ), 2) }}
+                                                        </div>
                                                     </div>
 
-                                                    <small
-                                                        class="text-xl">คงเหลือ</small>
-                                                </button>
 
-                                            </div>
-                                            <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
-                                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
-                                                <div class="fs-4 fw-semibold text-success">
-                                                    {{ number_format(($budgetscentralict- ($ospa + $osa)), 2) }}
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold">
+                                                                    {{ number_format($coatcons_ict) }} </div>
+
+                                                                <svg class="icon icon-xl">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
+                                                                    จ่าย ICT</small>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
 
-                                                    <small
-                                                        class="text-xl">คงเหลือ</small>
-                                                </button>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    {{ number_format($coatcons_inv) }}</div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">จ่ายดำเนินงาน</small>
+                                                            </div>
 
-                                            </div>
-                                            <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
-                                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
-                                                <div class="fs-4 fw-semibold text-success">
-                                                    {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    {{ number_format($coatcons_ut) }}</div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">จ่ายค่าสาธารณูปโภค</small>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
 
-                                                    <small
-                                                        class="text-xl">คงเหลือ</small>
-                                                </button>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold"><span
+                                                                        style="color:green;">{{ number_format($total_budgets) }}
+                                                                </div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">
+                                                                    รวมทั้งหมด</small>
+                                                            </div>
 
-                                            </div>
-                                            <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
-                                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
-                                                <div class="fs-4 fw-semibold text-success">
-                                                    {{ number_format(($budgetsut- ($utsc_pay_pa + $utsc_pay) ), 2) }}
+                                                        </div>
                                                     </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold">
+                                                                    {{ number_format($total_ict) }} </div>
 
-                                                    <small
-                                                        class="text-xl">คงเหลือ</small>
-                                                </button>
+                                                                <svg class="icon icon-xl">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบกลาง
+                                                                    ICT</small>
+                                                            </div>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    {{ number_format($total_inv) }}</div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">งบดำเนินงาน</small>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-4 col-lg-3">
+                                                        <div class="card ">
+                                                            <div class="card-body">
+                                                                <div class="fs-4 fw-semibold ">
+                                                                    {{ number_format($total_ut) }}</div>
+                                                                <svg class="icon icon-xl text-end">
+                                                                    <use
+                                                                        xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-money') }}">
+                                                                    </use>
+                                                                </svg>
+                                                                <small
+                                                                    class="text-medium-emphasis text-uppercase fw-semibold">ค่าสาธารณูปโภค</small>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
-
-
-
-
-                            </div><!--งยประมาณ -->
+                            </div>
                         </div>
                     </div>
+                    <div class="col-sm-2 ">
+                        <div class="card" href="#" role="button">
+                            <div class="card-body ">
+                                <a class="btn btn-outline-primary" href="/itdplaning-main/public/project"
+                                    role="button">
+                                    <div class="fs-4 fw-semibold">{{ $project_type_j }}</div>
+                                    <svg class="icon icon-xl">
+                                        <use
+                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-building') }}">
+                                        </use>
+                                    </svg>
+                                    <small class="text-medium-emphasis text-uppercase fw-semibold">งานประจำ</small>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body ">
+                                <a class="btn btn-outline-primary" href="/itdplaning-main/public/project/7dnamnzl"
+                                    role="button">
+                                    <div class="fs-4 fw-semibold">{{ $project_type_p }}</div> <svg
+                                        class="icon icon-xl">
+                                        <use
+                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-notes') }}">
+                                        </use>
+                                    </svg>
+                                    <small class="text-medium-emphasis text-uppercase fw-semibold">โครงการ</small>
+                                </a>
 
-
-
-                </div>
-
-
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body ">
+                                <a class="btn btn-outline-primary" href="/itdplaning-main/public/contract"
+                                    role="button">
+                                    <div class="fs-4 fw-semibold">{{ $contracts }}</div> <svg
+                                        class="icon icon-xl">
+                                        <use
+                                            xlink:href=" {{ asset('vendors/@coreui/icons/sprites/free.svg#cil-notes') }}">
+                                        </use>
+                                    </svg>
+                                    <small class="text-medium-emphasis text-uppercase fw-semibold">สัญญา</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
         <div class="mb-3 row">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="card">

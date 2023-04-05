@@ -191,7 +191,7 @@ class ProjectController extends Controller
             'budget_it'             => $__budget_it,
             'budget'                => $__budget,
             'balance'               => $__balance,
-            //'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'project_cost_disbursement'     => $project['project_cost_disbursemen'],
             'total_cost'                => $project['total_cost'],
             'cost'                  => $project['project_cost'],
             'cost_pa_1'             => $project['cost_pa_1'],
