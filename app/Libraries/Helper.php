@@ -67,6 +67,14 @@ class Helper
         return date( $timestamp);
     }
 
+    public static function Date4(String $date)
+    {
+
+        return \Carbon\Carbon::parse($date)->addYears(543)->format('d/m/Y');
+
+    }
+
+
     public static function Date3(String $date)
     {
         return ( $date);
@@ -268,6 +276,27 @@ class Helper
             return 'Unknown';
         }
     }
+
+    public static function projectsType($project_type = null)
+    {
+        $project_types = [
+            "1" => "งานประจำ",
+            "2" => "โครงการ",
+        ];
+
+        if ($project_type && array_key_exists($project_type, $project_types)) {
+            return $project_types[$project_type];
+        } elseif (!$project_type) {
+            return $project_type;
+        } else {
+            return 'Unknown';
+        }
+    }
+
+
+
+
+
 
     public static function contractRePa($repa_id = null)
     {

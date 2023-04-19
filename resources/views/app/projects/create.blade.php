@@ -25,13 +25,13 @@
                         </div>
                   <label for="project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
                   <div class="form-check form-check-inline ms-5">
-                    <input class="form-check-input" type="radio" name="project_type" id="project_type1" value="J" checked>
+                    <input class="form-check-input" type="radio" name="project_type" id="project_type1" value="1" checked>
                     <label class="form-check-label" for="project_type1">
                       งานประจำ
                     </label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="project_type" id="project_type2" value="P">
+                    <input class="form-check-input" type="radio" name="project_type" id="project_type2" value="2">
                     <label class="form-check-label" for="project_type2">
                       โครงการ
                     </label>
@@ -65,12 +65,12 @@
                 <div class="col-md-6">
                   <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="project_start_date" data-coreui-format="dd/MM/yyyy"></div>
+                  <div data-coreui-toggle="date-picker" id="project_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
                 </div>
                 <div class="col-md-6">
                   <label for="project_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="project_end_date" data-coreui-format="dd/MM/yyyy"></div>
+                  <div data-coreui-toggle="date-picker" id="project_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
                 </div>
 
                 <h4>งบประมาณ (บาท)</h4>

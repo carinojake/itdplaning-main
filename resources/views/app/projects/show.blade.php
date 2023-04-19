@@ -4,7 +4,8 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ $project->project_name }}">
+                        <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }}">
+
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}"
                                     class="btn btn-warning text-white">Edit</a>
@@ -17,7 +18,7 @@
                                     aria-orientation="vertical">
                                     <button class="nav-link active " id="v-pills-home-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-home" type="button" role="tab"
-                                        aria-controls="v-pills-home" aria-selected="true">งาน{{ $project->project_id }}
+                                        aria-controls="v-pills-home" aria-selected="true">ภาพรวมทั้งหมด <!--{{ Helper::projectsType($project->project_type ) }}{{ $project->reguiar_id }}-->
                                     </button>
                                     @if ($project['budget_it_operating'] > 0)
                                         <button class="nav-link "
@@ -85,7 +86,7 @@
                                                             </div>
 
                                                             <small
-                                                                class="text-xl">คงเหลือ</small>
+                                                                class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
                                                         </button>
 
                                                     </div>
@@ -128,8 +129,7 @@
                                                                         {{ number_format($ospa, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-xl">จำนวนเงินแบบมี
-                                                                        PA
+                                                                        class="text-xl">จำนวนเงิน แบบมี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -143,8 +143,7 @@
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($osa, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-xl">จำนวนเงินแบบ
-                                                                        ไม่มี PA
+                                                                        class="text-xl">จำนวนเงิน แบบไม่มี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -185,8 +184,7 @@
                                                                     </div>
                                                                     <small
                                                                         class="text-xl">การเบิกเงิน
-                                                                        แบบมี
-                                                                        PA
+                                                                        แบบมี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -201,9 +199,8 @@
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($otpsa2, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-medium-emphasis fw-semibold">การเบิกเงิน
-                                                                        แบบ
-                                                                        ไม่มี PA
+                                                                        class="text-xl">การเบิกเงิน
+                                                                        แบบไม่มี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -245,8 +242,7 @@
                                                                         {{ number_format($ospa - $otpsa1, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-xl">รอการเบิกจ่าย
-                                                                        แบบมี PA
+                                                                        class="text-xl">รอการเบิกจ่าย แบบมี PA
                                                                     </small>
 
                                                                 </button>
@@ -263,8 +259,7 @@
                                                                         {{ number_format($osa - $otpsa2, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-xl">รอการเบิกจ่าย
-                                                                        แบบมีไม่ PA
+                                                                        class="text-xl">รอการเบิกจ่าย แบบมีไม่ PA
                                                                     </small>
 
                                                                 </button>
@@ -341,7 +336,7 @@
                                                                     </div>
                                                                     <div>
                                                                     <small
-                                                                        class="text-xl" >จำนวนเงินแบบมี
+                                                                        class="text-xl" >จำนวนเงิน แบบมี
                                                                         PA
                                                                     </small>
                                                                     </div>
@@ -358,8 +353,7 @@
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($isa, 2) }}
                                                                     </div>
                                                                     <small
-                                                                        class="text-xl ">จำนวนเงินแบบ
-                                                                        ไม่มี PA
+                                                                        class="text-xl ">จำนวนเงินแบบ ไม่มี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -399,9 +393,7 @@
                                                                     </div>
                                                                     <div>
                                                                     <small
-                                                                        class="text-xl ">การเบิกเงิน
-                                                                        แบบมี
-                                                                        PA
+                                                                        class="text-xl ">การเบิกเงิน แบบมี PA
                                                                     </small>
                                                                 </div>
                                                                 </button>
@@ -418,9 +410,7 @@
                                                                     </div>
                                                                     <div>
                                                                     <small
-                                                                        class="text-xl">การเบิกเงิน
-                                                                        แบบ
-                                                                        ไม่มี PA
+                                                                        class="text-xl">การเบิกเงิน แบบไม่มี PA
                                                                     </small>
                                                                     </div>
                                                                 </button>
@@ -563,8 +553,7 @@
                                                                         </div>
                                                                         <div>
                                                                         <small
-                                                                            class="text-xl">จำนวนเงินแบบมี
-                                                                            PA
+                                                                            class="text-xl">จำนวนเงิน แบบมี PA
                                                                         </small>
                                                                     </div>
                                                                     </button>
@@ -581,8 +570,7 @@
                                                                         </div>
                                                                         <div>
                                                                         <small
-                                                                            class="text-xl">จำนวนเงินแบบ
-                                                                            ไม่มี PA
+                                                                            class="text-xl">จำนวนเงิน แบบไม่มี PA
                                                                         </small>
                                                                         </div>
                                                                     </button>
@@ -624,8 +612,7 @@
                                                                             {{ number_format($utsc_pay_pa, 2) }}
                                                                         </div>
                                                                         <small
-                                                                            class="text-xl">จำนวนเงินแบบมี
-                                                                            PA
+                                                                            class="text-xl">จำนวนเงิน แบบมี PA
                                                                         </small>
                                                                     </button>
                                                                 </div>
@@ -641,8 +628,7 @@
                                                                         </div>
                                                                         <div>
                                                                         <small
-                                                                            class="text-xl">จำนวนเงินแบบ
-                                                                            ไม่มี PA
+                                                                            class="text-xl">จำนวนเงิน แบบไม่มี PA
                                                                         </small>
                                                                         </div>
                                                                     </button>
@@ -684,8 +670,7 @@
                                                                             {{ number_format($utpcs - $utsc_pay_pa, 2) }}
                                                                         </div>
                                                                         <small
-                                                                            class="text-xl">การเบิกจ่าย
-                                                                            PA</small>
+                                                                            class="text-xl">รอการเบิกจ่าย แบบมี PA</small>
 
                                                                     </button>
                                                                 </div>
@@ -702,9 +687,7 @@
                                                                         </div>
                                                                         <div>
                                                                         <small
-                                                                            class="text-xl">การเบิกจ่าย
-                                                                            ไม่มี
-                                                                            PA</small>
+                                                                            class="text-xl">รอการเบิกจ่าย ไม่แบบ PA</small>
                                                                         </div>
 
                                                                     </button>
@@ -783,9 +766,9 @@
                                                             <li>
                                                                 {{ $subtask->task_name }}
                                                                 <span
-                                                                    class="badge bg-primary">{{ \Helper::date($subtask->task_start_date) }}</span>
+                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_start_date)) }}</span>
                                                                 <span
-                                                                    class="badge bg-primary">{{ \Helper::date($subtask->task_end_date) }}</span>
+                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_end_date)) }}</span>
                                                                 @if ($subtask->contract->count() > 0)
                                                                     {{-- <span class="badge bg-warning">{{ $subtask->contract->count() }} สัญญา</span> --}}
                                                                     @foreach ($subtask->contract as $contract)
@@ -815,10 +798,10 @@
                                             </td>
                                             <td>
                                                 <span
-                                                    class="badge bg-primary">{{ \Helper::date($task->task_start_date) }}</span>
-                                                -
+                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$task->task_start_date)) }}</span>
+
                                                 <span
-                                                    class="badge bg-primary">{{ \Helper::date($task->task_end_date) }}</span>
+                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$task->task_end_date))}}</span>
                                             </td>
                                             <td class="text-end">
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -933,7 +916,7 @@
                                     currency: 'THB'
                                 }).format(task.budget);
                             } else {
-                                return '';
+                                return '-';
                             }
                         }
 
@@ -959,7 +942,7 @@
                                     currency: 'THB'
                                 }).format(task.cost_pa_1) + '</span>';
                             } else {
-                                return '';
+                                return '-';
                             }
 
 
@@ -983,7 +966,7 @@
                                     currency: 'THB'
                                 }).format(task.cost_no_pa_2) + '</span>';
                             } else {
-                                return '';
+                                return '-';
                             }
 
 
@@ -1002,32 +985,29 @@
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
                             if (task.task_total_pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.task_total_pay) + '</span>';
+    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.task_total_pay) + '</span>';
+} else if (task.task_type == 1 && task.pay > 0) {
+    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.pay) + '</span>';
+} else if (task.task_type == 2 && task.pay > 0) {
+    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.pay) + '</span>';
+} else if (task.total_pay > 0) {
+    return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.total_pay) + '</span>';
+} else {
+    return '-';
+}
 
-                            } else
-                            if (task.task_type == 1) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.pay) + '</span>';
-                            } else if (task.task_type == 2) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.pay) + '</span>';
-
-                            } else if (task.total_pay > 0){
-
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.total_pay) + '</span>';
-                            } else {
-                                return '';
-                            }
                         }
                     },
 
@@ -1037,33 +1017,52 @@
                         label: "รอการเบิกจ่าย",
                         tree: true,
 
-                        template: function(task) {
-                            if (task.total_pay > 0) {
-                                return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.total_cost-task.total_pay) + '</span>';
-                            }
-                            else if (task.task_total_pay > 0) {
-                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost-task.task_total_pay) + '</span>';
-                            }
 
-                            else if (task.task_type == 1) {
+                                                template: function(task) {
+                                                    if (task.total_pay > 0) {
+                            return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.total_cost-task.total_pay) + '</span>';
+
+
+
+                        } else if (task.task_total_pay > 0) {
+                            let remainingCost = task.cost - task.task_total_pay;
+
+                            if (remainingCost > 0) {
+        return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(remainingCost) + '</span>';
+
+
+
+
+    } else {
+        return '-';
+    }
+} else if (task.task_type == 1) {
+                            if (task.cost - task.pay > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost-task.pay) + '</span>';
-                            } else if (task.task_type == 2) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost-task.pay) + '</span>';
-                             } else {
-                                return '';
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else {
+                                return '-';
                             }
+                        } else if (task.task_type == 2) {
+                            if (task.cost - task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else {
+                                return '-';
+                            }
+                        } else {
+                            return '-';
+                        }
 
 
                         }
@@ -1091,7 +1090,7 @@
 
                             {
 
-                                return '';
+                                return '-';
                             }
                         }
                     }
@@ -1250,12 +1249,23 @@
             gantt.config.scales = [{
                     unit: "year",
                     step: 1,
-                    format: "%Y"
+                    format: function (date) {
+      return parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+    },
+
+
+
                 },
                 {
                     unit: "month",
                     step: 2,
-                    format: "%M, %Y"
+                    format: function(date) {
+            //const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            const thaiMonthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+            const thaiYearNumber = parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+            const thaiMonthName = thaiMonthNames[date.getMonth()];
+            return thaiMonthName + " " + thaiYearNumber;
+        }
                 },
                 // {unit: "day", step: 3, format: "%D %M, %Y"},
             ];

@@ -17,14 +17,15 @@
                                                     href="#collapseExample" role="button" aria-expanded="false"
                                                     aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold">
-                                                        {{ number_format($budgets, 2) }}
+                                                        {{ number_format($budgets) }}
                                                     </div>
 
                                                     <small
-                                                        class="text-xl">
+                                                        class="text-xl ">
                                                         งบประมาณ
                                                     </small>
                                                 </button>
+
                                             </div>
                                             <div class="collapse" id="collapseExample">
                                                 <div class="card-body">
@@ -34,7 +35,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
                                                                 <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetscentralict, 2) }}
+                                                                    {{ number_format($budgetscentralict) }}
                                                                 </div>
                                                                 <small
                                                                     class="text-xl">
@@ -49,7 +50,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
                                                                 <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetsinvestment, 2) }}
+                                                                    {{ number_format($budgetsinvestment) }}
                                                                 </div>
                                                                 <small
                                                                     class="text-xl">
@@ -65,7 +66,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
                                                                 <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetsut, 2) }}
+                                                                    {{ number_format($budgetsut) }}
                                                                 </div>
                                                                 <small
                                                                     class="text-xl">
@@ -83,28 +84,28 @@
                                             <div class="card-body ">
 
                                                 <button class="btn btn btn-danger " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample" role="button" aria-expanded="false"
+                                                    href="#collapseExample1" role="button" aria-expanded="false"
                                                     aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold ">
 
-                                                        {{ number_format((($ospa) )+(($ispa ) )+(($utpcs) ), 2) }}
+                                                        {{ number_format((($ospa+$osa) )+(($ispa+$isa ) )+(($utpcs+$utsc) ), 2) }}
                                                     </div>
 
                                                     <small
                                                         class="text-xl">
-                                                        รวม PA
+                                                        รวม PA/ไม่PA ใช้งบประมาณไป
                                                     </small>
 
                                                 </button>
                                             </div>
-                                            <div class="collapse" id="collapseExample">
+                                            <div class="collapse" id="collapseExample1">
                                                 <div class="card-body">
 
                                                     <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
+                                                                <div class="fs-4 fw-semibold text-danger" >
                                                                     {{ number_format((($ospa +$osa)), 2) }}
                                                                 </div>
                                                                 <small
@@ -119,7 +120,7 @@
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold " >
+                                                                <div class="fs-4 fw-semibold text-danger" >
                                                                     {{ number_format((($ispa ) + ($isa)), 2) }}
                                                                 </div>
                                                                 <small
@@ -135,7 +136,7 @@
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
+                                                                <div class="fs-4 fw-semibold text-danger" >
                                                                     {{ number_format($utpcs + $utsc, 2) }}
                                                                 </div>
                                                                 <small
@@ -150,10 +151,10 @@
                                     <div class="col">
                                         <div class="card">
                                             <div class="card-body ">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="btn btn-primary " style="width: 12rem;" data-bs-toggle="collapse"
                                                     href="#collapseExample2" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold btn btn-primary"
+                                                    <div class="fs-4 fw-semibold "
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
                                                         {{ number_format($otpsa1 + $otpsa2 +$itpsa1 + $itpsa2 +$utsc_pay_pa + $utsc_pay, 2) }}
@@ -182,7 +183,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิก งบกลางICT จ่ายทั้งหมด</small>
+                                                        >เบิกจ่าย งบกลางICT ทั้งหมด</small>
                                                     </div>
                                                 </button>
                                                 </div>
@@ -200,7 +201,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิก งบดำเนินจ่าย ทั้งหมด</small>
+                                                        >เบิกจ่าย งบดำเนินงาน ทั้งหมด</small>
                                                     </div>
                                                 </button>
                                                     </button>
@@ -219,7 +220,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิก สาธารณูปโภค จ่ายทั้งหมด</small>
+                                                        >เบิกจ่าย งบสาธารณูปโภค ทั้งหมด</small>
                                                     </div>
                                                 </button>
                                                     </button>
@@ -232,10 +233,10 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="btn btn-warning " style="width: 12rem;" data-bs-toggle="collapse"
                                                     href="#collapseExample3" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold btn btn-warning">
+                                                    <div class="fs-4 fw-semibold ">
                                                         <!--รอการเบิกจ่ายทั้งหมด-->
                                                         {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)), 2) }}
                                                     </div>
@@ -253,7 +254,7 @@
                                                 <div class="card-body ">
 
                                                     <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample3" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
@@ -264,7 +265,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >รอการเบิก งบกลางICTจ่าย</small>
+                                                        >รอการเบิกจ่าย งบกลางICT</small>
                                                     </div>
                                                 </button>
                                                 </div>
@@ -272,7 +273,7 @@
                                                 <div class="card-body">
 
                                                     <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample3" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
@@ -283,14 +284,14 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >รอการเบิก งบดำเนินจ่าย </small>
+                                                        >รอการเบิกจ่าย งบดำเนินงาน </small>
                                                     </div>
                                                 </button>
                                                 </div>
                                                 <div class="card-body">
 
                                                     <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample3" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
@@ -301,7 +302,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >รอการเบิก สาธารณูปโภคจ่าย</small>
+                                                        >รอการเบิกจ่าย งบสาธารณูปโภค</small>
                                                     </div>
                                                 </button>
                                                     </button>
@@ -324,15 +325,15 @@
                                     <div class="col">
                                         <!--คงเหลือ-->
                                         <div class="card  ">
-                                            <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                            <div class="card-body ">
+                                                <button class="btn btn-success" style="width: 12rem;" data-bs-toggle="collapse"
+                                                    href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
-                                                <div class="fs-4 fw-semibold btn btn-success">
-                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utsc_pay_pa + $utsc_pay) ), 2) }}
+                                                <div class="fs-4 fw-semibold ">
+                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc) ), 2) }}
                                                     </div>
 
                                                     <small
@@ -340,9 +341,10 @@
                                                 </button>
 
                                             </div>
+                                            <div class="collapse" id="collapseExample5">
                                             <div class="card-body">
                                                 <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
@@ -358,7 +360,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
@@ -374,13 +376,13 @@
                                             </div>
                                             <div class="card-body">
                                                 <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
+                                                    href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    {{ number_format(($budgetsut- ($utsc_pay_pa + $utsc_pay) ), 2) }}
+                                                    {{ number_format(($budgetsut- ($utpcs + $utsc) ), 2) }}
                                                     </div>
 
                                                     <small
@@ -389,8 +391,8 @@
 
                                             </div>
 
-
                                         </div>
+                                    </div>
                                     </div>
                                 </div>
 
@@ -413,17 +415,212 @@
                 </div>
             </div>
         </div>
+        <div class="mb-3 row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="card ">
+                    <div class="card-body ">
+                        <div class="card-title fs-5 fw-semibold">กราฟเบิกจ่ายรวมทั้งหมด</div>
+
+                        <div class="card-body">
+
+                            <button class="btn " style="width: 13rem;">
+                            <div class="fs-4 fw-semibold text-success"
+                                >
+                                <!--รวมเบิกจ่ายทั้งหมด-->
+                                {{ number_format((($budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay)) / $budgets) * 100, 2) }}%
+
+                                {{ number_format((($budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay)))),2 }}
+
+                            </div>
+                            <div>
+                            <small
+                                class="text-xl"
+                                >คงเหลือ</small>
+                            </div>
+                        </button>
+                        </div>
+
+                        <div id="c1" class="chartdiv"></div>
+
+                        <div class="card-body">
+
+                            <button class="btn " style="width: 12rem;">
+                            <div class="fs-4 fw-semibold text-primary"
+                                >
+                                <!--รวมเบิกจ่ายทั้งหมด-->
+                                {{ number_format((($otpsa1 + $otpsa2) / $budgets)* 100, 2) }}%
+                                {{ number_format((($otpsa1 + $otpsa2) ), 2) }}
+
+                            </div>
+                            <div>
+                            <small
+                                class="text-xl"
+                                >ใช้ไป งบกลางICT </small>
+                            </div>
+                        </button>
+
+                        <button class="btn " style="width: 12rem;">
+                            <div class="fs-4 fw-semibold text-primary"
+                                >
+                                {{ number_format((($itpsa1 + $itpsa2) / $budgets)* 100, 2) }}%
+                                {{ number_format((($itpsa1 + $itpsa2))* 100) }}
+
+                            </div>
+                            <div>
+                            <small
+                                class="text-xl"
+                                >ไช้ไป งบดำเนินงาน </small>
+                            </div>
+                        </button>
+                        <button class="btn " style="width: 12rem;">
+                            <div class="fs-4 fw-semibold text-primary"
+                                >
+                                <!--รวมเบิกจ่ายทั้งหมด-->
+                                {{ number_format((($utsc_pay_pa +  $utsc_pay) / $budgets)* 100, 2) }}%
+                                {{ number_format((($utsc_pay_pa +  $utsc_pay) ), 2) }}
+
+                            </div>
+                            <div>
+                            <small
+                                class="text-xl"
+                                >ได้ไป งบสาธารณูปโภค </small>
+                            </div>
+                        </button>
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">
+                            กราฟเบิกจ่าย งบกลาง ICT</div>
+
+                        <div id="c2" class="chartdiv"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">
+                            กราฟเบิกจ่าย งบดำเนินงาน</div>
+
+                        <div id="c3" class="chartdiv"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">
+                            กราฟเบิกจ่าย งบสาธารณูปโภค</div>
+
+                        <div id="c4" class="chartdiv"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+
 
 
         <div class="mb-3 row">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">แยกงานประจำ/โครงการ ตามปีงบประมาณ 2566 </div>
+                        <div class="card-title fs-5 fw-semibold">ค่าใช้จ่ายเดือน ปีงบประมาณ 2566</div>
                         <div id="chart-totalbot2-div" class="chartdiv"></div>
                     </div>
                 </div>
             </div>
+        </div>
+
+
+
+
+
+        <div class="mb-3 row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 1
+                            </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 2
+                            </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 3
+                            </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 4
+                            </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
         </div>
         <div class="mb-3 row">
             <div class="card">
@@ -477,26 +674,10 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 </div>
             </div>
         </div>  -->
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-responsive-sm table-striped" id="datatables">
-                        <thead>
-                            <tr>
 
-                                <th>{{ __('ลำดับ') }}</th>
-                                <th>{{ __('สัญญาที่') }}</th>
-                                <th></th>
-                                <th>{{ __('กี่เดีอนเหลือ') }}</th>
-                                <th>{{ __('กี่เดีอนเหลือ2') }}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                    </table>
 
-                </div>
-            </div>
-        </div>
+
+
 
 
 
@@ -504,7 +685,19 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
             .chartdiv {
                 width: 100%;
                 height: 250px;
-            }
+            },
+            body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#chartdiv2 {
+  width: 100%;
+  height: 500px;
+},
+#chartdiv3 {
+  width: 10%;
+  height: 100px;
+}
         </style>
     </x-slot:content>
 
@@ -538,10 +731,11 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
             rel="stylesheet" />
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
 
+
         <!-- HTML -->
 
         <script>
-            gantt.plugins({
+           gantt.plugins({
                 marker: true,
                 fullscreen: true,
                 critical_path: true,
@@ -569,12 +763,15 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         name: "text",
                         width: 300,
                         label: "โครงการ/งานประจำ",
+                     //   open: false,
                         tree: true,
                         resize: true,
                         template(task) {
                             if (gantt.getState().selected_task == task.id) {
                                 return "<b>" + task.text + "</b>";
-                            } else {
+                            }
+
+                            else {
                                 return task.text;
                             };
                         }
@@ -601,7 +798,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                     currency: 'THB'
                                 }).format(task.budget);
                             } else {
-                                return '';
+                                return '-';
                             }
                         }
 
@@ -621,21 +818,23 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                 }).format(task.cost) + '</span>';
 
 
-                            } else {
-
-
+                            } else if (task.cost_pa_1 > 0){
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost_pa_1) + '</span>';
+                            } else {
+                                return '-';
                             }
+
 
                         }
                     },
                     {
                         name: "cost_no_pa",
                         width: 150,
-                        label: "ไม่มี PA",
+                        label: '<div class="text-d"> ไม่มี PA</div>',
+
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
@@ -644,20 +843,27 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost);
-                            } else {
-
-
+                            } else if (task.cost_no_pa_2 > 0){
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost_no_pa_2) + '</span>';
+                            } else {
+                                return '-';
                             }
+
+
+
+
+
                         }
                     },
                     {
                         name: "pay",
                         width: 100,
-                        label: "การเบิกจ่าย",
+
+                        label: '<div class="text-primary">การเบิกจ่าย</div>',
+
                         tree: true,
 
                         template: function(task) {
@@ -669,10 +875,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                     currency: 'THB'
                                 }).format(task.task_total_pay) + '</span>';
 
-
-
                             } else
-
                             if (task.task_type == 1) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -684,55 +887,45 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
 
-
-
-
-
-
-
-                            } else {
+                            } else if (task.total_pay > 0){
 
                                 return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_pay) + '</span>';
-
-
-
-
+                            } else {
+                                return '-';
                             }
                         }
                     },
 
                     {
-
-
-
                         name: "-",
                         width: 100,
-                        label: "รอการเบิกจ่าย",
+                        label: '<div class="text-warning">รอการเบิกจ่าย</div>',
                         tree: true,
 
                         template: function(task) {
-                            if (task.total_pay > 0) {
-                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.total_cost-task.total_pay) + '</span>';
-                            }
-                            else if (task.task_total_pay > 0) {
-                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost-task.task_total_pay) + '</span>';
+
+                                 //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+                                 if (task.total_cost-task.total_pay === 0){
+                                    return '-';
                             }
 
-                            else if (task.pay == 0) {
-                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+
+                                 else if (task.total_cost) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost) + '</span>';
+                                }).format( task.total_cost-task.total_pay)+ '</span>';
                             }
+
+                            else {
+                                return '';
+                            }
+
+
 
 
 
@@ -741,24 +934,42 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     {
                         name: "balance",
                         width: 100,
-                        label: "คงเหลือ",
+
+
+
+                        label: '<div class="text-success">คงเหลือ</div>',
+
                         tree: true,
 
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.balance > 0) {
-                                var tmp_class = task.balance < 1000000 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                            if (task.balance-task.total_cost=== 0){
+                                    return '-';
+                            }
+
+
+
+
+                            if (task.type === "project") {
+                                var tmp_class = task.total_pay > 0 ? 'green' : 'green';
+                                return '<span style="color:' + tmp_class + ';">'
+                                    + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.balance) + '</span>';
-                            } else if (task.balance = 0) {
-                                return '-';
+                                }).format(task.balance-task.total_cost)
+                                   '</span>';
+                            }
+
+
+
+                            else if (task.type === "task" ) {
+                                return  '<span style="color:' + tmp_class + ';">'
+                                    //+ new Intl.NumberFormat('th-TH', {
+                                   // style: 'currency',
+                                    //currency: 'THB'
+                                //}).format(task.total_pay)
+                                + task.type+    '</span>';
                             } else
-
-
-
-
                             {
 
                                 return '';
@@ -784,7 +995,9 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 var budget_gov_operating = task.budget_gov_operating ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
                     currency: 'THB'
-                }).format(task.budget_gov_operating) : '';
+                })
+
+                .format(task.budget_gov_operating) : '';
                 var budget_gov_investment = task.budget_gov_investment ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
                     currency: 'THB'
@@ -812,33 +1025,33 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                        <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                        <td colspan="3">เงินงบประมาณ<br></td>\
                                                         <td colspan="2">งบกลาง IT</td>\
-                                                        <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                        <td rowspan="2">รวมทั้งหมด<br></td>\
                                                       </tr>';
                     html += '<tr>\
-                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                        <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                        <td>งบดำเนินงาน<br></td>\
+                                                        <td>งบลงทุน IT<br></td>\
                                                         <td>ค่าสาธารณูปโภค</td>\
-                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                        <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                        <td>งบดำเนินงาน<br></td>\
+                                                        <td>งบลงทุน<br></td>\
                                                       </tr>';
                     if (task.type == 'task') {
                         html += '<tr class="text-end">\
-                                                        <td>-' + budget_gov_operating + '</td>\
-                                                        <td>' + budget_gov_investment + '</td>\
-                                                        <td>' + budget_gov_utility + '</td>\
+                                                        <td>-' +  + '</td>\
+                                                        <td>' +  + '</td>\
+                                                        <td>-' + budget_gov_utility + '</td>\
                                                         <td>' + budget_it_operating + '</td>\
                                                         <td>' + budget_it_investment + '</td>\
                                                         <td class="text-success">' + budget + '</td>\
                                                       </tr>';
                     } else {
                         html += '<tr class="text-end">\
-                                                        <td>' + budget_gov_operating + '</td>\
-                                                        <td>' + budget_gov_investment + '</td>\
-                                                        <td>' + budget_gov_utility + '</td>\
-                                                        <td>' + budget_it_operating + '</td>\
-                                                        <td>' + budget_it_investment + '</td>\
+                                                        <td>' +  + '</td>\
+                                                        <td>' +  + '</td>\
+                                                        <td>' +  + '</td>\
+                                                        <td>' +  + '</td>\
+                                                        <td>' +  + '</td>\
                                                         <td class="text-success">' + budget + '</td>\
                                                       </tr>';
                     }
@@ -920,12 +1133,23 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
             gantt.config.scales = [{
                     unit: "year",
                     step: 1,
-                    format: "%Y"
+                    format: function (date) {
+      return parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+    },
+
+
+
                 },
                 {
                     unit: "month",
                     step: 2,
-                    format: "%M, %Y"
+                    format: function(date) {
+            //const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            const thaiMonthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+            const thaiYearNumber = parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+            const thaiMonthName = thaiMonthNames[date.getMonth()];
+            return thaiMonthName + " " + thaiYearNumber;
+        }
                 },
                 // {unit: "day", step: 3, format: "%D %M, %Y"},
             ];
@@ -967,10 +1191,10 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         x: am5.p50
                     })
                 );
-                var data = {!! $project_groupby !!}
-                var data1 = {!! $taskcosttotals !!}
-                var date2 = {!! $taskcosttotals2_json !!}
-                var date3 = {!! $taskconcosttotals !!}
+                var data = {!! $chart_data_xy !!}
+              //  var data1 = {!! $taskcosttotals !!}
+              //  var date2 = {!! $taskcosttotals2_json !!}
+                //var date3 = {!! $taskconcosttotals !!}
                 // Create axes
                 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
                 var xRenderer = am5xy.AxisRendererX.new(root, {
@@ -984,7 +1208,8 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     multiLocation: 0.5
                 });
                 var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-                    categoryField: "fiscal_year_b",
+                    categoryField: "task_pay_month",
+
                     renderer: xRenderer,
                     tooltip: am5.Tooltip.new(root, {}),
                 }));
@@ -1008,14 +1233,26 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         xAxis: xAxis,
                         yAxis: yAxis,
                         valueYField: fieldName,
-                        categoryXField: "fiscal_year_b",
+                        categoryXField: "task_pay_month",
                     }));
                     series.columns.template.setAll({
                         tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}",
                         width: am5.percent(100),
                         stacked: true,
-                        fill: am5.color(0x68dc76),
+
                     });
+                    series.bullets.push(function () {
+  return am5.Bullet.new(root, {
+    locationY: 1.2,
+    sprite: am5.Label.new(root, {
+      text: "{valueY}",
+      stroke: root.interfaceColors.get("stroke"),
+      centerY: 5,
+      centerX: am5.p50,
+      populateText: true
+    })
+  });
+});
                     series.data.setAll(data);
                     // Make stuff animate on load
                     // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -1027,7 +1264,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                                 text: "{valueY}",
                                 populateText: true,
                                 fill: root.interfaceColors.get("alternativeText"),
-                                centerY: 0,
+                                centerY: 5,
                                 centerX: am5.p50,
                                 populateText: true
                             })
@@ -1036,286 +1273,303 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     legend.data.push(series);
                 };
                 //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                makeSeries("งบประมาณ", "total_budgot");
-                function makeSeries2(name, fieldName) {
-                    var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                        name: name,
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: fieldName,
-                        categoryXField: "fiscal_year_b"
-                    }));
-                    series.columns.template.setAll({
-                        tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}[/]\n:{percentage}%",
-                        width: am5.percent(100),
-                        fill: am5.color(0x6771dc),
-                        tooltipY: 0,
-                        strokeOpacity: 0
-                    });
-                    series.data.setAll(date2);
-                    // Make stuff animate on load
-                    // https://www.amcharts.com/docs/v5/concepts/animations/
-                    series.appear();
-                    series.bullets.push(function() {
-                        return am5.Bullet.new(root, {
-                            locationY: 0,
-                            sprite: am5.Label.new(root, {
-                                text: "{valueY}",
-                                populateText: true,
-                                fill: root.interfaceColors.get("alternativeText"),
-                                centerY: 0,
-                                centerX: am5.p50,
-                                populateText: true
-                            })
-                        });
-                    });
-                    legend.data.push(series);
-                };
-                //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                makeSeries2("PA", "total_cost");
+              makeSeries("ค่าใช้จ่ายเดือน", "total_cost");
 
-
-
-//jjjjjjjjjjjjjjjjjj
-function makeSeries3(name, fieldName) {
-                    var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                        name: name,
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: fieldName,
-                        categoryXField: "fiscal_year_b"
-                    }));
-                    series.columns.template.setAll({
-                        tooltipText: "[bold]{name}[/]\n {categoryX}[/]\n:{valueY}[/]\n:{percentage}%",
-                        width: am5.percent(100),
-                        fill: am5.color(0xb30000),
-                        tooltipY: 0,
-                        strokeOpacity: 0
-                    });
-                    series.data.setAll(date3);
-                    // Make stuff animate on load
-                    // https://www.amcharts.com/docs/v5/concepts/animations/
-                    series.appear();
-                    series.bullets.push(function() {
-                        return am5.Bullet.new(root, {
-                            locationY: 0,
-                            sprite: am5.Label.new(root, {
-                                text: "{valueY}",
-                                populateText: true,
-                                fill: root.interfaceColors.get("alternativeText"),
-                                centerY: 0,
-                                centerX: am5.p50,
-                                populateText: true
-                            })
-                        });
-                    });
-                    legend.data.push(series);
-                };
-                //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-                makeSeries3("สถานะการเบิกจ่าย", "totalcon_cost");
-                function createSeries(name, field) {
-                    var series = chart.series.push(
-                        am5xy.LineSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: field,
-                            stroke: am5.color(0x6771dc),
-                            categoryXField: "fiscal_year_b",
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name}[/]\nแผน{categoryX}\n: {valueY} บาท\n: {percentage} %"
-                            })
-                        })
-                    );
-                    series.bullets.push(function() {
-                        return am5.Bullet.new(root, {
-                            sprite: am5.Circle.new(root, {
-                                text: "{valueY}",
-                                strokeWidth: 3,
-                                stroke: series.get("stroke"),
-                                radius: 5,
-                                fill: am5.color(0x6771dc),
-                            })
-                        });
-                    });
-                    // create hover state for series and for mainContainer, so that when series is hovered,
-                    // the state would be passed down to the strokes which are in mainContainer.
-                    series.set("setStateOnChildren", true);
-                    series.states.create("hover", {});
-                    series.mainContainer.set("setStateOnChildren", true);
-                    series.mainContainer.states.create("hover", {});
-                    series.strokes.template.states.create("hover", {
-                        strokeWidth: 4,
-                    });
-                    series.data.setAll(date2);
-                }
-                chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                // createSeries("งบประมาณ", "total_budgot");
-                createSeries("PA ", "total_cost")
-                legend.data.setAll(chart.series.values);
-                // Make stuff animate on load
-                // https://www.amcharts.com/docs/v5/concepts/animations/
-                chart.appear(1000, 100);
-
-//kkk
-function createSeries2(name, field) {
-                    var series = chart.series.push(
-                        am5xy.LineSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: field,
-                            stroke: am5.color(0xb30000),
-                            categoryXField: "fiscal_year_b",
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name}[/]\nแผน{categoryX}\n: {valueY} บาท\n: {percentage} %"
-                            })
-                        })
-                    );
-                    series.bullets.push(function() {
-                        return am5.Bullet.new(root, {
-                            sprite: am5.Circle.new(root, {
-                                text: "{valueY}",
-                                strokeWidth: 3,
-                                stroke: series.get("stroke"),
-                                radius: 5,
-                                fill: am5.color(0xb30000),
-                            })
-                        });
-                    });
-                    // create hover state for series and for mainContainer, so that when series is hovered,
-                    // the state would be passed down to the strokes which are in mainContainer.
-                    series.set("setStateOnChildren", true);
-                    series.states.create("hover", {});
-                    series.mainContainer.set("setStateOnChildren", true);
-                    series.mainContainer.states.create("hover", {});
-                    series.strokes.template.states.create("hover", {
-                        strokeWidth: 4,
-                    });
-                    series.data.setAll(date3);
-                }
-                chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                // createSeries("งบประมาณ", "total_budgot");
-                createSeries2("ภาพรวมสถานะการเบิกจ่าย ", "totalcon_cost")
-                legend.data.setAll(chart.series.values);
-                // Make stuff animate on load
-                // https://www.amcharts.com/docs/v5/concepts/animations/
-                chart.appear(1000, 100);
             }); // end am5.ready()
         </script>
 
 
 
-        <script src="{{ asset('vendors/DataTables/datatables.min.js') }}"></script>
-        <script>
-            $(document).ready(function() {
-                var token = $('meta[name="csrf-token"]').attr('content');
-                var modal = $('.modal')
-                var form = $('.form')
-                var btnAdd = $('.add'),
-                    btnSave = $('.btn-save'),
-                    btnUpdate = $('.btn-update');
-                var table = $('#datatables').DataTable({
-                    autoWidth: false,
-                    processing: true,
-                    serverSide: true,
-                    responsive: true,
-                    ajax: "{{ route('contract.index') }}",
-                    language: {
-                        processing: "กำลังประมวลผล...",
-                        search: "ค้นหา:",
-                        lengthMenu: "แสดง _MENU_ รายการ",
-                        info: "แสดงรายที่ _START_ ถึง _END_ ทั้งหมด _TOTAL_ รายการ",
-                        infoEmpty: "แสดงรายที่ 0 ถึง 0 ทั้งหมด 0 รายการ",
-                        infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-                        infoPostFix: "",
-                        loadingRecords: "Chargement en cours...",
-                        zeroRecords: "ไม่พบข้อมูล",
-                        emptyTable: "ไม่พบข้อมูล",
-                        paginate: {
-                            first: "หน้าแรก",
-                            previous: "ย้อนกลับ",
-                            next: "ถัดไป",
-                            last: "หน้าสุดท้าย"
-                        },
-                        aria: {
-                            sortAscending: ": เรียงจากน้อยไปหามาก",
-                            sortDescending: ": เรียงจากมากไปหาน้อย"
-                        }
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'contract_number_output',
-                            name: 'contract_number'
-                        },
-                        {
-                            data: 'contract_name_output',
-                            name: 'contract_name'
-                        },
-                        {
-                            data: 'contract_fiscal_year'
-                        },
-                        {
-                            className: "text-end",
-                            data: 'action',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ]
-                });
-                btnUpdate.click(function() {
-                    if (!confirm("Are you sure?")) return;
-                    var formData = form.serialize() + '&_method=PUT&_token=' + token
-                    var updateId = form.find('input[name="id"]').val()
-                    $.ajax({
-                        type: "POST",
-                        url: "/" + updateId,
-                        data: formData,
-                        success: function(data) {
-                            if (data.success) {
-                                table.draw();
-                                modal.modal('hide');
-                            }
-                        }
-                    }); //end ajax
-                })
-                $(document).on('click', '.btn-delete', function() {
-                    if (!confirm("Are you sure?")) return;
-                    var rowid = $(this).data('rowid')
-                    var el = $(this)
-                    if (!rowid) return;
-                    $.ajax({
-                        type: "POST",
-                        dataType: 'JSON',
-                        url: "{{ url('contract') }}/" + rowid,
-                        data: {
-                            _method: 'delete',
-                            _token: token
-                        },
-                        success: function(data) {
-                            if (data.success) {
-                                table.row(el.parents('tr'))
-                                    .remove()
-                                    .draw();
-                            }
-                        }
-                    }); //end ajax
-                })
-            });
-        </script>
+
+
+
+
+<script>
+  /**
+ * ---------------------------------------
+ * This demo was created using amCharts 5.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v5/
+ * ---------------------------------------
+ */
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("c1");
+
+  // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+        am5themes_Animated.new(root)
+    ]);
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+    var chart = root.container.children.push(am5percent.PieChart.new(root, {
+        layout: root.verticalLayout
+    }));
+
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+    var series = chart.series.push(am5percent.PieSeries.new(root, {
+
+
+        valueField: "value",
+        categoryField: "category"
+    }));
 
 
 
 
 
+    // Set up adapters for variable slice radius
+    // https://www.amcharts.com/docs/v5/concepts/settings/adapters/
 
+    // Set data
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+    series.data.setAll([{
+value: {{ $budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
+category: "คงเหลือ"
+}, {
+value: {{($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
+category: "ใช้ไป"
+}
+]);
+
+    // Create legend
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+    var legend = chart.children.push(am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+        marginTop: 15,
+        marginBottom: 15
+    }));
+
+    legend.data.setAll(series.dataItems);
+
+    // Play initial series animation
+    // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+    series.appear(1000, 100);
+
+ // end am5.ready()
+
+</script>
+
+
+<script>
+   /**
+ * ---------------------------------------
+ * This demo was created using amCharts 5.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v5/
+ * ---------------------------------------
+ */
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("c2");
+
+// Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+        am5themes_Animated.new(root)
+    ]);
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+    var chart = root.container.children.push(am5percent.PieChart.new(root, {
+        layout: root.verticalLayout
+    }));
+
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+    var series = chart.series.push(am5percent.PieSeries.new(root, {
+
+
+        valueField: "value",
+        categoryField: "category"
+    }));
+
+
+
+
+
+    // Set up adapters for variable slice radius
+    // https://www.amcharts.com/docs/v5/concepts/settings/adapters/
+
+    // Set data
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+    series.data.setAll([{
+value: {{ $budgetscentralict-($otpsa1 + $otpsa2) }},
+category: "คงเหลือ"
+}, {
+value: {{($otpsa1 + $otpsa2) }},
+category: "ใช้ไป"
+}
+]);
+
+    // Create legend
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+    var legend = chart.children.push(am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+        marginTop: 15,
+        marginBottom: 15
+    }));
+
+    legend.data.setAll(series.dataItems);
+
+    // Play initial series animation
+    // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+    series.appear(1000, 100);
+
+ // end am5.ready()
+
+</script>
+
+<script>
+    // Create root element
+    var root = am5.Root.new("c3");
+
+   // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+        am5themes_Animated.new(root)
+    ]);
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+    var chart = root.container.children.push(am5percent.PieChart.new(root, {
+        layout: root.verticalLayout
+    }));
+
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+    var series = chart.series.push(am5percent.PieSeries.new(root, {
+
+
+        valueField: "value",
+        categoryField: "category"
+    }));
+
+
+
+
+
+    // Set up adapters for variable slice radius
+    // https://www.amcharts.com/docs/v5/concepts/settings/adapters/
+
+    // Set data
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+    series.data.setAll([{
+value: {{ $budgetsinvestment-($itpsa1 + $itpsa2) }},
+category: "คงเหลือ"
+}, {
+value: {{($itpsa1 + $itpsa2) }},
+category: "ใช้ไป"
+}
+]);
+
+    // Create legend
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+    var legend = chart.children.push(am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+        marginTop: 15,
+        marginBottom: 15
+    }));
+
+    legend.data.setAll(series.dataItems);
+
+    // Play initial series animation
+    // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+    series.appear(1000, 100);
+
+ // end am5.ready()
+</script>
+
+
+
+<script>
+/**
+ * ---------------------------------------
+ * This demo was created using amCharts 5.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v5/
+ * ---------------------------------------
+ */
+
+// Create root and chart
+var root = am5.Root.new("c4");
+
+// Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+        am5themes_Animated.new(root)
+    ]);
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+    var chart = root.container.children.push(am5percent.PieChart.new(root, {
+        layout: root.verticalLayout
+    }));
+
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+    var series = chart.series.push(am5percent.PieSeries.new(root, {
+
+
+        valueField: "value",
+        categoryField: "category"
+    }));
+
+
+
+
+
+    // Set up adapters for variable slice radius
+    // https://www.amcharts.com/docs/v5/concepts/settings/adapters/
+
+    // Set data
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+    series.data.setAll([{
+value: {{ $budgetsut-($utsc_pay_pa+$utsc_pay) }},
+category: "คงเหลือ"
+}, {
+value: {{($utsc_pay_pa+$utsc_pay) }},
+category: "ใช้ไป"
+}
+]);
+
+    // Create legend
+    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+    var legend = chart.children.push(am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+        marginTop: 15,
+        marginBottom: 15
+    }));
+
+    legend.data.setAll(series.dataItems);
+
+    // Play initial series animation
+    // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+    series.appear(1000, 100);
+
+ // end am5.ready()
+</script>
     </x-slot:javascript>
 
 

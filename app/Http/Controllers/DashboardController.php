@@ -19,6 +19,10 @@ class DashboardController extends Controller
 
 {
 
+
+
+
+
     /**
      * Create a new controller instance.
      *
@@ -33,6 +37,39 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
+
+
+
+
+
+        ($task_pay_xy  =  Task::select(DB::raw(" DATE_FORMAT((tasks.task_pay_date)+ INTERVAL 543 YEAR, '%b %Y', 'th_TH') AS task_pay_month,
+
+        COALESCE(SUM(tasks.task_pay), 0)AS total_cost,
+
+         COALESCE(SUM(tasks.task_cost_it_operating), 0) AS total_task_cost_it_operating,
+         COALESCE(SUM(tasks.task_cost_it_investment), 0) AS total_task_cost_it_investment,
+         COALESCE(SUM(tasks.task_cost_gov_utility), 0) AS total_cost_gov_utility "))
+
+
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->where('projects.project_fiscal_year', '=', 2566)
+        ->whereNotNull('tasks.task_pay_date')
+        ->groupBy('task_pay_month')
+       ->orderByRaw("CASE task_pay_month WHEN 'ต.ย. 2565' THEN 1 WHEN 'พ.ย. 2565' THEN 2 WHEN 'ธ.ค. 2565' THEN 3 WHEN 'ม.ค. 2566' THEN 4 WHEN 'ก.พ. 2566' THEN 5 WHEN 'มี.ค. 2566' THEN 6 WHEN 'เม.ย. 2566' THEN 7 WHEN 'พ.ค. 2566' THEN 8 WHEN 'มิ.ย. 2566' THEN 9 WHEN 'ก.ค. 2566' THEN 10 WHEN 'ส.ค. 2566' THEN 11 WHEN 'ก.ย. 2566' THEN 12 END")
+        ->get()
+       ->toJson(JSON_NUMERIC_CHECK)
+)
+        ;
+
+
+
+
+
+    // Convert the chart data to an array
+    ($chart_data = $task_pay_xy);
+
+// Convert the chart data to JSON
+    ($chart_data_xy = ($chart_data));
 
 
         ($contracts = Contract::where('contract_fiscal_year', 2566)->count());
@@ -229,6 +266,7 @@ as d')
                         ->GroupBy('reguiar_id');
                 }
             )
+
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
         ($json = json_decode($taskcosttotal));
@@ -412,7 +450,10 @@ as d')
 
 
         ($taskcosttotals = DB::table('tasks')
-            ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
+            ->selectRaw('reguiar_id as fiscal_year_b
+
+
+            ,sum(COALESCE(task_cost_gov_operating, 0)
             + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
             + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
              as total_cost')
@@ -422,6 +463,32 @@ as d')
             ->get()
             ->toJson(JSON_NUMERIC_CHECK)
         );
+
+
+        ($total_budget_cost = DB::table('tasks')
+        ->selectRaw('
+
+
+        sum(COALESCE(task_budget_gov_utility, 0)
+        + COALESCE(task_budget_it_operating, 0) + COALESCE(task_budget_it_investment, 0))
+         as total_task_budget,
+
+         sum(COALESCE(task_cost_gov_operating, 0)
+         + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
+         + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
+          as total_task_cost
+
+
+
+       ')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+       ->whereRaw('project_fiscal_year = 2566')
+        ->groupBy('project_fiscal_year')
+        ->get()
+        ->toJson(JSON_NUMERIC_CHECK)
+    );
+
+
 
        ($taskconcosttotals = DB::table('taskcons')
        ->select(
@@ -495,6 +562,16 @@ as d')
         $total_ict = $budgetscentralict - $coatcons_ict;
         $total_inv = $budgetsinvestment - $coatcons_inv;
 
+        ($task_pay_xy = Task::select(DB::raw("tasks.task_pay, DATE_FORMAT(tasks.task_pay_date, '%M') AS task_pay_month, tasks.task_id, tasks.project_id, tasks.task_name, tasks.task_description, tasks.task_parent, tasks.task_pay_date, tasks.task_start_date, tasks.task_end_date, projects.project_id, projects.reguiar_id, projects.project_status_during_year"))
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->whereNotNull('tasks.task_pay')
+        ->where('projects.project_fiscal_year', '=', 2566)
+        ->orderByRaw("CASE task_pay_month WHEN 'January' THEN 1 WHEN 'February' THEN 2 WHEN 'March' THEN 3 WHEN 'April' THEN 4 WHEN 'May' THEN 5 WHEN 'June' THEN 6 WHEN 'July' THEN 7 WHEN 'August' THEN 8 WHEN 'September' THEN 9 WHEN 'October' THEN 10 WHEN 'November' THEN 11 WHEN 'December' THEN 12 END")
+        ->get()
+        ->toArray()
+
+    );
+
 
 
 
@@ -554,8 +631,9 @@ as d')
             $gantt[] = [
                 'id'                    => $project['project_id'],
                 'text'                  => $project['project_name'],
-                'start_date'            => date('Y-m-d', $project['project_start_date']),
-                'end_date'              => date('Y-m-d', $project['project_end_date']),
+                'start_date' => date('Y-m-d', strtotime($project['project_start_date'])),
+                'end_date' => date('Y-m-d', strtotime($project['project_end_date'])),
+
                 'budget_gov_operating'  => $project['budget_gov_operating'],
                 'budget_gov_investment' => $project['budget_gov_investment'],
                 'budget_gov_utility'    => $project['budget_gov_utility'],
@@ -567,6 +645,7 @@ as d')
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
+                'pbalance'               => $__balance,
                //  'cost_disbursement'     => $project['cost_disbursement'],
                 'cost'                  => $project['project_cost'],
                 'owner'                 => $project['project_owner'],
@@ -592,105 +671,107 @@ as d')
             ($budget['total'] = $__budget);
 
 
-            ($tasks = DB::table('tasks')
-            ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
-            ->leftJoin(DB::raw('(select tasks.task_parent,
-            sum( COALESCE(tasks.task_cost_gov_utility,0))
-            +sum( COALESCE(tasks.task_cost_it_operating,0))
-            +sum( COALESCE(tasks.task_cost_it_investment,0))
-            as cost_disbursement,
-            sum( COALESCE(tasks.task_pay,0))  as total_pay
-            from tasks  group by tasks.task_parent) as a'),
-             'a.task_parent', '=', 'tasks.task_id')
-
-            ->leftJoin(DB::raw('(select tasks.task_parent,
-            sum(COALESCE(tasks.task_cost_gov_utility,0))
-            +sum(COALESCE(tasks.task_cost_it_operating,0))
-            +sum(COALESCE(tasks.task_cost_it_investment,0))
-            as cost_pa_1 ,
-            sum( COALESCE(tasks.task_pay,0)) as total_pay
-            from tasks
-            where tasks.task_type=1 group by tasks.task_parent) as ab'),
-            'ab.task_parent', '=', 'tasks.task_id')
-
-
-            ->leftJoin(DB::raw('(select tasks.task_parent,
-             sum(COALESCE(tasks.task_cost_gov_utility,0))
-            +sum(COALESCE(tasks.task_cost_it_operating,0))
-            +sum(COALESCE(tasks.task_cost_it_investment,0))
-            as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
-            as total_pay
-            from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
-            'ac.task_parent', '=', 'tasks.task_id')
+      //      ($tasks = DB::table('tasks')
+      //      ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+      //      ->leftJoin(DB::raw('(select tasks.task_parent,
+      //      sum( COALESCE(tasks.task_cost_gov_utility,0))
+      //      +sum( COALESCE(tasks.task_cost_it_operating,0))
+   //         +sum( COALESCE(tasks.task_cost_it_investment,0))
+    //        as cost_disbursement,
+     //       sum( COALESCE(tasks.task_pay,0))  as total_pay
+    //        from tasks  group by tasks.task_parent) as a'),
+    //         'a.task_parent', '=', 'tasks.task_id')
+//
+  //          ->leftJoin(DB::raw('(select tasks.task_parent,
+//            sum(COALESCE(tasks.task_cost_gov_utility,0))
+//            +sum(COALESCE(tasks.task_cost_it_operating,0))
+//            +sum(COALESCE(tasks.task_cost_it_investment,0))
+//            as cost_pa_1 ,
+//            sum( COALESCE(tasks.task_pay,0)) as total_pay
+//            from tasks
+//            where tasks.task_type=1 group by tasks.task_parent) as ab'),
+   //         'ab.task_parent', '=', 'tasks.task_id')
+//
+//
+  //          ->leftJoin(DB::raw('(select tasks.task_parent,
+    //         sum(COALESCE(tasks.task_cost_gov_utility,0))
+      //      +sum(COALESCE(tasks.task_cost_it_operating,0))
+      //      +sum(COALESCE(tasks.task_cost_it_investment,0))
+   //         as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
+   //         as total_pay
+  //          from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+   //         'ac.task_parent', '=', 'tasks.task_id')
          //   ->where('project_id',($id))
-         ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-         ->where('project_fiscal_year', 2566)
+     //    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+       //  ->where('project_fiscal_year', 2566)
 
-            ->get()
-            ->toArray());
-       ($tasks = json_decode(json_encode($tasks), true));
-
-
-            foreach ($tasks as $task) {
-                ($task);
-                (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
-                (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
-                (double) $__budget     = $__budget_gov + $__budget_it;
-                (double) $__cost = array_sum([
-                    (double)$task['cost_disbursement'],
-                    $task['task_cost_gov_operating'],
-                    $task['task_cost_gov_investment'],
-                    $task['task_cost_gov_utility'],
-                    $task['task_cost_it_operating'],
-                    $task['task_cost_it_investment'],
-                ]);
-                (double) $__balance = $__budget - $__cost;
+         //   ->get()
+           // ->toArray());
+ //      ($tasks = json_decode(json_encode($tasks), true));
 
 
+   //         foreach ($tasks as $task) {
+   //             ($task);
+   //             (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
+   //             (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
+  //              (double) $__budget     = $__budget_gov + $__budget_it;
+  //              (double) $__cost = array_sum([
+  //                  (double)$task['cost_disbursement'],
+  //                  $task['task_cost_gov_operating'],
+  //                  $task['task_cost_gov_investment'],
+  //                  $task['task_cost_gov_utility'],
+  //                  $task['task_cost_it_operating'],
+  //                  $task['task_cost_it_investment'],
+  //              ]);
+    //            (double) $__balance = $__budget - $__cost;
 
-                $gantt[] = [
-                    'id'                    => 'T' . $task['task_id'] . $task['project_id'],
-                    'text'                  => $task['task_name'],
+
+
+      //          $gantt[] = [
+    //                'id'                    => 'T' . $task['task_id'] . $task['project_id'],
+    //                'text'                  => $task['task_name'],
                     //'start_date'            => date('Y-m-d', $task['task_start_date']),
                    //'end_date'              => date('Y-m-d', $task['task_end_date']),
-                    'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
-                    'type'                  => 'task',
-                    'open'                  => true,
-                    'budget_gov_operating'  => $task['task_budget_gov_operating'],
-                    'budget_gov_investment' => $task['task_budget_gov_investment'],
-                    'budget_gov_utility'    => $task['task_budget_gov_utility'],
-                    'budget_gov'            => $__budget_gov,
-                    'budget_it_operating'   => $task['task_budget_it_operating'],
-                    'budget_it_investment'  => $task['task_budget_it_investment'],
-                    'budget_it'             => $__budget_it,
-                    'budget'                => $__budget,
-                    'cost'                  => $__cost,
-                    'balance'               => $__balance,
-                    'cost_disbursement'     => $task['cost_disbursement'],
-                    'pay'                   => $task['task_pay'],
-
-                    'total_pay'             => $task['total_pay'],
-                    'task_type'             => $task['task_type'],
-
-                    'cost_pa_1'             => $task['cost_pa_1'],
-                    'cost_no_pa_2'             => $task['cost_no_pa_2'],
+    //                'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
+    //                'task_type'                  => 'task',
+    //                'open'                  => true,
+    //                'task_budget_gov_operating'  => $task['task_budget_gov_operating'],
+    //                'task_budget_gov_investment' => $task['task_budget_gov_investment'],
+    //                'task_budget_gov_utility'    => $task['task_budget_gov_utility'],
+    //                'task_budget_gov'            => $__budget_gov,
+    //                'task_budget_it_operating'   => $task['task_budget_it_operating'],
+    //                'task_budget_it_investment'  => $task['task_budget_it_investment'],
+   //                 'task_budget_it'             => $__budget_it,
+    //                'task_budget'                => $__budget,
+    //                'task_cost'                  => $__cost,
+    //                'task_balance'               => $__balance,
+  //                  'task_cost_disbursement'     => $task['cost_disbursement'],
+ //                   'task_pay'                   => $task['task_pay'],
+//
+ //                   'task_total_pay'             => $task['total_pay'],
+//                    'task_task_type'             => $task['task_type'],
+//
+  //                  'task_cost_pa_1'             => $task['cost_pa_1'],
+    //                'task_cost_no_pa_2'             => $task['cost_no_pa_2'],
                   //  'cost_disbursement'     => $project['cost_disbursement'],
-                        'pay'                   => $task['task_pay'],
-                        'cost_disbursement'     => $task['cost_disbursement'],
-                        'task_total_pay'             => $task['total_pay'],
-                        'task_type'             => $task['task_type']
+
+
                     // 'owner' => $project['project_owner'],
-                ];
+      //          ];
 
 
 
-                $__project_cost[] = $__cost;
-            }
+      //          $__project_cost[] = $__cost;
+        //    }
             //    $gantt[0]['cost']    = array_sum($__project_cost);
 
-            $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
-            ($budget['cost']    = $gantt[0]['cost']);
+            $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
+            ($budget['cost']    = $gantt[0]['total_cost']);
             $budget['balance'] = $gantt[0]['balance'];
+
+
+
+
             $labels = [
                 'project' => 'โครงการ/งานประจำ',
                 'budget' => 'งบประมาณ',
@@ -723,7 +804,7 @@ as d')
 
 
 
-        ($gantt);
+       ($gantt);
         // dd ($costsum = ($__project_cost))  ;
        ($gantt = json_encode($gantt));
 
@@ -914,11 +995,22 @@ as d')
 ;
 
 
+
             return view(
                 'app.dashboard.index',
-                compact(
+
+
+
+
+
+
+
+                compact('task_pay_xy',
+                'chart_data_xy',
+                'chart_data',
+                    'total_budget_cost',
                     'project','itpsa1','itpsa2','otpsa1',
-                     'parent_sum_cd','task',
+                     'parent_sum_cd',//'task',
                     'utsc_pay_pa','otpsa2',
 
 
@@ -988,3 +1080,5 @@ as d')
         }
     }
 }
+
+

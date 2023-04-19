@@ -75,8 +75,9 @@
                       <td></td>
                       <td>
                         {{ $task['task_name'] }}<br>
-                        <span class="badge bg-primary">{{ \Helper::date($task->task_start_date) }}</span>
-                        <span class="badge bg-primary">{{ \Helper::date($task->task_end_date) }}</span>
+
+                        <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
+    <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s',$task->task_end_date)) }}</span>
                       </td>
                       <td class="text-end">
                         <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}" class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
@@ -129,12 +130,12 @@
               </div>
               <div class="row">
                 <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
-                <div class="col-9">{{ \Helper::date($contract->contract_start_date) }}</div>
+                <div class="col-9">{{   Helper::Date4(date('Y-m-d H:i:s',$contract->contract_start_date)) }}</div>
               </div>
 
               <div class="row">
                 <div class="col-3">{{ __('วันที่สิ้นสุดสัญญา') }}</div>
-                <div class="col-9">{{ \Helper::date($contract->contract_end_date) }}</div>
+                <div class="col-9">{{ Helper::Date4(date('Y-m-d H:i:s',$contract->contract_end_date))}}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('จำนวนเดือน') }}</div>

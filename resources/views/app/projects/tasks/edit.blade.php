@@ -101,21 +101,16 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                    <span class="text-danger">*</span>
+                                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_start_date"
-                                        data-coreui-format="dd/MM/yyyy"
-                                        data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                    <span class="text-danger">*</span>
+                                    <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_end_date"
-                                        data-coreui-format="dd/MM/yyyy"
-                                        data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
-                                </div>
+                                    <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
+                                  </div>
+
 
                                 <div class="row">
                                     <h4>งบประมาณ</h4>

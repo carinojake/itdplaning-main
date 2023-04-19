@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use Jenssegers\Date\Date;
+
 
 class ProjectController extends Controller
 {
@@ -137,7 +139,7 @@ class ProjectController extends Controller
     {
         $id = Hashids::decode($project)[0];
 // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
-        ($project = Project::select('projects.*', 'a.total_cost','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+       ($project = Project::select('projects.*', 'a.total_cost','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
 
         ->leftJoin(DB::raw('(select tasks.project_id,
          sum(COALESCE(tasks.task_cost_gov_utility,0))
@@ -167,9 +169,9 @@ class ProjectController extends Controller
        //->groupBy('projects.project_id')
         ->where('projects.project_id', $id)
         ->first());
+        // dd($project);
 
 // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
-
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] ;
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
         (float) $__budget     = $__budget_gov + $__budget_it;
@@ -181,7 +183,9 @@ class ProjectController extends Controller
             'id'                    => $project['project_id'],
             'text'                  => $project['project_name'],
             'start_date'            => date('Y-m-d', $project['project_start_date']),
-            // 'end_date' => date('Y-m-d', $project['project_end_date']),
+            'p'                  => $project['project_type'],
+
+             'end_date' => date('Y-m-d', $project['project_end_date']),
             'budget_gov_operating'  => $project['budget_gov_operating'],
             'budget_gov_investment' => $project['budget_gov_investment'],
             'budget_gov_utility'    => $project['budget_gov_utility'],
@@ -191,14 +195,15 @@ class ProjectController extends Controller
             'budget_it'             => $__budget_it,
             'budget'                => $__budget,
             'balance'               => $__balance,
+            'pbalance'               => $__balance,
             //'project_cost_disbursement'     => $project['project_cost_disbursemen'],
             'total_cost'                => $project['total_cost'],
             'cost'                  => $project['project_cost'],
             'cost_pa_1'             => $project['cost_pa_1'],
             'cost_no_pa_2'             => $project['cost_no_pa_2'],
-            'cost_disbursement'     => $project['cost_disbursement'],
+           // 'cost_disbursement'     => $project['cost_disbursement'],
 
-            'pay'                   => $project['pay'],
+           // 'pay'                   => $project['pay'],
             'total_pay'              => $project['total_pay'],
             'owner'                 => $project['project_owner'],
             'open'                  => true,
@@ -279,6 +284,7 @@ class ProjectController extends Controller
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
+                'tbalance'               => $__balance,
                 'cost'                  => $__cost,
 
 
@@ -310,6 +316,7 @@ class ProjectController extends Controller
 
         $labels = [
             'project' => 'โครงการ/งานประจำ',
+
             'budget' => 'งบประมาณ',
             'budget_it_operating' => 'งบกลาง ICT',
             'budget_it_investment' => 'งบดำเนินงาน',
@@ -489,12 +496,13 @@ class ProjectController extends Controller
 
 
 
+
     ($gantt);
 
         $gantt = json_encode($gantt);
 
         return view('app.projects.show', compact('project','itpsa1','itpsa2','otpsa1',
-        'gantt', 'budget', 'parent_sum_pa', 'parent_sum_cd','task',
+        'gantt', 'budget', 'parent_sum_pa', 'parent_sum_cd',
         'ispa','isa','utsc','utpcs','ospa','osa','itpsa','utsc_pay','utsc_pay_pa','otpsa2'));
     }
 
@@ -519,7 +527,7 @@ class ProjectController extends Controller
 
         $project->project_name        = $request->input('project_name');
         $project->project_description = $request->input('project_description');
-        $project->project_type        = $request->input('project_type');
+       // $project->project_type        = $request->input('project_type');
         $project->project_fiscal_year = $request->input('project_fiscal_year');
         $project->project_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $project->project_end_date    = $end_date ?? date('Y-m-d 00:00:00');
@@ -652,7 +660,6 @@ class ProjectController extends Controller
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
 
-        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
 
         $task->project_id       = $id;
         $task->task_name        = $request->input('task_name');
