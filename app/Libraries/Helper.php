@@ -240,9 +240,11 @@ class Helper
         }
     }
 
-    public static function contractAcquisition($acquisition_id = null)
+    public static function contractAcquisition($contract_acquisition = null) //contract_acquisition   acquisition_id
     {
         $acquisition = [
+            "99" => "-",
+            "0" => "-",
             "1" => "วิธีตกลงราคา",
             "2" => "วิธีสอบราคา",
             "3" => "วิธีประกวดราคา",
@@ -251,37 +253,39 @@ class Helper
             "6" => "วิธีประมูลด้วยระบบอิเล็กทรอนิกส์",
         ];
 
-        if ($acquisition_id && array_key_exists($acquisition_id, $acquisition)) {
-            return $acquisition[$acquisition_id];
-        } elseif (!$acquisition_id) {
+        if ($contract_acquisition && array_key_exists($contract_acquisition, $acquisition)) {
+            return $acquisition[$contract_acquisition];
+        } elseif (!$contract_acquisition) {
             return $acquisition;
         } else {
             return 'Unknown';
         }
     }
-
-    public static function contractType($type_id = null)
+    public static function contractType($contract_type = null)  //contract_type   type_id
     {
-        $type = [
-            "B" => "การซื้อ",
-            "H" => "การจ้าง",
-            "L" => "การเช่า",
+        $types = [
+            "99" => "-",
+            "0" => "-",
+            "1" => "การซื้อ",
+            "2" => "การจ้าง",
+            "3" => "การเช่า",
         ];
 
-        if ($type_id && array_key_exists($type_id, $type)) {
-            return $type[$type_id];
-        } elseif (!$type_id) {
-            return $type;
+        if ($contract_type && array_key_exists($contract_type, $types)) {
+            return $types[$contract_type];
+        } elseif (!$contract_type) {
+            return $types;
         } else {
             return 'Unknown';
         }
     }
 
+
     public static function projectsType($project_type = null)
     {
         $project_types = [
             "1" => "งานประจำ",
-            "2" => "โครงการ",
+            "2" => "โครงการที่",
         ];
 
         if ($project_type && array_key_exists($project_type, $project_types)) {

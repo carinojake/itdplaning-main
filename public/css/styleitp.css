@@ -50,7 +50,7 @@
   --cui-body-font-weight: 400;
   --cui-body-line-height: 1.5;
   --cui-body-color: rgba(44, 56, 74, 0.95);
-  --cui-body-bg: #fff;
+  --cui-body-bg: #dd1b1b !important;
   --cui-pay-rgb: 244,217,16;
   --cui-investment-rgb: 19,137,34;
 }

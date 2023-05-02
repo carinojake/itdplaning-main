@@ -30,7 +30,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_end_date', 'desc');
+            $records = contract::orderBy('contract_fiscal_year', 'desc');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
@@ -41,8 +41,8 @@ class ContractController extends Controller
                     $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
                     $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
                     $html        = $row->contract_name . ' ' . $flag_status;
-                    $html .= '<br><span class="badge bg-info">' . Helper::date($row->contract_start_date) . '</span> -';
-                    $html .= ' <span class="badge bg-info">' . Helper::date($row->contract_end_date) . '</span>';
+                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s',$row->contract_start_date)) . '</span> -';
+                    $html .= ' <span class="badge bg-info">' . Helper::date4(date('Y-m-d H:i:s',$row->contract_end_date)) . '</span>';
 
 
                     $startDate = Carbon::parse($row->contract_start_date);
@@ -91,7 +91,7 @@ class ContractController extends Controller
     {
         $id = Hashids::decode($contract)[0];
 
-        $contract = Contract::find($id);
+       ($contract = Contract::find($id));
 
         $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
         $contract_end_date = \Carbon\Carbon::createFromTimestamp($contract->contract_end_date);
@@ -101,14 +101,9 @@ class ContractController extends Controller
         ($duration_p =  \Carbon\Carbon::parse($contract->contract_end_date)
             ->diffInMonths(\Carbon\Carbon::parse($contract->contract_start_date))
             -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()));
-
-
         // $gantt = '';
 
-        // dd(Hashids::encode($contract->task->task_id));
-
-
-
+        //dd(Hashids::encode($contract->task->task_id));
 
         $gantt[] = [
             'id'                    => $contract['contract_id'],
@@ -139,51 +134,6 @@ class ContractController extends Controller
 
 
         $gantt = json_encode($gantt);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         return view('app.contracts.show', compact('contract', 'gantt', 'duration_p'));
     }
@@ -228,6 +178,8 @@ class ContractController extends Controller
         $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
+        $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
+
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -301,6 +253,7 @@ class ContractController extends Controller
         $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
+        $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
 
@@ -492,11 +445,17 @@ class ContractController extends Controller
             'taskcon_name'                   => 'required',
             'date-picker-taskcon_start_date' => 'required',
             'date-picker-taskcon_end_date'   => 'required',
+
         ]);
 
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
+        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_pay_date')), 'Y-m-d');
+        $timestamp = strtotime($taskcon->taskcon_pay_date);
+        $data_coreui_date = date('m/d/Y', $timestamp);
+
+
         $taskcon->taskcon_id       = $id_taskcon;
         $taskcon->contract_id       = $id_contract;
         $taskcon->taskcon_name        = $request->input('taskcon_name');
@@ -518,16 +477,18 @@ class ContractController extends Controller
         $taskcon->taskcon_cost_gov_utility    = $request->input('taskcon_cost_gov_utility');
         $taskcon->taskcon_cost_it_operating   = $request->input('taskcon_cost_it_operating');
         $taskcon->taskcon_cost_it_investment  = $request->input('taskcon_cost_it_investment');
-
+        $taskcon->taskcon_pay                 = $request->input('taskcon_pay');
+        $taskcon->taskcon_pay_date            =  $pay_date ?? date('m/d/Y', $timestamp);
+        $taskcon->taskcon_type                 = $request->input('taskcon_type');
         if ($taskcon->save()) {
 
             //update contract
-            if ($request->input('taskcon_contract')) {
+            if ($request->input('taskcon_id')) {
                 ContractHasTaskcon::where('taskcon_id', $id_taskcon)->delete();
                 ContractHasTaskcon::Create([
                     // 'contract_id' => $request->input('taskcon_task'),
                     //'taskcon_id'     => $id_taskcon,
-                    'task_id' => $request->input('taskcon_contract'),
+                    'task_id' => $request->input('taskcon_id'),
                     'taskcon_id'     => $id_taskcon,
                 ]);
             } else {

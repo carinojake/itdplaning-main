@@ -30,15 +30,15 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $records = Project::orderBy('project_start_date', 'desc');
+            $records = Project::orderBy('project_fiscal_year', 'DESC')->orderBy('reguiar_id', 'ASC')->orderBy('project_type', 'ASC');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
                 ->addColumn('project_name_output', function ($row) {
                     $flag_status = $row->project_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
                     $html        = $row->project_name . ' ' . $flag_status;
-                    $html .= '<br><span class="badge bg-info">' . Helper::date($row->project_start_date) . '</span> -';
-                    $html .= ' <span class="badge bg-info">' . Helper::date($row->project_end_date) . '</span>';
+                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s',$row->project_start_date)) . '</span> -';
+                    $html .= ' <span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s',$row->project_end_date)) . '</span>';
 
                     if ($row->task->count() > 0) {
                         $html .= ' <span class="badge bg-warning">' . $row->main_task->count() . 'กิจกรรม</span>';
@@ -55,9 +55,9 @@ class ProjectController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
-                    $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success"><i class="cil-folder-open "></i></a>';
+                    $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
                     //if (Auth::user()->hasRole('admin')) {
-                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit"><i class="cil-pencil "></i></a>';
+                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " target="_blank"><i class="cil-pencil "></i></a>';
                     $html .= '<button data-rowid="' . $row->hashid . '" class="text-white btn btn-danger btn-delete"><i class="cil-trash "></i></button>';
                     //}
                     $html .= '</div>';
@@ -168,8 +168,11 @@ class ProjectController extends Controller
    // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
        //->groupBy('projects.project_id')
         ->where('projects.project_id', $id)
-        ->first());
-        // dd($project);
+        ->first()
+
+       // ->toArray()
+    );
+        //dd($project);
 
 // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] ;
@@ -515,15 +518,15 @@ class ProjectController extends Controller
     {
         $project = new Project;
 
-        $request->validate([
-            'project_name'                   => 'required',
-            'date-picker-project_start_date' => 'required',
-            'date-picker-project_end_date'   => 'required',
-        ]);
+  //      $request->validate([
+    //        'project_name'                   => 'required',
+      //      'date-picker-project_start_date' => 'required',
+        //    'date-picker-project_end_date'   => 'required',
+       // ]);
 
         //convert date
-        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date')), 'Y-m-d');
-        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date')), 'Y-m-d');
+       // $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date')), 'Y-m-d');
+        //$end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date')), 'Y-m-d');
 
         $project->project_name        = $request->input('project_name');
         $project->project_description = $request->input('project_description');
@@ -555,7 +558,7 @@ class ProjectController extends Controller
     public function edit(Request $request, $project)
     {
         $id      = Hashids::decode($project)[0];
-        $project = Project::find($id);
+        ($project = Project::find($id));
 
         return view('app.projects.edit', compact('project'));
     }
@@ -619,21 +622,61 @@ class ProjectController extends Controller
         return redirect()->route('project.index');
     }
     //////////////////////////////////////////////////////////////////////
-    public function taskShow(Request $request, $project, $task)
+    public function taskShow($project, $task)
     {
-        ($id_project = Hashids::decode($project)[0]);
-        $id_task    = Hashids::decode($task)[0];
-        $project    = Project::find($id_project);
-        $task       = task::find($id_task);
-        $contracts = Contract::get();
+        // ดึงข้อมูล Project และ Task
+
+// ดึงข้อมูล Contract และ Taskcon โดยใช้คำสั่ง SQL
+
+($project = Project::find(Hashids::decode($project)[0]));
+  ($task = Task::find(Hashids::decode($task)[0]));
+
+
+
+        ($contract = Contract::
+    join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+    ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+    ->select(
+        'contracts.*',
+
+        'projects.*',
+        'tasks.*'
+    )
+    ->where('projects.project_id', $project->project_id)
+    ->where('tasks.task_id', $task->task_id)
+    ->first());
 
 
 
 
-        // echo 'contract' . $task->contract->count();
-        // dd($task->contract);
 
-        return view('app.projects.tasks.show', compact('contracts', 'project', 'task'));
+
+
+    ($results = Contract::
+    join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+    ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+    ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+    ->select(
+        'contracts.*',
+        'taskcons.*',
+        'projects.*',
+        'tasks.*'
+    )
+    ->where('projects.project_id', $project->project_id)
+    ->where('tasks.task_id', $task->task_id) // Replaced 'contracts.contract_id' with 'tasks.task_id'
+    ->get());
+
+
+
+
+
+        // ตรวจสอบค่าตัวแปร
+        //dd($project, $task, $results);
+
+        // ส่งข้อมูลไปยัง view
+        return view('app.projects.tasks.show', compact('project', 'task', 'results','contract'));
     }
 
     public function taskCreate(Request $request, $project)
@@ -644,6 +687,30 @@ class ProjectController extends Controller
 
         return view('app.projects.tasks.create', compact('contracts', 'project', 'tasks'));
     }
+
+
+
+    public function taskCreateSub(Request $request, $project, $task = null)
+    {
+        $id = Hashids::decode($project)[0];
+        //$project = Project::find($projectId);
+        $tasks = Task::where('project_id', $id)->get();
+        $contracts = Contract::get();
+
+        if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        }
+
+        return view('app.projects.tasks.createsub', compact('contracts', 'project', 'tasks', 'task'));
+    }
+
+
+
+
+
 
     public function taskStore(Request $request, $project)
     {
@@ -682,7 +749,7 @@ class ProjectController extends Controller
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
         $task->task_pay                 = $request->input('task_pay');
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
-
+        $task->task_type                 = $request->input('task_type');
         if ($task->save()) {
 
             //insert contract
@@ -699,6 +766,7 @@ class ProjectController extends Controller
         }
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -709,7 +777,7 @@ class ProjectController extends Controller
     {
         $id_project = Hashids::decode($project)[0];
         $id_task    = Hashids::decode($task)[0];
-        $project    = Project::find($id_project);
+       ($project    = Project::find($id_project));
         $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
@@ -767,6 +835,7 @@ class ProjectController extends Controller
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
         $task->task_pay                 = $request->input('task_pay');
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
+        $task->task_type                 = $request->input('task_type');
 
         if ($task->save()) {
 

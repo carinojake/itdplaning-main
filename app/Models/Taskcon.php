@@ -56,7 +56,8 @@ class Taskcon extends Model
          'taskcon_cost_gov_utility',
          'taskcon_cost_it_operating',
          'taskcon_cost_it_investment',
-         'taskcon_status'
+         'taskcon_status',
+         'taskcon_pay'
     ];
 
     /**

@@ -294,6 +294,8 @@
       <script src="{{ asset('vendors/amcharts5/xy.js') }}"></script>
       <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
       <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
+      <script src="//cdn.amcharts.com/lib/4/core.js"></script>
+<script src="//cdn.amcharts.com/lib/4/charts.js"></script>
       <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
       <!-- Chart code -->
       <script>

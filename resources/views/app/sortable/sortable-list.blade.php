@@ -67,14 +67,14 @@
                   console.log("Sending update order:", order_column); // Add this line
 
                   $.ajax({
-
-    url: "{{ route('sortable.updateorder') }}",
-
-    type: 'POST',
-    data: {
-        _token: '{{ csrf_token() }}',
-        items: $("#sortable").sortable("toArray")
-    },
+                    url: "{{ route('sortable.updateorder') }}",
+  type: 'POST',
+  dataType: 'json', // Add this line back
+  contentType: 'application/json', // Add this line back
+  data: JSON.stringify({ // Keep JSON.stringify
+    _token: '{{ csrf_token() }}',
+    items: JSON.stringify(order_column) // Add JSON.stringify() here
+  }),
     success: function(response) {
         // ตรวจสอบสถานะการตอบกลับ
         if (response.status === 'error') {

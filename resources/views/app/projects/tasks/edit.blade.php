@@ -33,14 +33,14 @@
                                         class="text-danger">*</span>
                                     <div class="form-check form-check-inline ms-5">
                                         <input class="form-check-input" type="radio" name="task_status"
-                                            id="task_status1" value="1" checked>
+                                            id="task_status1" value="1"  @checked($task->task_status == 1)>
                                         <label class="form-check-label" for="task_status1">
                                             อยู่ในระหว่างดำเนินการ
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="task_status"
-                                            id="task_status2" value="2">
+                                            id="task_status2" value="2"  @checked($task->task_status == 2)>
                                         <label class="form-check-label" for="task_status2">
                                             ดำเนินการแล้วเสร็จ
                                         </label>
@@ -78,6 +78,27 @@
                                 </div>
 
                                 <div class="col-md-12">
+                                    <label for="task_type" class="form-label">{{ __('สถานะงาน/โครงการ') }}</label> <span class="text-danger">*</span>
+                                    <div class="form-check form-check-inline ms-5">
+                                        <input class="form-check-input" type="radio" name="task_type" id="task_type1" value="1"
+                                        @checked($task->task_type == 1)>
+                                      <label class="form-check-label" for="task_type1">
+                                        มี PA
+                                      </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_type" id="task_type2" value="2"
+                                        @checked($task->task_type == 2)>
+                                      <label class="form-check-label" for="task_type2">
+                                        ไม่มี PA
+                                      </label>
+                                    </div>
+
+
+
+
+
+                                    <div class="col-md-12">
                                     <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span
                                         class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="task_contract" name="task_contract"> --}}
@@ -103,12 +124,12 @@
                                 <div class="col-md-6">
                                     <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
+                                    <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"  data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
                                   </div>
                                   <div class="col-md-6">
                                     <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
+                                    <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH" data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
                                   </div>
 
 
@@ -121,7 +142,7 @@
                                         <div class="col-md-12">
                                           <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
                                           <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating"
-                                           min="0" value="{{ $task->task_budget_it_operating }}">
+                                           min="0" value="{{ ($task->task_budget_it_operating) }}">
                                           <div class="invalid-feedback">
                                             {{ __('ระบุงบกลาง ICT') }}
                                           </div>
@@ -193,7 +214,7 @@
             <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
                 class="text-danger">*</span>
             {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-            <div data-coreui-toggle="date-picker" id="task_pay_date" data-coreui-format="dd/MM/yyyy"
+            <div data-coreui-toggle="date-picker" id="task_pay_date"data-coreui-locale="th-TH"  data-coreui-format="dd/MM/yyyy"
                 data-coreui-date="{{ date('m/d/Y', $task->task_pay_date) }}"></div>
         </div>
 
@@ -223,5 +244,19 @@
     </x-slot:css>
     <x-slot:javascript>
 
+    <script>
+        const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
+        const taskContractContainer = document.getElementById('task-contract-container');
+
+        taskTypeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === '2') {
+                    taskContractContainer.style.display = 'none';
+                } else {
+                    taskContractContainer.style.display = 'block';
+                }
+            });
+        });
+    </script>
     </x-slot:javascript>
 </x-app-layout>

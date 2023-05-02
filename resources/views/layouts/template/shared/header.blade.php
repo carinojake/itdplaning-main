@@ -16,12 +16,31 @@
               <input class="form-control bg-light border-0" type="text" placeholder="Search..." aria-label="Search" aria-describedby="search-addon">
             </div>
           </form> --}}
+                  <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/itdplaning-main/public">Home</a></li>
+            <?php $segments = ''; ?>
+            @for($i = 1; $i <= count(Request::segments()); $i++)
+                <?php $segments .= '/'. Request::segment($i); ?>
+                @if($i < count(Request::segments()))
+                    <li class="breadcrumb-item">{{ Request::segment($i) }}</li>
+                @else
+                    <li class="breadcrumb-item active">{{ Request::segment($i) }}</li>
+
+
+
+                @endif
+            @endfor
+          <!-- Breadcrumb Menu-->
+
+
+        </ol>
           <?php
             use App\MenuBuilder\FreelyPositionedMenus;
             if(isset($appMenus['top menu'])){
                 FreelyPositionedMenus::render( $appMenus['top menu'] , '', 'd-md-down-none');
             }
-          ?>   
+          ?>
           <ul class="header-nav ms-auto">
             <li class="header-nav-item">
               <form id="select-locale-form" action="/locale" method="GET">

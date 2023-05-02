@@ -8,8 +8,12 @@ use App\Models\ContractHasTask;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+use Jenssegers\Date\Date;
+
 
 class ProjectController extends Controller
 {
@@ -72,10 +76,10 @@ class ProjectController extends Controller
         $projects = Project::get()->toArray();
 
         foreach ($projects as $project) {
-            (Int) $__budget_gov = (Int) $project['budget_gov_operating'] + (Int) $project['budget_gov_utility'] + (Int) $project['budget_gov_investment'];
-            (Int) $__budget_it  = (Int) $project['budget_it_operating'] + (Int) $project['budget_it_investment'];
-            (Int) $__budget     = $__budget_gov + $__budget_it;
-            (Int) $__balance    = $__budget + (Int) $project['project_cost'];
+            (int) $__budget_gov = (int) $project['budget_gov_operating'] + (int) $project['budget_gov_utility'] + (int) $project['budget_gov_investment'];
+            (int) $__budget_it  = (int) $project['budget_it_operating'] + (int) $project['budget_it_investment'];
+            (int) $__budget     = $__budget_gov + $__budget_it;
+            (int) $__balance    = $__budget + (int) $project['project_cost'];
 
             $gantt[] = [
                 'id'                    => $project['project_id'],
@@ -134,21 +138,54 @@ class ProjectController extends Controller
     public function show(Request $request, $project)
     {
         $id = Hashids::decode($project)[0];
+// Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
+       ($project = Project::select('projects.*', 'a.total_cost','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
 
-        $project = Project::find($id);
+        ->leftJoin(DB::raw('(select tasks.project_id,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+    from tasks  group by tasks.project_id) as a'),
+     'a.project_id', '=', 'projects.project_id')
 
-        (Int) $__budget_gov = (Int) $project['budget_gov_operating'] + (Int) $project['budget_gov_utility'] + (Int) $project['budget_gov_investment'];
-        (Int) $__budget_it  = (Int) $project['budget_it_operating'] + (Int) $project['budget_it_investment'];
-        (Int) $__budget    = $__budget_gov + $__budget_it;
-        (Int) $__cost       = (Int) $project['project_cost'];
-        (Int) $__balance    = $__budget + (Int) $project['project_cost'];
+       ->leftJoin(DB::raw('(select tasks.project_id,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
+    'ab.project_id', '=', 'projects.project_id')
+
+   ->leftJoin(DB::raw('(select tasks.project_id,
+   sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
+   'ac.project_id', '=', 'projects.project_id')
+
+   // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+       //->groupBy('projects.project_id')
+        ->where('projects.project_id', $id)
+        ->first());
+        // dd($project);
+
+// คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
+        (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] ;
+        (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
+        (float) $__budget     = $__budget_gov + $__budget_it;
+        (float) $__cost       = (float) $project['project_cost'];
+        (float) $__balance    = $__budget + (float) $project['project_cost'];
         $__project_cost     = [];
 
         $gantt[] = [
             'id'                    => $project['project_id'],
             'text'                  => $project['project_name'],
             'start_date'            => date('Y-m-d', $project['project_start_date']),
-            // 'end_date' => date('Y-m-d', $project['project_end_date']),
+            'p'                  => $project['project_type'],
+
+             'end_date' => date('Y-m-d', $project['project_end_date']),
             'budget_gov_operating'  => $project['budget_gov_operating'],
             'budget_gov_investment' => $project['budget_gov_investment'],
             'budget_gov_utility'    => $project['budget_gov_utility'],
@@ -158,21 +195,68 @@ class ProjectController extends Controller
             'budget_it'             => $__budget_it,
             'budget'                => $__budget,
             'balance'               => $__balance,
+            'pbalance'               => $__balance,
+            //'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'total_cost'                => $project['total_cost'],
             'cost'                  => $project['project_cost'],
+            'cost_pa_1'             => $project['cost_pa_1'],
+            'cost_no_pa_2'             => $project['cost_no_pa_2'],
+           // 'cost_disbursement'     => $project['cost_disbursement'],
+
+           // 'pay'                   => $project['pay'],
+            'total_pay'              => $project['total_pay'],
             'owner'                 => $project['project_owner'],
             'open'                  => true,
             'type'                  => 'project',
-            'duration'              => 360,
+            // 'duration'              => 360,
         ];
 
         $budget['total'] = $__budget;
+        $tasks =  Project::find($id);
 
-        foreach ($project->task as $task) {
-            (Int) $__budget_gov = (Int) $task['task_budget_gov_operating'] + (Int) $task['task_budget_gov_utility'] + (Int) $task['task_budget_gov_investment'];
-            (Int) $__budget_it  = (Int) $task['task_budget_it_operating'] + (Int) $task['task_budget_it_investment'];
-            (Int) $__budget     = $__budget_gov + $__budget_it;
 
-            (Int) $__cost = array_sum([
+
+        ($tasks = DB::table('tasks')
+        ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as cost_disbursement,
+        sum( COALESCE(tasks.task_pay,0))  as total_pay
+        from tasks  group by tasks.task_parent) as a'),
+         'a.task_parent', '=', 'tasks.task_id')
+
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_pa_1 ,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay
+        from tasks
+        where tasks.task_type=1 group by tasks.task_parent) as ab'),
+        'ab.task_parent', '=', 'tasks.task_id')
+
+
+        ->leftJoin(DB::raw('(select tasks.task_parent,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
+        as total_pay
+        from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+        'ac.task_parent', '=', 'tasks.task_id')
+        ->where('project_id',($id))
+        ->get()
+        ->toArray());
+       ($tasks = json_decode(json_encode($tasks), true));
+        foreach ($tasks as $task) {
+            (float) $__budget_gov = (float) $task['task_budget_gov_operating'] + (float) $task['task_budget_gov_utility'] + (float) $task['task_budget_gov_investment'];
+            (float) $__budget_it  = (float) $task['task_budget_it_operating'] + (float) $task['task_budget_it_investment'];
+            (float) $__budget     = $__budget_gov + $__budget_it;
+
+            (float) $__cost = array_sum([
+                (double)$task['cost_disbursement'],
                 $task['task_cost_gov_operating'],
                 $task['task_cost_gov_investment'],
                 $task['task_cost_gov_utility'],
@@ -180,14 +264,15 @@ class ProjectController extends Controller
                 $task['task_cost_it_investment'],
             ]);
 
-            (Int) $__balance = $__budget - $__cost;
-
-            $gantt[] = [
+            (float) $__balance = $__budget - $__cost;
+            ($gantt[] = [
                 'id'                    => 'T' . $task['task_id'] . $task['project_id'],
                 'text'                  => $task['task_name'],
-                'start_date'            => date('Y-m-d', $task['task_start_date']),
-                'end_date'              => date('Y-m-d', $task['task_end_date']),
+                'start_date'            => date('Y-m-d', strtotime($task['task_start_date'])),
+
+                'end_date'              => date('Y-m-d',strtotime($task['task_end_date'])),
                 'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
+                'parent_sum'            => '' . $task['task_id'] . $task['project_id'],
                 'type'                  => 'task',
                 'open'                  => true,
                 'budget_gov_operating'  => $task['task_budget_gov_operating'],
@@ -199,20 +284,226 @@ class ProjectController extends Controller
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
+                'tbalance'               => $__balance,
                 'cost'                  => $__cost,
-                // 'owner' => $project['project_owner'],
-            ];
-            $__project_cost[] = $__cost;
-        }
-        $gantt[0]['cost']    = array_sum($__project_cost);
-        $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['cost'];
 
-        $budget['cost']    = $gantt[0]['cost'];
+
+
+            'cost_pa_1'             => $task['cost_pa_1'],
+            'cost_no_pa_2'             => $task['cost_no_pa_2'],
+            'cost_disbursement'     => $project['cost_disbursement'],
+                'pay'                   => $task['task_pay'],
+                'cost_disbursement'     => $task['cost_disbursement'],
+                'task_total_pay'             => $task['total_pay'],
+                'task_type'             => $task['task_type']
+                // 'owner' => $project['project_owner'],
+            ]);
+
+            $__project_cost[] = $__cost;
+            ($__project_pay[] = $task['task_pay']);
+            ($__project_parent[] = $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id']);
+            ($__project_parent_cost[] = 'parent');
+        }
+   // ($gntt[0]['cost']    =array_sum($__project_cost));
+    //  ($gantt[0]['pay']    = array_sum($__project_pay));
+    $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
+
+
+
+
+        $budget['cost']    = $gantt[0]['total_cost'];
         $budget['balance'] = $gantt[0]['balance'];
+
+        $labels = [
+            'project' => 'โครงการ/งานประจำ',
+
+            'budget' => 'งบประมาณ',
+            'budget_it_operating' => 'งบกลาง ICT',
+            'budget_it_investment' => 'งบดำเนินงาน',
+            'budget_gov_utility' => 'งบสาธารณูปโภค',
+        ];
+
+        $fields = [
+            'cost' => 'ค่าใช้จ่าย',
+            'cost_pa_1' => 'PA',
+            'cost_no_pa_2' => 'ไม่มี PA',
+            'task_pay' => 'การเบิกจ่าย',
+
+        ];
+
+
+
+
+        ($operating_pa_sum = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As ospa')
+         //->where('tasks.task_type', 1)
+         ->where('tasks.task_type', 1)
+         ->where('project_id',($id))
+         ->get());
+         ($json = json_decode($operating_pa_sum));
+         ($ospa = $json[0]->ospa);
+        ($ospa = (float)$ospa);
+
+
+        ($operating_sum = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As osa')
+         //->where('tasks.task_type', 1)
+         ->where('tasks.task_type', 2)
+         ->where('project_id',($id))
+         ->get());
+         ($json = json_decode($operating_sum));
+         ($osa = $json[0]->osa);
+        ($osa = (float)$osa);
+
+        ($operating_pay_sum_1 = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
+       ->where ('tasks.task_cost_it_operating','>', 1)
+       ->where('tasks.task_type', 1)
+       ->where('project_id',($id))
+       ->get());
+       ($json = json_decode($operating_pay_sum_1));
+       ($otpsa1 = $json[0]->iv);
+      ($otpsa1 = (float)$otpsa1);
+
+
+
+     ($operating_pay_sum_2 = DB::table('tasks')
+      ->selectRaw('SUM(COALESCE(task_pay,0)) as iv2')
+      ->where ('tasks.task_cost_it_operating','>', 2)
+      ->where('tasks.task_type', 2)
+      ->where('project_id',($id))
+      ->get());
+      ($json = json_decode($operating_pay_sum_2));
+     ($otpsa2 = $json[0]->iv2);
+     ($otpsa2 = (float)$otpsa2);
+
+
+
+
+        ($investment_pa_sum = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
+       ->where ('tasks.task_cost_it_investment','>', 1)
+        ->where('tasks.task_type', 1)
+        ->where('project_id',($id))
+        ->get());
+        ($json = json_decode($investment_pa_sum));
+        ($ispa = $json[0]->ispa);
+       ($ispa = (float)$ispa);
+
+       ($investment_pay_sum_1 = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
+       ->where ('tasks.task_cost_it_investment','>', 1)
+       ->where('tasks.task_type', 1)
+       ->where('project_id',($id))
+       ->get());
+       ($json = json_decode($investment_pay_sum_1));
+       ($itpsa1 = $json[0]->iv);
+      ($itpsa1 = (float)$itpsa1);
+
+      ($investment_pay_sum_2 = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
+       ->where ('tasks.task_cost_it_investment','>', 1)
+       ->where('tasks.task_type', 2)
+       ->where('project_id',($id))
+       ->get());
+       ($json = json_decode($investment_pay_sum_2));
+       ($itpsa2 = $json[0]->iv);
+      ($itpsa2 = (float)$itpsa2);
+
+       ($investment_sum = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As isa')
+
+        ->where ('tasks.task_cost_it_investment','>', 1)
+        ->where('tasks.task_type',2)
+        ->where('project_id',($id))
+        ->get());
+        ($json = json_decode($investment_sum));
+        ($isa = $json[0]->isa);
+       ($isa = (float)$isa);
+
+       ($investment_total_pay_sum = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
+        ->where ('tasks.task_cost_it_investment','>', 1)
+        ->where('project_id',($id))
+        ->get());
+        ($json = json_decode($investment_total_pay_sum));
+        ($itpsa = $json[0]->iv);
+       ($itpsa = (float)$itpsa);
+
+
+
+       ($ut_pa_sum = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
+       ->where('tasks.task_type',1)
+       ->where('project_id',($id))
+       ->get());
+       ($json = json_decode($ut_pa_sum));
+       ($utpcs = $json[0]->utpcs);
+      ($utpcs = (float)$utpcs);
+
+
+
+      ($ut_sum = DB::table('tasks')
+       ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utsc')
+       ->where('tasks.task_type',2)
+       ->where('project_id',($id))
+       ->get());
+       ($json = json_decode($ut_sum));
+       ($utsc = $json[0]->utsc);
+        ($utsc = (float)$utsc);
+
+
+
+       ($ut_pay_sum = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay  ')
+        ->where('tasks.task_type',2)
+        ->whereNotNull('task_cost_gov_utility')
+        ->where('project_id',($id))
+
+        ->get());
+        ($json = json_decode($ut_pay_sum));
+        ($utsc_pay = $json[0]->utsc_pay);
+         ($utsc_pay = (float)$utsc_pay);
+
+
+         ($ut_pay_pa_sum = DB::table('tasks')
+->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay_pa  ')
+->where('tasks.task_type',1)
+->whereNotNull('task_cost_gov_utility')
+->where('project_id',($id))
+->get());
+($json = json_decode($ut_pay_pa_sum));
+($utsc_pay_pa = $json[0]->utsc_pay_pa);
+ ($utsc_pay_pa = (float)$utsc_pay_pa);
+
+       $parent_sum_pa = DB::table('tasks')
+        ->select('tasks.task_parent', 'a.cost_a')
+
+        ->leftJoin(DB::raw('(select tasks.task_parent, sum( COALESCE(tasks.task_cost_it_investment,0)+ COALESCE(tasks.task_cost_it_operating,0)+ COALESCE(tasks.task_budget_gov_utility,0)) as cost_a from tasks where tasks.task_parent is not null group by tasks.task_parent) as a'), 'tasks.task_parent', '=', 'tasks.task_id')
+        ->whereNotNull('tasks.task_parent')
+        ->where('project_id',$id)
+        ->get();
+
+    ($parent_sum_pa);
+
+
+        ($parent_sum_cd = DB::table('tasks')
+            ->select('task_parent', DB::raw('sum(task_pay) as cost_app'))
+            ->whereNotNull('task_parent')
+            ->groupBy('task_parent')
+            ->get()
+        );
+
+
+
+
+    ($gantt);
 
         $gantt = json_encode($gantt);
 
-        return view('app.projects.show', compact('project', 'gantt', 'budget'));
+        return view('app.projects.show', compact('project','itpsa1','itpsa2','otpsa1',
+        'gantt', 'budget', 'parent_sum_pa', 'parent_sum_cd',
+        'ispa','isa','utsc','utpcs','ospa','osa','itpsa','utsc_pay','utsc_pay_pa','otpsa2'));
     }
 
     public function create(Request $request)
@@ -233,10 +524,10 @@ class ProjectController extends Controller
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date')), 'Y-m-d');
-        $project->reguiar_id        = $request->input('reguiar_id');
+
         $project->project_name        = $request->input('project_name');
         $project->project_description = $request->input('project_description');
-        $project->project_type        = $request->input('project_type');
+       // $project->project_type        = $request->input('project_type');
         $project->project_fiscal_year = $request->input('project_fiscal_year');
         $project->project_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $project->project_end_date    = $end_date ?? date('Y-m-d 00:00:00');
@@ -249,7 +540,7 @@ class ProjectController extends Controller
         $project->budget_gov_utility    = $request->input('budget_gov_utility');
         $project->budget_it_operating   = $request->input('budget_it_operating');
         $project->budget_it_investment  = $request->input('budget_it_investment');
-
+        $project->reguiar_id            = $request->input('reguiar_id');
         if ($project->save()) {
             return redirect()->route('project.index');
         }
@@ -297,8 +588,6 @@ class ProjectController extends Controller
         $project->project_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $project->project_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
-
-        $project->reguiar_id        = $request->input('reguiar_id');
         $project->project_status = $request->input('project_status') ?? null;
         // $project->budget_gov = $request->input('budget_gov');
         // $project->budget_it  = $request->input('budget_it');
@@ -308,7 +597,7 @@ class ProjectController extends Controller
         $project->budget_gov_utility    = $request->input('budget_gov_utility');
         $project->budget_it_operating   = $request->input('budget_it_operating');
         $project->budget_it_investment  = $request->input('budget_it_investment');
-
+        $project->reguiar_id            = $request->input('reguiar_id');
         if ($project->save()) {
             return redirect()->route('project.index');
         }
@@ -329,24 +618,28 @@ class ProjectController extends Controller
         }
         return redirect()->route('project.index');
     }
-
+    //////////////////////////////////////////////////////////////////////
     public function taskShow(Request $request, $project, $task)
     {
-        $id_project = Hashids::decode($project)[0];
+        ($id_project = Hashids::decode($project)[0]);
         $id_task    = Hashids::decode($task)[0];
         $project    = Project::find($id_project);
         $task       = task::find($id_task);
+        $contracts = Contract::get();
+
+
+
 
         // echo 'contract' . $task->contract->count();
         // dd($task->contract);
 
-        return 'Under Construction';
+        return view('app.projects.tasks.show', compact('contracts', 'project', 'task'));
     }
 
     public function taskCreate(Request $request, $project)
     {
         $id        = Hashids::decode($project)[0];
-        $tasks     = Task::where('project_id', $id)->get();
+        ($tasks     = Task::where('project_id', $id)->get());
         $contracts = Contract::get();
 
         return view('app.projects.tasks.create', compact('contracts', 'project', 'tasks'));
@@ -367,6 +660,7 @@ class ProjectController extends Controller
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
 
+
         $task->project_id       = $id;
         $task->task_name        = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
@@ -386,6 +680,8 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+        $task->task_pay                 = $request->input('task_pay');
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
@@ -414,7 +710,7 @@ class ProjectController extends Controller
         $id_project = Hashids::decode($project)[0];
         $id_task    = Hashids::decode($task)[0];
         $project    = Project::find($id_project);
-        $task       = task::find($id_task);
+        $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
             ->get();
@@ -440,11 +736,14 @@ class ProjectController extends Controller
             'task_name'                   => 'required',
             'date-picker-task_start_date' => 'required',
             'date-picker-task_end_date'   => 'required',
+
         ]);
 
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_end_date')), 'Y-m-d');
+        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-task_pay_date')), 'Y-m-d');
+
 
         $task->project_id       = $id_project;
         $task->task_name        = $request->input('task_name');
@@ -466,6 +765,8 @@ class ProjectController extends Controller
         $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
         $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
         $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+        $task->task_pay                 = $request->input('task_pay');
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
 
         if ($task->save()) {
 
@@ -500,5 +801,4 @@ class ProjectController extends Controller
         }
         return redirect()->route('project.show', $project);
     }
-
 }

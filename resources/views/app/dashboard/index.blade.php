@@ -13,7 +13,7 @@
                                         <div class="card">
                                             <div class="card-body">
 
-                                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
                                                     href="#collapseExample" role="button" aria-expanded="false"
                                                     aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold">
@@ -93,7 +93,7 @@
 
                                                     <small
                                                         class="text-xl">
-                                                        รวม PA/ไม่PA ใช้งบประมาณไป
+                                                        งบประมาณที่ใช้ไป
                                                     </small>
 
                                                 </button>
@@ -417,101 +417,19 @@
         </div>
         <div class="mb-3 row">
             <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="card ">
+
                     <div class="card-body ">
                         <div class="card-title fs-5 fw-semibold">กราฟเบิกจ่ายรวมทั้งหมด</div>
 
                         <div class="card-body">
 
-                            <button class="btn " style="width: 13rem;">
-                            <div class="fs-4 fw-semibold text-success"
-                                >
-                                <!--รวมเบิกจ่ายทั้งหมด-->
-                                {{ number_format((($budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay)) / $budgets) * 100, 2) }}%
 
-                                {{ number_format((($budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay)))),2 }}
-
-                            </div>
-                            <div>
-                            <small
-                                class="text-xl"
-                                >คงเหลือ</small>
-                            </div>
-                        </button>
-                        </div>
 
                         <div id="c1" class="chartdiv"></div>
 
-                        <div class="card-body">
-
-                            <button class="btn " style="width: 12rem;">
-                            <div class="fs-4 fw-semibold text-primary"
-                                >
-                                <!--รวมเบิกจ่ายทั้งหมด-->
-                                {{ number_format((($otpsa1 + $otpsa2) / $budgets)* 100, 2) }}%
-                                {{ number_format((($otpsa1 + $otpsa2) ), 2) }}
-
-                            </div>
-                            <div>
-                            <small
-                                class="text-xl"
-                                >ใช้ไป งบกลางICT </small>
-                            </div>
-                        </button>
-
-                        <button class="btn " style="width: 12rem;">
-                            <div class="fs-4 fw-semibold text-primary"
-                                >
-                                {{ number_format((($itpsa1 + $itpsa2) / $budgets)* 100, 2) }}%
-                                {{ number_format((($itpsa1 + $itpsa2))* 100) }}
-
-                            </div>
-                            <div>
-                            <small
-                                class="text-xl"
-                                >ไช้ไป งบดำเนินงาน </small>
-                            </div>
-                        </button>
-                        <button class="btn " style="width: 12rem;">
-                            <div class="fs-4 fw-semibold text-primary"
-                                >
-                                <!--รวมเบิกจ่ายทั้งหมด-->
-                                {{ number_format((($utsc_pay_pa +  $utsc_pay) / $budgets)* 100, 2) }}%
-                                {{ number_format((($utsc_pay_pa +  $utsc_pay) ), 2) }}
-
-                            </div>
-                            <div>
-                            <small
-                                class="text-xl"
-                                >ได้ไป งบสาธารณูปโภค </small>
-                            </div>
-                        </button>
-
-
                         </div>
 
-
-
-
-
-
                     </div>
-
-
-
-
-
-                </div>
-
-
-
-
-
-
-
-
-
-
 
 
             </div>
@@ -568,64 +486,10 @@
             </div>
         </div>
 
-
-
-
-
-        <div class="mb-3 row">
-            <div class="col-sm-3 col-md-3 col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 1
-                            </div>
-
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 2
-                            </div>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 3
-                            </div>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title fs-5 fw-semibold">ไตรมาสที่ 4
-                            </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-        </div>
         <div class="mb-3 row">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title fs-5 fw-semibold">Project</div>
+                    <div class="card-title fs-5 fw-semibold">งาน/โครงการ</div>
                     <div id="gantt_here" style='width:100%; height:100vh;'></div>
                 </div>
             </div>
@@ -707,7 +571,8 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
         <!--<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>-->
         <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
-
+        <script src="//cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="//cdn.amcharts.com/lib/4/charts.js"></script>
     </x-slot:css>
     <x-slot:javascript>
         <!-- Resources -->
@@ -943,32 +808,30 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
 
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.balance-task.total_cost=== 0){
-                                    return '-';
+
+                            if (task.balance-task.total_pay === 0 ) {
+                                return  '-';
                             }
 
 
 
-
-                            if (task.type === "project") {
+                            else if (task.project_type = "1") {
                                 var tmp_class = task.total_pay > 0 ? 'green' : 'green';
                                 return '<span style="color:' + tmp_class + ';">'
                                     + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.balance-task.total_cost)
+                                }).format(task.balance-task.total_pay)
                                    '</span>';
                             }
-
-
-
-                            else if (task.type === "task" ) {
+                            else if (task.project_type = "2" ) {
                                 return  '<span style="color:' + tmp_class + ';">'
-                                    //+ new Intl.NumberFormat('th-TH', {
-                                   // style: 'currency',
-                                    //currency: 'THB'
-                                //}).format(task.total_pay)
-                                + task.type+    '</span>';
+                                    + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.balance-task.total_pay)
+                                '</span>';
+
                             } else
                             {
 
@@ -1192,6 +1055,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                     })
                 );
                 var data = {!! $chart_data_xy !!}
+
               //  var data1 = {!! $taskcosttotals !!}
               //  var date2 = {!! $taskcosttotals2_json !!}
                 //var date3 = {!! $taskconcosttotals !!}
@@ -1219,7 +1083,8 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                 xAxis.data.setAll(data);
                 var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
                     renderer: am5xy.AxisRendererY.new(root, {
-                        strokeOpacity: 0.1
+                        strokeOpacity: 0.1,
+
                     })
                 }));
 
@@ -1241,30 +1106,30 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
                         stacked: true,
 
                     });
-                    series.bullets.push(function () {
-  return am5.Bullet.new(root, {
-    locationY: 1.2,
-    sprite: am5.Label.new(root, {
-      text: "{valueY}",
-      stroke: root.interfaceColors.get("stroke"),
-      centerY: 5,
-      centerX: am5.p50,
-      populateText: true
-    })
-  });
+
+                    let yRenderer = yAxis.get("renderer");
+yRenderer.ticks.template.setAll({
+  minPosition: 0.0,
+  maxPosition: 1.1,
+  visible: true
 });
+yRenderer.labels.template.setAll({
+  minPosition: 0.0,
+  maxPosition: 1.1
+});
+
                     series.data.setAll(data);
                     // Make stuff animate on load
                     // https://www.amcharts.com/docs/v5/concepts/animations/
                     series.appear();
                     series.bullets.push(function() {
                         return am5.Bullet.new(root, {
-                            locationY: 0,
+                            locationY: 1 ,
                             sprite: am5.Label.new(root, {
                                 text: "{valueY}",
                                 populateText: true,
-                                fill: root.interfaceColors.get("alternativeText"),
-                                centerY: 5,
+                               // fill: root.interfaceColors.get("alternativeText"),
+                                centerY: 0,
                                 centerX: am5.p50,
                                 populateText: true
                             })
@@ -1299,7 +1164,7 @@ $color = $duration_p < 3 ? 'red' : 'rgb(5, 255, 5)';
 
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("c1");
+var root = am5.Root.new("");
 
   // Set themes
     // https://www.amcharts.com/docs/v5/concepts/themes/
@@ -1310,7 +1175,7 @@ var root = am5.Root.new("c1");
     // Create chart
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
     var chart = root.container.children.push(am5percent.PieChart.new(root, {
-        layout: root.verticalLayout
+
     }));
 
     // Create series
@@ -1318,8 +1183,7 @@ var root = am5.Root.new("c1");
     var series = chart.series.push(am5percent.PieSeries.new(root, {
 
 
-        valueField: "value",
-        categoryField: "category"
+        valueField: "value"
     }));
 
 
@@ -1332,22 +1196,25 @@ var root = am5.Root.new("c1");
     // Set data
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
     series.data.setAll([{
-value: {{ $budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
-category: "คงเหลือ"
-}, {
-value: {{($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
-category: "ใช้ไป"
-}
-]);
+    value: {{ $budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
+    category: "คงเหลือ:" + {{ number_format(($budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) ) / $budgets * 100, 4) }} + "%"
+},
+{
+    value: {{($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
+    category: "เบิกจ่ายทั้งหมด :" + {{ number_format(($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) / $budgets * 100, 4) }} + "%" + "\nงบกลาง ICT :" + {{ number_format(($otpsa1 + $otpsa2) / $budgets * 100, 4) }} + "%" + "\nงบดำเนินงาน :" + {{ number_format(($itpsa1 + $itpsa2) / $budgets * 100, 4) }} + "%" + "\nงบสาธารณูปโภค :" + {{ number_format(($utsc_pay_pa+$utsc_pay) / $budgets * 100, 4) }} + "%"
+}]);
+
+series.labels.template.setAll({
+  text: "{category}",
+  textType: "circular",
+  inside: true,
+  radius: 10
+});
 
     // Create legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-    var legend = chart.children.push(am5.Legend.new(root, {
-        centerX: am5.p50,
-        x: am5.p50,
-        marginTop: 15,
-        marginBottom: 15
-    }));
+
+
 
     legend.data.setAll(series.dataItems);
 
@@ -1375,7 +1242,7 @@ category: "ใช้ไป"
 
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("c2");
+var root = am5.Root.new("");
 
 // Set themes
     // https://www.amcharts.com/docs/v5/concepts/themes/
@@ -1412,10 +1279,14 @@ value: {{ $budgetscentralict-($otpsa1 + $otpsa2) }},
 category: "คงเหลือ"
 }, {
 value: {{($otpsa1 + $otpsa2) }},
-category: "ใช้ไป"
+category: "เบิกจ่ายทั้งหมด"
 }
 ]);
-
+series.slices.template.setAll({
+  fillOpacity: 0.5,
+  fill: am5.color(0xf60b0b),
+  strokeWidth: 2
+});
     // Create legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
     var legend = chart.children.push(am5.Legend.new(root, {
@@ -1437,7 +1308,7 @@ category: "ใช้ไป"
 
 <script>
     // Create root element
-    var root = am5.Root.new("c3");
+    var root = am5.Root.new("");
 
    // Set themes
     // https://www.amcharts.com/docs/v5/concepts/themes/
@@ -1474,9 +1345,11 @@ value: {{ $budgetsinvestment-($itpsa1 + $itpsa2) }},
 category: "คงเหลือ"
 }, {
 value: {{($itpsa1 + $itpsa2) }},
-category: "ใช้ไป"
+category: "เบิกจ่ายทั้งหมด"
 }
 ]);
+
+
 
     // Create legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
@@ -1484,7 +1357,8 @@ category: "ใช้ไป"
         centerX: am5.p50,
         x: am5.p50,
         marginTop: 15,
-        marginBottom: 15
+        marginBottom: 15,
+
     }));
 
     legend.data.setAll(series.dataItems);
@@ -1512,8 +1386,8 @@ category: "ใช้ไป"
  */
 
 // Create root and chart
-var root = am5.Root.new("c4");
-
+var root = am5.Root.new("");
+pieSeries.slices.template.fill = am5core.color("green");
 // Set themes
     // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([
@@ -1546,10 +1420,11 @@ var root = am5.Root.new("c4");
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
     series.data.setAll([{
 value: {{ $budgetsut-($utsc_pay_pa+$utsc_pay) }},
-category: "คงเหลือ"
+category: "คงเหลือ",
+color: am5core.color("green")
 }, {
 value: {{($utsc_pay_pa+$utsc_pay) }},
-category: "ใช้ไป"
+category: "เบิกจ่ายทั้งหมด"
 }
 ]);
 
@@ -1569,7 +1444,166 @@ category: "ใช้ไป"
     series.appear(1000, 100);
 
  // end am5.ready()
+
+
+
 </script>
+
+<script>
+
+    /**
+     * ---------------------------------------
+     * This demo was created using amCharts 4.
+     *
+     * For more information visit:
+     * https://www.amcharts.com/
+     *
+     * Documentation is available at:
+     * https://www.amcharts.com/docs/v4/
+     * ---------------------------------------
+     */
+
+    // Create chart instance
+    var chart = am4core.create("c1", am4charts.PieChart);
+
+    // Add data
+    chart.data = [{
+      "country": "คงเหลือ",
+      "litres":  {{ $budgets-($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay)}},
+      "color": am4core.color("#198754")
+    }, {
+      "country": " :เบิกจ่ายทั้งหมด"  + "\n"+{{ number_format(($otpsa1 + $otpsa2) / $budgets * 100, 4) }} + "%"+" :งบกลาง ICT :"  + "\n" + {{ number_format(($itpsa1 + $itpsa2) / $budgets * 100, 4) }} + "%" + " :งบดำเนินงาน" + "\n" + {{ number_format(($utsc_pay_pa+$utsc_pay) / $budgets * 100, 4) }} + "%" +"  :งบสาธารณูปโภค",
+
+
+
+      "litres":  {{($otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa+$utsc_pay) }},
+      "color": am4core.color("#0d6efd")
+    }, ];
+
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "litres";
+    pieSeries.dataFields.category = "country";
+    pieSeries.slices.template.propertyFields.fill = "color";
+
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.00')}% {category}";
+    </script>
+
+
+
+
+<script>
+
+/**
+ * ---------------------------------------
+ * This demo was created using amCharts 4.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v4/
+ * ---------------------------------------
+ */
+
+// Create chart instance
+var chart = am4core.create("c2", am4charts.PieChart);
+
+// Add data
+chart.data = [{
+  "country": "คงเหลือ",
+  "litres":  {{ $budgetscentralict-($otpsa1 + $otpsa2) }},
+  "color": am4core.color("#198754")
+}, {
+  "country": "เบิกจ่ายทั้งหมด",
+  "litres":  {{($otpsa1 + $otpsa2) }},
+  "color": am4core.color("#0d6efd")
+}, ];
+
+// Add and configure Series
+var pieSeries = chart.series.push(new am4charts.PieSeries());
+pieSeries.dataFields.value = "litres";
+pieSeries.dataFields.category = "country";
+pieSeries.slices.template.propertyFields.fill = "color";
+pieSeries.labels.template.text = "{value.percent.formatNumber('#.00')}% {category}";
+//chart.legend = new am4charts.Legend();
+</script>
+
+<script>
+
+    /**
+     * ---------------------------------------
+     * This demo was created using amCharts 4.
+     *
+     * For more information visit:
+     * https://www.amcharts.com/
+     *
+     * Documentation is available at:
+     * https://www.amcharts.com/docs/v4/
+     * ---------------------------------------
+     */
+
+    // Create chart instance
+    var chart = am4core.create("c3", am4charts.PieChart);
+
+    // Add data
+    chart.data = [{
+      "country": "คงเหลือ",
+      "litres":  {{ $budgetsinvestment-($itpsa1 + $itpsa2) }},
+      "color": am4core.color("#198754")
+    }, {
+      "country": "เบิกจ่ายทั้งหมด",
+      "litres":  {{($itpsa1 + $itpsa2) }},
+      "color": am4core.color("#0d6efd")
+    }, ];
+
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "litres";
+    pieSeries.dataFields.category = "country";
+    pieSeries.slices.template.propertyFields.fill = "color";
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.00')}% {category}";
+  //  chart.legend = new am4charts.Legend();
+    </script>
+
+
+<script>
+
+    /**
+     * ---------------------------------------
+     * This demo was created using amCharts 4.
+     *
+     * For more information visit:
+     * https://www.amcharts.com/
+     *
+     * Documentation is available at:
+     * https://www.amcharts.com/docs/v4/
+     * ---------------------------------------
+     */
+
+    // Create chart instance
+    var chart = am4core.create("c4", am4charts.PieChart);
+
+    // Add data
+    chart.data = [{
+      "country": "คงเหลือ",
+      "litres":  {{ $budgetsut-($utsc_pay_pa+$utsc_pay) }},
+
+      "color": am4core.color("#198754")
+    }, {
+      "country": "เบิกจ่ายทั้งหมด",
+      "litres":  {{($utsc_pay_pa+$utsc_pay) }},
+      "color": am4core.color("#0d6efd")
+    }, ];
+
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "litres";
+    pieSeries.dataFields.category = "country";
+    pieSeries.slices.template.propertyFields.fill = "color";
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.00')}% {category}";
+   // chart.legend = new am4charts.Legend();
+    </script>
     </x-slot:javascript>
 
 

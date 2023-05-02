@@ -5,13 +5,30 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }}">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/itdplaning-main/public">Home</a></li>
+                                <?php $segments = ''; ?>
+                                @for($i = 1; $i <= count(Request::segments()); $i++)
+                                    <?php $segments .= '/'. Request::segment($i); ?>
+                                    @if($i < count(Request::segments()))
+                                        <li class="breadcrumb-item">{{ Helper::projectsType($project->project_type ) }}-{{$project->reguiar_id}}</li>
+                                    @else
+                                        <li class="breadcrumb-item active">{{$project->project_name}}</li>
 
+
+
+                                    @endif
+                                @endfor
+                              <!-- Breadcrumb Menu-->
+
+
+                            </ol>
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}"
-                                    class="btn btn-warning text-white">Edit</a>
+                                    class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
                                 <a href="{{ route('project.task.create', $project->hashid) }}"
-                                    class="btn btn-success text-white">Add Task</a>
-                                <a href="{{ route('project.index') }}" class="btn btn-secondary">Back</a>
+                                    class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
+                                <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
@@ -760,7 +777,7 @@
                                                     @endforeach
                                                 @endif
                                                 @if ($task->subtask->count() > 0)
-                                                    <h6>Sub task</h6>
+                                                    <h6>รายการที่ใช้จ่าย</h6>
                                                     <ul>
                                                         @foreach ($task->subtask as $subtask)
                                                             <li>
@@ -778,10 +795,10 @@
                                                                     @endforeach
                                                                 @endif
                                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                                                    class="btn-sm btn btn-primary text-white"><i
+                                                                    class="btn-sm btn btn-primary text-white" target="_blank"><i
                                                                         class="cil-folder-open "></i></a>
                                                                 <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                                                    class="btn-sm btn btn-warning text-white"> <i
+                                                                    class="btn-sm btn btn-warning text-white" target="_blank"> <i
                                                                         class="cil-cog"></i> </a>
                                                                 <form
                                                                     action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -805,10 +822,10 @@
                                             </td>
                                             <td class="text-end">
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                                    class="btn btn-primary text-white"><i
+                                                    class="btn btn-primary text-white" target="_blank"><i
                                                         class="cil-folder-open "></i></a>
                                                 <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                                    class="btn btn-warning text-white"> <i class="cil-cog"></i> </a>
+                                                    class="btn btn-warning text-white" target="_blank"> <i class="cil-cog"></i> </a>
                                                 <form
                                                     action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                                     method="POST" style="display:inline">

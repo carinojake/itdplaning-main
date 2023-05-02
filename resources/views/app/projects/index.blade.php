@@ -4,16 +4,17 @@
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="โครงการทั้งหมด">
+            <x-card title="งาน/โครงการ">
               <x-slot:toolbar>
-                <a href="{{ route('project.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
+                <a href="{{ route('project.create') }}" class="btn btn-success text-white" target="_blank">งาน/โครงการ</a>
               </x-slot:toolbar>
               <table class="table table-responsive-sm table-striped" id="datatables">
                 <thead>
                   <tr>
                     <th>{{ __('ลำดับ') }}</th>
-                    <th>{{ __('โครงการ/งาน') }}</th>
                     <th>{{ __('ปีงบประมาณ') }}</th>
+                    <th>{{ __('งาน/โครงการ') }}</th>
+
                     <th></th>
                   </tr>
                 </thead>
@@ -108,12 +109,13 @@
               searchable: false
             },
             {
+              data: 'project_fiscal_year'
+            },
+            {
               data: 'project_name_output',
               name: 'project_name'
             },
-            {
-              data: 'project_fiscal_year'
-            },
+
             {
               className: "text-end",
               data: 'action',

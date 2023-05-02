@@ -1,221 +1,297 @@
 <x-app-layout>
     <x-slot:content>
-        <div class="container-fluid">
-            <div class="animated fadeIn">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $task->task_name }}">
-                            <form method="POST"
-                                action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="row g-3">
-                                @csrf
-                                {{ method_field('PUT') }}
-                                <div class="col-md-12">
-                                    <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span
-                                        class="text-danger">*</span>
-                                    <input type="text" class="form-control" id="task_name" name="task_name"
-                                        value="{{ $task->task_name }}" required autofocus>
-                                    <div class="invalid-feedback">
-                                        {{ __('ชื่อกิจกรรมซ้ำ') }}
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label> <span
-                                        class="text-danger">*</span>
-                                    <div class="form-check form-check-inline ms-5">
-                                        <input class="form-check-input" type="radio" name="task_status"
-                                            id="task_status1" value="1" checked>
-                                        <label class="form-check-label" for="task_status1">
-                                            อยู่ในระหว่างดำเนินการ
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="task_status"
-                                            id="task_status2" value="2">
-                                        <label class="form-check-label" for="task_status2">
-                                            ดำเนินการแล้วเสร็จ
-                                        </label>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        {{ __('สถานะงาน/โครงการ') }}
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="task_description"
-                                        class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
-                                    <textarea class="form-control" name="task_description" id="task_description" rows="10">
-                    {{ $task->task_description }}
-                  </textarea>
-                                    <div class="invalid-feedback">
-                                        {{ __('รายละเอียดกิจกรรม') }}
-                                    </div>
-                                </div>
+        <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }} {{ $task->task_name }}">
+
+            <x-slot:toolbar>
+                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    class="btn btn-warning text-dark">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
+                <!--<a href="{{ route('project.task.create', $project->hashid ) }}"
+                    class="btn btn-success text-white">เพิ่มงาน</a>
+                -->
+                    <a href="{{ route('project.task.createsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                        class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>
 
 
+                <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+            </x-slot:toolbar>
+            @if($task['task_parent'] == null)
+    <h2>{{ $task->task_name }}</h2>
+    <div class="container">
+    <div class="row">
+    <div class="col-sm">
+      <div class="row">
+          <div class="col-6">{{ __('ปีงบประมาณ') }}</div>
 
-                                <div class="col-md-12">
-                                    <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span
-                                        class="text-danger">*</span>
-                                    {{-- <input type="text" class="form-control" id="task_contract" name="task_contract"> --}}
-                                    <select name="task_contract" id="task_contract" class="from-control">
-                                        <option value="">ไม่มี</option>
-                                        @foreach ($contracts as $contract)
-                                            @if ($task->contract->count() > 0 && $contract->contract_id == $task->contract->first()->contract_id)
-                                                <option value="{{ $contract->contract_id }}"selected>
-                                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                </option>
-                                            @else
-                                                <option value="{{ $contract->contract_id }}">
-                                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                </option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        {{ __('สัญญา') }}
-                                    </div>
-                                </div>
+            {{ $project->project_fiscal_year }}
 
-
-
-
-
-                                <div class="col-md-6">
-                                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                    <span class="text-danger">*</span>
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_start_date"
-                                        data-coreui-format="dd/MM/yyyy"
-                                        data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                    <span class="text-danger">*</span>
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="task_end_date"
-                                        data-coreui-format="dd/MM/yyyy"
-                                        data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
-                                </div>
-
-                                <div class="row">
-                                    <h4>งบประมาณ</h4>
-
-
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                              <strong>เงินงบประมาณ </strong>
-                                              <div class="col-md-12">
-                                                <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-
-                                              {{ $contract->contract_name}}
-                                                <div class="invalid-feedback">
-                                                  {{ __('ระบุงบกลาง ICT') }}
-                                                </div>
-                                              </div>
-
-
-                                        <div class="col-md-12">
-                                          <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                                          id="task_budget_it_investment" name="task_budget_it_investment" min="0"  value="{{ $task->task_budget_it_investment }}">
-                                          <div class="invalid-feedback">
-                                            {{ __('ระบุงบดำเนินงาน') }}
-                                          </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <label for="task_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                                           id="task_budget_gov_utility" name="task_budget_gov_utility" min="0" value="{{ $task->task_budget_gov_utility }}">
-                                          <div class="invalid-feedback">
-                                            {{ __('ระบุค่าสาธารณูปโภค') }}
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      <div class="col-6">
-                                        <strong>ค่าใช้จ่าย</strong>
-                                        <div class="col-md-12">
-                                            <label for="task_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                            <input type="number" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0"  value="{{ $task->task_cost_it_operating }}" >
-                                            <div class="invalid-feedback">
-                                              {{ __('งบกลาง ICT') }}}
-                                          </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="task_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                            <input type="number" class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}">
-                                            <div class="invalid-feedback">
-                                              {{ __('งบดำเนินงาน') }}
-                                          </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="task_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0"  value="{{ $task->task_cost_gov_utility }}">
-                                            <div class="invalid-feedback">
-                                              {{ __('ระบุค่าสาธารณูปโภค') }}
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                    </div>
-
-
-
-
-                                </div>
-
-
-
-
-
-
-
-
-
-
-        <div class="col-md-6">
-            <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
-                class="text-danger">*</span>
-            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-            <div data-coreui-toggle="date-picker" id="task_pay_date" data-coreui-format="dd/MM/yyyy"
-                data-coreui-date="{{ date('m/d/Y', $task->task_pay_date) }}"></div>
         </div>
 
 
+    <div class="row">
+    <div class="col-6">{{ __('รายละเอียดงาน/โครงการ') }}</div>
+    {{ $task->task_description }}
+    </div>
 
-
-        <div class="col-md-12">
-            <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_pay"
-                name="task_pay" min="0" value="{{ $task->task_pay }}">
-            <div class="invalid-feedback">
-                {{ __('เบิกจ่าย') }}
+    </div>
+    <div class="col-sm">
+        <div class="row">
+            <div class="col-6">{{ __('งบลงทุน IT') }}</div>
+            {{ number_format($task->task_budget_it_operating) }}
             </div>
+            <div class="row">
+            <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
+            {{ number_format($task->task_budget_it_investment) }}
         </div>
+        <div class="row">
+            <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
+            {{ number_format($task->task_budget_gov_utility) }}
+            </div>
 
-        <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-        <x-button link="{{ route('project.show', $project->hashid) }}" class="btn-light text-black">
-            {{ __('coreuiforms.return') }}</x-button>
-        </form>
-        </x-card>
-        </div>
-        </div>
-        </div>
-        </div>
+    </div>
+    </div>
+    </div>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="50">No</th>
+                <th>Task Name</th>
+                <th>Date</th>
+                <th width="200"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($project->main_task as $task)
+                <tr>
+                    <td></td>
+                    <td>
+
+
+                        @if ($task->subtask->count() > 0)
+                            <h6>รายการที่ใช้จ่าย</h6>
+                            <ul>
+                                @foreach ($task->subtask as $subtask)
+                                    <li>
+                                        {{ $subtask->task_name }}
+                                        <span
+                                            class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_start_date)) }}</span>
+                                        <span
+                                            class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_end_date)) }}</span>
+
+                                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                            class="btn-sm btn btn-primary text-white" target="_blank"><i
+                                                class="cil-folder-open "></i></a>
+                                        <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                            class="btn-sm btn btn-warning text-white" target="_blank"> <i
+                                                class="cil-cog"></i> </a>
+                                        <form
+                                            action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                            method="POST" style="display:inline">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn-sm btn btn-danger text-white"><i
+                                                    class="cil-trash"></i></button>
+                                        </form>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+
+
+
+
+
+
+
+    @endif
+    @if ($contract)
+
+            <h6>มีสัญญา</h2>
+            <div class="container">
+                <div class="row">
+                <div class="col-sm">
+                  <div class="row">
+                      <div class="col-3">{{ __('สถานะสัญญา') }}</div>
+                      <div class="col-9">
+                          <?php
+                          echo isset($contract) && $contract->contract_status == 2
+                              ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>'
+                              : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
+                          ?>
+                      </div>
+                    </div>
+                  <div class="row">
+                <div class="col-3">{{ __('เลขที่สัญญา') }}</div>
+                <div class="col-9">{{ $contract->contract_number }} </div>
+                  </div>
+                <div class="row">
+                <div class="col-3">{{ __('คู่ค้า') }}</div>
+                <div class="col-9">{{ $contract->contract_juristic_id }}</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('เลขที่สั่งซื้อ') }}</div>
+                <div class="col-9">{{ $contract->contract_order_no }}</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('ประเภท') }}</div>
+                <div class="col-9">{{ $contract->contract_type }}</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('วิธีการได้มา') }}</div>
+                <div class="col-9">{{ $contract->contract_acquisition }}</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
+                <div class="col-9">{{   Helper::Date4(date('Y-m-d H:i:s',$contract->contract_start_date)) }}</div>
+                </div>
+
+                <div class="row">
+                <div class="col-3">{{ __('วันที่สิ้นสุดสัญญา') }}</div>
+                <div class="col-9">{{ Helper::Date4(date('Y-m-d H:i:s',$contract->contract_end_date))}}</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('จำนวนเดือน') }}</div>
+                <div class="col-3">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }} เดือน</div>
+                <div class="col-3">{{ __('จำนวนวัน') }}</div>
+                <div class="col-3">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }} วัน</div>
+                </div>
+                <div class="row">
+                <div class="col-3">{{ __('ดำเนินการมาแล้ว') }}</div>
+                <div class="col-3">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }} เดือน</div>
+                <div class="col-3">{{ __('ดำเนินการมาแล้ว') }}</div>
+                <div class="col-3">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse()) }} วัน</div>
+                </div>
+
+                <div class="row">
+                <div class="col-3">{{ __('เตือน เหลือเวลา') }}</div>
+                <div class="col-9" >
+
+                    {{
+                    \Carbon\Carbon::parse($contract->contract_end_date)
+                    ->diffInMonths(\Carbon\Carbon::parse($contract->contract_start_date))
+                    -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse())}}  เดือน;                </div>
+                </div>
+
+
+
+                </div>
+                <div class="col-sm">
+                <div class="row">
+                <div class="col-6">{{ __('บันทึกข้อความ') }}</div>
+                <div class="col-6">{{ $contract->contract_projectplan }}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('เลขที่ PR') }}</div>
+                <div class="col-6">{{ $contract->contract_pr }}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('จำนวนเงิน PR') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pr_budget) }}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('เลขที่ PA') }}</div>
+                <div class="col-6">{{ $contract->contract_pa }}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('จำนวนเงิน PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pa_budget) }}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_pr_budget-$contract->contract_pa_budget) }}</div>
+                </div>
+
+                <div class="row">
+                <div class="col-6">{{ __('จำนวนเงินคงต่อปี PA') }}</div>
+                <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget)}}</div>
+                </div>
+
+                <div class="row">
+                <div class="col-6">{{ __('refund_pa_status') }}</div>
+                <div class="col-6">{{($contract->contract_refund_pa_status)}}</div>
+                </div>
+                <div class="row">
+                <div class="col-6">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
+                <div class="col-6">{{ $contract->contract_owner }}</div>
+                </div>
+                </div>
+                </div>
+                @if($results->count() > 0)
+
+                <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Contract ID</th>
+
+                        <th>Contract Name</th>
+
+                        <th>Contract Number</th>
+
+                        <th>Contract Year</th>
+                        <th>Contract taskcon_id</th>
+                        <th>Contract taskcon name</th>
+                        <th>Contract taskcon pay</th>
+                        <!-- Changed from Contract Description to Contract Year -->
+
+                        <!-- Add other columns as needed -->
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach($results as $result)
+
+                        <tr>
+
+                            <td>{{ $result->contract_id }}</td>
+
+                            <td>{{ $result->contract_name }}</td>
+
+                            <td>{{ $result->contract_number }}</td>
+
+                            <td>{{ $result->contract_year }}</td>
+                            <td>{{ $result->taskcon_id }}</td>
+                            <td>{{ $result->taskcon_name }}</td>
+                            <td>{{ $result->taskcon_pay }}</td>
+
+
+                            <!-- Changed from contract_description to contract_year -->
+
+                            <!-- Add other data rows as needed -->
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+                </table>
+
+            @endif
+            @endif
+</x-card>
     </x-slot:content>
     <x-slot:css>
     </x-slot:css>
-    <x-slot:javascript>
 
+
+
+    <x-slot:javascript>
     </x-slot:javascript>
 </x-app-layout>

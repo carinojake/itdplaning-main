@@ -631,8 +631,9 @@ as d')
             $gantt[] = [
                 'id'                    => $project['project_id'],
                 'text'                  => $project['project_name'],
-                'start_date' => date('Y-m-d', strtotime($project['project_start_date'])),
-                'end_date' => date('Y-m-d', strtotime($project['project_end_date'])),
+                'start_date' => date('Y-m-d', ($project['project_start_date'])),
+                'end_date' => date('Y-m-d', ($project['project_end_date'])),
+                'project_type'                  => $project['project_type'],
 
                 'budget_gov_operating'  => $project['budget_gov_operating'],
                 'budget_gov_investment' => $project['budget_gov_investment'],
@@ -652,8 +653,8 @@ as d')
                 'project_fiscal_year'   => $project['project_fiscal_year'],
 
 
-            'open'                  => true,
-            'type'                  => 'project',
+          //  'open'                  => true,
+          //  'type'                  => 'project',
 
             'total_cost'                => $project['total_cost'],
 
@@ -804,7 +805,7 @@ as d')
 
 
 
-       ($gantt);
+      ($gantt);
         // dd ($costsum = ($__project_cost))  ;
        ($gantt = json_encode($gantt));
 

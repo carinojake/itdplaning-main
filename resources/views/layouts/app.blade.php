@@ -4,13 +4,16 @@
 
 <head>
   <base href="./">
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta name="description" content="Shibaza Framework">
   <meta name="author" content="CptMeow">
   <meta name="keyword" content="Shibaza">
+
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>{{ config('app.name', 'Shibaza Framework') }}</title>
   <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/favicon/apple-icon-57x57.png') }}">
   <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('assets/favicon/apple-icon-60x60.png') }}">
@@ -46,10 +49,13 @@
   @include('layouts.template.shared.sidebar')
 
   <div class="wrapper d-flex flex-column min-vh-100 bg-light bg-opacity-50 dark:bg-transparent">
+
     @include('layouts.template.shared.header')
+
     <div class="body flex-grow-1 px-3">
       {{ $content }}
     </div>
+
     @include('layouts.template.shared.footer')
   </div>
 
@@ -57,6 +63,10 @@
   <script src="{{ asset('vendors/@coreui/coreui-pro/dist/js/coreui.bundle.min.js') }}"></script>
   <script src="{{ asset('vendors/jquery/jquery-3.6.1.min.js') }}"></script>
   <script src="{{ asset('vendors/simplebar/dist/simplebar.min.js') }}"></script>
+
+   <!-- นำเข้าไฟล์ jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script>
     if (document.body.classList.contains('dark-theme')) {
       var element = document.getElementById('btn-dark-theme');
@@ -103,6 +113,10 @@
   </script>
   <!--JS PAGE-->
   {{ $javascript }}
+
+
+
 </body>
 
 </html>
+

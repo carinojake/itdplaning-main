@@ -7,7 +7,7 @@
             <x-card title="สัญญาทั้งหมด">
               <x-slot:toolbar>
                 <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
-                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
+
 
               </x-slot:toolbar>
 
@@ -15,8 +15,9 @@
                 <thead>
                   <tr>
                     <th>ลำดับ</th>
-                    <th>สัญญา</th>
                     <th>ปีงบประมาณ</th>
+                    <th>สัญญา</th>
+
                     <th></th>
                   </tr>
                 </thead>
@@ -100,15 +101,15 @@
               searchable: false
             },
             {
+              data: 'contract_fiscal_year'
+            },
+            {
               data: 'contract_number_output',
               name: 'contract_number'
             },
             {
               data: 'contract_name_output',
               name: 'contract_name'
-            },
-            {
-              data: 'contract_fiscal_year'
             },
             {
               className: "text-end",

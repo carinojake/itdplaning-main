@@ -13,41 +13,73 @@
         @endif
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="{{ __('แก้ไขข้อมูลงาน/โครงการ') }} {{ $project->project_name }}">
+            <x-card title="{{ __('แก้ไข') }} {{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }}">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/itdplaning-main/public">Home</a></li>
+                    <?php $segments = ''; ?>
+                    @for($i = 1; $i <= count(Request::segments()); $i++)
+                        <?php $segments .= '/'. Request::segment($i); ?>
+                        @if($i < count(Request::segments()))
+                            @if (Request::segment($i) == 'project' && $i == count(Request::segments()) - 1 && isset($project))
+                                <li class="breadcrumb-item">{{ $project->project_name }}</li>
+                                @elseif (Request::segment($i) == 'project' && $i == count(Request::segments())- 1 && isset($project))
+                                <li class="breadcrumb-item">{{ $project->project_name }}</li>
+                          @else
+                                <li class="breadcrumb-item">{{ Request::segment($i) }}</li>
+                            @endif
+                        @else
+                            <li class="breadcrumb-item active">{{ Request::segment($i) }}</li>
+                        @endif
+                    @endfor
+                </ol>
               <form method="POST" action="{{ route('project.update', $project->hashid) }}" class="row g-3">
                 @csrf
                 {{ method_field('PUT') }}
                 <div class="col-md-12">
-                  <label for="project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
-                  <div class="form-check form-check-inline ms-5">
-                    <input class="form-check-input" type="radio" name="project_type" id="project_type1" value="J" checked>
-                    <label class="form-check-label" for="project_type1">
-                      งานประจำ
-                    </label>
+                    <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="project_fiscal_year"   name="project_fiscal_year" value="{{ $project->project_fiscal_year }}" >
+                    <div class="invalid-feedback">
+                      {{ __('ชื่องาน/โครงการ ซ้ำ') }}
+                    </div>
                   </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="project_type" id="project_type2" value="P">
-                    <label class="form-check-label" for="project_type2">
-                      โครงการ
-                    </label>
-                  </div>
-                  <div class="invalid-feedback">
-                    {{ __('สถานะงาน/โครงการ') }}
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <label for="project_status" class="form-label">{{ __('สถานะงาน/โครงการ') }}</label> <span class="text-danger">*</span>
-                  <div class="form-check form-check-inline ms-5">
-                    <input class="form-check-input" type="radio" name="project_status" id="project_status1" value="1" checked>
-                    <label class="form-check-label" for="project_status1">
-                      อยู่ในระหว่างดำเนินการ
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="project_status" id="project_status2" value="2">
-                    <label class="form-check-label" for="project_status2">
-                      ดำเนินการแล้วเสร็จ
-                    </label>
+                  <div class="col-md-12">
+                      <label for="reguiar_id" class="form-label">{{ __('no.ชื่องาน/โครงการ') }}</label> <span class="text-danger"></span>
+                      <input type="text" class="form-control" id="reguiar_id" name="reguiar_id" value="{{ $project->reguiar_id }}">
+                      <div class="invalid-feedback">
+                        {{ __('no.ชื่องาน/โครงการ ') }}
+                      </div>
+                      <div class="col-md-12">
+                        <label for="project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
+                        <div class="form-check form-check-inline ms-5">
+                          <input class="form-check-input" type="radio" name="project_type" id="project_type1" value="1"  @checked($project->project_type == 1)>
+                          <label class="form-check-label" for="project_type1"   @checked($project->project_type == 1)>
+                            งานประจำ
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="project_type" id="project_type2" value="2"  @checked($project->project_type == 2)>
+                          <label class="form-check-label" for="project_type2"   @checked($project->project_type == 2)>
+                            โครงการ
+                          </label>
+                        </div>
+                        <div class="invalid-feedback">
+                          {{ __('สถานะงาน/โครงการ') }}
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <label for="project_status" class="form-label">{{ __('สถานะงาน/โครงการ') }}</label> <span class="text-danger">*</span>
+                        <div class="form-check form-check-inline ms-5">
+                          <input class="form-check-input" type="radio" name="project_status" id="project_status1" value="1" @checked($project->project_status == 1)>
+                          <label class="form-check-label" for="project_status1"  @checked($project->project_status == 1)>
+                            อยู่ในระหว่างดำเนินการ
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="project_status" id="project_status2" value="2" @checked($project->project_status == 2)>
+                          <label class="form-check-label" for="project_status2"  @checked($project->project_status == 1)>
+                            ดำเนินการแล้วเสร็จ
+                          </label>
+                        </div>
                   </div>
                   <div class="invalid-feedback">
                     {{ __('สถานะงาน/โครงการ') }}
@@ -69,115 +101,42 @@
                     {{ __('รายละเอียดงาน/โครงการ') }}
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="project_fiscal_year" name="project_fiscal_year" value="{{ $project->project_fiscal_year }}" required>
-                  <div class="invalid-feedback">
-                    {{ __('ชื่องาน/โครงการ ซ้ำ') }}
-                  </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="reguiar_id" class="form-label">{{ __('no') }}</label> <span class="text-danger"></span>
-                    <input type="text" class="form-control" id="reguiar_id" name="reguiar_id" value="{{ $project->reguiar_id }}">
-                    <div class="invalid-feedback">
-                      {{ __('no.ชื่องาน/โครงการ ') }}
-                    </div>
+
                 <div class="col-md-6">
                   <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="project_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $project->project_start_date) }}"></div>
+                  <div data-coreui-toggle="date-picker" id="project_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH" data-coreui-date="{{ date('m/d/Y', $project->project_start_date)  }} "></div>
                 </div>
                 <div class="col-md-6">
                   <label for="project_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="project_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $project->project_end_date) }}"></div>
+                  <div data-coreui-toggle="date-picker" id="project_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH" data-coreui-date="{{ date('m/d/Y', $project->project_end_date) }}"></div>
                 </div>
 
-                <div class="row">
-                    <h4>งบประมาณ</h4>
+
+                  <div class="row">
+
 
                     <div class="row">
-                      <div class="col-6">
-                        <strong>เงินงบประมาณ </strong>
-                        <div class="col-md-12">
-                          <label for="budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_it_operating" name="budget_it_operating"
-                           min="0" value="{{ $project->budget_it_operating }}">
+                        <h4>งบประมาณ</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                          <label for="budget_it_operating" class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                          <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                          <input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_operating" name="budget_it_operating" min="0" value="{{ $project->budget_it_operating }}">
                           <div class="invalid-feedback">
                             {{ __('ระบุงบกลาง ICT') }}
                           </div>
                         </div>
-                        <div class="col-md-12">
-                          <label for="project_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                          id="task_budget_it_investment" name="_budget_it_investment" min="0"  value="{{ $project->budget_it_investment }}">
-                          <div class="invalid-feedback">
-                            {{ __('ระบุงบดำเนินงาน') }}
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <label for="project_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                           id="project_budget_gov_utility" name="project_budget_gov_utility" min="0" value="{{ $project->budget_gov_utility }}">
-                          <div class="invalid-feedback">
-                            {{ __('ระบุค่าสาธารณูปโภค') }}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-6">
-                        <strong>ค่าใช้จ่าย</strong>
-                        <div class="col-md-12">
-                            <label for="project_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="project_cost_it_operating" name="project_cost_it_operating" min="0"  value="{{ $project->project_cost_it_operating }}" >
-                            <div class="invalid-feedback">
-                              {{ __('งบกลาง ICT') }}
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="project_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                            <input type="number"  placeholder="0.00" step="0.01" class="form-control" id="project_cost_it_investment" name="project_cost_it_investment" min="0"  value="{{ $project->project_cost_it_investment }}">
-                            <div class="invalid-feedback">
-                              {{ __('งบดำเนินงาน') }}
-                          </div>
-                        </div>
-
-
-
-
-                        <div class="col-md-12">
-                            <label for="project_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="project_cost_gov_utility" name="project_cost_gov_utility" min="0"  value="{{ $project->project_cost_gov_utility }}">
-                            <div class="invalid-feedback">
-                              {{ __('ระบุค่าสาธารณูปโภค') }}
-                            </div>
-                          </div>
-                        </div>
-
-                    </div>
-
-
-          {{-- <div class="row">
-                  <h4>งบประมาณ</h4>
-
-                  <div class="row">
-                    <div class="col-6">
-                      <strong>เงินงบประมาณ (งบประมาณขอรัฐบาล)</strong>
-                      <div class="col-md-12">
-                        <label for="budget_gov_operating" class="form-label">{{ __('งบดำเนินงาน (ค่าใช้สอยต่างๆ)') }}</label>
-                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_gov_operating" name="budget_gov_operating" min="0" value="{{ $project->budget_gov_operating }}">
+                    <div class="col-4">
+                        <label for="budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="{{ $project->budget_it_investment }}">
                         <div class="invalid-feedback">
-                          {{ __('ระบุงบดำเนินงาน (ค่าใช้สอยต่างๆ)') }}
+                          {{ __('ระบุงบดำเนินงาน') }}
                         </div>
                       </div>
-                      <div class="col-md-12">
-                        <label for="budget_gov_investment" class="form-label">{{ __('งบลงทุน IT (ครุภัณฑ์ต่างๆ)') }}</label>
-                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_gov_investment" name="budget_gov_investment" min="0" value="{{ $project->budget_gov_investment }}">
-                        <div class="invalid-feedback">
-                          {{ __('ระบุงบลงทุน IT (ครุภัณฑ์ต่างๆ)') }}
-                        </div>
-                      </div>
-                      <div class="col-md-12">
+
+                      <div class="col-md-4">
                         <label for="budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                         <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_gov_utility" name="budget_gov_utility" min="0" value="{{ $project->budget_gov_utility }}">
                         <div class="invalid-feedback">
@@ -186,25 +145,11 @@
                       </div>
                     </div>
 
-                    <div class="col-6">
-                      <strong>เงินงบกลาง IT</strong>
-                      <div class="col-md-12">
-                        <label for="budget_it_operating" class="form-label">{{ __('งบดำเนินงาน (ค่าใช้สอยต่างๆ)') }}</label>
-                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_it_operating" name="budget_it_operating" min="0" value="{{ $project->budget_it_operating }}">
-                        <div class="invalid-feedback">
-                          {{ __('ระบุงบดำเนินงาน (ค่าใช้สอยต่างๆ)') }}
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <label for="budget_it_investment" class="form-label">{{ __('งบลงทุน IT (ครุภัณฑ์ต่างๆ)') }}</label>
-                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="{{ $project->budget_it_investment }}">
-                        <div class="invalid-feedback">
-                          {{ __('ระบุงบลงทุน IT (ครุภัณฑ์ต่างๆ)') }}
-                        </div>
-                      </div>
+
+
 
                     </div>
-                  </div>--}}
+                  </div>
                 </div>
 
 
@@ -220,6 +165,7 @@
   <x-slot:css>
   </x-slot:css>
   <x-slot:javascript>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
   </x-slot:javascript>
 </x-app-layout>

@@ -10,6 +10,7 @@
   <meta name="author" content="CptMeow">
   <meta name="keyword" content="Bootstrap,Admin,Template,SCSS,HTML,RWD,Dashboard">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  @livewireStyles
   <title>{{ config('app.name', 'Laravel') }}</title>
   <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/favicon/apple-icon-57x57.png') }}">
   <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('assets/favicon/apple-icon-60x60.png') }}">
@@ -73,6 +74,7 @@
     }
   </script>
   <script></script>
+  @livewireScripts
 </body>
 
 </html>
