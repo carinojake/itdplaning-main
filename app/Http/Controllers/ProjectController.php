@@ -518,23 +518,24 @@ class ProjectController extends Controller
     {
         $project = new Project;
 
-  //      $request->validate([
-    //        'project_name'                   => 'required',
-      //      'date-picker-project_start_date' => 'required',
-        //    'date-picker-project_end_date'   => 'required',
-       // ]);
+        $request->validate([
+          'project_name'                   => 'required',
+          'reguiar_id'                   => 'required',
+            'date-picker-project_start_date' => 'required',
+            'date-picker-project_end_date'   => 'required',
+        ]);
 
         //convert date
-       // $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date')), 'Y-m-d');
-        //$end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date')), 'Y-m-d');
+        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date')), 'Y-m-d');
+        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date')), 'Y-m-d');
 
         $project->project_name        = $request->input('project_name');
         $project->project_description = $request->input('project_description');
-       // $project->project_type        = $request->input('project_type');
+        $project->project_type        = $request->input('project_type');
         $project->project_fiscal_year = $request->input('project_fiscal_year');
         $project->project_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $project->project_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-
+        $project->project_status = $request->input('project_status') ?? null;
         // $project->budget_gov = $request->input('budget_gov');
         // $project->budget_it  = $request->input('budget_it');
 
@@ -544,6 +545,8 @@ class ProjectController extends Controller
         $project->budget_it_operating   = $request->input('budget_it_operating');
         $project->budget_it_investment  = $request->input('budget_it_investment');
         $project->reguiar_id            = $request->input('reguiar_id');
+
+
         if ($project->save()) {
             return redirect()->route('project.index');
         }
@@ -683,7 +686,7 @@ class ProjectController extends Controller
     {
         $id        = Hashids::decode($project)[0];
         ($tasks     = Task::where('project_id', $id)->get());
-        $contracts = Contract::get();
+        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
         return view('app.projects.tasks.create', compact('contracts', 'project', 'tasks'));
     }
@@ -695,7 +698,7 @@ class ProjectController extends Controller
         $id = Hashids::decode($project)[0];
         //$project = Project::find($projectId);
         $tasks = Task::where('project_id', $id)->get();
-        $contracts = Contract::get();
+        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
         if ($task) {
             $taskId = Hashids::decode($task)[0];
@@ -750,6 +753,16 @@ class ProjectController extends Controller
         $task->task_pay                 = $request->input('task_pay');
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
         $task->task_type                 = $request->input('task_type');
+
+        $tasks      = Task::where('project_id', $id)
+        ->whereNot('task_id', $task)
+        ->get();
+        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
+
+
+
+
+
         if ($task->save()) {
 
             //insert contract
@@ -782,7 +795,7 @@ class ProjectController extends Controller
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
             ->get();
-        $contracts = Contract::get();
+            $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
         return view('app.projects.tasks.edit', compact('contracts', 'project', 'task', 'tasks'));
     }

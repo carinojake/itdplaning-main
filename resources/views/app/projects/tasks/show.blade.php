@@ -35,7 +35,7 @@
     </div>
     <div class="col-sm">
         <div class="row">
-            <div class="col-6">{{ __('งบลงทุน IT') }}</div>
+            <div class="col-6">{{ __('งบกลาง ICT') }}</div>
             {{ number_format($task->task_budget_it_operating) }}
             </div>
             <div class="row">
@@ -58,6 +58,7 @@
             <tr>
                 <th width="50">No</th>
                 <th>Task Name</th>
+                <th>m</th>
                 <th>Date</th>
                 <th width="200"></th>
             </tr>
@@ -75,6 +76,7 @@
                                 @foreach ($task->subtask as $subtask)
                                     <li>
                                         {{ $subtask->task_name }}
+                                        {{ $subtask->contract_peryear_pa_budget }}
                                         <span
                                             class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_start_date)) }}</span>
                                         <span
@@ -145,11 +147,11 @@
                 </div>
                 <div class="row">
                 <div class="col-3">{{ __('ประเภท') }}</div>
-                <div class="col-9">{{ $contract->contract_type }}</div>
+                <div class="col-9">{{ \Helper::contractType($contract->contract_type) }}</div>
                 </div>
                 <div class="row">
                 <div class="col-3">{{ __('วิธีการได้มา') }}</div>
-                <div class="col-9">{{ $contract->contract_acquisition }}</div>
+                <div class="col-9">{{ \Helper::contractAcquisition ($contract->contract_acquisition)  }}</div>
                 </div>
                 <div class="row">
                 <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
@@ -217,10 +219,10 @@
                 <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget)}}</div>
                 </div>
 
-                <div class="row">
+                <!--<div class="row">
                 <div class="col-6">{{ __('refund_pa_status') }}</div>
                 <div class="col-6">{{($contract->contract_refund_pa_status)}}</div>
-                </div>
+                </div>-->
                 <div class="row">
                 <div class="col-6">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
                 <div class="col-6">{{ $contract->contract_owner }}</div>
@@ -235,14 +237,13 @@
 
                     <tr>
 
-                        <th>Contract ID</th>
 
-                        <th>Contract Name</th>
 
-                        <th>Contract Number</th>
 
-                        <th>Contract Year</th>
-                        <th>Contract taskcon_id</th>
+
+
+
+
                         <th>Contract taskcon name</th>
                         <th>Contract taskcon pay</th>
                         <!-- Changed from Contract Description to Contract Year -->
@@ -259,14 +260,8 @@
 
                         <tr>
 
-                            <td>{{ $result->contract_id }}</td>
 
-                            <td>{{ $result->contract_name }}</td>
 
-                            <td>{{ $result->contract_number }}</td>
-
-                            <td>{{ $result->contract_year }}</td>
-                            <td>{{ $result->taskcon_id }}</td>
                             <td>{{ $result->taskcon_name }}</td>
                             <td>{{ $result->taskcon_pay }}</td>
 

@@ -925,6 +925,7 @@
                         width: 120,
                         label: "งบประมาณ",
                         tree: true,
+                        resize:true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.budget) {
@@ -944,6 +945,7 @@
                         width: 150,
                         label: "PA",
                         tree: true,
+                        resize:true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 1) {
@@ -970,6 +972,7 @@
                         width: 150,
                         label: "ไม่มี PA",
                         tree: true,
+                        resize:true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 2) {
@@ -997,7 +1000,7 @@
                         width: 100,
                         label: "การเบิกจ่าย",
                         tree: true,
-
+                        resize:true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
@@ -1033,7 +1036,7 @@
                         width: 100,
                         label: "รอการเบิกจ่าย",
                         tree: true,
-
+                        resize:true,
 
                                                 template: function(task) {
                                                     if (task.total_pay > 0) {
@@ -1089,6 +1092,7 @@
                         width: 100,
                         label: "คงเหลือ",
                         tree: true,
+                        resize:true,
 
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
@@ -1226,11 +1230,16 @@
                                 width: 600,
                                 scrollX: "scrollHor",
                                 scrollY: "scrollVer",
+
+
+
+
                                 config: leftGridColumns
                             },
                             {
                                 resizer: true,
-                                width: 1
+                                width: 1,
+                                height:20
                             },
                             {
                                 view: "timeline",

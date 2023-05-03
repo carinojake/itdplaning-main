@@ -406,6 +406,7 @@ class ContractController extends Controller
         $taskcon       = Taskcon::find($id_taskcon);
         $taskcons      = Taskcon::where('contract_id', $id_contract)
             ->whereNot('taskcon_id', $id_taskcon)
+
             ->get();
         $tasks = task::get();
         $contractcons = Contract::get();
