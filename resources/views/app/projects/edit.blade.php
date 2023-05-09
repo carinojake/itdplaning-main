@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
+            {{ Breadcrumbs::render('project.edit', $project) }}
             <div class="animated fadeIn">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -15,24 +16,7 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card
                             title="{{ __('แก้ไข') }} {{ Helper::projectsType($project->project_type) }} {{ $project->project_name }}">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('project.index') }}">Home</a></li>
-                                <?php $segments = ''; ?>
-                                @for ($i = 1; $i <= count(Request::segments()); $i++)
-                                    <?php $segments .= '/' . Request::segment($i); ?>
-                                    @if ($i < count(Request::segments()))
-                                        @if (Request::segment($i) == 'project' && $i == count(Request::segments()) - 1 && isset($project))
-                                            <li class="breadcrumb-item">{{ $project->project_name }}</li>
-                                        @elseif (Request::segment($i) == 'project' && $i == count(Request::segments()) - 1 && isset($project))
-                                            <li class="breadcrumb-item">{{ $project->project_name }}</li>
-                                        @else
-                                            <li class="breadcrumb-item">{{ Request::segment($i) }}</li>
-                                        @endif
-                                    @else
-                                        <li class="breadcrumb-item active">{{ Request::segment($i) }}</li>
-                                    @endif
-                                @endfor
-                            </ol>
+
 
 
 
@@ -41,7 +25,7 @@
                                 @csrf
                                 {{ method_field('PUT') }}
 
-                        <div class="row">
+                        <div class="row mt-3">
                                 <div class="col-md-3">
                                     <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
                                     <span class="text-danger">*</span>

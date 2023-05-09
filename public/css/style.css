@@ -2417,6 +2417,7 @@ html:not([dir=rtl]) .offset-11 {
 .form-label {
   margin-bottom: 0.5rem;
   color: var(--cui-form-label-color, );
+  font-weight: 800 !important;
 }
 
 .col-form-label {

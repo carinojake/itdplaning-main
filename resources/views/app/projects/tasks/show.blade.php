@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot:content>
+        {{ Breadcrumbs::render('project.task.show', $project,$task) }}
         <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }} {{ $task->task_name }}">
-
             <x-slot:toolbar>
                 <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                     class="btn btn-warning text-dark">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>

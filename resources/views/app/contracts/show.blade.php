@@ -245,85 +245,86 @@
 
               <table class="table">
                 <thead>
-                  <tr>
-                    <th width="50">No</th>
-                    <th>Task Name</th>
-                    <th>Date</th>
-                    <th width="200"></th>
-                  </tr>
+                    <tr>
+                        <th width="50">No</th>
+                        <th>Task Name</th>
+                        <th>Date</th>
+                        <th>ใช้จ่าย</th>
+                        <th>วันที่ ใช้จ่าย</th>
+                        <th width="200"></th>
+                    </tr>
                 </thead>
                 <tbody>
-                  @foreach ($contract->main_taskcon as $taskcon)
-                    <tr>
-                      <td></td>
-                      <td>
-                        {{ $taskcon->taskcon_name }} {!! $taskcon->taskcon_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+                    @foreach ($contract->main_taskcon as $taskcon)
+                        <tr>
+                            <td></td>
+                            <td>
+                                {{ $taskcon->taskcon_name }} {!! $taskcon->taskcon_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
 
-                        @if ($taskcon->subtaskcon->count() > 0)
-                          <h6>Sub task</h6>
-                          <ul>
-                            @foreach ($taskcon->subtaskcon as $subtaskcon)
-                              <li>
-                                {{ $subtaskcon->taskcon_name }}
-                                <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" class="btn-sm btn btn-primary text-white"><i class="cil-folder-open "></i></a>
-                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i> </a>
-                                <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}" method="POST" style="display:inline">
+                                @if ($taskcon->subtaskcon->count() > 0)
+                                    <h6>Sub task</h6>
+                                    <ul>
+                                        @foreach ($taskcon->subtaskcon as $subtaskcon)
+                                            <li>
+                                                {{ $subtaskcon->taskcon_name }}
+                                                <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}"
+                                                    class="btn-sm btn btn-primary text-white"><i
+                                                        class="cil-folder-open "></i></a>
+                                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}"
+                                                    class="btn-sm btn btn-warning text-white">
+                                                    <i class="cil-cog"></i> </a>
+                                                <form
+                                                    action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $subtaskcon->hashid]) }}"
+                                                    method="POST" style="display:inline">
 
-                                  @method('DELETE')
-                                  @csrf
-                                  <button class="btn-sm btn btn-danger text-white"><i class="cil-trash"></i></button>
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button
+                                                        class="btn-sm btn btn-danger text-white"><i
+                                                            class="cil-trash"></i></button>
+                                                </form>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </td>
+                            <td>
+                                <span
+                                    class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s',$taskcon->taskcon_start_date)) }}</span>
+                                -
+                                <span
+                                    class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s',$taskcon->taskcon_end_date)) }}</span>
+                            </td>
+                            <td>
+                                {{ number_format($taskcon->taskcon_pay) }}
+
+                            </td>
+                            <td>
+                                {{ $taskcon->taskcon_pay_date ? Helper::Date4($taskcon->taskcon_pay_date) : '' }}
+                            </td>
+
+
+                            <td class="text-end">
+
+                                <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
+                                    class="btn-sm btn btn-primary text-white"><i
+                                        class="cil-folder-open "></i></a>
+                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
+                                    class="btn-sm btn btn-warning text-white"> <i
+                                        class="cil-cog"></i> </a>
+                                <form
+                                    action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
+                                    method="POST" style="display:inline">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button class="btn btn-danger text-white"><i
+                                            class="cil-trash"></i></button>
                                 </form>
-                              </li>
-                            @endforeach
-                          </ul>
-                        @endif
-                      </td>
-                      <td>
-                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_start_date) }}</span> -
-                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_end_date) }}</span>
-                      </td>
-                      <td class="text-end">
-
-                        <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="btn-sm btn btn-primary text-white"><i class="cil-folder-open "></i></a>
-                        <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i> </a>
-                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" method="POST" style="display:inline">
-                          @method('DELETE')
-                          @csrf
-                          <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                  @endforeach
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
-              </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            </table>
 
 
 
@@ -332,7 +333,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <div id="gantt_here" style='width:100%; height:100vh;'></div>
+                        <div id="gantt_here" style='width:100%; height:60vh;'></div>
                     </div>
                 </div>
             </div>
@@ -406,15 +407,15 @@
         columns: [{
             name: "budget",
             width: 100,
-            label: "งบประมาณ",
+            label: "งบประมาณ/งวด",
             tree: true,
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-              if (task.budget) {
+              if (task.contract_pa_budget) {
                 return new Intl.NumberFormat('th-TH', {
                   style: 'currency',
                   currency: 'THB'
-                }).format(task.budget);
+                }).format(task.contract_pa_budget);
               } else {
                 return '';
               }
@@ -422,8 +423,10 @@
           },
           {
             name: "cost",
-            width: 100,
-            label: "ใช้จ่ายแล้ว",
+            width: 50,
+            label: "การเบิกจ่าย",
+            tree: true,
+             resize:true,
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
               if (task.cost) {
@@ -436,9 +439,68 @@
               }
             }
           },
+
+          {
+                        name: "-",
+                        width: 100,
+                        label: "รอการเบิกจ่าย",
+                        tree: true,
+                        resize:true,
+
+                                                template: function(task) {
+                                                    if (task.total_pay > 0) {
+                            return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.total_cost-task.total_pay) + '</span>';
+
+
+
+                        } else if (task.task_total_pay > 0) {
+                            let remainingCost = task.cost - task.task_total_pay;
+
+                            if (remainingCost > 0) {
+        return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(remainingCost) + '</span>';
+
+
+
+
+    } else {
+        return '-';
+    }
+} else if (task.task_type == 1) {
+                            if (task.cost - task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else {
+                                return '-';
+                            }
+                        } else if (task.task_type == 2) {
+                            if (task.cost - task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else {
+                                return '-';
+                            }
+                        } else {
+                            return '-';
+                        }
+
+
+                        }
+                    },
+
+
           {
             name: "balance",
-            width: 100,
+            width: 50,
             label: "คงเหลือ",
             template: function(task) {
               //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));

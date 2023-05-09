@@ -1,28 +1,12 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
+            {{ Breadcrumbs::render('project.show', $project) }}
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }}">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/itdplaning-main/public">Home</a></li>
-                                <?php $segments = ''; ?>
-                                @for($i = 1; $i <= count(Request::segments()); $i++)
-                                    <?php $segments .= '/'. Request::segment($i); ?>
-                                    @if($i < count(Request::segments()))
-                                        <li class="breadcrumb-item">{{ Helper::projectsType($project->project_type ) }}-{{$project->reguiar_id}}</li>
-                                    @else
-                                        <li class="breadcrumb-item active">{{$project->project_name}}</li>
 
-
-
-                                    @endif
-                                @endfor
-                              <!-- Breadcrumb Menu-->
-
-
-                            </ol>
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}"
                                     class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>

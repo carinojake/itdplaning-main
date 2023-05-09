@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "asantibanez/laravel-blade-sortable": "dev-master",
         "barryvdh/laravel-dompdf": "^2.0",
+        "diglactic/laravel-breadcrumbs": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "hashids/hashids": "^4.1",
         "jenssegers/date": "^4.0",

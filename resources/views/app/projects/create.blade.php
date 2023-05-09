@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
+            {{ Breadcrumbs::render('project.create') }}
             <div class="animated fadeIn">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -11,13 +12,13 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('เพิ่มข้อมูลงาน/โครงการ') }}">
 
                             <form method="POST" action="{{ route('project.store') }}" class="row g-3">
                                 @csrf
-                                <div class="row">
+                                <div class="row mt-3">
                                     <div class="col-md-3">
                                         <label for="project_fiscal_year"
                                             class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
@@ -71,7 +72,7 @@
                                           </label>
                                         </div>
                                   </div>
-
+                                  <div class="row mt-3">
                                   <div class="col-md-6">
                                     <label for="project_start_date"
                                         class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
@@ -88,11 +89,11 @@
                                     <div data-coreui-toggle="date-picker" id="project_end_date"
                                         data-coreui-format="dd/MM/yyyy"></div>
                                 </div>
+                                  </div>
 
 
 
-
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mt-3">
                                         <label for="project_name" class="form-label">{{ __('ชื่องาน/โครงการ') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="project_name" name="project_name"
@@ -101,7 +102,7 @@
                                             {{ __('ชื่องาน/โครงการ ซ้ำ') }}
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mt-3">
                                         <label for="project_description" class="form-label">{{ __('รายละเอียดงาน/โครงการ') }}</label>
                                         <textarea class="form-control" name="project_description" id="project_description" rows="10"></textarea>
                                         <div class="invalid-feedback">
@@ -110,10 +111,10 @@
                                       </div>
 
 
-                                      <div class="row">
+                                      <div class="row mt-3">
 
 
-                                        <div class="row">
+                                        <div class="row mt-3">
                                             <h4>งบประมาณ</h4>
                                             <div class="row">
                                                 <div class="col-md-4">

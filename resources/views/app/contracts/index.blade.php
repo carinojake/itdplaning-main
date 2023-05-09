@@ -4,9 +4,9 @@
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="สัญญาทั้งหมด">
+            <x-card title="สัญญา/ใบจ้าง ทั้งหมด">
               <x-slot:toolbar>
-                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา</a>
+                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a>
 
 
               </x-slot:toolbar>

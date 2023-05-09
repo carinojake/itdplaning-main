@@ -685,6 +685,7 @@ class ProjectController extends Controller
     public function taskCreate(Request $request, $project)
     {
         $id        = Hashids::decode($project)[0];
+        $project = $request->project;
         ($tasks     = Task::where('project_id', $id)->get());
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 

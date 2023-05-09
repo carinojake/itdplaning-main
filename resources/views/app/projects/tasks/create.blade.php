@@ -1,102 +1,82 @@
 <x-app-layout>
-  <x-slot:content>
-    <div class="container-fluid">
-      <div class="animated fadeIn">
-        @if ($errors->any())
-          <div class="alert alert-danger">
-            <ul>
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
-        @endif
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-            <x-card title="{{ __('เพิ่มกิจกรรม ') }} ">
-              <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
-                @csrf
+    <x-slot:content>
+      <div class="container-fluid">
+        {{ Breadcrumbs::render('project.task.create',$project) }}
 
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
-                    <span class="text-danger">*</span>
+        <div class="animated fadeIn">
+          @if ($errors->any())
+            <div class="alert alert-danger">
+              <ul>
+                @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
+          <div class="row">
 
-                        <select name="task_parent" id="task_parent" class="form-control">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-                            <option value="">ไม่มี</option>
-                            @foreach ($tasks as $task)
-                              <option value="{{ $task->task_id }}">{{ $task->task_name }}</option>
-                            @endforeach
-                          </select>
-                </select>
-                      </select>
+              <x-card title="{{ __('เพิ่มกิจกรรม ') }} ">
+
+
+
+                  <form method="POST" action="{{ route('project.task.create', $project) }}" class="row g-3">
+                  @csrf
+
+              <div class="row mt-3">
+
+                  <div class="col-md-12">
+                    <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="task_name" name="task_name" required autofocus>
+
+                  </div>
+
+
+                  <div class="row mt-3">
+                  <div class="col-md-6">
+
+                      <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
+                      <span class="text-danger">*</span>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="task_status" id="task_status1" value="1" checked >
+                          <label class="form-check-label" for="task_status1">
+                              ระหว่างดำเนินการ
+                          </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="task_status" id="task_status2" value="2" >
+                          <label class="form-check-label" for="task_status2">
+                              ดำเนินการแล้วเสร็จ
+                          </label>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row mt-3">
+                    <div class="col-md-6">
+                      <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
+                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                      <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy"></div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
+                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                      <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" ></div>
+                    </div>
+              </div>
+
+
+
+
+                  <div class="col-md-12 mt-3">
+                    <label for="task_description" class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
+                    <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
                     <div class="invalid-feedback">
-                        {{ __('กิจกรรมย่อย') }}
+                      {{ __('รายละเอียดกิจกรรม') }}
                     </div>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
-                    <span class="text-danger">*</span>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="task_status"
-                            id="task_status1" value="1" checked >
-                        <label class="form-check-label" for="task_status1">
-                            ระหว่างดำเนินการ
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="task_status"
-                            id="task_status2" value="2" >
-                        <label class="form-check-label" for="task_status2">
-                            ดำเนินการแล้วเสร็จ
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="row">
-                  <div class="col-md-6">
-                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy"></div>
-
                   </div>
-                  <div class="col-md-6">
-                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" ></div>
-                  </div>
-            </div>
-
-
-
-                <div class="col-md-12">
-                  <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="task_name" name="task_name" required autofocus>
-                  <div class="invalid-feedback">
-                    {{ __('ชื่อกิจกรรมซ้ำ') }}
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <label for="task_description" class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
-                  <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
-                  <div class="invalid-feedback">
-                    {{ __('รายละเอียดกิจกรรม') }}
-                  </div>
-                </div>
 
 
              <!--   <div class="col-md-12">
@@ -192,7 +172,7 @@
 
             </div>
         </div>
-
+    </div>
 
 
 

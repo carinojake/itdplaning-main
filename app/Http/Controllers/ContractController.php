@@ -12,6 +12,7 @@ use App\Models\Task;
 use App\Models\Taskcon;
 use App\Models\ContractHasTask;
 use App\Models\ContractHasTaskcon;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ContractController extends Controller
@@ -105,6 +106,69 @@ class ContractController extends Controller
 
         //dd(Hashids::encode($contract->task->task_id));
 
+
+                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
+                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
+             //       ($contract = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+
+                 //   ->leftJoin(
+               //         DB::raw('(select taskcons.contract_id,
+               //     sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                 //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_cost ,
+                 //   sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+                 //   from taskcons  group by taskcons.contract_id) as a'),
+                 //       'a.contract_id',
+                 //       '=',
+                 //       'contracts.contract_id'
+                 //   )
+
+                   // ->leftJoin(
+                 //       DB::raw('(select taskcons.contract_id,
+              //      sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                //    +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+               //     +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as cost_pa_1 ,
+               //     sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+               //     from tasks  where taskcons.taskcon_type=1 group by taskcons.contract_id) as ab'),
+                //        'ab.contract_id',
+                //        '=',
+                //        'contracts.contract_id'
+                //    )
+
+                   // ->leftJoin(
+                  //      DB::raw('(select taskcons.contract_id,
+                 //   sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                 //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))as cost_no_pa_2 ,
+                //    sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+                //    from taskcons  where taskcons.taskcon_type=2 group by taskcons.contract_id) as ac'),
+                //        'ac.contract_id',
+                //        '=',
+                //        'contracts.contract_id'
+                //    )
+
+                    // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+                    //->groupBy('projects.project_id')
+                   // ->where( 'contracts.contract_id', $id)
+                   // ->first()
+
+                    // ->toArray()
+                  //  );
+                    //dd($project);
+
+                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
+                 //   (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
+                 //   (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
+                 //   (float) $__budget     = $__budget_gov + $__budget_it;
+                 //   (float) $__cost       = (float) $project['project_cost'];
+                 //   (float) $__balance    = $__budget + (float) $project['project_cost'];
+                  //  $__project_cost     = [];
+
+
+
+
+
+
         $gantt[] = [
             'id'                    => $contract['contract_id'],
             'text'                  => $contract['contract_name'],
@@ -114,9 +178,74 @@ class ContractController extends Controller
             'open'                  => true,
             'type'                  => 'project',
             'duration'              => 360,
+            'contract_pa_budget'    => $contract['contract_pa_budget']
+
         ];
 
+
+
+
+
+        ($taskcons = DB::table('taskcons')
+        ->select('taskcons.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+        sum( COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum( COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum( COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as cost_disbursement,
+        sum( COALESCE(taskcons.taskcon_pay,0))  as total_pay
+        from taskcons  group by taskcons.taskcon_parent) as a'),
+         'a.taskcon_parent', '=', 'taskcons.taskcon_id')
+
+        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+        sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as cost_pa_1 ,
+        sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+        from taskcons
+        where taskcons.taskcon_type=1 group by taskcons.taskcon_parent) as ab'),
+        'ab.taskcon_parent', '=', 'taskcons.taskcon_id')
+
+
+        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+         sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as cost_no_pa_2 ,sum( COALESCE(taskcons.taskcon_pay,0))
+        as total_pay
+        from taskcons  where taskcons.taskcon_type=2 group by taskcons.taskcon_parent) as ac'),
+        'ac.taskcon_parent', '=', 'taskcons.taskcon_id')
+        ->where('contract_id',($id))
+        ->get()
+        ->toArray());
+
+
+
+
+
+       ($taskcons = json_decode(json_encode($taskcons), true));
+
         foreach ($contract->taskcon as $task) {
+
+            (float) $__budget_gov = (float) $task['taskcon_budget_gov_operating'] + (float) $task['taskcon_budget_gov_utility'] + (float) $task['taskcon_budget_gov_investment'];
+            (float) $__budget_it  = (float) $task['taskcom_budget_it_operating'] + (float) $task['taskcon_budget_it_investment'];
+            (float) $__budget     = $__budget_gov + $__budget_it;
+
+            (float) $__cost = array_sum([
+               // (double)$task['cost_disbursement'],
+                $task['taskcon_cost_gov_operating'],
+                $task['taskcon_cost_gov_investment'],
+                $task['taskcon_cost_gov_utility'],
+                $task['taskcom_cost_it_operating'],
+                $task['taskcon_cost_it_investment'],
+            ]);
+
+            (float) $__balance = $__budget - $__cost;
+
+
+
+
 
             $gantt[] = [
                 'id'                    => 'T' . $task['taskcon_id'] . $task['contract_id'],
@@ -126,6 +255,28 @@ class ContractController extends Controller
                 'parent'                => $task['taskcon_parent'] ? 'T' . $task['taskcon_parent'] . $task['contract_id'] : $task['contract_id'],
                 'type'                  => 'taskcon',
                 'open'                  => true,
+
+                'budget_gov_operating'  => $task['taskcon_budget_gov_operating'],
+                'budget_gov_investment' => $task['taskcon_budget_gov_investment'],
+                'budget_gov_utility'    => $task['taskcon_budget_gov_utility'],
+                'budget_gov'            => $__budget_gov,
+                'budget_it_operating'   => $task['taskcon_budget_it_operating'],
+                'budget_it_investment'  => $task['taskcon_budget_it_investment'],
+                'budget_it'             => $__budget_it,
+                'budget'                => $__budget,
+                'balance'               => $__balance,
+                'tbalance'               => $__balance,
+                'cost'                  => $__cost,
+
+
+
+         //   'cost_pa_1'             => $task['cost_pa_1'],
+           // 'cost_no_pa_2'             => $task['cost_no_pa_2'],
+           // 'cost_disbursement'     => $project['cost_disbursement'],
+                'pay'                   => $task['taskcon_pay'],
+             //   'cost_disbursement'     => $task['cost_disbursement'],
+             //   'task_total_pay'             => $task['total_pay'],
+                'taskcon_type'             => $task['taskcon_type']
 
                 // 'owner' => $project['project_owner'],
             ];
@@ -138,14 +289,27 @@ class ContractController extends Controller
         return view('app.contracts.show', compact('contract', 'gantt', 'duration_p'));
     }
 
-    public function create(Request $request)
+
+
+
+    public function create(Request $request,$project=null)
     {
-        return view('app.contracts.create');
+
+
+        $origin = $request->origin;
+        $project = $request->project;
+        $task = $request->taskHashid;
+        return view('app.contracts.create', compact('origin', 'project','task'));
     }
+
+
+
+
 
     public function store(Request $request)
     {
-        $contract = new Contract;;
+        $contract = new Contract;
+
         $request->validate([
             'contract_name'                   => 'required',
             'contract_number'                 => 'required',
@@ -156,7 +320,20 @@ class ContractController extends Controller
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
-        $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d');
+       // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
+        $sign_date_input = $request->input('date-picker-contract_sign_date');
+        $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
+
+        if ($sign_date_object !== false) {
+            $sign_date = $sign_date_object->format('Y-m-d');
+        } else {
+            $sign_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
+        }
+
+
+
+
+
 
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_number      = $request->input('contract_number');
@@ -179,7 +356,9 @@ class ContractController extends Controller
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
-
+        $origin = $request->input('origin');
+        $project = $request->input('project');
+        $task = $request->input('task');
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -190,10 +369,26 @@ class ContractController extends Controller
         // $contract->budget_it_operating   = $request->input('budget_it_operating');
         // $contract->budget_it_investment  = $request->input('budget_it_investment');
 
-        if ($contract->save()) {
-            return redirect()->route('contract.index');
+    //    if ($contract->save()) {
+      //      return redirect()->route('contract.index');
+       // }
+    //
+    if ($contract->save()) {
+        $origin = $request->input('origin');
+        $project = $request->input('project');
+        $task = $request->input('task');
+        echo $lastinsertedId = $contract->$contract_name;
+        if ($origin) {
+            return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
         }
+
+        return redirect()->route('contract.index');
     }
+
+
+
+
+}
 
     /**
      * Remove the specified resource from storage.

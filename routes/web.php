@@ -20,6 +20,10 @@ require __DIR__ . '/core.php';
 Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     //Project
+Route::get('/contract/{project}/create', [ContractController::class, 'create'])->name('contract.create');
+
+
+
     Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
     Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
     Route::post('/project/{project}/task/create', [ProjectController::class, 'taskStore'])->name('project.task.store');
