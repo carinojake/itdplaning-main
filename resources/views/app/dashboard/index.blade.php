@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="mb-3 row container-fluid">
+
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12">

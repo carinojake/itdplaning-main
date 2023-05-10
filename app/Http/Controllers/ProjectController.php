@@ -676,6 +676,8 @@ class ProjectController extends Controller
 
 
         // ตรวจสอบค่าตัวแปร
+        ($results);
+
         //dd($project, $task, $results);
 
         // ส่งข้อมูลไปยัง view

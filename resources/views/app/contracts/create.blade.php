@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot:content>
       <div class="container-fluid">
+
+        {{ Breadcrumbs::render('contract.create') }}
+
         <div class="animated fadeIn">
           @if ($errors->any())
             <div class="alert alert-danger">
@@ -19,34 +22,16 @@
 
   <a href="{{ route('project.task.createsub', $project) }}" class="btn btn-primary text-white">ไปยังหน้าการใช้จ่ายของงาน</a>--}}
 </x-slot:toolbar>
-<form method="POST" action="{{ route('contract.store') }}" class="row g-3" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('contract.store') }}" class="row g-3" enctype="multipart/form-data">
+
+
     @csrf
-    <input name="origin" value="{{ $origin }}">
+     <input type="hidden"name="origin" value="{{ $origin }}">
 
-    <input name="project" value="{{ $project }}">
+    <input type="hidden" name="project" value="{{ $project }}">
 
-    <input name="task" value="{{ $task }}">
-                {{--    <form method="POST" action="{{ route('contract.store') }}" class="row g-3" enctype="multipart/form-data">
+    <input type="hidden" name="task" value="{{ $task }}">
 
-                  @csrf
-                 <div class="col-md-12">
-                    <label for="contract_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
-                    <div class="form-check form-check-inline ms-5">
-                      <input class="form-check-input" type="radio" name="contract_type" id="contract_type1" value="J" checked>
-                      <label class="form-check-label" for="contract_type1">
-                        งานประจำ
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="contract_type" id="contract_type2" value="P">
-                      <label class="form-check-label" for="contract_type2">
-                        โครงการ
-                      </label>
-                    </div>
-                    <div class="invalid-feedback">
-                      {{ __('ประเภทงาน/โครงการ') }}
-                    </div>
-                  </div> --}}
                   <div class="row mt-3">
                   <div class="col-md-3">
                       <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
@@ -103,12 +88,12 @@
                   </div>
                   <div class="col-md-4">
                     <label for="contract_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                     <div data-coreui-toggle="date-picker" id="contract_end_date" data-coreui-format="dd/MM/yyyy"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="contract_sign_date" class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                     <div data-coreui-toggle="date-picker" id="contract_sign_date" data-coreui-format="dd/MM/yyyy"></div>
                   </div>
                   <div class="col-md-6">
@@ -126,8 +111,6 @@
                     </div>
                   </div>
 
-
-
                     <div class="col-md-12">
                       <label for="contract_projectplan" class="form-label">{{ __('หมายเหตุ') }}</label>
                       <input type="text" class="form-control" id="contract_projectplan" name="contract_projectplan" maxlength="50" >
@@ -136,23 +119,38 @@
                         {{ __('หมายเหตุ') }}
                       </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="contract_mm" class="form-label">{{ __('เลขที่ MM') }}</label> <span class="text-danger"></span>
+
+                        <input type="text" class="form-control" id="contract_mm" name="contract_mm" >
+                        <div class="invalid-feedback">
+                          {{ __(' ') }}
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="contract_mm_budget" class="form-label">{{ __('จำนวนเงิน  MM') }}</label> <span class="text-danger"></span>
+
+                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_mm_budget" name="contract_mm_budget" min="0">
+                      </div>
+
+
 
                     <div class="col-md-6">
                       <label for="contract_pr" class="form-label">{{ __('เลขที่ PR') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                       <input type="text" class="form-control" id="contract_pr" name="contract_pr" >
                       <div class="invalid-feedback">
                         {{ __('เลขที่สัญญา ซ้ำ') }}
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR / MM') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                      <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR ') }}</label> <span class="text-danger">*</span>
+
                       <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pr_budget" name="contract_pr_budget" min="0">
                     </div>
                     <div class="col-md-6">
                       <label for="contract_pa" class="form-label">{{ __('เลขที่ PA') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                       <input type="text" class="form-control" id="contract_pa" name="contract_pa" >
                       <div class="invalid-feedback">
                         {{ __('เลขที่สัญญา ซ้ำ') }}
@@ -160,23 +158,22 @@
                     </div>
                     <div class="col-md-6">
                       <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                       <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0">
                     </div>
                     <div class="col-md-6">
                       <label for="contract_peryear_pa_budget" class="form-label">{{ __('จำนวนเงินต่อปี PA') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                       <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0">
                     </div>
 
 
                     <div class="col-md-6">
                       <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> <span class="text-danger">*</span>
-                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                       <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" >
                     </div>
 
-                    <!--<div class="col-md-6">
+               <!--    <div class="col-md-6">
                       <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
                       <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" >
                     </div>
@@ -187,6 +184,14 @@
                           {{ __('เลือกไฟล์สัญญา') }}
                       </div>
                   </div>
+
+                  <div class="col-md-12">
+                    <label for="mm_file" class="form-label">{{ __('อัปโหลดไฟล์สัญญา') }}</label>
+                    <input type="file" class="form-control" id="mm_file" name="mm_file">
+                    <div class="invalid-feedback">
+                        {{ __('เลือกไฟล์สัญญา') }}
+                    </div>
+                </div>
                   <div class="col-md-12">
                       <label for="pr_file" class="form-label">{{ __('อัปโหลดไฟล์ PR') }}</label>
                       <input type="file" class="form-control" id="pr_file" name="pr_file">
@@ -207,8 +212,8 @@
                       <div class="invalid-feedback">
                           {{ __('เลือกไฟล์ CN') }}
                       </div>
-                  </div>  -->
-
+                  </div>
+                -->
                   <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                   @if($origin)
                       <x-button link="{{ route('project.task.createsub', ['projectHashid' => $origin, 'taskHashid' => $task]) }}" class="text-black btn-light">{{ __('coreuiforms.return') }}</x-button>
@@ -230,24 +235,31 @@
     <x-slot:css>
     </x-slot:css>
     <x-slot:javascript>
-      <script>
-          // Get references to the input fields
-          var prInput = document.getElementById('contract_pr_budget');
-          var paInput = document.getElementById('contract_pa_budget');
-          var refundInput = document.getElementById('contract_refund_pa_budget');
+        <script>
+            function handleSubmit(event) {
+                event.preventDefault();
 
-          // Add event listeners to the input fields to detect changes
-          prInput.addEventListener('input', updateRefund);
-          paInput.addEventListener('input', updateRefund);
+                const form = event.target;
+                const formData = new FormData(form);
 
-          // Function to update the refund input field based on the PR and PA input fields
-          function updateRefund() {
-            // Calculate the difference between the PR and PA input fields
-            var refund = prInput.value - paInput.value;
-
-            // Update the refund input field with the calculated value
-            refundInput.value = refund;
-          }
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                })
+                    .then((response) => response.json())
+                    .then((newContract) => {
+                        window.opener.addContractOption(newContract);
+                        window.close();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
         </script>
+
+
+
+
+
     </x-slot:javascript>
   </x-app-layout>

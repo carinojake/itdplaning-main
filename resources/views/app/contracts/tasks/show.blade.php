@@ -1,6 +1,7 @@
 <x-app-layout>
   <x-slot:content>
     <div class="container-fluid">
+        {{ Breadcrumbs::render('contract.task.show', $contract,$taskcon) }}
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

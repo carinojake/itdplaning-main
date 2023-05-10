@@ -2,6 +2,8 @@
   <x-slot:content>
 
     <div class="container-fluid">
+
+        {{ Breadcrumbs::render('contract.task.edit', $contract,$taskcon) }}
       <div class="animated fadeIn">
         @if ($errors->any())
           <div class="alert alert-danger">

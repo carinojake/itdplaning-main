@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
+            {{ Breadcrumbs::render('project.task.edit', $project,$task) }}
             <div class="animated fadeIn">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -11,7 +12,7 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row">
+                <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $task->task_name }}">
                             <form method="POST"
@@ -19,7 +20,7 @@
                                 class="row g-3">
                                 @csrf
                                 {{ method_field('PUT') }}
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-3">
                                     <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
                                     <span class="text-danger">*</span>
@@ -102,7 +103,7 @@
 
 
 
-                            <div class="row">
+                            <div class="row mt-3">
                             <div class="col-md-6">
                                 <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                                 {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
@@ -117,7 +118,7 @@
 
 
 
-                                <div class="col-md-12">
+                                <div class="col-md-12 mt-3">
                                     <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span
                                         class="text-danger">*</span>
                                     <input type="text" class="form-control" id="task_name" name="task_name"
@@ -129,7 +130,7 @@
 
 
 
-                                <div class="col-md-12">
+                                <div class="col-md-12 mt-3">
                                     <label for="task_description"
                                         class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
                                     <textarea class="form-control" name="task_description" id="task_description" rows="10">
@@ -140,7 +141,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row mt-3">
                                     <h4>งบประมาณ</h4>
 
                                     <div class="row">
@@ -172,7 +173,7 @@
                                         </div>
                                       </div>
 
-                                      <div class="row">
+                                      <div class="row mt-3">
 
                                         <h4>เบิกจ่าย</h4>
                                         <div class="col-md-6">

@@ -310,13 +310,18 @@ class ContractController extends Controller
     {
         $contract = new Contract;
 
+
+
+        $messages = [
+            'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+        ];
+
         $request->validate([
             'contract_name'                   => 'required',
             'contract_number'                 => 'required',
-            'date-picker-contract_start_date' => 'required',
-            'date-picker-contract_end_date'   => 'required',
-        ]);
-
+            'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
+            'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
+        ], $messages);
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
@@ -360,6 +365,99 @@ class ContractController extends Controller
         $project = $request->input('project');
         $task = $request->input('task');
 
+
+
+
+        // Get the ID of the newly created contract
+$idproject =  $project;
+$idtask =  $task;
+$id =$project.'/'.$task ;
+// Create a new directory for the contract if it doesn't exist
+$contractDir = public_path('uploads/contracts/' . $id);
+if (!file_exists($contractDir)) {
+    mkdir($contractDir, 0755, true);
+}
+
+
+        // Handle file upload
+            if ($request->hasFile('contract_file')) {
+                // Delete the old file if it exists
+                if ($contract->contract_file) {
+                    $oldFilePath = public_path('uploads/contracts/' . $id . '/' . $contract->contract_file);
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+
+                $file = $request->file('contract_file');
+                $filename = $contract->contract_number  . $contract->contract_fiscal_year .'.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/contracts/'), $filename);
+                $contract->contract_file  = $filename;
+            }
+// Handle pr_file upload
+if ($request->hasFile('pr_file')) {
+    // ...Your code for handling pr_file upload...
+    if ($contract->pr_file) {
+        $oldFilePath = public_path('uploads/contracts/' . $contract->pr_file);
+        if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
+        }
+    }
+
+    $file = $request->file('pr_file');
+    $filename = $id . '_PR_' . time() . '.' . $file->getClientOriginalExtension();
+    $file->move(public_path('uploads/contracts/'), $filename);
+    $contract->pr_file = $filename;
+}
+
+// Handle pa_file upload
+if ($request->hasFile('pa_file')) {
+    // ...Your code for handling pa_file upload...
+    if ($contract->pa_file) {
+        $oldFilePath = public_path('uploads/contracts/' . $contract->pa_file);
+        if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
+        }
+    }
+
+    $file = $request->file('pa_file');
+    $filename = $id . '_PA_' . time() . '.' . $file->getClientOriginalExtension();
+    $file->move(public_path('uploads/contracts/'), $filename);
+    $contract->pa_file = $filename;
+}
+
+// Handle cn_file upload
+if ($request->hasFile('cn_file')) {
+    // ...Your code for handling cn_file upload...
+    if ($contract->cn_file) {
+        $oldFilePath = public_path('uploads/contracts/' . $contract->cn_file);
+        if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
+        }
+    }
+
+    $file = $request->file('cn_file');
+    $filename = $id . '_CN_' . time() . '.' . $file->getClientOriginalExtension();
+    $file->move(public_path('uploads/contracts/'), $filename);
+    $contract->cn_file = $filename;
+}
+
+// Handle cn_file upload
+if ($request->hasFile('mm_file')) {
+    // ...Your code for handling cn_file upload...
+    if ($contract->mm_file) {
+        $oldFilePath = public_path('uploads/contracts/' . $contract->mm_file);
+        if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
+        }
+    }
+
+    $file = $request->file('mm_file');
+    $filename = $id . '_mm_' . time() . '.' . $file->getClientOriginalExtension();
+    $file->move(public_path('uploads/contracts/'), $filename);
+    $contract->mm_file = $filename;
+}
+
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
 
@@ -373,11 +471,20 @@ class ContractController extends Controller
       //      return redirect()->route('contract.index');
        // }
     //
+
+
+
+
     if ($contract->save()) {
         $origin = $request->input('origin');
         $project = $request->input('project');
         $task = $request->input('task');
-        echo $lastinsertedId = $contract->$contract_name;
+
+        // บันทึกข้อมูลลงใน session
+        session()->flash('contract_id', $contract->contract_id);
+        session()->flash('contract_number', $contract->contract_number);
+        session()->flash('contract_name', $contract->contract_name);
+
         if ($origin) {
             return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
         }
@@ -388,6 +495,18 @@ class ContractController extends Controller
 
 
 
+
+}
+public function download($id)
+{
+    $contract = Contract::findOrFail($id);
+
+    if ($contract->contract_file) {
+        $filePath = public_path('uploads/contracts/'.$id . $contract->contract_file);
+        return response()->download($filePath, $contract->contract_file);
+    }
+
+    return abort(404);
 }
 
     /**

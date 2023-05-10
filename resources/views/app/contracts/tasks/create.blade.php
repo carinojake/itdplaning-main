@@ -1,6 +1,8 @@
 <x-app-layout>
   <x-slot:content>
     <div class="container-fluid">
+
+        {{ Breadcrumbs::render('contract.task.create',$contract) }}
       <div class="animated fadeIn">
         @if ($errors->any())
           <div class="alert alert-danger">
@@ -13,7 +15,7 @@
         @endif
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="{{ __('เพิ่มกิจกรรม (สัญญา)') }}">
+            <x-card title="{{ __('เพิ่มค่าใช้จ่าย ( ครั้งเดียว/งวด)') }}">
              <form method="POST" action="{{ route('contract.task.store', $contract) }}" class="row g-3">
 
                 @csrf
@@ -45,9 +47,9 @@
                   </div>
                 </div>
 
-                <div class="col-md-12">
+               {{-- <div class="col-md-12">
                   <label for="taskcon_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
-                  {{-- <input type="text" class="form-control" id="taskcon_contract" name="taskcon_contract"> --}}
+                   <input type="text" class="form-control" id="taskcon_contract" name="taskcon_contract">
                   <select name="taskcon_contract" id="taskcon_contract" class="from-control">
                     <option value="">ไม่มี</option>
                     @foreach ($contractcons as $contract)
@@ -57,7 +59,7 @@
                   <div class="invalid-feedback">
                     {{ __('สัญญา') }}
                   </div>
-                </div>
+                </div>--}}
 
                 <div class="col-md-6">
                   <label for="taskcon_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>

@@ -1,13 +1,14 @@
 <x-app-layout>
   <x-slot:content>
     <div class="container-fluid">
+        {{ Breadcrumbs::render('contract.show',$contract) }}
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="{{ $contract->contract_name }}">
               <x-slot:toolbar>
                 <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning">Edit</a>
-                <a href="{{ route('contract.task.create', $contract->hashid) }}" class="text-white btn btn-success">Add Task</a>
+                <a href="{{ route('contract.task.create', $contract->hashid) }}" class="text-white btn btn-success">เพิ่มค่าใช้จ่าย</a>
 
                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
               </x-slot:toolbar>
@@ -167,9 +168,18 @@
             </div>
               <div class="col-sm">
               <div class="row">
-                <div class="col-6">{{ __('บันทึกข้อความ') }}</div>
+                <div class="col-6">{{ __('หมายเหตุ') }}</div>
                 <div class="col-6">{{ $contract->contract_projectplan }}</div>
               </div>
+              <div class="row">
+                <div class="col-6">{{ __('เลขที่ MM') }}</div>
+                <div class="col-6">{{ $contract->contract_mm }}</div>
+              </div>
+              <div class="row">
+                <div class="col-6">{{ __('จำนวนเงิน MM') }}</div>
+                <div class="col-6">{{ $contract->contract_mm_bodget }}</div>
+              </div>
+
               <div class="row">
                 <div class="col-6">{{ __('เลขที่ PR') }}</div>
                 <div class="col-6">{{ $contract->contract_pr }}</div>
@@ -196,6 +206,12 @@
                 <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget)}}</div>
               </div>
 
+
+
+
+
+
+
               <!--<div class="row">
                 <div class="col-6">{{ __('refund_pa_status') }}</div>
                 <div class="col-6">{{($contract->contract_refund_pa_status)}}</div>
@@ -206,6 +222,65 @@
               </div>
             </div>
          </div>
+
+         <div class="row">
+            <div class="col-6">{{ __('สัญญา File') }}</div>
+            <div class="col-6">
+                @if ($contract->contract_file)
+                    <a href="{{ url('uploads/contracts/' . $contract->contract_file) }}"
+                        target="_blank">{{ __('Download Contract File') }}</a>
+                @else
+                    {{ __('No file uploaded') }}
+                @endif
+            </div>
+        </div>
+
+
+        <!-- Add this for pr_file -->
+        <div class="row">
+            <div class="col-6">{{ __('PR File') }}</div>
+            <div class="col-6">
+                @if ($contract->pr_file)
+                    <a href="{{ url('uploads/contracts/' . $contract->pr_file) }}"
+                        target="_blank">{{ __('Download PR File') }}</a>
+                @else
+                    {{ __('No file uploaded') }}
+                @endif
+            </div>
+        </div>
+
+        <!-- Add this for pa_file -->
+        <div class="row">
+            <div class="col-6">{{ __('PA File') }}</div>
+            <div class="col-6">
+                @if ($contract->pa_file)
+                    <a href="{{ url('uploads/contracts/' . $contract->pa_file) }}"
+                        target="_blank">{{ __('Download PA File') }}</a>
+                @else
+                    {{ __('No file uploaded') }}
+                @endif
+            </div>
+        </div>
+
+        <!-- Add this for cn_file -->
+        <div class="row">
+            <div class="col-6">{{ __('CN File') }}</div>
+            <div class="col-6">
+                @if ($contract->cn_file)
+                    <a href="{{ url('uploads/contracts/' . $contract->cn_file) }}"
+                        target="_blank">{{ __('Download CN File') }}</a>
+                @else
+                    {{ __('No file uploaded') }}
+                @endif
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
           {{--    <table class="table">
                 <thead>
                   <tr>

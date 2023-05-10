@@ -1,6 +1,8 @@
 <x-app-layout>
   <x-slot:content>
     <div class="container-fluid">
+
+        {{ Breadcrumbs::render('project.task.createsub',$project,$task) }}
       <div class="animated fadeIn">
         @if ($errors->any())
           <div class="alert alert-danger">
@@ -68,7 +70,15 @@
                           </label>
                         </div>
                 </div>
-
+                @if (session('contract_id'))
+                ID: {{ session('contract_id') }}
+            @endif
+            @if (session('contract_number'))
+                Number: {{ session('contract_number') }}
+            @endif
+            @if (session('contract_name'))
+                Name: {{ session('contract_name') }}
+            @endif
                 <div class="row">
                     <div class="col-md-9">
                         <div class="form-group">
@@ -76,17 +86,24 @@
                             <select name="task_contract" id="task_contract" class="form-control">
                                 <option value="">ไม่มี</option>
                                 @foreach ($contracts as $contract)
-                                    <option value="{{ $contract->contract_id }}">[{{ $contract->contract_number }}]{{ $contract->contract_name }}</option>
+                                    <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                    </option>
                                 @endforeach
                             </select>
+
                             <div class="invalid-feedback">
                                 {{ __('สัญญา') }}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3 mt-4">
-    <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a>
-</div>
+                      {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a>--}}
+                        <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white" target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
+
+
+
+                    </div>
 
 
 

@@ -64,7 +64,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($project->main_task as $task)
+
                 <tr>
                     <td></td>
                     <td>
@@ -105,16 +105,9 @@
 
                     </td>
                 </tr>
-            @endforeach
+
         </tbody>
     </table>
-
-
-
-
-
-
-
 
     @endif
     @if ($contract)
