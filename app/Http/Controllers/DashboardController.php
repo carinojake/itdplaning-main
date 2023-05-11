@@ -92,6 +92,9 @@ class DashboardController extends Controller
         ($budgetsinvestment = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw(' COALESCE(budget_it_investment,0)')));
         ($budgetsut  = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
         ///จ่ายงบict
+
+
+
         ($taskcostict = DB::table('tasks')
             ->selectRaw('sum(
       COALESCE(task_cost_it_operating, 0)
@@ -557,7 +560,7 @@ as d')
 
            // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
                //->groupBy('projects.project_id')
-               ->where('project_fiscal_year', 2566)
+               ->where('project_fiscal_year', $fiscal_year)
 
         ->get()
         ->toArray());
@@ -780,7 +783,7 @@ as d')
             ->where ('tasks.task_cost_it_operating','>', 1)
             ->where('tasks.task_type', 1)
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('project_fiscal_year', 2566)
+             ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($operating_pay_sum_1));
             ($otpsa1 = $json[0]->iv);
@@ -793,7 +796,7 @@ as d')
            ->where ('tasks.task_cost_it_operating','>', 2)
            ->where('tasks.task_type', 2)
            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('project_fiscal_year', 2566)
+             ->where('project_fiscal_year',  $fiscal_year)
            ->get());
            ($json = json_decode($operating_pay_sum_2));
           ($otpsa2 = $json[0]->iv2);
@@ -804,17 +807,18 @@ as d')
              //->where('tasks.task_type', 1)
              ->where('tasks.task_type', 1)
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('project_fiscal_year', 2566)
+             ->where('project_fiscal_year',  $fiscal_year)
              ->get());
              ($json = json_decode($operating_pa_sum));
              ($ospa = $json[0]->ospa);
             ($ospa = (float)$ospa);
+
             ($operating_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As osa')
              //->where('tasks.task_type', 1)
              ->where('tasks.task_type', 2)
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('project_fiscal_year', 2566)
+             ->where('project_fiscal_year',  $fiscal_year)
              ->get());
              ($json = json_decode($operating_sum));
              ($osa = $json[0]->osa);
@@ -823,7 +827,7 @@ as d')
            ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
             ->where('tasks.task_type', 1)
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($investment_pa_sum));
             ($ispa = $json[0]->ispa);
@@ -832,7 +836,7 @@ as d')
             ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As isa')
             ->where('tasks.task_type',2)
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($investment_sum));
             ($isa = $json[0]->isa);
@@ -841,7 +845,7 @@ as d')
             ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
             ->where('tasks.task_budget_gov_investment')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($investment_total_pay_sum));
             ($itpsa = $json[0]->iv);
@@ -853,7 +857,7 @@ as d')
            ->where ('tasks.task_cost_it_investment','>', 1)
            ->where('tasks.task_type', 1)
            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-           ->where('project_fiscal_year', 2566)
+           ->where('project_fiscal_year',  $fiscal_year)
            ->get());
            ($json = json_decode($investment_pay_sum_1));
            ($itpsa1 = $json[0]->iv);
@@ -864,7 +868,7 @@ as d')
            ->where ('tasks.task_cost_it_investment','>', 1)
            ->where('tasks.task_type', 2)
            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-           ->where('project_fiscal_year', 2566)
+           ->where('project_fiscal_year',  $fiscal_year)
            ->get());
            ($json = json_decode($investment_pay_sum_2));
            ($itpsa2 = $json[0]->iv);
@@ -876,7 +880,7 @@ as d')
            ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
            ->where('tasks.task_type',1)
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
            ->get());
            ($json = json_decode($ut_pa_sum));
            ($utpcs = $json[0]->utpcs);
@@ -888,7 +892,7 @@ as d')
            ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utsc')
            ->where('tasks.task_type',2)
            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-           ->where('project_fiscal_year', 2566)
+           ->where('project_fiscal_year',  $fiscal_year)
            ->get());
            ($json = json_decode($ut_sum));
            ($utsc = $json[0]->utsc);
@@ -901,7 +905,7 @@ as d')
             ->where('tasks.task_type',2)
             ->whereNotNull('tasks.task_cost_gov_utility')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_pay_sum));
             ($utsc_pay = $json[0]->utsc_pay);
@@ -916,7 +920,7 @@ as d')
      ->where('tasks.task_type',1)
      ->whereNotNull('task_cost_gov_utility')
      ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
      ->get());
      ($json = json_decode($ut_pay_pa_sum));
      ($utsc_pay_pa = $json[0]->utsc_pay_pa);

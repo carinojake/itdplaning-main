@@ -12,8 +12,8 @@
     <div class="input-group mb-3">
         <select name="fiscal_year" class="form-select">
             @for($i = 2564; $i <= date('Y')+543+1; $i++)
-            <option value="{{ $i }}" {{ (date('Y')+543 == $i) ? 'selected' : '' }}>{{ $i }}</option>
-        @endfor
+            <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
+            @endfor
             <!-- เพิ่มตัวเลือกเพิ่มเติมตามที่จำเป็น -->
         </select>
         <button class="btn btn-outline-secondary" type="submit">Submit</button>
@@ -562,6 +562,28 @@
 
         <!-- HTML -->
 
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.form-select').on('change', function(e){
+                    e.preventDefault();
+                    var fiscal_year = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('dashboard.index') }}",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            fiscal_year: fiscal_year,
+                        },
+                        success: function(response){
+                            // จัดการกับ response ที่ได้รับจาก server
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            // จัดการกับ error
+                        }
+                    });
+                });
+            });
+        </script>
         <script>
            gantt.plugins({
                 marker: true,
