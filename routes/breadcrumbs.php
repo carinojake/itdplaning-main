@@ -87,6 +87,16 @@
                 $trail->push($task->task_name,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]   ) );
                 $trail->push('Create');
             });
+
+
+      // 7 projects.task.editsub   มีแล้ว
+      Breadcrumbs::for('project.task.editsub', function (BreadcrumbTrail $trail, $project, $task) {
+        $trail->push('Project', route('project.index'));
+        $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
+        //$trail->push('Task',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
+        $trail->push($task->task_name);
+        $trail->push('EditSub');
+    });
         ////////////////////////////////////////////////////////////////////////////////////////
 
         //  contract 7 มีทั้ง
@@ -147,15 +157,6 @@
             $trail->push('Edit');
         });
 
-        //// Home > Blog
-        //Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
-        //    $trail->parent('home');
-        //    $trail->push('Blog', route('blog'));
-        //});
-        //
-        //// Home > Blog > [Category]
-        //Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {
-        //    $trail->parent('blog');
-        //    $trail->push($category->title, route('category', $category));
-        //});
-        //
+
+
+

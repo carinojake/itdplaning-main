@@ -22,7 +22,7 @@
                                 {{ method_field('PUT') }}
                             <div class="row mt-3">
                                 <div class="col-md-3">
-                                    <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
+                                    <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                     <span class="text-danger">*</span>
                                     {{-- <input type="text" class="form-control" id="task_parent" name="task_parent"> --}}
                                     <select name="task_parent" id="task_parent" class="form-control">
@@ -34,7 +34,7 @@
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">
-                                        {{ __('กิจกรรมย่อย') }}
+                                        {{ __('กิจกรรม') }}
                                     </div>
                                 </div>
                                 <div class="col-md-3">

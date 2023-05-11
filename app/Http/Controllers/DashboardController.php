@@ -14,16 +14,11 @@ use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 
+
 class DashboardController extends Controller
 
 
-{
-
-
-
-
-
-    /**
+{    /**
      * Create a new controller instance.
      *
      * @return void
@@ -37,7 +32,10 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
-
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
 
 
 
@@ -52,19 +50,14 @@ class DashboardController extends Controller
 
 
         ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-        ->where('projects.project_fiscal_year', '=', 2566)
+        ->where('projects.project_fiscal_year', '=', $fiscal_year)
         ->whereNotNull('tasks.task_pay_date')
         ->groupBy('task_pay_month')
-       ->orderByRaw("CASE task_pay_month WHEN 'ต.ย. 2565' THEN 1 WHEN 'พ.ย. 2565' THEN 2 WHEN 'ธ.ค. 2565' THEN 3 WHEN 'ม.ค. 2566' THEN 4 WHEN 'ก.พ. 2566' THEN 5 WHEN 'มี.ค. 2566' THEN 6 WHEN 'เม.ย. 2566' THEN 7 WHEN 'พ.ค. 2566' THEN 8 WHEN 'มิ.ย. 2566' THEN 9 WHEN 'ก.ค. 2566' THEN 10 WHEN 'ส.ค. 2566' THEN 11 WHEN 'ก.ย. 2566' THEN 12 END")
+        ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
         ->get()
        ->toJson(JSON_NUMERIC_CHECK)
 )
         ;
-
-
-
-
-
     // Convert the chart data to an array
     ($chart_data = $task_pay_xy);
 
@@ -72,10 +65,10 @@ class DashboardController extends Controller
     ($chart_data_xy = ($chart_data));
 
 
-        ($contracts = Contract::where('contract_fiscal_year', 2566)->count());
-        $projects  = Project::where('project_fiscal_year', 2566)->count();
-        ($project_type_j  = Project::where('project_type', 'J')->where('project_fiscal_year', 2566)->count());
-        ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', 2566)->count());
+        ($contracts = Contract::where('contract_fiscal_year', $fiscal_year)->count());
+        $projects  = Project::where('project_fiscal_year', $fiscal_year)->count();
+        ($project_type_j  = Project::where('project_type', 'J')->where('project_fiscal_year', $fiscal_year)->count());
+        ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', $fiscal_year)->count());
 
 
        // $rebuts = contract::count($contract->taskcont);
@@ -90,14 +83,14 @@ class DashboardController extends Controller
 
         $projects_amount = Project::count();
 
-        ($budgets   = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
-        $budgets2   = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)'));
-        ($budgetsgov =  Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
-        ($budgetsict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
+        ($budgets   = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
+        $budgets2   = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)'));
+        ($budgetsgov =  Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
+        ($budgetsict = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
 
-        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_it_operating,0)')));
-        ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw(' COALESCE(budget_it_investment,0)')));
-        ($budgetsut  = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
+        ($budgetscentralict = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('	COALESCE(budget_it_operating,0)')));
+        ($budgetsinvestment = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw(' COALESCE(budget_it_investment,0)')));
+        ($budgetsut  = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
         ///จ่ายงบict
         ($taskcostict = DB::table('tasks')
             ->selectRaw('sum(
@@ -251,7 +244,6 @@ as d')
         ($coatcons_ut = (float) $d);
 
         //($coatstotal = $coats_ut+$coats_ict+$coats_gov)
-
         ($taskcosttotal = DB::table('tasks')
             ->selectRaw('sum(COALESCE(task_cost_gov_operating, 0)
          + COALESCE(task_cost_gov_investment, 0)
@@ -266,13 +258,11 @@ as d')
                         ->GroupBy('reguiar_id');
                 }
             )
-
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
         ($json = json_decode($taskcosttotal));
         ($a = $json[0]->a);
         ($coats = (float)$a);
-
 
         ($taskconcosttotal = DB::table('taskcons')
             ->selectRaw('sum(COALESCE(taskcon_cost_gov_operating, 0)
@@ -293,18 +283,6 @@ as d')
         ($json = json_decode($taskconcosttotal));
         ($a = $json[0]->a);
         ($coatcons = (float)$a);
-
-
-
-
-
-
-
-
-
-
-
-
         $contracts_pr_budget = DB::table('contracts')
         ->selectRaw('SUM(COALESCE(contract_pr_budget, 0)) AS cp')
         ->get()
@@ -338,9 +316,6 @@ as d')
     ($json = json_decode($contracts_pa_budget));
     ($cb = $json[0]->cb);
     ($cpa = (float)$cb);
-
-
-
     ($contractsre = DB::table('contracts')
    ->select('contracts.contract_name',
             'contracts.contract_number',
@@ -362,11 +337,6 @@ as d')
    ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
    ->get()
-
-
-
-
-
 );
 
 //$remaining_amounts = [];
@@ -390,33 +360,12 @@ as d')
     ($json = json_decode($contract_refund_pa_budget));
     ($cbrr = $json[0]->cbr);
     ($cpre = (float)$cbrr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         ($project_bu_fiscal_years = Project::selectRaw('project_fiscal_year as fiscal_year, sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
 
             ->groupBy('project_fiscal_year')
             ->get()
 
             ->toJson(JSON_NUMERIC_CHECK));
-
-
-
-
-
 
         ($contract_groupby_fiscal_years = Contract::selectRaw('contract_fiscal_year as fiscal_year, count(*) as total')
             ->GroupBy('contract_fiscal_year')
@@ -1006,7 +955,9 @@ as d')
 
 
 
-                compact('task_pay_xy',
+                compact(
+                    'fiscal_year',
+                    'task_pay_xy',
                 'chart_data_xy',
                 'chart_data',
                     'total_budget_cost',

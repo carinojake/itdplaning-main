@@ -803,6 +803,25 @@ class ProjectController extends Controller
         return view('app.projects.tasks.edit', compact('contracts', 'project', 'task', 'tasks'));
     }
 
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function taskEditSub(Request $request, $project, $task)
+    {
+        $id_project = Hashids::decode($project)[0];
+        $id_task    = Hashids::decode($task)[0];
+       ($project    = Project::find($id_project));
+        $task       = Task::find($id_task);
+        $tasks      = Task::where('project_id', $id_project)
+            ->whereNot('task_id', $id_task)
+            ->get();
+            $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
+
+        return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks'));
+    }
     /**
      * Remove the specified resource from storage.
      *
