@@ -309,7 +309,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $contract = new Contract;
-        $latestContract = Contract::latest()->first();
+
 
 
         $messages = [
@@ -484,15 +484,9 @@ if ($request->hasFile('mm_file')) {
         session()->flash('contract_id', $contract->contract_id);
         session()->flash('contract_number', $contract->contract_number);
         session()->flash('contract_name', $contract->contract_name);
-        $latestContract = Contract::latest()->first();
-        if ($latestContract) {
-            echo $latestContract->contract_id;
-        } else {
-            echo "No contracts found.";
-        }
 
         if ($origin) {
-            return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task, 'latestContract' => $latestContract]);
+            return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
         }
 
         return redirect()->route('contract.index');
