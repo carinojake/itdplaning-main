@@ -86,7 +86,7 @@
                             <select name="task_contract" id="task_contract" class="form-control">
                                 <option value="">ไม่มี</option>
                                 @foreach ($contracts as $contract)
-                                    <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                    <option value="{{ $contract->contract_id }}" {{ $latestContract && $latestContract->contract_id == $contract->contract_id ? 'selected' : '' }}>
                                         [{{ $contract->contract_number }}]{{ $contract->contract_name }}
                                     </option>
                                 @endforeach

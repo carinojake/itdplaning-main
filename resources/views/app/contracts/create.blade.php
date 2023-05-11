@@ -173,7 +173,7 @@
                       <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" >
                     </div>
 
-               <!--    <div class="col-md-6">
+                  <div class="col-md-6">
                       <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
                       <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" >
                     </div>
@@ -213,7 +213,7 @@
                           {{ __('เลือกไฟล์ CN') }}
                       </div>
                   </div>
-                -->
+
                   <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                   @if($origin)
                       <x-button link="{{ route('project.task.createsub', ['projectHashid' => $origin, 'taskHashid' => $task]) }}" class="text-black btn-light">{{ __('coreuiforms.return') }}</x-button>

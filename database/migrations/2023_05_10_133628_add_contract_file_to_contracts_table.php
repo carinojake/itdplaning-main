@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('pa_file')->nullable();
             $table->string('cn_file')->nullable();
             $table->string('mm_file')->nullable();
-            $table->string('etc_file')->nullable();
+
         });
     }
     /**
