@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Libraries;
 
 use App\Models\User;
@@ -57,27 +58,26 @@ class Helper
         return $type_id ? $type[$type_id] . $reason : $type;
     }
 
-   public static function Date(String $date)
+    public static function Date(String $date)
     {
         return date('d/m/Y', $date);
     }
     public static function Date2(string $date)
     {
         $timestamp = strtotime($date);
-        return date( $timestamp);
+        return date($timestamp);
     }
 
     public static function Date4(String $date)
     {
 
         return \Carbon\Carbon::parse($date)->addYears(543)->format('d/m/Y');
-
     }
 
 
     public static function Date3(String $date)
     {
-        return ( $date);
+        return ($date);
     }
 
 
@@ -320,6 +320,28 @@ class Helper
     }
 
 
+                        public static function budget_fiscal_year($fiscal_year = null)
+                        {
+                            if ($fiscal_year === null) {
+                                $fiscal_year = date('Y') + 543;
+                            }
+
+                            return "CASE task_pay_month
+                            WHEN
+                            'ต.ย. " . ($fiscal_year - 1) . "' THEN 1 WHEN
+                            'พ.ย. " . ($fiscal_year - 1) . "' THEN 2 WHEN
+                            'ธ.ค. " . ($fiscal_year - 1) . "' THEN 3 WHEN
+                            'ม.ค. $fiscal_year' THEN 4 WHEN
+                            'ก.พ. $fiscal_year' THEN 5 WHEN
+                            'มี.ค. $fiscal_year' THEN 6 WHEN
+                            'เม.ย. $fiscal_year' THEN 7 WHEN
+                            'พ.ค. $fiscal_year' THEN 8 WHEN
+                            'มิ.ย. $fiscal_year' THEN 9 WHEN
+                           'ก.ค. $fiscal_year' THEN 10 WHEN
+                            'ส.ค. $fiscal_year' THEN 11 WHEN
+                           'ก.ย. $fiscal_year' THEN 12 END";
+                        }
+
 
     public static function JuristicType($juristic_type_id = null)
     {
@@ -390,12 +412,11 @@ class Helper
             $format = number_format($number);
         } else if ($number < 1000000000) {
             // Anything less than a billion
-            $format = (number_format ($number / 1000000, 2)) . 'M';
+            $format = (number_format($number / 1000000, 2)) . 'M';
         } else {
             // At least a billion
             $format = (number_format($number / 1000000000, 2)) . 'B';
         }
         return $format;
     }
-
 }

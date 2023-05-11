@@ -31,14 +31,24 @@ Route::get('/contract/{project}/create', [ContractController::class, 'create'])-
 
     Route::get('/project/{project}/task/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
     Route::post('/project/{project}/task/createsub', [ProjectController::class, 'taskStore'])->name('project.task.store');
+    Route::get('/project/{projectHashid}/task/{taskHashid}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
 
-Route::get('/project/{projectHashid}/task/{taskHashid}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
+
+
 
 
     Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
     Route::PUT('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
     Route::DELETE('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
     Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
+
+
+    Route::get('/project/{project}/task/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+    Route::post('/project/{project}/task/editsub', [ProjectController::class, 'taskStore'])->name('project.task.store');
+    Route::get('/project/{projectHashid}/task/{taskHashid}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+
+
+
 
     Route::resource('project', ProjectController::class);
 
@@ -84,6 +94,14 @@ Route::get('/import/excelcsv', [WordExcelController::class, 'importExcelCSV'])->
 Route::get('/genchart', [WordExcelController::class, 'genChart'])->name('genchart');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/dashboard', [DashboardController::class, 'index'])->name('dashboard.post');
+
+
 //wordexcel
 
 

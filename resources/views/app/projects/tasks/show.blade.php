@@ -2,18 +2,27 @@
     <x-slot:content>
         {{ Breadcrumbs::render('project.task.show', $project,$task) }}
         <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }} {{ $task->task_name }}">
+
+            @if($task['task_parent'] == null)
             <x-slot:toolbar>
-                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-warning text-dark">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
-                <!--<a href="{{ route('project.task.create', $project->hashid ) }}"
-                    class="btn btn-success text-white">เพิ่มงาน</a>
-                -->
+                <a href="{{ route('project.task.editsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type ) }} </a>
                     <a href="{{ route('project.task.createsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>
-
-
                 <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
             </x-slot:toolbar>
+            @endif
+
+            @if ($contract)
+            <x-slot:toolbar>
+                <a href="{{ route('project.task.editsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    class="btn btn-warning text-dark">แก้ไขeditsub {{ Helper::projectsType($project->project_type ) }} </a>
+                   <!-- <a href="{{ route('project.task.createsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                        class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
+                <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+            </x-slot:toolbar>
+            @endif
+
             @if($task['task_parent'] == null)
     <h2>{{ $task->task_name }}</h2>
     <div class="container">
@@ -50,9 +59,6 @@
     </div>
     </div>
     </div>
-
-
-
     <table class="table">
         <thead>
             <tr>
@@ -64,12 +70,9 @@
             </tr>
         </thead>
         <tbody>
-
                 <tr>
                     <td></td>
                     <td>
-
-
                         @if ($task->subtask->count() > 0)
                             <h6>รายการที่ใช้จ่าย</h6>
                             <ul>
@@ -102,17 +105,13 @@
                         @endif
                     </td>
                     <td>
-
                     </td>
                 </tr>
-
         </tbody>
     </table>
-
     @endif
     @if ($contract)
-
-            <h6>มีสัญญา</h2>
+            <h5>มีสัญญา</h5>
             <div class="container">
                 <div class="row">
                 <div class="col-sm">
@@ -227,39 +226,26 @@
                 <table class="table">
 
                 <thead>
-
                     <tr>
-
-
-
-
-
-
-
-
-                        <th>Contract taskcon name</th>
-                        <th>Contract taskcon pay</th>
+                        <th>งวด</th>
+                        <th>วันที่เบิกจ่าย</th>
+                        <th>disbursement_taskcons_status</th>
+                        <th>ใช้จ่าย</th>
                         <!-- Changed from Contract Description to Contract Year -->
-
                         <!-- Add other columns as needed -->
-
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                     @foreach($results as $result)
-
                         <tr>
 
-
-
                             <td>{{ $result->taskcon_name }}</td>
+                            <td>{{  Helper::Date4(date('Y-m-d H:i:s', strtotime($result->taskcon_pay_date))) }}</td>
+                            <td>{{ $result->disbursement_taskcons_status }}</td>
                             <td>{{ $result->taskcon_pay }}</td>
 
 
-                            <!-- Changed from contract_description to contract_year -->
+                            <!-- Changed from contract_description to contract_year  -->
 
                             <!-- Add other data rows as needed -->
 
@@ -270,16 +256,12 @@
                 </tbody>
 
                 </table>
-
+                @endif
             @endif
-            @endif
-</x-card>
+        </x-card>
     </x-slot:content>
     <x-slot:css>
     </x-slot:css>
-
-
-
     <x-slot:javascript>
     </x-slot:javascript>
 </x-app-layout>

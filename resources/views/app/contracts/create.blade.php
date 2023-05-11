@@ -16,7 +16,7 @@
           @endif
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-              <x-card title="{{ __('เพิ่มสัญญา / ใบจ้าง') }}">
+              <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER') }}">
                 <x-slot:toolbar>
       {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -33,7 +33,16 @@
     <input type="hidden" name="task" value="{{ $task }}">
 
                   <div class="row mt-3">
-                  <div class="col-md-3">
+                    <div class="col-md-2">
+                        <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label> <span class="text-danger">*</span>
+                        {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...']) }}
+                        <div class="invalid-feedback">
+                          {{ __('สัญญา') }}
+                        </div>
+                      </div>
+
+
+                  <div class="col-md-2">
                       <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
                       <input type="text" class="form-control" id="contract_fiscal_year" name="contract_fiscal_year" required>
                       <div class="invalid-feedback">
@@ -41,14 +50,14 @@
                       </div>
                     </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา / ') }}</label> <span class="text-danger">*</span>
                     <input type="text" class="form-control" id="contract_number" name="contract_number" required>
                     <div class="invalid-feedback">
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label> <span class="text-danger">*</span>
                     <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" maxlength="13" required>
                     <div class="invalid-feedback">
@@ -57,7 +66,7 @@
                   </div>
 
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ CN/PO ') }}</label> <span class="text-danger">*</span>
                     <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" maxlength="50" required>
                     <div class="invalid-feedback">

@@ -7,7 +7,7 @@
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="สัญญา/ใบจ้าง ทั้งหมด">
               <x-slot:toolbar>
-                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a>
+                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบสั่งซื้อ/ใบสั่งจ้าง</a>
 
 
               </x-slot:toolbar>
