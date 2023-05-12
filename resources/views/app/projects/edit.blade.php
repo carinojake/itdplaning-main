@@ -156,6 +156,8 @@
                                                     class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                 <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
+
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="budget_it_operating"
                                                     name="budget_it_operating" min="0"
                                                     value="{{ $project->budget_it_operating }}">
@@ -166,7 +168,8 @@
                                             <div class="col-4">
                                                 <label for="budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="budget_it_investment"
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}">
@@ -178,7 +181,8 @@
                                             <div class="col-md-4">
                                                 <label for="budget_gov_utility"
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="budget_gov_utility"
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}">
@@ -210,6 +214,14 @@
     </x-slot:css>
     <x-slot:javascript>
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+        <script>
+         $(document).ready(function(){
+    $(":input").inputmask();
+});
+    </script>
 
     </x-slot:javascript>
 </x-app-layout>

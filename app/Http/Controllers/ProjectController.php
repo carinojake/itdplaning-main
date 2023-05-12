@@ -193,7 +193,7 @@ class ProjectController extends Controller
             'budget_gov_investment' => $project['budget_gov_investment'],
             'budget_gov_utility'    => $project['budget_gov_utility'],
             'budget_gov'            => $__budget_gov,
-            'budget_it_operating'   => $project['budget_it_operating'],
+            'budget_it_operating'   => str_replace(',', '',$project['budget_it_operating']),
             'budget_it_investment'  => $project['budget_it_investment'],
             'budget_it'             => $__budget_it,
             'budget'                => $__budget,
@@ -541,9 +541,10 @@ class ProjectController extends Controller
 
         $project->budget_gov_operating  = $request->input('budget_gov_operating');
         $project->budget_gov_investment = $request->input('budget_gov_investment');
-        $project->budget_gov_utility    = $request->input('budget_gov_utility');
-        $project->budget_it_operating   = $request->input('budget_it_operating');
-        $project->budget_it_investment  = $request->input('budget_it_investment');
+        $project->budget_gov_utility    = str_replace(',', '',$request->input('budget_gov_utility'));
+        $project->budget_it_operating = str_replace(',', '', $request->input('budget_it_operating'));
+
+        $project->budget_it_investment  = str_replace(',', '',$request->input('budget_it_investment'));
         $project->reguiar_id            = $request->input('reguiar_id');
 
 
@@ -600,9 +601,10 @@ class ProjectController extends Controller
 
         $project->budget_gov_operating  = $request->input('budget_gov_operating');
         $project->budget_gov_investment = $request->input('budget_gov_investment');
-        $project->budget_gov_utility    = $request->input('budget_gov_utility');
-        $project->budget_it_operating   = $request->input('budget_it_operating');
-        $project->budget_it_investment  = $request->input('budget_it_investment');
+        $project->budget_gov_utility    = str_replace(',', '',$request->input('budget_gov_utility'));
+        $project->budget_it_operating = str_replace(',', '', $request->input('budget_it_operating'));
+
+        $project->budget_it_investment  = str_replace(',', '',$request->input('budget_it_investment'));;
         $project->reguiar_id            = $request->input('reguiar_id');
         if ($project->save()) {
             return redirect()->route('project.index');
@@ -687,11 +689,13 @@ class ProjectController extends Controller
     public function taskCreate(Request $request, $project)
     {
         $id        = Hashids::decode($project)[0];
-        $project = $request->project;
+        ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
+       // $project = $request->project;
         ($tasks     = Task::where('project_id', $id)->get());
-        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
+     ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
 
-        return view('app.projects.tasks.create', compact('contracts', 'project', 'tasks'));
+
+       return view('app.projects.tasks.create', compact('contracts', 'project', 'tasks'));
     }
 
 
@@ -742,17 +746,22 @@ class ProjectController extends Controller
 
         $task->task_parent = $request->input('task_parent') ?? null;
 
-        $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
-        $task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
-        $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
-        $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
-        $task->task_budget_it_investment  = $request->input('task_budget_it_investment');
+        $task->task_budget_gov_operating  = str_replace(',', '',$request->input('task_budget_gov_operating'));
+        $task->task_budget_gov_investment = str_replace(',', '',$request->input('task_budget_gov_investment'));
+        $task->task_budget_gov_utility    = str_replace(',', '',$request->input('task_budget_gov_utility'));
+        $task->task_budget_it_operating   = str_replace(',', '',$request->input('task_budget_it_operating'));
+        $task->task_budget_it_investment  = str_replace(',', '',$request->input('task_budget_it_investment'));
 
-        $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
-        $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
-        $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
-        $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
-        $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+        $task->task_cost_gov_operating  = str_replace(',', '',$request->input('task_cost_gov_operating'));
+        $task->task_cost_gov_investment = str_replace(',', '',$request->input('task_cost_gov_investment'));
+        $task->task_cost_gov_utility    = str_replace(',', '',$request->input('task_cost_gov_utility'));
+        $task->task_cost_it_operating   = str_replace(',', '',$request->input('task_cost_it_operating'));
+        $task->task_cost_it_investment  = str_replace(',', '',$request->input('task_cost_it_investment'));
+
+
+
+
+
         $task->task_pay                 = $request->input('task_pay');
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
         $task->task_type                 = $request->input('task_type');
@@ -857,18 +866,37 @@ class ProjectController extends Controller
 
         $task->task_parent = $request->input('task_parent') ?? null;
 
-        $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
-        $task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
-        $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
-        $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
-        $task->task_budget_it_investment  = $request->input('task_budget_it_investment');
+       // $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
+       // $task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
+       // $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
+       // $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
+       // $task->task_budget_it_investment  = $request->input('task_budget_it_investment');
 
-        $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
-        $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
-        $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
-        $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
-        $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
-        $task->task_pay                 = $request->input('task_pay');
+       // $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
+        //$task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
+      //  $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
+      //  $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
+      //  $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+
+
+
+
+        $task->task_budget_gov_operating  = str_replace(',', '',$request->input('task_budget_gov_operating'));
+        $task->task_budget_gov_investment = str_replace(',', '',$request->input('task_budget_gov_investment'));
+        $task->task_budget_gov_utility    = str_replace(',', '',$request->input('task_budget_gov_utility'));
+        $task->task_budget_it_operating   = str_replace(',', '',$request->input('task_budget_it_operating'));
+        $task->task_budget_it_investment  = str_replace(',', '',$request->input('task_budget_it_investment'));
+
+        $task->task_cost_gov_operating  = str_replace(',', '',$request->input('task_cost_gov_operating'));
+        $task->task_cost_gov_investment = str_replace(',', '',$request->input('task_cost_gov_investment'));
+        $task->task_cost_gov_utility    = str_replace(',', '',$request->input('task_cost_gov_utility'));
+        $task->task_cost_it_operating   = str_replace(',', '',$request->input('task_cost_it_operating'));
+        $task->task_cost_it_investment  = str_replace(',', '',$request->input('task_cost_it_investment'));
+
+
+        $task->task_pay                 = str_replace(',', '',$request->input('task_pay'));
+
+
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
         $task->task_type                 = $request->input('task_type');
 

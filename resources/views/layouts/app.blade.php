@@ -67,6 +67,7 @@
    <!-- นำเข้าไฟล์ jQuery UI -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
   <script>
     if (document.body.classList.contains('dark-theme')) {
       var element = document.getElementById('btn-dark-theme');

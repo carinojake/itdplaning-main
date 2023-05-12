@@ -45,10 +45,7 @@
 
         // 5 projects.task.create มีแล้ว
         Breadcrumbs::for('project.task.create', function (BreadcrumbTrail $trail, $project) {
-            $id = Hashids::decode($project)[0];
 
-            $project = App\Models\Project::find($id);
-            ($project);
             $trail->push('Project', route('project.index'));
 
             $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
