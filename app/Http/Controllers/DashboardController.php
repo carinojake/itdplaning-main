@@ -954,11 +954,6 @@ as d')
                 'app.dashboard.index',
 
 
-
-
-
-
-
                 compact(
                     'fiscal_year',
                     'task_pay_xy',
