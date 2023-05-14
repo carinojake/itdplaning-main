@@ -48,7 +48,7 @@
 
             $trail->push('Project', route('project.index'));
 
-            $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
+            //$trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
             $trail->push('Task');
             $trail->push('Create');
         });

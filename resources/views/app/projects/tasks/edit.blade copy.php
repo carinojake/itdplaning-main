@@ -20,39 +20,7 @@
                                 class="row g-3">
                                 @csrf
                                 {{ method_field('PUT') }}
-
-                                <div class="col-md-12 mt-3">
-                                    <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span
-                                        class="text-danger">*</span>
-                                    <input type="text" class="form-control" id="task_name" name="task_name"
-                                        value="{{ $task->task_name }}" required autofocus>
-                                    <div class="invalid-feedback">
-                                        {{ __('ชื่อกิจกรรมซ้ำ') }}
-                                    </div>
-                                </div>
-
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-
-                                        <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_status" id="task_status1" value="1" @checked($task->task_status == 1) >
-                                            <label class="form-check-label" for="task_status1">
-                                                ระหว่างดำเนินการ
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_status" id="task_status2" value="2"  @checked($task->task_status == 2) >
-                                            <label class="form-check-label" for="task_status2">
-                                                ดำเนินการแล้วเสร็จ
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                           <!-- <div class="row mt-3">
-
+                            <div class="row mt-3">
                                 <div class="col-md-3">
                                     <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                     <span class="text-danger">*</span>
@@ -106,7 +74,7 @@
                                         ไม่มี PA
                                       </label>
                                     </div>
-                            </div>-->
+                            </div>
 
 
 
@@ -150,7 +118,15 @@
 
 
 
-
+                                <div class="col-md-12 mt-3">
+                                    <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span
+                                        class="text-danger">*</span>
+                                    <input type="text" class="form-control" id="task_name" name="task_name"
+                                        value="{{ $task->task_name }}" required autofocus>
+                                    <div class="invalid-feedback">
+                                        {{ __('ชื่อกิจกรรมซ้ำ') }}
+                                    </div>
+                                </div>
 
 
 
@@ -197,12 +173,30 @@
                                         </div>
                                       </div>
 
+                                      <div class="row mt-3">
+
+                                        <h4>เบิกจ่าย</h4>
+                                        <div class="col-md-6">
+                                                          <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span class="text-danger">*</span>
+                                                          {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                                                          <div data-coreui-toggle="date-picker" id="task_pay_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                          <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
+                                                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_pay" name="task_pay" min="0" >
+                                                          <div class="invalid-feedback">
+                                                            {{ __('เบิกจ่าย') }}
+                                                          </div>
+                                                        </div>
+                                                      </div>
 
 
-                                    </div>
+
                                 </div>
 
-
+        </div>
+    </div>
 
         <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
         <x-button link="{{ route('project.show', $project->hashid) }}" class="btn-light text-black">

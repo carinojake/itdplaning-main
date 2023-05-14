@@ -83,14 +83,15 @@
                     <div class="col-md-9">
                         <div class="form-group">
                             <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
-                            <select name="task_contract" id="task_contract" class="form-control">
+                            <<select name="task_contract" id="task_contract" class="form-control">
                                 <option value="">ไม่มี</option>
                                 @foreach ($contracts as $contract)
-                                    <option value="{{ $contract->contract_id }}" {{ $latestContract && $latestContract->contract_id == $contract->contract_id ? 'selected' : '' }}>
-                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                    </option>
+                                <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                </option>
                                 @endforeach
                             </select>
+
 
                             <div class="invalid-feedback">
                                 {{ __('สัญญา') }}

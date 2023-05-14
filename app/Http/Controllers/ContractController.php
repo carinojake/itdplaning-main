@@ -91,7 +91,7 @@ class ContractController extends Controller
     public function show(Request $request, $contract)
     {
         $id = Hashids::decode($contract)[0];
-
+        $latestContract = Contract::latest()->first();
        ($contract = Contract::find($id));
 
         $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
@@ -286,7 +286,7 @@ class ContractController extends Controller
 
         $gantt = json_encode($gantt);
 
-        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p'));
+        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p',' latestContract'));
     }
 
 
