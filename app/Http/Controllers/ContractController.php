@@ -286,7 +286,7 @@ class ContractController extends Controller
 
         $gantt = json_encode($gantt);
 
-        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p',' latestContract'));
+        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p','latestContract'));
     }
 
 
@@ -321,10 +321,16 @@ class ContractController extends Controller
             'contract_number'                 => 'required',
             'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
+            'start_date' => 'required|date_format:d/m/Y',
+            'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
+
+
+
         ], $messages);
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
+
        // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
         $sign_date_input = $request->input('date-picker-contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
@@ -766,7 +772,7 @@ public function download($id)
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
-        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_pay_date')), 'Y-m-d');
+        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_pay_date')), 'Y-m-d' ?? null);
         $timestamp = strtotime($taskcon->taskcon_pay_date);
         $data_coreui_date = date('m/d/Y', $timestamp);
 

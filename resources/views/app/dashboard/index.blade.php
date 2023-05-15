@@ -4,26 +4,30 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="งบประมาณ">
+                        <x-card title=" ปีงบประมาณ  {{$fiscal_year}}">
                           <x-slot:toolbar>
  <!--งบประมาณ-->
  <form method="POST" action="{{ route('dashboard.index') }}" class="mt-3">
     @csrf
+
     <div class="input-group mb-3">
+
+        <button class="btn btn-outline-secondary" type="submit">เลือกปีงบประมาณ</button>
         <select name="fiscal_year" class="form-select">
-            @for($i = 2564; $i <= date('Y')+543+1; $i++)
+            @for($i = 2564; $i <= date('Y')+543+3; $i++)
             <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
             @endfor
             <!-- เพิ่มตัวเลือกเพิ่มเติมตามที่จำเป็น -->
         </select>
-        <button class="btn btn-outline-secondary" type="submit">Submit</button>
+
+
     </div>
 </form>
 <!-- Add the rest of your code here -->
                           </x-slot:toolbar>
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="card-title fs-5 fw-semibold">ปีงบประมาณ  {{$fiscal_year}} </div>
+                            <div class="card-title fs-5 fw-semibold"> </div>
                             <div class="col-sm-12">
                                 <div class="row">
                                     <div class="col">

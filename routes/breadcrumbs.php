@@ -24,7 +24,7 @@
         //2 project.create  มีแล้ว
         Breadcrumbs::for('project.create', function (BreadcrumbTrail $trail) {
             $trail->push('Project', route('project.index'));
-            $trail->push('Create', route('project.create'));
+            $trail->push('เพิ่มข้อมูลงาน โครงการ', route('project.create'));
         });
 
         // 3 project project.show มีแล้ว

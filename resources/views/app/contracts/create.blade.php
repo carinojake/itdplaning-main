@@ -51,15 +51,15 @@
                     </div>
 
                   <div class="col-md-2">
-                    <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา / ') }}</label> <span class="text-danger">*</span>
-                    <input type="text" class="form-control" id="contract_number" name="contract_number" required>
+                    <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา / ') }}</label> <span class="text-danger"></span>
+                    <input type="text" class="form-control" id="contract_number" name="contract_number" >
                     <div class="invalid-feedback">
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label> <span class="text-danger">*</span>
-                    <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" maxlength="13" required>
+                    <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label> <span class="text-danger"></span>
+                    <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" maxlength="13" >
                     <div class="invalid-feedback">
                       {{ __('คู่ค้าซ้ำ') }}
                     </div>
@@ -67,8 +67,8 @@
 
 
                   <div class="col-md-2">
-                    <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ CN/PO ') }}</label> <span class="text-danger">*</span>
-                    <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" maxlength="50" required>
+                    <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ CN/PO ') }}</label> <span class="text-danger"></span>
+                    <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" maxlength="50" >
                     <div class="invalid-feedback">
                       {{ __('เลขที่ใบสั่งซื้อ') }}
                     </div>

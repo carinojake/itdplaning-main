@@ -511,8 +511,18 @@ class ProjectController extends Controller
 
     public function create(Request $request)
     {
-        return view('app.projects.create');
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
+
+        $reguiar_id = $request->input('reguiar_id');
+    if (!$reguiar_id) {
+        $reguiar_id = 1; // Use 1 as default if not provided
     }
+        return view('app.projects.create', compact('fiscal_year','reguiar_id'));
+    }
+
 
     public function store(Request $request)
     {
@@ -520,11 +530,27 @@ class ProjectController extends Controller
 
 
         $request->validate([
-          'project_name'                   => 'required',
-          'reguiar_id'                   => 'required',
-            'date-picker-project_start_date' => 'required',
-            'date-picker-project_end_date'   => 'required',
+            'project_name' => 'required',
+            'reguiar_id' => 'required',
+            'project_start_date' => 'required|date_format:d/m/Y',
+            'project_end_date' => 'required|date_format:d/m/Y',
+            'project_fiscal_year' => 'required|integer'
         ]);
+
+        $start_date_obj = date_create_from_format('d/m/Y', $request->input('date-picker-project_start_date'));
+        $end_date_obj = date_create_from_format('d/m/Y', $request->input('date-picker-project_end_date'));
+
+        if ($start_date_obj === false || $end_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+            $start_date_obj->modify('-543 years');
+            $end_date_obj->modify('-543 years');
+
+            $start_date = date_format($start_date_obj, 'Y-m-d');
+            $end_date = date_format($end_date_obj, 'Y-m-d');
+        }
+
 
 
         // convert input to decimal or set it to null if empty
@@ -569,6 +595,9 @@ if ($start_date_obj === false || $end_date_obj === false) {
         $project->budget_it_operating   = $budget_it_operating;
         $project->budget_it_investment  = $budget_it_investment;
         $project->reguiar_id            = $request->input('reguiar_id');
+
+
+        dd($project);
 
         if ($project->save()) {
             return redirect()->route('project.index');
@@ -779,6 +808,11 @@ $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
     {
         $id   = Hashids::decode($project)[0];
         $task = new Task;
+
+
+
+
+
 
         $request->validate([
             'task_name'                   => 'required',

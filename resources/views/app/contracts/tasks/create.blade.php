@@ -62,12 +62,15 @@
                 </div>--}}
 
                 <div class="col-md-6">
-                  <label for="taskcon_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
+                  <label for="datepicker-th" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                   <div data-coreui-toggle="date-picker" id="taskcon_start_date"  data-coreui-locale="th-TH"  data-coreui-format="dd/MM/yyyy"></div>
                 </div>
+
+
+
                 <div class="col-md-6">
-                  <label for="taskcon_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
+                  <label for="datepicker-th-2" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                   <div data-coreui-toggle="date-picker" id="taskcon_end_date"  data-coreui-locale="th-TH" data-coreui-format="dd/MM/yyyy"></div>
                 </div>
@@ -149,6 +152,31 @@
   <x-slot:css>
   </x-slot:css>
   <x-slot:javascript>
+    <script type="text/javascript">
+        $(function () {
+          var d = new Date();
+          var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+
+          // กรณีต้องการใส่ปฏิทินลงไปมากกว่า 1 อันต่อหน้า ก็ให้มาเพิ่ม Code ที่บรรทัดด้านล่างด้วยครับ (1 ชุด = 1 ปฏิทิน)
+
+          $("#datepicker-th").datepicker({ dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay, dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+            monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+            monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+
+          $("#datepicker-th-2").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+            dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+            monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+            monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+
+               $("#datepicker-en").datepicker({ dateFormat: 'dd/mm/yy'});
+
+          $("#inline").datepicker({ dateFormat: 'dd/mm/yy', inline: true });
+
+
+          });
+      </script>
 
   </x-slot:javascript>
 </x-app-layout>

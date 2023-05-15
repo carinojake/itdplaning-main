@@ -14,28 +14,36 @@
                 @endif
                 <div class="row mt-3">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มข้อมูลงาน/โครงการ') }}">
+                        <x-card title="{{ __('เพิ่มข้อมูลงาน โครงการ') }}">
 
                             <form method="POST" action="{{ route('project.store') }}" class="row g-3">
                                 @csrf
                                 <div class="row mt-3">
                                     <div class="col-md-3">
-                                        <label for="project_fiscal_year"
-                                            class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="project_fiscal_year"
-                                            name="project_fiscal_year" required>
-                                        <div class="invalid-feedback">
-                                            {{ __('ปีงบประมาณ') }}
-                                        </div>
+                                        <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
+                                        <select name="project_fiscal_year" class="form-select @error('project_fiscal_year') is-invalid @enderror">
+                                            @for($i = date('Y')+541; $i <= date('Y')+543+2; $i++)
+                                                <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                        @error('project_fiscal_year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
+
                                     <div class="col-md-3">
                                         <label for="reguiar_id"
                                             class="form-label">{{ __('no.ชื่องาน/โครงการ') }}</label> <span
                                             class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
-                                            required autofocus>
-                                    </div>
+                                        <!--<input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
+                                            required autofocus>-->
+                                            <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
+                                                @for($i = $reguiar_id; $i <= $reguiar_id; $i++)
+                                                    <option value="{{ $i }}" {{ ($reguiar_id == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
                                     <div class="col-md-3">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
@@ -72,25 +80,18 @@
                                           </label>
                                         </div>
                                   </div>
-                                  <div class="row mt-3">
-                                  <div class="col-md-6">
-                                    <label for="project_start_date"
-                                        class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
-                                        class="text-danger">*</span>
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="project_start_date"
-                                        data-coreui-format="dd/MM/yyyy"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="project_end_date"
-                                        class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
-                                        class="text-danger">*</span>
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="project_end_date"
-                                        data-coreui-format="dd/MM/yyyy"></div>
-                                </div>
-                                  </div>
 
+
+                                  <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="project_start_date" name="project_start_date" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="project_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="project_end_date" name="project_end_date" required>
+                                    </div>
+                                </div>
 
 
                                     <div class="col-md-12 mt-3">
@@ -143,20 +144,8 @@
                                             </div>
                                           </div>
                                         </div>
-
-
-
-
                                         </div>
                                       </div>
-
-
-
-
-
-
-
-
                                 </div>
                                     <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
                                     </x-button>
@@ -171,14 +160,44 @@
     <x-slot:css>
     </x-slot:css>
     <x-slot:javascript>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+
+
 
         <script>
          $(document).ready(function(){
     $(":input").inputmask();
 });
     </script>
+
+
+<script>
+    $(function () {
+      if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+        alert("jQuery or jQuery UI is not loaded");
+        return;
+      }
+
+      var d = new Date();
+      var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+      $("#project_start_date, #project_end_date").datepicker({
+        dateFormat: 'dd/mm/yy',
+        isBuddhist: true,
+        defaultDate: toDay,
+        dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+        dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+      });
+    });
+
+   </script>
 
     </x-slot:javascript>
 </x-app-layout>

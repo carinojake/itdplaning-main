@@ -57,8 +57,8 @@
                         <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label> <span class="text-danger">*</span>
                         <div >
                             <input class="form-check-input" type="radio" name="task_type" id="task_type1" value="1"
-                            >
-                          <label class="form-check-label" for="task_type1">
+                            checked   >
+                          <label class="form-check-label" for="task_type1" >
                             มี PA
                           </label>
                         </div>
@@ -83,7 +83,7 @@
                     <div class="col-md-9">
                         <div class="form-group">
                             <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
-                            <<select name="task_contract" id="task_contract" class="form-control">
+                            <select name="task_contract" id="task_contract" class="form-control">
                                 <option value="">ไม่มี</option>
                                 @foreach ($contracts as $contract)
                                 <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
@@ -147,22 +147,28 @@
                         <strong>วงเงินที่ขออนุมัติ</strong>
                         <div class="col-md-12">
                           <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating" min="0">
-                          <div class="invalid-feedback">
+                         <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating" min="0">-->
+                         <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_budget_it_operating" name="task_budget_it_operating" min="0" >
+
+                         <div class="invalid-feedback">
                             {{ __('ระบุงบกลาง ICT') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                           <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_investment" name="task_budget_it_investment" min="0">
-                          <div class="invalid-feedback">
+                        <!--  <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_investment" name="task_budget_it_investment" min="0">-->
+                        <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_budget_it_investment" name="task_budget_it_investment" min="0" >
+
+                        <div class="invalid-feedback">
                             {{ __('ระบุงบดำเนินงาน') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                           <label for="task_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0">
-                          <div class="invalid-feedback">
+                         <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0"> -->
+                         <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0" >
+
+                         <div class="invalid-feedback">
                             {{ __('ระบุค่าสาธารณูปโภค') }}
                           </div>
                         </div>
@@ -172,21 +178,30 @@
                         <strong>ค่าใช้จ่าย</strong>
                         <div class="col-md-12">
                             <label for="task_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                            <input type="number"placeholder="0.00" step="0.01" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">
+                           <!-- <input type="number"placeholder="0.00" step="0.01" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">-->
+                            <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_cost_it_operating" name="task_cost_it_operating" min="0" >
+
+
                             <div class="invalid-feedback">
                               {{ __('งบกลาง ICT') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                             <label for="task_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                            <input type="number" placeholder="0.00" step="0.01"class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0">
+                           <!-- <input type="number" placeholder="0.00" step="0.01"class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0"> -->
+                            <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_cost_it_investment" name="task_cost_it_investment" min="0" >
+
+
                             <div class="invalid-feedback">
                               {{ __('งบดำเนินงาน') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                             <label for="task_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0">
+                           <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0"> -->
+                            <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0" >
+
+
                             <div class="invalid-feedback">
                               {{ __('ระบุค่าสาธารณูปโภค') }}
                             </div>
@@ -204,7 +219,7 @@
 
 
 
-                <div class="row mt-3">
+              <!--  <div class="row mt-3">
 
                     <h4>เบิกจ่าย</h4>
                     <div class="col-md-6">
@@ -221,7 +236,7 @@
                                       </div>
                                     </div>
                                   </div>
-
+                                -->
 
 
             </div>
@@ -241,6 +256,8 @@
   <x-slot:css>
   </x-slot:css>
   <x-slot:javascript>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script>
         // สร้างฟังก์ชันสำหรับเพิ่มรายการสัญญา
         function addContractOption(contract) {
@@ -269,6 +286,15 @@
             }
         });
     </script>
+
+
+
+
+<script>
+ $(document).ready(function(){
+$(":input").inputmask();
+});
+</script>
 
   </x-slot:javascript>
 </x-app-layout>
