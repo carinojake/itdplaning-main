@@ -1,11 +1,14 @@
 <x-app-layout>
   <x-slot:content>
     <div class="container-fluid">
-        {{ Breadcrumbs::render('project') }}
+
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="งาน/โครงการ">
+            <x-card title="">
+                {{ Breadcrumbs::render('project') }}
+
+
               <x-slot:toolbar>
                 <a href="{{ route('project.create') }}" class="btn btn-success text-white" target="_blank">งาน/โครงการ</a>
               </x-slot:toolbar>

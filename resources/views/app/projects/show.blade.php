@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
-            {{ Breadcrumbs::render('project.show', $project) }}
+
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ Helper::projectsType($project->project_type ) }} {{ $project->project_name }}">
+                        <x-card >       {{ Breadcrumbs::render('project.show', $project) }}
 
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}"

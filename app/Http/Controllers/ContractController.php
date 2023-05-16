@@ -299,7 +299,15 @@ class ContractController extends Controller
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-        return view('app.contracts.create', compact('origin', 'project','task'));
+        $id_project       = Hashids::decode($project)[0];
+        $id_task      = Hashids::decode($task)[0];
+        $pro = Project::find($id_project);
+        $ta = Task::find($id_task);
+
+
+        //dd($id_project,$id_task,$project,$task,$pro,$ta);
+
+        return view('app.contracts.create', compact('origin', 'project','task','pro','ta'));
     }
 
 

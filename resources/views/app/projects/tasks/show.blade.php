@@ -2,7 +2,7 @@
     <x-slot:content>
         {{ Breadcrumbs::render('project.task.show', $project, $task) }}
         <x-card
-            title="{{ Helper::projectsType($project->project_type) }} {{ $project->project_name }} {{ $task->task_name }}">
+            >
 
             @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
@@ -45,23 +45,51 @@
                             </div>
 
                         </div>
-                        <div class="col-sm">
 
-                      <!--  <div class="col-sm">
+                        <div class="col-sm">
                             <div class="row">
+                                @if($task->task_budget_it_operating)
+                                <div class="col-6">{{ __('งบกลาง ICT') }}</div>
+                                {{ number_format($task->task_budget_it_operating) }}
+                                @endif
+                            </div>
+                            <div class="row">
+                                @if($task->task_budget_it_investment)
+                                <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
+                                {{ number_format($task->task_budget_it_investment) }}
+                                @endif
+                            </div>
+                            <div class="row">
+                                @if($task->task_budget_gov_utility)
+                                <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                {{ number_format($task->task_budget_gov_utility) }}
+                                @endif
+                            </div>
+                        </div>
+
+
+
+
+                             <div class="col-sm">
+                            <div class="row">
+                                @if($task->task_budget_it_operating)
                                 <div class="col-6">{{ __('คงเหลือ งบกลาง ICT') }}</div>
                                 {{ number_format($task->task_budget_it_operating) }}
+                                @endif
                             </div>
                             <div class="row">
+                                @if($task->task_budget_it_investment)
                                 <div class="col-6">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
                                 {{ number_format($task->task_budget_it_investment) }}
+                                @endif
                             </div>
                             <div class="row">
+                                @if($task->task_budget_gov_utility)
                                 <div class="col-6">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
                                 {{ number_format($task->task_budget_gov_utility) }}
                             </div>
-
-                        </div>-->
+                            @endif
+                        </div>
 
 
 

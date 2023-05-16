@@ -18,19 +18,21 @@
 
         // 1 project project.index    มีแล้ว
         Breadcrumbs::for('project', function (BreadcrumbTrail $trail) {
-            $trail->push('project', route('project.index'));
+            $trail->push('งาน/โครงการ', route('project.index'));
         });
 
         //2 project.create  มีแล้ว
         Breadcrumbs::for('project.create', function (BreadcrumbTrail $trail) {
-            $trail->push('Project', route('project.index'));
+            $trail->push('งาน/โครงการ', route('project.index'));
             $trail->push('เพิ่มข้อมูลงาน โครงการ', route('project.create'));
         });
 
         // 3 project project.show มีแล้ว
         Breadcrumbs::for('project.show', function (BreadcrumbTrail $trail, $project) {
             //  $trail->parent('dashboard');
-            $trail->push('Project', route('project.index'));
+           // $trail->push('Project', route('project.index'));
+           $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+            $trail->push( Helper::projectsType($project->project_type ), route('project.index'));
             $trail->push($project->project_name, route('project.show', ['project' => $project->project_id]));
             // $trail->push($project->project_name, route('project.edit', ['project' => $project->project_id]));
         });
@@ -38,28 +40,47 @@
 
         // 4 project.edit มีแล้ว
         Breadcrumbs::for('project.edit', function (BreadcrumbTrail $trail, $project) {
-            $trail->push('Project', route('project.index'));
+           // $trail->push('Project', route('project.index'));
+           $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+           $trail->push( Helper::projectsType($project->project_type ), route('project.index'));
             $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
-            $trail->push('Edit', route('project.edit', ['project' => $project->project_id]));
+            $trail->push('แก้ไข', route('project.edit', ['project' => $project->project_id]));
         });
 
         // 5 projects.task.create มีแล้ว
         Breadcrumbs::for('project.task.create', function (BreadcrumbTrail $trail, $project) {
 
-            $trail->push('Project', route('project.index'));
 
+            $id = Hashids::decode($project)[0];
+
+            $project = App\Models\Project::find($id);
+            $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+           // $trail->push('Project', route('project.index'));
             //$trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
-            $trail->push('Task');
-            $trail->push('Create');
+            $trail->push( Helper::projectsType($project->project_type ), route('project.index'));
+            $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
+           // $trail->push('กิจกรรม');
+            $trail->push('เพิ่มกิจกรรม');
         });
 
         // 6 projects.task.show   มีแล้ว
         Breadcrumbs::for('project.task.show', function (BreadcrumbTrail $trail, $project, $task) {
-            $trail->push('Project', route('project.index'));
+            $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+            $trail->push(Helper::projectsType($project->project_type), route('project.index'));
             $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
-            $trail->push('Task',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
+            $trail->push('กิจกรรม',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
             $trail->push($task->task_name);
         });
+
+       // 6-2 projects.task.show   มีแล้ว
+       Breadcrumbs::for('project.task.show', function (BreadcrumbTrail $trail, $project, $task) {
+        $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+        $trail->push(Helper::projectsType($project->project_type), route('project.index'));
+        $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
+        $trail->push('กิจกรรม',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
+        $trail->push($task->task_name);
+    });
+
 
         // 7 projects.task.edit   มีแล้ว
         Breadcrumbs::for('project.task.edit', function (BreadcrumbTrail $trail, $project, $task) {
@@ -77,12 +98,13 @@
 
                 $project = App\Models\Project::find($id);
                 ($project);
-                $trail->push('Project', route('project.index'));
-
+               // $trail->push('Project', route('project.index'));
+               $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
+               $trail->push(Helper::projectsType($project->project_type), route('project.index'));
                 $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
-                $trail->push('Task');
+                $trail->push('กิจกรรม');
                 $trail->push($task->task_name,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]   ) );
-                $trail->push('Create');
+                $trail->push('เพิ่ม');
             });
 
 

@@ -15,25 +15,18 @@
         @endif
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ ') }}{{ $task->task_name }}">
+            <x-card >
 
 
               <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
                 @csrf
 
+                    <input type="hidden" class="form-control" id="task_parent_display" value="{{ $task->task_name }}" disabled readonly>
+
+                    <input type="hidden" class="form-control" id="task_parent" name="task_parent" value="{{$task->task_id }}">
 
                 <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
-                        <span class="text-danger">*</span>
-                        <input type="text" class="form-control" id="task_parent_display" value="{{ $task->task_name }}" disabled readonly>
 
-                        <input type="hidden" class="form-control" id="task_parent" name="task_parent" value="{{$task->task_id }}">
-
-                        <div class="invalid-feedback">
-                            {{ __('กิจกรรม') }}
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                         <span class="text-danger">*</span>
