@@ -73,7 +73,7 @@
         });
 
        // 6-2 projects.task.show   มีแล้ว
-       Breadcrumbs::for('project.task.show', function (BreadcrumbTrail $trail, $project, $task) {
+       Breadcrumbs::for('project.task.show2', function (BreadcrumbTrail $trail, $project, $task) {
         $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));
         $trail->push(Helper::projectsType($project->project_type), route('project.index'));
         $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));

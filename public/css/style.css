@@ -69,7 +69,7 @@
 
 body {
   margin: 0;
-  font-family: var(--cui-body-font-family);
+  font-family: 'Prompt', sans-serif;
   font-size: var(--cui-body-font-size);
   font-weight: var(--cui-body-font-weight);
   line-height: var(--cui-body-line-height);

@@ -291,6 +291,24 @@ class ContractController extends Controller
 
 
 
+    public function createbae(Request $request,$project=null)
+    {
+
+
+        $origin = $request->origin;
+        $project = $request->project;
+        $task = $request->taskHashid;
+       // $id_project       = Hashids::decode($project)[0];
+       // $id_task      = Hashids::decode($task)[0];
+        //$pro = Project::find($id_project);
+        //$ta = Task::find($id_task);
+
+
+        //dd($id_project,$id_task,$project,$task,$pro,$ta);
+
+        return view('app.contracts.create', compact('origin', 'project','task'));
+    }
+
 
     public function create(Request $request,$project=null)
     {
@@ -321,7 +339,7 @@ class ContractController extends Controller
 
 
         $messages = [
-            'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
 
         $request->validate([
@@ -329,8 +347,8 @@ class ContractController extends Controller
             'contract_number'                 => 'required',
             'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
-            'start_date' => 'required|date_format:d/m/Y',
-            'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
+            //'start_date' => 'required|date_format:d/m/Y',
+            //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
 
 
 

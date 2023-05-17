@@ -5,7 +5,11 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card >       {{ Breadcrumbs::render('project.show', $project) }}
+                        {!! 'ปีงบประมาณ ' . $project->project_fiscal_year .'<br>'. Helper::projectsType($project->project_type).$project->project_name
+                        !!}
+                                <x-card title="">
+
+                            {{ Breadcrumbs::render('project.show', $project) }}
 
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}"
@@ -835,16 +839,13 @@
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
 
-    <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet">
+  <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
         <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
 
 
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-            rel="stylesheet" />
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
