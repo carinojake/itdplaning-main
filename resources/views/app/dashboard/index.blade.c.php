@@ -286,7 +286,7 @@
     </x-slot:content>
 
     <x-slot:css>
-      <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
+     < <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
     </x-slot:css>
     <x-slot:javascript>
       <!-- Resources -->
@@ -295,7 +295,7 @@
       <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
       <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
       <script src="//cdn.amcharts.com/lib/4/core.js"></script>
-<script src="//cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="//cdn.amcharts.com/lib/4/charts.js"></script>
       <script src="{{ asset('/vendors/dhtmlx/dhtmlxgantt.js') }}"></script>
       <!-- Chart code -->
       <script>

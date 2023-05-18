@@ -69,7 +69,10 @@
             $trail->push(Helper::projectsType($project->project_type), route('project.index'));
             $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
             $trail->push('กิจกรรม',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
-            $trail->push($task->task_name);
+           // $trail->push($project->task_parent,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
+         //  $trail->push($task->task_parent, route('project.show', ['project' => $project->hashid]));
+
+           $trail->push($task->task_name);
         });
 
        // 6-2 projects.task.show   มีแล้ว
@@ -78,6 +81,7 @@
         $trail->push(Helper::projectsType($project->project_type), route('project.index'));
         $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
         $trail->push('กิจกรรม',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
+        $trail->push($project->task_parent,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
         $trail->push($task->task_name);
     });
 

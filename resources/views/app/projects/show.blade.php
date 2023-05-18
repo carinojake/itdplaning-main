@@ -4,14 +4,19 @@
 
             <div class="animated fadeIn">
                 <div class="row">
+                   <!-- {!! 'ปีงบประมาณ ' . $project->project_fiscal_year .'<br>'. Helper::projectsType($project->project_type).$project->project_name
+                    !!}-->
+                      {{ Breadcrumbs::render('project.show', $project) }}
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        {!! 'ปีงบประมาณ ' . $project->project_fiscal_year .'<br>'. Helper::projectsType($project->project_type).$project->project_name
-                        !!}
+
                                 <x-card title="">
 
-                            {{ Breadcrumbs::render('project.show', $project) }}
+
 
                             <x-slot:toolbar>
+
+
+
                                 <a href="{{ route('project.edit', $project->hashid) }}"
                                     class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
                                 <a href="{{ route('project.task.create', $project->hashid) }}"

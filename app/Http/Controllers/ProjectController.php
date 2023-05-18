@@ -570,17 +570,17 @@ class ProjectController extends Controller
         $project = new Project;
 
         $messages = [
-            'project_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+           // 'project_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
 
         $request->validate([
             'project_name' => 'required',
             'reguiar_id' => 'required',
-            'project_start_date' => 'required|date_format:d/m/Y',
-            'project_end_date' => 'required|date_format:d/m/Y',
-            'project_fiscal_year' => 'required|integer',
-            'start_date' => 'required|date_format:d/m/Y',
-            'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
+           // 'project_start_date' => 'required|date_format:d/m/Y',
+            //'project_end_date' => 'required|date_format:d/m/Y',
+            //'project_fiscal_year' => 'required|integer',
+            //'start_date' => 'required|date_format:d/m/Y',
+            //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
         ], $messages);
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('project_start_date'));

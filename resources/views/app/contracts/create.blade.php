@@ -23,19 +23,20 @@
   <a href="{{ route('project.task.createsub', $project) }}" class="btn btn-primary text-white">ไปยังหน้าการใช้จ่ายของงาน</a> --}}
                             </x-slot:toolbar>
 
-                            <div class="col-md-12">
-                                <div class="col-md-12">
-                                    <input type="text"name="origin" value="{{ $origin }}">
 
-                                    <input type="text" name="project" value="{{ $project }}">
-
-                                    <input type="text" name="task" value="{{ $task }}">
-
-                                </div>
-                            </div>
                             <form method="POST" action="{{ route('contract.store') }}" class="row g-3"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <input type="text"name="origin" value="{{ $origin }}">
+
+                                        <input type="text" name="project" value="{{ $project }}">
+
+                                        <input type="text" name="task" value="{{ $task }}">
+
+                                    </div>
+                                </div>
                                 <div class="row g-3 align-items-center">
                                     <div class="col-auto">
                                         <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label>
@@ -575,23 +576,7 @@
     <x-slot:javascript>
 
 
-<script>
-    $(document).ready(function() {
-        $('#contract_type').change(function() {
-            var contract_type = $(this).val();
-            if(contract_type == 1 || contract_type == 3) {
-                $('#po_form').show();
-                $('#er_form').hide();
-            } else if(contract_type == 2) {
-                $('#po_form').hide();
-                $('#er_form').show();
-            } else {
-                $('#po_form').hide();
-                $('#er_form').hide();
-            }
-        });
-    });
-    </script>
+
 
 <script>
     $(document).ready(function() {
@@ -608,10 +593,10 @@
                 $('#er_form').show();
             } else if(contract_type == 3) {
                 contract_name_label.text('ชื่อ CN');
-                $('#po_form').hide();
+                $('#po_form').show();
                 $('#er_form').hide();
             } else {
-                contract_name_label.text('ชื่อ PO/ER/CN');
+                contract_name_label.text('ชื่อ /CN');
                 $('#po_form').hide();
                 $('#er_form').hide();
             }
@@ -620,7 +605,7 @@
     </script>
 
 
-<script>
+<!--<script>
    function formatDate(date) {
     var parts = date.split("/");
     return parts[1] + "/" + parts[0] + "/" + parts[2];
@@ -645,9 +630,9 @@ $(document).ready(function() {
         $("#insurance_duration_days").text(days + " วัน");
     });
 });
-    </script>
+    </script> -->
 
-<!--<script>
+<script>
     function calculateDuration() {
         var startDate = $('#insurance_start_date').datepicker('getDate');
         var endDate = $('#insurance_end_date').datepicker('getDate');
@@ -662,11 +647,44 @@ $(document).ready(function() {
 
     $(document).ready(function() {
         $('#insurance_start_date, #insurance_end_date').datepicker({
+
             dateFormat: "dd/mm/yy",
             onSelect: calculateDuration
         });
     });
-</script>-->
+</script>
+
+
+<div data-coreui-toggle="date-picker" id="insurance_end_date"
+                                                            data-coreui-format="dd/MM/yyyy">
+                                                        </div>
+
+<!--<script>
+    $(document).ready(function() {
+        $('#contract_type').change(function() {
+            var contract_type = $(this).val();
+            if(contract_type == 1 || contract_type == 3) {
+                $('#po_form').show();
+                $('#er_form').hide();
+            } else if(contract_type == 2) {
+                $('#po_form').hide();
+                $('#er_form').show();
+                else if(contract_type == 3) {
+                    $('#po_form').show();
+                $('#er_form').hide();
+            }
+            } else {
+                $('#po_form').hide();
+                $('#er_form').hide();
+            }
+        });
+    });
+    </script>
+
+
+
+
+-->
 
     </x-slot:javascript>
 </x-app-layout>

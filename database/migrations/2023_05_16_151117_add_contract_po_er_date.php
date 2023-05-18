@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::table('contracts', function (Blueprint $table) {
             //
 
-            $table->date('contract_po_start_date')->nullable();
-            $table->date('contract_po_end_date')->nullable();
-            $table->date('contract_er_start_date')->nullable();
-            $table->date('contract_er_end_date')->nullable();
+            $table->timestamp('contract_po_start_date')->nullable();
+            $table->timestamp('contract_po_end_date')->nullable();
+            $table->timestamp('contract_er_start_date')->nullable();
+            $table->timestamp('contract_er_end_date')->nullable();
         });
     }
 

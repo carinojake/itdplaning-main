@@ -14,7 +14,7 @@
                 @endif
                 <div class="row mt-3">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มข้อมูลงาน โครงการ') }}">
+                        <x-card title="{{ __('เพิ่มข้อมูล งาน/โครงการ') }}">
 
                             <form method="POST" action="{{ route('project.store') }}" class="row g-3">
                                 @csrf

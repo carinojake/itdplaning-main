@@ -10,7 +10,7 @@
 
 
               <x-slot:toolbar>
-                <a href="{{ route('project.create') }}" class="btn btn-success text-white" target="_blank">งาน/โครงการ</a>
+                <a href="{{ route('project.create') }}" class="btn btn-success text-white" target="_blank">เพิ่ม งาน/โครงการ</a>
               </x-slot:toolbar>
               <table class="table table-responsive-sm table-striped" id="datatables">
                 <thead>
