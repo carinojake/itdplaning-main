@@ -856,8 +856,8 @@ class ProjectController extends Controller
             'task_name'                   => 'required',
            // 'date-picker-task_start_date' => 'required',
             //'date-picker-task_end_date'   => 'required',
-            'task_start_date' => 'required|date_format:d/m/Y',
-            'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+           // 'task_start_date' => 'required|date_format:d/m/Y',
+            //'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
 
 
         ], $messages);
@@ -886,6 +886,14 @@ class ProjectController extends Controller
         $task_budget_gov_utility = str_replace(',', '', $request->input('task_budget_gov_utility'));
         $task_budget_it_investment = str_replace(',', '', $request->input('task_budget_it_investment'));
 
+
+        $task_cost_it_operating = str_replace(',', '', $request->input('task_cost_it_operating'));
+        $task_cost_gov_utility = str_replace(',', '', $request->input('task_cost_gov_utility'));
+        $task_cost_it_investment = str_replace(',', '', $request->input('task_cost_it_investment'));
+
+
+
+
         if ($task_budget_it_operating === '') {
             $task_budget_it_operating = null; // or '0'
         }
@@ -897,6 +905,12 @@ class ProjectController extends Controller
         if ($task_budget_it_investment === '') {
             $task_budget_it_investment = null; // or '0'
         }
+
+
+
+
+
+
         $task->project_id       = $id;
         $task->task_name        = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
@@ -920,13 +934,22 @@ class ProjectController extends Controller
         $task->task_budget_it_operating   = $task_budget_it_operating;
         $task->task_budget_it_investment  = $task_budget_it_investment;
 
+        //$task->task_cost_gov_operating  = $task_cost_gov_operating;
+       // $task->task_cost_gov_investment = $task_cost_gov_investment;
+       // $task->task_cost_gov_utility    = $task_cost_gov_utility;
+       // $task->task_cost_it_operating   = $task_cost_it_operating;
+       // $task->task_cost_it_investment  = $task_cost_it_investment;
 
 
-        $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
-        $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
-        $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
-        $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
-        $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
+
+
+
+
+       // $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
+       // $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
+       // $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
+       // $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
+       // $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
         $task->task_pay                 = $request->input('task_pay');
 
         $task->task_type                 = $request->input('task_type');

@@ -3,6 +3,10 @@
         <div class="container-fluid">
 
             {{ Breadcrumbs::render('contract.create') }}
+            {{ $pro->project_name }}
+
+            {{ $ta->task_name }}
+
 
             <div class="animated fadeIn">
                 @if ($errors->any())
@@ -74,8 +78,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) MM') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="text" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_mm_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_mm_budget" min="0">
                                                     </div>
                                                 </div>
@@ -98,8 +104,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="taxt" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_pr_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_pr_budget" min="0">
                                                     </div>
                                                 </div>
@@ -121,8 +129,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) PA') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="taxt" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_pa_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_pa_budget" min="0">
                                                     </div>
                                                 </div>
@@ -147,8 +157,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) PO') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="taxt" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_po_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_po_budget" min="0">
                                                     </div>
 
@@ -185,8 +197,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) ER') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="text" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_er_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_po_budget" min="0">
                                                     </div>
 
@@ -221,8 +235,10 @@
                                                             class="form-label">{{ __('จำนวนเงิน (บาท) CN') }}</label> <span
                                                             class="text-danger"></span>
 
-                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                        <input type="text" placeholder="0.00" step="0.01"
                                                             class="form-control" id="contract_cn_budget"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
                                                             name="contract_cn_budget" min="0">
                                                     </div>
                                                 </div>
@@ -258,9 +274,9 @@
                                                     <div class="col-md-3">
                                                         <label for="contract_sign_date"
                                                             class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
-
-                                                        <div data-coreui-toggle="date-picker" id="contract_sign_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>
+                                                            <input type="text" class="form-control" id="contract_sign_date" name="contract_sign_date" >
+                                                        <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
+                                                            data-coreui-format="dd/MM/yyyy"></div>-->
                                                     </div>
 
 
@@ -286,19 +302,20 @@
                                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                                                             class="text-danger">*</span>
                                                         {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                                        <div data-coreui-toggle="date-picker" id="contract_start_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>
+                                                        <input type="text" class="form-control" id="contract_start_date" name="contract_start_date" >
+                                                        <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
+                                                            data-coreui-format="dd/MM/yyyy"></div>-->
                                                     </div>
 
 
                                                     <div class="col-md-3">
                                                         <label for="contract_end_date"
                                                             class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
-                                                            class="text-danger">*</span>
-
-                                                        <div data-coreui-toggle="date-picker" id="contract_end_date"
+                                                            class="text-danger"></span>
+                                                            <input type="text" class="form-control" id="contract_end_date" name="contract_end_date" >
+                                                       <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
                                                             data-coreui-format="dd/MM/yyyy">
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </div>
 
@@ -306,10 +323,10 @@
                                                     <div class="col-md-3">
                                                         <label for="insurance_start_date"
                                                             class="form-label">{{ __('วันที่เริ่มต้น ประก้น') }}</label> <span
-                                                            class="text-danger">*</span>
-                                                        {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                                        <div data-coreui-toggle="date-picker" id="insurance_start_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>
+                                                            class="text-danger"></span>
+                                                         <input type="text" class="form-control" id="insurance_start_date" name="insurance_start_date" >
+                                                       <!-- <div data-coreui-toggle="date-picker" id="insurance_start_date"
+                                                            data-coreui-format="dd/MM/yyyy"></div>-->
                                                     </div>
 
 
@@ -317,20 +334,20 @@
                                                         <label for="insurance_end_date"
                                                             class="form-label">{{ __('วันที่สิ้นสุด ประกัน') }}</label> <span
                                                             class="text-danger">*</span>
-
-                                                        <div data-coreui-toggle="date-picker" id="insurance_end_date"
+                                                            <input type="text" class="form-control" id="insurance_end_date" name="insurance_end_date">
+                                                       <!-- <div data-coreui-toggle="date-picker" id="insurance_end_date"
                                                             data-coreui-format="dd/MM/yyyy">
-                                                        </div>
+                                                        </div>-->
                                                     </div>
 
                                                     <div class="row mt-3">
                                                         <div class="col-md-3">
                                                             <div class="row">
-                                                                <div class="col-12">{{ __('จำนวนเดือน') }}</div>
+                                                                <div class="col-12">{{ __('ประกัน จำนวนเดือน') }}</div>
                                                                 <div id="insurance_duration_months" class="col-12"></div>
                                                             </div>
                                                             <div class="row mt-3">
-                                                                <div class="col-12">{{ __('จำนวนวัน') }}</div>
+                                                                <div class="col-12">{{ __('ประกัน จำนวนวัน') }}</div>
                                                                 <div id="insurance_duration_days" class="col-12"></div>
                                                             </div>
                                                         </div>
@@ -357,7 +374,7 @@
                                             <div class="accordion-body">
 
                                 <!--ข้อมูลสัญญา 3 -->
-                                <div class="col-md-12">
+                                <div class="col-md-12 mt-3">
                                     <label for="contract_name" class="form-label">{{ __('ชื่อ MM') }}</label> <span
                                         class="text-danger">*</span>
                                     <input type="text" class="form-control" id="contract_name"
@@ -632,6 +649,40 @@ $(document).ready(function() {
 });
     </script> -->
 
+    <script>
+        $(function () {
+          if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+          }
+
+          var d = new Date();
+          var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+
+
+
+
+
+
+
+
+
+
+          $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            isBuddhist: true,
+            defaultDate: toDay,
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+
+            onSelect: calculateDuration
+          });
+        });
+
+       </script>
 <script>
     function calculateDuration() {
         var startDate = $('#insurance_start_date').datepicker('getDate');
@@ -649,42 +700,20 @@ $(document).ready(function() {
         $('#insurance_start_date, #insurance_end_date').datepicker({
 
             dateFormat: "dd/mm/yy",
+
+
             onSelect: calculateDuration
         });
     });
 </script>
 
-
-<div data-coreui-toggle="date-picker" id="insurance_end_date"
-                                                            data-coreui-format="dd/MM/yyyy">
-                                                        </div>
-
-<!--<script>
-    $(document).ready(function() {
-        $('#contract_type').change(function() {
-            var contract_type = $(this).val();
-            if(contract_type == 1 || contract_type == 3) {
-                $('#po_form').show();
-                $('#er_form').hide();
-            } else if(contract_type == 2) {
-                $('#po_form').hide();
-                $('#er_form').show();
-                else if(contract_type == 3) {
-                    $('#po_form').show();
-                $('#er_form').hide();
-            }
-            } else {
-                $('#po_form').hide();
-                $('#er_form').hide();
-            }
-        });
-    });
-    </script>
+<script>
+    $(document).ready(function(){
+   $(":input").inputmask();
+   });
+   </script>
 
 
-
-
--->
 
     </x-slot:javascript>
 </x-app-layout>

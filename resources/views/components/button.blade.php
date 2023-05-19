@@ -9,7 +9,7 @@
         @if($icon)
         <svg class="icon me-2">
             <use xlink:href="{{ asset("vendors/@coreui/icons/sprites/free.svg#".$icon) }}"></use>
-        </svg> 
+        </svg>
         @endif
         {{ $slot }}
     </a>
@@ -18,7 +18,7 @@
         @if($icon)
         <svg class="icon me-2">
             <use xlink:href="{{ asset("vendors/@coreui/icons/sprites/free.svg#".$icon) }}"></use>
-        </svg> 
+        </svg>
         @endif
         {{ $slot }}
     </button>

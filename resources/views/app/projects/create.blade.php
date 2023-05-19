@@ -30,20 +30,6 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
-
-                                    <div class="col-md-3">
-                                        <label for="reguiar_id"
-                                            class="form-label">{{ __('no.ชื่องาน/โครงการ') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <!--<input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
-                                            required autofocus>-->
-                                            <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
-                                                @for($i = $reguiar_id; $i <= $reguiar_id; $i++)
-                                                    <option value="{{ $i }}" {{ ($reguiar_id == $i) ? 'selected' : '' }}>{{ $i }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
                                     <div class="col-md-3">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
@@ -63,6 +49,20 @@
                                             </label>
                                         </div>
                                     </div>
+
+
+                                    <div class="col-md-3">
+                                        <label for="reguiar_id"
+                                            class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ') }}</label> <span
+                                            class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
+                                            required autofocus>
+                                           <!-- <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
+                                                @for($i = $reguiar_id; $i <= $reguiar_id; $i++)
+                                                    <option value="{{ $i }}" {{ ($reguiar_id == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                                @endfor
+                                            </select>-->
+                                        </div>
 
 
                                     <div class="col-md-3">

@@ -323,7 +323,7 @@ class ContractController extends Controller
         $ta = Task::find($id_task);
 
 
-        //dd($id_project,$id_task,$project,$task,$pro,$ta);
+    //    dd($id_project,$id_task,$project,$task,$pro,$ta);
 
         return view('app.contracts.create', compact('origin', 'project','task','pro','ta'));
     }
@@ -345,8 +345,11 @@ class ContractController extends Controller
         $request->validate([
             'contract_name'                   => 'required',
             'contract_number'                 => 'required',
-            'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
-            'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
+            //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
+            //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
+
+
+
             //'start_date' => 'required|date_format:d/m/Y',
             //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
 
@@ -354,10 +357,12 @@ class ContractController extends Controller
 
         ], $messages);
         //convert date
-        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
-        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
+      //  $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
+       // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
 
-       // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
+       // $insurance_start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_start_date')), 'Y-m-d');
+       // $insurance_end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_end_date')), 'Y-m-d');
+        // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
         $sign_date_input = $request->input('date-picker-contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
 
@@ -365,6 +370,37 @@ class ContractController extends Controller
             $sign_date = $sign_date_object->format('Y-m-d');
         } else {
             $sign_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
+        }
+
+
+
+        $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
+        $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
+        $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
+        $contract_po_budget = str_replace(',', '', $request->input('contract_po_budget'));
+        $contract_er_budget = str_replace(',', '', $request->input('contract_er_budget'));
+        $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
+
+
+        if ($contract_pr_budget === '') {
+            $contract_pr_budget = null; // or '0'
+        }
+
+        if ($contract_pa_budget === '') {
+            $contract_pa_budget = null; // or '0'
+        }
+
+        if ($contract_mm_budget === '') {
+            $contract_mm_budget = null; // or '0'
+        }
+        if ($contract_po_budget === '') {
+            $contract_po_budget = null; // or '0'
+        }
+        if ($contract_er_budget === '') {
+            $contract_er_budget = null; // or '0'
+        }
+        if ($contract_cn_budget === '') {
+            $contract_cn_budget = null; // or '0'
         }
 
 
@@ -379,6 +415,13 @@ class ContractController extends Controller
         $contract->contract_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $contract->contract_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
+
+        $contract->insurance_start_date  =  $insurance_start_date ?? date('Y-m-d 00:00:00');
+        $contract->insurance_end_date   =   $insurance_end_date?? date('Y-m-d 00:00:00');
+
+
+
+
         $contract->contract_juristic_id = $request->input('contract_juristic_id') ?? null;
         $contract->contract_order_no    = $request->input('contract_order_no') ?? null;
         $contract->contract_type        = $request->input('contract_type') ?? null;
@@ -388,11 +431,24 @@ class ContractController extends Controller
         $contract->contract_mm        = $request->input('contract_mm');
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
-        $contract->contract_pr_budget        = $request->input('contract_pr_budget');
-        $contract->contract_pa_budget        = $request->input('contract_pa_budget');
+
+        $contract->contract_pr_budget = $contract_pr_budget;
+        $contract->contract_pa_budget = $contract_pa_budget;
+        $contract->contract_mm_budget = $contract_mm_budget;
+        $contract->contract_po_budget = $contract_po_budget;
+        $contract->contract_er_budget = $contract_er_budget;
+        $contract->contract_cn_budget = $contract_cn_budget;
+
+
+
+    //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
+      //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
+
+
+
         $origin = $request->input('origin');
         $project = $request->input('project');
         $task = $request->input('task');
@@ -576,6 +632,16 @@ public function download($id)
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
         $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d');
+
+
+
+
+
+
+
+
+
+
 
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_number      = $request->input('contract_number');

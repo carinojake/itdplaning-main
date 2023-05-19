@@ -29,19 +29,13 @@
             @if ($task['task_parent'] == null)
                 <h2>{{ $task->task_name }}</h2>
                 <div class="container">
-                    <div class="row">
+                    <div class="row mt-5">
                         <div class="col-sm">
                             <div class="row">
                                 <div class="col-6">{{ __('ปีงบประมาณ') }}</div>
 
                                 {{ $project->project_fiscal_year }}
 
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-6">{{ __('รายละเอียดงาน/โครงการ') }}</div>
-                                {{ $task->task_description }}
                             </div>
 
                         </div>
@@ -90,27 +84,25 @@
                             </div>
                             @endif
                         </div>
+                    </div>
 
-
-
-
-
+                    <div class="row mt-3">
+                        <div class="col-12" ><h5>{{ __('รายละเอียดงาน/โครงการ') }}</h5></div>
+                        {{ $task->task_description }}
                     </div>
 
 
 
 
 
-
-
                 </div>
-                <table class="table">
+                <table class="table mt-3">
                     <thead>
                         <tr>
-                            <th width="50">No</th>
-                            <th>Task Name</th>
-                            <th>m</th>
-                            <th>Date</th>
+                            <th width="50">ลำดับ</th>
+                            <th>กิจกรรม</th>
+                            <th></th>
+                            <th></th>
                             <th width="200"></th>
                         </tr>
                     </thead>
@@ -282,7 +274,7 @@
                                 <tr>
                                     <th>งวด</th>
                                     <th>วันที่เบิกจ่าย</th>
-                                    <th>disbursement_taskcons_status</th>
+                                    <th>สถานะการเบิกจ่าย</th>
                                     <th>ใช้จ่าย</th>
                                     <!-- Changed from Contract Description to Contract Year -->
                                     <!-- Add other columns as needed -->
@@ -296,7 +288,7 @@
                                         <td>{{ Helper::Date4(date('Y-m-d H:i:s', strtotime($result->taskcon_pay_date))) }}
                                         </td>
                                         <td>{{ $result->disbursement_taskcons_status }}</td>
-                                        <td>{{ $result->taskcon_pay }}</td>
+                                        <td>{{ number_format($result->taskcon_pay) }}</td>
 
 
                                         <!-- Changed from contract_description to contract_year  -->

@@ -422,7 +422,7 @@
   </x-slot:content>
 
   <x-slot:css>
-    <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
 
   </x-slot:css>
   <x-slot:javascript>

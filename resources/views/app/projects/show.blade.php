@@ -7,22 +7,19 @@
                    <!-- {!! 'ปีงบประมาณ ' . $project->project_fiscal_year .'<br>'. Helper::projectsType($project->project_type).$project->project_name
                     !!}-->
                       {{ Breadcrumbs::render('project.show', $project) }}
+
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
                                 <x-card title="">
 
+                                    <x-slot:toolbar>
+                                        <a href="{{ route('project.edit', $project->hashid) }}"
+                                            class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
+                                        <a href="{{ route('project.task.create', $project->hashid) }}"
+                                            class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
+                                        <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+                                    </x-slot:toolbar>
 
-
-                            <x-slot:toolbar>
-
-
-
-                                <a href="{{ route('project.edit', $project->hashid) }}"
-                                    class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
-                                <a href="{{ route('project.task.create', $project->hashid) }}"
-                                    class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
-                                <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
-                            </x-slot:toolbar>
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
                                     aria-orientation="vertical">
@@ -749,9 +746,9 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th width="50">No</th>
-                                        <th>Task Name</th>
-                                        <th>Date</th>
+                                        <th width="50">ลำดับ</th>
+                                        <th>กิจกรรม</th>
+                                        <th>วันที่</th>
                                         <th width="200"></th>
                                     </tr>
                                 </thead>
@@ -845,7 +842,7 @@
     <x-slot:css>
 
   <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
-        <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
 
 
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">

@@ -11,8 +11,11 @@
         </div>
       </div>
     </div>
+
   </x-slot:content>
   <x-slot:css>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt&display=swap">
     <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
   </x-slot:css>
   <x-slot:javascript>
@@ -63,7 +66,7 @@
           },
           //{name:"start_date", label:"Start time", align: "center" },
           // {name:"owner", width: 200, label:"Owner", template:function(task){
-          //   return task.owner} 
+          //   return task.owner}
           // }
         ]
       };

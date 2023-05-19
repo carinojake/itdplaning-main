@@ -7,12 +7,12 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-9 text-start">
+      <div class="col-8 text-start">
         <h4>
           <i class="{{ $icon }} me-2"></i> {{ $title }}
         </h4>
       </div>
-      <div class="col-3 text-end">
+      <div class="col-4 text-end">
         {{ $toolbar }}
       </div>
     </div>

@@ -4,7 +4,7 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title=" ปีงบประมาณ  {{$fiscal_year}}">
+                        <x-card title=" ปีงบประมาณ  {{$fiscal_year}}     ดูรายงานและโครงการ">
                           <x-slot:toolbar>
  <!--งบประมาณ-->
  <form method="POST" action="{{ route('dashboard.index') }}" class="mt-3">
@@ -506,7 +506,7 @@
         <div class="mb-3 row">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title fs-5 fw-semibold">งาน/โครงการ {{$fiscal_year}}</div>
+                    <div class="card-title fs-5 fw-semibold">ปีงบประมาณ งาน/โครงการ {{$fiscal_year}}</div>
                     <div id="gantt_here" style='width:100%; height:100vh;'></div>
                 </div>
             </div>
@@ -526,20 +526,24 @@
   width: 10%;
   height: 100px;
 }
+
+#gantt_here{
+    font-family: 'Prompt', Arial, sans-serif;
+}
         </style>
          </x-card>
     </x-slot:content>
 
     <x-slot:css>
+        <link href="{{ asset('vendors/DataTables/datatables.css') }}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-        <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
-        <link href="{{ asset('vendors/DataTables/datatables.css') }}" rel="stylesheet" />
-        <!--<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>-->
-        <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
-        <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
-        <script src="//cdn.amcharts.com/lib/4/core.js"></script>
-        <script src="//cdn.amcharts.com/lib/4/charts.js"></script>
+
+
+        <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
+
+
     </x-slot:css>
     <x-slot:javascript>
         <!-- Resources -->
@@ -550,12 +554,15 @@
         <script src="{{ asset('vendors/amcharts5/themes/Animated.js') }}"></script>
 
         <!-- Chart code -->
-
+        <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+        <script src="//cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="//cdn.amcharts.com/lib/4/charts.js"></script>
 
+  <!--<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>-->
 
         <!-- HTML -->
 

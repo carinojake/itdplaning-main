@@ -5,9 +5,12 @@
         use Diglactic\Breadcrumbs\Breadcrumbs;
 
         use App\Models\Project;
+        use App\Models\task;
         // This import is also not required, and you could replace `BreadcrumbTrail $trail`
         //  with `$trail`. This is nice for IDE type checking and completion.
         use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
+
+
 
         // Home
         Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
@@ -70,7 +73,14 @@
             $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
             $trail->push('กิจกรรม',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
            // $trail->push($project->task_parent,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
-         //  $trail->push($task->task_parent, route('project.show', ['project' => $project->hashid]));
+          // $trail->push($task->task_parent, route('project.show', ['project' => $project->hashid]));
+          if($task->task_parent > 1) {
+            $parentTask = Task::find($task->task_parent);
+            if ($parentTask) {
+                $trail->push($parentTask->task_name,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));       ;
+            }
+        }
+
 
            $trail->push($task->task_name);
         });
@@ -131,8 +141,8 @@
 
         //2 project.create  มีแล้ว
         Breadcrumbs::for('contract.create', function (BreadcrumbTrail $trail) {
-            $trail->push('contract', route('contract.index'));
-            $trail->push('Create', route('contract.create'));
+            //$trail->push('contract', route('contract.index'));
+            $trail->push('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER', route('contract.create'));
         });
 
 
