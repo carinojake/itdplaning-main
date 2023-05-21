@@ -54,7 +54,7 @@ if(!function_exists('renderDropdown')){
                                     <use xlink:href="{{ asset("vendors/@coreui/icons/sprites/free.svg#".$menuel['icon'])}}"></use>
                                 </svg>
                             @endif
-                        @endif 
+                        @endif
                         {{ $menuel['name'] }}
                         </a>
                     </li>
@@ -68,7 +68,7 @@ if(!function_exists('renderDropdown')){
                                 <use xlink:href="{{ asset("vendors/@coreui/icons/sprites/free.svg#".$menuel['icon'])}}"></use>
                             </svg>
                             @endif
-                        @endif 
+                        @endif
                         {{ $menuel['name'] }}
                     </li>
                 @endif

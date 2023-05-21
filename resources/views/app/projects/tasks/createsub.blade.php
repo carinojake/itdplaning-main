@@ -103,19 +103,19 @@
 
                 </div>
 
-                <div class="row mt-3">
-                          <div class="col-md-6">
-                          <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
-                          {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                          <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy" ></div>
 
-                        </div>
-                        <div class="col-md-6">
-                          <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
-                          {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                          <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" ></div>
-                        </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
+                        <input class="form-control" id="task_start_date" name="task_start_date" required>
                     </div>
+                    <div class="col-md-6">
+                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
+                        <input  class="form-control" id="task_end_date" name="task_end_date" required>
+                    </div>
+                </div>
+
+
                 <div class="col-md-12 mt-3">
                   <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span class="text-danger">*</span>
                   <input type="text" class="form-control" id="task_name" name="task_name" required autofocus>
@@ -251,6 +251,7 @@
   <x-slot:javascript>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         // สร้างฟังก์ชันสำหรับเพิ่มรายการสัญญา
         function addContractOption(contract) {
@@ -288,6 +289,28 @@
 $(":input").inputmask();
 });
 </script>
+
+<script>
+    $(function () {
+      if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+        alert("jQuery or jQuery UI is not loaded");
+        return;
+      }
+
+      var d = new Date();
+      var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+      $("#task_start_date, #task_end_date").datepicker({
+        dateFormat: 'dd/mm/yy',
+        isBuddhist: true,
+        defaultDate: toDay,
+        dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+        dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+      });
+    });
+   </script>
 
   </x-slot:javascript>
 </x-app-layout>

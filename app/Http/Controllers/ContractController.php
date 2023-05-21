@@ -42,8 +42,8 @@ class ContractController extends Controller
                     $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
                     $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
                     $html        = $row->contract_name . ' ' . $flag_status;
-                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s',$row->contract_start_date)) . '</span> -';
-                    $html .= ' <span class="badge bg-info">' . Helper::date4(date('Y-m-d H:i:s',$row->contract_end_date)) . '</span>';
+                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s', $row->contract_start_date)) . '</span> -';
+                    $html .= ' <span class="badge bg-info">' . Helper::date4(date('Y-m-d H:i:s', $row->contract_end_date)) . '</span>';
 
 
                     $startDate = Carbon::parse($row->contract_start_date);
@@ -92,7 +92,7 @@ class ContractController extends Controller
     {
         $id = Hashids::decode($contract)[0];
         $latestContract = Contract::latest()->first();
-       ($contract = Contract::find($id));
+        ($contract = Contract::find($id));
 
         $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
         $contract_end_date = \Carbon\Carbon::createFromTimestamp($contract->contract_end_date);
@@ -107,62 +107,62 @@ class ContractController extends Controller
         //dd(Hashids::encode($contract->task->task_id));
 
 
-                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
-                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
-             //       ($contract = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+        // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
+        // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
+        //       ($contract = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
 
-                 //   ->leftJoin(
-               //         DB::raw('(select taskcons.contract_id,
-               //     sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
-                 //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
-                //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_cost ,
-                 //   sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
-                 //   from taskcons  group by taskcons.contract_id) as a'),
-                 //       'a.contract_id',
-                 //       '=',
-                 //       'contracts.contract_id'
-                 //   )
+        //   ->leftJoin(
+        //         DB::raw('(select taskcons.contract_id,
+        //     sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_cost ,
+        //   sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+        //   from taskcons  group by taskcons.contract_id) as a'),
+        //       'a.contract_id',
+        //       '=',
+        //       'contracts.contract_id'
+        //   )
 
-                   // ->leftJoin(
-                 //       DB::raw('(select taskcons.contract_id,
-              //      sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
-                //    +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
-               //     +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as cost_pa_1 ,
-               //     sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
-               //     from tasks  where taskcons.taskcon_type=1 group by taskcons.contract_id) as ab'),
-                //        'ab.contract_id',
-                //        '=',
-                //        'contracts.contract_id'
-                //    )
+        // ->leftJoin(
+        //       DB::raw('(select taskcons.contract_id,
+        //      sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        //    +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        //     +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as cost_pa_1 ,
+        //     sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+        //     from tasks  where taskcons.taskcon_type=1 group by taskcons.contract_id) as ab'),
+        //        'ab.contract_id',
+        //        '=',
+        //        'contracts.contract_id'
+        //    )
 
-                   // ->leftJoin(
-                  //      DB::raw('(select taskcons.contract_id,
-                 //   sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
-                 //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
-                //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))as cost_no_pa_2 ,
-                //    sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
-                //    from taskcons  where taskcons.taskcon_type=2 group by taskcons.contract_id) as ac'),
-                //        'ac.contract_id',
-                //        '=',
-                //        'contracts.contract_id'
-                //    )
+        // ->leftJoin(
+        //      DB::raw('(select taskcons.contract_id,
+        //   sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        //   +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        //    +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))as cost_no_pa_2 ,
+        //    sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+        //    from taskcons  where taskcons.taskcon_type=2 group by taskcons.contract_id) as ac'),
+        //        'ac.contract_id',
+        //        '=',
+        //        'contracts.contract_id'
+        //    )
 
-                    // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
-                    //->groupBy('projects.project_id')
-                   // ->where( 'contracts.contract_id', $id)
-                   // ->first()
+        // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+        //->groupBy('projects.project_id')
+        // ->where( 'contracts.contract_id', $id)
+        // ->first()
 
-                    // ->toArray()
-                  //  );
-                    //dd($project);
+        // ->toArray()
+        //  );
+        //dd($project);
 
-                    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
-                 //   (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
-                 //   (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
-                 //   (float) $__budget     = $__budget_gov + $__budget_it;
-                 //   (float) $__cost       = (float) $project['project_cost'];
-                 //   (float) $__balance    = $__budget + (float) $project['project_cost'];
-                  //  $__project_cost     = [];
+        // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
+        //   (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
+        //   (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
+        //   (float) $__budget     = $__budget_gov + $__budget_it;
+        //   (float) $__cost       = (float) $project['project_cost'];
+        //   (float) $__balance    = $__budget + (float) $project['project_cost'];
+        //  $__project_cost     = [];
 
 
 
@@ -187,17 +187,22 @@ class ContractController extends Controller
 
 
         ($taskcons = DB::table('taskcons')
-        ->select('taskcons.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
-        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+            ->select('taskcons.*', 'a.cost_disbursement', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+            ->leftJoin(
+                DB::raw('(select taskcons.taskcon_parent,
         sum( COALESCE(taskcons.taskcon_cost_gov_utility,0))
         +sum( COALESCE(taskcons.taskcon_cost_it_operating,0))
         +sum( COALESCE(taskcons.taskcon_cost_it_investment,0))
         as cost_disbursement,
         sum( COALESCE(taskcons.taskcon_pay,0))  as total_pay
         from taskcons  group by taskcons.taskcon_parent) as a'),
-         'a.taskcon_parent', '=', 'taskcons.taskcon_id')
+                'a.taskcon_parent',
+                '=',
+                'taskcons.taskcon_id'
+            )
 
-        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+            ->leftJoin(
+                DB::raw('(select taskcons.taskcon_parent,
         sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
@@ -205,26 +210,33 @@ class ContractController extends Controller
         sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
         from taskcons
         where taskcons.taskcon_type=1 group by taskcons.taskcon_parent) as ab'),
-        'ab.taskcon_parent', '=', 'taskcons.taskcon_id')
+                'ab.taskcon_parent',
+                '=',
+                'taskcons.taskcon_id'
+            )
 
 
-        ->leftJoin(DB::raw('(select taskcons.taskcon_parent,
+            ->leftJoin(
+                DB::raw('(select taskcons.taskcon_parent,
          sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
         as cost_no_pa_2 ,sum( COALESCE(taskcons.taskcon_pay,0))
         as total_pay
         from taskcons  where taskcons.taskcon_type=2 group by taskcons.taskcon_parent) as ac'),
-        'ac.taskcon_parent', '=', 'taskcons.taskcon_id')
-        ->where('contract_id',($id))
-        ->get()
-        ->toArray());
+                'ac.taskcon_parent',
+                '=',
+                'taskcons.taskcon_id'
+            )
+            ->where('contract_id', ($id))
+            ->get()
+            ->toArray());
 
 
 
 
 
-       ($taskcons = json_decode(json_encode($taskcons), true));
+        ($taskcons = json_decode(json_encode($taskcons), true));
 
         foreach ($contract->taskcon as $task) {
 
@@ -233,7 +245,7 @@ class ContractController extends Controller
             (float) $__budget     = $__budget_gov + $__budget_it;
 
             (float) $__cost = array_sum([
-               // (double)$task['cost_disbursement'],
+                // (double)$task['cost_disbursement'],
                 $task['taskcon_cost_gov_operating'],
                 $task['taskcon_cost_gov_investment'],
                 $task['taskcon_cost_gov_utility'],
@@ -270,12 +282,12 @@ class ContractController extends Controller
 
 
 
-         //   'cost_pa_1'             => $task['cost_pa_1'],
-           // 'cost_no_pa_2'             => $task['cost_no_pa_2'],
-           // 'cost_disbursement'     => $project['cost_disbursement'],
+                //   'cost_pa_1'             => $task['cost_pa_1'],
+                // 'cost_no_pa_2'             => $task['cost_no_pa_2'],
+                // 'cost_disbursement'     => $project['cost_disbursement'],
                 'pay'                   => $task['taskcon_pay'],
-             //   'cost_disbursement'     => $task['cost_disbursement'],
-             //   'task_total_pay'             => $task['total_pay'],
+                //   'cost_disbursement'     => $task['cost_disbursement'],
+                //   'task_total_pay'             => $task['total_pay'],
                 'taskcon_type'             => $task['taskcon_type']
 
                 // 'owner' => $project['project_owner'],
@@ -286,47 +298,61 @@ class ContractController extends Controller
 
         $gantt = json_encode($gantt);
 
-        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p','latestContract'));
+        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p', 'latestContract'));
     }
 
 
 
-    public function createbae(Request $request,$project=null)
+    public function createbae(Request $request, $project = null)
     {
 
 
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-       // $id_project       = Hashids::decode($project)[0];
-       // $id_task      = Hashids::decode($task)[0];
+        // $id_project       = Hashids::decode($project)[0];
+        // $id_task      = Hashids::decode($task)[0];
         //$pro = Project::find($id_project);
         //$ta = Task::find($id_task);
 
 
         //dd($id_project,$id_task,$project,$task,$pro,$ta);
 
-        return view('app.contracts.create', compact('origin', 'project','task'));
+        return view('app.contracts.create', compact('origin', 'project', 'task'));
     }
 
-
-    public function create(Request $request,$project=null)
+    public function create(Request $request, $project = null)
     {
-
-
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-        $id_project       = Hashids::decode($project)[0];
-        $id_task      = Hashids::decode($task)[0];
-        $pro = Project::find($id_project);
-        $ta = Task::find($id_task);
 
+        $id_project = null;
+        $id_task = null;
+        $pro = null;
+        $ta = null;
 
-    //    dd($id_project,$id_task,$project,$task,$pro,$ta);
+        if ($project && $task) {
+            $decodedProject = Hashids::decode($project);
+            $decodedTask = Hashids::decode($task);
 
-        return view('app.contracts.create', compact('origin', 'project','task','pro','ta'));
+            if (isset($decodedProject[0]) && isset($decodedTask[0])) {
+                $id_project = $decodedProject[0];
+                $id_task = $decodedTask[0];
+
+                $pro = Project::find($id_project);
+                $ta = Task::find($id_task);
+            }
+        }
+
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
+
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year'));
     }
+
 
 
 
@@ -344,7 +370,7 @@ class ContractController extends Controller
 
         $request->validate([
             'contract_name'                   => 'required',
-            'contract_number'                 => 'required',
+            // 'contract_number'                 => 'required',
             //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
 
@@ -357,11 +383,11 @@ class ContractController extends Controller
 
         ], $messages);
         //convert date
-      //  $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
-       // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
+        //  $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
+        // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
 
-       // $insurance_start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_start_date')), 'Y-m-d');
-       // $insurance_end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_end_date')), 'Y-m-d');
+        // $insurance_start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_start_date')), 'Y-m-d');
+        // $insurance_end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_end_date')), 'Y-m-d');
         // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
         $sign_date_input = $request->input('date-picker-contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
@@ -417,7 +443,7 @@ class ContractController extends Controller
 
 
         $contract->insurance_start_date  =  $insurance_start_date ?? date('Y-m-d 00:00:00');
-        $contract->insurance_end_date   =   $insurance_end_date?? date('Y-m-d 00:00:00');
+        $contract->insurance_end_date   =   $insurance_end_date ?? date('Y-m-d 00:00:00');
 
 
 
@@ -441,8 +467,8 @@ class ContractController extends Controller
 
 
 
-    //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
-      //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
+        //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
+        //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
@@ -457,94 +483,94 @@ class ContractController extends Controller
 
 
         // Get the ID of the newly created contract
-$idproject =  $project;
-$idtask =  $task;
-$id =$project.'/'.$task ;
-// Create a new directory for the contract if it doesn't exist
-$contractDir = public_path('uploads/contracts/' . $id);
-if (!file_exists($contractDir)) {
-    mkdir($contractDir, 0755, true);
-}
+        $idproject =  $project;
+        $idtask =  $task;
+        $id = $project . '/' . $task;
+        // Create a new directory for the contract if it doesn't exist
+        $contractDir = public_path('uploads/contracts/' . $id);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
 
 
         // Handle file upload
-            if ($request->hasFile('contract_file')) {
-                // Delete the old file if it exists
-                if ($contract->contract_file) {
-                    $oldFilePath = public_path('uploads/contracts/' . $id . '/' . $contract->contract_file);
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath);
-                    }
+        if ($request->hasFile('contract_file')) {
+            // Delete the old file if it exists
+            if ($contract->contract_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $id . '/' . $contract->contract_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
                 }
-
-                $file = $request->file('contract_file');
-                $filename = $contract->contract_number  . $contract->contract_fiscal_year .'.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/contracts/'), $filename);
-                $contract->contract_file  = $filename;
             }
-// Handle pr_file upload
-if ($request->hasFile('pr_file')) {
-    // ...Your code for handling pr_file upload...
-    if ($contract->pr_file) {
-        $oldFilePath = public_path('uploads/contracts/' . $contract->pr_file);
-        if (file_exists($oldFilePath)) {
-            unlink($oldFilePath);
+
+            $file = $request->file('contract_file');
+            $filename = $contract->contract_number  . $contract->contract_fiscal_year . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->contract_file  = $filename;
         }
-    }
+        // Handle pr_file upload
+        if ($request->hasFile('pr_file')) {
+            // ...Your code for handling pr_file upload...
+            if ($contract->pr_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->pr_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
 
-    $file = $request->file('pr_file');
-    $filename = $id . '_PR_' . time() . '.' . $file->getClientOriginalExtension();
-    $file->move(public_path('uploads/contracts/'), $filename);
-    $contract->pr_file = $filename;
-}
-
-// Handle pa_file upload
-if ($request->hasFile('pa_file')) {
-    // ...Your code for handling pa_file upload...
-    if ($contract->pa_file) {
-        $oldFilePath = public_path('uploads/contracts/' . $contract->pa_file);
-        if (file_exists($oldFilePath)) {
-            unlink($oldFilePath);
+            $file = $request->file('pr_file');
+            $filename = $id . '_PR_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->pr_file = $filename;
         }
-    }
 
-    $file = $request->file('pa_file');
-    $filename = $id . '_PA_' . time() . '.' . $file->getClientOriginalExtension();
-    $file->move(public_path('uploads/contracts/'), $filename);
-    $contract->pa_file = $filename;
-}
+        // Handle pa_file upload
+        if ($request->hasFile('pa_file')) {
+            // ...Your code for handling pa_file upload...
+            if ($contract->pa_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->pa_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
 
-// Handle cn_file upload
-if ($request->hasFile('cn_file')) {
-    // ...Your code for handling cn_file upload...
-    if ($contract->cn_file) {
-        $oldFilePath = public_path('uploads/contracts/' . $contract->cn_file);
-        if (file_exists($oldFilePath)) {
-            unlink($oldFilePath);
+            $file = $request->file('pa_file');
+            $filename = $id . '_PA_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->pa_file = $filename;
         }
-    }
 
-    $file = $request->file('cn_file');
-    $filename = $id . '_CN_' . time() . '.' . $file->getClientOriginalExtension();
-    $file->move(public_path('uploads/contracts/'), $filename);
-    $contract->cn_file = $filename;
-}
+        // Handle cn_file upload
+        if ($request->hasFile('cn_file')) {
+            // ...Your code for handling cn_file upload...
+            if ($contract->cn_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->cn_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
 
-// Handle cn_file upload
-if ($request->hasFile('mm_file')) {
-    // ...Your code for handling cn_file upload...
-    if ($contract->mm_file) {
-        $oldFilePath = public_path('uploads/contracts/' . $contract->mm_file);
-        if (file_exists($oldFilePath)) {
-            unlink($oldFilePath);
+            $file = $request->file('cn_file');
+            $filename = $id . '_CN_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->cn_file = $filename;
         }
-    }
 
-    $file = $request->file('mm_file');
-    $filename = $id . '_mm_' . time() . '.' . $file->getClientOriginalExtension();
-    $file->move(public_path('uploads/contracts/'), $filename);
-    $contract->mm_file = $filename;
-}
+        // Handle cn_file upload
+        if ($request->hasFile('mm_file')) {
+            // ...Your code for handling cn_file upload...
+            if ($contract->mm_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->mm_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('mm_file');
+            $filename = $id . '_mm_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->mm_file = $filename;
+        }
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -555,47 +581,42 @@ if ($request->hasFile('mm_file')) {
         // $contract->budget_it_operating   = $request->input('budget_it_operating');
         // $contract->budget_it_investment  = $request->input('budget_it_investment');
 
-    //    if ($contract->save()) {
-      //      return redirect()->route('contract.index');
-       // }
-    //
+        //    if ($contract->save()) {
+        //      return redirect()->route('contract.index');
+        // }
+        //
 
 
 
 
-    if ($contract->save()) {
-        $origin = $request->input('origin');
-        $project = $request->input('project');
-        $task = $request->input('task');
+        if ($contract->save()) {
+            $origin = $request->input('origin');
+            $project = $request->input('project');
+            $task = $request->input('task');
 
-        // บันทึกข้อมูลลงใน session
-        session()->flash('contract_id', $contract->contract_id);
-        session()->flash('contract_number', $contract->contract_number);
-        session()->flash('contract_name', $contract->contract_name);
+            // บันทึกข้อมูลลงใน session
+            session()->flash('contract_id', $contract->contract_id);
+            session()->flash('contract_number', $contract->contract_number);
+            session()->flash('contract_name', $contract->contract_name);
 
-        if ($origin) {
-            return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
+            if ($origin) {
+                return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
+            }
+
+            return redirect()->route('contract.index');
+        }
+    }
+    public function download($id)
+    {
+        $contract = Contract::findOrFail($id);
+
+        if ($contract->contract_file) {
+            $filePath = public_path('uploads/contracts/' . $id . $contract->contract_file);
+            return response()->download($filePath, $contract->contract_file);
         }
 
-        return redirect()->route('contract.index');
+        return abort(404);
     }
-
-
-
-
-
-}
-public function download($id)
-{
-    $contract = Contract::findOrFail($id);
-
-    if ($contract->contract_file) {
-        $filePath = public_path('uploads/contracts/'.$id . $contract->contract_file);
-        return response()->download($filePath, $contract->contract_file);
-    }
-
-    return abort(404);
-}
 
     /**
      * Remove the specified resource from storage.
@@ -610,6 +631,11 @@ public function download($id)
 
         return view('app.contracts.edit', compact('contract'));
     }
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -632,16 +658,6 @@ public function download($id)
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
         $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d');
-
-
-
-
-
-
-
-
-
-
 
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_number      = $request->input('contract_number');
@@ -666,6 +682,7 @@ public function download($id)
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
+
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
 

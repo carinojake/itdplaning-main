@@ -3,9 +3,18 @@
         <div class="container-fluid">
 
             {{ Breadcrumbs::render('contract.create') }}
-            {{ $pro->project_name }}
 
-            {{ $ta->task_name }}
+            @if($pro)
+                {{ $pro->project_name }}
+            @else
+                No Project Found
+            @endif
+
+            @if($ta)
+                {{ $ta->task_name }}
+            @else
+                No Task Found
+            @endif
 
 
             <div class="animated fadeIn">
@@ -42,10 +51,22 @@
                                     </div>
                                 </div>
                                 <div class="row g-3 align-items-center">
-                                    <div class="col-auto">
-                                        <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label>
+                                    <div class="col-md-3">
+                                        <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
+                                        <select name="contract_fiscal_year" class="form-select @error('contract_fiscal_year') is-invalid @enderror">
+                                            @for($i = date('Y')+541; $i <= date('Y')+543+2; $i++)
+                                                <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                        @error('contract_fiscal_year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    <div class="col-auto">
+
+
+                                    <div class="col-md-3">
+                                        <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label>
+
                                         {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
                                     </div>
                                 </div>
@@ -658,16 +679,6 @@ $(document).ready(function() {
 
           var d = new Date();
           var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-
-
-
-
-
-
-
-
-
-
 
           $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date").datepicker({
             dateFormat: 'dd/mm/yy',

@@ -16,8 +16,8 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $task->task_name }}">
                             <form method="POST"
-                                action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="row g-3">
+                            action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                            class="row g-3">
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -199,6 +199,29 @@
 
 
 
+                                    </div>
+
+
+                                    <div class="row mt-3">
+
+                                        <h4>เบิกจ่าย</h4>
+                                        <div class="col-md-6">
+                                            <label for="task_pay_date"
+                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
+                                                class="text-danger">*</span>
+                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                                            <div data-coreui-toggle="date-picker" id="task_pay_date"
+                                                data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
+                                            <input type="number" placeholder="0.00" step="0.01"
+                                                class="form-control" id="task_pay" name="task_pay" min="0">
+                                            <div class="invalid-feedback">
+                                                {{ __('เบิกจ่าย') }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

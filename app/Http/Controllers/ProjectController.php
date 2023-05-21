@@ -570,13 +570,13 @@ class ProjectController extends Controller
         $project = new Project;
 
         $messages = [
-           // 'project_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            // 'project_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
 
         $request->validate([
             'project_name' => 'required',
             'reguiar_id' => 'required',
-           // 'project_start_date' => 'required|date_format:d/m/Y',
+            // 'project_start_date' => 'required|date_format:d/m/Y',
             //'project_end_date' => 'required|date_format:d/m/Y',
             //'project_fiscal_year' => 'required|integer',
             //'start_date' => 'required|date_format:d/m/Y',
@@ -784,7 +784,7 @@ class ProjectController extends Controller
         // ตรวจสอบค่าตัวแปร
         ($results);
 
-        //($project, $task, $results);
+        //dd($project, $task, $results);
 
         // ส่งข้อมูลไปยัง view
         return view('app.projects.tasks.show', compact('project', 'task', 'results', 'contract', 'latestContract'));
@@ -814,7 +814,7 @@ class ProjectController extends Controller
         }
 
 
-
+        //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
 
 
         return view('app.projects.tasks.create', compact('request', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
@@ -854,33 +854,26 @@ class ProjectController extends Controller
         ];
         $request->validate([
             'task_name'                   => 'required',
-           // 'date-picker-task_start_date' => 'required',
+            // 'date-picker-task_start_date' => 'required',
             //'date-picker-task_end_date'   => 'required',
-           // 'task_start_date' => 'required|date_format:d/m/Y',
+            // 'task_start_date' => 'required|date_format:d/m/Y',
             //'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-
-
         ], $messages);
-
-
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
-       // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+        // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
 
-        if ($start_date_obj === false || $end_date_obj === false ) {
+        if ($start_date_obj === false || $end_date_obj === false) {
             // Handle date conversion error
             // You can either return an error message or use a default date
         } else {
             $start_date_obj->modify('-543 years');
             $end_date_obj->modify('-543 years');
-         //   $pay_date_obj->modify('-543 years');
-
+            //   $pay_date_obj->modify('-543 years');
             $start_date = date_format($start_date_obj, 'Y-m-d');
             $end_date = date_format($end_date_obj, 'Y-m-d');
-        //    $pay_date = date_format($pay_date_obj, 'Y-m-d');
+            //    $pay_date = date_format($pay_date_obj, 'Y-m-d');
         }
-
-
         // convert input to decimal or set it to null if empty
         $task_budget_it_operating = str_replace(',', '', $request->input('task_budget_it_operating'));
         $task_budget_gov_utility = str_replace(',', '', $request->input('task_budget_gov_utility'));
@@ -891,6 +884,7 @@ class ProjectController extends Controller
         $task_cost_gov_utility = str_replace(',', '', $request->input('task_cost_gov_utility'));
         $task_cost_it_investment = str_replace(',', '', $request->input('task_cost_it_investment'));
 
+        $task_pay = str_replace(',', '', $request->input('task_pay'));
 
 
 
@@ -906,9 +900,21 @@ class ProjectController extends Controller
             $task_budget_it_investment = null; // or '0'
         }
 
+        if ($task_cost_it_operating === '') {
+            $task_cost_it_operating = null; // or '0'
+        }
 
+        if ($task_cost_gov_utility === '') {
+            $task_cost_gov_utility = null; // or '0'
+        }
 
+        if ($task_cost_it_investment === '') {
+            $task_cost_it_investment = null; // or '0'
+        }
 
+        if ( $task_pay === '') {
+            $task_pay = null; // or '0'
+        }
 
 
         $task->project_id       = $id;
@@ -917,16 +923,12 @@ class ProjectController extends Controller
 
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-        //$task->task_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+        $task->task_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
 
 
         $task->task_parent = $request->input('task_parent') ?? null;
 
-        //  $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
-        //$task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
-        // $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
-        // $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
-        // $task->task_budget_it_investment  = $request->input('task_budget_it_investment');
+
 
         //convert input to decimal or set it to null if empty
 
@@ -934,23 +936,27 @@ class ProjectController extends Controller
         $task->task_budget_it_operating   = $task_budget_it_operating;
         $task->task_budget_it_investment  = $task_budget_it_investment;
 
-        //$task->task_cost_gov_operating  = $task_cost_gov_operating;
-       // $task->task_cost_gov_investment = $task_cost_gov_investment;
-       // $task->task_cost_gov_utility    = $task_cost_gov_utility;
-       // $task->task_cost_it_operating   = $task_cost_it_operating;
-       // $task->task_cost_it_investment  = $task_cost_it_investment;
+        $task->task_cost_gov_utility    = $task_cost_gov_utility;
+        $task->task_cost_it_operating   = $task_cost_it_operating;
+        $task->task_cost_it_investment  = $task_cost_it_investment;
 
 
+        $task->task_pay                 =  $task_pay;
 
+ //  $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
+        //$task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
+        // $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
+        // $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
+        // $task->task_budget_it_investment  = $request->input('task_budget_it_investment');
 
+        // $task->task_cost_gov_operating  = $task_cost_gov_operating;
+        // $task->task_cost_gov_investment = $task_cost_gov_investment;
+        // $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
+        // $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
+        // $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
+        // $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
+        // $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
 
-
-       // $task->task_cost_gov_operating  = $request->input('task_cost_gov_operating');
-       // $task->task_cost_gov_investment = $request->input('task_cost_gov_investment');
-       // $task->task_cost_gov_utility    = $request->input('task_cost_gov_utility');
-       // $task->task_cost_it_operating   = $request->input('task_cost_it_operating');
-       // $task->task_cost_it_investment  = $request->input('task_cost_it_investment');
-        $task->task_pay                 = $request->input('task_pay');
 
         $task->task_type                 = $request->input('task_type');
 
@@ -976,7 +982,7 @@ class ProjectController extends Controller
             }
 
 
-            ($task);
+            //($task);
 
 
             return redirect()->route('project.show', $project);
@@ -1036,6 +1042,10 @@ class ProjectController extends Controller
         $project    = Project::find($id_project);
         $task       = task::find($id_task);
 
+
+
+
+
         $request->validate([
             'task_name'                   => 'required',
             'date-picker-task_start_date' => 'required',
@@ -1054,6 +1064,26 @@ class ProjectController extends Controller
         $task_budget_gov_utility = str_replace(',', '', $request->input('task_budget_gov_utility'));
         $task_budget_it_investment = str_replace(',', '', $request->input('task_budget_it_investment'));
 
+        // convert input to decimal or set it to null if empty
+        $task_cost_it_operating = str_replace(',', '', $request->input('task_cost_it_operating'));
+        $task_cost_gov_utility = str_replace(',', '', $request->input('task_cost_gov_utility'));
+        $task_cost_it_investment = str_replace(',', '', $request->input('task_cost_it_investment'));
+
+
+        $task->task_pay                 = str_replace(',', '', $request->input('task_pay'));
+
+        if ($task_cost_it_operating === '') {
+            $task_cost_it_operating = null; // or '0'
+        }
+
+        if ($task_cost_gov_utility === '') {
+            $task_cost_gov_utility = null; // or '0'
+        }
+
+        if ($task_cost_it_investment === '') {
+            $task_cost_it_investment = null; // or '0'
+        }
+
         if ($task_budget_it_operating === '') {
             $task_budget_it_operating = null; // or '0'
         }
@@ -1066,6 +1096,11 @@ class ProjectController extends Controller
             $task_budget_it_investment = null; // or '0'
         }
 
+
+
+
+
+
         $task->project_id       = $id_project;
         $task->task_name        = $request->input('task_name');
         $task->task_status      = $request->input('task_status');
@@ -1073,7 +1108,7 @@ class ProjectController extends Controller
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
-        $task->task_parent = $request->input('task_parent') ?? null;
+    //    $task->task_parent = $request->input('task_parent') ?? null;
 
         // $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
         // $task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
@@ -1096,19 +1131,25 @@ class ProjectController extends Controller
         $task->task_budget_it_operating   = $task_budget_it_operating;
         $task->task_budget_it_investment  = $task_budget_it_investment;
 
+        // set budget values
+        $task->task_budget_gov_utility    = $task_budget_gov_utility;
+        $task->task_budget_it_operating   = $task_budget_it_operating;
+        $task->task_budget_it_investment  = $task_budget_it_investment;
 
-        //  $task->task_cost_gov_operating  = str_replace(',', '',$request->input('task_cost_gov_operating'));
-        // $task->task_cost_gov_investment = str_replace(',', '',$request->input('task_cost_gov_investment'));
-        // $task->task_cost_gov_utility    = str_replace(',', '',$request->input('task_cost_gov_utility'));
-        // $task->task_cost_it_operating   = str_replace(',', '',$request->input('task_cost_it_operating'));
-        // $task->task_cost_it_investment  = str_replace(',', '',$request->input('task_cost_it_investment'));
+        // set cost values
+        $task->task_cost_gov_utility    = $task_cost_gov_utility;
+        $task->task_cost_it_operating   = $task_cost_it_operating;
+        $task->task_cost_it_investment  = $task_cost_it_investment;
 
 
-        //$task->task_pay                 = str_replace(',', '',$request->input('task_pay'));
 
 
-        //$task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00');
-        $task->task_type                 = $request->input('task_type');
+
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00')?? null;
+        $task->task_type                 = $request->input('task_type')?? null;
+
+
+        //dd($task);
 
         if ($task->save()) {
 

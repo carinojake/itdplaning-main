@@ -787,7 +787,7 @@
                                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                                                     class="btn-sm btn btn-primary text-white" target="_blank"><i
                                                                         class="cil-folder-open "></i></a>
-                                                                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                                                     class="btn-sm btn btn-warning text-white" target="_blank"> <i
                                                                         class="cil-cog"></i> </a>
                                                                 <form

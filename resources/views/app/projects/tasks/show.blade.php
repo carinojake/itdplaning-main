@@ -6,10 +6,10 @@
 
             @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
-                    <a href="{{ route('project.task.editsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type) }}
                     </a>
-                    <a href="{{ route('project.task.createsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>
                     <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
@@ -17,10 +17,10 @@
 
             @if ($contract)
                 <x-slot:toolbar>
-                    <a href="{{ route('project.task.editsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark">แก้ไขeditsub
                         {{ Helper::projectsType($project->project_type) }} </a>
-                    <!-- <a href="{{ route('project.task.createsub', ['projectHashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
                     <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
@@ -125,7 +125,7 @@
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                                     class="btn-sm btn btn-primary text-white" target="_blank"><i
                                                         class="cil-folder-open "></i></a>
-                                                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                                     class="btn-sm btn btn-warning text-white" target="_blank"> <i
                                                         class="cil-cog"></i> </a>
                                                 <form
