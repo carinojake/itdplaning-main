@@ -269,6 +269,7 @@ class Helper
             "1" => "การซื้อ",
             "2" => "การจ้าง",
             "3" => "การเช่า",
+            "4" => "ค่าใช้จ่ายสำนักงาน",
         ];
 
         if ($contract_type && array_key_exists($contract_type, $types)) {

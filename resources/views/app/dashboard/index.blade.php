@@ -4,15 +4,18 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title=" ปีงบประมาณ  {{$fiscal_year}}     ดูรายงานและโครงการ">
+                        <x-card title="ปีงบประมาณ {{$fiscal_year}} ">
+
+
                           <x-slot:toolbar>
  <!--งบประมาณ-->
  <form method="POST" action="{{ route('dashboard.index') }}" class="mt-3">
+
     @csrf
 
     <div class="input-group mb-3">
 
-        <button class="btn btn-outline-secondary" type="submit">เลือกปีงบประมาณ</button>
+        <button class="btn btn-success" >เลือกปีงบประมาณ</button>
         <select name="fiscal_year" class="form-select">
             @for($i = 2564; $i <= date('Y')+543+3; $i++)
             <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
@@ -20,10 +23,13 @@
             <!-- เพิ่มตัวเลือกเพิ่มเติมตามที่จำเป็น -->
         </select>
 
+        <button class="btn btn-secondary" type="submit">ค้นหา</button>
 
     </div>
 </form>
 <!-- Add the rest of your code here -->
+<a href="{{ route('dashboard.gantt') }}" class="btn btn-primary text-white">ดูรายงานและโครงการ</a>
+
                           </x-slot:toolbar>
                     <div class="col-sm-12">
                         <div class="row">
@@ -503,14 +509,14 @@
             </div>
         </div>
 
-        <div class="mb-3 row">
+       <!-- <div class="mb-3 row">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title fs-5 fw-semibold">ปีงบประมาณ งาน/โครงการ {{$fiscal_year}}</div>
                     <div id="gantt_here" style='width:100%; height:100vh;'></div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <style>
             .chartdiv {
                 width: 100%;
@@ -527,9 +533,7 @@
   height: 100px;
 }
 
-#gantt_here{
-    font-family: 'Prompt', Arial, sans-serif;
-}
+
         </style>
          </x-card>
     </x-slot:content>
@@ -566,7 +570,7 @@
 
         <!-- HTML -->
 
-        <script type="text/javascript">
+       <!-- <script type="text/javascript">
             $(document).ready(function(){
                 $('.form-select').on('change', function(e){
                     e.preventDefault();
@@ -1011,7 +1015,7 @@
             gantt.parse({
                 data: {!! $gantt !!}
             });
-        </script>
+        </script>-->
 
 
         <!-- xy2 -->

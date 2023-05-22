@@ -829,6 +829,15 @@ class ProjectController extends Controller
         $tasks = Task::where('project_id', $id)->get();
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
+
+
+      //  if ($project) {
+        //    $projectId = Hashids::decode($id)[0];
+        //    $project = Task::find($projectId);
+        //} else {
+        //    $project = null;
+       // }
+
         if ($task) {
             $taskId = Hashids::decode($task)[0];
             $task = Task::find($taskId);
@@ -1070,7 +1079,7 @@ class ProjectController extends Controller
         $task_cost_it_investment = str_replace(',', '', $request->input('task_cost_it_investment'));
 
 
-        $task->task_pay                 = str_replace(',', '', $request->input('task_pay'));
+        $task_pay                 = str_replace(',', '', $request->input('task_pay'));
 
         if ($task_cost_it_operating === '') {
             $task_cost_it_operating = null; // or '0'
@@ -1098,6 +1107,9 @@ class ProjectController extends Controller
 
 
 
+        if ($task_pay === '') {
+            $task_pay = null; // or '0'
+        }
 
 
 
@@ -1143,7 +1155,7 @@ class ProjectController extends Controller
 
 
 
-
+        $task->task_pay                 =  $task_pay;
 
         $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00')?? null;
         $task->task_type                 = $request->input('task_type')?? null;

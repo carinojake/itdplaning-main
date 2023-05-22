@@ -3,13 +3,13 @@
         <div class="container-fluid">
 
             {{ Breadcrumbs::render('contract.create') }}
-
+            งาน
             @if($pro)
                 {{ $pro->project_name }}
             @else
                 No Project Found
             @endif
-
+            /
             @if($ta)
                 {{ $ta->task_name }}
             @else
@@ -29,7 +29,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER') }}">
+                        <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}">
                             <x-slot:toolbar>
                                 {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -44,7 +44,7 @@
                                     <div class="col-md-12">
                                         <input type="text"name="origin" value="{{ $origin }}">
 
-                                        <input type="text" name="project" value="{{ $project }}">
+                                        <input type="text" name="project" value="{{ $origin }}">
 
                                         <input type="text" name="task" value="{{ $task }}">
 
@@ -65,7 +65,7 @@
 
 
                                     <div class="col-md-3">
-                                        <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label>
+                                        <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
 
                                         {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
                                     </div>
@@ -264,6 +264,36 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="row mt-3">
+                                                    <div class="col-md-4">
+                                                        <label for="contract_pay"
+                                                            class="form-label">{{ __('เลขที่_pay ') }}</label>
+                                                        <span class="text-danger"></span>
+
+                                                        <input type="text" class="form-control" id="contract_cn"
+                                                            name="contract_cn">
+                                                        <div class="invalid-feedback">
+                                                            {{ __(' ') }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label for="contract_pay"
+                                                            class="form-label">{{ __('จำนวนเงิน (บาท) pay') }}</label> <span
+                                                            class="text-danger"></span>
+
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                            class="form-control" id="contract_pay"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
+                                                            name="contract_pay" min="0">
+                                                    </div>
+                                                </div>
+
+
+
+
+
                                             </div><!-- 1  -->
                                         </div>
                                     </div>
@@ -332,7 +362,7 @@
                                                     <div class="col-md-3">
                                                         <label for="contract_end_date"
                                                             class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
-                                                            class="text-danger"></span>
+                                                            class="text-danger">*</span>
                                                             <input type="text" class="form-control" id="contract_end_date" name="contract_end_date" >
                                                        <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
                                                             data-coreui-format="dd/MM/yyyy">
@@ -354,7 +384,7 @@
                                                     <div class="col-md-3">
                                                         <label for="insurance_end_date"
                                                             class="form-label">{{ __('วันที่สิ้นสุด ประกัน') }}</label> <span
-                                                            class="text-danger">*</span>
+                                                            class="text-danger"></span>
                                                             <input type="text" class="form-control" id="insurance_end_date" name="insurance_end_date">
                                                        <!-- <div data-coreui-toggle="date-picker" id="insurance_end_date"
                                                             data-coreui-format="dd/MM/yyyy">
@@ -405,7 +435,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="contract_name" id="contract_name_label" class="form-label">{{ __('ชื่อ PO/ER/CN') }}</label>
+                                    <label for="contract_name" id="contract_name_label" class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
                                     <span class="text-danger">*</span>
                                     <input type="text" class="form-control" id="contract_name"
                                         name="contract_name" required autofocus>
@@ -593,7 +623,8 @@
                     <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                     @if ($origin)
                         <x-button
-                            link="{{ route('project.task.createsub', ['projectHashid' => $origin, 'taskHashid' => $task]) }}"
+
+                            link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
                             class="text-black btn-light">{{ __('coreuiforms.return') }}</x-button>
                     @else
                     @endif
@@ -633,7 +664,12 @@
                 contract_name_label.text('ชื่อ CN');
                 $('#po_form').show();
                 $('#er_form').hide();
-            } else {
+            } else if(contract_type == 4) {
+                contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
+                $('#po_form').show();
+                $('#er_form').show();
+            }
+            else {
                 contract_name_label.text('ชื่อ /CN');
                 $('#po_form').hide();
                 $('#er_form').hide();

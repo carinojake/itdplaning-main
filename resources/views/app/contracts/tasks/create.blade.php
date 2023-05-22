@@ -81,7 +81,7 @@
 
                   <div class="row">
                     <div class="col-6">
-                      <strong>เงินงบประมาณ</strong>
+                      <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
 
 
                       <div class="col-md-12">

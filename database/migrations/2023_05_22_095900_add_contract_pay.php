@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->timestamp('task_pay_date')->nullable();
-            $table->decimal('task_pay', 11, 2)->nullable();
-
+        Schema::table('contracts', function (Blueprint $table) {
             //
+               $table->timestamp('contract_pay_date')->nullable();
+            $table->decimal('contract_pay', 11, 2)->nullable();
         });
     }
 
@@ -28,10 +27,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('task_pay_date');  //
-            $table->dropColumn('task_pay');  //
-            //
+        Schema::table('contracts', function (Blueprint $table) {
+            $table->dropColumn('contract_pay_date');  //
+            $table->dropColumn('contract_pay');  //   //
         });
     }
 };

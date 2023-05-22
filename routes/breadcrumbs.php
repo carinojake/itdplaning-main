@@ -157,7 +157,7 @@
         Breadcrumbs::for('contract.edit', function (BreadcrumbTrail $trail, $contract) {
             $trail->push('contract', route('contract.index'));
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
-            $trail->push('Edit', route('contract.edit', ['contract' => $contract->contract_id]));
+            $trail->push('แก้ไข', route('contract.edit', ['contract' => $contract->contract_id]));
         });
 
         // 5 contract.task.create มีแล้ว
@@ -169,15 +169,15 @@
             $trail->push('contract', route('contract.index'));
 
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
-            $trail->push('Task');
-            $trail->push('Create');
+            $trail->push('กิจกรรม');
+            $trail->push('เพี่ม');
         });
 
         // 6 contract.task.show   มีแล้ว
         Breadcrumbs::for('contract.task.show', function (BreadcrumbTrail $trail, $contract, $taskcon) {
             $trail->push('contract', route('contract.index'));
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
-            $trail->push('Task',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]));
+            $trail->push('กิจกรรม',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]));
             $trail->push($taskcon->taskcon_name);
         });
 
@@ -185,9 +185,9 @@
         Breadcrumbs::for('contract.task.edit', function (BreadcrumbTrail $trail, $contract, $taskcon) {
             $trail->push('contract', route('contract.index'));
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
-            $trail->push('Task',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $contract->hashid]));
+            $trail->push('กิจกรรม',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $contract->hashid]));
             $trail->push($taskcon->taskcon_name);
-            $trail->push('Edit');
+            $trail->push('แก้ไข');
         });
 
 

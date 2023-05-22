@@ -326,6 +326,12 @@ class ContractController extends Controller
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
+        $id = Hashids::decode($project);
+
+
+
+        $pro = $project;
+        $ta = $task;
 
         $id_project = null;
         $id_task = null;
@@ -349,6 +355,9 @@ class ContractController extends Controller
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
         }
+
+//dd($id,$origin, $project, $task, $pro, $ta, $fiscal_year);
+
 
         return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year'));
     }
@@ -407,6 +416,7 @@ class ContractController extends Controller
         $contract_er_budget = str_replace(',', '', $request->input('contract_er_budget'));
         $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
 
+        $contract_pay = str_replace(',', '', $request->input('contract_pay'));
 
         if ($contract_pr_budget === '') {
             $contract_pr_budget = null; // or '0'
@@ -428,7 +438,9 @@ class ContractController extends Controller
         if ($contract_cn_budget === '') {
             $contract_cn_budget = null; // or '0'
         }
-
+        if ($contract_pay === '') {
+            $contract_pay = null; // or '0'
+        }
 
 
 
@@ -464,8 +476,7 @@ class ContractController extends Controller
         $contract->contract_po_budget = $contract_po_budget;
         $contract->contract_er_budget = $contract_er_budget;
         $contract->contract_cn_budget = $contract_cn_budget;
-
-
+        $contract->contract_pay = $contract_pay;
 
         //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
@@ -600,7 +611,7 @@ class ContractController extends Controller
             session()->flash('contract_name', $contract->contract_name);
 
             if ($origin) {
-                return redirect()->route('project.task.createsub', ['projectHashid' => $project, 'taskHashid' => $task]);
+                return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             }
 
             return redirect()->route('contract.index');

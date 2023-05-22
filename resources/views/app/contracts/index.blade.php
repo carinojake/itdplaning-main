@@ -22,31 +22,7 @@
                     <th></th>
                   </tr>
                 </thead>
-                {{-- <tbody>
-                  @foreach ($contracts as $contract)
-                    <tr>
-                      <td></td>
-                      <td>
-                        {{ $contract->contract_name }}<br>
-                        <span class="badge bg-success">{{ $contract->contract_number }}</span>
-                        <span class="badge bg-info">{{ \Helper::date($contract->contract_start_date) }}</span> -
-                        <span class="badge bg-info">{{ \Helper::date($contract->contract_end_date) }}</span>
-                        @if ($contract->task->count() > 0)
-                          <span class="badge bg-warning">{{ $contract->task->count() }} กิจกรรม</span>
-                        @endif
-                      </td>
-                      <td class="text-end">
-                        <a href="{{ route('contract.show', $contract->hashid) }}" class="btn btn-primary text-white"><i class="cil-folder-open "></i></a>
-                        <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning text-white"> <i class="cil-cog"></i> </a>
-                        <form action="{{ route('contract.destroy', $contract->hashid) }}" method="POST" style="display:inline">
-                          @method('DELETE')
-                          @csrf
-                          <button class="btn btn-danger btn-delete text-white"><i class="cil-trash"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                  @endforeach
-                </tbody> --}}
+
               </table>
             </x-card>
           </div>

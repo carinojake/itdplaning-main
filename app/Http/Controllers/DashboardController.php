@@ -29,6 +29,12 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
+
+
+
+
+
+
     public function index(Request $request)
     {
 
@@ -947,10 +953,7 @@ as d')
             ($total_expenses = (($osa)+ ($isa)+($utsc)));
 
 ;
-
-
-
-            return view(
+         return view(
                 'app.dashboard.index',
 
 
@@ -1029,6 +1032,243 @@ as d')
                 )
             );
         }
+    }
+
+
+    public function gantt(Request $request) {
+        // your logic here
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
+        // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
+        ($project = Project::select('projects.*', 'a.total_cost','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+
+        ->leftJoin(DB::raw('(select tasks.project_id,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+    from tasks  group by tasks.project_id) as a'),
+     'a.project_id', '=', 'projects.project_id')
+
+       ->leftJoin(DB::raw('(select tasks.project_id,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
+    'ab.project_id', '=', 'projects.project_id')
+
+   ->leftJoin(DB::raw('(select tasks.project_id,
+   sum(COALESCE(tasks.task_cost_gov_utility,0))
+   +sum(COALESCE(tasks.task_cost_it_operating,0))
+   +sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
+   sum( COALESCE(tasks.task_pay,0)) as total_pay
+   from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
+   'ac.project_id', '=', 'projects.project_id')
+
+   // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+       //->groupBy('projects.project_id')
+       ->where('project_fiscal_year', $fiscal_year)
+
+->get()
+->toArray());
+($project = ($project));
+
+// คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
+
+
+
+
+
+foreach ($project as $project) {
+    ((double) $__budget_gov = (double) $project['budget_gov_operating'] + (double) $project['budget_gov_utility'] + (double) $project['budget_gov_investment']);
+    ((double) $__budget_it  = (double) $project['budget_it_operating'] + (double) $project['budget_it_investment']);
+    ((double) $__budget    = $__budget_gov + $__budget_it);
+    (double) $__cost       = (double) $project['project_cost'];
+    (double) $__balance    = $__budget + (double) $project['project_cost'];
+
+    $__project_cost     = [];
+    $gantt[] = [
+        'id'                    => $project['project_id'],
+        'text'                  => $project['project_name'],
+        'start_date' => date('Y-m-d', ($project['project_start_date'])),
+        'end_date' => date('Y-m-d', ($project['project_end_date'])),
+        'project_type'                  => $project['project_type'],
+
+        'budget_gov_operating'  => $project['budget_gov_operating'],
+        'budget_gov_investment' => $project['budget_gov_investment'],
+        'budget_gov_utility'    => $project['budget_gov_utility'],
+        'budget_gov'            => $__budget_gov,
+        'budget_it_operating'   => $project['budget_it_operating'],
+        'budget_it_investment'  => $project['budget_it_investment'],
+      //  'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+       // 'cost_disbursement'     => $project['cost_disbursement'],
+        'budget_it'             => $__budget_it,
+        'budget'                => $__budget,
+        'balance'               => $__balance,
+        'pbalance'               => $__balance,
+       //  'cost_disbursement'     => $project['cost_disbursement'],
+        'cost'                  => $project['project_cost'],
+        'owner'                 => $project['project_owner'],
+        'project_fiscal_year'   => $project['project_fiscal_year'],
+
+
+  //  'open'                  => true,
+  //  'type'                  => 'project',
+
+    'total_cost'                => $project['total_cost'],
+
+    'cost_pa_1'             => $project['cost_pa_1'],
+    'cost_no_pa_2'             => $project['cost_no_pa_2'],
+    //'cost_disbursement'     => $project['cost_disbursement'],
+
+   // 'pay'                   => $project['pay'],
+    'total_pay'              => $project['total_pay'],
+
+
+    ];
+
+
+    ($budget['total'] = $__budget);
+
+
+//      ($tasks = DB::table('tasks')
+//      ->select('tasks.*', 'a.cost_disbursement','a.total_pay','ab.cost_pa_1','ac.cost_no_pa_2')
+//      ->leftJoin(DB::raw('(select tasks.task_parent,
+//      sum( COALESCE(tasks.task_cost_gov_utility,0))
+//      +sum( COALESCE(tasks.task_cost_it_operating,0))
+//         +sum( COALESCE(tasks.task_cost_it_investment,0))
+//        as cost_disbursement,
+//       sum( COALESCE(tasks.task_pay,0))  as total_pay
+//        from tasks  group by tasks.task_parent) as a'),
+//         'a.task_parent', '=', 'tasks.task_id')
+//
+//          ->leftJoin(DB::raw('(select tasks.task_parent,
+//            sum(COALESCE(tasks.task_cost_gov_utility,0))
+//            +sum(COALESCE(tasks.task_cost_it_operating,0))
+//            +sum(COALESCE(tasks.task_cost_it_investment,0))
+//            as cost_pa_1 ,
+//            sum( COALESCE(tasks.task_pay,0)) as total_pay
+//            from tasks
+//            where tasks.task_type=1 group by tasks.task_parent) as ab'),
+//         'ab.task_parent', '=', 'tasks.task_id')
+//
+//
+//          ->leftJoin(DB::raw('(select tasks.task_parent,
+//         sum(COALESCE(tasks.task_cost_gov_utility,0))
+//      +sum(COALESCE(tasks.task_cost_it_operating,0))
+//      +sum(COALESCE(tasks.task_cost_it_investment,0))
+//         as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
+//         as total_pay
+//          from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+//         'ac.task_parent', '=', 'tasks.task_id')
+ //   ->where('project_id',($id))
+//    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+//  ->where('project_fiscal_year', 2566)
+
+ //   ->get()
+   // ->toArray());
+//      ($tasks = json_decode(json_encode($tasks), true));
+
+
+//         foreach ($tasks as $task) {
+//             ($task);
+//             (double) $__budget_gov = (double) $task['task_budget_gov_operating'] + (double) $task['task_budget_gov_utility'] + (double) $task['task_budget_gov_investment'];
+//             (double) $__budget_it  = (double) $task['task_budget_it_operating'] + (double) $task['task_budget_it_investment'];
+//              (double) $__budget     = $__budget_gov + $__budget_it;
+//              (double) $__cost = array_sum([
+//                  (double)$task['cost_disbursement'],
+//                  $task['task_cost_gov_operating'],
+//                  $task['task_cost_gov_investment'],
+//                  $task['task_cost_gov_utility'],
+//                  $task['task_cost_it_operating'],
+//                  $task['task_cost_it_investment'],
+//              ]);
+//            (double) $__balance = $__budget - $__cost;
+
+
+
+//          $gantt[] = [
+//                'id'                    => 'T' . $task['task_id'] . $task['project_id'],
+//                'text'                  => $task['task_name'],
+            //'start_date'            => date('Y-m-d', $task['task_start_date']),
+           //'end_date'              => date('Y-m-d', $task['task_end_date']),
+//                'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
+//                'task_type'                  => 'task',
+//                'open'                  => true,
+//                'task_budget_gov_operating'  => $task['task_budget_gov_operating'],
+//                'task_budget_gov_investment' => $task['task_budget_gov_investment'],
+//                'task_budget_gov_utility'    => $task['task_budget_gov_utility'],
+//                'task_budget_gov'            => $__budget_gov,
+//                'task_budget_it_operating'   => $task['task_budget_it_operating'],
+//                'task_budget_it_investment'  => $task['task_budget_it_investment'],
+//                 'task_budget_it'             => $__budget_it,
+//                'task_budget'                => $__budget,
+//                'task_cost'                  => $__cost,
+//                'task_balance'               => $__balance,
+//                  'task_cost_disbursement'     => $task['cost_disbursement'],
+//                   'task_pay'                   => $task['task_pay'],
+//
+//                   'task_total_pay'             => $task['total_pay'],
+//                    'task_task_type'             => $task['task_type'],
+//
+//                  'task_cost_pa_1'             => $task['cost_pa_1'],
+//                'task_cost_no_pa_2'             => $task['cost_no_pa_2'],
+          //  'cost_disbursement'     => $project['cost_disbursement'],
+
+
+            // 'owner' => $project['project_owner'],
+//          ];
+
+
+
+//          $__project_cost[] = $__cost;
+//    }
+    //    $gantt[0]['cost']    = array_sum($__project_cost);
+
+    $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
+    ($budget['cost']    = $gantt[0]['total_cost']);
+    $budget['balance'] = $gantt[0]['balance'];
+
+
+
+
+    $labels = [
+        'project' => 'โครงการ/งานประจำ',
+        'budget' => 'งบประมาณ',
+        'budget_it_operating' => 'งบกลาง ICT',
+        'budget_it_investment' => 'งบดำเนินงาน',
+        'budget_gov_utility' => 'งบสาธารณูปโภค',
+    ];
+
+    $fields = [
+        'cost' => 'ค่าใช้จ่าย',
+        'cost_pa_1' => 'PA',
+        'cost_no_pa_2' => 'ไม่มี PA',
+        'task_pay' => 'การเบิกจ่าย',
+
+    ];
+
+
+}
+
+
+        ($gantt);
+        // dd ($costsum = ($__project_cost))  ;
+       ($gantt = json_encode($gantt));
+         return view(
+                'app.dashboard.gantt',
+
+
+                compact(
+                    'fiscal_year',
+
+                    'gantt',
+
+                )
+            );
     }
 }
 
