@@ -31,6 +31,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/project/{project}/task/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
     Route::post('/project/{project}/task/createsub', [ProjectController::class, 'taskStore'])->name('project.task.store');
 
+    //Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
 
     Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
     Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
@@ -102,11 +103,17 @@ Route::get('/genchart', [WordExcelController::class, 'genChart'])->name('genchar
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::post('/dashboard', [DashboardController::class, 'index'])->name('dashboard.post');
+
+    Route::get('/dashboard/gantt', [DashboardController::class, 'gantt'])->name('dashboard.gantt');
+    Route::post('/dashboard/gantt', [DashboardController::class, 'gantt'])->name('dashboard.post');
+
+
+
+
+    //Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.gantt');
+
 
 
 //wordexcel
