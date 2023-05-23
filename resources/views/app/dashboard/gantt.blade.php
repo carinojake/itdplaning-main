@@ -14,7 +14,7 @@
                     <div class="input-group mb-3">
 
 
-                        <button class="btn btn-success" >เลือกปีงบประมาณ</button>
+                        <div >เลือกปีงบประมาณ</div>
                         <select name="fiscal_year" class="form-select">
                             @for($i = 2564; $i <= date('Y')+543+3; $i++)
                             <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>

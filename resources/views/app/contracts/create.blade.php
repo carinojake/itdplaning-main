@@ -264,7 +264,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="row mt-3">
+                                            {{--    <div class="row mt-3">
                                                     <div class="col-md-4">
                                                         <label for="contract_pay"
                                                             class="form-label">{{ __('เลขที่_pay ') }}</label>
@@ -288,7 +288,7 @@
                                                             class="form-control numeral-mask"
                                                             name="contract_pay" min="0">
                                                     </div>
-                                                </div>
+                                                </div>  --}}
 
 
 
@@ -338,8 +338,7 @@
                                                 <div class="row mt-3">
                                                     <div class="col-md-3">
                                                         <label for="contract_juristic_id"
-                                                            class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label> <span
-                                                            class="text-danger"></span>
+                                                            class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
                                                         <input type="text" class="form-control" id="contract_juristic_id"
                                                             name="contract_juristic_id" maxlength="13">
                                                         <div class="invalid-feedback">
@@ -350,8 +349,7 @@
 
                                                     <div class="col-md-3">
                                                         <label for="contract_start_date"
-                                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
-                                                            class="text-danger">*</span>
+                                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                                         {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                                         <input type="text" class="form-control" id="contract_start_date" name="contract_start_date" >
                                                         <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
@@ -361,8 +359,7 @@
 
                                                     <div class="col-md-3">
                                                         <label for="contract_end_date"
-                                                            class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
-                                                            class="text-danger">*</span>
+                                                            class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                                             <input type="text" class="form-control" id="contract_end_date" name="contract_end_date" >
                                                        <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
                                                             data-coreui-format="dd/MM/yyyy">
@@ -426,8 +423,9 @@
 
                                 <!--ข้อมูลสัญญา 3 -->
                                 <div class="col-md-12 mt-3">
-                                    <label for="contract_name" class="form-label">{{ __('ชื่อ MM') }}</label> <span
-                                        class="text-danger">*</span>
+                                    <label for="contract_name" class="form-label">{{ __('ชื่อ MM') }}</label>
+
+
                                     <input type="text" class="form-control" id="contract_name"
                                         name="contract_name" required autofocus>
                                     <div class="invalid-feedback">
@@ -436,7 +434,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="contract_name" id="contract_name_label" class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
-                                    <span class="text-danger">*</span>
+
                                     <input type="text" class="form-control" id="contract_name"
                                         name="contract_name" required autofocus>
                                     <div class="invalid-feedback">

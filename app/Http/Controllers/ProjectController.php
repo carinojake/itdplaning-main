@@ -524,7 +524,7 @@ class ProjectController extends Controller
 
 
 
-        ($gantt);
+       ($gantt);
 
         $gantt = json_encode($gantt);
 
