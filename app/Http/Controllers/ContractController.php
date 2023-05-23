@@ -14,7 +14,7 @@ use App\Models\ContractHasTask;
 use App\Models\ContractHasTaskcon;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Log;
 class ContractController extends Controller
 {
     /**
@@ -417,51 +417,50 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $contract = new Contract;
-
-
-
         $messages = [
             //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
-
         $request->validate([
             'contract_name'                   => 'required',
+         //   'contract_pr_budget' => 'numeric|nullable',
+           // 'contract_pa_budget' => 'numeric|nullable',
             // 'contract_number'                 => 'required',
             //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
-
-
-
             //'start_date' => 'required|date_format:d/m/Y',
             //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
-
-
-
         ], $messages);
         //convert date
-        //  $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
-        // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
+        function convertToGregorianDate($input_date) {
+            $date_object = date_create_from_format('d/m/Y', $input_date);
 
-        // $insurance_start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_start_date')), 'Y-m-d');
-        // $insurance_end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-insurance_end_date')), 'Y-m-d');
-        // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d'?? null);
-        $sign_date_input = $request->input('date-picker-contract_sign_date');
-        $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
+            if ($date_object !== false) {
+                // Convert to Gregorian calendar
+                $date_object->modify('-543 years');
+                $formatted_date = $date_object->format('Y-m-d');
+            } else {
+                $formatted_date = null; // Default value when the date can't be parsed
+            }
 
-        if ($sign_date_object !== false) {
-            $sign_date = $sign_date_object->format('Y-m-d');
-        } else {
-            $sign_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
+            return $formatted_date;
         }
+
+        $start_date = convertToGregorianDate($request->input('contract_start_date'));
+        $end_date = convertToGregorianDate($request->input('contract_end_date'));
+        $insurance_start_date = convertToGregorianDate($request->input('insurance_start_date'));
+        $insurance_end_date = convertToGregorianDate($request->input('insurance_end_date'));
+        $sign_date = convertToGregorianDate($request->input('contract_sign_date'));
 
 
 
         $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
         $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
-        $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
+
         $contract_po_budget = str_replace(',', '', $request->input('contract_po_budget'));
         $contract_er_budget = str_replace(',', '', $request->input('contract_er_budget'));
+
         $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
+        $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
 
         $contract_pay = str_replace(',', '', $request->input('contract_pay'));
 
@@ -513,15 +512,19 @@ class ContractController extends Controller
         $contract->contract_acquisition = $request->input('contract_acquisition') ?? null;
         $contract->contract_sign_date   = $sign_date ?? null;
         $contract->contract_projectplan        = $request->input('contract_projectplan');
+
+
         $contract->contract_mm        = $request->input('contract_mm');
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
 
         $contract->contract_pr_budget = $contract_pr_budget;
         $contract->contract_pa_budget = $contract_pa_budget;
-        $contract->contract_mm_budget = $contract_mm_budget;
+
         $contract->contract_po_budget = $contract_po_budget;
         $contract->contract_er_budget = $contract_er_budget;
+
+        $contract->contract_mm_budget = $contract_mm_budget;
         $contract->contract_cn_budget = $contract_cn_budget;
         $contract->contract_pay = $contract_pay;
 
@@ -644,10 +647,32 @@ class ContractController extends Controller
         // }
         //
 
-
-
-
         if ($contract->save()) {
+            if(is_array($request->tasks) || is_object($request->tasks)) {
+                foreach($request->tasks as $task){
+                    $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
+
+                    Taskcon::create([
+                        'contract_id' => $contract->contract_id,
+                        'taskcon_name' => $taskName,
+                        'updated_at' => now(),
+                        'created_at' => now()
+                    ]);
+                }
+            }
+        }
+
+
+
+
+        Log::info('Contract saved successfully');
+        Log::info('Request tasks:', ['tasks' => $request->tasks]);;
+        if ($contract->save()) {
+
+
+
+
+
             $origin = $request->input('origin');
             $project = $request->input('project');
             $task = $request->input('task');

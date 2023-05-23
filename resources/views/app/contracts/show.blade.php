@@ -21,7 +21,8 @@
                                                 <i class="cil-money icon icon-xxl"></i>
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($contract->contract_pa_budget) }}</div><small
+                                                {{ number_format($contract->contract_pa_budget) }}
+                                            </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
                                             <div class="progress progress-thin mt-3 mb-0">
                                                 <div class="progress-bar bg-primary" role="progressbar"
@@ -140,12 +141,12 @@
                                             <div class="col-9">{{ \Helper::contractType($contract->contract_type) }}
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        {{-- <div class="row">
                                             <div class="col-3">{{ __('วิธีการได้มา') }}</div>
                                             <div class="col-9">
                                                 {{ \Helper::contractAcquisition($contract->contract_acquisition) }}
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="row">
                                             <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
                                             <div class="col-9">

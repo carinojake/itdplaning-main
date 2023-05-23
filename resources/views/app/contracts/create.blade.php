@@ -264,7 +264,7 @@
                                                     </div>
                                                 </div>
 
-                                            {{--    <div class="row mt-3">
+                                               <div class="row mt-3">
                                                     <div class="col-md-4">
                                                         <label for="contract_pay"
                                                             class="form-label">{{ __('เลขที่_pay ') }}</label>
@@ -288,10 +288,16 @@
                                                             class="form-control numeral-mask"
                                                             name="contract_pay" min="0">
                                                     </div>
-                                                </div>  --}}
+                                                </div>
+                                                <div class="row mt-3">
+                                                <div class="col-md-4">
+                                                <label>Number of Rounds:</label>
+                                                <input type="text" id="rounds" name="rounds" required>
 
+                                                <div id="tasksContainer"></div>
 
-
+                                                </div>
+                                                </div>
 
 
                                             </div><!-- 1  -->
@@ -642,6 +648,28 @@
     </x-slot:css>
     <x-slot:javascript>
 
+
+
+
+    <script>
+        $(document).ready(function(){
+            $('#rounds').change(function(){
+                var rounds = $(this).val();
+                $('#tasksContainer').empty();  // clear the container
+                for(var i=0; i<rounds; i++){
+                    $('#tasksContainer').append(`
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <label>Task Name `+(i+1)+`:</label><input type="text" name="tasks[`+i+`][task_name]" required>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+            });
+        });
+        </script>
 
 
 
