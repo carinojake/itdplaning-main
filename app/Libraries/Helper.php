@@ -282,6 +282,17 @@ class Helper
     }
 
 
+    public static function taskconrounds($rounds = null)
+{
+    $types = [];
+
+    for ($i = 1; $i <= 36; $i++) {
+        $types[$i] = $i;
+    }
+
+    return $types;
+}
+
     public static function projectsType($project_type = null)
     {
         $project_types = [

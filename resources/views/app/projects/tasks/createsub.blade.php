@@ -135,12 +135,12 @@
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                                             class="text-danger">*</span>
                                         <input class="form-control" id="task_start_date" name="task_start_date"
-                                            required>
+                                            >
                                     </div>
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input class="form-control" id="task_end_date" name="task_end_date" required>
+                                        <input class="form-control" id="task_end_date" name="task_end_date" >
                                     </div>
                                 </div>
 

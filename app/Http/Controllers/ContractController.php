@@ -350,23 +350,49 @@ class ContractController extends Controller
 
 
 
-    public function createbae(Request $request, $project = null)
+    public function createoe(Request $request, $project = null)
     {
 
 
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-        // $id_project       = Hashids::decode($project)[0];
-        // $id_task      = Hashids::decode($task)[0];
-        //$pro = Project::find($id_project);
-        //$ta = Task::find($id_task);
+        $id = Hashids::decode($project);
 
 
-        //dd($id_project,$id_task,$project,$task,$pro,$ta);
 
-        return view('app.contracts.create', compact('origin', 'project', 'task'));
+        $pro = $project;
+        $ta = $task;
+
+        $id_project = null;
+        $id_task = null;
+        $pro = null;
+        $ta = null;
+
+        if ($project && $task) {
+            $decodedProject = Hashids::decode($project);
+            $decodedTask = Hashids::decode($task);
+
+            if (isset($decodedProject[0]) && isset($decodedTask[0])) {
+                $id_project = $decodedProject[0];
+                $id_task = $decodedTask[0];
+
+                $pro = Project::find($id_project);
+                $ta = Task::find($id_task);
+            }
+        }
+
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
+
+        //dd($id,$origin, $project, $task, $pro, $ta, $fiscal_year);
+
+
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year'));
     }
+
 
     public function create(Request $request, $project = null)
     {

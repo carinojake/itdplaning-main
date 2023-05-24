@@ -245,7 +245,7 @@
 
 
 
-                                        <!--<div class="row">
+                                        {{-- <!--<div class="row">
                 <div class="col-6">{{ __('refund_pa_status') }}</div>
                 <div class="col-6">{{ $contract->contract_refund_pa_status }}</div>
               </div>-->
@@ -306,10 +306,10 @@
                                             {{ __('No file uploaded') }}
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
 
 
-                            </div>
+
 
 
 
@@ -349,7 +349,7 @@
               </table>   --}}
 
 
-
+            </div>
 
                             <table class="table">
                                 <thead>

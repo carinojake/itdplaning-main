@@ -40,7 +40,7 @@
                                             value="{{ $taskcon->taskcon_name }}">
                                     </div>
                                     <div class="form-group mt-3">
-                                        <label for="taskcon_description">กิจกรรม ละเลือก</label>
+                                        <label for="taskcon_description">กิจกรรม</label>
                                         <textarea class="form-control" id="taskcon_description" name="taskcon_description">{{ $taskcon->taskcon_description }}</textarea>
                                     </div>
                                 </div>

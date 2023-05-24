@@ -19,60 +19,63 @@ require __DIR__ . '/core.php';
  */
 Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
-    //Project
+  /*   //Project
     Route::get('/contract/{project}/create', [ContractController::class, 'create'])->name('contract.create');
-
-
     Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
-
     Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
     Route::post('/project/{project}/task/create', [ProjectController::class, 'taskStore'])->name('project.task.store');
-
     Route::get('/project/{project}/task/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
     Route::post('/project/{project}/task/createsub', [ProjectController::class, 'taskStore'])->name('project.task.store');
-
     //Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
-
     Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
     Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
-
-
 //    Route::get('/project/{projectHashid}/task/{taskHashid}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
   //  Route::get('/project/{projectHashid}/task/{taskHashid}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
-
    Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
    Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
-
    Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
-
     Route::PUT('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
-
-
     Route::DELETE('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
     Route::resource('project', ProjectController::class);
-
     //  Route::get('/project/{project}/task/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
     Route::post('/project/{project}/task/editsub', [ProjectController::class, 'taskStore'])->name('project.task.store');
-
-
-
-
-
-
-
     //Contract
     Route::resource('contract', ContractController::class);
     Route::post('/contract/{contract}/task/create', [ContractController::class,'taskconstore'])->name('contract.task.store');
     Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskconCreate'])->name('contract.task.create');
-
-
-
-
-
     Route::get('/contract/{contract}/task/{taskcon}/edit', [ContractController::class, 'taskconEdit'])->name('contract.task.edit');
     Route::PUT('/contract/{contract}/task/{taskcon}/update', [ContractController::class, 'taskconUpdate'])->name('contract.task.update');
     Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
+ */
+// Project
+Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
+Route::resource('project', ProjectController::class);
+Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
+Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
+Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
+Route::put('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
+Route::delete('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
+Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
+Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
+Route::post('/project/{project}/task/{task}/storesub', [ProjectController::class, 'taskStoreSub'])->name('project.task.storesub');
+Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+
+// Contract
+Route::resource('contract', ContractController::class);
+/* Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskCreate'])->name('contract.task.create');
+Route::post('/contract/{contract}/task/store', [ContractController::class, 'taskStore'])->name('contract.task.store');
+Route::get('/contract/{contract}/task/{task}/edit', [ContractController::class, 'taskEdit'])->name('contract.task.edit');
+Route::put('/contract/{contract}/task/{task}/update', [ContractController::class, 'taskUpdate'])->name('contract.task.update');
+Route::delete('/contract/{contract}/task/{task}/destroy', [ContractController::class, 'taskDestroy'])->name('contract.task.destroy');
+Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'taskShow'])->name('contract.task.show'); */
+
+Route::post('/contract/{contract}/task/create', [ContractController::class,'taskconstore'])->name('contract.task.store');
+Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskconCreate'])->name('contract.task.create');
+Route::get('/contract/{contract}/task/{taskcon}/edit', [ContractController::class, 'taskconEdit'])->name('contract.task.edit');
+Route::PUT('/contract/{contract}/task/{taskcon}/update', [ContractController::class, 'taskconUpdate'])->name('contract.task.update');
+Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
+Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
 
 // localhost/laravel-report/pdf
 Route::get('/pdf', [PdfController::class, 'index'])->name('pdf');

@@ -4,25 +4,24 @@
 
             <div class="animated fadeIn">
                 <div class="row">
-                   <!-- {!! 'ปีงบประมาณ ' . $project->project_fiscal_year .'<br>'. Helper::projectsType($project->project_type).$project->project_name
-                    !!}-->
-                      {{ Breadcrumbs::render('project.show', $project) }}
+                    <!-- {!! 'ปีงบประมาณ ' .
+                        $project->project_fiscal_year .
+                        '<br>' .
+                        Helper::projectsType($project->project_type) .
+                        $project->project_name !!}-->
+                    {{ Breadcrumbs::render('project.show', $project) }}
 
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-                                <x-card title="">
+                        <x-card title="">
 
-                                    <x-slot:toolbar>
-                                        <a href="{{ route('project.edit', $project->hashid) }}"
-                                            class="btn btn-warning text-dark" target="_blank">แก้ไข {{ Helper::projectsType($project->project_type ) }} </a>
-                                        <a href="{{ route('project.task.create', $project->hashid) }}"
-                                            class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
-                                        <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
-                                    </x-slot:toolbar>
-
-
-
-
+                            <x-slot:toolbar>
+                                <a href="{{ route('project.edit', $project->hashid) }}" class="btn btn-warning text-dark"
+                                    target="_blank">แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
+                                <a href="{{ route('project.task.create', $project->hashid) }}"
+                                    class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
+                                <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+                            </x-slot:toolbar>
 
 
 
@@ -31,24 +30,22 @@
                                     aria-orientation="vertical">
                                     <button class="nav-link active " id="v-pills-home-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-home" type="button" role="tab"
-                                        aria-controls="v-pills-home" aria-selected="true">ภาพรวมทั้งหมด <!--{{ Helper::projectsType($project->project_type ) }}{{ $project->reguiar_id }}-->
+                                        aria-controls="v-pills-home" aria-selected="true">ภาพรวมทั้งหมด
+                                        <!--{{ Helper::projectsType($project->project_type) }}{{ $project->reguiar_id }}-->
                                     </button>
                                     @if ($project['budget_it_operating'] > 0)
-                                        <button class="nav-link "
-                                            id="v-pills-profile-tab" data-bs-toggle="pill"
+                                        <button class="nav-link " id="v-pills-profile-tab" data-bs-toggle="pill"
                                             data-bs-target="#v-pills-profile" type="button" role="tab"
                                             aria-controls="v-pills-profile" aria-selected="false">งบกลาง
                                             ICT</button>
                                     @endif
                                     @if ($project['budget_it_investment'] > 0)
-                                        <button class="nav-link "
-                                            id="v-pills-messages-tab" data-bs-toggle="pill"
+                                        <button class="nav-link " id="v-pills-messages-tab" data-bs-toggle="pill"
                                             data-bs-target="#v-pills-messages" type="button" role="tab"
                                             aria-controls="v-pills-messages" aria-selected="false">งบดำเนินงาน</button>
                                     @endif
                                     @if ($project['budget_gov_utility'] > 0)
-                                        <button class="nav-link "
-                                            id="v-pills-settings-tab" data-bs-toggle="pill"
+                                        <button class="nav-link " id="v-pills-settings-tab" data-bs-toggle="pill"
                                             data-bs-target="#v-pills-settings" type="button" role="tab"
                                             aria-controls="v-pills-settings"
                                             aria-selected="false">งบสาธารณูปโภค</button>
@@ -56,7 +53,7 @@
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <!-- 1 งาน -->
-                                    <div class="tab-pane fade show active"  id="v-pills-home" role="tabpanel"
+                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                                         aria-labelledby="v-pills-home-tab">
                                         <div class="row">
                                             <div class="col">
@@ -64,15 +61,15 @@
                                                 <div class="card">
                                                     <div class="card-body">
 
-                                                        <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                            href="#collapseExample" role="button" aria-expanded="false"
+                                                        <button class="btn " style="width: 13rem;"
+                                                            data-bs-toggle="collapse" href="#collapseExample"
+                                                            role="button" aria-expanded="false"
                                                             aria-controls="collapseExample">
                                                             <div class="fs-4 fw-semibold">
                                                                 {{ number_format($budget['total'], 2) }}
                                                             </div>
 
-                                                            <small
-                                                                class="text-xl">
+                                                            <small class="text-xl">
                                                                 งบประมาณ
                                                             </small>
                                                         </button>
@@ -88,18 +85,18 @@
                                                 <!--คงเหลือ-->
                                                 <div class="card  ">
                                                     <div class="card-body">
-                                                        <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                            href="#collapseExample2" role="button"
-                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                        <button class="btn " style="width: 13rem;"
+                                                            data-bs-toggle="collapse" href="#collapseExample2"
+                                                            role="button" aria-expanded="false"
+                                                            aria-controls="collapseExample">
                                                             @php
-                                                            $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                          @endphp
-                                                        <div class="fs-4 fw-semibold text-success">
-                                                            {{ number_format(floatval($budget['balance']), 2) }}
+                                                                $tmp_class_bal = $budget['balance'] > 1000000 ? 'success' : 'danger';
+                                                            @endphp
+                                                            <div class="fs-4 fw-semibold text-success">
+                                                                {{ number_format(floatval($budget['balance']), 2) }}
                                                             </div>
 
-                                                            <small
-                                                                class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                            <small class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
                                                         </button>
 
                                                     </div>
@@ -118,15 +115,14 @@
                                                 <div class="col">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
+                                                            <button class="btn " style="width: 13rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample1"
+                                                                role="button" aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
+                                                                <div class="fs-4 fw-semibold">
                                                                     {{ number_format($project['budget_it_operating'], 2) }}
                                                                 </div>
-                                                                <small
-                                                                    class="text-xl">
+                                                                <small class="text-xl">
                                                                     งบประมาณ
                                                                 </small>
                                                             </button>
@@ -134,29 +130,28 @@
                                                         <div class="collapse" id="collapseExample1">
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" style="color:   #06268e"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    style="color:   #06268e" data-bs-toggle="collapse"
+                                                                    href="#collapseExample2" role="button"
+                                                                    aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <div class="fs-4 fw-semibold ">
                                                                         {{ number_format($ospa, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">จำนวนเงิน แบบมี PA
+                                                                    <small class="text-xl">จำนวนเงิน แบบมี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <div class="fs-4 fw-semibold ">
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($osa, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">จำนวนเงิน แบบไม่มี PA
+                                                                    <small class="text-xl">จำนวนเงิน แบบไม่มี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -168,19 +163,17 @@
                                                 <div class="col">
                                                     <div class="card">
                                                         <div class="card-body ">
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample2" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold btn btn-primary"
-                                                                    >
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample2"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold btn btn-primary">
                                                                     <!--รวมเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($otpsa1 + $otpsa2, 2) }}
 
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl"
-                                                                    >รวมเบิกจ่ายทั้งหมด</small>
+                                                                    <small class="text-xl">รวมเบิกจ่ายทั้งหมด</small>
                                                                 </div>
                                                             </button>
 
@@ -195,24 +188,21 @@
                                                                     <div class="fs-4 fw-semibold text-primary">
                                                                         {{ number_format($otpsa1, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">การเบิกเงิน
+                                                                    <small class="text-xl">การเบิกเงิน
                                                                         แบบมี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-primary"
-                                                                       >
+                                                                    <div class="fs-4 fw-semibold text-primary">
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($otpsa2, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">การเบิกเงิน
+                                                                    <small class="text-xl">การเบิกเงิน
                                                                         แบบไม่มี PA
                                                                     </small>
                                                                 </button>
@@ -227,52 +217,46 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                            <button class="btn " style="width: 12rem;"  data-bs-toggle="collapse"
-                                                                href="#collapseExample3" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold btn btn-warning"
-                                                                   >
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample3"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold btn btn-warning">
                                                                     <!--รอการเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl"
-                                                                   >รอการเบิกจ่ายทั้งหมด</small>
+                                                                    <small class="text-xl">รอการเบิกจ่ายทั้งหมด</small>
                                                                 </div>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseExample3">
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-pay"
-                                                                       >
+                                                                    <div class="fs-4 fw-semibold text-pay">
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($ospa - $otpsa1, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">รอการเบิกจ่าย แบบมี PA
+                                                                    <small class="text-xl">รอการเบิกจ่าย แบบมี PA
                                                                     </small>
 
                                                                 </button>
                                                             </div>
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-pay"
-                                                               >
+                                                                    <div class="fs-4 fw-semibold text-pay">
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($osa - $otpsa2, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl">รอการเบิกจ่าย แบบมีไม่ PA
+                                                                    <small class="text-xl">รอการเบิกจ่าย แบบมีไม่ PA
                                                                     </small>
 
                                                                 </button>
@@ -284,20 +268,20 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
                                                                 <div class="fs-4 fw-semibold btn btn-success"
                                                                     style="btn btn-success">
                                                                     <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                                                     {{ number_format($project['budget_it_operating'] - ($ospa + $osa), 2) }}
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl"
-                                                                   >ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                                    <small
+                                                                        class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
                                                                 </div>
-                                                                </button>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -320,53 +304,49 @@
                                             <div class="row mb-3">
 
                                                 <div class="col">
-                                                    <div class="card" >
+                                                    <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample1"
+                                                                role="button" aria-expanded="false"
                                                                 aria-controls="collapseExample1">
                                                                 <div class="fs-4 fw-semibold">
                                                                     {{ number_format($project['budget_it_investment'], 2) }}
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl" >
-                                                                    งบประมาณ
-                                                                </small>
+                                                                    <small class="text-xl">
+                                                                        งบประมาณ
+                                                                    </small>
                                                                 </div>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseExample1">
                                                             <div class="card-body">
 
-                                                                <button class="btn "
-                                                                    data-bs-toggle="collapse" style="width: 12rem;" href="#collapseExample2"
+                                                                <button class="btn " data-bs-toggle="collapse"
+                                                                    style="width: 12rem;" href="#collapseExample2"
                                                                     role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <div class="fs-4 fw-semibold">
                                                                         {{ number_format($ispa, 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl" >จำนวนเงิน แบบมี
-                                                                        PA
-                                                                    </small>
+                                                                        <small class="text-xl">จำนวนเงิน แบบมี
+                                                                            PA
+                                                                        </small>
                                                                     </div>
                                                                 </button>
                                                             </div>
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold"
-                                                                        >
+                                                                    <div class="fs-4 fw-semibold">
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($isa, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl ">จำนวนเงินแบบ ไม่มี PA
+                                                                    <small class="text-xl ">จำนวนเงินแบบ ไม่มี PA
                                                                     </small>
                                                                 </button>
                                                             </div>
@@ -378,53 +358,48 @@
                                                 <div class="col">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample2" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold   btn btn-primary"
-                                                                    >
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample2"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold   btn btn-primary">
                                                                     <!--รวมเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($itpsa1 + $itpsa2, 2) }}
 
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl"
-                                                                   >รวมเบิกจ่ายทั้งหมด</small>
+                                                                    <small class="text-xl">รวมเบิกจ่ายทั้งหมด</small>
                                                                 </div>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseExample2">
                                                             <div class="card-body">
 
-                                                                <button class="btn "
-                                                                    data-bs-toggle="collapse" style="width: 12rem;" href="#collapseExample2"
+                                                                <button class="btn " data-bs-toggle="collapse"
+                                                                    style="width: 12rem;" href="#collapseExample2"
                                                                     role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <div class="fs-4 fw-semibold  text-primary">
                                                                         {{ number_format($itpsa1, 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl ">การเบิกเงิน แบบมี PA
-                                                                    </small>
-                                                                </div>
+                                                                        <small class="text-xl ">การเบิกเงิน แบบมี PA
+                                                                        </small>
+                                                                    </div>
                                                                 </button>
                                                             </div>
                                                             <div class="card-body">
 
-                                                                <button class="btn "style="width: 12rem;"  data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn "style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-primary"
-                                                                        >
+                                                                    <div class="fs-4 fw-semibold text-primary">
                                                                         <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($itpsa2, 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl">การเบิกเงิน แบบไม่มี PA
-                                                                    </small>
+                                                                        <small class="text-xl">การเบิกเงิน แบบไม่มี PA
+                                                                        </small>
                                                                     </div>
                                                                 </button>
                                                             </div>
@@ -436,18 +411,17 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample3" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample3"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
                                                                 <div class="fs-4 fw-semibold btn btn-warning">
                                                                     <!--รอการเบิกจ่ายทั้งหมด-->
                                                                     {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl "
-
-                                                                    >รอการเบิกจ่ายทั้งหมด</small>
+                                                                    <small
+                                                                        class="text-xl ">รอการเบิกจ่ายทั้งหมด</small>
                                                                 </div>
 
                                                             </button>
@@ -456,17 +430,15 @@
                                                         <div class="collapse" id="collapseExample3">
                                                             <div class="card-body ">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-pay"
-                                                                        >
+                                                                    <div class="fs-4 fw-semibold text-pay">
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($ispa - $itpsa1, 2) }}
                                                                     </div>
-                                                                    <small
-                                                                        class="text-xl ">รอการเบิกจ่าย
+                                                                    <small class="text-xl ">รอการเบิกจ่าย
                                                                         แบบมี PA
                                                                     </small>
 
@@ -475,20 +447,18 @@
 
                                                             <div class="card-body">
 
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold  text-pay"
-                                                                       >
+                                                                    <div class="fs-4 fw-semibold  text-pay">
                                                                         <!--การเบิกจ่าย PA -->
                                                                         {{ number_format($isa - $itpsa2, 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl ">รอการเบิกจ่าย
-                                                                        แบบมีไม่ PA
-                                                                    </small>
+                                                                        <small class="text-xl ">รอการเบิกจ่าย
+                                                                            แบบมีไม่ PA
+                                                                        </small>
                                                                     </div>
 
                                                                 </button>
@@ -501,18 +471,17 @@
                                                     <div class="card ">
                                                         <div class="card-body ">
                                                             <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                            <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                href="#collapseExample" role="button"
-                                                                aria-expanded="false" aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold btn btn-success"
-                                                                   >
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold btn btn-success">
                                                                     <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                                                     {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
                                                                 </div>
                                                                 <div>
-                                                                <small
-                                                                    class="text-xl  "
-                                                                    >ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                                    <small
+                                                                        class="text-xl  ">ยอดงบประมาณคงเหลือทั้งหมด</small>
                                                                 </div>
                                                             </button>
                                                         </div>
@@ -538,25 +507,25 @@
                                                     <div class="col">
                                                         <div class="card">
                                                             <div class="card-body">
-                                                                <button class="btn "style="width: 12rem;"  data-bs-toggle="collapse"
-                                                                    href="#collapseExample1" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn "style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample1"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample1">
                                                                     <div class="fs-4 fw-semibold">
                                                                         {{ number_format($project['budget_gov_utility'], 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl">
-                                                                        งบประมาณ
-                                                                    </small>
+                                                                        <small class="text-xl">
+                                                                            งบประมาณ
+                                                                        </small>
                                                                     </div>
                                                                 </button>
                                                             </div>
                                                             <div class="collapse" id="collapseExample1">
                                                                 <div class="card-body">
 
-                                                                    <button class="btn " style="width: 12rem;" style="color:   #06268e"
+                                                                    <button class="btn " style="width: 12rem;"
+                                                                        style="color:   #06268e"
                                                                         data-bs-toggle="collapse"
                                                                         href="#collapseExample2" role="button"
                                                                         aria-expanded="false"
@@ -565,26 +534,25 @@
                                                                             {{ number_format($utpcs, 2) }}
                                                                         </div>
                                                                         <div>
-                                                                        <small
-                                                                            class="text-xl">จำนวนเงิน แบบมี PA
-                                                                        </small>
-                                                                    </div>
+                                                                            <small class="text-xl">จำนวนเงิน แบบมี PA
+                                                                            </small>
+                                                                        </div>
                                                                     </button>
                                                                 </div>
                                                                 <div class="card-body">
 
-                                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                                    <button class="btn " style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
                                                                         href="#collapseExample2" role="button"
                                                                         aria-expanded="false"
                                                                         aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold"
-                                                                            >
+                                                                        <div class="fs-4 fw-semibold">
                                                                             <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($utsc, 2) }}
                                                                         </div>
                                                                         <div>
-                                                                        <small
-                                                                            class="text-xl">จำนวนเงิน แบบไม่มี PA
-                                                                        </small>
+                                                                            <small class="text-xl">จำนวนเงิน แบบไม่มี
+                                                                                PA
+                                                                            </small>
                                                                         </div>
                                                                     </button>
                                                                 </div>
@@ -596,20 +564,18 @@
                                                     <div class="col">
                                                         <div class="card">
                                                             <div class="card-body">
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample2" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold btn btn-primary"
-                                                                        >
+                                                                    <div class="fs-4 fw-semibold btn btn-primary">
                                                                         <!--รวมเบิกจ่ายทั้งหมด-->
                                                                         {{ number_format($utsc_pay_pa + $utsc_pay, 2) }}
 
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl">
-                                                                        รวมเบิกจ่ายทั้งหมด</small>
+                                                                        <small class="text-xl">
+                                                                            รวมเบิกจ่ายทั้งหมด</small>
                                                                     </div>
                                                                 </button>
                                                             </div>
@@ -624,25 +590,24 @@
                                                                         <div class="fs-4 fw-semibold text-primary">
                                                                             {{ number_format($utsc_pay_pa, 2) }}
                                                                         </div>
-                                                                        <small
-                                                                            class="text-xl">จำนวนเงิน แบบมี PA
+                                                                        <small class="text-xl">จำนวนเงิน แบบมี PA
                                                                         </small>
                                                                     </button>
                                                                 </div>
                                                                 <div class="card-body">
 
-                                                                    <button class="btn "style="width: 12rem;"  data-bs-toggle="collapse"
+                                                                    <button class="btn "style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
                                                                         href="#collapseExample2" role="button"
                                                                         aria-expanded="false"
                                                                         aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold text-primary"
-                                                                            >
+                                                                        <div class="fs-4 fw-semibold text-primary">
                                                                             <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($utsc_pay, 2) }}
                                                                         </div>
                                                                         <div>
-                                                                        <small
-                                                                            class="text-xl">จำนวนเงิน แบบไม่มี PA
-                                                                        </small>
+                                                                            <small class="text-xl">จำนวนเงิน แบบไม่มี
+                                                                                PA
+                                                                            </small>
                                                                         </div>
                                                                     </button>
                                                                 </div>
@@ -653,54 +618,51 @@
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                                    href="#collapseExample3" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample3"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold btn btn-warning"
-
-                                                                       >
+                                                                    <div class="fs-4 fw-semibold btn btn-warning">
                                                                         <!--รอการเบิกจ่ายทั้งหมด-->
-                                                                        {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay), 2) }}
+                                                                        {{ number_format($utpcs - $utsc_pay_pa + ($utsc - $utsc_pay), 2) }}
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl"
-                                                                       >รอการเบิกจ่ายทั้งหมด</small>
+                                                                        <small
+                                                                            class="text-xl">รอการเบิกจ่ายทั้งหมด</small>
                                                                     </div>
                                                                 </button>
                                                             </div>
                                                             <div class="collapse" id="collapseExample3">
                                                                 <div class="card-body">
 
-                                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                                    <button class="btn " style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
                                                                         href="#collapseExample2" role="button"
                                                                         aria-expanded="false"
                                                                         aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold text-pay"
-                                                                            >
+                                                                        <div class="fs-4 fw-semibold text-pay">
                                                                             <!--การเบิกจ่าย PA -->
                                                                             {{ number_format($utpcs - $utsc_pay_pa, 2) }}
                                                                         </div>
-                                                                        <small
-                                                                            class="text-xl">รอการเบิกจ่าย แบบมี PA</small>
+                                                                        <small class="text-xl">รอการเบิกจ่าย แบบมี
+                                                                            PA</small>
 
                                                                     </button>
                                                                 </div>
                                                                 <div class="card-body">
 
-                                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                                    <button class="btn " style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
                                                                         href="#collapseExample2" role="button"
                                                                         aria-expanded="false"
                                                                         aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold text-pay"
-                                                                            >
+                                                                        <div class="fs-4 fw-semibold text-pay">
                                                                             <!--การเบิกจ่าย PA -->
                                                                             {{ number_format($utsc - $utsc_pay, 2) }}
                                                                         </div>
                                                                         <div>
-                                                                        <small
-                                                                            class="text-xl">รอการเบิกจ่าย ไม่แบบ PA</small>
+                                                                            <small class="text-xl">รอการเบิกจ่าย ไม่แบบ
+                                                                                PA</small>
                                                                         </div>
 
                                                                     </button>
@@ -712,21 +674,19 @@
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <!--ยอดงบประมาณคงเหลือทั้งหมด-->
-                                                                <button class="btn "style="width: 12rem;"  data-bs-toggle="collapse"
-                                                                    href="#collapseExample" role="button"
-                                                                    aria-expanded="false"
+                                                                <button class="btn "style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample"
+                                                                    role="button" aria-expanded="false"
                                                                     aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold btn btn-success"
-                                                                      >
+                                                                    <div class="fs-4 fw-semibold btn btn-success">
                                                                         <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
 
-                                                                        {{ number_format($project['budget_gov_utility']-($utsc_pay_pa + $utsc_pay),2) }}
+                                                                        {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
 
                                                                     </div>
                                                                     <div>
-                                                                    <small
-                                                                        class="text-xl"
-                                                                       >ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                                        <small
+                                                                            class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
                                                                     </div>
                                                                 </button>
                                                             </div>
@@ -779,23 +739,316 @@
                                                             <li>
                                                                 {{ $subtask->task_name }}
                                                                 <span
-                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_start_date)) }}</span>
+                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                                                                 <span
-                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$subtask->task_end_date)) }}</span>
+                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                                                                 @if ($subtask->contract->count() > 0)
-                                                                    {{-- <span class="badge bg-warning">{{ $subtask->contract->count() }} สัญญา</span> --}}
                                                                     @foreach ($subtask->contract as $contract)
                                                                         <a
-                                                                            href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"><span
-                                                                                class="badge bg-warning">{{ $contract->contract_number }}</span></a>
+                                                                            href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
+                                                                            <span
+                                                                                class="badge bg-warning">{{ $contract->contract_number }}</span>
+                                                                        </a>
+
+
+                                                                        <!-- Button trigger modal -->
+                                                                        <button type="button" class="btn btn-primary"
+                                                                            data-coreui-toggle="modal"
+                                                                            data-coreui-target="#exampleModal{{ $contract->hashid }}">
+                                                                            {{ $contract->contract_number }}
+                                                                        </button>
+
+                                                                        <!-- Modal -->
+                                                                        <div class="modal fade"
+                                                                            id="exampleModal{{ $contract->hashid }}"
+                                                                            tabindex="-1"
+                                                                            aria-labelledby="exampleModalLabel"
+                                                                            aria-hidden="true">
+                                                                            <div class="modal-dialog modal-xl">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title"
+                                                                                            id="exampleModalLabel">
+                                                                                            สัญญา
+                                                                                            {{ $contract->contract_number }}
+                                                                                        </h5>
+                                                                                        <button type="button"
+                                                                                            class="btn-close"
+                                                                                            data-coreui-dismiss="modal"
+                                                                                            aria-label="Close"></button>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+
+
+                                                                                        {{--  --}}
+                                                                                        <div class="container">
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm">
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('สถานะสัญญา') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            <?php
+                                                                                                            echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
+                                                                                                            ?>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('เลขที่ สัญญา') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ $contract->contract_number }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('เลขที่ คู่ค้า') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ $contract->contract_juristic_id }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('เลขที่สั่งซื้อ') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ $contract->contract_order_no }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('ประเภท') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ \Helper::contractType($contract->contract_type) }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    {{-- <div class="row">
+                <div class="col-3">{{ __('วิธีการได้มา') }}</div>
+                <div class="col-9">
+                    {{ \Helper::contractAcquisition($contract->contract_acquisition) }}
+                </div>
+            </div> --}}
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('วันที่เริ่มสัญญา') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('วันที่สิ้นสุดสัญญา') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-9">
+                                                                                                            {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('จำนวนเดือน') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                                                                            เดือน</div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('จำนวนวัน') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                                                                            วัน</div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('ดำเนินการมาแล้ว') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }}
+                                                                                                            เดือน</div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ __('ดำเนินการมาแล้ว') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-3">
+                                                                                                            {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse()) }}
+                                                                                                            วัน</div>
+                                                                                                    </div>
+
+                                                                                                    {{--   <div class="row">
+                <div class="col-3">{{ __('เตือน เหลือเวลา') }}</div>
+                <div class="col-9">
+                    <?php
+                    echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
+                    ?> เดือน
+
+
+                </div>
+            </div> --}}
+
+
+                                                                                                </div>
+                                                                                                <div class="col-sm">
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('หมายเหตุ') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ $contract->contract_projectplan }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('เลขที่ MM') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ $contract->contract_mm }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('จำนวนเงิน MM') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ $contract->contract_mm_bodget }}
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('เลขที่ PR') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ $contract->contract_pr }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('จำนวนเงิน PR') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ number_format($contract->contract_pr_budget) }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('เลขที่ PA') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ $contract->contract_pa }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('จำนวนเงิน PA') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ number_format($contract->contract_pa_budget) }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('จำนวนคงเหลือหลังเงิน PA') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div
+                                                                                                        class="row">
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ __('จำนวนเงิน ที่ใช้จ่ายต่อปี') }}
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-6">
+                                                                                                            {{ number_format($contract->contract_peryear_pa_budget) }}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {{--  --}}
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-secondary"
+                                                                                            data-coreui-dismiss="modal">Close</button>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     @endforeach
                                                                 @endif
+
+
                                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                                                    class="btn-sm btn btn-primary text-white" target="_blank"><i
+                                                                    class="btn-sm btn btn-primary text-white"
+                                                                    target="_blank"><i
                                                                         class="cil-folder-open "></i></a>
                                                                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                                                    class="btn-sm btn btn-warning text-white" target="_blank"> <i
-                                                                        class="cil-cog"></i> </a>
+                                                                    class="btn-sm btn btn-warning text-white"
+                                                                    target="_blank"> <i class="cil-cog"></i> </a>
                                                                 <form
                                                                     action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                                                     method="POST" style="display:inline">
@@ -811,17 +1064,18 @@
                                             </td>
                                             <td>
                                                 <span
-                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$task->task_start_date)) }}</span>
+                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
 
                                                 <span
-                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s',$task->task_end_date))}}</span>
+                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                                             </td>
                                             <td class="text-end">
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                                     class="btn btn-primary text-white" target="_blank"><i
                                                         class="cil-folder-open "></i></a>
                                                 <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                                    class="btn btn-warning text-white" target="_blank"> <i class="cil-cog"></i> </a>
+                                                    class="btn btn-warning text-white" target="_blank"> <i
+                                                        class="cil-cog"></i> </a>
                                                 <form
                                                     action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                                     method="POST" style="display:inline">
@@ -847,11 +1101,11 @@
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
 
-  <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
-  <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
+        <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
+        <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
 
 
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
@@ -864,6 +1118,21 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const popoverEl = document.querySelectorAll('[data-coreui-toggle="popover"]');
+                Array.from(popoverEl).forEach(function(el) {
+                    new coreui.Popover(el);
+                });
+            });
+        </script>
+
+
+
 
         <script>
             gantt.plugins({
@@ -918,7 +1187,7 @@
                         width: 120,
                         label: "งบประมาณ",
                         tree: true,
-                        resize:true,
+                        resize: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.budget) {
@@ -938,7 +1207,7 @@
                         width: 150,
                         label: "PA",
                         tree: true,
-                        resize:true,
+                        resize: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 1) {
@@ -948,7 +1217,7 @@
                                 }).format(task.cost) + '</span>';
 
 
-                            } else if (task.cost_pa_1 > 0){
+                            } else if (task.cost_pa_1 > 0) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -965,7 +1234,7 @@
                         width: 150,
                         label: "ไม่มี PA",
                         tree: true,
-                        resize:true,
+                        resize: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 2) {
@@ -973,7 +1242,7 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost);
-                            } else if (task.cost_no_pa_2 > 0){
+                            } else if (task.cost_no_pa_2 > 0) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -993,33 +1262,33 @@
                         width: 100,
                         label: "การเบิกจ่าย",
                         tree: true,
-                        resize:true,
+                        resize: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
                             if (task.task_total_pay > 0) {
-    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-        style: 'currency',
-        currency: 'THB'
-    }).format(task.task_total_pay) + '</span>';
-} else if (task.task_type == 1 && task.pay > 0) {
-    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-        style: 'currency',
-        currency: 'THB'
-    }).format(task.pay) + '</span>';
-} else if (task.task_type == 2 && task.pay > 0) {
-    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-        style: 'currency',
-        currency: 'THB'
-    }).format(task.pay) + '</span>';
-} else if (task.total_pay > 0) {
-    return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
-        style: 'currency',
-        currency: 'THB'
-    }).format(task.total_pay) + '</span>';
-} else {
-    return '-';
-}
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.task_total_pay) + '</span>';
+                            } else if (task.task_type == 1 && task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else if (task.task_type == 2 && task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else if (task.total_pay > 0) {
+                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_pay) + '</span>';
+                            } else {
+                                return '-';
+                            }
 
                         }
                     },
@@ -1029,53 +1298,53 @@
                         width: 100,
                         label: "รอการเบิกจ่าย",
                         tree: true,
-                        resize:true,
+                        resize: true,
 
-                                                template: function(task) {
-                                                    if (task.total_pay > 0) {
-                            return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
-                                style: 'currency',
-                                currency: 'THB'
-                            }).format(task.total_cost-task.total_pay) + '</span>';
-
-
-
-                        } else if (task.task_total_pay > 0) {
-                            let remainingCost = task.cost - task.task_total_pay;
-
-                            if (remainingCost > 0) {
-        return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
-            style: 'currency',
-            currency: 'THB'
-        }).format(remainingCost) + '</span>';
-
-
-
-
-    } else {
-        return '-';
-    }
-} else if (task.task_type == 1) {
-                            if (task.cost - task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                        template: function(task) {
+                            if (task.total_pay > 0) {
+                                return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost - task.pay) + '</span>';
+                                }).format(task.total_cost - task.total_pay) + '</span>';
+
+
+
+                            } else if (task.task_total_pay > 0) {
+                                let remainingCost = task.cost - task.task_total_pay;
+
+                                if (remainingCost > 0) {
+                                    return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(remainingCost) + '</span>';
+
+
+
+
+                                } else {
+                                    return '-';
+                                }
+                            } else if (task.task_type == 1) {
+                                if (task.cost - task.pay > 0) {
+                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.cost - task.pay) + '</span>';
+                                } else {
+                                    return '-';
+                                }
+                            } else if (task.task_type == 2) {
+                                if (task.cost - task.pay > 0) {
+                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.cost - task.pay) + '</span>';
+                                } else {
+                                    return '-';
+                                }
                             } else {
                                 return '-';
                             }
-                        } else if (task.task_type == 2) {
-                            if (task.cost - task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost - task.pay) + '</span>';
-                            } else {
-                                return '-';
-                            }
-                        } else {
-                            return '-';
-                        }
 
 
                         }
@@ -1085,7 +1354,7 @@
                         width: 100,
                         label: "คงเหลือ",
                         tree: true,
-                        resize:true,
+                        resize: true,
 
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
@@ -1155,35 +1424,35 @@
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                        <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                        <td colspan="2">งบกลาง IT</td>\
-                                                        <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                      </tr>';
+                                                                        <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                                        <td colspan="2">งบกลาง IT</td>\
+                                                                        <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                                      </tr>';
                     html += '<tr>\
-                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                        <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                        <td>ค่าสาธารณูปโภค</td>\
-                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                        <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                      </tr>';
+                                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                        <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                        <td>ค่าสาธารณูปโภค</td>\
+                                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                        <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                      </tr>';
                     if (task.type == 'task') {
                         html += '<tr class="text-end">\
-                                                        <td>-' + budget_gov_operating + '</td>\
-                                                        <td>' + budget_gov_investment + '</td>\
-                                                        <td>' + budget_gov_utility + '</td>\
-                                                        <td>' + budget_it_operating + '</td>\
-                                                        <td>' + budget_it_investment + '</td>\
-                                                        <td class="text-success">' + budget + '</td>\
-                                                      </tr>';
+                                                                        <td>-' + budget_gov_operating + '</td>\
+                                                                        <td>' + budget_gov_investment + '</td>\
+                                                                        <td>' + budget_gov_utility + '</td>\
+                                                                        <td>' + budget_it_operating + '</td>\
+                                                                        <td>' + budget_it_investment + '</td>\
+                                                                        <td class="text-success">' + budget + '</td>\
+                                                                      </tr>';
                     } else {
                         html += '<tr class="text-end">\
-                                                        <td>' + budget_gov_operating + '</td>\
-                                                        <td>' + budget_gov_investment + '</td>\
-                                                        <td>' + budget_gov_utility + '</td>\
-                                                        <td>' + budget_it_operating + '</td>\
-                                                        <td>' + budget_it_investment + '</td>\
-                                                        <td class="text-success">' + budget + '</td>\
-                                                      </tr>';
+                                                                        <td>' + budget_gov_operating + '</td>\
+                                                                        <td>' + budget_gov_investment + '</td>\
+                                                                        <td>' + budget_gov_utility + '</td>\
+                                                                        <td>' + budget_it_operating + '</td>\
+                                                                        <td>' + budget_it_investment + '</td>\
+                                                                        <td class="text-success">' + budget + '</td>\
+                                                                      </tr>';
                     }
                     html += '</table>';
                 }
@@ -1232,7 +1501,7 @@
                             {
                                 resizer: true,
                                 width: 1,
-                                height:20
+                                height: 20
                             },
                             {
                                 view: "timeline",
@@ -1268,9 +1537,9 @@
             gantt.config.scales = [{
                     unit: "year",
                     step: 1,
-                    format: function (date) {
-      return parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
-    },
+                    format: function(date) {
+                        return parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+                    },
 
 
 
@@ -1279,12 +1548,14 @@
                     unit: "month",
                     step: 2,
                     format: function(date) {
-            //const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
-            const thaiMonthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-            const thaiYearNumber = parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
-            const thaiMonthName = thaiMonthNames[date.getMonth()];
-            return thaiMonthName + " " + thaiYearNumber;
-        }
+                        //const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+                        const thaiMonthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
+                            "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+                        ];
+                        const thaiYearNumber = parseInt(gantt.date.date_to_str("%Y")(date)) + 543;
+                        const thaiMonthName = thaiMonthNames[date.getMonth()];
+                        return thaiMonthName + " " + thaiYearNumber;
+                    }
                 },
                 // {unit: "day", step: 3, format: "%D %M, %Y"},
             ];

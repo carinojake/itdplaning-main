@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('contracts', function (Blueprint $table) {
 
-            $table->decimal('contract_mm_budget', 8, 2)->nullable();
+            $table->decimal('contract_mm_budget', 11, 2)->nullable();
         });
     }
 
