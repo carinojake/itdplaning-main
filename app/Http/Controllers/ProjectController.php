@@ -190,8 +190,8 @@ class ProjectController extends Controller
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
         (float) $__budget     = $__budget_gov + $__budget_it;
-        (float) $__cost       = (float) $project['project_cost'];
-        (float) $__balance    = $__budget + (float) $project['project_cost'];
+        ((float) $__cost       = (float) $project['project_cost']);
+        dd((float) $__balance    = $__budget + (float) $project['project_cost']);
         $__project_cost     = [];
 
         $gantt[] = [
@@ -333,7 +333,7 @@ class ProjectController extends Controller
         }
         // ($gntt[0]['cost']    =array_sum($__project_cost));
         //  ($gantt[0]['pay']    = array_sum($__project_pay));
-        $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
+        ($gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost']);
 
 
 
