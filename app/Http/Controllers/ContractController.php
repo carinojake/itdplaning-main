@@ -447,7 +447,7 @@ class ContractController extends Controller
             //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
         $request->validate([
-            'contract_name'                   => 'required',
+        //    'contract_name'                   => 'required',
          //   'contract_pr_budget' => 'numeric|nullable',
            // 'contract_pa_budget' => 'numeric|nullable',
             // 'contract_number'                 => 'required',
@@ -488,6 +488,8 @@ class ContractController extends Controller
         $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
         $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
 
+        $contract_oe_budget = str_replace(',', '', $request->input('contract_oe_budget'));
+
         $contract_pay = str_replace(',', '', $request->input('contract_pay'));
 
         if ($contract_pr_budget === '') {
@@ -509,6 +511,10 @@ class ContractController extends Controller
         }
         if ($contract_cn_budget === '') {
             $contract_cn_budget = null; // or '0'
+        }
+
+        if ($contract_oe_budget === '') {
+            $contract_oe_budget = null; // or '0'
         }
         if ($contract_pay === '') {
             $contract_pay = null; // or '0'
@@ -552,6 +558,8 @@ class ContractController extends Controller
 
         $contract->contract_mm_budget = $contract_mm_budget;
         $contract->contract_cn_budget = $contract_cn_budget;
+        $contract->contract_oe_budget = $contract_oe_budget;
+
         $contract->contract_pay = $contract_pay;
 
         //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
@@ -707,6 +715,9 @@ class ContractController extends Controller
             session()->flash('contract_id', $contract->contract_id);
             session()->flash('contract_number', $contract->contract_number);
             session()->flash('contract_name', $contract->contract_name);
+            session()->flash('contract_pr_budget', $contract->contract_pr_budget);
+            session()->flash('contract_pa_budget', $contract->contract_pa_budget);
+            session()->flash('contract_pay', $contract->contract_pay);
 
             if ($origin) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);

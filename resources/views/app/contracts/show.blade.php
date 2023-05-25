@@ -21,7 +21,7 @@
                                                 <i class="cil-money icon icon-xxl"></i>
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($contract->contract_pa_budget) }}
+                                                {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
                                             <div class="progress progress-thin mt-3 mb-0">

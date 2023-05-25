@@ -163,16 +163,13 @@
 
 
 
+                                <div class="row mt-3">
+                                    <h4>เบิกจ่าย</h4>
 
-
-
-
-
-
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="taskcon_pay_date"
-                                        class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
-                                        class="text-danger">*</span>
+                                        class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+
                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                     <div data-coreui-toggle="date-picker" id="taskcon_pay_date"
                                         data-coreui-locale="th-TH" data-coreui-format="dd/MM/yyyy"
@@ -181,7 +178,22 @@
 
 
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label for="disbursement_taskcons_status"
+                                        class="form-label">{{ __('เลขที่ PP') }}</label>
+
+                                        <input type="text" class="form-control" id="disbursement_taskcons_status" name="disbursement_taskcons_status"
+                                            value="{{ $taskcon->disbursement_taskcons_status }}">
+                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
+
+
+
+                                </div>
+
+
+
+                                <div class="col-md-4">
                                     <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
                                     <input type="number" placeholder="0.00" step="0.01" class="form-control"
                                         id="taskcon_pay" name="taskcon_pay" min="0"
@@ -190,7 +202,7 @@
                                         {{ __('เบิกจ่าย') }}
                                     </div>
                                 </div>
-
+                                </div>
                                  {{--  <div class="col-md-12">
                                     <label for="taskcon_parent"
                                         class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label> <span

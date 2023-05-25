@@ -69,27 +69,44 @@
 
                                     <div class="col-md-5" id='contract_group'>
                                         <div class="form-group">
-                                            <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label>
-                                            <select name="task_contract" id="task_contract" class="form-control">
+                                            <label for="task_contract" class="form-label">{{ __('สัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}</label>
+                                           <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
                                                 <option value="">ไม่มี</option>
                                                 @foreach ($contracts as $contract)
                                                     <option value="{{ $contract->contract_id }}"
                                                         {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
                                                         [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            {{-- <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
+                                                <option value="">ไม่มี</option>
+                                                @if (!empty($contracts['results']))
+                                                    @foreach ($contracts['results'] as $group)
+                                                        <optgroup label="{{ $group['text'] }}">
+                                                            @foreach ($group['children'] as $contract)
+                                                                <option value="{{ $contract['id'] }}" {{ session('contract_id') == $contract['id'] ? 'selected' : '' }}>
+                                                                    [{{ $contract['text'] }}]{{ $contract['text'] }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                @endif
+                                            </select> --}}
+
+
                                             <div class="invalid-feedback">
                                                 {{ __('สัญญา') }}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2" id='add_contract_group'>
+                                    <div class="col-md-2 mt-3" id='add_contract_group'>
                                         {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
                                         <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
                                             class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
+                                            target="contractCreate">เพิ่ม</a>
                                     </div>
                                 </div>
 
@@ -102,6 +119,17 @@
                             @if (session('contract_name'))
                                 Name: {{ session('contract_name') }}
                             @endif
+                            @if (session('contract_pr_budget'))
+                            วงเงินที่ขออนุมัติ: {{ session('contract_pr_budget') }}
+                        @endif
+                        @if (session('contract_pa_budget'))
+                        ค่าใช้จ่าย: {{ session('contract_pa_budget') }}
+                    @endif
+                    @if (session('contract_pay'))
+                    เบิก: {{ session('contract_pay') }}
+                @endif
+
+
                                 {{--     <div class="row">
                     <div class="col-md-9  mt-3">
                         <div class="form-group">
@@ -306,10 +334,29 @@
     <x-slot:css>
     </x-slot:css>
     <x-slot:javascript>
+
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></scrip
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script>
+            $(document).ready(function() {
+                // Initialize Select2 on the select element
+                $('.js-example-basic-single').select2();
+
+                $('.js-example-basic-single').on('change', function() {
+                    // Get the selected value
+                    const selectedValue = $(this).val();
+                    // Handle the selected value as needed
+                    console.log(selectedValue);
+                });
+            });
+        </script>
+
+
+        {{-- <script>
             // สร้างฟังก์ชันสำหรับเพิ่มรายการสัญญา
             function addContractOption(contract) {
                 const selectElement = document.getElementById('task_contract');
@@ -338,7 +385,7 @@
                     addContractOption(newContract);
                 }
             });
-        </script>
+        </script> --}}
 
 
 
@@ -392,8 +439,8 @@
             }
             else if (task_type == 2) {
                 contract_label.text('สัญญา');
-                $('#contract_group').hide();
-                $('#add_contract_group').hide();
+                $('#contract_group').show();
+                $('#add_contract_group').show();
             }
         });
     });

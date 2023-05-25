@@ -25,6 +25,7 @@
         "spatie/laravel-permission": "^5.5",
         "twbs/bootstrap": "5.3.0-alpha1",
         "vinkla/hashids": "^10.0",
+        "select2/select2": "4.1.0-rc.0",
         "yajra/laravel-datatables": "^9.0"
     },
     "require-dev": {

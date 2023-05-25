@@ -265,7 +265,6 @@ class Helper
     {
         $types = [
             "99" => "-",
-
             "1" => "การซื้อ",
             "2" => "การจ้าง",
             "3" => "การเช่า",
@@ -283,6 +282,17 @@ class Helper
 
 
     public static function taskconrounds($rounds = null)
+{
+    $types = [];
+
+    for ($i = 1; $i <= 36; $i++) {
+        $types[$i] = $i;
+    }
+
+    return $types;
+}
+
+public static function taskconrounds2($rounds = null)
 {
     $types = [];
 
