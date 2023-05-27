@@ -146,13 +146,13 @@
         });
 
 
-        // 3 contract contract.show มีแล้ว
+      /*   // 3 contract contract.show มีแล้ว
         Breadcrumbs::for('contract.show', function (BreadcrumbTrail $trail, $contract) {
 
             $trail->push('contract', route('contract.index'));
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->contract_id]));
         });
-
+ */
         // 4 contract.edit มีแล้ว
         Breadcrumbs::for('contract.edit', function (BreadcrumbTrail $trail, $contract) {
             $trail->push('contract', route('contract.index'));

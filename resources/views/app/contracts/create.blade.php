@@ -89,7 +89,7 @@
                                                     data-coreui-toggle="collapse"
                                                     data-coreui-target="#flush-collapseOne" aria-expanded="false"
                                                     aria-controls="flush-collapseOne">
-                                                    ข้อมูลการจัดซื่อจัดจ้าง
+                                                    ข้อมูลการจัดซื้อจัดจ้าง
                                                 </button>
                                             </h2>
                                             <div id="flush-collapseOne" class="accordion-collapse collapse"
@@ -97,7 +97,7 @@
                                                 data-coreui-parent="#accordionFlushExample">
                                                 <div class="accordion-body">
                                                     <div id="mm_form" style="display:none;">
-                                                        <div class="row mt-3">
+                                                        <div class="callout callout-primary row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_mm"
                                                                     class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
@@ -112,7 +112,7 @@
 
                                                             <div class="col-md-4">
                                                                 <label for="contract_mm_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) MM') }}</label>
+                                                                    class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" placeholder="0.00" step="0.01"
@@ -121,34 +121,41 @@
                                                                     class="form-control numeral-mask"
                                                                     name="contract_mm_budget" min="0">
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="pr_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_pr"
-                                                                    class="form-label">{{ __('เลขที่ PR') }}</label>
-                                                                <span class="text-danger"></span>
+                                                            <div id="pr_form" style="display:none;">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_pr"
+                                                                        class="form-label">{{ __('เลขที่ PR') }}</label>
+                                                                    <span class="text-danger"></span>
 
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_PR" name="contract_pr">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_PR" name="contract_pr">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_pr_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="taxt" placeholder="0.00" step="0.01"
+                                                                        class="form-control" id="contract_pr_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_pr_budget" min="0">
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_pr_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="taxt" placeholder="0.00" step="0.01"
-                                                                    class="form-control" id="contract_pr_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_pr_budget" min="0">
                                                             </div>
+
+
+
+
                                                         </div>
+                                                    </div>
+                                          <div class="callout callout-success">
+                                                    <div id="pr_form" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_pa"
@@ -176,8 +183,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+
                                                     <div id="po_form" style="display:none;">
                                                         <!-- PO form fields -->
+
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_po"
@@ -289,24 +299,24 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="oe_form" style="display:none;">
+                                                    <div id="ba_form" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
-                                                                <label for="contract_oe "
-                                                                    class="form-label">{{ __('เลขที่ OE ') }}</label>
+                                                                <label for="contract_ba "
+                                                                    class="form-label">{{ __('เลขที่  BA ') }}</label>
                                                                 {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"
-                                                                    id="contract_oe" name="contract_cn">
+                                                                    id="contract_ba" name="contract_cn">
                                                                 <div class="invalid-feedback">
                                                                     {{ __(' ') }}
                                                                 </div>
                                                             </div>
 
                                                             <div class="col-md-4">
-                                                                <label for="contract_oe_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) OE') }}</label>
+                                                                <label for="contract_ba_budget"
+                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BA') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" placeholder="0.00"
@@ -318,7 +328,59 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="pp_form" style="display:none;">
+
+                                                    <div id="bd_form" style="display:none;">
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-4">
+                                                                <label for="contract_bd "
+                                                                    class="form-label">{{ __('เลขที่ BD') }}</label>
+                                                                {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
+                                                                <span class="text-danger"></span>
+
+                                                                <input type="text" class="form-control"
+                                                                    id="contract_bd" name="contract_bd">
+                                                                <div class="invalid-feedback">
+                                                                    {{ __(' ') }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="contract_bd_budget"
+                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
+                                                                <span class="text-danger"></span>
+
+                                                                <input type="text" placeholder="0.00"
+                                                                    step="0.01" class="form-control"
+                                                                    id="contract_bd_budget"
+                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                    class="form-control numeral-mask"
+                                                                    name="contract_bd_budget" min="0">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+
+
+
+                                          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                          <div id="pp_form" class="callout callout-danger" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_pay"
@@ -365,13 +427,13 @@
                                                     </div>
  --}}
 
-                                                    <div id="rounds_form" style="display:none;">
+                                                    <div id="rounds_form" class="callout callout-warning" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-12">
                                                                 <label  id="rounds_label" for="rounds"
-                                                                    class="form-label">{{ __('งวด/ค่าใช้จ่ายสำนักงาน') }}</label>
+                                                                    class="form-label">{{ __('งวดที่/ค่าใช้จ่ายสำนักงาน') }}</label>
                                                                 <span class="text-danger">*</span>
-                                                                {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => 'js-example-basic-single', 'placeholder' => 'งวด', 'id' => 'rounds', 'name' => 'change']) }}
+                                                                {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
                                                                 <div id="tasksContainer"></div>
                                                                 <div class="invalid-feedback">
                                                                     {{ __(' ') }}
@@ -401,13 +463,14 @@
                                                 <button class="accordion-button collapsed" type="button"
                                                     data-coreui-toggle="collapse" data-coreui-target="#collapseTwo"
                                                     aria-expanded="false" aria-controls="collapseTwo">
-                                                    ข้อมูลสัญญา 2
+                                                    ข้อมูลสัญญา 2 (เลขที่สัญญา,เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา, ประก้น)
                                                 </button>
                                             </h2>
                                             <div id="collapseTwo" class="accordion-collapse collapse"
                                                 aria-labelledby="headingTwo" data-coreui-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    <div class="row mt-3">
+
+                                                    <div class="row  callout callout-info mt-3">
                                                         <div class="col-md-3">
                                                             <label for="contract_number"
                                                                 class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
@@ -419,21 +482,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3">
-                                                            <label for="contract_sign_date"
-                                                                class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
-                                                            <input type="text" class="form-control"
-                                                                id="contract_sign_date" name="contract_sign_date">
-                                                            <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>-->
-                                                        </div>
 
-
-                                                    </div>
-
-
-
-                                                    <div class="row mt-3">
                                                         <div class="col-md-3">
                                                             <label for="contract_juristic_id"
                                                                 class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
@@ -445,6 +494,13 @@
                                                             </div>
                                                         </div>
 
+
+
+                                                    </div>
+
+
+
+                                                    <div class="row callout callout-warning  mt-3">
 
                                                         <div class="col-md-3">
                                                             <label for="contract_start_date"
@@ -466,9 +522,17 @@
                                                             data-coreui-format="dd/MM/yyyy">
                                                         </div>-->
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <label for="contract_sign_date"
+                                                                class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
+                                                            <input type="text" class="form-control"
+                                                                id="contract_sign_date" name="contract_sign_date">
+                                                            <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
+                                                            data-coreui-format="dd/MM/yyyy"></div>-->
+                                                        </div>
                                                     </div>
 
-                                                    <div class="row mt-3">
+                                                    <div class="row callout callout-danger mt-3">
                                                         <div class="col-md-3">
                                                             <label for="insurance_start_date"
                                                                 class="form-label">{{ __('วันที่เริ่มต้น ประก้น') }}</label>
@@ -532,7 +596,7 @@
                                                     <!--ข้อมูลสัญญา 3 -->
                                                     <div class="col-md-12 mt-3">
                                                         <label for="contract_name"
-                                                            class="form-label">{{ __('ชื่อ MM') }}</label>
+                                                            class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
 
                                                         <input type="text" class="form-control"
@@ -737,8 +801,8 @@
                                 @else
                                 @endif
 
-                                <!-- <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
-                 -->
+                                <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
+
 
                             </form>
 
@@ -786,9 +850,9 @@
                     for (var i = 0; i < rounds; i++) {
                         $('#tasksContainer').append(`
                         <div class="row mt-3">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
 
-                                    <label>งวด Name ` + (i + 1) + `:</label><input type="text" name="tasks[` + i +
+                                    <label>ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
                             `][task_name]" value="งวด ` + (i + 1) + `"required>
                                 </div>
                             </div>
@@ -812,7 +876,7 @@
 
                     if (contract_type == 1) {
                         contract_name_label.text('ชื่อ PO');
-                        rounds_label.text('งวด');
+                        rounds_label.text('จำนวนงวด');
                         $('#mm_form').show();
                         $('#pr_form').show();
                         $('#pa_form').show();
@@ -824,7 +888,7 @@
                         $('#rounds_form').show();
                     } else if (contract_type == 2) {
                         contract_name_label.text('ชื่อ ER');
-                        rounds_label.text('งวด');
+                        rounds_label.text('จำนวนงวด');
                         $('#mm_form').show();
                         $('#pr_form').show();
                         $('#pa_form').show();
@@ -836,7 +900,7 @@
                         $('#rounds_form').show();
                     } else if (contract_type == 3) {
                         contract_name_label.text('ชื่อ CN');
-                        rounds_label.text('งวด');
+                        rounds_label.text('จำนวนงวด');
                         $('#mm_form').show();
                         $('#pr_form').show();
                         $('#pa_form').show();
@@ -857,6 +921,8 @@
                         $('#cn_form').hide();
                         $('#oe_form').show();
                         $('#pp_form').show();
+                        $('#ba_form').show();
+                        $('#bd_form').show();
                         $('#rounds_form').show();
                     } else {
                         contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
@@ -868,6 +934,8 @@
                         $('#cn_form').show();
                         $('#oe_form').show();
                         $('#pp_form').show();
+                        $('#ba_form').show();
+                        $('#bd_form').show();
                         $('#rounds_form').show();
                     }
                 });

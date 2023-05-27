@@ -1,24 +1,35 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
-            {{ Breadcrumbs::render('contract.show', $contract) }}
+           {{--  {{ Breadcrumbs::render('contract.show', $contract) }} --}}
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ $contract->contract_name }}">
+
                             <x-slot:toolbar>
+                                <div class="row">
+                                    <div class="col-3">{{ __('เตือน เหลือเวลา') }}</div>
+                                    <div class="col-9">
+                                        <?php
+                                        echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
+                                        ?> เดือน
+
+
+                                    </div>
+                                </div>
                                 <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning">Edit</a>
                                 <a href="{{ route('contract.task.create', $contract->hashid) }}"
                                     class="text-white btn btn-success">เพิ่มค่าใช้จ่าย</a>
 
                                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
-                            <div class="row mb-3">
+                            <div class="row  callout callout-primary mb-3">
                                 <div class="col-sm-6 col-md-3 col-lg-4">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="text-medium-emphasis text-end mb-4">
-                                                <i class="cil-money icon icon-xxl"></i>
+
                                             </div>
                                             <div class="fs-4 fw-semibold">
                                                 {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
@@ -36,7 +47,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="text-medium-emphasis text-end mb-4">
-                                                <i class="cil-money icon icon-xxl"></i>
+
                                             </div>
                                             <div class="fs-4 fw-semibold"></div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
@@ -52,7 +63,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="text-medium-emphasis text-end mb-4">
-                                                <i class="cil-money icon icon-xxl"></i>
+
                                             </div>
                                             <div class="fs-4 fw-semibold"></div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
@@ -72,11 +83,11 @@
 
 
 
-                            <table class="table">
+                            <table class="table callout callout-danger">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Task Name</th>
+                                        <th>สำดับ</th>
+                                        <th>project</th>
 
                                         <th></th>
                                     </tr>
@@ -114,7 +125,8 @@
 
 
                             <div class="container">
-                                <div class="row">
+                                <div class="callout callout-info">
+                                <div class="row ">
                                     <div class="col-sm">
                                         <div class="row">
                                             <div class="col-3">{{ __('สถานะสัญญา') }}</div>
@@ -240,10 +252,10 @@
                                         </div>
 
 
+                                    </div>
 
 
-
-
+                                </div>
 
                                         {{-- <!--<div class="row">
                 <div class="col-6">{{ __('refund_pa_status') }}</div>
@@ -351,10 +363,10 @@
 
             </div>
 
-                            <table class="table">
+                            <table class="table callout callout-primary">
                                 <thead>
                                     <tr>
-                                        <th width="50">ลำดับ</th>
+                                        {{-- <th width="50">ลำดับ</th> --}}
                                         <th>กิจกรรม</th>
                                         <th>วันที่</th>
                                         <th>การเบิกจ่าย</th>
@@ -365,7 +377,7 @@
                                 <tbody>
                                     @foreach ($contract->main_taskcon as $taskcon)
                                         <tr>
-                                            <td></td>
+                                            {{-- <td></td> --}}
                                             <td>
                                                 {{ $taskcon->taskcon_name }} {!! $taskcon->taskcon_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
 

@@ -6,11 +6,16 @@
 
             @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
-                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                        class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type) }}
-                    </a>
+
                     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                        class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>
+                        class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย PA</a>
+
+                        <a href="{{ route('project.task.createsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                            class="btn btn-info text-white">เพิ่มรายการที่ใช้จ่าย ไม่มี PA</a>
+
+                            <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                                class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type) }}
+                            </a>
                     <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
@@ -20,6 +25,8 @@
                     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark">แก้ไขeditsub
                         {{ Helper::projectsType($project->project_type) }} </a>
+
+
                     <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
                     <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
@@ -173,11 +180,11 @@
                                 <div class="col-9">{{ $contract->contract_order_no }}</div>
                             </div>
 
-                            <div class="row">
+                           {{--  <div class="row">
                                 <div class="col-3">{{ __('วิธีการได้มา') }}</div>
                                 <div class="col-9">
                                     {{ \Helper::contractAcquisition($contract->contract_acquisition) }}</div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
                                 <div class="col-9">

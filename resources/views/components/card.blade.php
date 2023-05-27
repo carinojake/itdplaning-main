@@ -12,7 +12,7 @@
           <i class="{{ $icon }} me-2"></i> {{ $title }}
         </h4>
       </div>
-      <div class="col-4 text-end">
+      <div class="col-12 text-end">
         {{ $toolbar }}
       </div>
     </div>

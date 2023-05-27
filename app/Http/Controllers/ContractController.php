@@ -92,16 +92,16 @@ class ContractController extends Controller
     {
         $id = Hashids::decode($contract)[0];
         $latestContract = Contract::latest()->first();
-       // ($contract = Contract::find($id));
+        ($contract = Contract::find($id));
 
-     /*    $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
+        $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
         $contract_end_date = \Carbon\Carbon::createFromTimestamp($contract->contract_end_date);
 
         ($duration = $contract_end_date->diff($contract_start_date)->days);
 
         ($duration_p =  \Carbon\Carbon::parse($contract->contract_end_date)
             ->diffInMonths(\Carbon\Carbon::parse($contract->contract_start_date))
-            -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse())); */
+            -  \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()));
         // $gantt = '';
 
         // dd(Hashids::encode($contract->task->task_id));
@@ -109,7 +109,7 @@ class ContractController extends Controller
 
 
         //    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
-       ($contract = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay')
+       ($contractgannt = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay')
 
             ->leftJoin(
                 DB::raw('(select taskcons.contract_id,
@@ -154,16 +154,15 @@ class ContractController extends Controller
 
             ->toArray()
         );
-          ($contract);
+        //dd  ($contract);
 
         //   คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
-/*
-        ((float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility']);
-        ((float) $__budget_it  = (float) $contract['budget_it_operating'] + (float) $contract['budget_it_investment']);
-        ((float) $__budget     = $__budget_gov + $__budget_it);
-        ((float) $__cost       = (float) $contract['project_cost']);
-        ((float) $__balance    = $__budget + (float) $contract['project_cost']);
-          $__contract     = []; */
+        //   (float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility'];
+        //   (float) $__budget_it  = (float) $contract['budget_it_operating'] + (float) $contract['budget_it_investment'];
+        //   (float) $__budget     = $__budget_gov + $__budget_it;
+        //   (float) $__cost       = (float) $contract['project_cost'];
+        //   (float) $__balance    = $__budget + (float) $contract['project_cost'];
+        //  $__contract     = [];
 
         $gantt[] = [
             'id'                    => $contract['contract_id'],
@@ -174,14 +173,21 @@ class ContractController extends Controller
             'open'                  => true,
             'type'                  => 'project',
             'duration'              => 360,
+            'contract_mm_budget'    => $contract['contract_mm_budget'],
             'contract_pr_budget'    => $contract['contract_pr_budget'],
             'contract_pa_budget'    => $contract['contract_pa_budget'],
-            'contract_refund_pa_budget' => $contract['contract_refund_pa_budget'],
-            'contract_total_cost'    => $contract['total_cost'],
-            'contract_total_pay'    => $contract['total_pay'],
+            'contract_po_budget'    => $contract['contract_pa_budget'],
+            'contract_er_budget'    => $contract['contract_er_budget'],
+            'contract_cn_budget'    => $contract['contract_cn_budget'],
+            'contract_oe_budget'    => $contract['contract_oe_budget'],
+            'contract_pay'          => $contract['contract_pay'],
+
+            'total_cost'            => $contractgannt['total_cost'],
+
+            'total_pay'             => $contractgannt['total_pay'],
             //pro
 
-            'p'                  => $contract['contract_type'],
+            //             'p'                  => $contract['contract_type'],
 
             //             'end_date' => date('Y-m-d', $contract['contract_end_date']),
             //             'budget_gov_operating'  => $contract['budget_gov_operating'],
@@ -195,12 +201,11 @@ class ContractController extends Controller
             //             'balance'               => $__balance,
             //             'pbalance'               => $__balance,
 
-            //             'total_cost'                => $contract['total_cost'],
+
             //             'cost'                  => $contract['contract_cost'],
             //             'cost_pa_1'             => $contract['cost_pa_1'],
             //             'cost_no_pa_2'             => $contract['cost_no_pa_2'],
 
-            //             'total_pay'              => $contract['total_pay'],
             //             'owner'                 => $contract['contract_owner'],
             //             'open'                  => true,
             //            'type'                  => 'project',
@@ -211,7 +216,11 @@ class ContractController extends Controller
             //             'pay'                   => $project['pay'],
             //  'project_cost_disbursement'     => $project['project_cost_disbursemen'],
         ];
-       // $budget['total'] = $__budget;
+
+        //dd($gantt);
+
+
+
         $taskcons =  Contract::find($id);
         ($taskcons = DB::table('taskcons')
             ->select('taskcons.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
@@ -261,28 +270,28 @@ class ContractController extends Controller
         //    dd  ($taskcons);
         ($taskcons = json_decode(json_encode($taskcons), true));
         foreach ($taskcons as $task) {
-           ((float) $__budget_gov = (float) $task['taskcon_budget_gov_operating'] + (float) $task['taskcon_budget_gov_utility'] + (float) $task['taskcon_budget_gov_investment']);
-            ((float) $__budget_it  = (float) $task['taskcon_budget_it_operating'] + (float) $task['taskcon_budget_it_investment']);
+            (float) $__budget_gov = (float) $task['taskcon_budget_gov_operating'] + (float) $task['taskcon_budget_gov_utility'] + (float) $task['taskcon_budget_gov_investment'];
+            (float) $__budget_it  = (float) $task['taskcon_budget_it_operating'] + (float) $task['taskcon_budget_it_investment'];
 
-            ((float) $__budget     = $__budget_gov + $__budget_it);
+            (float) $__budget     = $__budget_gov + $__budget_it;
 
-            ((float) $__cost = array_sum([
+            (float) $__cost = array_sum([
                 // (double)$task['cost_disbursement'],
                 $task['taskcon_cost_gov_operating'],
                 $task['taskcon_cost_gov_investment'],
                 $task['taskcon_cost_gov_utility'],
                 $task['taskcon_cost_it_operating'],
                 $task['taskcon_cost_it_investment'],
-            ]));
+            ]);
 
 
-          ((float) $__taskcon_pay = array_sum([
+            (float) $__taskcon_pay = array_sum([
                 // (double)$task['cost_disbursement'],
                 $task['taskcon_pay']
 
-            ]));
+            ]);
 
-            ((float) $__balance = $__budget - $__cost);
+            (float) $__balance = $__budget - ($__cost);
 
 
 
@@ -323,47 +332,32 @@ class ContractController extends Controller
 
                 // 'owner' => $project['project_owner'],
             ];
-         ($__contract_cost[] = $__cost);
+            $__contract_cost[] = $__cost;
             ($__contract_pay[] = $task['taskcon_pay']);
             ($__contract_parent[] = $task['taskcon_parent'] ? 'T' . $task['taskcon_parent'] . $task['contract_id'] : $task['contract_id']);
             ($__contract_parent_cost[] = 'parent');
         }
-        ($gantt);
-       /*  ((float) $__taskcon_pay = array_sum([
-            // (double)$task['cost_disbursement'],
-            $task['taskcon_pay']
-
-        ]));
- */
-
-   /*  $gntt[0]['cost'] = $__cost;
-    dd($gntt[0]['cost']); */
+        // ($gntt[0]['cost']    =array_sum($__project_cost));
+        //  ($gantt[0]['pay']    = array_sum($__project_pay));
+       // $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
 
 
 
 
- //      dd((float) $gntt[0]['cost']    =array_sum($__cost));
-   //       ($gantt[0]['pay']    = array_sum('pay'));
-
-
-   //     ($gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost']);
-
-
-
-
-       // $budget['cost']    = $gantt[0]['total_cost'];
+        //$budget['cost']    = $gantt[0]['total_cost'];
         //$budget['balance'] = $gantt[0]['balance'];
 
 
 
 
-       dd($gantt);
+      //  dd($gantt);
 
         ($gantt = json_encode($gantt));
 
 
         return view('app.contracts.show', compact('contract', 'gantt', 'duration_p', 'latestContract'));
     }
+
 
 
 

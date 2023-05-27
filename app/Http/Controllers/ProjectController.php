@@ -191,7 +191,7 @@ class ProjectController extends Controller
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
         (float) $__budget     = $__budget_gov + $__budget_it;
         ((float) $__cost       = (float) $project['project_cost']);
-        dd((float) $__balance    = $__budget + (float) $project['project_cost']);
+        ((float) $__balance    = $__budget + (float) $project['project_cost']);
         $__project_cost     = [];
 
         $gantt[] = [
@@ -877,6 +877,67 @@ class ProjectController extends Controller
 
       /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
+
+
+    public function taskCreateSubno(Request $request, $project, $task = null)
+    {
+        $id = Hashids::decode($project)[0];
+        //$project = Project::find($projectId);
+        $tasks = Task::where('project_id', $id)->get();
+        ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
+       // ($request = contract::orderBy('contract_fiscal_year', 'desc')->get());
+
+      //dd ($request);
+      //  if ($project) {
+        //    $projectId = Hashids::decode($id)[0];
+        //    $project = Task::find($projectId);
+        //} else {
+        //    $project = null;
+       // }
+       if (!empty($contracts['results'])) {
+        foreach ($contracts['results'] as $group) {
+            if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
+                // ตรวจสอบกลุ่มสัญญา
+                $groupName = $group['text'];
+                $groupChildren = $group['children'];
+
+                // ตรวจสอบสัญญาในกลุ่ม
+                foreach ($groupChildren as $contract) {
+                    if (isset($contract['id']) && isset($contract['text'])) {
+                        // ข้อมูลสัญญาที่ถูกต้อง
+                        $contractId = $contract['id'];
+                        $contractText = $contract['text'];
+
+                        // นำข้อมูลสัญญาไปใช้งานตามต้องการ
+                    } else {
+                        // ข้อมูลสัญญาไม่ถูกต้อง
+
+                    }
+                }
+            } else {
+                // ข้อมูลกลุ่มสัญญาไม่ถูกต้อง
+            }
+        }
+    } else {
+        // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
+    }
+        if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        }
+
+
+     //   dd($contracts);
+
+      return view('app.projects.tasks.createsubno', compact('request', 'contracts', 'project', 'tasks', 'task'));
+
+      /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
+    }
+
+
+
 
 
 

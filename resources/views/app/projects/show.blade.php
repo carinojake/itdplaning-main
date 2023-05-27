@@ -712,7 +712,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th width="50">ลำดับ</th>
+                                        {{-- <th width="50">ลำดับ</th> --}}
                                         <th>กิจกรรม</th>
                                         <th>วันที่</th>
                                         <th width="200"></th>
@@ -721,7 +721,7 @@
                                 <tbody>
                                     @foreach ($project->main_task as $task)
                                         <tr>
-                                            <td></td>
+                                           {{--  <td> </td> --}}
                                             <td>
                                                 {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
                                                 @if ($task->contract->count() > 0)
@@ -738,24 +738,26 @@
                                                         @foreach ($task->subtask as $subtask)
                                                             <li>
                                                                 {{ $subtask->task_name }}
-                                                                <span
+                                                              {{--   <span
                                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                                                                 <span
-                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
+                                                                    class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span> --}}
                                                                 @if ($subtask->contract->count() > 0)
                                                                     @foreach ($subtask->contract as $contract)
-                                                                        <a
+                                                                       {{--  <a
                                                                             href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
                                                                             <span
                                                                                 class="badge bg-warning">{{ $contract->contract_number }}</span>
-                                                                        </a>
+                                                                        </a> --}}
 
 
                                                                         <!-- Button trigger modal -->
-                                                                        <button type="button" class="btn btn-primary"
+                                                                        <button type="button" class="btn btn-success text-white"
                                                                             data-coreui-toggle="modal"
+
                                                                             data-coreui-target="#exampleModal{{ $contract->hashid }}">
-                                                                            {{ $contract->contract_number }}
+                                                                           สญ.ที่ {{ $contract->contract_number }}
+
                                                                         </button>
 
                                                                         <!-- Modal -->
@@ -1257,41 +1259,7 @@
 
                         }
                     },
-                    {
-                        name: "pay",
-                        width: 100,
-                        label: "การเบิกจ่าย",
-                        tree: true,
-                        resize: true,
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
-                            if (task.task_total_pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.task_total_pay) + '</span>';
-                            } else if (task.task_type == 1 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.pay) + '</span>';
-                            } else if (task.task_type == 2 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.pay) + '</span>';
-                            } else if (task.total_pay > 0) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.total_pay) + '</span>';
-                            } else {
-                                return '-';
-                            }
-
-                        }
-                    },
 
                     {
                         name: "-",
@@ -1346,6 +1314,41 @@
                                 return '-';
                             }
 
+
+                        }
+                    },
+                    {
+                        name: "pay",
+                        width: 100,
+                        label: "เบิกจ่ายแล้ว",
+                        tree: true,
+                        resize: true,
+                        template: function(task) {
+                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
+
+                            if (task.task_total_pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.task_total_pay) + '</span>';
+                            } else if (task.task_type == 1 && task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else if (task.task_type == 2 && task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.pay) + '</span>';
+                            } else if (task.total_pay > 0) {
+                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_pay) + '</span>';
+                            } else {
+                                return '-';
+                            }
 
                         }
                     },
