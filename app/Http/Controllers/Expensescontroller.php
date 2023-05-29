@@ -172,12 +172,17 @@ public function getContractData()
             //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
         $request->validate([
-            // Validation rules for contract data
+        //    'contract_name'                   => 'required',
+         //   'contract_pr_budget' => 'numeric|nullable',
+           // 'contract_pa_budget' => 'numeric|nullable',
+            // 'contract_number'                 => 'required',
+            //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
+            //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
+            //'start_date' => 'required|date_format:d/m/Y',
+            //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
         ], $messages);
-
-        // Convert date format to Gregorian calendar
-        function convertToGregorianDate($input_date)
-        {
+        //convert date
+        function convertToGregorianDate($input_date) {
             $date_object = date_create_from_format('d/m/Y', $input_date);
 
             if ($date_object !== false) {
@@ -191,21 +196,219 @@ public function getContractData()
             return $formatted_date;
         }
 
-        // Convert dates to Gregorian format
-        $contract_start_date = convertToGregorianDate($request->input('contract_start_date'));
-        $contract_end_date = convertToGregorianDate($request->input('contract_end_date'));
+        $start_date = convertToGregorianDate($request->input('contract_start_date'));
+        $end_date = convertToGregorianDate($request->input('contract_end_date'));
+        $insurance_start_date = convertToGregorianDate($request->input('insurance_start_date'));
+        $insurance_end_date = convertToGregorianDate($request->input('insurance_end_date'));
+        $sign_date = convertToGregorianDate($request->input('contract_sign_date'));
 
-        // Set contract data
-        $contract->contract_name = $request->input('contract_name');
-        $contract->contract_number = $request->input('contract_number');
-        $contract->contract_start_date = $contract_start_date ?? date('Y-m-d 00:00:00');
-        $contract->contract_end_date = $contract_end_date ?? date('Y-m-d 00:00:00');
 
-        // Save the contract
+
+        $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
+        $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
+
+        $contract_po_budget = str_replace(',', '', $request->input('contract_po_budget'));
+        $contract_er_budget = str_replace(',', '', $request->input('contract_er_budget'));
+
+        $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
+        $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
+
+        $contract_oe_budget = str_replace(',', '', $request->input('contract_oe_budget'));
+
+        $contract_pay = str_replace(',', '', $request->input('contract_pay'));
+
+        if ($contract_pr_budget === '') {
+            $contract_pr_budget = null; // or '0'
+        }
+
+        if ($contract_pa_budget === '') {
+            $contract_pa_budget = null; // or '0'
+        }
+
+        if ($contract_mm_budget === '') {
+            $contract_mm_budget = null; // or '0'
+        }
+        if ($contract_po_budget === '') {
+            $contract_po_budget = null; // or '0'
+        }
+        if ($contract_er_budget === '') {
+            $contract_er_budget = null; // or '0'
+        }
+        if ($contract_cn_budget === '') {
+            $contract_cn_budget = null; // or '0'
+        }
+
+        if ($contract_oe_budget === '') {
+            $contract_oe_budget = null; // or '0'
+        }
+        if ($contract_pay === '') {
+            $contract_pay = null; // or '0'
+        }
+
+
+
+
+
+        $contract->contract_name        = $request->input('contract_name');
+        $contract->contract_number      = $request->input('contract_number');
+        $contract->contract_description = trim($request->input('contract_description'));
+        $contract->contract_fiscal_year = $request->input('contract_fiscal_year');
+        $contract->contract_start_date  = $start_date ?? date('Y-m-d 00:00:00');
+        $contract->contract_end_date    = $end_date ?? date('Y-m-d 00:00:00');
+
+
+        $contract->insurance_start_date  =  $insurance_start_date ?? date('Y-m-d 00:00:00');
+        $contract->insurance_end_date   =   $insurance_end_date ?? date('Y-m-d 00:00:00');
+
+
+
+
+        $contract->contract_juristic_id = $request->input('contract_juristic_id') ?? null;
+        $contract->contract_order_no    = $request->input('contract_order_no') ?? null;
+        $contract->contract_type        = $request->input('contract_type') ?? null;
+        $contract->contract_acquisition = $request->input('contract_acquisition') ?? null;
+        $contract->contract_sign_date   = $sign_date ?? null;
+        $contract->contract_projectplan        = $request->input('contract_projectplan');
+
+
+        $contract->contract_mm        = $request->input('contract_mm');
+        $contract->contract_pr        = $request->input('contract_pr');
+        $contract->contract_pa        = $request->input('contract_pa');
+
+        $contract->contract_pr_budget = $contract_pr_budget;
+        $contract->contract_pa_budget = $contract_pa_budget;
+
+        $contract->contract_po_budget = $contract_po_budget;
+        $contract->contract_er_budget = $contract_er_budget;
+
+        $contract->contract_mm_budget = $contract_mm_budget;
+        $contract->contract_cn_budget = $contract_cn_budget;
+        $contract->contract_oe_budget = $contract_oe_budget;
+
+        $contract->contract_pay = $contract_pay;
+
+        //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
+        //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
+        $contract->contract_owner        = $request->input('contract_owner');
+        $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
+        $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
+
+
+
+        $origin = $request->input('origin');
+        $project = $request->input('project');
+        $task = $request->input('task');
+
+
+
+
+        // Get the ID of the newly created contract
+        $idproject =  $project;
+        $idtask =  $task;
+        $id = $project . '/' . $task;
+        // Create a new directory for the contract if it doesn't exist
+        $contractDir = public_path('uploads/contracts/' . $id);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+
+        // Handle file upload
+        if ($request->hasFile('contract_file')) {
+            // Delete the old file if it exists
+            if ($contract->contract_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $id . '/' . $contract->contract_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('contract_file');
+            $filename = $contract->contract_number  . $contract->contract_fiscal_year . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->contract_file  = $filename;
+        }
+        // Handle pr_file upload
+        if ($request->hasFile('pr_file')) {
+            // ...Your code for handling pr_file upload...
+            if ($contract->pr_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->pr_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('pr_file');
+            $filename = $id . '_PR_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->pr_file = $filename;
+        }
+
+        // Handle pa_file upload
+        if ($request->hasFile('pa_file')) {
+            // ...Your code for handling pa_file upload...
+            if ($contract->pa_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->pa_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('pa_file');
+            $filename = $id . '_PA_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->pa_file = $filename;
+        }
+
+        // Handle cn_file upload
+        if ($request->hasFile('cn_file')) {
+            // ...Your code for handling cn_file upload...
+            if ($contract->cn_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->cn_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('cn_file');
+            $filename = $id . '_CN_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->cn_file = $filename;
+        }
+
+        // Handle cn_file upload
+        if ($request->hasFile('mm_file')) {
+            // ...Your code for handling cn_file upload...
+            if ($contract->mm_file) {
+                $oldFilePath = public_path('uploads/contracts/' . $contract->mm_file);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            $file = $request->file('mm_file');
+            $filename = $id . '_mm_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/contracts/'), $filename);
+            $contract->mm_file = $filename;
+        }
+
+        // $contract->budget_gov = $request->input('budget_gov');
+        // $contract->budget_it  = $request->input('budget_it');
+
+        // $contract->budget_gov_operating  = $request->input('budget_gov_operating');
+        // $contract->budget_gov_investment = $request->input('budget_gov_investment');
+        // $contract->budget_gov_utility    = $request->input('budget_gov_utility');
+        // $contract->budget_it_operating   = $request->input('budget_it_operating');
+        // $contract->budget_it_investment  = $request->input('budget_it_investment');
+
+        //    if ($contract->save()) {
+        //      return redirect()->route('contract.index');
+        // }
+        //
+
         if ($contract->save()) {
-            // Handle tasks creation
-            if (is_array($request->tasks) || is_object($request->tasks)) {
-                foreach ($request->tasks as $task) {
+            if(is_array($request->tasks) || is_object($request->tasks)) {
+                foreach($request->tasks as $task){
                     $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
 
                     Taskcon::create([
@@ -216,21 +419,45 @@ public function getContractData()
                     ]);
                 }
             }
+        }
 
-            // Redirect to the appropriate page
-            if ($request->origin) {
-                return redirect()->route('project.task.createsub', ['project' => $request->project, 'task' => $request->task]);
+
+
+
+        Log::info('Contract saved successfully');
+        Log::info('Request tasks:', ['tasks' => $request->tasks]);;
+        if ($contract->save()) {
+
+
+
+
+
+            $origin = $request->input('origin');
+            $project = $request->input('project');
+            $task = $request->input('task');
+
+            // บันทึกข้อมูลลงใน session
+            session()->flash('contract_id', $contract->contract_id);
+            session()->flash('contract_number', $contract->contract_number);
+            session()->flash('contract_name', $contract->contract_name);
+            session()->flash('contract_pr_budget', $contract->contract_pr_budget);
+            session()->flash('contract_pa_budget', $contract->contract_pa_budget);
+            session()->flash('contract_pay', $contract->contract_pay);
+
+            if ($origin) {
+                return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             }
 
 
-            //
-            dd($contract);
-
-
+          //dd($contract);
 
             return redirect()->route('expenses.index');
+
         }
     }
+
+
+
 
 
     public function download($id)
