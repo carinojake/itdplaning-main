@@ -7,6 +7,7 @@ use App\Models\Contract;
 use App\Models\ContractHasTask;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Taskcon;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
@@ -524,7 +525,7 @@ class ProjectController extends Controller
 
 
 
-       ($gantt);
+        ($gantt);
 
         $gantt = json_encode($gantt);
 
@@ -782,7 +783,7 @@ class ProjectController extends Controller
 
 
         // ตรวจสอบค่าตัวแปร
-      ($results);
+        ($results);
 
         //dd($project, $task, $results);
 
@@ -828,42 +829,42 @@ class ProjectController extends Controller
         //$project = Project::find($projectId);
         $tasks = Task::where('project_id', $id)->get();
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
-       // ($request = contract::orderBy('contract_fiscal_year', 'desc')->get());
+        // ($request = contract::orderBy('contract_fiscal_year', 'desc')->get());
 
-      //dd ($request);
-      //  if ($project) {
+        //dd ($request);
+        //  if ($project) {
         //    $projectId = Hashids::decode($id)[0];
         //    $project = Task::find($projectId);
         //} else {
         //    $project = null;
-       // }
-       if (!empty($contracts['results'])) {
-        foreach ($contracts['results'] as $group) {
-            if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
-                // ตรวจสอบกลุ่มสัญญา
-                $groupName = $group['text'];
-                $groupChildren = $group['children'];
+        // }
+        if (!empty($contracts['results'])) {
+            foreach ($contracts['results'] as $group) {
+                if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
+                    // ตรวจสอบกลุ่มสัญญา
+                    $groupName = $group['text'];
+                    $groupChildren = $group['children'];
 
-                // ตรวจสอบสัญญาในกลุ่ม
-                foreach ($groupChildren as $contract) {
-                    if (isset($contract['id']) && isset($contract['text'])) {
-                        // ข้อมูลสัญญาที่ถูกต้อง
-                        $contractId = $contract['id'];
-                        $contractText = $contract['text'];
+                    // ตรวจสอบสัญญาในกลุ่ม
+                    foreach ($groupChildren as $contract) {
+                        if (isset($contract['id']) && isset($contract['text'])) {
+                            // ข้อมูลสัญญาที่ถูกต้อง
+                            $contractId = $contract['id'];
+                            $contractText = $contract['text'];
 
-                        // นำข้อมูลสัญญาไปใช้งานตามต้องการ
-                    } else {
-                        // ข้อมูลสัญญาไม่ถูกต้อง
+                            // นำข้อมูลสัญญาไปใช้งานตามต้องการ
+                        } else {
+                            // ข้อมูลสัญญาไม่ถูกต้อง
 
+                        }
                     }
+                } else {
+                    // ข้อมูลกลุ่มสัญญาไม่ถูกต้อง
                 }
-            } else {
-                // ข้อมูลกลุ่มสัญญาไม่ถูกต้อง
             }
+        } else {
+            // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
         }
-    } else {
-        // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
-    }
         if ($task) {
             $taskId = Hashids::decode($task)[0];
             $task = Task::find($taskId);
@@ -872,55 +873,58 @@ class ProjectController extends Controller
         }
 
 
-      //  dd($contracts);
+        //  dd($contracts);
         return view('app.projects.tasks.createsub', compact('request', 'contracts', 'project', 'tasks', 'task'));
 
-      /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
+        /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
 
 
     public function taskCreateSubno(Request $request, $project, $task = null)
     {
-        $id = Hashids::decode($project)[0];
-        //$project = Project::find($projectId);
+        ($id = Hashids::decode($project)[0]);
         $tasks = Task::where('project_id', $id)->get();
-        ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
-       // ($request = contract::orderBy('contract_fiscal_year', 'desc')->get());
+        $projectyear = Project::where('project_id', $id)->first(); // เปลี่ยนจาก get() เป็น first()
+        $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
 
-      //dd ($request);
-      //  if ($project) {
+        $contractText = ''; // กำหนดค่าเริ่มต้นให้กับ $contractText
+
+
+
+        //dd ($request);
+        //  if ($project) {
         //    $projectId = Hashids::decode($id)[0];
         //    $project = Task::find($projectId);
         //} else {
         //    $project = null;
-       // }
-       if (!empty($contracts['results'])) {
-        foreach ($contracts['results'] as $group) {
-            if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
-                // ตรวจสอบกลุ่มสัญญา
-                $groupName = $group['text'];
-                $groupChildren = $group['children'];
+        // }
+        if (!empty($contracts['results'])) {
+            foreach ($contracts['results'] as $group) {
+                if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
+                    // ตรวจสอบกลุ่มสัญญา
+                    $groupName = $group['text'];
+                    $groupChildren = $group['children'];
 
-                // ตรวจสอบสัญญาในกลุ่ม
-                foreach ($groupChildren as $contract) {
-                    if (isset($contract['id']) && isset($contract['text'])) {
-                        // ข้อมูลสัญญาที่ถูกต้อง
-                        $contractId = $contract['id'];
-                        $contractText = $contract['text'];
+                    // ตรวจสอบสัญญาในกลุ่ม
+                    foreach ($groupChildren as $contract) {
+                        if (isset($contract['id']) && isset($contract['text'])) {
+                            // ข้อมูลสัญญาที่ถูกต้อง
+                            $contractId = $contract['id'];
+                            $contractText = $contract['text'];
 
-                        // นำข้อมูลสัญญาไปใช้งานตามต้องการ
-                    } else {
-                        // ข้อมูลสัญญาไม่ถูกต้อง
+                            // นำข้อมูลสัญญาไปใช้งานตามต้องการ
+                        } else {
+                            // ข้อมูลสัญญาไม่ถูกต้อง
 
+                        }
                     }
+                } else {
+                    // ข้อมูลกลุ่มสัญญาไม่ถูกต้อง
                 }
-            } else {
-                // ข้อมูลกลุ่มสัญญาไม่ถูกต้อง
             }
+        } else {
+            // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
         }
-    } else {
-        // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
-    }
         if ($task) {
             $taskId = Hashids::decode($task)[0];
             $task = Task::find($taskId);
@@ -929,11 +933,29 @@ class ProjectController extends Controller
         }
 
 
-     //   dd($contracts);
+        if ($project && $task) {
+            $decodedProject = Hashids::decode($project);
+            $decodedTask = Hashids::decode($task);
 
-      return view('app.projects.tasks.createsubno', compact('request', 'contracts', 'project', 'tasks', 'task'));
+            if (isset($decodedProject[0]) && isset($decodedTask[0])) {
+                $id_project = $decodedProject[0];
+                $id_task = $decodedTask[0];
 
-      /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
+                $pro = Project::find($id_project);
+                $ta = Task::find($id_task);
+            }
+        }
+
+        $fiscal_year = $request->input('fiscal_year');
+        if (!$fiscal_year) {
+            $fiscal_year = date('Y') + 543; // Use current year if not provided
+        }
+
+     //  dd($contracts);
+
+        return view('app.projects.tasks.createsubno', compact('request', 'contracts', 'project', 'projectyear', 'tasks', 'task', 'contractText'));
+
+        /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
 
 
@@ -944,7 +966,7 @@ class ProjectController extends Controller
 
 
 
-    public function taskStore(Request $request, $project)
+   /*  public function taskStore(Request $request, $project)
     {
         $id   = Hashids::decode($project)[0];
         $task = new Task;
@@ -953,7 +975,7 @@ class ProjectController extends Controller
             'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
         $request->validate([
-            'task_name'                   => 'required',
+        //    'task_name'                   => 'required',
             // 'date-picker-task_start_date' => 'required',
             //'date-picker-task_end_date'   => 'required',
             // 'task_start_date' => 'required|date_format:d/m/Y',
@@ -1012,7 +1034,7 @@ class ProjectController extends Controller
             $task_cost_it_investment = null; // or '0'
         }
 
-        if ( $task_pay === '') {
+        if ($task_pay === '') {
             $task_pay = null; // or '0'
         }
 
@@ -1043,7 +1065,7 @@ class ProjectController extends Controller
 
         $task->task_pay                 =  $task_pay;
 
- //  $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
+        //  $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
         //$task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
         // $task->task_budget_gov_utility    = $request->input('task_budget_gov_utility');
         // $task->task_budget_it_operating   = $request->input('task_budget_it_operating');
@@ -1066,8 +1088,20 @@ class ProjectController extends Controller
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
 
+        if ($contract->save()) {
+            if(is_array($request->tasks) || is_object($request->tasks)) {
+                foreach($request->tasks as $task){
+                    $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
 
-
+                    Taskcon::create([
+                        'contract_id' => $contract->contract_id,
+                        'taskcon_name' => $taskName,
+                        'updated_at' => now(),
+                        'created_at' => now()
+                    ]);
+                }
+            }
+        }
 
         if ($task->save()) {
 
@@ -1075,20 +1109,145 @@ class ProjectController extends Controller
             if ($request->input('task_contract')) {
                 //insert contract
                 $contract_has_task = new ContractHasTask;
-
                 $contract_has_task->contract_id = $request->input('task_contract');
                 $contract_has_task->task_id     = $task->task_id;
                 $contract_has_task->save();
             }
-
-
             //($task);
+            return redirect()->route('project.show', $project);
+        }
+    } */
+    public function taskStore(Request $request, $project)
+    {
+        $id = Hashids::decode($project)[0];
+        $task = new Task;
 
+        $messages = [
+           // 'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+        ];
+
+        $request->validate([
+            //    'task_name'                   => 'required',
+            // 'date-picker-task_start_date' => 'required',
+            //'date-picker-task_end_date'   => 'required',
+            // 'task_start_date' => 'required|date_format:d/m/Y',
+            //'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+        ], $messages);
+
+        $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
+        $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
+        // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+
+        if ($start_date_obj === false || $end_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+            $start_date_obj->modify('-543 years');
+            $end_date_obj->modify('-543 years');
+            //   $pay_date_obj->modify('-543 years');
+            $start_date = date_format($start_date_obj, 'Y-m-d');
+            $end_date = date_format($end_date_obj, 'Y-m-d');
+            //    $pay_date = date_format($pay_date_obj, 'Y-m-d');
+        }
+
+        // convert input to decimal or set it to null if empty
+        $task_budget_it_operating = str_replace(',', '', $request->input('task_budget_it_operating'));
+        $task_budget_gov_utility = str_replace(',', '', $request->input('task_budget_gov_utility'));
+        $task_budget_it_investment = str_replace(',', '', $request->input('task_budget_it_investment'));
+
+        $task_cost_it_operating = str_replace(',', '', $request->input('task_cost_it_operating'));
+        $task_cost_gov_utility = str_replace(',', '', $request->input('task_cost_gov_utility'));
+        $task_cost_it_investment = str_replace(',', '', $request->input('task_cost_it_investment'));
+
+        $task_pay = str_replace(',', '', $request->input('task_pay'));
+
+        if ($task_budget_it_operating === '') {
+            $task_budget_it_operating = null; // or '0'
+        }
+
+        if ($task_budget_gov_utility === '') {
+            $task_budget_gov_utility = null; // or '0'
+        }
+
+        if ($task_budget_it_investment === '') {
+            $task_budget_it_investment = null; // or '0'
+        }
+
+        if ($task_cost_it_operating === '') {
+            $task_cost_it_operating = null; // or '0'
+        }
+
+        if ($task_cost_gov_utility === '') {
+            $task_cost_gov_utility = null; // or '0'
+        }
+
+        if ($task_cost_it_investment === '') {
+            $task_cost_it_investment = null; // or '0'
+        }
+
+        if ($task_pay === '') {
+            $task_pay = null; // or '0'
+        }
+
+        $task->project_id = $id;
+        $task->task_name = $request->input('task_name');
+        $task->task_description = trim($request->input('task_description'));
+
+        $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
+        $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
+        $task->task_pay_date = $pay_date ?? date('Y-m-d 00:00:00');
+
+        $task->task_parent = $request->input('task_parent') ?? null;
+
+        //convert input to decimal or set it to null if empty
+        $task->task_budget_gov_utility = $task_budget_gov_utility;
+        $task->task_budget_it_operating = $task_budget_it_operating;
+        $task->task_budget_it_investment = $task_budget_it_investment;
+
+        $task->task_cost_gov_utility = $task_cost_gov_utility;
+        $task->task_cost_it_operating = $task_cost_it_operating;
+        $task->task_cost_it_investment = $task_cost_it_investment;
+
+        $task->task_pay = $task_pay;
+
+        $task->task_type = $request->input('task_type');
+
+        if ($task->save()) {
+            //insert contract
+            if ($request->input('task_contract')) {
+                //insert contract
+                $contract_has_task = new ContractHasTask;
+                $contract_has_task->contract_id = $request->input('task_contract');
+                $contract_has_task->task_id = $task->task_id;
+                $contract_has_task->save();
+            }
+
+            if ($request->has('tasks')) {
+                foreach ($request->tasks as $contractData) {
+                    $contractName = isset($contractData['contract_name']) ? $contractData['contract_name'] : 'Default Contract Name';
+
+                    $contract = new Contract;
+                    $contract->contract_name = $contractName;
+                    $contract->save();
+                }
+            }
+
+            if ($request->has('tasks')) {
+                foreach ($request->tasks as $taskData) {
+                    $taskName = isset($taskData['task_name']) ? $taskData['task_name'] : 'Default Task Name';
+
+                    Taskcon::create([
+                        'contract_id' => $request->input('task_contract'),
+                        'taskcon_name' => $taskName,
+                        'updated_at' => now(),
+                        'created_at' => now()
+                    ]);
+                }
+            }
 
             return redirect()->route('project.show', $project);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -1211,7 +1370,7 @@ class ProjectController extends Controller
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
-    //    $task->task_parent = $request->input('task_parent') ?? null;
+        //    $task->task_parent = $request->input('task_parent') ?? null;
 
         // $task->task_budget_gov_operating  = $request->input('task_budget_gov_operating');
         // $task->task_budget_gov_investment = $request->input('task_budget_gov_investment');
@@ -1248,8 +1407,8 @@ class ProjectController extends Controller
 
         $task->task_pay                 =  $task_pay;
 
-        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00')?? null;
-        $task->task_type                 = $request->input('task_type')?? null;
+        $task->task_pay_date            =  $pay_date ?? date('Y-m-d 00:00:00') ?? null;
+        $task->task_type                 = $request->input('task_type') ?? null;
 
 
         //dd($task);

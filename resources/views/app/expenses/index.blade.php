@@ -5,9 +5,9 @@
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <x-card title="สัญญา/ใบจ้าง ทั้งหมด">
+            <x-card title="Office">
               <x-slot:toolbar>
-                <a href="{{ route('contract.create') }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบสั่งซื้อ/ใบสั่งจ้าง</a>
+                <a href="{{ route('expenses.create') }}" class="btn btn-success text-white">เพื่ม Office exp</a>
 
 
               </x-slot:toolbar>
@@ -43,21 +43,23 @@
         var btnAdd = $('.add'),
           btnSave = $('.btn-save'),
           btnUpdate = $('.btn-update');
+
         var table = $('#datatables').DataTable({
+
           autoWidth: false,
           processing: true,
           serverSide: true,
           responsive: true,
-          ajax: "",
+          ajax: "{{ route('expenses.index') }}",
           language: {
             processing: "กำลังประมวลผล...",
-            search: "ค้นหา:",
+            search: "ค้นหา:"  ,
             lengthMenu: "แสดง _MENU_ รายการ",
             info: "แสดงรายที่ _START_ ถึง _END_ ทั้งหมด _TOTAL_ รายการ",
             infoEmpty: "แสดงรายที่ 0 ถึง 0 ทั้งหมด 0 รายการ",
             infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-            infoPostFix: "",
-            loadingRecords: "Chargement en cours...",
+            infoPostFix: "", // ส่วนท้ายของข้อความ (ใช้แท็ก <span> เพื่อให้ปรากฏในรูปแบบ HTML)
+             loadingRecords: "กำลังโหลดข้อมูล...",
             zeroRecords: "ไม่พบข้อมูล",
             emptyTable: "ไม่พบข้อมูล",
             paginate: {
@@ -124,21 +126,28 @@
 
 
           $.ajax({
-            type: "POST",
-            dataType: 'JSON',
-            url: "{{ url('expenses') }}/" + rowid,
-            data: {
-              _method: 'delete',
-              _token: token
-            },
-            success: function(data) {
-              if (data.success) {
-                table.row(el.parents('tr'))
-                  .remove()
-                  .draw();
-              }
-            }
-          }); //end ajax
+  type: "POST",
+  dataType: 'JSON',
+  url: "{{ url('expenses') }}/" + rowid,
+  data: {
+    _method: 'delete',
+    _token: token
+  },
+  success: function(data) {
+    if (data.success) {
+      table.row(el.parents('tr')).remove().draw();
+    }
+  },
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Accept-Language', 'en');
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    xhr.setRequestHeader('X-CSRF-TOKEN', token);
+    xhr.setRequestHeader('Search', 'OE');
+  }
+});
+
         })
       });
     </script>

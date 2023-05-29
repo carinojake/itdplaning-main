@@ -74,6 +74,11 @@ Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 
 
 // Contract
 Route::resource('contract', ContractController::class);
+
+Route::get('/contract/createsubno', [ContractController::class, 'createsubno'])->name('contract.createsubno');
+
+
+
 /* Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskCreate'])->name('contract.task.create');
 Route::post('/contract/{contract}/task/store', [ContractController::class, 'taskStore'])->name('contract.task.store');
 Route::get('/contract/{contract}/task/{task}/edit', [ContractController::class, 'taskEdit'])->name('contract.task.edit');
@@ -83,6 +88,7 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
 
 Route::post('/contract/{contract}/task/create', [ContractController::class,'taskconstore'])->name('contract.task.store');
 Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskconCreate'])->name('contract.task.create');
+
 Route::get('/contract/{contract}/task/{taskcon}/edit', [ContractController::class, 'taskconEdit'])->name('contract.task.edit');
 Route::PUT('/contract/{contract}/task/{taskcon}/update', [ContractController::class, 'taskconUpdate'])->name('contract.task.update');
 Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
@@ -90,6 +96,30 @@ Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 't
 
 
 Route::resource('expenses' ,ExpensesController::class);
+//Route::post('/expensrs', [ExpensrController::class, 'store'])->name('expensrs.store');
+
+Route::get('/expenses/createsubno', [ExpensesController::class, 'createsubno'])->name('expenses.createsubno');
+// routes/web.php
+
+Route::get('/contract/getdata', [ContractController::class, 'getData'])->name('contract.getdata');
+
+
+
+/* Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskCreate'])->name('contract.task.create');
+Route::post('/contract/{contract}/task/store', [ContractController::class, 'taskStore'])->name('contract.task.store');
+Route::get('/contract/{contract}/task/{task}/edit', [ContractController::class, 'taskEdit'])->name('contract.task.edit');
+Route::put('/contract/{contract}/task/{task}/update', [ContractController::class, 'taskUpdate'])->name('contract.task.update');
+Route::delete('/contract/{contract}/task/{task}/destroy', [ContractController::class, 'taskDestroy'])->name('contract.task.destroy');
+Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'taskShow'])->name('contract.task.show'); */
+
+Route::post('/expenses/{contract}/task/create', [ExpensesController::class,'taskconstore'])->name('expenses.task.store');
+Route::get('/expenses/{contract}/task/create', [ExpensesController::class, 'taskconCreate'])->name('expenses.task.create');
+
+Route::get('/expenses/{contract}/task/{taskcon}/edit', [ExpensesController::class, 'taskconEdit'])->name('expenses.task.edit');
+Route::PUT('/expenses/{contract}/task/{taskcon}/update', [ExpensesController::class, 'taskconUpdate'])->name('expenses.task.update');
+Route::DELETE('/expenses/{contract}/task/{taskcon}/destroy', [ExpensesController::class, 'taskconDestroy'])->name('expenses.task.destroy');
+Route::get('/expenses/{contract}/task/{taskcon}', [ExpensesController::class, 'taskconShow'])->name('expenses.task.show');
+
 // localhost/laravel-report/pdf
 Route::get('/pdf', [PdfController::class, 'index'])->name('pdf');
 

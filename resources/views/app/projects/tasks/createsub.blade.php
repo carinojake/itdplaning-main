@@ -24,7 +24,7 @@
                                 <input type="hidden" class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
 
-                                <input type="hidden" class="form-control" id="task_parent" name="task_parent"
+                                <input {{-- type="hidden"  --}}class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
 
                                 <div class="row mt-3">
@@ -160,14 +160,13 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_start_date"
-                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
-                                            class="text-danger">*</span>
+                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                         <input class="form-control" id="task_start_date" name="task_start_date"
                                             >
                                     </div>
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                        <span class="text-danger">*</span>
+
                                         <input class="form-control" id="task_end_date" name="task_end_date" >
                                     </div>
                                 </div>
@@ -175,7 +174,7 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label>
-                                    <span class="text-danger">*</span>
+
                                     <input type="text" class="form-control" id="task_name" name="task_name" required
                                         autofocus>
                                     <div class="invalid-feedback">
