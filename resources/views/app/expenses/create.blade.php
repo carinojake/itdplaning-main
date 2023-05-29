@@ -540,36 +540,27 @@
 
 
                                      <div class="col-md-12 mt-3">
-                                         <label for="contract_name"
+                                         <label for="contract_mm_name"
                                              class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
 
                                          <input type="text" class="form-control"
-                                             id="contract_mm_name" name="contract_mm_name" required
-                                             autofocus>
+                                             id="contract_mm_name" name="contract_mm_name" >
                                          <div class="invalid-feedback">
                                              {{ __('ชื่อสัญญา ซ้ำ') }}
                                          </div>
                                      </div>
-                                     <div class="col-md-12 mt-3">
-                                         <label for="contract_name" id="contract_name_label"
-                                             class="form-label">{{ __('ชื่อ ค่าใช้จ่ายสำนักงาน') }}</label>
 
-                                         <input type="text" class="form-control"
-                                             id="contract_name" name="contract_name" required
-                                             autofocus>
-                                         <div class="invalid-feedback">
-                                             {{ __('ชื่อสัญญา ซ้ำ') }}
-                                         </div>
-                                     </div>
-                                     <div class="col-md-12">
-                                         <label for="contract_description"
-                                             class="form-label">{{ __('รายละเอียดสัญญา') }}</label>
-                                         <textarea class="form-control" name="contract_description" id="contract_description" rows="10"></textarea>
-                                         <div class="invalid-feedback">
-                                             {{ __('รายละเอียดงาน/โครงการ') }}
-                                         </div>
-                                     </div>
+                                     <div class="col-md-12 mt-3">
+                                        <label for="contract_name" id="contract_name_label"
+                                            class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
+
+                                        <input type="text" class="form-control" id="contract_name"
+                                            name="contract_name" required autofocus>
+                                        <div class="invalid-feedback">
+                                            {{ __('ชื่อสัญญา ซ้ำ') }}
+                                        </div>
+                                    </div>
                                  </div>
 
                              </div>
@@ -645,7 +636,7 @@
         </script>
 
 
-        <script>
+        {{-- <script>
             $(document).ready(function() {
                 $('#contract_type').change(function() {
                     var contract_type = $(this).val();
@@ -721,7 +712,7 @@
                     }
                 });
             });
-        </script>
+        </script> --}}
 
 
         <!--<script>
