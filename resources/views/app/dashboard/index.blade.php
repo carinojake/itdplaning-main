@@ -173,6 +173,93 @@
                                             </div>
                                         </div>
                                     </div> <!--จบปี-->
+<!--รอการเบิน-->
+<div class="col">
+    <div class="card">
+        <div class="card-body">
+            <!--รอการเบิกจ่ายทั้งหมด 3-->
+            <button class="btn btn-warning " style="width: 12rem;" data-bs-toggle="collapse"
+                href="#collapseExample3" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                <div class="fs-4 fw-semibold ">
+                    <!--รอการเบิกจ่ายทั้งหมด-->
+                    {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay))) }}
+                </div>
+                <div>
+                <small
+                    class="text-xl "
+
+                    >รอการเบิกจ่ายทั้งหมด</small>
+                </div>
+
+            </button>
+        </div>
+
+        <div class="collapse" id="collapseExample3">
+            <div class="card-body ">
+
+                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                href="#collapseExample3" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                <div class="fs-4 fw-semibold text-warning"
+                    >
+                    <!--รวมเบิกจ่ายทั้งหมด-->
+                    {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
+
+                </div>
+                <div>
+                <small
+                    class="text-xl"
+                    >รอการเบิกจ่าย งบกลางICT</small>
+                </div>
+            </button>
+            </div>
+
+            <div class="card-body">
+
+                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                href="#collapseExample3" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                <div class="fs-4 fw-semibold text-warning"
+                    >
+                    <!--รวมเบิกจ่ายทั้งหมด-->
+                    {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
+
+                </div>
+                <div>
+                <small
+                    class="text-xl"
+                    >รอการเบิกจ่าย งบดำเนินงาน </small>
+                </div>
+            </button>
+            </div>
+            <div class="card-body">
+
+                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                href="#collapseExample3" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                <div class="fs-4 fw-semibold text-warning"
+                    >
+                    <!--รวมเบิกจ่ายทั้งหมด-->
+                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)) }}
+
+                </div>
+                <div>
+                <small
+                    class="text-xl"
+                    >รอการเบิกจ่าย งบสาธารณูปโภค</small>
+                </div>
+            </button>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
                                     <div class="col">
                                         <div class="card">
                                             <div class="card-body ">
@@ -253,90 +340,6 @@
                                             </div>
                                         </div>
                                     </div> <!-- รวยเบิกจบ-->
-                                    <!--รอการเบิน-->
-                                    <div class="col">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                <button class="btn btn-warning " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample3" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold ">
-                                                        <!--รอการเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)), 2) }}
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl "
-
-                                                        >รอการเบิกจ่ายทั้งหมด</small>
-                                                    </div>
-
-                                                </button>
-                                            </div>
-
-                                            <div class="collapse" id="collapseExample3">
-                                                <div class="card-body ">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample3" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิกจ่าย งบกลางICT</small>
-                                                    </div>
-                                                </button>
-                                                </div>
-
-                                                <div class="card-body">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample3" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิกจ่าย งบดำเนินงาน </small>
-                                                    </div>
-                                                </button>
-                                                </div>
-                                                <div class="card-body">
-
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
-                                                    href="#collapseExample3" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-warning"
-                                                        >
-                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay), 2) }}
-
-                                                    </div>
-                                                    <div>
-                                                    <small
-                                                        class="text-xl"
-                                                        >รอการเบิกจ่าย งบสาธารณูปโภค</small>
-                                                    </div>
-                                                </button>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
 
 
 
@@ -358,7 +361,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold ">
-                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc) ), 2) }}
+                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc) )) }}
                                                     </div>
 
                                                     <small

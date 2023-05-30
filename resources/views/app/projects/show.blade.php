@@ -160,57 +160,6 @@
                                                 </div>
 
 
-                                                <div class="col">
-                                                    <div class="card">
-                                                        <div class="card-body ">
-                                                            <button class="btn " style="width: 12rem;"
-                                                                data-bs-toggle="collapse" href="#collapseExample2"
-                                                                role="button" aria-expanded="false"
-                                                                aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold btn btn-primary">
-                                                                    <!--รวมเบิกจ่ายทั้งหมด-->
-                                                                    {{ number_format($otpsa1 + $otpsa2, 2) }}
-
-                                                                </div>
-                                                                <div>
-                                                                    <small class="text-xl">รวมเบิกจ่ายทั้งหมด</small>
-                                                                </div>
-                                                            </button>
-
-                                                        </div>
-                                                        <div class="collapse" id="collapseExample2">
-                                                            <div class="card-body">
-
-                                                                <button class="btn " style="width: 12rem;"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-primary">
-                                                                        {{ number_format($otpsa1, 2) }}
-                                                                    </div>
-                                                                    <small class="text-xl">การเบิกเงิน
-                                                                        แบบมี PA
-                                                                    </small>
-                                                                </button>
-                                                            </div>
-                                                            <div class="card-body">
-
-                                                                <button class="btn " style="width: 12rem;"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-primary">
-                                                                        <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($otpsa2, 2) }}
-                                                                    </div>
-                                                                    <small class="text-xl">การเบิกเงิน
-                                                                        แบบไม่มี PA
-                                                                    </small>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
 
 
                                                 <div class="col">
@@ -264,6 +213,60 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body ">
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample2"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold btn btn-primary">
+                                                                    <!--รวมเบิกจ่ายทั้งหมด-->
+                                                                    {{ number_format($otpsa1 + $otpsa2, 2) }}
+
+                                                                </div>
+                                                                <div>
+                                                                    <small class="text-xl">รวมเบิกจ่ายทั้งหมด</small>
+                                                                </div>
+                                                            </button>
+
+                                                        </div>
+                                                        <div class="collapse" id="collapseExample2">
+                                                            <div class="card-body">
+
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
+                                                                    aria-controls="collapseExample">
+                                                                    <div class="fs-4 fw-semibold text-primary">
+                                                                        {{ number_format($otpsa1, 2) }}
+                                                                    </div>
+                                                                    <small class="text-xl">การเบิกเงิน
+                                                                        แบบมี PA
+                                                                    </small>
+                                                                </button>
+                                                            </div>
+                                                            <div class="card-body">
+
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
+                                                                    aria-controls="collapseExample">
+                                                                    <div class="fs-4 fw-semibold text-primary">
+                                                                        <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($otpsa2, 2) }}
+                                                                    </div>
+                                                                    <small class="text-xl">การเบิกเงิน
+                                                                        แบบไม่มี PA
+                                                                    </small>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
                                                 <div class="col">
                                                     <div class="card">
                                                         <div class="card-body">
@@ -358,6 +361,68 @@
                                                 <div class="col">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <!--รอการเบิกจ่ายทั้งหมด 3-->
+                                                            <button class="btn " style="width: 12rem;"
+                                                                data-bs-toggle="collapse" href="#collapseExample3"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <div class="fs-4 fw-semibold btn btn-warning">
+                                                                    <!--รอการเบิกจ่ายทั้งหมด-->
+                                                                    {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
+                                                                </div>
+                                                                <div>
+                                                                    <small
+                                                                        class="text-xl ">รอการเบิกจ่ายทั้งหมด</small>
+                                                                </div>
+
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="collapse" id="collapseExample3">
+                                                            <div class="card-body ">
+
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
+                                                                    aria-controls="collapseExample">
+                                                                    <div class="fs-4 fw-semibold text-pay">
+                                                                        <!--การเบิกจ่าย PA -->
+                                                                        {{ number_format($ispa - $itpsa1, 2) }}
+                                                                    </div>
+                                                                    <small class="text-xl ">รอการเบิกจ่าย
+                                                                        แบบมี PA
+                                                                    </small>
+
+                                                                </button>
+                                                            </div>
+
+
+
+
+                                                            <div class="card-body">
+
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
+                                                                    aria-controls="collapseExample">
+                                                                    <div class="fs-4 fw-semibold  text-pay">
+                                                                        <!--การเบิกจ่าย PA -->
+                                                                        {{ number_format($isa - $itpsa2, 2) }}
+                                                                    </div>
+                                                                    <div>
+                                                                        <small class="text-xl ">รอการเบิกจ่าย
+                                                                            แบบมีไม่ PA
+                                                                        </small>
+                                                                    </div>
+
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
                                                             <button class="btn " style="width: 12rem;"
                                                                 data-bs-toggle="collapse" href="#collapseExample2"
                                                                 role="button" aria-expanded="false"
@@ -407,65 +472,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <!--รอการเบิกจ่ายทั้งหมด 3-->
-                                                            <button class="btn " style="width: 12rem;"
-                                                                data-bs-toggle="collapse" href="#collapseExample3"
-                                                                role="button" aria-expanded="false"
-                                                                aria-controls="collapseExample">
-                                                                <div class="fs-4 fw-semibold btn btn-warning">
-                                                                    <!--รอการเบิกจ่ายทั้งหมด-->
-                                                                    {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
-                                                                </div>
-                                                                <div>
-                                                                    <small
-                                                                        class="text-xl ">รอการเบิกจ่ายทั้งหมด</small>
-                                                                </div>
 
-                                                            </button>
-                                                        </div>
 
-                                                        <div class="collapse" id="collapseExample3">
-                                                            <div class="card-body ">
-
-                                                                <button class="btn " style="width: 12rem;"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold text-pay">
-                                                                        <!--การเบิกจ่าย PA -->
-                                                                        {{ number_format($ispa - $itpsa1, 2) }}
-                                                                    </div>
-                                                                    <small class="text-xl ">รอการเบิกจ่าย
-                                                                        แบบมี PA
-                                                                    </small>
-
-                                                                </button>
-                                                            </div>
-
-                                                            <div class="card-body">
-
-                                                                <button class="btn " style="width: 12rem;"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold  text-pay">
-                                                                        <!--การเบิกจ่าย PA -->
-                                                                        {{ number_format($isa - $itpsa2, 2) }}
-                                                                    </div>
-                                                                    <div>
-                                                                        <small class="text-xl ">รอการเบิกจ่าย
-                                                                            แบบมีไม่ PA
-                                                                        </small>
-                                                                    </div>
-
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div class="col ">
                                                     <div class="card ">
@@ -561,59 +569,7 @@
                                                     </div>
 
 
-                                                    <div class="col">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <button class="btn " style="width: 12rem;"
-                                                                    data-bs-toggle="collapse" href="#collapseExample2"
-                                                                    role="button" aria-expanded="false"
-                                                                    aria-controls="collapseExample">
-                                                                    <div class="fs-4 fw-semibold btn btn-primary">
-                                                                        <!--รวมเบิกจ่ายทั้งหมด-->
-                                                                        {{ number_format($utsc_pay_pa + $utsc_pay, 2) }}
 
-                                                                    </div>
-                                                                    <div>
-                                                                        <small class="text-xl">
-                                                                            รวมเบิกจ่ายทั้งหมด</small>
-                                                                    </div>
-                                                                </button>
-                                                            </div>
-                                                            <div class="collapse" id="collapseExample2">
-                                                                <div class="card-body">
-
-                                                                    <button class="btn " style="width: 12rem;"
-                                                                        data-bs-toggle="collapse"
-                                                                        href="#collapseExample2" role="button"
-                                                                        aria-expanded="false"
-                                                                        aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold text-primary">
-                                                                            {{ number_format($utsc_pay_pa, 2) }}
-                                                                        </div>
-                                                                        <small class="text-xl">จำนวนเงิน แบบมี PA
-                                                                        </small>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="card-body">
-
-                                                                    <button class="btn "style="width: 12rem;"
-                                                                        data-bs-toggle="collapse"
-                                                                        href="#collapseExample2" role="button"
-                                                                        aria-expanded="false"
-                                                                        aria-controls="collapseExample">
-                                                                        <div class="fs-4 fw-semibold text-primary">
-                                                                            <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($utsc_pay, 2) }}
-                                                                        </div>
-                                                                        <div>
-                                                                            <small class="text-xl">จำนวนเงิน แบบไม่มี
-                                                                                PA
-                                                                            </small>
-                                                                        </div>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                     <div class="col">
                                                         <div class="card">
                                                             <div class="card-body">
@@ -665,6 +621,59 @@
                                                                                 PA</small>
                                                                         </div>
 
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <button class="btn " style="width: 12rem;"
+                                                                    data-bs-toggle="collapse" href="#collapseExample2"
+                                                                    role="button" aria-expanded="false"
+                                                                    aria-controls="collapseExample">
+                                                                    <div class="fs-4 fw-semibold btn btn-primary">
+                                                                        <!--รวมเบิกจ่ายทั้งหมด-->
+                                                                        {{ number_format($utsc_pay_pa + $utsc_pay, 2) }}
+
+                                                                    </div>
+                                                                    <div>
+                                                                        <small class="text-xl">
+                                                                            รวมเบิกจ่ายทั้งหมด</small>
+                                                                    </div>
+                                                                </button>
+                                                            </div>
+                                                            <div class="collapse" id="collapseExample2">
+                                                                <div class="card-body">
+
+                                                                    <button class="btn " style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
+                                                                        href="#collapseExample2" role="button"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold text-primary">
+                                                                            {{ number_format($utsc_pay_pa, 2) }}
+                                                                        </div>
+                                                                        <small class="text-xl">จำนวนเงิน แบบมี PA
+                                                                        </small>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="card-body">
+
+                                                                    <button class="btn "style="width: 12rem;"
+                                                                        data-bs-toggle="collapse"
+                                                                        href="#collapseExample2" role="button"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <div class="fs-4 fw-semibold text-primary">
+                                                                            <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($utsc_pay, 2) }}
+                                                                        </div>
+                                                                        <div>
+                                                                            <small class="text-xl">จำนวนเงิน แบบไม่มี
+                                                                                PA
+                                                                            </small>
+                                                                        </div>
                                                                     </button>
                                                                 </div>
                                                             </div>

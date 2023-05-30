@@ -24,12 +24,46 @@
                                 <input type="hidden" class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
 
-                                <input {{-- type="hidden"  --}}class="form-control" id="task_parent" name="task_parent"
+                                <input  type="hidden"  class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
+
+
+
+                                   {{--  <div class="col-md-3">
+
+                                        <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
+
+                                        <span class="text-danger">*</span>
+
+                                         <input type="text" class="form-control" id="task_parent" name="task_parent">
+
+                                        <select name="task_parent" id="task_parent" class="form-control">
+
+                                            <option value="">ไม่มี</option>
+
+                                            @foreach ($tasks as $subtask)
+
+                                                <option value="{{ $subtask->task_id }}"
+
+                                                    {{ $task->task_parent == $subtask->task_id ? 'selected' : '' }}>
+
+                                                    {{ $subtask->task_name }}</option>
+
+                                            @endforeach
+
+                                        </select>
+
+                                        <div class="invalid-feedback">
+
+                                            {{ __('กิจกรรม') }}
+
+                                        </div>
+
+                                    </div> --}}
 
                                 <div class="row mt-3">
 
-                                    <div class="col-md-2">
+                                    <div class="  d-none col-md-2">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
@@ -48,7 +82,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class=" d-none col-md-2">
                                         <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label>
 
                                         <div >
@@ -67,7 +101,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-5" id='contract_group'>
+                                    <div class="col-md-5 d-none" id='contract_group'>
                                         <div class="form-group">
                                             <label for="task_contract" class="form-label">{{ __('สัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}</label>
                                            <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
@@ -96,13 +130,13 @@
                                             </select> --}}
 
 
-                                            <div class="invalid-feedback">
+                                            <div d-none class="invalid-feedback">
                                                 {{ __('สัญญา') }}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2 mt-3" id='add_contract_group'>
+                                    <div class="col-md-2 mt-3 d-none" id='add_contract_group'>
                                         {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
                                         <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
                                             class="btn btn-success text-white"
@@ -157,6 +191,15 @@
                 </div> --}}
 
 
+                                <div class="col-md-12 mt-3">
+                                    <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label>
+
+                                    <input type="text" class="form-control" id="task_name" name="task_name" required
+                                        autofocus>
+                                    <div class="invalid-feedback">
+                                        {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                    </div>
+                                </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_start_date"
@@ -172,15 +215,6 @@
                                 </div>
 
 
-                                <div class="col-md-12 mt-3">
-                                    <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label>
-
-                                    <input type="text" class="form-control" id="task_name" name="task_name" required
-                                        autofocus>
-                                    <div class="invalid-feedback">
-                                        {{ __('ชื่อรายการที่ใช้จ่าย') }}
-                                    </div>
-                                </div>
 
                                 <div class="col-md-12 mt-3">
                                     <label for="task_description"
@@ -331,15 +365,15 @@
         </div>
     </x-slot:content>
     <x-slot:css>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     </x-slot:css>
     <x-slot:javascript>
-
-
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></scrip
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
         <script>
             $(document).ready(function() {
                 // Initialize Select2 on the select element
@@ -354,97 +388,60 @@
             });
         </script>
 
+                <script>
+                    $(document).ready(function() {
+                        $(":input").inputmask();
+                    });
+                </script>
 
-        {{-- <script>
-            // สร้างฟังก์ชันสำหรับเพิ่มรายการสัญญา
-            function addContractOption(contract) {
-                const selectElement = document.getElementById('task_contract');
-                const optionElement = document.createElement('option');
-                optionElement.value = contract.contract_id;
-                optionElement.textContent = `[${contract.contract_number}]${contract.contract_name}`;
-                selectElement.appendChild(optionElement);
-            }
+                <script>
+                    $(function() {
+                        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+                            alert("jQuery or jQuery UI is not loaded");
+                            return;
+                        }
 
-            // ตั้งค่าฟังก์ชันเมื่อกดปุ่ม "เพิ่มสัญญา/ใบจ้าง"
-            const addContractButton = document.querySelector('.add-contract-button');
-            addContractButton.addEventListener('click', async () => {
-                // ทำ AJAX request เพื่อเพิ่มสัญญาใหม่
-                const contractData = {}; // รับข้อมูลสัญญาจากฟอร์ม
-                const response = await fetch('/api/contracts', {
-                    method: 'POST',
-                    body: JSON.stringify(contractData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                });
+                        var d = new Date();
+                        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                if (response.ok) {
-                    const newContract = await response.json();
-                    // เพิ่มรายการสัญญาใหม่ลงใน <select>
-                    addContractOption(newContract);
-                }
-            });
-        </script> --}}
-
-
-
-
-        <script>
-            $(document).ready(function() {
-                $(":input").inputmask();
-            });
-        </script>
-
-        <script>
-            $(function() {
-                if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                    alert("jQuery or jQuery UI is not loaded");
-                    return;
-                }
-
-                var d = new Date();
-                var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-
-                $("#task_start_date, #task_end_date").datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    isBuddhist: true,
-                    defaultDate: toDay,
-                    dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                    dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                        'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                    ],
-                    monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                        'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                    ]
-                });
-            });
-        </script>
+                        $("#task_start_date, #task_end_date").datepicker({
+                            dateFormat: 'dd/mm/yy',
+                            isBuddhist: true,
+                            defaultDate: toDay,
+                            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+                            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                            ],
+                            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                                'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                            ]
+                        });
+                    });
+                </script>
 
 
 
+                <script>
+                    $(document).ready(function() {
+                        var contract_label = $('#contract_label');
 
-<script>
-    $(document).ready(function() {
-        var contract_label = $('#contract_label');
+                        $('input[type=radio][name=task_type]').change(function() {
+                            var task_type = $(this).val();
 
-        $('input[type=radio][name=task_type]').change(function() {
-            var task_type = $(this).val();
-
-            if (task_type == 1) {
-                contract_label.text('สัญญา');
-                $('#contract_group').show();
-                $('#add_contract_group').show();
-            }
-            else if (task_type == 2) {
-                contract_label.text('สัญญา');
-                $('#contract_group').show();
-                $('#add_contract_group').show();
-            }
-        });
-    });
-</script>
-
+                            if (task_type == 1) {
+                                contract_label.text('สัญญา');
+                                $('#contract_group').show();
+                                $('#add_contract_group').show();
+                            }
+                            else if (task_type == 2) {
+                                contract_label.text('สัญญา');
+                                $('#contract_group').show();
+                                $('#add_contract_group').show();
+                            }
+                        });
+                    });
+                </script>
 
 
     </x-slot:javascript>

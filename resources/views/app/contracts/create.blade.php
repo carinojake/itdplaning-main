@@ -67,6 +67,24 @@
                                     </div>
 
 
+                                    <div class="row mt-3">
+                                        <div class="col-md-3">
+                                            <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
+                                            <span class="text-danger">*</span>
+                                            {{-- <input type="text" class="form-control" id="task_parent" name="task_parent"> --}}
+                                            <select name="task_parent" id="task_parent" class="form-control">
+                                                <option value="">ไม่มี</option>
+                                                @foreach ($tasks as $subtask)
+                                                    <option value="{{ $subtask->task_id }}"
+                                                        {{ $task->task_parent == $subtask->task_id ? 'selected' : '' }}>
+                                                        {{ $subtask->task_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                {{ __('กิจกรรม') }}
+                                            </div>
+                                        </div>
+
                                     <div class="col-md-3">
                                         <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
 
@@ -99,17 +117,14 @@
                                                     <div id="mm_form" style="display:none;">
                                                         <div class="callout callout-primary row mt-3">
                                                             <div class="col-md-4">
-                                                                <label for="contract_mm"
-                                                                    class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
-                                                                <span class="text-danger"></span>
 
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_mm" name="contract_mm">
+                                                                <label for="contract_mm" class="form-label">{{ __('บันทึกข้อความ (MM)') }}</label>
+                                                                <span class="text-danger"></span>
+                                                                <input type="text" class="form-control" id="contract_mm" name="contract_mm">
                                                                 <div class="invalid-feedback">
                                                                     {{ __(' ') }}
                                                                 </div>
                                                             </div>
-
                                                             <div class="col-md-4">
                                                                 <label for="contract_mm_budget"
                                                                     class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
@@ -125,7 +140,7 @@
                                                             <div class="row mt-3">
                                                                 <div class="col-md-4">
                                                                     <label for="contract_pr"
-                                                                        class="form-label">{{ __('เลขที่ PR') }}</label>
+                                                                        class="form-label">{{ __('ใบขอดำเนินการซื้อ/จ้าง (PR)') }}</label>
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" class="form-control"
@@ -155,11 +170,11 @@
                                                         </div>
                                                     </div>
                                           <div class="callout callout-success">
-                                                    <div id="pr_form" style="display:none;">
+                                                    <div id="pa_form" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_pa"
-                                                                    class="form-label">{{ __('เลขที่ PA') }}</label>
+                                                                    class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"
@@ -185,13 +200,24 @@
                                                     </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
                                                     <div id="po_form" style="display:none;">
                                                         <!-- PO form fields -->
 
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_po"
-                                                                    class="form-label">{{ __('เลขที่ PO') }}</label>
+                                                                    class="form-label">{{ __('ใบสั่งซื้อ (PO)') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"
@@ -233,7 +259,7 @@
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_er"
-                                                                    class="form-label">{{ __('เลขที่ ER') }}</label>
+                                                                    class="form-label">{{ __('ใบสั่งจ้าง (ER)') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"
@@ -275,7 +301,7 @@
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_cn"
-                                                                    class="form-label">{{ __('เลขที่ CN') }}</label>
+                                                                    class="form-label">{{ __('สัญญา (CN)') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"
@@ -303,7 +329,7 @@
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_ba "
-                                                                    class="form-label">{{ __('เลขที่  BA ') }}</label>
+                                                                    class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
                                                                 {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
                                                                 <span class="text-danger"></span>
 
@@ -333,7 +359,7 @@
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_bd "
-                                                                    class="form-label">{{ __('เลขที่ BD') }}</label>
+                                                                    class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
                                                                 {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
                                                                 <span class="text-danger"></span>
 
@@ -358,33 +384,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-
-
-
-
-
-
-
-
                                           </div>
-
-
-
-
-
-
-
-
-
-
-
-
                                           <div id="pp_form" class="callout callout-danger" style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_pay"
-                                                                    class="form-label">{{ __('เลขที่_PP ') }}</label>
+                                                                    class="form-label">{{ __('งบใบสำคัญ (PP) ') }}</label>
                                                                 <span class="text-danger"></span>
 
                                                                 <input type="text" class="form-control"

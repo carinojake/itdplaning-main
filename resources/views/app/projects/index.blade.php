@@ -17,6 +17,7 @@
                   <tr>
                     <th>{{ __('ลำดับ') }}</th>
                     <th>{{ __('ปีงบประมาณ') }}</th>
+                    <th>{{ __('สำดับ') }}</th>
                     <th>{{ __('งาน/โครงการ') }}</th>
 
                     <th></th>
@@ -114,6 +115,10 @@
             },
             {
               data: 'project_fiscal_year'
+            },
+            {
+              data: 'reguiar_id'
+
             },
             {
               data: 'project_name_output',

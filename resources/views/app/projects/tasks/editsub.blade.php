@@ -12,7 +12,7 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row">
+                <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ ') }}{{ $task->task_name }}">
 
@@ -22,7 +22,7 @@
                                 @csrf
                                 {{ method_field('PUT') }}
 
-                                <div class="row mt-3">
+                                <div class="row mt-3 callout callout-primary">
 
                                     <div class="col-md-6">
                                         <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
@@ -117,12 +117,11 @@
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
+                               {{--      <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label for="task_start_date"
                                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                                                 class="text-danger">*</span>
-                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                             <div data-coreui-toggle="date-picker" id="task_start_date"
                                                 data-coreui-format="dd/MM/yyyy"
                                                 data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }} "></div>
@@ -132,12 +131,33 @@
                                             <label for="task_end_date"
                                                 class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
                                                 class="text-danger">*</span>
-                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                                             <div data-coreui-toggle="date-picker" id="task_end_date"
                                                 data-coreui-format="dd/MM/yyyy"
                                                 data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }} "></div>
                                         </div>
+                                    </div> --}}
+
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                            <input class="form-control" id="task_start_date" name="task_start_date"
+                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                            <input class="form-control" id="task_end_date" name="task_end_date"
+                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}">
+                                        </div>
                                     </div>
+
+
+
+
+
+
+
                                     <div class="col-md-12 mt-3">
                                         <label for="task_name"
                                             class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
@@ -171,10 +191,17 @@
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                    <input type="number" placeholder="0.00" step="0.01"
+                                                   {{--  <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_budget_it_operating"
                                                         name="task_budget_it_operating" min="0"
-                                                        value="{{ $task->task_budget_it_operating }}">
+                                                        value="{{ $task->task_budget_it_operating }}"> --}}
+
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_budget_it_operating"
+                                                         name="task_budget_it_operating" min="0"   value="{{ $task->task_budget_it_operating }}">
+
+
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
@@ -182,21 +209,35 @@
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                    <input type="number" placeholder="0.00" step="0.01"
+                                         {{--            <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_budget_it_investment"
                                                         name="task_budget_it_investment" min="0"
-                                                        value="{{ $task->task_budget_it_investment }}">
+                                                        value="{{ $task->task_budget_it_investment }}"> --}}
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_budget_it_investment"
+                                                         name="task_budget_it_investment" min="0"   value="{{ $task->task_budget_it_investment }}">
+
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบดำเนินงาน') }}
                                                     </div>
                                                 </div>
+
+
                                                 <div class="col-md-12">
                                                     <label for="task_budget_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                    <input type="number" placeholder="0.00" step="0.01"
+                                              {{--       <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_budget_gov_utility"
                                                         name="task_budget_gov_utility" min="0"
-                                                        value="{{ $task->task_budget_gov_utility }}">
+                                                        value="{{ $task->task_budget_gov_utility }}"> --}}
+
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
+                                                         name="task_budget_gov_utility" min="0"   value="{{ $task->task_budget_gov_utility }}">
+
+
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
@@ -208,33 +249,57 @@
                                                 <div class="col-md-12">
                                                     <label for="task_cost_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                    <input type="number"placeholder="0.00" step="0.01"
+                                                {{--     <input type="text"placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_cost_it_operating"
                                                         name="task_cost_it_operating" min="0"
                                                         value="{{ $task->task_cost_it_operating }}">
-                                                    <div class="invalid-feedback">
+ --}}
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_cost_it_operating"
+                                                         name="task_cost_it_operating" min="0"   value="{{ $task->task_cost_it_operating }}">
+
+                                                        <div class="invalid-feedback">
                                                         {{ __('งบกลาง ICT') }}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="task_cost_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                    <input type="number" placeholder="0.00"
+                                           {{--          <input type="text" placeholder="0.00"
                                                         step="0.01"class="form-control"
                                                         id="task_cost_it_investment" name="task_cost_it_investment"
-                                                        min="0" value="{{ $task->task_cost_it_investment }}">
-                                                    <div class="invalid-feedback">
+                                                        min="0" value="{{ $task->task_cost_it_investment }}"> --}}
+
+
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_cost_it_investment"
+                                                         name="task_cost_it_investment" min="0"   value="{{ $task->task_cost_it_investment }}">
+
+
+
+
+                                                        <div class="invalid-feedback">
                                                         {{ __('งบดำเนินงาน') }}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="task_cost_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                    <input type="number" placeholder="0.00" step="0.01"
+                                                   {{--  <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_cost_gov_utility"
                                                         name="task_cost_gov_utility" min="0"
-                                                        value="{{ $task->task_cost_gov_utility }}">
-                                                    <div class="invalid-feedback">
+                                                        value="{{ $task->task_cost_gov_utility }}"> --}}
+
+                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         class="form-control numeral-mask" id="task_cost_gov_utility"
+                                                         name="task_cost_gov_utility" min="0"   value="{{ $task->task_cost_gov_utility }}">
+
+
+
+                                                        <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
                                                 </div>
@@ -247,11 +312,8 @@
                                             <label for="task_pay_date"
                                                 class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
                                                 class="text-danger">*</span>
-                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                            <div data-coreui-toggle="date-picker" id="task_pay_date"
-                                                data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"
-                                                data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }} ">
-                                            </div>
+                                                <input class="form-control" id="task_pay_date" name="task_pay_date"
+                                                value="{{ date('d/m/Y', $task->task_pay_date) }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
@@ -274,6 +336,9 @@
 
 
 
+
+
+
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button link="{{ route('project.show', $project->hashid) }}"
                                     class="btn-light text-black">
@@ -286,26 +351,59 @@
         </div>
     </x-slot:content>
     <x-slot:css>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     </x-slot:css>
     <x-slot:javascript>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
         <script>
-            const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
-            const taskContractContainer = document.getElementById('task-contract-container');
+            $(document).ready(function() {
+                // Initialize Select2 on the select element
+                $('.js-example-basic-single').select2();
 
-            taskTypeRadios.forEach(radio => {
-                radio.addEventListener('change', () => {
-                    if (radio.value === '2') {
-                        taskContractContainer.style.display = 'none';
-                    } else {
-                        taskContractContainer.style.display = 'block';
-                    }
+                $('.js-example-basic-single').on('change', function() {
+                    // Get the selected value
+                    const selectedValue = $(this).val();
+                    // Handle the selected value as needed
+                    console.log(selectedValue);
                 });
             });
         </script>
+
+                <script>
+                    $(document).ready(function() {
+                        $(":input").inputmask();
+                    });
+                </script>
+
+                <script>
+                    $(function() {
+                        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+                            alert("jQuery or jQuery UI is not loaded");
+                            return;
+                        }
+
+                        var d = new Date();
+                        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+                        $("#task_start_date, #task_end_date").datepicker({
+                            dateFormat: 'dd/mm/yy',
+                            isBuddhist: true,
+                            defaultDate: toDay,
+                            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+                            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                            ],
+                            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                                'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                            ]
+                        });
+                    });
+                </script>
 
 
 

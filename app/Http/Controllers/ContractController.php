@@ -411,7 +411,7 @@ class ContractController extends Controller
         $project = $request->project;
         $task = $request->taskHashid;
         $id = Hashids::decode($project);
-
+        $tasks = Task::all();
 
 
         $pro = $project;
@@ -443,7 +443,7 @@ class ContractController extends Controller
         //dd($id,$origin, $project, $task, $pro, $ta, $fiscal_year);
 
 
-        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year'));
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year','tasks'));
     }
 
 
