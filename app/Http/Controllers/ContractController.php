@@ -167,8 +167,9 @@ class ContractController extends Controller
         $gantt[] = [
             'id'                    => $contract['contract_id'],
             'text'                  => $contract['contract_name'],
-            //   'start_date'            => date('Y-m-d', $contract['contract_id_start_date']),
-            // 'end_date' => date('Y-m-d', $project['project_end_date']),
+            'start_date' => date('Y-m-d', strtotime($contract['contract_start_date'])),
+            'end_date'   => date('Y-m-d', strtotime($contract['contract_end_date'])),
+
 
             'open'                  => true,
             'type'                  => 'project',
@@ -299,8 +300,9 @@ class ContractController extends Controller
             $gantt[] = [
                 'id'                    => 'T' . $task['taskcon_id'] . $task['contract_id'],
                 'text'                  => $task['taskcon_name'],
-                //'start_date'            => date('Y-m-d', $task['taskcon_start_date']),
-                //'end_date'              => date('Y-m-d', $task['taskcon_end_date']),
+                'start_date' => date('Y-m-d', strtotime($task['taskcon_start_date'])),
+                'end_date'   => date('Y-m-d', strtotime($task['taskcon_end_date'])),
+
                 'parent'                => $task['taskcon_parent'] ? 'T' . $task['taskcon_parent'] . $task['contract_id'] : $task['contract_id'],
                 'type'                  => 'task',
                 'open'                  => true,
@@ -412,6 +414,7 @@ class ContractController extends Controller
         $task = $request->taskHashid;
         $id = Hashids::decode($project);
         $tasks = Task::all();
+
 
 
         $pro = $project;

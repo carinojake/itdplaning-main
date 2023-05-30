@@ -310,10 +310,9 @@
                                         <h4>เบิกจ่าย</h4>
                                         <div class="col-md-6">
                                             <label for="task_pay_date"
-                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
-                                                class="text-danger">*</span>
+                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
                                                 <input class="form-control" id="task_pay_date" name="task_pay_date"
-                                                value="{{ date('d/m/Y', $task->task_pay_date) }}">
+                                                value="{{  \Helper::date4(date('Y-m-d H:i:s', $task->task_pay_date))  }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
@@ -389,7 +388,7 @@
                         var d = new Date();
                         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                        $("#task_start_date, #task_end_date").datepicker({
+                        $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
                             dateFormat: 'dd/mm/yy',
                             isBuddhist: true,
                             defaultDate: toDay,

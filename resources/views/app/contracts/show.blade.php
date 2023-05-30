@@ -540,6 +540,27 @@
                             }
                         }
                     },
+                 {
+                        name: "-",
+                        width: 100,
+                        label: "รอการเบิกจ่าย",
+                        tree: true,
+                        resize: true,
+
+                        template: function(task) {
+                            if (task.cost - task.pay > 0) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.cost - task.pay) + '</span>';}
+                                else {
+                                return '-';
+                            }
+
+
+
+                        }
+                    },
                     {
                         name: "pay",
                         width: 50,
@@ -577,29 +598,6 @@
                             } else {
                                 return '-';
                             }
-                        }
-                    },
-
-
-                    {
-                        name: "-",
-                        width: 100,
-                        label: "รอการเบิกจ่าย",
-                        tree: true,
-                        resize: true,
-
-                        template: function(task) {
-                            if (task.cost - task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.cost - task.pay) + '</span>';}
-                                else {
-                                return '-';
-                            }
-
-
-
                         }
                     },
 

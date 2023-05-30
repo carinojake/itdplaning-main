@@ -97,12 +97,12 @@
                                 </div>
                             </div>
                         </div>
-
+{{--
                         <div class="col-md-6">
                             <label for="project_start_date"
                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                                 class="text-danger">*</span>
-                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                             <div data-coreui-toggle="date-picker" id="project_start_date"
                                 data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"
                                 data-coreui-date="{{ date('m/d/Y', $project->project_start_date) }} "></div>
@@ -111,14 +111,25 @@
                             <label for="project_end_date"
                                 class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
                                 class="text-danger">*</span>
-                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                             <div data-coreui-toggle="date-picker" id="project_end_date"
                                 data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"
                                 data-coreui-date="{{ date('m/d/Y', $project->project_end_date) }}"></div>
                         </div>
+ --}}
 
-
-
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                <input class="form-control" id="project_start_date" name="project_start_date"
+                                    value="{{ \Helper::date4(date('Y-m-d H:i:s', $project->project_start_date)) }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="project_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                <input class="form-control" id="project_end_date" name="project_end_date"
+                                    value="{{ \Helper::date4(date('Y-m-d H:i:s', $project->project_end_date)) }}">
+                            </div>
+                        </div>
 
 
 
@@ -216,12 +227,43 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script>
          $(document).ready(function(){
     $(":input").inputmask();
 });
     </script>
+
+
+<script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
+
+        var d = new Date();
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+        $("#project_start_date, #project_end_date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            isBuddhist: true,
+            defaultDate: toDay,
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+            ],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                'ต.ค.', 'พ.ย.', 'ธ.ค.'
+            ]
+        });
+    });
+</script>
+
+
+
+
 
     </x-slot:javascript>
 </x-app-layout>
