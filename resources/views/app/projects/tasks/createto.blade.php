@@ -22,14 +22,14 @@
                                 @csrf
 
                                 <input {{-- type="hidden" --}} class="form-control" id="task_parent_display"
-                                    value="{{ $task->task_name }}" >
+                                    value="{{ $task->task_name }}" disabled readonly>
 
                                 <input {{--  type="hidden" --}}  class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
 
 
-
-                        {{--             <div class="col-md-3">
+{{--
+                                    <div class="col-md-3">
 
                                         <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
 

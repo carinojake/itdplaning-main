@@ -878,34 +878,53 @@ class ProjectController extends Controller
     }
 
 
-    public function taskCreate(Request $request, $project, $task = null)
-    {
-        $id        = Hashids::decode($project)[0];
-        $project = $request->project;
-        //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
-        ($tasks     = Task::where('project_id', $id)->get());
-        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
-        ($request = Project::find($id));
-
-        // Sum the task_budget_it_operating for all tasks
-        $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
-        $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
-        $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
-
-        if ($task) {
-            $taskId = Hashids::decode($task)[0];
-            $task = Task::find($taskId);
-        } else {
-            $task = null;
-        }
+/*     public function taskCreate(Request $request, $project, $task = null)
+{
+    $id = Hashids::decode($project)[0];
+    $tasks = Task::where('project_id', $id)->get();
+    $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
 
 
-        //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
+    $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
+    $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
+    $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
 
-
-        return view('app.projects.tasks.create', compact('request', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+    if ($task) {
+        $taskId = Hashids::decode($task)[0];
+        $task = Task::find($taskId);
+    } else {
+        $task = null;
     }
+
+    return view('app.projects.tasks.create', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+}
+ */
+
+public function taskCreateTo(Request $request, $project, $task = null)
+{
+    $id = Hashids::decode($project)[0];
+    $tasks = Task::where('project_id', $id)->get();
+    $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
+    $requestProject = Project::find($id);
+
+    $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
+    $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
+    $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
+
+    if ($task) {
+        $taskId = Hashids::decode($task)[0];
+        $task = Task::find($taskId);
+    } else {
+        $task = null;
+    }
+
+
+       // dd($tasks);
+
+    return view('app.projects.tasks.createto', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+}
+
 
 
 
@@ -1330,7 +1349,7 @@ class ProjectController extends Controller
                     ]);
                 }
             }
-
+              //      dd($task);
             return redirect()->route('project.show', $project);
         }
     }

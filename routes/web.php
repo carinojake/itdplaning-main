@@ -48,29 +48,36 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::PUT('/contract/{contract}/task/{taskcon}/update', [ContractController::class, 'taskconUpdate'])->name('contract.task.update');
     Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
- */
-// Project
-Route::post('/project/{project}/task/create', [ProjectController::class, 'taskStore'])->name('project.task.store');
+    */
+    // Project
+    Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
+    Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
 
-Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
-Route::resource('project', ProjectController::class);
-Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
-Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
-Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
-Route::put('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
-Route::delete('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
-Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
-Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
-Route::post('/project/{project}/task/{task}/storesub', [ProjectController::class, 'taskStoreSub'])->name('project.task.storesub');
+    Route::resource('project', ProjectController::class);
+    //Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
 
+    Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
+    Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
+    Route::put('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
+    Route::delete('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
+    Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
+    Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
+    Route::post('/project/{project}/task/{task}/storesub', [ProjectController::class, 'taskStoreSub'])->name('project.task.storesub');
 
- Route::get('/project/{project}/task/{task}/createsubno', [ProjectController::class, 'taskCreateSubno'])->name('project.task.createsubno');
-Route::post('/project/{project}/task/{task}/storesubno', [ProjectController::class, 'taskStoreSubno'])->name('project.task.storesubno');
-Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSubno'])->name('project.task.editsubno');
-
+    Route::get('/project/{project}/task/{task}/createsub', [ProjectController::class, 'taskCreateSub'])->name('project.task.createsub');
+    Route::post('/project/{project}/task/{task}/storesub', [ProjectController::class, 'taskStoreSub'])->name('project.task.storesub');
 
 
-Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+    Route::get('/project/{project}/task/{task}/createto', [ProjectController::class, 'taskCreateTo'])->name('project.task.createto');
+    Route::post('/project/{project}/task/{task}/storeto', [ProjectController::class, 'taskStoreTo'])->name('project.task.storeTo');
+
+    Route::get('/project/{project}/task/{task}/createsubno', [ProjectController::class, 'taskCreateSubno'])->name('project.task.createsubno');
+    Route::post('/project/{project}/task/{task}/storesubno', [ProjectController::class, 'taskStoreSubno'])->name('project.task.storesubno');
+    Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSubno'])->name('project.task.editsubno');
+
+    Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+
+
 
 // Contract
 Route::resource('contract', ContractController::class);

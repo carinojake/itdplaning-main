@@ -7,6 +7,10 @@
             @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
 
+                <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    class="btn btn-success text-white">เพิ่มรายการ วงเงิน</a>
+
+
                     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย PA</a>
 
@@ -16,6 +20,7 @@
                             <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type) }}
                             </a>
+
                     <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
