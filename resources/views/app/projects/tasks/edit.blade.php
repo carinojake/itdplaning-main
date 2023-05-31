@@ -136,17 +136,18 @@
 
 
                             <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
-                                {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                <div data-coreui-toggle="date-picker" id="task_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"  data-coreui-date="{{ date('m/d/Y', $task->task_start_date) }}"></div>
-                              </div>
-                              <div class="col-md-6">
-                                <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
-                                {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                <div data-coreui-toggle="date-picker" id="task_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH" data-coreui-date="{{ date('m/d/Y', $task->task_end_date) }}"></div>
-                              </div>
+                                <div class="col-md-6">
+                                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                    <input class="form-control" id="task_start_date" name="task_start_date"
+                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                    <input class="form-control" id="task_end_date" name="task_end_date"
+                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}">
+                                </div>
                             </div>
+
 
 
 
@@ -165,7 +166,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-3">
+                             {{--    <div class="row mt-3">
                                     <h4>งบประมาณ</h4>
 
                                     <div class="row">
@@ -173,7 +174,8 @@
 
                                         <div class="col-md-4">
                                           <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                          <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating"
+                                          <input type="text" placeholder="0.00" step="0.01" class="form-control"
+                                           id="task_budget_it_operating" name="task_budget_it_operating"
                                            min="0" value="{{ ($task->task_budget_it_operating) }}">
                                           <div class="invalid-feedback">
                                             {{ __('ระบุงบกลาง ICT') }}
@@ -181,42 +183,99 @@
                                         </div>
                                         <div class="col-md-4">
                                           <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                                          id="task_budget_it_investment" name="task_budget_it_investment" min="0"  value="{{ $task->task_budget_it_investment }}">
+                                          <input type="text" placeholder="0.00" step="0.01" class="form-control"
+                                          id="task_budget_it_investment" name="task_budget_it_investment" min="0"
+                                            value="{{ $task->task_budget_it_investment }}">
                                           <div class="invalid-feedback">
                                             {{ __('ระบุงบดำเนินงาน') }}
                                           </div>
                                         </div>
                                         <div class="col-md-4">
                                           <label for="task_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                          <input type="number" placeholder="0.00" step="0.01" class="form-control"
+                                          <input type="tect" placeholder="0.00" step="0.01" class="form-control"
                                            id="task_budget_gov_utility" name="task_budget_gov_utility" min="0" value="{{ $task->task_budget_gov_utility }}">
                                           <div class="invalid-feedback">
                                             {{ __('ระบุค่าสาธารณูปโภค') }}
                                           </div>
                                         </div>
                                       </div>
+                                    </div> --}}
+
+                                    <div class="row">
+
+
+                                        <div class="row">
+                                            <h4>งบประมาณ</h4>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="task_budget_it_operating"
+                                                        class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                                    <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                                                    <input type="text" placeholder="0.00" step="0.01"
+
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                        class="form-control" id="task_budget_it_operating"
+                                                        name="task_budget_it_operating" min="0"
+                                                        value="{{ ($task->task_budget_it_operating) }}">
+                                                    <div class="invalid-feedback">
+                                                        {{ __('ระบุงบกลาง ICT') }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="task_it_investment"
+                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                    <input type="text" placeholder="0.00" step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                        class="form-control" id="task_it_investment"
+                                                        name="task_it_investment" min="0"
+                                                        value="{{ $task->task_it_investment }}">
+                                                    <div class="invalid-feedback">
+                                                        {{ __('ระบุงบดำเนินงาน') }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="task_gov_utility"
+                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                    <input type="text" placeholder="0.00" step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                        class="form-control" id="task_gov_utility"
+                                                        name="task_gov_utility" min="0"
+                                                        value="{{ $task->task_gov_utility }}">
+                                                    <div class="invalid-feedback">
+                                                        {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
 
+
+                                        </div>
                                     </div>
+
+
+
+
+
+
+
 
 
                                     <div class="row mt-3">
 
-                                        <h4>เบิกจ่าย</h4>
-                                        <div class="col-md-6">
-                                            <label for="task_pay_date"
-                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span
-                                                class="text-danger">*</span>
-                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                            <div data-coreui-toggle="date-picker" id="task_pay_date"
-                                                data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
-                                        </div>
+                                        <div class="row mt-3">
+                                            <h4>เบิกจ่าย</h4>
+                                            <div class="col-md-6">
+                                                <label for="task_pay_date"
+                                                    class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+                                                    <input class="form-control" id="task_pay_date" name="task_pay_date"
+                                                    value="{{  \Helper::date4(date('Y-m-d H:i:s', $task->task_pay_date))  }}">
+                                            </div>
 
                                         <div class="col-md-6">
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-                                            <input type="number" placeholder="0.00" step="0.01"
+                                            <input type="text" placeholder="0.00" step="0.01"
                                                 class="form-control" id="task_pay" name="task_pay" min="0">
                                             <div class="invalid-feedback">
                                                 {{ __('เบิกจ่าย') }}
@@ -241,6 +300,10 @@
     </x-slot:css>
     <x-slot:javascript>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
     <script>
         const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
         const taskContractContainer = document.getElementById('task-contract-container');
@@ -255,5 +318,56 @@
             });
         });
     </script>
+>
+
+<script>
+    $(document).ready(function(){
+        $(":input").inputmask();
+    });
+</script>
+
+<script>
+    $(function () {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
+
+        var d = new Date();
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+        $("#task_start_date, #task_end_date,#task_pay").datepicker({
+            dateFormat: 'dd/mm/yy',
+            isBuddhist: true,
+            defaultDate: toDay,
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+        });
+    });
+</script>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+
     </x-slot:javascript>
 </x-app-layout>

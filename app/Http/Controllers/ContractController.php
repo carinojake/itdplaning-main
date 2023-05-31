@@ -443,10 +443,18 @@ class ContractController extends Controller
             $fiscal_year = date('Y') + 543; // Use current year if not provided
         }
 
+
+        $tasksData = $tasks->map(function ($task) {
+            return [
+                'id' => $task->task_id,
+                'text' => $task->task_name
+            ];
+        });
+        $tasksJson = json_encode($tasksData);
         //dd($id,$origin, $project, $task, $pro, $ta, $fiscal_year);
+     //  dd ($tasksData);
 
-
-        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year','tasks'));
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year','tasks','tasksJson'));
     }
 
 

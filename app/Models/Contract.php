@@ -157,4 +157,18 @@ class Contract extends Model
     }
 
 
+        // Relations ...
+
+
+        public function main_task()
+        {
+            return $this->task()->whereNull('task_parent');
+        }
+
+        public function main_task_with_project($task_parent)
+        {
+            return $this->main_task()->join('projects', 'tasks.project_id', '=', 'projects.project_id')->where('tasks.task_parent', $task_parent)->select('tasks.*', 'projects.project_id as project_project_id')->get();
+        }
+
+
 }

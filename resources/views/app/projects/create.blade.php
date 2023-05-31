@@ -30,7 +30,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 ">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
                                             class="text-danger">*</span>
@@ -65,7 +65,7 @@
                                         </div>
 
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 d-none">
                                         <label for="project_status" class="form-label">{{ __('สถานะงาน/โครงการ') }}</label> <span class="text-danger">*</span>
                                         <div >
                                           <input class="form-check-input" type="radio" name="project_status" id="project_status1" value="1" checked>
@@ -80,7 +80,15 @@
                                           </label>
                                         </div>
                                   </div>
-
+                                  <div class="col-md-12 mt-3">
+                                    <label for="project_name" class="form-label">{{ __('ชื่องาน/โครงการ') }}</label>
+                                    <span class="text-danger">*</span>
+                                    <input type="text" class="form-control" id="project_name" name="project_name"
+                                        required autofocus>
+                                    <div class="invalid-feedback">
+                                        {{ __('ชื่องาน/โครงการ ซ้ำ') }}
+                                    </div>
+                                </div>
 
                                   <div class="row mt-3">
                                     <div class="col-md-6">
@@ -94,15 +102,7 @@
                                 </div>
 
 
-                                    <div class="col-md-12 mt-3">
-                                        <label for="project_name" class="form-label">{{ __('ชื่องาน/โครงการ') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="project_name" name="project_name"
-                                            required autofocus>
-                                        <div class="invalid-feedback">
-                                            {{ __('ชื่องาน/โครงการ ซ้ำ') }}
-                                        </div>
-                                    </div>
+
                                     <div class="col-md-12 mt-3">
                                         <label for="project_description" class="form-label">{{ __('รายละเอียดงาน/โครงการ') }}</label>
                                         <textarea class="form-control" name="project_description" id="project_description" rows="10"></textarea>

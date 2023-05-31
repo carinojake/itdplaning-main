@@ -29,13 +29,13 @@
 
 
 
-                                   {{--  <div class="col-md-3">
+                                    <div class="col-md-3">
 
                                         <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
 
                                         <span class="text-danger">*</span>
 
-                                         <input type="text" class="form-control" id="task_parent" name="task_parent">
+
 
                                         <select name="task_parent" id="task_parent" class="form-control">
 
@@ -59,7 +59,7 @@
 
                                         </div>
 
-                                    </div> --}}
+                                    </div>
 
                                 <div class="row mt-3">
 
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-5 d-none" id='contract_group'>
+                                    <div class="col-md-5 " id='contract_group'>
                                         <div class="form-group">
                                             <label for="task_contract" class="form-label">{{ __('สัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}</label>
                                            <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
@@ -114,7 +114,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{-- <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
+                                        {{--  <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
                                                 <option value="">ไม่มี</option>
                                                 @if (!empty($contracts['results']))
                                                     @foreach ($contracts['results'] as $group)

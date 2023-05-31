@@ -41,58 +41,63 @@
                                 enctype="multipart/form-data">
                                 @csrf
 
-                                        <input type="hidden"name="origin" value="{{ $origin }}">
+                                        <input {{-- type="hidden" --}}name="origin" value="{{ $origin }}">
 
-                                        <input type="hidden" name="project" value="{{ $origin }}">
+                                        <input {{-- type="hidden" --}} name="project" value="{{ $origin }}">
 
-                                        <input type="hidden" name="task" value="{{ $task }}">
-
-
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-md-3">
-                                        <label for="contract_fiscal_year"
-                                            class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <select name="contract_fiscal_year"
-                                            class="form-select @error('contract_fiscal_year') is-invalid @enderror">
-                                            @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 2; $i++)
-                                                <option value="{{ $i }}"
-                                                    {{ $fiscal_year == $i ? 'selected' : '' }}>{{ $i }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                        @error('contract_fiscal_year')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-
-                                    <div class="row mt-3">
-                                        <div class="col-md-3">
-                                            <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
-                                            <span class="text-danger">*</span>
-                                            {{-- <input type="text" class="form-control" id="task_parent" name="task_parent"> --}}
-                                            <select name="task_parent" id="task_parent" class="form-control">
-                                                <option value="">ไม่มี</option>
-                                                @foreach ($tasks as $subtask)
-                                                    <option value="{{ $subtask->task_id }}"
-                                                        {{ $task->task_parent == $subtask->task_id ? 'selected' : '' }}>
-                                                        {{ $subtask->task_name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                {{ __('กิจกรรม') }}
+                                        <input {{--  type="hidden" --}} name="task" value="{{ $task }}">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-3">
+                                                <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                                                <span class="text-danger">*</span>
+                                                <select name="contract_fiscal_year" class="form-select @error('contract_fiscal_year') is-invalid @enderror">
+                                                    @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 2; $i++)
+                                                        <option value="{{ $i }}" {{ $fiscal_year == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('contract_fiscal_year')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
                                             </div>
+
+                                            <div class="col-md-3">
+                                                <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
+
+                                                <select name="task_parent" id="task_parent" class="form-control">
+                                                    <option value="">ไม่มี</option>
+                                                    @if ($tasks)
+                                                        @foreach ($tasks as $subtask)
+                                                            @if ($subtask->task_id)
+                                                                <option value="{{ $subtask->task_id }}" {{ $subtask->task_parent == $subtask->task_id ? 'selected' : '' }}>
+                                                                    {{ $subtask->task_name }}
+                                                                </option>
+                                                            @elseif ($subtask->task_parent == 1 && $subtask->task_id)
+                                                                <!-- โค้ดที่คุณต้องการแสดงเมื่อเงื่อนไขเป็นจริง -->
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    {{ __('กิจกรรม') }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
+
+                                                {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'js-example-basic-single', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                                            </div>
+
                                         </div>
 
-                                    <div class="col-md-3">
-                                        <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
 
-                                        {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
-                                    </div>
+                                    {{--
+                                         {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
 
-
-                                    {{--     <div class="col-md-3">
+                                        <div class="col-md-3">
                                     <label for="contract_type" class="form-label">{{ __('ค่าใช้จ่ายสำนักงาน') }}</label>
 
                                     {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
@@ -842,7 +847,17 @@
             });
         </script>
 
+<script>
+    $(document).ready(function() {
+        var tasksData = {!! $tasksJson !!};
 
+        $('#task_parent').select2({
+            data: tasksData,
+            placeholder: 'เลือกกิจกรรม',
+            minimumInputLength: 0
+        });
+    });
+</script>
 
 
 
