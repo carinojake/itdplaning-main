@@ -7,13 +7,11 @@
             @if ($pro)
                 {{ $pro->project_name }}
             @else
-
             @endif
 
             @if ($ta)
                 {{ $ta->task_name }}
             @else
-
             @endif
 
 
@@ -29,7 +27,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}">
+                        <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER') }}">
                             <x-slot:toolbar>
                                 {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -41,30 +39,38 @@
                                 enctype="multipart/form-data">
                                 @csrf
 
-                                        <input {{-- type="hidden" --}}name="origin" value="{{ $origin }}">
+                                <input  type="hidden" name="origin" value="{{ $origin }}">
 
-                                        <input {{-- type="hidden" --}} name="project" value="{{ $origin }}">
+                                <input  type="hidden"  name="project" value="{{ $origin }}">
 
-                                        <input {{--  type="hidden" --}} name="task" value="{{ $task }}">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-3">
-                                                <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                                <span class="text-danger">*</span>
-                                                <select name="contract_fiscal_year" class="form-select @error('contract_fiscal_year') is-invalid @enderror">
-                                                    @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 2; $i++)
-                                                        <option value="{{ $i }}" {{ $fiscal_year == $i ? 'selected' : '' }}>
-                                                            {{ $i }}
-                                                        </option>
-                                                    @endfor
-                                                </select>
-                                                @error('contract_fiscal_year')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                <input   type="hidden" name="task" value="{{ $task }}">
+                                <div class="row g-3 align-items-center callout callout-success ">
 
-                                            <div class="col-md-3">
+                                <div class="row g-3 align-items-center">
+
+                                    <!-- Fiscal Year -->
+                                    <div class="col-md-3">
+                                        <label for="contract_fiscal_year"
+                                            class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <select name="contract_fiscal_year"
+                                            class="form-select @error('contract_fiscal_year') is-invalid @enderror">
+                                            @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 2; $i++)
+                                                <option value="{{ $i }}"
+                                                    {{ $fiscal_year == $i ? 'selected' : '' }}>
+                                                    {{ $i }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                        @error('contract_fiscal_year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+
+                                    <!-- Task Parent -->
+                                    {{--  <div class="col-md-3">
                                                 <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
-
                                                 <select name="task_parent" id="task_parent" class="form-control">
                                                     <option value="">ไม่มี</option>
                                                     @if ($tasks)
@@ -74,7 +80,7 @@
                                                                     {{ $subtask->task_name }}
                                                                 </option>
                                                             @elseif ($subtask->task_parent == 1 && $subtask->task_id)
-                                                                <!-- โค้ดที่คุณต้องการแสดงเมื่อเงื่อนไขเป็นจริง -->
+                                                                <!-- code to display when condition is true -->
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -82,16 +88,43 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('กิจกรรม') }}
                                                 </div>
-                                            </div>
+                                            </div> --}}
+                                    <!-- Contract Type -->
+                                    <div class="col-md-3">
+                                        <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
+                                        <select name="contract_type" id="contract_type" class="form-control">
+                                            <option value="" disabled selected>{{ __('เลือกประเภท...') }}
+                                            </option>
+                                            @foreach (\Helper::contractType() as $key => $type)
+                                                <option value="{{ $key }}">{{ $type }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                            <div class="col-md-3">
-                                                <label for="contract_type" class="form-label">{{ __('ประเภท') }}</label>
+                                </div>
 
-                                                {{ Form::select('contract_type', \Helper::contractType(), null, ['class' => 'js-example-basic-single', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
 
-                                            </div>
+                                    <!-- Task Parent -->
+                                    <div class="col-md-6">
+                                        <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
+                                        <select name="task_parent" id="task_parent" class="form-control">
+                                        </select>
 
+                                        <div class="invalid-feedback">
+                                            {{ __('กิจกรรม') }}
                                         </div>
+                                    </div>
+                                    <!-- Contract Type -->
+                                    <div class="col-md-3  mt-3">
+                                        <label for="contract_type_budget" class="form-label">{{ __('วงเงิน') }}</label>
+                                        <input type="text" class="form-control" name="contract_type_budget" id="contract-type-budget" value="N/A">
+                                    </div>
+                                </div>
+
+
+
+
+
 
 
                                     {{--
@@ -105,6 +138,7 @@
                             </div> --}}
 
                                     <!--  1  -->
+                                <div class="callout callout-info">
                                     <div class="accordion accordion-flush" id="accordionFlushExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="flush-headingOne">
@@ -123,9 +157,11 @@
                                                         <div class="callout callout-primary row mt-3">
                                                             <div class="col-md-4">
 
-                                                                <label for="contract_mm" class="form-label">{{ __('บันทึกข้อความ (MM)') }}</label>
+                                                                <label for="contract_mm"
+                                                                    class="form-label">{{ __('บันทึกข้อความ (MM)') }}</label>
                                                                 <span class="text-danger"></span>
-                                                                <input type="text" class="form-control" id="contract_mm" name="contract_mm">
+                                                                <input type="text" class="form-control"
+                                                                    id="contract_mm" name="contract_mm">
                                                                 <div class="invalid-feedback">
                                                                     {{ __(' ') }}
                                                                 </div>
@@ -142,255 +178,257 @@
                                                                     name="contract_mm_budget" min="0">
                                                             </div>
                                                             <div id="pr_form" style="display:none;">
+                                                                <div class="row mt-3">
+                                                                    <div class="col-md-4">
+                                                                        <label for="contract_pr"
+                                                                            class="form-label">{{ __('ใบขอดำเนินการซื้อ/จ้าง (PR)') }}</label>
+                                                                        <span class="text-danger"></span>
+
+                                                                        <input type="text" class="form-control"
+                                                                            id="contract_PR" name="contract_pr">
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __(' ') }}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="contract_pr_budget"
+                                                                            class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label>
+                                                                        <span class="text-danger"></span>
+
+                                                                        <input type="taxt" placeholder="0.00"
+                                                                            step="0.01" class="form-control"
+                                                                            id="contract_pr_budget"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            name="contract_pr_budget" min="0">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="callout callout-success">
+                                                        <div id="pa_form" style="display:none;">
                                                             <div class="row mt-3">
                                                                 <div class="col-md-4">
-                                                                    <label for="contract_pr"
-                                                                        class="form-label">{{ __('ใบขอดำเนินการซื้อ/จ้าง (PR)') }}</label>
+                                                                    <label for="contract_pa"
+                                                                        class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" class="form-control"
-                                                                        id="contract_PR" name="contract_pr">
+                                                                        id="contract_PA" name="contract_pa">
                                                                     <div class="invalid-feedback">
                                                                         {{ __(' ') }}
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label for="contract_pr_budget"
-                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label>
+                                                                    <label for="contract_pa_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) PA') }}</label>
                                                                     <span class="text-danger"></span>
 
-                                                                    <input type="taxt" placeholder="0.00" step="0.01"
-                                                                        class="form-control" id="contract_pr_budget"
+                                                                    <input type="taxt" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_pa_budget"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        name="contract_pr_budget" min="0">
-                                                                </div>
-                                                            </div>
-                                                            </div>
-
-
-
-
-                                                        </div>
-                                                    </div>
-                                          <div class="callout callout-success">
-                                                    <div id="pa_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_pa"
-                                                                    class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_PA" name="contract_pa">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_pa_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) PA') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="taxt" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_pa_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_pa_budget" min="0">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                    <div id="po_form" style="display:none;">
-                                                        <!-- PO form fields -->
-
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_po"
-                                                                    class="form-label">{{ __('ใบสั่งซื้อ (PO)') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_PO" name="contract_po">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_po_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) PO') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="taxt" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_po_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_po_budget" min="0">
-                                                            </div>
-
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_po_start_date"
-                                                                    class="form-label">{{ __('กำหนดวันที่ส่งของ') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_po_start_date"
-                                                                    name="contract_po_start_date">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
+                                                                        name="contract_pa_budget" min="0">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div id="er_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_er"
-                                                                    class="form-label">{{ __('ใบสั่งจ้าง (ER)') }}</label>
-                                                                <span class="text-danger"></span>
 
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_ER" name="contract_er">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        <div id="po_form" style="display:none;">
+                                                            <!-- PO form fields -->
+
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_po"
+                                                                        class="form-label">{{ __('ใบสั่งซื้อ (PO)') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_PO" name="contract_po">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_po_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) PO') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="taxt" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_po_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_po_budget" min="0">
+                                                                </div>
+
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_po_start_date"
+                                                                        class="form-label">{{ __('กำหนดวันที่ส่งของ') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_po_start_date"
+                                                                        name="contract_po_start_date">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div id="er_form" style="display:none;">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_er"
+                                                                        class="form-label">{{ __('ใบสั่งจ้าง (ER)') }}</label>
+                                                                    <span class="text-danger"></span>
 
-                                                            <div class="col-md-4">
-                                                                <label for="contract_er_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) ER') }}</label>
-                                                                <span class="text-danger"></span>
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_ER" name="contract_er">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
 
-                                                                <input type="text" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_er_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_po_budget" min="0">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_er_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) ER') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_er_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_po_budget" min="0">
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_er_start_date"
+                                                                        class="form-label">{{ __('กำหนดวันที่ส่งมอบงาน') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_er_start_date"
+                                                                        name="contract_er_start_date">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                        </div>
 
-                                                            <div class="col-md-4">
-                                                                <label for="contract_er_start_date"
-                                                                    class="form-label">{{ __('กำหนดวันที่ส่งมอบงาน') }}</label>
-                                                                <span class="text-danger"></span>
+                                                        <div id="cn_form" style="display:none;">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_cn"
+                                                                        class="form-label">{{ __('สัญญา (CN)') }}</label>
+                                                                    <span class="text-danger"></span>
 
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_er_start_date"
-                                                                    name="contract_er_start_date">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_cn" name="contract_cn">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_cn_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) CN') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_cn_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_cn_budget" min="0">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="ba_form" style="display:none;">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_ba "
+                                                                        class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
+                                                                    {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_ba" name="contract_cn">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_ba_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) BA') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_oe_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_oe_budget" min="0">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="bd_form" style="display:none;">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_bd "
+                                                                        class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
+                                                                    {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        id="contract_bd" name="contract_bd">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ __(' ') }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="contract_bd_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
+                                                                    <span class="text-danger"></span>
+
+                                                                    <input type="text" placeholder="0.00"
+                                                                        step="0.01" class="form-control"
+                                                                        id="contract_bd_budget"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                        class="form-control numeral-mask"
+                                                                        name="contract_bd_budget" min="0">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div id="cn_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_cn"
-                                                                    class="form-label">{{ __('สัญญา (CN)') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_cn" name="contract_cn">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_cn_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) CN') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_cn_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_cn_budget" min="0">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="ba_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_ba "
-                                                                    class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
-                                                                {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_ba" name="contract_cn">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_ba_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BA') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_oe_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_oe_budget" min="0">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div id="bd_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="contract_bd "
-                                                                    class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
-                                                                {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" class="form-control"
-                                                                    id="contract_bd" name="contract_bd">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="contract_bd_budget"
-                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
-                                                                <span class="text-danger"></span>
-
-                                                                <input type="text" placeholder="0.00"
-                                                                    step="0.01" class="form-control"
-                                                                    id="contract_bd_budget"
-                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                    class="form-control numeral-mask"
-                                                                    name="contract_bd_budget" min="0">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                          </div>
-                                          <div id="pp_form" class="callout callout-danger" style="display:none;">
+                                                    <div id="pp_form" class="callout callout-danger"
+                                                        style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-4">
                                                                 <label for="contract_pay"
@@ -437,10 +475,11 @@
                                                     </div>
  --}}
 
-                                                    <div id="rounds_form" class="callout callout-warning" style="display:none;">
+                                                    <div id="rounds_form" class="callout callout-warning"
+                                                        style="display:none;">
                                                         <div class="row mt-3">
                                                             <div class="col-md-12">
-                                                                <label  id="rounds_label" for="rounds"
+                                                                <label id="rounds_label" for="rounds"
                                                                     class="form-label">{{ __('งวดที่/ค่าใช้จ่ายสำนักงาน') }}</label>
                                                                 <span class="text-danger">*</span>
                                                                 {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
@@ -473,7 +512,9 @@
                                                 <button class="accordion-button collapsed" type="button"
                                                     data-coreui-toggle="collapse" data-coreui-target="#collapseTwo"
                                                     aria-expanded="false" aria-controls="collapseTwo">
-                                                    ข้อมูลสัญญา 2 (เลขที่สัญญา,เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา, ประก้น)
+                                                    ข้อมูลสัญญา 2
+                                                    (เลขที่สัญญา,เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา,
+                                                    ประก้น)
                                                 </button>
                                             </h2>
                                             <div id="collapseTwo" class="accordion-collapse collapse"
@@ -484,7 +525,7 @@
                                                         <div class="col-md-3">
                                                             <label for="contract_number"
                                                                 class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
-                                                           {{--  <span class="text-danger">*</span> --}}
+                                                            {{--  <span class="text-danger">*</span> --}}
                                                             <input type="text" class="form-control"
                                                                 id="contract_number" name="contract_number">
                                                             <div class="invalid-feedback">
@@ -811,7 +852,8 @@
                                 @else
                                 @endif
 
-                                <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
+                                <x-button link="{{ route('contract.index') }}" class="btn-light text-black">
+                                    {{ __('coreuiforms.return') }}</x-button>
 
 
                             </form>
@@ -854,10 +896,25 @@
         $('#task_parent').select2({
             data: tasksData,
             placeholder: 'เลือกกิจกรรม',
+
             minimumInputLength: 0
         });
+
+        $('#task_parent').on('select2:select', function (e) {
+            var data = e.params.data;
+            var budget = parseFloat(data.budget_it_investment) || parseFloat(data.budget_it_operating) || parseFloat(data.budget_gov_utility) || 0;
+
+            if (typeof budget === 'number') {
+                budget = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(budget);
+            }
+
+            $('#contract-type-budget').val(budget);
+        });
     });
-</script>
+    </script>
+
+
+
 
 
 
@@ -872,7 +929,8 @@
                         <div class="row mt-3">
                             <div class="col-md-12">
 
-                                    <label>ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
+                                    <label>ชื่องวด ` + (i + 1) +
+                            ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
                             `][task_name]" value="งวด ` + (i + 1) + `"required>
                                 </div>
                             </div>
@@ -1047,8 +1105,13 @@
                 $(":input").inputmask();
             });
         </script>
+        <script>
+            $(document).ready(function() {
 
-
+                $('#contract_type option[value="99"]').remove();
+                $('#contract_type option[value="4"]').remove();
+            });
+        </script>
 
     </x-slot:javascript>
 </x-app-layout>
