@@ -8,14 +8,14 @@
                 <x-slot:toolbar>
 
                 <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-success text-white">เพิ่มรายการ วงเงิน</a>
+                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม (วงเงิน)</a>
 
 
                     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย PA</a>
 
                         <a href="{{ route('project.task.createsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                            class="btn btn-info text-white">เพิ่มรายการที่ใช้จ่าย ไม่มี PA</a>
+                            class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย ไม่มี PA</a>
 
                             <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="btn btn-warning text-dark">แก้ไขedit {{ Helper::projectsType($project->project_type) }}

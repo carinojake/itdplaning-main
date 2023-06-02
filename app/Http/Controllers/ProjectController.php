@@ -879,7 +879,7 @@ class ProjectController extends Controller
 
 
 
-/*     public function taskCreate(Request $request, $project, $task = null)
+    /*     public function taskCreate(Request $request, $project, $task = null)
 {
     $id = Hashids::decode($project)[0];
     $tasks = Task::where('project_id', $id)->get();
@@ -901,29 +901,29 @@ class ProjectController extends Controller
 }
  */
 
-public function taskCreateTo(Request $request, $project, $task = null)
-{
-    $id = Hashids::decode($project)[0];
-    $tasks = Task::where('project_id', $id)->get();
-    $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
-    $requestProject = Project::find($id);
+    public function taskCreateTo(Request $request, $project, $task = null)
+    {
+        $id = Hashids::decode($project)[0];
+        $tasks = Task::where('project_id', $id)->get();
+        $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
+        $requestProject = Project::find($id);
 
-    $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
-    $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
-    $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
+        $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
+        $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
+        $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
 
-    if ($task) {
-        $taskId = Hashids::decode($task)[0];
-        $task = Task::find($taskId);
-    } else {
-        $task = null;
+        if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        }
+
+
+        // dd($tasks);
+
+        return view('app.projects.tasks.createto', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
-
-
-       // dd($tasks);
-
-    return view('app.projects.tasks.createto', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
-}
 
 
 
@@ -1349,7 +1349,7 @@ public function taskCreateTo(Request $request, $project, $task = null)
                     ]);
                 }
             }
-              //      dd($task);
+            //      dd($task);
             return redirect()->route('project.show', $project);
         }
     }
@@ -1514,7 +1514,11 @@ public function taskCreateTo(Request $request, $project, $task = null)
         $task->task_budget_gov_utility = $task_budget_gov_utility;
         $task->task_budget_it_investment = $task_budget_it_investment;
         $task->task_budget_it_operating = $task_budget_it_operating;
-        $task->task_budget_it_investment = $task_budget_it_investment;
+
+
+        $task->task_cost_it_operating = $task_cost_it_operating;
+        $task->task_cost_gov_utility =  $task_cost_gov_utility;
+        $task->task_cost_it_investment = $task_cost_it_investment;
 
         // Update other task attributes as needed
 
@@ -1529,7 +1533,7 @@ public function taskCreateTo(Request $request, $project, $task = null)
             } else {
                 ContractHasTask::where('task_id', $id_task)->delete();
             }
-         //   dd($task);
+            //   dd($task);
             return redirect()->route('project.show', $project->hashid);
         }
     }

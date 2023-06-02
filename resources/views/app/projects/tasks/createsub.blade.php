@@ -29,7 +29,7 @@
 
 
 
-                        {{--             <div class="col-md-3">
+                                   <div class="col-md-3">
 
                                         <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
 
@@ -59,47 +59,11 @@
 
                                         </div>
 
-                                    </div> --}}
-
-                                <div class="row mt-3">
-
-                                    <div class="  d-none col-md-2">
-                                        <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status1" value="1" checked>
-                                            <label class="form-check-label" for="task_status1">
-                                                ระหว่างดำเนินการ
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status2" value="2">
-                                            <label class="form-check-label" for="task_status2">
-                                                ดำเนินการแล้วเสร็จ
-                                            </label>
-                                        </div>
                                     </div>
 
-                                    <div class=" d-none col-md-2">
-                                        <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label>
 
-                                        <div >
-                                            <input class="form-check-input" type="radio" name="task_type"
-                                                id="task_type1" value="1" checked>
-                                            <label class="form-check-label" for="task_type1">
-                                                มี PA
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_type"
-                                                id="task_type2" value="2">
-                                            <label class="form-check-label" for="task_type2">
-                                                ไม่มี PA
-                                            </label>
-                                        </div>
-                                    </div>
+
+
 
                                     <div class="col-md-5 " id='contract_group'>
                                         <div class="form-group">
@@ -114,6 +78,46 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+
+
+                                            <div class="row mt-3">
+
+                                                <div class="  d-none col-md-2">
+                                                    <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
+                                                    <span class="text-danger">*</span>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="task_status"
+                                                            id="task_status1" value="1" checked>
+                                                        <label class="form-check-label" for="task_status1">
+                                                            ระหว่างดำเนินการ
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="task_status"
+                                                            id="task_status2" value="2">
+                                                        <label class="form-check-label" for="task_status2">
+                                                            ดำเนินการแล้วเสร็จ
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            <div class=" d-none col-md-2">
+                                                <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label>
+
+                                                <div >
+                                                    <input class="form-check-input" type="radio" name="task_type"
+                                                        id="task_type1" value="1" checked>
+                                                    <label class="form-check-label" for="task_type1">
+                                                        มี PA
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="task_type"
+                                                        id="task_type2" value="2">
+                                                    <label class="form-check-label" for="task_type2">
+                                                        ไม่มี PA
+                                                    </label>
+                                                </div>
+                                            </div>
                                         {{--  <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
                                                 <option value="">ไม่มี</option>
                                                 @if (!empty($contracts['results']))

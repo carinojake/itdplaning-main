@@ -412,18 +412,10 @@ class ContractController extends Controller
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-        $id = Hashids::decode($project);
+        $id = $project ? Hashids::decode($project) : null;
+
         $tasks = Task::all();
-
-
-
-        $pro = $project;
-        $ta = $task;
-
-        $id_project = null;
-        $id_task = null;
-        $pro = null;
-        $ta = null;
+        $id_project = $id_task = $pro = $ta = null;
 
         if ($project && $task) {
             $decodedProject = Hashids::decode($project);
@@ -438,24 +430,38 @@ class ContractController extends Controller
             }
         }
 
-        $fiscal_year = $request->input('fiscal_year');
-        if (!$fiscal_year) {
-            $fiscal_year = date('Y') + 543; // Use current year if not provided
-        }
+        $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
+
+        $project_fiscal_year = $pro ? $pro->project_fiscal_year : null;
+        $tasksData = DB::table('tasks')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('tasks.*', 'projects.*')
+        ->get();
 
 
-        $tasksData = $tasks->map(function ($task) {
+
+        $tasksData = $tasksData->map(function ($task) {
             return [
+                'project_fiscal_year' => $task->project_fiscal_year,
+                'project_id' => $task->project_id,
+                'project_name' => $task->project_name,
                 'id' => $task->task_id,
-                'text' => $task->task_name
+                'text' => $task->task_name,
+                'budget_it_operating' => $task->task_budget_it_operating,
+                'budget_it_investment' => $task->task_budget_it_investment,
+                'budget_gov_utility' => $task->task_budget_gov_utility,
             ];
         });
+
+     // dd($tasksData);
+
         $tasksJson = json_encode($tasksData);
-        //dd($id,$origin, $project, $task, $pro, $ta, $fiscal_year);
-     //  dd ($tasksData);
 
         return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year','tasks','tasksJson'));
     }
+
+
+
 
 
 

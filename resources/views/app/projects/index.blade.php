@@ -114,11 +114,12 @@
               searchable: false
             },
             {
-              data: 'project_fiscal_year'
+              data: 'project_fiscal_year',
+              name: 'project_fiscal_year'
             },
             {
-              data: 'reguiar_id'
-
+              data: 'reguiar_id',
+              name: 'reguiar_id'
             },
             {
               data: 'project_name_output',

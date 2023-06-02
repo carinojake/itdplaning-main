@@ -21,10 +21,10 @@
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
                                 @csrf
 
-                                <input {{-- type="hidden" --}} class="form-control" id="task_parent_display"
+                                <input  {{-- type="hidden" --}} class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
 
-                                <input {{--  type="hidden" --}}  class="form-control" id="task_parent" name="task_parent"
+                                <input   type="hidden"   class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
 
 
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-5 " id='contract_group'>
+                                    <div class="col-md-5  d-none" id='contract_group'>
                                         <div class="form-group">
                                             <label for="task_contract" class="form-label">{{ __('สัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER / ค่าใช้จ่ายสำนักงาน') }}</label>
                                            <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
@@ -225,13 +225,13 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                             {{--    <div class="row">
                                     <h4>งบประมาณ</h4>
 
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div >
                                             <strong>วงเงินที่ขออนุมัติ</strong>
-                                            <div class="col-md-12">
+
                                                 <label for="task_budget_it_operating"
                                                     class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating" min="0">-->
@@ -243,8 +243,8 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
-                                            </div>
-                                            <div class="col-md-12">
+
+
                                                 <label for="task_budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <!--  <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_investment" name="task_budget_it_investment" min="0">-->
@@ -256,8 +256,7 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
-                                            </div>
-                                            <div class="col-md-12">
+
                                                 <label for="task_budget_gov_utility"
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0"> -->
@@ -271,8 +270,43 @@
                                                 </div>
                                             </div>
                                         </div>
+ --}}
 
-                                        <div class="col-6 ">
+                                        <div class="row mt-3">
+
+
+                                            <div class="row mt-3">
+                                                <h4>งบประมาณ</h4>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                  <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT ') }}</label>
+
+                                                  <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"  class="form-control numeral-mask" id="task_budget_it_operating" name="task_budget_it_operating" min="0" >
+
+
+                                                  <div class="invalid-feedback">
+                                                    {{ __('ระบุงบกลาง ICT') }}
+                                                  </div>
+                                                </div>
+                                            <div class="col-4">
+                                                <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="task_budget_it_investment" name="task_budget_it_investment" min="0" >
+                                                <div class="invalid-feedback">
+                                                  {{ __('ระบุงบดำเนินงาน') }}
+                                                </div>
+                                              </div>
+
+                                              <div class="col-md-4">
+                                                <label for="task_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0" >
+                                                <div class="invalid-feedback">
+                                                  {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                </div>
+                                              </div>
+                                            </div>
+                                            </div>
+                                          </div>
+                                  {{--       <div class="col-6 ">
                                             <strong>ค่าใช้จ่าย</strong>
                                             <div class="col-md-12">
                                                 <label for="task_cost_it_operating"
@@ -316,7 +350,7 @@
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
                                 </div>

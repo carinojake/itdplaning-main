@@ -746,6 +746,7 @@
                                                     <ul>
                                                         @foreach ($task->subtask as $subtask)
                                                             <li>
+
                                                                 {{ $subtask->task_name }}
                                                               {{--   <span
                                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
@@ -1073,6 +1074,8 @@
                                                     </ul>
                                                 @endif
                                             </td>
+
+
                                             <td>
                                                 <span
                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
@@ -1080,6 +1083,7 @@
                                                 <span
                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                                             </td>
+
                                             <td class="text-end">
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                                     class="btn btn-primary text-white" target="_blank"><i
