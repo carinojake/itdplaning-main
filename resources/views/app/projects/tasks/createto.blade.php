@@ -218,10 +218,10 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label for="task_description"
-                                        class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
+                                        class="form-label">{{ __('รายละเอียด') }}</label>
                                     <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
                                     <div class="invalid-feedback">
-                                        {{ __('รายละเอียดการที่ใช้จ่าย') }}
+                                        {{ __('รายละเอียดการ') }}
                                     </div>
                                 </div>
 
@@ -287,6 +287,8 @@
                                                   <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                   </div>
+
+                                                 {{--  ไม่เกิน {{ ($task_budget_it_operating) }} บาท --}}
                                                 </div>
                                             <div class="col-4">
                                                 <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
@@ -294,6 +296,8 @@
                                                 <div class="invalid-feedback">
                                                   {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
+                                                {{-- ไม่เกิน {{ ($task_budget_it_investment) }} บาท --}}
+
                                               </div>
 
                                               <div class="col-md-4">
@@ -302,6 +306,8 @@
                                                 <div class="invalid-feedback">
                                                   {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
+                                               {{--  ไม่เกิน {{ ($task_budget_gov_utility) }} บาท --}}
+
                                               </div>
                                             </div>
                                             </div>

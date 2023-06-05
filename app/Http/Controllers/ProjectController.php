@@ -879,38 +879,59 @@ class ProjectController extends Controller
 
 
 
-    /*     public function taskCreate(Request $request, $project, $task = null)
-{
-    $id = Hashids::decode($project)[0];
-    $tasks = Task::where('project_id', $id)->get();
-    $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
+    public function taskCreate(Request $request, $project, $task = null)
+    {
+        $id        = Hashids::decode($project)[0];
+        $project = $request->project;
+        //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
+        ($tasks     = Task::where('project_id', $id)->get());
+        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
+
+        ($request = Project::find($id));
+
+        // Sum the task_budget_it_operating for all tasks
+        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+
+        // Sum the task_budget_it_investment for all tasks
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+
+        // Sum the task_budget_gov_utility for all tasks
+        $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
 
 
-    $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
-    $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
-    $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
+        if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        }
 
-    if ($task) {
-        $taskId = Hashids::decode($task)[0];
-        $task = Task::find($taskId);
-    } else {
-        $task = null;
+
+        //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
+
+
+        return view('app.projects.tasks.create', compact('request', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 
-    return view('app.projects.tasks.create', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
-}
- */
 
     public function taskCreateTo(Request $request, $project, $task = null)
     {
         $id = Hashids::decode($project)[0];
-        $tasks = Task::where('project_id', $id)->get();
-        $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
-        $requestProject = Project::find($id);
 
-        $sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating');
-        $sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment');
-        $sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility');
+    ($tasks = Task::where('project_id', $id)->get());
+        $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
+        ($request = Project::find($id));
+
+ // Get the task_budget_it_operating for $task->task_id tasks
+$task_budget_it_operating = $tasks->where('task_parent', null)->pluck('task_budget_it_operating')->sum();
+
+// Get the task_budget_it_investment for $task->task_id tasks
+$task_budget_it_investment = $tasks->where('task_parent', null)->pluck('task_budget_it_investment')->sum();
+
+// Get the task_budget_gov_utility for $task->task_id tasks
+$task_budget_gov_utility = $tasks->where('task_parent', null)->pluck('task_budget_gov_utility')->sum();
+
+
 
         if ($task) {
             $taskId = Hashids::decode($task)[0];
@@ -922,7 +943,7 @@ class ProjectController extends Controller
 
         // dd($tasks);
 
-        return view('app.projects.tasks.createto', compact('requestProject', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+        return view('app.projects.tasks.createto', compact('request', 'contracts', 'project', 'tasks', 'task', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
 
 
@@ -1390,9 +1411,12 @@ class ProjectController extends Controller
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
             ->get();
-        $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
-        return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks'));
+        ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
+        ($contract = $contracts->toJson()); // Convert the collection to JSON
+        //  $contract = $contracts->first();
+
+        return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks', 'contract'));
     }
     /**
      * Remove the specified resource from storage.
@@ -1439,7 +1463,7 @@ class ProjectController extends Controller
         $request->validate([
             'task_name' => 'required',
             'task_start_date' => 'required|date_format:d/m/Y',
-            //          'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+            // 'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             //'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->input('budget_it_operating') - $sum_task_budget_it_operating),
             //'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->input('budget_it_investment') - $sum_task_budget_it_investment),
             //'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->input('budget_gov_utility') - $sum_task_budget_gov_utility),
@@ -1468,7 +1492,7 @@ class ProjectController extends Controller
  */
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
-        // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+        //$pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
 
         if ($start_date_obj === false || $end_date_obj === false) {
             // Handle date conversion error
@@ -1519,7 +1543,8 @@ class ProjectController extends Controller
         $task->task_cost_it_operating = $task_cost_it_operating;
         $task->task_cost_gov_utility =  $task_cost_gov_utility;
         $task->task_cost_it_investment = $task_cost_it_investment;
-
+        $task->task_pay = $task_pay;
+        $task->task_type = $request->input('task_type');
         // Update other task attributes as needed
 
         if ($task->save()) {

@@ -1,7 +1,7 @@
 <x-app-layout>
-    <x-slot name="content">
+    <x-slot:content>
         <div class="container-fluid">
-            {{ Breadcrumbs::render('project.task.create', $project) }}
+            {{ Breadcrumbs::render('project.task.create',$project) }}
             <div class="animated fadeIn">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -14,18 +14,9 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มกิจกรรม') }}">
+                        <x-card title="{{ __('เพิ่มกิจกรรม ') }}">
                             <form method="POST" action="{{ route('project.task.create', $project) }}" class="row g-3 needs-validation" novalidate>
                                 @csrf
-
-                                <input {{-- type="hidden" --}} class="form-control" id="task_parent_display"
-                                value="{{ $task->task_name }}" disabled readonly>
-
-                            <input {{--  type="hidden" --}}  class="form-control" id="task_parent" name="task_parent"
-                                value="{{ $task->task_id }}">
-
-
-
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
@@ -34,7 +25,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-3 d-none">
+                                <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
@@ -74,7 +65,39 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <h4>งบประมาณ</h4>
+                                    <div class="row">
+                                        <div class="row">
+                                            <div class="col-md-4 needs-validation" novalidate>
+                                                <label for="task_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="task_budget_it_operating" name="task_budget_it_operating" min="0" >
 
+
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบกลาง ICT') }}
+                                                </div>
+                                                ไม่เกิน {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating) }} บาท
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="task_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="task_budget_it_investment" name="task_budget_it_investment" min="0" >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบดำเนินงาน') }}
+                                                </div>
+                                                ไม่เกิน {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment) }} บาท
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="task_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0" >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                </div>
+                                                ไม่เกิน {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility) }} บาท
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button link="{{ route('project.show', $project) }}" class="text-black btn-light">{{ __('coreuiforms.return') }}</x-button>
@@ -84,10 +107,10 @@
                 </div>
             </div>
         </div>
-    </x-slot>
-    <x-slot name="css">
-    </x-slot>
-    <x-slot name="javascript">
+    </x-slot:content>
+    <x-slot:css>
+    </x-slot:css>
+    <x-slot:javascript>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -139,7 +162,5 @@
                     })
             })()
         </script>
-    </x-slot>
+    </x-slot:javascript>
 </x-app-layout>
-
-

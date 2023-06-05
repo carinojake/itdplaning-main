@@ -442,10 +442,13 @@ class ContractController extends Controller
 
         $tasksData = $tasksData->map(function ($task) {
             return [
+                'id' => $task->task_id,
                 'project_fiscal_year' => $task->project_fiscal_year,
                 'project_id' => $task->project_id,
+                'task_parent_id' => $task->task_parent,
+
                 'project_name' => $task->project_name,
-                'id' => $task->task_id,
+
                 'text' => $task->task_name,
                 'budget_it_operating' => $task->task_budget_it_operating,
                 'budget_it_investment' => $task->task_budget_it_investment,
@@ -453,7 +456,13 @@ class ContractController extends Controller
             ];
         });
 
-     // dd($tasksData);
+
+
+
+
+
+
+    // dd($tasksData);
 
         $tasksJson = json_encode($tasksData);
 
@@ -470,7 +479,11 @@ class ContractController extends Controller
 
     public function store(Request $request)
     {
+
         $contract = new Contract;
+        $task = new Task;
+       // $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
+
         $messages = [
             //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
@@ -710,7 +723,18 @@ class ContractController extends Controller
         //
 
         if ($contract->save()) {
-            if(is_array($request->tasks) || is_object($request->tasks)) {
+
+
+                   //insert contract
+                   if ($request->input('task_parent')) {
+                    //insert contract
+                    $contract_has_task = new ContractHasTask;
+                    $contract_has_task->contract_id = $contract->contract_id;
+                    $contract_has_task->task_id = $request->input('task_parent');
+                    $contract_has_task->save();
+                }
+
+              if(is_array($request->tasks) || is_object($request->tasks)) {
                 foreach($request->tasks as $task){
                     $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
 
@@ -754,6 +778,8 @@ class ContractController extends Controller
             return redirect()->route('contract.index');
         }
     }
+
+
     public function download($id)
     {
         $contract = Contract::findOrFail($id);

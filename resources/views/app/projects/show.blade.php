@@ -730,7 +730,7 @@
                                 <tbody>
                                     @foreach ($project->main_task as $task)
                                         <tr>
-                                           {{--  <td> </td> --}}
+                                            {{--  <td> </td> --}}
                                             <td>
                                                 {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
                                                 @if ($task->contract->count() > 0)
@@ -748,13 +748,13 @@
                                                             <li>
 
                                                                 {{ $subtask->task_name }}
-                                                              {{--   <span
+                                                                {{--   <span
                                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                                                                 <span
                                                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span> --}}
                                                                 @if ($subtask->contract->count() > 0)
                                                                     @foreach ($subtask->contract as $contract)
-                                                                       {{--  <a
+                                                                        {{--  <a
                                                                             href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
                                                                             <span
                                                                                 class="badge bg-warning">{{ $contract->contract_number }}</span>
@@ -762,11 +762,11 @@
 
 
                                                                         <!-- Button trigger modal -->
-                                                                        <button type="button" class="btn btn-success text-white"
+                                                                        <button type="button"
+                                                                            class="btn btn-success text-white"
                                                                             data-coreui-toggle="modal"
-
                                                                             data-coreui-target="#exampleModal{{ $contract->hashid }}">
-                                                                           สญ.ที่ {{ $contract->contract_number }}
+                                                                            สญ.ที่ {{ $contract->contract_number }}
 
                                                                         </button>
 
@@ -1195,16 +1195,13 @@
                 ]
             };
             var rightGridColumns = {
-                columns: [
-
-                    {
+                columns: [{
                         name: "budget",
                         width: 120,
                         label: "งบประมาณ",
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.budget) {
                                 return new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -1214,9 +1211,7 @@
                                 return '-';
                             }
                         }
-
                     },
-
                     {
                         name: "cost_pa",
                         width: 150,
@@ -1224,14 +1219,11 @@
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 1) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost) + '</span>';
-
-
                             } else if (task.cost_pa_1 > 0) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -1240,8 +1232,6 @@
                             } else {
                                 return '-';
                             }
-
-
                         }
                     },
                     {
@@ -1251,7 +1241,6 @@
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.task_type == 2) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -1265,69 +1254,75 @@
                             } else {
                                 return '-';
                             }
-
-
-
-
-
                         }
                     },
-
-
                     {
                         name: "-",
                         width: 100,
                         label: "รอการเบิกจ่าย",
                         tree: true,
                         resize: true,
-
                         template: function(task) {
                             if (task.total_pay > 0) {
-                                return '<span  class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_cost - task.total_pay) + '</span>';
+                            }
 
-
-
-                            } else if (task.task_total_pay > 0) {
+                            else if (task.task_total_pay > 0) {
                                 let remainingCost = task.cost - task.task_total_pay;
-
                                 if (remainingCost > 0) {
                                     return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                         style: 'currency',
                                         currency: 'THB'
                                     }).format(remainingCost) + '</span>';
+                                }
 
 
-
-
-                                } else {
+                                else {
                                     return '-';
                                 }
-                            } else if (task.task_type == 1) {
-                                if (task.cost - task.pay > 0) {
-                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format(task.cost - task.pay) + '</span>';
-                                } else {
-                                    return '-';
-                                }
-                            } else if (task.task_type == 2) {
-                                if (task.cost - task.pay > 0) {
-                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format(task.cost - task.pay) + '</span>';
-                                } else {
-                                    return '-';
-                                }
-                            } else {
-                                return '-';
                             }
 
+                            else if (task.task_type == 1) {
+                                if (task.cost - task.pay > 0) {
+                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.cost - task.pay) + '</span>';
+                                } else {
+                                    return '-';
+                                }
+                            }
 
+                            else if (task.task_type == 2) {
+                                if (task.cost - task.pay > 0) {
+                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.cost - task.pay) + '</span>';
+                                }
+                                else {
+                                    return '';
+                                }}
+
+
+                                else if (task.cost > 0) {
+                                if (task.cost - task.pay ) {
+                                    return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.cost - task.pay) + '</span>';
+                                }
+                                else {
+                                    return '';
+                                }}
+
+
+                                else {
+                                return '00';
+                            }
                         }
                     },
                     {
@@ -1337,8 +1332,6 @@
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-
                             if (task.task_total_pay > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -1362,7 +1355,6 @@
                             } else {
                                 return '-';
                             }
-
                         }
                     },
                     {
@@ -1371,24 +1363,16 @@
                         label: "คงเหลือ",
                         tree: true,
                         resize: true,
-
                         template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.balance > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.balance) + '</span>';
-                            } else if (task.balance = 0) {
+                            } else if (task.balance == 0) {
                                 return '-';
-                            } else
-
-
-
-
-                            {
-
+                            } else {
                                 return '-';
                             }
                         }
@@ -1440,35 +1424,35 @@
                 if (budget) {
                     html += '<table class="table table-sm " style="font-size:9px">';
                     html += '<tr class="text-center align-middle">\
-                                                                        <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                                        <td colspan="2">งบกลาง IT</td>\
-                                                                        <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                                      </tr>';
+                                                                                <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                                                <td colspan="2">งบกลาง IT</td>\
+                                                                                <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                                              </tr>';
                     html += '<tr>\
-                                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                        <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                        <td>ค่าสาธารณูปโภค</td>\
-                                                                        <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                        <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                      </tr>';
+                                                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                                <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                                <td>ค่าสาธารณูปโภค</td>\
+                                                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                                <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                              </tr>';
                     if (task.type == 'task') {
                         html += '<tr class="text-end">\
-                                                                        <td>-' + budget_gov_operating + '</td>\
-                                                                        <td>' + budget_gov_investment + '</td>\
-                                                                        <td>' + budget_gov_utility + '</td>\
-                                                                        <td>' + budget_it_operating + '</td>\
-                                                                        <td>' + budget_it_investment + '</td>\
-                                                                        <td class="text-success">' + budget + '</td>\
-                                                                      </tr>';
+                                                                                <td>-' + budget_gov_operating + '</td>\
+                                                                                <td>' + budget_gov_investment + '</td>\
+                                                                                <td>' + budget_gov_utility + '</td>\
+                                                                                <td>' + budget_it_operating + '</td>\
+                                                                                <td>' + budget_it_investment + '</td>\
+                                                                                <td class="text-success">' + budget + '</td>\
+                                                                              </tr>';
                     } else {
                         html += '<tr class="text-end">\
-                                                                        <td>' + budget_gov_operating + '</td>\
-                                                                        <td>' + budget_gov_investment + '</td>\
-                                                                        <td>' + budget_gov_utility + '</td>\
-                                                                        <td>' + budget_it_operating + '</td>\
-                                                                        <td>' + budget_it_investment + '</td>\
-                                                                        <td class="text-success">' + budget + '</td>\
-                                                                      </tr>';
+                                                                                <td>' + budget_gov_operating + '</td>\
+                                                                                <td>' + budget_gov_investment + '</td>\
+                                                                                <td>' + budget_gov_utility + '</td>\
+                                                                                <td>' + budget_it_operating + '</td>\
+                                                                                <td>' + budget_it_investment + '</td>\
+                                                                                <td class="text-success">' + budget + '</td>\
+                                                                              </tr>';
                     }
                     html += '</table>';
                 }

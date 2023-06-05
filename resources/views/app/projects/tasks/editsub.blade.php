@@ -90,6 +90,10 @@
                                         Name: {{ session('contract_name') }}
                                     @endif
                                     <div class="row">
+
+
+
+
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <label for="task_contract"
