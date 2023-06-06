@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Libraries\Helper;
 use App\Models\Contract;
-use App\Models\ContractHasTask;
+
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Taskcon;
+use App\Models\ContractHasTask;
+use App\Models\ContractHasTaskcon;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
@@ -215,14 +217,14 @@ class ProjectController extends Controller
             'budget'                => $__budget,
             'balance'               => $__balance,
             'pbalance'               => $__balance,
-            //'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'project_cost_disbursement'     => $project['project_cost_disbursemen'],
             'total_cost'                => $project['total_cost'],
             'cost'                  => $project['project_cost'],
             'cost_pa_1'             => $project['cost_pa_1'],
             'cost_no_pa_2'             => $project['cost_no_pa_2'],
-            // 'cost_disbursement'     => $project['cost_disbursement'],
+             'cost_disbursement'     => $project['cost_disbursement'],
 
-            // 'pay'                   => $project['pay'],
+             'pay'                   => $project['pay'],
             'total_pay'              => $project['total_pay'],
             'owner'                 => $project['project_owner'],
             'open'                  => true,
@@ -528,7 +530,7 @@ class ProjectController extends Controller
 
 
 
-        ($gantt);
+       ($gantt);
 
         $gantt = json_encode($gantt);
 
@@ -843,11 +845,6 @@ class ProjectController extends Controller
             ->where('projects.project_id', $project->project_id)
             ->where('tasks.task_id', $task->task_id)
             ->first());
-
-
-
-
-
 
 
         ($results = Contract::join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')

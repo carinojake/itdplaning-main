@@ -100,7 +100,7 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                            <div class=" d-none col-md-2">
+                                            <div class="  col-md-2">
                                                 <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label>
 
                                                 <div >

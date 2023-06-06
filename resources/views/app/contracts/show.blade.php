@@ -371,7 +371,7 @@
                                         <th>วันที่</th>
                                         <th>การเบิกจ่าย</th>
                                         <th>วันที่ ใช้จ่าย</th>
-                                        <th width="200"></th>
+                                        <th width="200"> work</th>
                                     </tr>
                                 </thead>
                                 <tbody>

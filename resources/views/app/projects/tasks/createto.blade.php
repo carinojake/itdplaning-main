@@ -63,7 +63,7 @@
 
                                 <div class="row mt-3">
 
-                                    <div class="  d-none col-md-2">
+                                    <div class="  col-md-2">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
