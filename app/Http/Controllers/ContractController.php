@@ -181,6 +181,8 @@ class ContractController extends Controller
             'contract_er_budget'    => $contract['contract_er_budget'],
             'contract_cn_budget'    => $contract['contract_cn_budget'],
             'contract_oe_budget'    => $contract['contract_oe_budget'],
+            'contract_ba_budget'    => $contract['contract_ba_budget'],
+            'contract_bd_budget'    => $contract['contract_bd_budget'],
             'contract_pay'          => $contract['contract_pay'],
 
             'total_cost'            => $contractgannt['total_cost'],
@@ -352,7 +354,7 @@ class ContractController extends Controller
 
 
 
-      //  dd($gantt);
+        dd($gantt);
 
         ($gantt = json_encode($gantt));
 

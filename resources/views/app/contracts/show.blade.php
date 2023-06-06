@@ -78,11 +78,6 @@
 
 
 
-
-
-
-
-
                             <table class="table callout callout-danger">
                                 <thead>
                                     <tr>
@@ -111,12 +106,12 @@
                                                 <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                     class="text-white btn btn-primary"><i class="cil-folder-open "></i>
                                                     Task</a>
-                                                {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
-                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-                          @method('DELETE')
-                          @csrf
-                          <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
-                        </form> --}}
+                                                                                {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
+                                                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
+                                                        </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -124,7 +119,7 @@
                             </table>
 
 
-                            <div class="container">
+
                                 <div class="callout callout-info">
                                 <div class="row ">
                                     <div class="col-sm">
@@ -250,117 +245,8 @@
                                             <div class="col-6">
                                                 {{ number_format($contract->contract_peryear_pa_budget) }}</div>
                                         </div>
-
-
-                                    </div>
-
-
-                                </div>
-
-                                        {{-- <!--<div class="row">
-                <div class="col-6">{{ __('refund_pa_status') }}</div>
-                <div class="col-6">{{ $contract->contract_refund_pa_status }}</div>
-              </div>-->
-                                        <div class="row">
-                                            <div class="col-6">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
-                                            <div class="col-6">{{ $contract->contract_owner }}</div>
-                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-6">{{ __('สัญญา File') }}</div>
-                                    <div class="col-6">
-                                        @if ($contract->contract_file)
-                                            <a href="{{ url('uploads/contracts/' . $contract->contract_file) }}"
-                                                target="_blank">{{ __('Download Contract File') }}</a>
-                                        @else
-                                            {{ __('No file uploaded') }}
-                                        @endif
-                                    </div>
-                                </div>
-
-
-                                <!-- Add this for pr_file -->
-                                <div class="row">
-                                    <div class="col-6">{{ __('PR File') }}</div>
-                                    <div class="col-6">
-                                        @if ($contract->pr_file)
-                                            <a href="{{ url('uploads/contracts/' . $contract->pr_file) }}"
-                                                target="_blank">{{ __('Download PR File') }}</a>
-                                        @else
-                                            {{ __('No file uploaded') }}
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <!-- Add this for pa_file -->
-                                <div class="row">
-                                    <div class="col-6">{{ __('PA File') }}</div>
-                                    <div class="col-6">
-                                        @if ($contract->pa_file)
-                                            <a href="{{ url('uploads/contracts/' . $contract->pa_file) }}"
-                                                target="_blank">{{ __('Download PA File') }}</a>
-                                        @else
-                                            {{ __('No file uploaded') }}
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <!-- Add this for cn_file -->
-                                <div class="row">
-                                    <div class="col-6">{{ __('CN File') }}</div>
-                                    <div class="col-6">
-                                        @if ($contract->cn_file)
-                                            <a href="{{ url('uploads/contracts/' . $contract->cn_file) }}"
-                                                target="_blank">{{ __('Download CN File') }}</a>
-                                        @else
-                                            {{ __('No file uploaded') }}
-                                        @endif
-                                    </div>
-                                </div> --}}
-
-
-
-
-
-
-
-                            {{--    <table class="table">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Task Name</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach ($contract->taskcon as $taskcon)
-                    <tr>
-                      <td></td>
-                      <td>
-                        {{ $taskcon['taskcon_name'] }}<br>
-                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_start_date) }}</span>
-                        <span class="badge bg-primary">{{ \Helper::date($taskcon->taskcon_end_date) }}</span>
-                      </td>
-                      <td class="text-end">
-                        <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> ข้อมูล</a>
-                        <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Taske</a>
-                        <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}" class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
-                        <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
-                         <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
-                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-                          @method('DELETE')
-                          @csrf
-                          <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                  @endforeach
-                </tbody>
-              </table>   --}}
-
-
             </div>
 
                             <table class="table callout callout-primary">
@@ -530,12 +416,23 @@
                         tree: true,
                         template: function(task) {
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.contract_pa_budget) {
+                            if (task.type == 'project') {
                                 return new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.contract_pa_budget);
-                            } else {
+                            }  else if (task.type == 'task' ) {
+                                return new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget);
+                            }
+
+
+
+
+
+                            else {
                                 return '';
                             }
                         }
@@ -548,11 +445,19 @@
                         resize: true,
 
                         template: function(task) {
-                            if (task.cost - task.pay > 0) {
+                            if (task.type == 'project') {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_cost - task.total_pay) + '</span>';}
+
+                                else if (task.cost - task.pay > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost - task.pay) + '</span>';}
+
+
                                 else {
                                 return '-';
                             }
