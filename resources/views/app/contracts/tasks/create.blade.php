@@ -78,8 +78,7 @@
                         <label for="task_start_date"
                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                             class="text-danger"></span>
-                        <input class="form-control" id="taskcon_start_date" name="taskcon_start_date"
-                            >
+                        <input class="form-control" id="taskcon_start_date" name="taskcon_start_date" >
                     </div>
                     <div class="col-md-6">
                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
