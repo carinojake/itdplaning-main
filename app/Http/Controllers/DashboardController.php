@@ -797,6 +797,23 @@ as d')
 
 
 
+        $operating_taskcon_pay_sum_1 = DB::table('taskcons')
+    ->selectRaw('SUM(COALESCE(taskcon_pay, 0)) as iv')
+    ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+    ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+    ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+    ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+    ->where('taskcons.taskcon_cost_it_operating', '>', 1)
+    ->where('taskcons.taskcon_type', 1)
+    ->where('projects.project_fiscal_year', $fiscal_year)
+    ->get();
+
+$json = json_decode($operating_taskcon_pay_sum_1);
+$otpsataskcon1 = $json[0]->iv;
+($otpsataskcon1 = (float) $otpsataskcon1);
+
+
+
           ($operating_pay_sum_2 = DB::table('tasks')
            ->selectRaw('SUM(COALESCE(task_pay,0)) as iv2')
            ->where ('tasks.task_cost_it_operating','>', 2)
@@ -807,6 +824,32 @@ as d')
            ($json = json_decode($operating_pay_sum_2));
           ($otpsa2 = $json[0]->iv2);
           ($otpsa2 = (float)$otpsa2);
+
+          $operating_taskcon_pay_sum_2 = DB::table('taskcons')
+    ->selectRaw('SUM(COALESCE(taskcon_pay, 0)) as iv')
+    ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+    ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+    ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+    ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+    ->where('taskcons.taskcon_cost_it_operating', '>', 2)
+    ->where('taskcons.taskcon_type', 2)
+    ->where('projects.project_fiscal_year', $fiscal_year)
+    ->get();
+
+$json = json_decode($operating_taskcon_pay_sum_2);
+$otpsataskcon2 = $json[0]->iv;
+($otpsataskcon2 = (float) $otpsataskcon2);
+
+
+
+
+
+
+
+
+
+
+
 
             ($operating_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As ospa')
@@ -829,6 +872,9 @@ as d')
              ($json = json_decode($operating_sum));
              ($osa = $json[0]->osa);
             ($osa = (float)$osa);
+
+
+
             ($investment_pa_sum = DB::table('tasks')
            ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
             ->where('tasks.task_type', 1)
@@ -838,7 +884,8 @@ as d')
             ($json = json_decode($investment_pa_sum));
             ($ispa = $json[0]->ispa);
            ($ispa = (float)$ispa);
-            ($investment_sum = DB::table('tasks')
+
+           ($investment_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As isa')
             ->where('tasks.task_type',2)
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
@@ -847,7 +894,8 @@ as d')
             ($json = json_decode($investment_sum));
             ($isa = $json[0]->isa);
            ($isa = (float)$isa);
-            ($investment_total_pay_sum = DB::table('tasks')
+
+           ($investment_total_pay_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
             ->where('tasks.task_budget_gov_investment')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
@@ -856,6 +904,39 @@ as d')
             ($json = json_decode($investment_total_pay_sum));
             ($itpsa = $json[0]->iv);
            ($itpsa = (float)$itpsa);
+
+
+
+           ($investment_total_pay_sum = DB::table('taskcons')
+           ->selectRaw('SUM(COALESCE(taskcon_pay,0)) as iv')
+           ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+           ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+           ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+           ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+           ->where('taskcons.taskcon_budget_gov_investment')
+
+         //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+           ->where('project_fiscal_year',  $fiscal_year)
+           ->get());
+           ($json = json_decode($investment_total_pay_sum));
+           ($itpsa = $json[0]->iv);
+         dd ($itpsa = (float)$itpsa);
+
+   /*   ->selectRaw('SUM(COALESCE(taskcon_pay, 0)) as iv')
+        ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+        ->where('taskcons.taskcon_cost_it_operating', '>', 2)
+        ->where('taskcons.taskcon_type', 2)
+        ->where('projects.project_fiscal_year', $fiscal_year)
+        ->get();
+ */
+
+
+
+
+
 
 
            ($investment_pay_sum_1 = DB::table('tasks')
@@ -918,6 +999,31 @@ as d')
         ($utsc_pay = (float)$utsc_pay);
 
 
+        ($ut_pay_sum = DB::table('taskcons')
+        ->selectRaw('SUM(COALESCE(taskcon_pay,0)) As utsc_pay')
+        //->where('taskcons.taskcon_type',2)
+        //->whereNotNull('taskcons.taskcon_cost_gov_utility')
+        ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+        ->where('project_fiscal_year',  $fiscal_year)
+        ->get());
+        ($json = json_decode($ut_pay_sum));
+        ($utsc_pay = $json[0]->utsc_pay);
+    dd($utsc_taskcon_pay = (float)$utsc_pay);
+
+
+      /*   ->selectRaw('SUM(COALESCE(taskcon_pay, 0)) as iv')
+        ->leftJoin('contracts', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->leftJoin('contract_has_tasks', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->leftJoin('tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
+        ->where('taskcons.taskcon_cost_it_operating', '>', 2)
+        ->where('taskcons.taskcon_type', 2)
+        ->where('projects.project_fiscal_year', $fiscal_year)
+        ->get();
+ */
 
 
 
@@ -949,6 +1055,12 @@ as d')
           ->groupBy('task_parent')
           ->get()
       );
+
+
+
+
+
+
 
             ($total_expenses = (($osa)+ ($isa)+($utsc)));
 

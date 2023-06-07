@@ -765,8 +765,13 @@
                                                                                class="badge btn btn-success text-white "
                                                                         data-coreui-toggle="modal"
                                                                         data-coreui-target="#exampleModal{{ $contract->hashid }}">
-                                                                        สญ.ที่ {{  strtolower($contract->contract_number)  }}
 
+
+                                                                         @if (($contract->contract_type == 4))
+                                                                         {{ \Helper::contractType($contract->contract_type) }}"_"{{  strtolower($contract->contract_number)  }}
+                                                                         @else
+                                                                            สญ.ที่ {{  strtolower($contract->contract_number)  }}
+                                                                         @endif
                                                                     </button>
 
                                                                     <!-- Modal -->

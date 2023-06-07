@@ -130,7 +130,12 @@
                                             @if ($subtask->contract->count() > 0)
                                                 @foreach ($subtask->contract as $contract)
                                                     <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $contract->hashid }}">
-                                                        สญ.ที่ {{ $contract->contract_number }}
+
+                                                        @if (($contract->contract_type == 4))
+                                                        {{ \Helper::contractType($contract->contract_type) }}"_"{{  strtolower($contract->contract_number)  }}
+                                                        @else
+                                                           สญ.ที่ {{  strtolower($contract->contract_number)  }}
+                                                        @endif
                                                     </button>
 
                                                     <!-- Modal -->
