@@ -145,53 +145,83 @@ class ProjectController extends Controller
     {
         $id = Hashids::decode($project)[0];
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
-        ($project = Project::select('projects.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+        ($project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*'/* , 'a.total_cost', 'at.total_taskcon_pay', 'at.total_taskcon_cost', 'a.total_pay',     'ab.cost_pa_1', 'ac.cost_no_pa_2' */)
 
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
-         sum(COALESCE(tasks.task_cost_gov_utility,0))
-   +sum(COALESCE(tasks.task_cost_it_operating,0))
-   +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
-   sum( COALESCE(tasks.task_pay,0)) as total_pay
-    from tasks  group by tasks.project_id) as a'),
-                'a.project_id',
-                '=',
-                'projects.project_id'
-            )
 
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
-        sum(COALESCE(tasks.task_cost_gov_utility,0))
-   +sum(COALESCE(tasks.task_cost_it_operating,0))
-   +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
-   sum( COALESCE(tasks.task_pay,0)) as total_pay
-   from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
-                'ab.project_id',
-                '=',
-                'projects.project_id'
-            )
+->leftJoin('tasks', 'tasks.project_id', '=', 'projects.project_id')
+->leftJoin('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+->leftJoin('contracts', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+->leftJoin('taskcons', 'taskcons.contract_id', '=', 'contracts.contract_id')
 
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
-   sum(COALESCE(tasks.task_cost_gov_utility,0))
-   +sum(COALESCE(tasks.task_cost_it_operating,0))
-   +sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
-   sum( COALESCE(tasks.task_pay,0)) as total_pay
-   from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
-                'ac.project_id',
-                '=',
-                'projects.project_id'
-            )
+->leftJoin(
+    DB::raw('(select  taskcons.contract_id,
+sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
++sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
++sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_taskcon_cost ,
+sum( COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay
+from taskcons  group by taskcons.contract_id) as at'),
+    'at.contract_id',
+    '=',
+    'contracts.contract_id'
+)
 
-            // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
-            //->groupBy('projects.project_id')
-            ->where('projects.project_id', $id)
-            ->first()
 
-            // ->toArray()
-        );
-        //dd($project);
 
+  ->leftJoin(
+        DB::raw('(select tasks.project_id,
+ sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))
++sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+sum( COALESCE(tasks.task_pay,0)) as total_pay
+from tasks  group by tasks.project_id) as a'),
+        'a.project_id',
+        '=',
+        'projects.project_id'
+    )
+
+    ->leftJoin(
+        DB::raw('(select tasks.project_id,
+sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))
++sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+sum( COALESCE(tasks.task_pay,0)) as total_pay
+from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
+        'ab.project_id',
+        '=',
+        'projects.project_id'
+    )
+
+    ->leftJoin(
+        DB::raw('(select tasks.project_id,
+sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))
++sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
+sum( COALESCE(tasks.task_pay,0)) as total_pay
+from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
+        'ac.project_id',
+        '=',
+        'projects.project_id'
+    )
+
+    // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
+    //->groupBy('projects.project_id')
+    ->where('projects.project_id', $id)
+    ->first()
+
+    // ->toArray()
+);
+
+/*  $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
+->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
+->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+->join('contracts', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+->join('taskcons', 'taskcons.contract_id', '=', 'contracts.contract_id')
+->where('projects.project_id', $id)
+->first()
+->toArray()
+; */
+
+    //dd($project);
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
@@ -530,7 +560,7 @@ class ProjectController extends Controller
 
 
 
-       ($gantt);
+      // dd($gantt);
 
         $gantt = json_encode($gantt);
 

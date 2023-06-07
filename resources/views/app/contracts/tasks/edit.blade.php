@@ -46,12 +46,12 @@
                                 </div>
 
 
-                                <div class="row">
+                            {{--     <div class="row">
                                     <div class="col-md-6 mt-3">
                                         <label for="taskcon_start_date"
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                                             class="text-danger">*</span>
-                                        {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                                         <div data-coreui-toggle="date-picker" id="taskcon_start_date"
                                             data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"
                                             data-coreui-date="{{ date('m/d/Y', $taskcon->taskcon_start_date) }}">
@@ -62,50 +62,59 @@
                                         <label for="taskcon_end_date"
                                             class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
                                             class="text-danger">*</span>
-                                        {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+
                                         <div data-coreui-toggle="date-picker" id="taskcon_end_date"
                                             data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"
                                             data-coreui-date="{{ date('m/d/Y', $taskcon->taskcon_end_date) }}">
                                         </div>
                                     </div>
                                 </div>
+ --}}
 
 
-                                <div class="row">
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+
+                                        <input class="form-control" id="taskcon_start_date" name="taskcon_start_date"
+                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}">
+                                </div>
+
+
+                                    <div class="col-md-6">
+                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                     {{--    <span class="text-danger"></span> --}}
+                                     <input class="form-control" id="taskcon_end_date" name="taskcon_end_date"
+                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}">
+                             </div>
+                                </div>
+
+                                <div class="row mt-3">
                                     <h4>งบประมาณ</h4>
 
-                                    <div class="row">
+                                    <div class="row mt-3">
                                         <div class="col-6">
-                                            <strong>เงินงบประมาณ </strong>
-                                            <div class="col-md-12">
-                                                <label for="taskcon_budget_it_operating"
-                                                    class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_budget_it_operating"
-                                                    name="taskcon_budget_it_operating" min="0"
-                                                    value="{{ $taskcon->taskcon_budget_it_operating }}">
+                                            <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
+
+                                            <div class="col-md-12 mt-3">
+                                                <label for="taskcon_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_operating" name="taskcon_budget_it_operating" min="0" value="{{ $taskcon->taskcon_budget_it_operating }}">
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
                                             </div>
+
                                             <div class="col-md-12">
-                                                <label for="taskcon_budget_it_investment"
-                                                    class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_budget_it_investment"
-                                                    name="taskcon_budget_it_investment" min="0"
-                                                    value="{{ $taskcon->taskcon_budget_it_investment }}">
+                                                <label for="taskcon_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
                                             </div>
+
                                             <div class="col-md-12">
-                                                <label for="taskcon_budget_gov_utility"
-                                                    class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_budget_gov_utility"
-                                                    name="taskcon_budget_gov_utility" min="0"
-                                                    value="{{ $taskcon->taskcon_budget_gov_utility }}">
+                                                <label for="taskcon_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
@@ -113,40 +122,25 @@
                                         </div>
 
                                         <div class="col-6">
-                                            <strong>ค่าใช้จ่าย</strong>
-                                            <div class="col-md-12">
-                                                <label for="taskcon_cost_it_operating"
-                                                    class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_cost_it_operating"
-                                                    name="taskcon_cost_it_operating" min="0"
-                                                    value="{{ $taskcon->taskcon_cost_it_operating }}">
+                                            <strong>ค่าใช้จ่าย  (งวด/ต่อครั้ง)</strong>
+                                            <div class="col-md-12 mt-3">
+                                                <label for="taskcon_cost_it_operating" class="form-label">{{ __('ค่าใช้จ่ายงบกลาง ICT') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
                                                 <div class="invalid-feedback">
-                                                    {{ __('งบกลาง ICT') }}
+                                                    {{ __('ค่าใช้จ่ายงบกลาง ICT') }}
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <label for="taskcon_cost_it_investment"
-                                                    class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_cost_it_investment"
-                                                    name="taskcon_cost_it_investment" min="0"
-                                                    value="{{ $taskcon->taskcon_cost_it_investment }}">
+                                                <label for="taskcon_cost_it_investment" class="form-label">{{ __('ค่าใช้จ่ายงบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
                                                 <div class="invalid-feedback">
-                                                    {{ __('งบดำเนินงาน') }}
+                                                    {{ __('ค่าใช้จ่ายงบดำเนินงาน') }}
                                                 </div>
                                             </div>
 
-
-
-
                                             <div class="col-md-12">
-                                                <label for="taskcon_cost_gov_utility"
-                                                    class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                <input type="number" placeholder="0.00" step="0.01"
-                                                    class="form-control" id="taskcon_cost_gov_utility"
-                                                    name="taskcon_cost_gov_utility" min="0"
-                                                    value="{{ $taskcon->taskcon_cost_gov_utility }}">
+                                                <label for="taskcon_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
@@ -155,85 +149,25 @@
 
                                     </div>
 
-
-
-
-                                </div>
-
-
-
-
-                                <div class="row mt-3">
-                                    <h4>เบิกจ่าย</h4>
-
-                                <div class="col-md-4">
-                                    <label for="taskcon_pay_date"
-                                        class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                    <div data-coreui-toggle="date-picker" id="taskcon_pay_date"
-                                        data-coreui-locale="th-TH" data-coreui-format="dd/MM/yyyy"
-                                        data-coreui-date="{{ $taskcon->taskcon_pay_date }}"></div>
-                                </div>
-
-
-
-                                <div class="col-md-4">
-                                    <label for="disbursement_taskcons_status"
-                                        class="form-label">{{ __('เลขที่ PP') }}</label>
-
-                                        <input type="text" class="form-control" id="disbursement_taskcons_status" name="disbursement_taskcons_status"
-                                            value="{{ $taskcon->disbursement_taskcons_status }}">
-                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-
-
-
-
-                                </div>
-
-
-
-                                <div class="col-md-4">
-                                    <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-                                    <input type="number" placeholder="0.00" step="0.01" class="form-control"
-                                        id="taskcon_pay" name="taskcon_pay" min="0"
-                                        value="{{ $taskcon->taskcon_pay }}">
-                                    <div class="invalid-feedback">
-                                        {{ __('เบิกจ่าย') }}
+                                    <div class="row mt-3">
+                                        <h4>เบิกจ่าย</h4>
+                                        <div class="col-md-6">
+                                            <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+                                            <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date" value="{{ \Helper::date4(date('Y-m-d', strtotime($taskcon->taskcon_pay_date))) }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
+                                            <div class="invalid-feedback">
+                                                {{ __('เบิกจ่าย') }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                </div>
-                                 {{--  <div class="col-md-12">
-                                    <label for="taskcon_parent"
-                                        class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label> <span
-                                        class="text-danger"></span>
-                                    <input type="text" class="form-control" id="taskcon_parent"
-                                        name="taskcon_parent" value="{{ $taskcon->taskcon_parent }}">
-                                     <select name="taskcon_parent" id="taskcon_parent" class="from-control">
-                          <option value="">ไม่มี</option>
-                           @foreach ($taskcons as $taskcon)
-                            <option value="{{ $taskcon->taskcon_id }}">{{ $taskcon->taskcon_name }}</option>
-                          @endforeach
-                        </select>
-                        <div class="invalid-feedback">
-                          {{ __('กิจกรรมย่อย') }}
-                        </div> --}}
-                                </div>
-
-
-                                {{-- <select name="taskcon_contract" id="taskcon_contract" class="from-control">
-                          <option value="">ไม่มี</option>
-                          @foreach ($contractcons as $contract)
-                            <option value="{{ $contract->contract_id }}">[{{ $contract->contract_number }}]{{ $contract->contract_name }}</option>
-                          @endforeach
-                        </select>
-                        <div class="invalid-feedback">
-                          {{ __('สัญญา') }}
-                        </div> --}}
 
 
 
-                    </div>
+
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
 
@@ -247,6 +181,49 @@
     <x-slot:css>
     </x-slot:css>
     <x-slot:javascript>
+        <script type="text/javascript">
+            $(function () {
+              var d = new Date();
+              var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
+
+              // กรณีต้องการใส่ปฏิทินลงไปมากกว่า 1 อันต่อหน้า ก็ให้มาเพิ่ม Code ที่บรรทัดด้านล่างด้วยครับ (1 ชุด = 1 ปฏิทิน)
+
+              $("#taskcon_start_date").datepicker({  changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay, dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+
+              $("#taskcon_end_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+
+                $("#taskcon_pay_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+
+
+
+
+
+                   $("#datepicker-en").datepicker({ dateFormat: 'dd/mm/yy'});
+
+              $("#inline").datepicker({ dateFormat: 'dd/mm/yy', inline: true });
+
+
+              });
+          </script>
+
+
+
+
+
+    <script>
+        $(document).ready(function(){
+       $(":input").inputmask();
+       });
+       </script>>
     </x-slot:javascript>
 </x-app-layout>

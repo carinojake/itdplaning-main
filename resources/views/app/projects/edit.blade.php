@@ -167,7 +167,6 @@
                                                     class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                 <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-
                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="budget_it_operating"
                                                     name="budget_it_operating" min="0"
@@ -176,6 +175,10 @@
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
                                             </div>
+
+
+
+
                                             <div class="col-4">
                                                 <label for="budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>

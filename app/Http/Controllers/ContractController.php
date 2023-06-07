@@ -15,6 +15,7 @@ use App\Models\ContractHasTaskcon;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+
 class ContractController extends Controller
 {
     /**
@@ -109,10 +110,10 @@ class ContractController extends Controller
 
 
         //    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
-       ($contractgannt = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay')
+        ($contractgannt = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay')
 
             ->leftJoin(
-                DB::raw('(select taskcons.contract_id,
+                DB::raw('(select  taskcons.contract_id,
             sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
           +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
            +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_cost ,
@@ -154,7 +155,7 @@ class ContractController extends Controller
 
             ->toArray()
         );
-        //dd  ($contract);
+         ($contractgannt);
 
         //   คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         //   (float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility'];
@@ -270,7 +271,7 @@ class ContractController extends Controller
 
 
 
-        //    dd  ($taskcons);
+
         ($taskcons = json_decode(json_encode($taskcons), true));
         foreach ($taskcons as $task) {
             (float) $__budget_gov = (float) $task['taskcon_budget_gov_operating'] + (float) $task['taskcon_budget_gov_utility'] + (float) $task['taskcon_budget_gov_investment'];
@@ -343,7 +344,7 @@ class ContractController extends Controller
         }
         // ($gntt[0]['cost']    =array_sum($__project_cost));
         //  ($gantt[0]['pay']    = array_sum($__project_pay));
-       // $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
+        // $gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost'];
 
 
 
@@ -354,12 +355,12 @@ class ContractController extends Controller
 
 
 
-        dd($gantt);
-
+      // dd($gantt);
+        //  dd  ($taskcons);
         ($gantt = json_encode($gantt));
 
 
-        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p', 'latestContract'));
+        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p', 'latestContract', 'taskcons'));
     }
 
 
@@ -436,9 +437,9 @@ class ContractController extends Controller
 
         $project_fiscal_year = $pro ? $pro->project_fiscal_year : null;
         $tasksData = DB::table('tasks')
-        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-        ->select('tasks.*', 'projects.*')
-        ->get();
+            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->select('tasks.*', 'projects.*')
+            ->get();
 
 
 
@@ -464,11 +465,11 @@ class ContractController extends Controller
 
 
 
-    // dd($tasksData);
+       //  dd($tasksData);
 
         $tasksJson = json_encode($tasksData);
 
-        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year','tasks','tasksJson'));
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year', 'tasks', 'tasksJson'));
     }
 
 
@@ -484,15 +485,15 @@ class ContractController extends Controller
 
         $contract = new Contract;
         $task = new Task;
-       // $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
+        // $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
 
         $messages = [
-            //'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
         $request->validate([
-        //    'contract_name'                   => 'required',
-         //   'contract_pr_budget' => 'numeric|nullable',
-           // 'contract_pa_budget' => 'numeric|nullable',
+            //   'contract_name'                   => 'required',
+            //   'contract_pr_budget' => 'numeric|nullable',
+            // 'contract_pa_budget' => 'numeric|nullable',
             // 'contract_number'                 => 'required',
             //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
@@ -500,7 +501,8 @@ class ContractController extends Controller
             //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
         ], $messages);
         //convert date
-        function convertToGregorianDate($input_date) {
+        function convertToGregorianDate($input_date)
+        {
             $date_object = date_create_from_format('d/m/Y', $input_date);
 
             if ($date_object !== false) {
@@ -727,17 +729,17 @@ class ContractController extends Controller
         if ($contract->save()) {
 
 
-                   //insert contract
-                   if ($request->input('task_parent')) {
-                    //insert contract
-                    $contract_has_task = new ContractHasTask;
-                    $contract_has_task->contract_id = $contract->contract_id;
-                    $contract_has_task->task_id = $request->input('task_parent');
-                    $contract_has_task->save();
-                }
+            //insert contract
+            if ($request->input('task_parent')) {
+                //insert contract
+                $contract_has_task = new ContractHasTask;
+                $contract_has_task->contract_id = $contract->contract_id;
+                $contract_has_task->task_id = $request->input('task_parent');
+                $contract_has_task->save();
+            }
 
-              if(is_array($request->tasks) || is_object($request->tasks)) {
-                foreach($request->tasks as $task){
+            if (is_array($request->tasks) || is_object($request->tasks)) {
+                foreach ($request->tasks as $task) {
                     $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
 
                     Taskcon::create([
@@ -833,7 +835,7 @@ class ContractController extends Controller
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
-        // $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d' );
+        $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d');
 
         $sign_date_input = $request->input('date-picker-contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
@@ -1041,10 +1043,12 @@ class ContractController extends Controller
 
         $taskcon->contract_id       = $id;
         $taskcon->taskcon_name        = $request->input('taskcon_name');
+
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+
         $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
         //convert input to decimal or set it to null if empty
 
@@ -1146,42 +1150,113 @@ class ContractController extends Controller
 
         $request->validate([
             'taskcon_name'                   => 'required',
-            'date-picker-taskcon_start_date' => 'required',
-            'date-picker-taskcon_end_date'   => 'required',
+            //  'date-picker-taskcon_start_date' => 'required',
+            //'date-picker-taskcon_end_date'   => 'required',
 
         ]);
 
         //convert date
-        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_start_date')), 'Y-m-d');
-        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_end_date')), 'Y-m-d');
-        $pay_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-taskcon_pay_date')), 'Y-m-d' );
-        $timestamp = strtotime($taskcon->taskcon_pay_date);
-        $data_coreui_date = date('m/d/Y', $timestamp);
+        // Convert date inputs to the correct format
+        $start_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_start_date'))->format('Y-m-d');
+        $end_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_end_date'))->format('Y-m-d');
+        $pay_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
+
+        $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
+        $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
+        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
+
+        if ($start_date_obj === false || $end_date_obj === false  || $pay_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+            $start_date_obj->modify('-543 years');
+            $end_date_obj->modify('-543 years');
+            $pay_date_obj->modify('-543 years');
+            $start_date = date_format($start_date_obj, 'Y-m-d');
+            $end_date = date_format($end_date_obj, 'Y-m-d');
+            $pay_date = date_format($pay_date_obj, 'Y-m-d');
+        }
+
+        // convert input to decimal or set it to null if empty
+        $taskcon_budget_it_operating = str_replace(',', '', $request->input('taskcon_budget_it_operating'));
+        $taskcon_budget_gov_utility = str_replace(',', '', $request->input('taskcon_budget_gov_utility'));
+        $taskcon_budget_it_investment = str_replace(',', '', $request->input('taskcon_budget_it_investment'));
+
+
+        $taskcon_cost_it_operating = str_replace(',', '', $request->input('taskcon_cost_it_operating'));
+        $taskcon_cost_gov_utility = str_replace(',', '', $request->input('taskcon_cost_gov_utility'));
+        $taskcon_cost_it_investment = str_replace(',', '', $request->input('taskcon_cost_it_investment'));
+
+        $taskcon_pay = str_replace(',', '', $request->input('taskcon_pay'));
+
+        if ($taskcon_budget_it_operating === '') {
+            $taskcon_budget_it_operating = null; // or '0'
+        }
+
+        if ($taskcon_budget_gov_utility === '') {
+            $taskcon_budget_gov_utility = null; // or '0'
+        }
+
+        if ($taskcon_budget_it_investment === '') {
+            $taskcon_budget_it_investment = null; // or '0'
+        }
+
+        if ($taskcon_cost_it_operating === '') {
+            $taskcon_cost_it_operating = null; // or '0'
+        }
+
+        if ($taskcon_cost_gov_utility === '') {
+            $taskcon_cost_gov_utility = null; // or '0'
+        }
+
+        if ($taskcon_cost_it_investment === '') {
+            $taskcon_cost_it_investment = null; // or '0'
+        }
+
+        if ($taskcon_pay === '') {
+            $taskcon_pay = null; // or '0'
+        }
+
+
+
 
 
         $taskcon->taskcon_id       = $id_taskcon;
         $taskcon->contract_id       = $id_contract;
         $taskcon->taskcon_name        = $request->input('taskcon_name');
         $taskcon->taskcon_status      = $request->input('taskcon_status');
+
+        /*         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
+        $taskcon->taskcon_start_date  = $start_date ;
+        $taskcon->taskcon_end_date    = $end_date ;
+        $taskcon->taskcon_pay_date     =  $pay_date ; */
+
+
+
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
+        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+
+
+
+
+
+
 
         $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
 
-        $taskcon->taskcon_budget_gov_operating  = $request->input('taskcon_budget_gov_operating');
-        $taskcon->taskcon_budget_gov_investment = $request->input('taskcon_budget_gov_investment');
-        $taskcon->taskcon_budget_gov_utility    = $request->input('taskcon_budget_gov_utility');
-        $taskcon->taskcon_budget_it_operating   = $request->input('taskcon_budget_it_operating');
-        $taskcon->taskcon_budget_it_investment  = $request->input('taskcon_budget_it_investment');
+       //convert input to decimal or set it to null if empty
 
-        $taskcon->taskcon_cost_gov_operating  = $request->input('taskcon_cost_gov_operating');
-        $taskcon->taskcon_cost_gov_investment = $request->input('taskcon_cost_gov_investment');
-        $taskcon->taskcon_cost_gov_utility    = $request->input('taskcon_cost_gov_utility');
-        $taskcon->taskcon_cost_it_operating   = $request->input('taskcon_cost_it_operating');
-        $taskcon->taskcon_cost_it_investment  = $request->input('taskcon_cost_it_investment');
-        $taskcon->taskcon_pay                 = $request->input('taskcon_pay');
-        $taskcon->taskcon_pay_date            =  $pay_date ?? date('m/d/Y', $timestamp);
+       $taskcon->taskcon_budget_gov_utility    = $taskcon_budget_gov_utility;
+       $taskcon->taskcon_budget_it_operating   = $taskcon_budget_it_operating;
+       $taskcon->taskcon_budget_it_investment  = $taskcon_budget_it_investment;
+
+       $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
+       $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
+       $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
+       $taskcon->taskcon_pay                 =  $taskcon_pay;
+
         $taskcon->taskcon_type                 = $request->input('taskcon_type');
         if ($taskcon->save()) {
 

@@ -24,7 +24,7 @@
 
                                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
-                            <div class="row  callout callout-primary mb-3">
+                           {{--  <div class="row  callout callout-primary mb-3">
                                 <div class="col-sm-6 col-md-3 col-lg-4">
                                     <div class="card">
                                         <div class="card-body">
@@ -49,8 +49,11 @@
                                             <div class="text-medium-emphasis text-end mb-4">
 
                                             </div>
-                                            <div class="fs-4 fw-semibold"></div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
+                                            <div class="fs-4 fw-semibold">
+
+                                                {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
+                                            </div><small
+                                                class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย</small>
                                             <div class="progress progress-thin mt-3 mb-0">
                                                 <div class="progress-bar bg-danger" role="progressbar"
                                                     style="width: 25%" aria-valuenow="25" aria-valuemin="0"
@@ -63,10 +66,12 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="text-medium-emphasis text-end mb-4">
-
                                             </div>
-                                            <div class="fs-4 fw-semibold"></div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
+                                            <div class="fs-4 fw-semibold">
+
+
+                                            </div><small
+                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย</small>
                                             <div class="progress progress-thin mt-3 mb-0">
                                                 <div class="progress-bar bg-info" role="progressbar" style="width: 25%"
                                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -74,8 +79,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            </div> --}}
 
 
                             <table class="table callout callout-danger">
@@ -83,48 +87,43 @@
                                     <tr>
                                         <th>สำดับ</th>
                                         <th>project</th>
-
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($contract->taskcont as $task)
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                {{ $task['task_name'] }}<br>
-
-                                                <span
-                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
-                                                <span
-                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}"
-                                                    class="text-white btn btn-success"><i class="cil-folder-open "></i>
-                                                    Project</a>
-                                                <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                                    class="text-white btn btn-primary"><i class="cil-folder-open "></i>
-                                                    Task</a>
-                                                                                {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" class="text-white btn btn-warning"> <i class="cil-cog"></i> </a>
-                                                        <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
-                                                        </form> --}}
-                                            </td>
-                                        </tr>
+                                    @foreach ($contract->taskcont as $index => $task)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            {{ $task['task_name'] }}<br>
+                                            <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
+                                            <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}"
+                                                class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
+                                            <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
+                                            {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
+                                                class="text-white btn btn-warning"><i class="cil-cog"></i></a>
+                                            <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
+                                                method="POST" style="display:inline">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
+                                            </form> --}}
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
 
 
-
                                 <div class="callout callout-info">
-                                <div class="row ">
-                                    <div class="col-sm">
+                                <div class="row  ">
+                                    <div class="col-sm ">
                                         <div class="row">
-                                            <div class="col-3">{{ __('สถานะสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('สถานะสัญญา') }}</div>
                                             <div class="col-9">
                                                 <?php
                                                 echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
@@ -132,19 +131,19 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('เลขที่ สัญญา') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('เลขที่ สัญญา') }}</div>
                                             <div class="col-9">{{ $contract->contract_number }} </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('เลขที่ คู่ค้า') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('เลขที่ คู่ค้า') }}</div>
                                             <div class="col-9">{{ $contract->contract_juristic_id }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('เลขที่สั่งซื้อ') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('เลขที่สั่งซื้อ') }}</div>
                                             <div class="col-9">{{ $contract->contract_order_no }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('ประเภท') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('ประเภท') }}</div>
                                             <div class="col-9">{{ \Helper::contractType($contract->contract_type) }}
                                             </div>
                                         </div>
@@ -155,41 +154,41 @@
                                             </div>
                                         </div> --}}
                                         <div class="row">
-                                            <div class="col-3">{{ __('วันที่เริ่มสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('วันที่เริ่มสัญญา') }}</div>
                                             <div class="col-9">
                                                 {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-3">{{ __('วันที่สิ้นสุดสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('วันที่สิ้นสุดสัญญา') }}</div>
                                             <div class="col-9">
                                                 {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('จำนวนเดือน') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('จำนวนเดือน') }}</div>
                                             <div class="col-3">
                                                 {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
                                                 เดือน</div>
-                                            <div class="col-3">{{ __('จำนวนวัน') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('จำนวนวัน') }}</div>
                                             <div class="col-3">
                                                 {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
                                                 วัน</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3">{{ __('ดำเนินการมาแล้ว') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('ดำเนินการมาแล้ว') }}</div>
                                             <div class="col-3">
                                                 {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }}
                                                 เดือน</div>
-                                            <div class="col-3">{{ __('ดำเนินการมาแล้ว') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('ดำเนินการมาแล้ว') }}</div>
                                             <div class="col-3">
                                                 {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse()) }}
                                                 วัน</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-3">{{ __('เตือน เหลือเวลา') }}</div>
+                                            <div class="col-3 fw-semibold">{{ __('เตือน เหลือเวลา') }}</div>
                                             <div class="col-9">
                                                 <?php
                                                 echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
@@ -203,45 +202,45 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="row">
-                                            <div class="col-6">{{ __('หมายเหตุ') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('หมายเหตุ') }}</div>
                                             <div class="col-6">{{ $contract->contract_projectplan }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('เลขที่ MM') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('เลขที่ MM') }}</div>
                                             <div class="col-6">{{ $contract->contract_mm }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('จำนวนเงิน MM') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน MM') }}</div>
                                             <div class="col-6">{{ $contract->contract_mm_bodget }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-6">{{ __('เลขที่ PR') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('เลขที่ PR') }}</div>
                                             <div class="col-6">{{ $contract->contract_pr }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('จำนวนเงิน PR') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PR') }}</div>
                                             <div class="col-6">{{ number_format($contract->contract_pr_budget) }}
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('เลขที่ PA') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('เลขที่ PA') }}</div>
                                             <div class="col-6">{{ $contract->contract_pa }}</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('จำนวนเงิน PA') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PA') }}</div>
                                             <div class="col-6">{{ number_format($contract->contract_pa_budget) }}
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
                                             <div class="col-6">
                                                 {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-6">{{ __('จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</div>
+                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</div>
                                             <div class="col-6">
                                                 {{ number_format($contract->contract_peryear_pa_budget) }}</div>
                                         </div>
@@ -255,9 +254,10 @@
                                         {{-- <th width="50">ลำดับ</th> --}}
                                         <th>กิจกรรม</th>
                                         <th>วันที่</th>
+                                       {{--  <th>รอการเบิกจ่าย</th> --}}
                                         <th>การเบิกจ่าย</th>
                                         <th>วันที่ ใช้จ่าย</th>
-                                        <th width="200"> work</th>
+                                        <th width="250"> work</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -300,6 +300,10 @@
                                                 <span
                                                     class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
                                             </td>
+                                           {{--  <td>
+                                                {{ number_format($taskcon->task_cost) }}
+
+                                            </td> --}}
                                             <td>
                                                 {{ number_format($taskcon->taskcon_pay) }}
 
@@ -313,9 +317,9 @@
 
                                                 <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
                                                     class="btn-sm btn btn-primary text-white"><i
-                                                        class="cil-folder-open "></i></a>
+                                                        class="cil-folder-open ">ข้อมูล </i></a>
                                                 <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
-                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i>
+                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog"> เบิกจ่าย</i>
                                                 </a>
                                                 <form
                                                     action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"

@@ -954,6 +954,8 @@
                     // Group tasks by project parent ID and project fiscal year
                     // Group tasks by project parent ID and project fiscal year
                     var groupedTasks = tasksData.reduce(function(groups, task) {
+
+
                         var projectParent = task.task_parent_id;
                         if (projectParent === null) {
                             return groups; // Skip tasks with null task_parent_id
@@ -961,7 +963,8 @@
                         var projectYear = task.project_fiscal_year;
                         var taskId = task.task_id;
                         var taskName = task.task_name;
-                        var groupKey = projectParent + '_' + projectYear;
+
+                        var groupKey = projectParent + '_' + projectYear ;
 
                         if (!groups[groupKey]) {
                             groups[groupKey] = [];
@@ -1114,7 +1117,7 @@
 
 
                         if (contract_type == 1) {
-                            contract_name_label.text('ชื่อ PO');
+                            contract_name_label.text('ชื่อ สั่งจ้าง PO');
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -1126,7 +1129,7 @@
                             $('#pp_form').hide();
                             $('#rounds_form').show();
                         } else if (contract_type == 2) {
-                            contract_name_label.text('ชื่อ ER');
+                            contract_name_label.text('ชื่อ สั่งจ้าง ER');
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -1138,7 +1141,7 @@
                             $('#pp_form').hide();
                             $('#rounds_form').show();
                         } else if (contract_type == 3) {
-                            contract_name_label.text('ชื่อ CN');
+                            contract_name_label.text('ชื่อ สัญญา CN');
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -1270,7 +1273,7 @@
                 $(document).ready(function() {
 
                     $('#contract_type option[value="99"]').remove();
-                    $('#contract_type option[value="4"]').remove();
+                   // $('#contract_type option[value="4"]').remove();
                 });
             </script>
 

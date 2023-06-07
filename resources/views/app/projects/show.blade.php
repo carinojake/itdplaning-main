@@ -762,10 +762,10 @@
 
                                                                                <!-- Button trigger modal -->
                                                                                <button type="button"
-                                                                               class="btn btn-success text-white"
+                                                                               class="badge btn btn-success text-white "
                                                                         data-coreui-toggle="modal"
                                                                         data-coreui-target="#exampleModal{{ $contract->hashid }}">
-                                                                        สญ.ที่ {{ $contract->contract_number }}
+                                                                        สญ.ที่ {{  strtolower($contract->contract_number)  }}
 
                                                                     </button>
 
