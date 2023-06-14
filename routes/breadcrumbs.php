@@ -32,6 +32,8 @@
 
         // 3 project project.show มีแล้ว
         Breadcrumbs::for('project.show', function (BreadcrumbTrail $trail, $project) {
+
+      //  dd($project);
             //  $trail->parent('dashboard');
            // $trail->push('Project', route('project.index'));
            $trail->push('ปีงบประมาณ ' . $project->project_fiscal_year, route('project.index'));

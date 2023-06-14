@@ -12,6 +12,7 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
-        "inputmask": "^5.0.8"
+        "inputmask": "^5.0.8",
+        "sweetalert2": "^11.7.12"
     }
 }

@@ -356,7 +356,7 @@ class ContractController extends Controller
 
 
       // dd($gantt);
-        //  dd  ($taskcons);
+     //   dd  ($taskcons);
         ($gantt = json_encode($gantt));
 
 
@@ -417,7 +417,7 @@ class ContractController extends Controller
         $task = $request->taskHashid;
         $id = $project ? Hashids::decode($project) : null;
 
-        $tasks = Task::all();
+
         $id_project = $id_task = $pro = $ta = null;
 
         if ($project && $task) {
@@ -432,14 +432,25 @@ class ContractController extends Controller
                 $ta = Task::find($id_task);
             }
         }
+        ($tasks     = Task::where('project_id', $id)->get());
+                                // Sum the task_budget_it_operating for all tasks
+        ($task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating'));
+
+        // Sum the task_budget_it_investment for all tasks
+        ($task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment'));
+
+        // Sum the task_budget_gov_utility for all tasks
+        $task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
 
         $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
 
         $project_fiscal_year = $pro ? $pro->project_fiscal_year : null;
         $tasksData = DB::table('tasks')
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->select('tasks.*', 'projects.*')
-            ->get();
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('tasks.*', 'projects.*')
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+
 
 
 
@@ -447,12 +458,17 @@ class ContractController extends Controller
             return [
                 'id' => $task->task_id,
                 'project_fiscal_year' => $task->project_fiscal_year,
-                'project_id' => $task->project_id,
-                'task_parent_id' => $task->task_parent,
 
+
+                'project_id' => $task->project_id,
                 'project_name' => $task->project_name,
 
+
+
+                'task_parent_id' => $task->task_parent,
                 'text' => $task->task_name,
+
+
                 'budget_it_operating' => $task->task_budget_it_operating,
                 'budget_it_investment' => $task->task_budget_it_investment,
                 'budget_gov_utility' => $task->task_budget_gov_utility,
@@ -465,14 +481,19 @@ class ContractController extends Controller
 
 
 
-       //  dd($tasksData);
+       // dd($tasksData);
 
         $tasksJson = json_encode($tasksData);
 
-        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year', 'tasks', 'tasksJson'));
+        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year', 'tasks', 'tasksJson','task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
 
 
+    public function createModal(Request $request) {
+        // เตรียมข้อมูลที่ต้องการส่งไปยัง view ถ้ามี
+
+        return view('app.contracts.createModal');  // ต้องสร้าง view ใหม่ที่ไม่มี layout หรือ elements อื่นๆ ที่ไม่เกี่ยวข้อง
+    }
 
 
 
@@ -491,7 +512,7 @@ class ContractController extends Controller
             'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
         ];
         $request->validate([
-            //   'contract_name'                   => 'required',
+               'contract_name'                   => 'required',
             //   'contract_pr_budget' => 'numeric|nullable',
             // 'contract_pa_budget' => 'numeric|nullable',
             // 'contract_number'                 => 'required',
@@ -566,7 +587,7 @@ class ContractController extends Controller
         }
 
 
-
+        $contract->contract_type_pa        = $request->input('contract_type_pa');
 
 
         $contract->contract_name        = $request->input('contract_name');
@@ -725,7 +746,7 @@ class ContractController extends Controller
         //      return redirect()->route('contract.index');
         // }
         //
-
+        //dd($contract);
         if ($contract->save()) {
 
 
@@ -771,13 +792,18 @@ class ContractController extends Controller
             session()->flash('contract_id', $contract->contract_id);
             session()->flash('contract_number', $contract->contract_number);
             session()->flash('contract_name', $contract->contract_name);
+            session()->flash('contract_mm_budget', $contract->contract_mm_budget);
             session()->flash('contract_pr_budget', $contract->contract_pr_budget);
             session()->flash('contract_pa_budget', $contract->contract_pa_budget);
             session()->flash('contract_pay', $contract->contract_pay);
+            session()->flash('contract_start_date', $contract->contract_start_date);
+            session()->flash('contract_end_date', $contract->contract_end_date);
+
 
             if ($origin) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             }
+
 
             return redirect()->route('contract.index');
         }

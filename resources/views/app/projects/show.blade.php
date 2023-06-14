@@ -18,8 +18,12 @@
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}" class="btn btn-warning text-dark"
                                     target="_blank">แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
-                                <a href="{{ route('project.task.create', $project->hashid) }}"
-                                    class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
+
+                                    <a href="{{ route('project.task.create', $project->hashid) }}"
+                                        class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
+
+                                   {{--  <a href="{{ route('project.task.createcn', $project->hashid) }}"
+                                    class="btn btn-info text-white" target="_blank">เพิ่มสัญญา</a> --}}
                                 <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
 
@@ -722,8 +726,10 @@
                                 <thead>
                                     <tr>
                                          <th width="50">ลำดับ</th>
-                                        <th>กิจกรรม</th>
+                                         <th>ประเภท</th>
+                                        <th >รายการ</th>
                                         <th>วันที่</th>
+                                        <th>วงเงิน</th>
                                         <th width="200"> คำสั่ง</th>
                                     </tr>
                                 </thead>
@@ -731,6 +737,16 @@
                                     @foreach ($project->main_task as $index => $task)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
+                                            <td>
+                                                @if ($task->contract->count() > 0)
+                                                {{ __('สัญญา') }}
+                                                    @if ($task->contract->count()  == 0)
+
+                                                    @endif
+                                                @else
+                                                {{ __('กิจกรรม') }}<!-- You can include an else clause if you want to display something when there are no contracts -->
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div>
                                                     {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
@@ -761,17 +777,35 @@
 
 
                                                                                <!-- Button trigger modal -->
-                                                                               <button type="button"
-                                                                               class="badge btn btn-success text-white "
+                                                                               @if (($contract->contract_type == 4))
+                                                                               <button
+
+
+                                                                               type="button"
+                                                                               class="badge btn btn-primary text-white "
                                                                         data-coreui-toggle="modal"
                                                                         data-coreui-target="#exampleModal{{ $contract->hashid }}">
 
 
-                                                                         @if (($contract->contract_type == 4))
+
                                                                          {{ \Helper::contractType($contract->contract_type) }}"_"{{  strtolower($contract->contract_number)  }}
+
+
+
                                                                          @else
+
                                                                             สญ.ที่ {{  strtolower($contract->contract_number)  }}
                                                                          @endif
+                                                                    </button>
+
+                                                                    @if (($contract->contract_type > 1 ))
+                                                                    <button
+                                                                               type="button"
+                                                                               class="badge btn btn-success text-white "
+                                                                        data-coreui-toggle="modal"
+                                                                        data-coreui-target="#exampleModal{{ $contract->hashid }}">
+                                                                            สญ.ที่ {{  strtolower($contract->contract_number)  }}
+                                                                            @endif
                                                                     </button>
 
                                                                     <!-- Modal -->
@@ -793,7 +827,7 @@
                                                                                         data-coreui-dismiss="modal"
                                                                                         aria-label="Close"></button>
                                                                                 </div>
-                                                                                <div class="modal-body">
+                                                                    <div class="modal-body">
 
 
                                                                                     {{--  --}}
@@ -1086,17 +1120,46 @@
                                                     </div>
                                                 @endif
                                             </td>
+
+
                                             <td>
                                                 <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
                                                 <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                                             </td>
+                                            <td>
+                                                <div class="row">
+                                                    @if ($task->task_budget_it_operating > 0)
+                                                        <div class="col-6 ">{{ __('งบกลาง ICT') }}</div>
+                                                        {{ number_format($task->task_budget_it_operating) }} บาท
+                                                    @endif
+                                                </div>
+                                                <div class="row">
+                                                    @if ($task->task_budget_it_investment > 0)
+                                                        <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
+                                                        {{ number_format($task->task_budget_it_investment) }} บาท
+                                                    @endif
+                                                </div>
+                                                <div class="row">
+                                                    @if ($task->task_budget_gov_utility > 0)
+                                                        <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                        {{ number_format($task->task_budget_gov_utility) }} บาท
+                                                    @endif
+                                                </div>
+                                            </td>
                                             <td class="text-end">
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
-                                                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
+                                               <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
+
+                                                @if ($task->task_parent == 0)
+
                                                 <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                                     @method('DELETE')
                                                     @csrf
                                                     <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
+                                                </form>
+
+                                            @endif
+
                                                 </form>
                                             </td>
                                         </tr>
@@ -1125,6 +1188,7 @@
 
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="sweetalert2.min.css">
 
     </x-slot:css>
     <x-slot:javascript>
@@ -1133,6 +1197,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+        <script src="sweetalert2.min.js"></script>
 
 
 

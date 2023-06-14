@@ -52,11 +52,16 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
     */
     // Project
+    Route::get('/project/{project}/task/createcn', [ProjectController::class, 'taskCreatecn'])->name('project.task.createcn');
     Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
     Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
 
+
+
+
     Route::post('/project/{project}/task/create', [ProjectController::class, 'taskStore'])->name('project.task.store');
     Route::resource('project', ProjectController::class);
+
 
     Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
     Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
@@ -96,6 +101,8 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     // Contract
     Route::resource('contract', ContractController::class);
+    Route::get('/contract/modal', [ContractController::class, 'createModal'])->name('contract.createModal');
+
 
     Route::get('/contract/createsubno', [ContractController::class, 'createsubno'])->name('contract.createsubno');
 

@@ -116,7 +116,7 @@
                                         </div>
                                         <div class="col-md-3 mt-4">
                                             {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                            <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            <a href="{{ route('contract.create', ['origin' => $project->hashid, 'project' => $project->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>
@@ -209,6 +209,9 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
+
+
+
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_investment"
@@ -362,6 +365,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
+                var max = 0;
+                var fieldId = $(this).attr('id');
+
+                if (fieldId === "task_budget_it_investment") {
+                    max = parseFloat('{{ $task_budget_it_investment }}'.replace(/,/g , ""));
+                } else if (fieldId === "task_budget_gov_utility") {
+                    max = parseFloat('{{ $task_budget_gov_utility }}'.replace(/,/g , ""));
+                } else if (fieldId === "task_budget_it_operating") {
+                    max = parseFloat('{{ $task_budget_it_operating }}'.replace(/,/g , ""));
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g , ""));
+                if (current > max) {
+                    alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                    $(this).val(max.toFixed(2));
+                }
+            });
+        });
+        </script>
+
+
+
+
+
+
+
+
+
+
         <script>
             $(document).ready(function() {
                 // Initialize Select2 on the select element
@@ -393,6 +428,9 @@
                         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
                         $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
+                            changeMonth: true,
+            changeYear: true,
+
                             dateFormat: 'dd/mm/yy',
                             isBuddhist: true,
                             defaultDate: toDay,

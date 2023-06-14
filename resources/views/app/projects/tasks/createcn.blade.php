@@ -34,8 +34,8 @@
 
 
 
-                                <div class=" row mt-3">
-                                    <div class="d-none col-md-4">
+                                <div class="row mt-3">
+                                    <div class=" col-md-4">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
 
                                         <div class="form-check form-check-inline">
@@ -214,7 +214,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             $(document).ready(function() {
                 $(".numeral-mask").inputmask();
@@ -290,12 +290,7 @@
 
         var current = parseFloat($(this).val().replace(/,/g , ""));
         if (current > max) {
-
-
-            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-
-
-
+            alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
             $(this).val(max.toFixed(2));
         }
     });

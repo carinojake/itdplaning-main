@@ -28,7 +28,7 @@
                     @endif
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <x-card title="{{ __('เพิ่มสัญญา CN / ใบสั่งซื้อ PO / ใบสั่งจ้าง ER') }}">
+                            <x-card title="{{ __('เพิ่มสัญญา CN ') }}">
                                 <x-slot:toolbar>
                                     {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -40,11 +40,11 @@
                                     enctype="multipart/form-data">
                                     @csrf
 
-                                    <input type="hidden" name="origin" value="{{ $origin }}">
+                                    <input  type="hidden"  name="origin" value="{{ $origin }}">
 
-                                    <input type="hidden" name="project" value="{{ $origin }}">
+                                    <input   type="hidden"  name="project" value="{{ $origin }}">
 
-                                    <input type="hidden" name="task" value="{{ $task }}">
+                                    <input  type="hidden"  name="task" value="{{ $task }}">
                                     <div class="row g-3 align-items-center callout callout-success ">
 
 
@@ -68,8 +68,35 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            <div class="d-none  col-md-4">
+                                                <label for="contract_type_pa" class="form-label">{{ __('งาน/โครงการ') }}</label> <span
+                                                    class="text-danger">*</span>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="contract_type_pa"
+                                                        id="contract_type_pa" value="1" checked>
+                                                    <label class="form-check-label" for="contract_type_pa1">
+                                                        มี PA
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="contract_type_pa"
+                                                        id="contract_type_pa2" value="2">
+                                                    <label class="form-check-label" for="contract_type_pa2">
+                                                        ไม่มี PA
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="contract_number"
+                                                    class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
+                                                {{--    <span class="text-danger">*</span> --}}
+                                                <input type="text" class="form-control" id="contract_number"
+                                                    name="contract_number" required autofocus>
 
-
+                                                <div class="invalid-feedback">
+                                                    {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                </div>
+                                            </div>
                                             <!-- Task Parent -->
                                             {{--  <div class="col-md-3">
                                                 <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
@@ -92,24 +119,47 @@
                                                 </div>
                                             </div> --}}
                                             <!-- Contract Type -->
-                                            <div class="col-md-3">
-                                                <label for="contract_type"
-                                                    class="form-label">{{ __('ประเภท') }}</label>
-                                                <select name="contract_type" id="contract_type" class="form-control">
-                                                    <option value="" disabled selected>{{ __('เลือกประเภท...') }}
-                                                    </option>
-                                                    @foreach (\Helper::contractType() as $key => $type)
-                                                        <option value="{{ $key }}">{{ $type }}
+
+                                            @if ($origin)
+
+                                                <div class="col-md-3">
+                                                    <label for="contract_type"
+                                                        class="form-label">{{ __('ประเภท') }}</label>
+                                                    <select name="contract_type" id="contract_type"
+                                                        class="form-control">
+                                                        <option value="" disabled selected>
+                                                            {{ __('เลือกประเภท...') }}
                                                         </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                                        @foreach (\Helper::contractType() as $key => $type)
+                                                            <option value="{{ $key }}">{{ $type }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @else
+                                                <div class="col-md-3">
+                                                    <label for="contract_type"
+                                                        class="form-label">{{ __('ประเภท') }}</label>
+                                                    <select name="contract_type" id="contract_type"
+                                                        class="form-control">
+                                                        <option value="" disabled selected>
+                                                            {{ __('เลือกประเภท...') }}
+                                                        </option>
+                                                        @foreach (\Helper::contractType() as $key => $type)
+                                                            <option value="{{ $key }}">{{ $type }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
 
                                         </div>
 
+
+
+
                                         <!-- Task Parent -->
                                         <div class="col-md-6">
-                                            <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
+                                            <label for="task_parent" class="form-label">{{ __('อยู่ภายใต้กิจกรรม') }}</label>
                                             <select class="form-control" name="task_parent" id="task_parent">
                                                 <option value="">{{ __('เลือกประเภท...') }}
                                                 </option>
@@ -125,7 +175,7 @@
                                             <input type="text" class="form-control" name="contract_type_budget"
                                                 id="contract-type-budget" value="N/A">
                                         </div>
-
+                                        @endif
                                         {{--
                                          {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
 
@@ -137,6 +187,26 @@
                             </div> --}}
 
                                         <!--  1  -->
+                                        <div class="row fw-semibold mt-3">
+                                            <div class="row">
+                                                @if ($task_budget_it_operating > 0)
+                                                    <div class="col-6">{{ __('งบกลาง ICT') }}</div>
+                                                    {{ number_format($task_budget_it_operating) }} บาท
+                                                @endif
+                                            </div>
+                                            <div class="row">
+                                                @if ($task_budget_it_investment > 0)
+                                                    <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
+                                                    {{ number_format($task_budget_it_investment) }} บาท
+                                                @endif
+                                            </div>
+                                            <div class="row">
+                                                @if ($task_budget_gov_utility > 0)
+                                                    <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                    {{ number_format($task_budget_gov_utility) }} บาท
+                                                @endif
+                                            </div>
+                                        </div>
                                         <div class="callout callout-info">
                                             <div class="accordion accordion-flush" id="accordionFlushExample">
                                                 <div class="accordion-item">
@@ -157,7 +227,7 @@
                                                                     <div class="col-md-4">
 
                                                                         <label for="contract_mm"
-                                                                            class="form-label">{{ __('บันทึกข้อความ (MM)') }}</label>
+                                                                            class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
                                                                         <span class="text-danger"></span>
                                                                         <input type="text" class="form-control"
                                                                             id="contract_mm" name="contract_mm">
@@ -496,7 +566,7 @@
                                                                 <div class="row mt-3">
                                                                     <div class="col-md-12">
                                                                         <label id="rounds_label" for="rounds"
-                                                                            class="form-label">{{ __('งวดที่/ค่าใช้จ่ายสำนักงาน') }}</label>
+                                                                            class="form-label">{{ __('งวดที่') }}</label>
                                                                         <span class="text-danger">*</span>
                                                                         {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
                                                                         <div id="tasksContainer"></div>
@@ -528,16 +598,7 @@
                                                         <div class="accordion-body">
 
                                                             <div class="row  callout callout-info mt-3">
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_number"
-                                                                        class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
-                                                                    {{--  <span class="text-danger">*</span> --}}
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_number" name="contract_number">
-                                                                    <div class="invalid-feedback">
-                                                                        {{ __('เลขที่สัญญา ซ้ำ') }}
-                                                                    </div>
-                                                                </div>
+
 
 
                                                                 <div class="col-md-3">
@@ -871,19 +932,18 @@
 
 
 
+                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
+                </x-button>
+                @if ($origin && $task)
 
-                                        <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
-                                        </x-button>
-                                        @if ($origin)
-                                            <x-button
-                                                link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
-                                                class="text-black btn-light">{{ __('coreuiforms.return') }}
-                                            </x-button>
-                                        @else
-                                        @endif
+                <x-button
+                    link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
+                    class="text-black btn-light">{{ __('coreuiforms.return') }}
+                </x-button>
 
-                                        <x-button link="{{ route('contract.index') }}" class="btn-light text-black">
-                                            {{ __('coreuiforms.return') }}</x-button>
+                @endif
+                <x-button link="{{ route('contract.index') }}" class="btn-light text-black">
+                    {{ __('coreuiforms.return') }}</x-button>
 
 
                                 </form>
@@ -903,6 +963,87 @@
 
             <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
+            <script>
+                $(document).ready(function() {
+                    var task_budget_it_operating =  $task_budget_it_operating;
+                    var task_budget_it_investment =  $task_budget_it_investment;
+                    var task_budget_gov_utility =   $task_budget_gov_utility;
+
+                    $("#contract_mm_budget,#contract_pr_budget").on("input", function() {
+                        var max = 0;
+                        var fieldId = $(this).attr('id');
+
+                        if (fieldId === "contract_mm_budget" || fieldId === "contract_pr_budget") {
+                            if(task_budget_it_operating > 0) {
+                                max = parseFloat(task_budget_it_operating);
+                            } else if(task_budget_it_investment > 0) {
+                                max = parseFloat(task_budget_it_investment);
+                            } else if(task_budget_gov_utility > 0) {
+                                max = parseFloat(task_budget_gov_utility);
+                            }
+                        }
+
+                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (current > max) {
+                            alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                            $(this).val(max.toFixed(2));
+                        }
+                    });
+                });
+            </script>
+
+
+
+       {{--          <script>
+                    $(document).ready(function() {
+                        $("#contract_mm_budget, #contract_PR_butget").on("input", function() {
+                            var max;
+                            var fieldId = $(this).attr('id');
+
+                            if (fieldId === "contract_mm_budget") {
+                                max = parseFloat('{{ number_format($task_budget_it_investment) }}'.replace(/,/g,
+                                    ""));
+                            } else if (fieldId === "contract_mm_budget") {
+                                max = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(/,/g,
+                                    ""));
+                            }
+
+                            var current = parseFloat($(this).val().replace(/,/g, ""));
+                            if (current > max) {
+                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                                $(this).val(max.toFixed(2));
+                            }
+                        });
+
+
+
+                        $("#contract_PR").on("input", function() {
+                            var maxUtility = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(
+                                /,/g, ""));
+                            var current = parseFloat($(this).val().replace(/,/g, ""));
+                            if (current > maxUtility) {
+                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + maxUtility.toFixed(2) + " บาท (ค่าสาธารณูปโภค)");
+                                $(this).val(maxUtility.toFixed(2));
+                            }
+                        });
+                    });
+            </script> --}}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             {{--   <script>
@@ -955,6 +1096,9 @@
                     // Group tasks by project parent ID and project fiscal year
                     var groupedTasks = tasksData.reduce(function(groups, task) {
 
+                        console.log('a',groups);
+                        console.log('ab',task);
+
 
                         var projectParent = task.task_parent_id;
                         if (projectParent === null) {
@@ -963,8 +1107,8 @@
                         var projectYear = task.project_fiscal_year;
                         var taskId = task.task_id;
                         var taskName = task.task_name;
-
-                        var groupKey = projectParent + '_' + projectYear ;
+                        var projectName = task.project_name;
+                        var groupKey = projectName + '_' + projectYear ;
 
                         if (!groups[groupKey]) {
                             groups[groupKey] = [];
@@ -978,6 +1122,7 @@
                     }, {});
 
 
+
                     // Sort project fiscal years in descending order
                     var sortedYears = Object.keys(groupedTasks).sort(function(a, b) {
                         return b.split('_')[1] - a.split('_')[1];
@@ -986,13 +1131,15 @@
                     // Generate options with groupings
                     var options = sortedYears.map(function(groupKey) {
                         var groupParts = groupKey.split('_');
-                        var projectParent = groupParts[0];
+                       // var projectParent = groupParts[0];
+                       // var projectYear = groupParts[0];
+                       var projectName = groupParts[0];
                         var projectYear = groupParts[1];
                         var tasks = groupedTasks[groupKey];
                         var taskOptions = tasks.map(function(task) {
                             return '<option value="' + task.id + '">' + task.text + '</option>';
                         }).join('');
-                        return '<optgroup label="' + projectYear + ' - ' + projectParent + '">' + taskOptions +
+                        return '<optgroup label="' + projectYear + ' - ' + projectName + '">' + taskOptions +
                             '</optgroup>';
                     });
 
@@ -1225,6 +1372,8 @@
                     $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
+                            changeMonth: true,
+                    changeYear: true,
                             isBuddhist: true,
                             defaultDate: toDay,
                             dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
@@ -1273,7 +1422,7 @@
                 $(document).ready(function() {
 
                     $('#contract_type option[value="99"]').remove();
-                   // $('#contract_type option[value="4"]').remove();
+                     $('#contract_type option[value="4"]').remove();
                 });
             </script>
 

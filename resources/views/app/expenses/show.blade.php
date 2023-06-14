@@ -24,57 +24,7 @@
 
                                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
-                            <div class="row  callout callout-primary mb-3">
-                                <div class="col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
 
-                                            </div>
-                                            <div class="fs-4 fw-semibold">
-                                                {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
-                                            </div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                    style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
-
-                                            </div>
-                                            <div class="fs-4 fw-semibold"></div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">ค่าใช้จ่าย</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
-
-                                            </div>
-                                            <div class="fs-4 fw-semibold"></div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">คงเหลือ</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 25%"
-                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
 
 

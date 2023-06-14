@@ -254,7 +254,8 @@
                                         {{-- <th width="50">ลำดับ</th> --}}
                                         <th>กิจกรรม</th>
                                         <th>วันที่</th>
-                                       {{--  <th>รอการเบิกจ่าย</th> --}}
+                                        <th>งบ</th>
+                                        <th>รอการเบิกจ่าย</th>
                                         <th>การเบิกจ่าย</th>
                                         <th>วันที่ ใช้จ่าย</th>
                                         <th width="250"> work</th>
@@ -300,10 +301,15 @@
                                                 <span
                                                     class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
                                             </td>
-                                           {{--  <td>
-                                                {{ number_format($taskcon->task_cost) }}
+                                            <td>
+                                                {{ number_format($taskcon->taskcon_budget) }}
 
-                                            </td> --}}
+                                            </td>
+
+                                             <td>
+                                                {{ number_format($taskcon->taskcon_cost) }}
+
+                                            </td>
                                             <td>
                                                 {{ number_format($taskcon->taskcon_pay) }}
 

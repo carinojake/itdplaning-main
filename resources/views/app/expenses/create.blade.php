@@ -553,7 +553,7 @@
 
                                      <div class="col-md-12 mt-3">
                                         <label for="contract_name" id="contract_name_label"
-                                            class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
+                                            class="form-label">{{ __('ชื่อ ค่าใช้จ่ายสำนักงาน') }}</label>
 
                                         <input type="text" class="form-control" id="contract_name"
                                             name="contract_name" required autofocus>
@@ -624,8 +624,8 @@
                         <div class="row mt-3">
                             <div class="col-md-12">
 
-                                    <label>ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                            `][task_name]" value="งวด ` + (i + 1) + `"required>
+                                    <label>ชื่อ ` + (i + 1) + ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
+                            `][task_name]" value=" ` + (i + 1) + `"required>
                                 </div>
                             </div>
                         </div>

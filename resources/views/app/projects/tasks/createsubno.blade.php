@@ -17,24 +17,25 @@
                         <x-card>
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
                                 @csrf
+                                <h2>เพิ่มรายการที่ใช้จ่าย สำนักงาน</h2>
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-3">
-                                        <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                        <input type="text" class="form-control" id="contract_fiscal_year" value="{{ $projectyear->project_fiscal_year }}" disabled readonly>
+                                   {{--      <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> --}}
+                                        <input type="hidden" type="text" class="form-control" id="contract_fiscal_year" value="{{ $projectyear->project_fiscal_year }}" disabled readonly>
                                         @error('contract_fiscal_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <input type="hidden" class="form-control" id="task_parent_display"
+                                    <input {{-- type="hidden" --}} class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
 
-                                <input {{-- type="hidden"  --}}class="form-control" id="task_parent" name="task_parent"
+                                <input  type="hidden" class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
 
                                 <!-- Add the rest of the form fields here -->
                                 <!-- ... -->
 
-                                <div class="{{-- d-none --}} row callout callout-primary mt-3">
+                                <div class=" d-none  row callout callout-primary mt-3">
 
                                     <div class="col-md-2">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
@@ -68,10 +69,10 @@
                                     </div>
 
                                     <div class="col-md-5" id='contract_group'>
-                                        {{-- <div class="form-group">
+                                         <div class="form-group">
                                             <label for="task_contract"
                                                 class="form-label">{{ __(' ค่าใช้จ่ายสำนักงาน') }}</label>
-                                            <select name="task_contract" id="task_contract"
+                                        {{--     <select name="task_contract" id="task_contract"
                                                 class="form-control js-example-basic-single">
                                                 <option value="">ไม่มี</option>
                                                 @foreach ($contracts as $contract)
@@ -82,7 +83,7 @@
                                                     </option>
                                                 @endforeach
                                             </select> --}}
-                                            {{-- <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
+                                          <select name="task_contract" id="task_contract" class="form-control js-example-basic-single">
                                                 <option value="">ไม่มี</option>
                                                 @if (!empty($contracts['results']))
                                                     @foreach ($contracts['results'] as $group)
@@ -95,7 +96,7 @@
                                                         </optgroup>
                                                     @endforeach
                                                 @endif
-                                            </select> --}}
+                                            </select>
 
 
                                             <div class="invalid-feedback">
@@ -129,22 +130,6 @@
                                     เบิก: {{ session('contract_pay') }}
                                 @endif
 
-
-
-                    <div class=" row mt-3   callout callout-primary">
-                        <div class="col-md-6 ">
-                            <label for="task_start_date"
-                                class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
-                                class="text-danger"></span>
-                            <input class="form-control" id="task_start_date" name="task_start_date">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                            <span class="text-danger"></span>
-                            <input class="form-control" id="task_end_date" name="task_end_date">
-                        </div>
-                    </div>
-
                     <div class=" callout callout-info">
                         <div class="col-md-12 mt-3">
                             <label for="task_name"
@@ -157,6 +142,21 @@
                             </div>
                         </div>
 
+                        <div class=" row mt-3  ">
+                            <div class="col-md-6 ">
+                                <label for="task_start_date"
+                                    class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
+                                    class="text-danger"></span>
+                                <input class="form-control" id="task_start_date" name="task_start_date">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                <span class="text-danger"></span>
+                                <input class="form-control" id="task_end_date" name="task_end_date">
+                            </div>
+                        </div>
+
+
                         <div class="col-md-12 mt-3">
                             <label for="task_description"
                                 class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
@@ -167,15 +167,39 @@
                         </div>
 
                         <div class="row">
-                            <h4>งบประมาณ</h4>
+                            <h4>งบประมาณ  </h4>
 
-                            <div class="row">
-                                <div class="col-6">
+
+                                <div class="row fw-semibold mt-3">
+                                <div class="row">
+                                    @if ($task->task_budget_it_operating > 0)
+                                        <div class="col-2">{{ __('งบกลาง ICT') }}</div>
+                                        {{ number_format($task->task_budget_it_operating) }} บาท
+                                    @endif
+                                </div>
+                                <div class="row">
+                                    @if ($task->task_budget_it_investment > 0)
+                                        <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
+                                        {{ number_format($task->task_budget_it_investment) }} บาท
+                                    @endif
+                                </div>
+                                <div class="row">
+                                    @if ($task->task_budget_gov_utility > 0)
+                                        <div class="col-2">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                        {{ number_format($task->task_budget_gov_utility) }} บาท
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-6 mt-3">
                                     <strong>วงเงินที่ขออนุมัติ</strong>
+
+
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_it_operating > 0)
                                         <label for="task_budget_it_operating"
                                             class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                        <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating" min="0">-->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask"
@@ -185,11 +209,13 @@
                                         <div class="invalid-feedback">
                                             {{ __('ระบุงบกลาง ICT') }}
                                         </div>
+                                        @endif
+
                                     </div>
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_it_investment > 0)
                                         <label for="task_budget_it_investment"
                                             class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                        <!--  <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_investment" name="task_budget_it_investment" min="0">-->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask"
@@ -199,11 +225,12 @@
                                         <div class="invalid-feedback">
                                             {{ __('ระบุงบดำเนินงาน') }}
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_gov_utility > 0)
                                         <label for="task_budget_gov_utility"
                                             class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                        <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0"> -->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask" id="task_budget_gov_utility"
@@ -212,15 +239,17 @@
                                         <div class="invalid-feedback">
                                             {{ __('ระบุค่าสาธารณูปโภค') }}
                                         </div>
+                                        @endif
                                     </div>
+
                                 </div>
 
-                                <div class="col-6 ">
+                                <div class="col-6 mt-3">
                                     <strong>ค่าใช้จ่าย</strong>
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_it_operating > 0)
                                         <label for="task_cost_it_operating"
                                             class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                        <!-- <input type="number"placeholder="0.00" step="0.01" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">-->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask" id="task_cost_it_operating"
@@ -230,11 +259,12 @@
                                         <div class="invalid-feedback">
                                             {{ __('งบกลาง ICT') }}
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_it_investment > 0)
                                         <label for="task_cost_it_investment"
                                             class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                        <!-- <input type="number" placeholder="0.00" step="0.01"class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0"> -->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask" id="task_cost_it_investment"
@@ -244,11 +274,12 @@
                                         <div class="invalid-feedback">
                                             {{ __('งบดำเนินงาน') }}
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-12">
+                                        @if ($task->task_budget_gov_utility > 0)
                                         <label for="task_cost_gov_utility"
                                             class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                        <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0"> -->
                                         <input type="text" placeholder="0.00" step="0.01"
                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                             class="form-control numeral-mask" id="task_cost_gov_utility"
@@ -258,6 +289,7 @@
                                         <div class="invalid-feedback">
                                             {{ __('ระบุค่าสาธารณูปโภค') }}
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -554,8 +586,8 @@
                                                        </div>
                                                    </div>
                                                </div>
-                                               <div id="pp_form"
-                                                   class="callout callout-danger"{{--  style="display:none;" --}}>
+                                               {{-- <div id="pp_form"
+                                                   class="callout callout-danger"  style="display:none;">
                                                    <div class="row mt-3">
                                                        <div class="col-md-4">
                                                            <label for="contract_pay"
@@ -581,14 +613,14 @@
                                                                class="form-control numeral-mask"
                                                                name="contract_pay" min="0">
                                                        </div>
-                                                   </div>
+                                                   </div> --}}
 
-                                               <div id="rounds_form" class="callout callout-warning"
-                                                  {{--  style="display:none;" --}}>
+                                               <div id="d-none rounds_form" class="callout callout-warning"
+                                                  >
                                                    <div class="row mt-3">
                                                        <div class="col-md-12">
                                                            <label id="rounds_label" for="rounds"
-                                                               class="form-label">{{ __('ค่าใช้จ่ายสำนักงาน') }}</label>
+                                                               class="form-label">{{ __('งวด') }}</label>
 
                                                            {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'item...', 'id' => 'rounds', 'name' => 'change']) }}
                                                            <div id="tasksContainer"></div>
@@ -615,7 +647,7 @@
                                       </h2> --}}
 
                                       <h4>    ข้อมูลสัญญา 2
-                                        (เลขที่สัญญา,เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา,
+                                        (เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,
                                         ประก้น)    </h4>
                                     <div {{--  id="collapseTwo" class="accordion-collapse collapse"
                                         aria-labelledby="headingTwo"
@@ -624,14 +656,7 @@
 
 
                                             <div class="row callout callout-info mt-3">
-                                                <div class="col-md-3">
-                                                    <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา') }}</label>
-                                                    {{-- <span class="text-danger">*</span> --}}
-                                                    <input type="text" class="form-control" id="contract_number" name="contract_number">
-                                                    <div class="invalid-feedback">
-                                                        {{ __('เลขที่สัญญา ซ้ำ') }}
-                                                    </div>
-                                                </div>
+
                                                 <div class="col-md-3">
                                                     <label for="contract_juristic_id"
                                                         class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
@@ -741,7 +766,7 @@
                                             <div class="accordion-body">
 
                                                 <!--ข้อมูลสัญญา 3 -->
-                                                <div class="col-md-12 mt-3">
+                                          {{--       <div class="col-md-12 mt-3">
                                                     <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label>
 
                                                     <input type="text" class="form-control" id="task_name" name="task_name" required
@@ -759,7 +784,7 @@
                                                         {{ __('รายละเอียดการที่ใช้จ่าย') }}
                                                     </div>
                                                 </div>
-
+ --}}
                                                 <div class="col-md-12 mt-3">
                                                     <label for="contract_name"
                                                         class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
@@ -769,7 +794,7 @@
                                                         id="contract_mm_name" name="contract_mm_name" required
                                                         autofocus>
                                                     <div class="invalid-feedback">
-                                                        {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                        {{ __('') }}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 mt-3">
@@ -785,7 +810,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="contract_description"
-                                                        class="form-label">{{ __('รายละเอียดสัญญา') }}</label>
+                                                        class="form-label">{{ __('รายละเอียด') }}</label>
                                                     <textarea class="form-control" name="contract_description" id="contract_description" rows="10"></textarea>
                                                     <div class="invalid-feedback">
                                                         {{ __('รายละเอียดงาน/โครงการ') }}
@@ -829,6 +854,80 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+
+    <script>
+        $(document).ready(function() {
+            $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating      ,#task_cost_it_investment,#task_cost_gov_utility,#task_cost_it_operating").on("input",
+                function() {
+                    var max = 0;
+                    var fieldId = $(this).attr('id');
+
+                    if (fieldId === "task_budget_it_investment" ) {
+                        max = parseFloat({{ $task->task_budget_it_investment }});
+                    } else if (fieldId === "task_budget_gov_utility"   ) {
+                        max = parseFloat({{ $task->task_budget_gov_utility }});
+                    } else if (fieldId === "task_budget_it_operating"  ) {
+                        max = parseFloat({{ $task->task_budget_it_operating }});
+                    }
+
+
+                    else if (fieldId === "task_cost_it_investment"  ) {
+                        max = parseFloat({{ $task->task_budget_it_investment }});
+                    } else if (fieldId === "task_cost_gov_utility"  ) {
+                        max = parseFloat({{ $task->task_budget_gov_utility }});
+                    } else if (fieldId === "task_cost_it_operating"  ) {
+                        max = parseFloat({{ $task->task_budget_it_operating }});
+                    }
+                    var current = parseFloat($(this).val().replace(/,/g, ""));
+                    if (current > max) {
+                        alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                        $(this).val(max.toFixed(2));
+                    }
+                });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+
+
+
+</script>
+
+
+
     <script>
         $(document).ready(function() {
             $('#rounds').change(function() {
@@ -840,7 +939,7 @@
                         <div class="col-md-12">
 
                                 <label>ชื่อ ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        <input type="text" name="tasks[` + i + `][task_name]" value=" ` + (i + 1) + `">
+                        <input type="text" name="taskcons[` + i + `][taskcons_name]" value=" ` + (i + 1) + `">
 
 
 
@@ -1001,6 +1100,10 @@
         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
         $("#task_start_date, #task_end_date").datepicker({
+
+
+            changeMonth: true,
+                    changeYear: true,
             dateFormat: 'dd/mm/yy',
             isBuddhist: true,
             defaultDate: toDay,
