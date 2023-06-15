@@ -12,6 +12,19 @@
                             <x-slot:toolbar>
                                 <a href="{{ route('project.create') }}" class="btn btn-success text-white"
                                     target="_blank">เพิ่ม งาน/โครงการ</a>
+
+                                    <a href="{{ route('project.create') }}"
+                                        class="btn btn-success text-white">เพิ่ม สัญญา</a>
+
+                                    <a href="{{ route('project.create') }}"
+                                        class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย สำนักงาน</a>
+
+
+
+
+
+
+
                             </x-slot:toolbar>
                             <table class="table table-responsive-sm table-striped" id="datatables">
                                 <thead>

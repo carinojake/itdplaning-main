@@ -229,6 +229,8 @@
 
                 $("#project_start_date, #project_end_date").datepicker({
                     dateFormat: 'dd/mm/yy',
+                    changeMonth: true,
+                    changeYear: true,
                     isBuddhist: true,
                     defaultDate: toDay,
                     dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],

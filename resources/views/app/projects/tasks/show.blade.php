@@ -11,9 +11,9 @@
                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                     class="btn btn-warning text-dark">  <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                 </a>
-{{--
+
                 <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a> --}}
+                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
 
 
                         @if ($task->task_budget_it_operating > 0)
