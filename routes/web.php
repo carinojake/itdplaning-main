@@ -62,7 +62,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::post('/project/{project}/task/create', [ProjectController::class, 'taskStore'])->name('project.task.store');
     Route::resource('project', ProjectController::class);
 
-
+    Route::post('/project/{project}/task/storesubno', [ProjectController::class, 'taskStoresubno'])->name('project.task.storesubno');
     Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
     Route::get('/project/{project}/task/{task}/edit', [ProjectController::class, 'taskEdit'])->name('project.task.edit');
     Route::put('/project/{project}/task/{task}/update', [ProjectController::class, 'taskUpdate'])->name('project.task.update');
