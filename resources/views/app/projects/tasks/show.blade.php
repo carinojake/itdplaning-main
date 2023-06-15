@@ -11,9 +11,9 @@
                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                     class="btn btn-warning text-dark">  <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                 </a>
-
+{{--
                 <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
+                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a> --}}
 
 
                         @if ($task->task_budget_it_operating > 0)
@@ -54,7 +54,7 @@
 
 
 
-                    <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+                        <a href="{{ route('project.show', ['project' => $project->hashid]) }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
 
@@ -67,7 +67,7 @@
 
                     <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
-                    <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
+                    <a href="{{ route('project.show', ['project' => $project->hashid]) }}" class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
 
@@ -150,9 +150,9 @@
                                     <th>วันที่</th>
 
                                     <th>ที่สัญญา</th>
+                                    <th>ที่ค่าใช้จ่าย</th>
 
-
-                                    <th width="200"> ดูสัญญา</th>
+                                    <th width="200"> ดู</th>
                                 </tr>
                                 @if ($task->subtask->count() > 0)
                                     @foreach ($task->subtask as $index => $subtask)
@@ -168,6 +168,7 @@
 
 
                                             <td>
+
                                                 @if ($subtask->contract->count() > 0)
                                                     @foreach ($subtask->contract as $contract)
                                                         <button type="button" class="badge btn btn-success text-white"
@@ -199,8 +200,21 @@
                                                             </div>
                                                         </div>
                                                     @endforeach
+
+
                                                 @endif
+
                                             </td>
+
+
+
+                                            <td>
+
+
+                                                ที่ค่าใช้จ่าย
+
+                                            </td>
+
 
                                             <td>
                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -254,7 +268,10 @@
                                     </div>
                                 </div>
 
-                                Contract Number: {{ $contract->contract_number }}
+                                <div class="row">
+                                    <div class="col-3 fw-semibold">{{ __('เลขที่ สัญญา') }}</div>
+                                    <div class="col-9">{{ $contract->contract_number }} </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-3 fw-semibold">{{ __('คู่ค้า') }}</div>
@@ -432,6 +449,18 @@
                         </table>
                     @endif
             @endif
+            @foreach ($taskcons as $taskcon)
+
+                        {{-- <div>{{ $taskcon->task_id}}</div> --}}
+                        <div>{{ $taskcon->taskcon_id}}</div
+            @endforeach
+
+
+
+
+
+
+
         </x-card>
     </x-slot:content>
     <x-slot:css>

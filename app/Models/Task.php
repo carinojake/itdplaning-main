@@ -105,4 +105,10 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Models\Contract', 'contract_has_tasks', 'task_id', 'contract_id');
     }
+
+
+    public function taskconsend()
+    {
+        return $this->belongsToMany('App\Models\Taskcon', 'task_has_taskcons', 'taskcon_id', 'task_id');
+    }
 }

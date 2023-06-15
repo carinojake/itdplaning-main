@@ -22,8 +22,8 @@
                                     <a href="{{ route('project.task.create', $project->hashid) }}"
                                         class="btn btn-success text-white" target="_blank">เพิ่มกิจกรรม</a>
 
-                                   {{--  <a href="{{ route('project.task.createcn', $project->hashid) }}"
-                                    class="btn btn-info text-white" target="_blank">เพิ่มสัญญา</a> --}}
+                                     <a href="{{ route('project.task.createcn', $project->hashid) }}"
+                                    class="btn btn-info text-white" target="_blank">เพิ่มสัญญา</a>
                                 <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
 
@@ -761,7 +761,7 @@
                                                 @endif
                                                 @if ($task->subtask->count() > 0)
                                                     <div class="mt-2">
-                                                        <h6>รายการที่ใช้จ่าย</h6>
+                                                        <h6>กิจกรรมย่อย</h6>
                                                         <ul>
                                                             @foreach ($task->subtask as $subtask)
                                                                 <li>
@@ -777,7 +777,7 @@
 
 
                                                                                <!-- Button trigger modal -->
-                                                                               @if (($contract->contract_type == 4))
+                                                                               @if (($contract->task_type == 2))
                                                                                <button
 
 
@@ -798,7 +798,7 @@
                                                                          @endif
                                                                     </button>
 
-                                                                    @if (($contract->contract_type > 1 ))
+                                                                    @if (($contract->task_type == 1 ))
                                                                     <button
                                                                                type="button"
                                                                                class="badge btn btn-success text-white "

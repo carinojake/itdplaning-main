@@ -24,7 +24,7 @@
 
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3 needs-validation" novalidate>
                                 @csrf
-                                <h2>เพิ่มรายการที่ใช้จ่าย แบบ สัญญา</h2>
+                                <h2>เพิ่มรายการที่ใช้จ่าย สำนักงาน</h2>
                                 <input {{--  type="hidden" --}} class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
 

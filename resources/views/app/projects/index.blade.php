@@ -69,6 +69,7 @@
     </x-slot:content>
     <x-slot:css>
         <link href="{{ asset('vendors/DataTables/datatables.css') }}" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </x-slot:css>
     <x-slot:javascript>
         <script src="{{ asset('vendors/DataTables/datatables.min.js') }}"></script>
@@ -155,7 +156,7 @@
                 })
 
                 $(document).on('click', '.btn-delete', function() {
-                    if (!confirm("Are you sure?" )) return;
+                    if (!Swal.fire("Are you sure?" )) return;
 
                     var rowid = $(this).data('rowid')
                     var el = $(this)
@@ -173,7 +174,7 @@
                             if (data.success) {
                                 // Check if there is any project inside before delete
                                 if (data.project_inside) {
-                                    alert("Cannot delete because there is a project inside." + rowid);
+                                    Swal.fire("กกกกCannot delete because there is a project inside." + rowid);
                                     return;
                                 }
                                 table.row(el.parents('tr'))

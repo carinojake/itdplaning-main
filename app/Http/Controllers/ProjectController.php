@@ -189,7 +189,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
             // ->toArray()
         );
 
-        /*  $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
+     /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
 ->join('contracts', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
@@ -950,6 +950,13 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
             ->where('tasks.task_id', $task->task_id)
             ->first();
 
+            $taskcons = Task::join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+            ->select('tasks.*', 'taskcons.*')
+            ->where('tasks.task_id', $task->task_id)
+            ->get();
+
+        //dd($taskcon);
+
         $results = Contract::join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
             ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -961,7 +968,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
         $latestContract = Contract::latest()->first();
 
-        return view('app.projects.tasks.show', compact('project', 'task', 'results', 'contract', 'latestContract', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+        return view('app.projects.tasks.show', compact('taskcons','project', 'task', 'results', 'contract', 'latestContract', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 
 
@@ -973,6 +980,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $project = $request->project;
         //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
         ($tasks     = Task::where('project_id', $id)->get());
+        ($taskcons     = Taskcon::where('task_id', $id)->get());
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
         ($request = Project::find($id));
@@ -999,10 +1007,10 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         }
 
 
-        //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
+             //dd ($taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
 
 
-        return view('app.projects.tasks.create', compact('request', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+        return view('app.projects.tasks.create', compact('request', 'taskcons', 'contracts', 'project', 'tasks', 'task', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 
 
@@ -1090,6 +1098,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $id = Hashids::decode($project)[0];
         //$project = Project::find($projectId);
         $tasks = Task::where('project_id', $id)->get();
+
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
 
 
@@ -1141,6 +1150,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
     {
         ($id = Hashids::decode($project)[0]);
         $tasks = Task::where('project_id', $id)->get();
+        $taskcons     = new Taskcon ;
         $projectyear = Project::where('project_id', $id)->first(); // เปลี่ยนจาก get() เป็น first()
         $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
 
@@ -1148,11 +1158,11 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
 
 
-        //dd ($request);
+       //  ($request);
         //  if ($project) {
         //    $projectId = Hashids::decode($id)[0];
         //    $project = Task::find($projectId);
-        //} else {
+        // } else {
         //    $project = null;
         // }
         if (!empty($contracts['results'])) {
@@ -1182,13 +1192,15 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         } else {
             // ไม่มีข้อมูลกลุ่มสัญญาในผลลัพธ์
         }
+
+
+
         if ($task) {
             $taskId = Hashids::decode($task)[0];
             $task = Task::find($taskId);
         } else {
             $task = null;
         }
-
 
         if ($project && $task) {
             $decodedProject = Hashids::decode($project);
@@ -1208,9 +1220,9 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
             $fiscal_year = date('Y') + 543; // Use current year if not provided
         }
 
-        //  dd($contracts);
+         // dd($taskcon);
 
-        return view('app.projects.tasks.createsubno', compact('request', 'contracts', 'project', 'projectyear', 'tasks', 'task', 'contractText'));
+        return view('app.projects.tasks.createsubno', compact('request', 'contracts', 'project', 'projectyear', 'tasks', 'task', 'contractText','taskcons'));
 
         /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
@@ -1222,8 +1234,8 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $id = Hashids::decode($project)[0];
 
         ($task = new Task);
-
-
+        //dd($request);
+        $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
         // convert input to decimal or set it to null if empty
         $task_budget_it_operating = $request->input('task_budget_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_operating')) : null;
         $task_budget_gov_utility = $request->input('task_budget_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_budget_gov_utility')) : null;
@@ -1234,14 +1246,16 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $task_cost_it_investment = $request->input('task_cost_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_investment')) : null;
 
         $task_pay = $request->input('task_pay') !== '' ? (float) str_replace(',', '', $request->input('task_pay')) : null;
+        $taskcon_pay = $request->input('taskcon_pay') !== '' ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
+
         // $tasks = Task::where('project_id', $id)->get(); // Fetch all tasks for the project
-        $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
+
         ($sum_task_budget_it_operating = $tasks->sum('task_budget_it_operating'));
         ($sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment'));
         ($sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility'));
 
         $messages = [
-            'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+          //  'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
             'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
             'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข กลาง ICT',
             'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก min',
@@ -1261,8 +1275,8 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         ];
         $request->validate([
             // 'task_name' => 'required',
-               'task_start_date' => 'required|date_format:d/m/Y',
-             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+           //    'task_start_date' => 'required|date_format:d/m/Y',
+             //'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             //  'task_budget_it_operating' => 'nullable|min:0|max:' . ($request->input('budget_it_operating') - $sum_task_budget_it_operating),
             // 'task_budget_it_investment' => 'nullable|min:0|max:' . ($request->input('budget_it_investment') - $sum_task_budget_it_investment),
             // 'task_budget_gov_utility' => 'nullable|min:0|max:' . ($request->input('budget_gov_utility') - $sum_task_budget_gov_utility),
@@ -1315,7 +1329,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $task->task_pay = $task_pay;
 
         $task->task_type = $request->input('task_type');
-
+       // dd($task);
         if ($task->save()) {
             //insert contract
             if ($request->input('task_contract')) {
@@ -1326,7 +1340,15 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
                 $contract_has_task->save();
             }
 
-            if ($request->has('contracts')) {
+            // if ($request->input('task_contract')) {
+            //     //insert task-taskcon link
+            //     $task_has_taskcon = new TasktHasTaskcon;
+            //     $task_has_taskcon->task_id = $task->task_id; // This should be task_id from the Task object
+            //     $task_has_taskcon->taskcon_id = $taskcon->taskcon_id; // Please ensure $taskcon is defined and has an id
+            //     $task_has_taskcon->save();
+            // }
+
+            else if ($request->has('contracts')) {
                 foreach ($request->contracts as $contractData) {
                     $contractName = isset($contractData['contract_mm_name']) ? $contractData['contract_mm_name'] : 'Default Contract Name';
                     $contractNumber = isset($contractData['contract_number']) ? $contractData['contract_number'] : 'Default Number';
@@ -1339,29 +1361,74 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
                 }
             }
 
-            if ($request->has('tasks')) {
+            else  if ($request->has('tasks')) {
                 foreach ($request->tasks as $taskData) {
                     $taskName = isset($taskData['task_name']) ? $taskData['task_name'] : 'Default Task Name';
 
-                    if (isset($contract)) {
-                        Taskcon::create([
-                            'contract_id' => $contract->contract_id,
-                            'taskcon_name' => $taskName,
-                            'updated_at' => now(),
-                            'created_at' => now()
-                        ]);
-                    }
+                    Taskcon::create([
+                        //'task_id' => $
+                        'taskcon_name' => $taskName,
+                        'updated_at' => now(),
+                        'created_at' => now()
+                    ]);
                 }
             }
 
 
 
 
-
-            // dd($task);
+         //  dd($task);
             return redirect()->route('project.show', $project);
         }
     }
+
+
+
+    public function taskStoresubno(Request $request, $project)
+    {
+        // สร้าง Taskcon object ใหม่
+        $taskcon = new Taskcon;
+        $task = new Task;
+
+        // กำหนดค่าให้กับ field ที่ต้องการให้รับค่าจาก request parameter
+        // ในที่นี้คือการกำหนดค่าทั้งหมดที่ส่งมาจาก request ให้กับ object นี้
+        $taskcon->fill($request->all());
+
+        $taskcon->task_id = $request->input('task_id');
+        // กำหนด task_id ให้กับ taskcon ตามที่ส่งมาใน parameter
+
+
+       // dd($taskcon,$task);
+
+        if ($taskcon->save()) {
+
+
+            $origin = $request->input('origin');
+            $project = $request->input('project');
+            $task = $request->input('task');
+
+            // บันทึกข้อมูลลงใน session
+            session()->flash('taskcon_id', $taskcon->taskcon_id);
+            session()->flash('taskcon_number', $taskcon->taskcon_number);
+            session()->flash('taskcon_name', $taskcon->taskcon_name);
+            session()->flash('taskcon_mm_budget', $taskcon->taskcon_mm_budget);
+            session()->flash('taskcon_pr_budget', $taskcon->taskcon_pr_budget);
+            session()->flash('taskcon_pa_budget', $taskcon->taskcon_pa_budget);
+            session()->flash('taskcon_pay', $taskcon->taskcon_pay);
+            session()->flash('taskcon_start_date', $taskcon->taskcon_start_date);
+            session()->flash('taskcon_end_date', $taskcon->taskcon_end_date);
+
+            if ($origin) {
+                return redirect()->route('project.task.createsubno', ['project' => $project, 'task' => $task]);
+            }
+
+            return redirect()->route('project.index');
+        }
+
+        // You might want to add some error handling here, in case saving fails
+        return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
+    }
+
 
 
     /**
