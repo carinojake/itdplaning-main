@@ -72,7 +72,7 @@
                                                 Looks good!
                                             </div>
                                             <div class="invalid-feedback">
-                                                ลำดับ ชื่องาน/โครงการ
+                                               งาน/โครงการ
                                               </div>
                                     </div>
 

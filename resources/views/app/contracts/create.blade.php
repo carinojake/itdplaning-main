@@ -36,8 +36,8 @@
                                 </x-slot:toolbar>
 
 
-                                <form method="POST" action="{{ route('contract.store') }}" class="row g-3"
-                                    enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('contract.store') }}" class="row g-3 needs-validation"
+                                    enctype="multipart/form-data"  novalidate>
                                     @csrf
 
                                     <input  type="hidden"  name="origin" value="{{ $origin }}">
@@ -207,6 +207,8 @@
                                                 @endif
                                             </div>
                                         </div>
+
+
                                         <div class="callout callout-info">
                                             <div class="accordion accordion-flush" id="accordionFlushExample">
                                                 <div class="accordion-item">
@@ -222,6 +224,8 @@
                                                         aria-labelledby="flush-headingOne"
                                                         data-coreui-parent="#accordionFlushExample">
                                                         <div class="accordion-body">
+
+
                                                             <div id="mm_form" style="display:none;">
                                                                 <div class="callout callout-primary row mt-3">
                                                                     <div class="col-md-4">
@@ -931,19 +935,28 @@
 
 
 
-
-                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
+                <x-button class="btn-success" type="submit">
+                    {{ __('coreuiforms.save') }}
                 </x-button>
+{{--
                 @if ($origin && $task)
-
+                    <x-button
+                        link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
+                        class="text-black btn-light">
+                        {{ __('coreuiforms.return') }}
+                    </x-button>
+                    @else
                 <x-button
-                    link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
-                    class="text-black btn-light">{{ __('coreuiforms.return') }}
+                link="{{ route('project.task.createcn', ['project' => $origin]) }}"
+                class="text-black btn-light">
+                {{ __('coreuiforms.return') }}
+            </x-button>
+            @endif --}}
+            <x-button
+                    link="{{ route('contract.index') }}"
+                    class="btn-light text-black">
+                    {{ __('coreuiforms.return') }}
                 </x-button>
-
-                @endif
-                <x-button link="{{ route('contract.index') }}" class="btn-light text-black">
-                    {{ __('coreuiforms.return') }}</x-button>
 
 
                                 </form>

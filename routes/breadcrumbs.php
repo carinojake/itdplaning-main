@@ -109,7 +109,7 @@
 
 
             // 8 projects.task.createsub  มีแล้ว
-            Breadcrumbs::for('project.task.createsub', function (BreadcrumbTrail $trail, $project, $task) {
+            Breadcrumbs::for('project.task.createsub', function (BreadcrumbTrail $trail, $project) {
                 $id = Hashids::decode($project)[0];
 
                 $project = App\Models\Project::find($id);
@@ -119,7 +119,7 @@
                $trail->push(Helper::projectsType($project->project_type), route('project.index'));
                 $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
                 $trail->push('กิจกรรม');
-                $trail->push($task->task_name,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]   ) );
+          //      $trail->push($task->task_name,  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]   ) );
                 $trail->push('เพิ่ม');
             });
 

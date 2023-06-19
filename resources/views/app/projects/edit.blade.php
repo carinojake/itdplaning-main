@@ -21,7 +21,7 @@
 
 
                             <form method="POST" action="{{ route('project.update', $project->hashid) }}"
-                                class="row g-3">
+                                class="row g-3"  >
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -36,17 +36,6 @@
                                         {{ __('ปีงบประมาณ') }}
                                     </div>
                                 </div>
-
-                                <div class="col-md-3">
-                                    <label for="reguiar_id" class="form-label">{{ __('no.ชื่องาน/โครงการ') }}</label>
-                                    <span class="text-danger"></span>
-                                    <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
-                                        value="{{ $project->reguiar_id }}">
-                                    <div class="invalid-feedback">
-                                        {{ __('no.ชื่องาน/โครงการ ') }}
-                                    </div>
-                                </div>
-
 
                                 <div class="col-md-3">
                                     <label for="project_type"
@@ -72,6 +61,17 @@
                                         {{ __('สถานะงาน/โครงการ') }}
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <label for="reguiar_id" class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ *') }}</label>
+                                    <span class="text-danger"></span>
+                                    <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
+                                        value="{{ $project->reguiar_id }}">
+                                    <div class="invalid-feedback">
+                                        {{ __('ลำดับ.ชื่องาน/โครงการ * ') }}
+                                    </div>
+                                </div>
+
+
                                 <div class="col-md-3">
                                     <label for="project_status"
                                         class="form-label">{{ __('สถานะงาน/โครงการ') }}</label> <span

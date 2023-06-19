@@ -20,21 +20,105 @@
                                 class="row g-3 needs-validation" novalidate>
 
                                 @csrf
+                              <div>
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
-                                            required autofocus>
+                                        value= {{ session('contract_name') }} >
                                     </div>
 
                                 </div>
 
 
 
+                                <div class="d-none  col-md-4">
+                                    <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label> <span
+                                        class="text-danger">*</span>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_type"
+                                            id="task_type1" value="1" checked>
+                                        <label class="form-check-label" for="task_type1">
+                                            มี PA
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_type"
+                                            id="task_type2" value="2">
+                                        <label class="form-check-label" for="task_type2">
+                                            ไม่มี PA
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="d-none">
+                                @if (session('contract_id'))
+                                    ID: {{ session('contract_id') }}
+                                @endif
+                                @if (session('contract_number'))
+                                    Number: {{ session('contract_number') }}
+                                @endif
+                                @if (session('contract_name'))
+                                    Name: {{ session('contract_name') }}
+                                @endif
+                                @if (session('contract_mm_budget'))
+                                    MM: {{ session('contract_mm_budget') }}
+                                @endif
+                                @if (session('contract_pr_budget'))
+                                Pr: {{ session('contract_pr_budget') }}
+                            @endif
+                            @if (session('contract_pa_budget'))
+                            pa: {{ session('contract_pa_budget') }}
+                        @endif
+                        @if (session('contract_start_date'))
+                        start_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
 
 
-                                <div class="row mt-3">
+
+                    @endif
+                    @if (session('contract_end_date'))
+                    end_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                @endif
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <label for="task_contract"
+                                                class="form-label">{{ __('สัญญา') }}</label> <span
+                                                class="text-danger">*</span>
+                                            <select name="task_contract" id="task_contract" class="form-control">
+                                                <option value="">ไม่มี</option>
+                                                @foreach ($contracts as $contract)
+                                                    <option value="{{ $contract->contract_id }}"
+                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+
+                                            <div class="invalid-feedback">
+                                                {{ __('สัญญา') }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (session('contract_id') == 0)
+                                    <div class="col-md-3 mt-4">
+                                        {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
+                            {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            class="btn btn-success text-white"
+                                            target="contractCreate">เพิ่มสัญญา</a> --}}
+
+                                        <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
+                                            class="btn btn-success text-white"
+                                            target="contractCreate">เพิ่มสัญญา</a>
+                                    </div>
+                                    @endif
+                                </div>
+
+                               {{--  <div class="row mt-3">
                                     <div class=" col-md-4">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
 
@@ -54,7 +138,7 @@
                                         </div>
                                     </div>
 
-                                <div class="col-md-3">
+                                <div class="d-none col-md-3">
                     <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
                     <span class="text-danger">*</span>
 
@@ -112,7 +196,7 @@
                                             class="btn btn-success text-white"
                                             target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                                 </div>
@@ -122,12 +206,13 @@
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                         <span class="text-danger">*</span>
                                         <input class="form-control" id="task_start_date" name="task_start_date"
+                                        value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
                                             required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input class="form-control" id="task_end_date" name="task_end_date" required>
+                                        <input class="form-control" id="task_end_date" name="task_end_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}>
                                     </div>
                                 </div>
 

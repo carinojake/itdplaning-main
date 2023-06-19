@@ -101,10 +101,13 @@ class Task extends Model
         return $this->belongsTo('App\Models\Project');
     }
 
+
+
     public function contract()
     {
         return $this->belongsToMany('App\Models\Contract', 'contract_has_tasks', 'task_id', 'contract_id');
     }
+
 
 
     public function taskconsend()

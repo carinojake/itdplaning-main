@@ -503,7 +503,6 @@ class ContractController extends Controller
 
     public function store(Request $request)
     {
-
         $contract = new Contract;
         $task = new Task;
         // $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
@@ -800,9 +799,10 @@ class ContractController extends Controller
             session()->flash('contract_end_date', $contract->contract_end_date);
 
 
-            if ($origin) {
+            if ($task) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
-            }
+            } elseif ($project) {
+                return redirect()->route('project.task.createcn', ['project' => $project]);}
 
 
             return redirect()->route('contract.index');

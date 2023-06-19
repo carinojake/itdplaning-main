@@ -14,7 +14,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มกิจกรรม ') }}">
+                        <x-card title="{{ __('เพิ่มกิจกรรม (1)') }}">
 
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row g-3 needs-validation" novalidate>
@@ -54,9 +54,9 @@
                                         </div>
                                     </div>
 
-                                <div class="col-md-3">
+                      {{--           <div class="col-md-3">
                     <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
-                    <span class="text-danger">*</span>
+
 
                         <select name="task_parent" id="task_parent" class="form-control">
 
@@ -70,7 +70,7 @@
                     <div class="invalid-feedback">
                         {{ __('กิจกรรมย่อย') }}
                     </div>
-                </div>
+                </div> --}}
                                     </div>
 
                                 @if (session('contract_id'))
