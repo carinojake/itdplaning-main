@@ -160,7 +160,17 @@
                                         @endif
                                     </div>
 
+                                    <div class="col-md-12 mt-3">
+                                        <label for="task_name"
+                                            class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
+                                            class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="task_name" name="task_name"
+                                        value= {{ session('contract_name') }}>
+                                        <div class="invalid-feedback">
+                                            {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                        </div>
 
+                                    </div>
 
 
 
@@ -184,17 +194,7 @@
 
 
 
-                                    <div class="col-md-12 mt-3">
-                                        <label for="task_name"
-                                            class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="task_name" name="task_name"
-                                        value= {{ session('contract_name') }}>
-                                        <div class="invalid-feedback">
-                                            {{ __('ชื่อรายการที่ใช้จ่าย') }}
-                                        </div>
 
-                                    </div>
 
                                     <div class="col-md-12 mt-3">
                                         <label for="task_description"

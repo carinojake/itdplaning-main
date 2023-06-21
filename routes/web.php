@@ -67,6 +67,11 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/project/{project}/task/createsubno', [ProjectController::class, 'taskCreatesubno'])->name('project.task.createsubno');
     Route::post('/project/{project}/task/createsubno', [ProjectController::class, 'taskStoresubno'])->name('project.task.storesubno');
 
+
+
+
+
+
     Route::get('/project/createsubno', [ProjectController::class, 'CreateSubno'])->name('project.createsubno');
     Route::post('/project/storesubno', [ProjectController::class, 'Storesubno'])->name('project.storesubno');
 

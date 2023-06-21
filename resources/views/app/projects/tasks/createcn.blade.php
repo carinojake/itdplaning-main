@@ -21,9 +21,51 @@
 
                                 @csrf
                               <div>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <label for="task_contract"
+                                                class="form-label">{{ __('สัญญา') }}</label> <span
+                                                class="text-danger">*</span>
+                                            <select name="task_contract" id="task_contract" class="form-control">
+                                                <option value="">ไม่มี</option>
+                                                @foreach ($contracts as $contract)
+                                                    <option value="{{ $contract->contract_id }}"
+                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+
+                                            <div class="invalid-feedback">
+                                                {{ __('สัญญา') }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (session('contract_id') == 0)
+                                    <div class="col-md-3 mt-4">
+                                        {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
+                            {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            class="btn btn-success text-white"
+                                            target="contractCreate">เพิ่มสัญญา</a> --}}
+
+                                        <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
+                                            class="btn btn-success text-white"
+                                            target="contractCreate">เพิ่มสัญญา</a>
+                                    </div>
+                                    @endif
+                                </div>
+
+
+
+
                                 <div class="row mt-3">
+
+
                                     <div class="col-md-12">
-                                        <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
+                                        <label for="task_name" class="form-label">{{ __('ชื่อสัญญา') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
                                         value= {{ session('contract_name') }} >
@@ -81,42 +123,7 @@
                 @endif
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <label for="task_contract"
-                                                class="form-label">{{ __('สัญญา') }}</label> <span
-                                                class="text-danger">*</span>
-                                            <select name="task_contract" id="task_contract" class="form-control">
-                                                <option value="">ไม่มี</option>
-                                                @foreach ($contracts as $contract)
-                                                    <option value="{{ $contract->contract_id }}"
-                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
 
-
-                                            <div class="invalid-feedback">
-                                                {{ __('สัญญา') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if (session('contract_id') == 0)
-                                    <div class="col-md-3 mt-4">
-                                        {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                            {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
-                                            class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา</a> --}}
-
-                                        <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
-                                            class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา</a>
-                                    </div>
-                                    @endif
-                                </div>
 
                                {{--  <div class="row mt-3">
                                     <div class=" col-md-4">

@@ -254,7 +254,7 @@
                                         {{-- <th width="50">ลำดับ</th> --}}
                                         <th>กิจกรรม</th>
                                         <th>วันที่</th>
-                                        <th>งบ</th>
+                                        <th>งวด</th>
                                         <th>รอการเบิกจ่าย</th>
                                         <th>การเบิกจ่าย</th>
                                         <th>วันที่ ใช้จ่าย</th>
@@ -302,12 +302,26 @@
                                                     class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
                                             </td>
                                             <td>
-                                                {{ number_format($taskcon->taskcon_budget) }}
+                                                @if($taskcon->taskcon_budget_it_operating > 0)
+                                                {{ number_format($taskcon->taskcon_budget_it_operating) }}
+
+                                                @elseif($taskcon->taskcon_budget_it_investment > 0)
+                                                {{ number_format($taskcon->taskcon_budget_it_investment) }}
+
+                                                @elseif ($taskcon->taskcon_budget_gov_utility > 0)
+                                                {{ number_format($taskcon->taskcon_budget_gov_utility) }}
+                                                @endif
 
                                             </td>
 
                                              <td>
-                                                {{ number_format($taskcon->taskcon_cost) }}
+                                                @if($taskcon->taskcon_budget_it_operating > 0)
+                                                {{ number_format($taskcon->taskcon_cost_it_operating) }}
+                                                @elseif($taskcon->taskcon_budget_it_investment > 0)
+                                                {{ number_format($taskcon->taskcon_cost_it_investment) }}
+                                                @elseif ($taskcon->taskcon_budget_gov_utility > 0)
+                                                {{ number_format($taskcon->taskcon_cost_gov_utility) }}
+                                                @endif
 
                                             </td>
                                             <td>

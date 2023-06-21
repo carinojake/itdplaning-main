@@ -12,8 +12,8 @@
                             <x-slot:toolbar>
                                 <a href="{{ route('project.create') }}" class="btn btn-success text-white"
                                     target="_blank">เพิ่ม งาน/โครงการ</a>
-{{--
-                                 <a href="{{ route('project.createsub') }}"
+
+                                {{--  <a href="{{ route('project.createsub') }}"
                                         class="btn btn-info text-white">เพิ่ม สัญญา</a>
 
                                     <a href="{{ route('project.createsubno') }}"

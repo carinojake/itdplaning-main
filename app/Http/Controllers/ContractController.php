@@ -1006,6 +1006,13 @@ class ContractController extends Controller
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
         $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
 
+
+        if ($pay_date_obj !== false) {
+            $pay_date = $pay_date_obj->format('Y-m-d');
+        } else {
+            $pay_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
+        }
+
         if ($start_date_obj === false || $end_date_obj === false  || $pay_date_obj === false) {
             // Handle date conversion error
             // You can either return an error message or use a default date
@@ -1183,25 +1190,48 @@ class ContractController extends Controller
 
         //convert date
         // Convert date inputs to the correct format
+
+
+
+
+
         $start_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_start_date'))->format('Y-m-d');
         $end_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_end_date'))->format('Y-m-d');
-        $pay_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
+
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
-        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
 
-        if ($start_date_obj === false || $end_date_obj === false  || $pay_date_obj === false) {
+
+
+
+
+
+        if ($start_date_obj === false || $end_date_obj === false  ) {
             // Handle date conversion error
             // You can either return an error message or use a default date
+
         } else {
             $start_date_obj->modify('-543 years');
             $end_date_obj->modify('-543 years');
-            $pay_date_obj->modify('-543 years');
+
             $start_date = date_format($start_date_obj, 'Y-m-d');
             $end_date = date_format($end_date_obj, 'Y-m-d');
-            $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
         }
+        $pay_date_str = $request->input('taskcon_pay_date');
+        $pay_date_obj = date_create_from_format('d/m/Y', $pay_date_str);
+
+        if ($pay_date_obj !== false) {
+            $pay_date_obj->modify('-543 years');
+            $pay_date = $pay_date_obj->format('Y-m-d');
+        } else {
+            $pay_date = null; // or any default value
+        }
+
+
+
+
 
         // convert input to decimal or set it to null if empty
         $taskcon_budget_it_operating = str_replace(',', '', $request->input('taskcon_budget_it_operating'));

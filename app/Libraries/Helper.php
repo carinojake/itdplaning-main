@@ -281,6 +281,26 @@ class Helper
     }
 
 
+    public static function project_select($project_type = null)  //contract_type   type_id
+    {
+        $types = [
+            "99" => "-",
+            "1" => "งบกลาง ICT",
+            "2" => "งบดำเนินงาน",
+            "3" => "ค่าสาธารณูปโภค",
+
+        ];
+
+        if ($project_type && array_key_exists($project_type, $types)) {
+            return $types[$project_type];
+        } elseif (!$project_type) {
+            return $types;
+        } else {
+            return 'Unknown';
+        }
+    }
+
+
     public static function taskconrounds($rounds = null)
 {
     $types = [];
