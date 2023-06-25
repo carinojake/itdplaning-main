@@ -3,6 +3,7 @@
     <table class="table">
         <thead>
             <tr>
+
                  <th width="50">ลำดับ</th>
                 {{--  <th>ประเภท</th> --}}
                 <th >รายการ</th>
@@ -12,8 +13,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($project->main_task_activity as $index => $task)
-           {{--  {{ var_dump($task->hashid) }} --}}
+            @foreach ($project->main_task_sub as $index => $task)
+        {{--     {{ var_dump($task->hashid) }} --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
 
@@ -418,8 +419,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                     </td>
 
                        <td class="text-end">
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
-                       <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
+                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
+                       <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
 
                         @if ($task->task_parent == 0)
 

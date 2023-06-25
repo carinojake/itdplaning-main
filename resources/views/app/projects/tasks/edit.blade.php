@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
-            {{ Breadcrumbs::render('project.task.edit', $project, $task) }}
+           {{--  {{ Breadcrumbs::render('project.task.edit', $project, $task) }} --}}
             <div class="animated fadeIn">
                 @if ($errors->any())
                     <div class="alert alert-danger">

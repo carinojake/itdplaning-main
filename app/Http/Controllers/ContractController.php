@@ -1008,7 +1008,7 @@ class ContractController extends Controller
 
 
         if ($pay_date_obj !== false) {
-            $pay_date = $pay_date_obj->format('Y-m-d');
+           // $pay_date = $pay_date_obj->format('Y-m-d');
         } else {
             $pay_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
         }
@@ -1080,7 +1080,7 @@ class ContractController extends Controller
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00') ?? null;
 
         $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
         //convert input to decimal or set it to null if empty

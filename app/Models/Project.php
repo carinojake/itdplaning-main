@@ -95,12 +95,36 @@ class Project extends Model
     // Relations ...
     public function task()
     {
-        return $this->hasMany('App\Models\Task', 'project_id')->OrderBy('created_at');
+        return $this->hasMany('App\Models\Task', 'project_id')/* ->OrderBy('created_at') */;
     }
     public function main_task()
     {
-        return $this->task()->whereNull('task_parent');
+        return $this->task()->whereNull('task_parent')
+
+      //->leftJoin('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+
+        ;
     }
+
+    public function main_task_activity()
+    {
+        return $this->task()
+        ->leftJoin('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+        ->whereNull('taskcons.task_id')
+        ->select('tasks.task_id', 'tasks.project_id', 'taskcons.taskcon_id', 'taskcons.contract_id', 'taskcons.task_id', 'tasks.task_parent', 'tasks.*');
+        ;
+    }
+    public function main_task_sub()
+    {
+        return $this->task('task.task_id')
+        ->whereNull('task_parent')
+      ->RIGHTJOIN('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+
+
+        ;
+    }
+
+
 
     public function main_task_with_project($task_parent)
     {

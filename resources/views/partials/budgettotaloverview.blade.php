@@ -586,7 +586,7 @@
                                             aria-expanded="false"
                                             aria-controls="collapseExample">
                                             <div class="fs-4 fw-semibold text-pay">
-                                                <!--การเบิกจ่าย PA -->
+                                                <!--การเบิกจ่าย ไม่แบบ PA -->
                                                 {{ number_format($utsc - $utsc_pay, 2) }}
                                             </div>
                                             <div>

@@ -129,7 +129,7 @@
         $trail->push('Project', route('project.index'));
         $trail->push($project->project_name, route('project.show', ['project' => $project->hashid]));
         //$trail->push('Task',  route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]));
-        $trail->push($task->task_name);
+     //   $trail->push($task->task_name);
         $trail->push('EditSub');
     });
         ////////////////////////////////////////////////////////////////////////////////////////

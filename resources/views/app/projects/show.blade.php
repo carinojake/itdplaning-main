@@ -34,14 +34,16 @@
                                         <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
                             @include('partials.budgettotaloverview')
+
                             <div id="gantt_here" style='width:100%; height:50vh;'></div>
+
                             <div class="callout callout-primary row mt-3">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
                                   <a class="nav-link active" aria-current="page" href="#activity" data-bs-toggle="pill">กิจกรรมย่อย</a>
                                 </li>
                                 <li class="nav-item">
-                                  <a class="nav-link" href="#subactivity" data-bs-toggle="pill">รายการที่ใช้จ่าย</a>
+                                  <a class="nav-link" href="#subactivity" data-bs-toggle="pill">รายการที่ใช้จ่าย </a>
                                 </li>
                                 <li class="nav-item">
                                   <a class="nav-link" href="#contract" data-bs-toggle="pill">สัญญา</a>
@@ -55,7 +57,7 @@
                                 </div>
                             <div class="tab-pane fade" id="subactivity">
                                     <!-- Content for Subactivity tab -->
-
+                                    @include ('partials.expenses')
                            </div>
                                 <div class="tab-pane fade" id="contract">
                                     <!-- Content for Contract tab -->
