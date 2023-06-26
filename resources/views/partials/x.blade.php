@@ -49,6 +49,7 @@
                 @endif
             </div>
         </div>
+        @if ($task->subtask->count() > 1)
         <div class="row mt-3">
             <div class="col-12">
                 <h5>{{ __('รายละเอียดงาน/โครงการ') }}</h5>
@@ -56,6 +57,7 @@
             {{ $task->task_description }}
         </div>
     </div>
+
     <table class="table mt-3">
         <table class="table mt-3">
             <tbody>
@@ -138,4 +140,5 @@
                 @endif
             </tbody>
         </table>
+@endif
 @endif

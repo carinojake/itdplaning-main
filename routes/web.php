@@ -87,7 +87,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::delete('/project/{project}/task/{task}/destroy', [ProjectController::class, 'taskDestroy'])->name('project.task.destroy');
     Route::get('/project/{project}/task/{task}', [ProjectController::class, 'taskShow'])->name('project.task.show');
 
-    Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSub'])->name('project.task.editsubno');
+    Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSubno'])->name('project.task.editsubno');
     Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
 
 

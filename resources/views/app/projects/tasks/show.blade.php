@@ -8,46 +8,35 @@
 
 
 
-                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-warning text-dark">  <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
-                </a>
+                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                        class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
+                    </a>
 
-                <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
-
-
-                        @if ($task->task_budget_it_operating > 0)
+                    <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                        class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
 
 
-
+                    @if ($task->task_budget_it_operating > 0)
                         <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-
-                        @elseif ($task->task_budget_it_investment > 0)
-
-
+                    @elseif ($task->task_budget_it_investment > 0)
                         <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-
-
-
-                            @elseif ($task->task_budget_gov_utility > 0)
-
-
+                    @elseif ($task->task_budget_gov_utility > 0)
                         <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
-
-                        @endif
-                        <a href="{{ route('project.show', ['project' => $project->hashid]) }}" class="btn btn-secondary">กลับ</a>
+                    @endif
+                    <a href="{{ route('project.show', ['project' => $project->hashid]) }}"
+                        class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
 
@@ -60,7 +49,8 @@
 
                     <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
-                    <a href="{{ route('project.show', ['project' => $project->hashid]) }}" class="btn btn-secondary">กลับ</a>
+                    <a href="{{ route('project.show', ['project' => $project->hashid]) }}"
+                        class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
 
@@ -71,14 +61,14 @@
             @include('partials.y')
 
 
+            @include('partials.z')
 
-
-
+            {{--
             @foreach ($taskcons as $taskcon)
 
                          <div>{{ $taskcon->task_id}}</div>
                         <div>{{ $taskcon->taskcon_id}}</div
-            @endforeach
+            @endforeach --}}
 
 
 
@@ -93,11 +83,11 @@
 
     </x-slot:css>
     <x-slot:javascript>
-    <script src="sweetalert2.min.js"></script>
+        <script src="sweetalert2.min.js"></script>
 
 
 
-      <script>
+        <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const popoverEl = document.querySelectorAll('[data-coreui-toggle="popover"]');
                 Array.from(popoverEl).forEach(function(el) {
@@ -107,14 +97,14 @@
         </script>
 
 
-<script>
-    Swal.fire({
-        title: 'Error!',
-        text: 'Do you want to continue',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-      })
-    </script>
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
+        </script>
 
 
 

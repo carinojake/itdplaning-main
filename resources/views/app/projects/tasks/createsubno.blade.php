@@ -210,7 +210,24 @@
 
                                                 <div id="mm_form">
 
+                                                    <div class="d-none col-md-4">
+                                                        <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
 
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="task_status"
+                                                                id="task_status1" value="1" checked>
+                                                            <label class="form-check-label" for="task_status1">
+                                                                ระหว่างดำเนินการ
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="task_status"
+                                                                id="task_status2" value="2">
+                                                            <label class="form-check-label" for="task_status2">
+                                                                ดำเนินการแล้วเสร็จ
+                                                            </label>
+                                                        </div>
+                                                    </div>
                                                     <div class="callout callout-primary row mt-3">
                                                         <div class="row">
                                                             <div class="col-md-4 mt-3">
@@ -237,6 +254,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="row mt-3">
                                                             <div class="col-md-6">
                                                                 <label for="task_start_date"
@@ -253,6 +271,7 @@
                                                                     name="task_end_date" name="task_start_date">
                                                             </div>
                                                         </div>
+                                                    </div>
                                                         <div class="callout callout-warning">
                                                         <div class="row ">
                                                             <div class="col-md-4 mt-3">
@@ -379,6 +398,7 @@
                                                                 </div>
                                                             </div>
                                                             </div>
+                                                        </div>
                                                             {{--
 
 
@@ -461,9 +481,9 @@
                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                 class="form-control numeral-mask"
                                                                 name="taskcon_mm_budget" min="0">
-                                                        </div> --}}
+                                                        </div>    </div>--}}
 
-                                                    </div>
+                                                        <div class="callout callout-light">
                                                             <div id="ba_form" {{-- style="display:none;" --}}>
                                                                 <div class="row mt-3">
                                                                     <div class="col-md-4">
@@ -533,7 +553,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                    </div>
                                                         {{--
 
                                             <div class=" d-none callout callout-info row mt-3">
