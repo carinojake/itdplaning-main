@@ -2001,6 +2001,8 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
         //$task->task_cost_disbursement =  $taskcon_bd_budget +$taskcon_ba_budget  ;
         $task->task_pay = $task_pay;
+       // $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
+     // $task->taskcon_pp        = $request->input('taskcon_pp');
         $task->task_type = $request->input('task_type');
         //dd($task);
         // Save the Project
@@ -2105,7 +2107,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $taskcon->task_id = $task->task_id; // Use the id of the newly created project
         $taskcon->taskcon_name        = $request->input('task_name');
         $taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
-
+        $taskcon->taskcon_pp        = $request->input('taskcon_pp');
         // $taskcon->taskcon_name        = $request->input('task_name');
 
         $taskcon->taskcon_mm_name        = $request->input('taskcon_mm_name');
@@ -2388,7 +2390,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $taskcon->taskcon_ba_budget                 =  $taskcon_ba_budget;
         $taskcon->taskcon_bd_budget                 =  $taskcon_bd_budget;
         $taskcon->taskcon_pp                =   $request->input('taskcon_pp');
-        $taskcon->taskcon_pp_name                =   $request->input('taskcon_pp');
+        $taskcon->taskcon_pp_name                =   $request->input('taskcon_pp_name');
         $taskcon->taskcon_pay                 =  $taskcon_pay;
         $taskcon->taskcon_mm_budget                 =  $taskcon_mm_budget;
 
@@ -2468,7 +2470,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $task_budget_gov_utility = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
 
 
-        //dd($tasks);
+     //   dd($tasks);
 
         return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
@@ -2497,11 +2499,15 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
            $task = Task::
     join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
-    ->select('tasks.*','taskcons.taskcon_id', 'taskcons.taskcon_mm','taskcons.taskcon_mm_name','taskcons.taskcon_pay','taskcons.taskcon_pp_name','taskcons.taskcon_pay_date','taskcons.taskcon_pp') // make sure taskcon_mm is included in taskcons.*
+    ->select('tasks.*','taskcons.taskcon_id',
+    'taskcons.taskcon_mm','taskcons.taskcon_mm_name',
+    'taskcons.taskcon_pay','taskcons.taskcon_pay_date',
+    'taskcons.taskcon_pp_name'
+    ,'taskcons.taskcon_pp') // make sure taskcon_mm is included in taskcons.*
     ->where('tasks.task_id', $id_task)
     ->first();
 
-     // dd($task);
+     //dd($task);
          ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
          ($contract = $contracts->toJson()); // Convert the collection to JSON
          //  $contract = $contracts->first();
@@ -2640,7 +2646,8 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $task->task_pay = $task_pay;
         $task->task_type = $request->input('task_type');
         // Update other task attributes as needed
-
+   //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
+     // $task->taskcon_pp        = $request->input('taskcon_pp');
         // dd($task);
 
 
@@ -2656,11 +2663,6 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $taskcon = Taskcon::where('task_id', $task->task_id)->first();
 
         // If the Taskcon doesn't exist, return an error
-        if (!$taskcon) {
-            return redirect()->back()->withErrors('Taskcon not found.');
-        }
-
-
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
@@ -2777,7 +2779,15 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
         //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
         // Save the Taskcon
-      //  dd($task,$taskcon);
+        //dd($task,$taskcon);
+
+
+        if (!$taskcon) {
+            return redirect()->back()->withErrors('Taskcon not found.');
+        }
+
+
+
 
       if ($task->save()) {
         // Update contract

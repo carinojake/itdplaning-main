@@ -458,7 +458,7 @@
                                                         </div>
 
                                                          <div class="row ">
-                                                         {{--   <div class="col-md-4 mt-3">
+                                                       <div class="col-md-4 mt-3">
                                                                 <label for="project_select"
                                                                     class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
 
@@ -478,15 +478,116 @@
                                                                 <div class="invalid-feedback">
                                                                     {{ __('กิจกรรม') }}
                                                                 </div>
-                                                            </div> --}}
+                                                            </div>
 
                                                             <!-- Contract Type -->
+                                                            <div id="ICT" {{-- style="display:none;" --}}>
+                                                                <div class="row mt-3">
+                                                                  <div class="col-md-4">
+                                                                        <label for="task_budget_it_operating"
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT') }}</label>
+                                                                        <input type="text" placeholder="0.00"
+                                                                            step="0.01"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            id="task_budget_it_operating"
+                                                                            name="task_budget_it_operating"
+                                                                            min="0"
+                                                                           >
+
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('ระบุงบกลาง ICT') }}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="task_cost_it_operating"
+                                                                        class="form-label">{{ __('รอการเบิก งบกลาง ICT') }}</label>
+                                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                         class="form-control numeral-mask" id="task_cost_it_operating"
+                                                                         name="task_cost_it_operating" min="0"   >
+
+                                                                        <div class="invalid-feedback">
+                                                                        {{ __('งบกลาง ICT') }}
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="inv" {{-- style="display:none;" --}}>
+                                                                <div class="row mt-3">
+                                                                  <div class="col-md-4">
+                                                                        <label for="task_budget_it_investment"
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน') }}</label>
+                                                                        <input type="text" placeholder="0.00"
+                                                                            step="0.01"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            id="task_budget_it_investment"
+                                                                            name="task_budget_it_investment"
+                                                                            min="0"
+                                                                           >
+
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('งบดำเนินงาน') }}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="task_cost_it_investment"
+                                                                        class="form-label">{{ __('รอการเบิก งบดำเนินงาน') }}</label>
+                                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                         class="form-control numeral-mask" id="task_cost_it_investment"
+                                                                         name="task_cost_it_investment" min="0"   >
+
+                                                                        <div class="invalid-feedback">
+                                                                        {{ __('งบดำเนินงาน') }}
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div id="utility" {{-- style="display:none;" --}}>
+                                                                <div class="row mt-3">
+                                                                  <div class="col-md-4">
+                                                                        <label for="task_budget_gov_utility"
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
+                                                                        <input type="text" placeholder="0.00"
+                                                                            step="0.01"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            id="task_budget_gov_utility"
+                                                                            name="task_budget_gov_utility"
+                                                                            min="0"
+                                                                           >
+
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('ค่าสาธารณูปโภค') }}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <label for="task_cost_gov_utility"
+                                                                        class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
+                                                                        <input type="text" placeholder="0.00" step="0.01"
+                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                         class="form-control numeral-mask" id="task_cost_gov_utility"
+                                                                         name="task_cost_gov_utility" min="0"   >
+
+                                                                        <div class="invalid-feedback">
+                                                                        {{ __('ค่าสาธารณูปโภค') }}
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
 
 
 
-
-                                                            @if ($task->task_budget_it_operating > 0)
+                                                        {{--     @if ($task->task_budget_it_operating > 0)
                                                                 <div class="col-md-3 mt-3">
                                                                     <label for="task_budget_it_operating"
                                                                         class="form-label">{{ __('วงเงินที่ขออนุมัติ ') }}</label>
@@ -540,7 +641,7 @@
                                                                 </div>
                                                             @endif
                                                         </div>
-
+ --}}
                                                         <div class="d-none  col-md-12 mt-3">
                                                             <label for="taskcon_mm_name"
                                                                 class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ 2') }}</label>
@@ -935,7 +1036,25 @@
                 });
             </script>
 
+<script>
+    $(document).ready(function() {
+$('#project_select').change(function() {
+// ซ่อนทุกฟิลด์ก่อน
+$('#ICT').hide();
+$('#inv').hide();
+$('#utility').hide();
 
+// แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+if ($(this).val() == 'task_budget_it_operating') {
+$('#ICT').show();
+} else if ($(this).val() == 'task_budget_it_investment') {
+$('#inv').show();
+} else if ($(this).val() == 'task_budget_gov_utility') {
+$('#utility').show();
+}
+});
+});
+</script>
             <script>
                 $(document).ready(function() {
                     $('#project_select').change(function() {

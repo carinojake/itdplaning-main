@@ -668,18 +668,18 @@
                                                                             <span class="text-danger">*</span>
 
                                                                             <input type="text" class="form-control"
-                                                                                id="taskcon_pp" name="taskcon_cn"
+                                                                                id="taskcon_pp" name="taskcon_pp"
                                                                                 required>
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกงบใบสำคัญ_PP') }}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-8">
-                                                                            <label for="task_name"
+                                                                            <label for="taskcon_pp_name"
                                                                                 class="form-label">{{ __('รายการใช้จ่าย ') }}</label>
                                                                             <span class="text-danger">*</span>
                                                                             <input type="text" class="form-control"
-                                                                                id="task_name" name="task_name"
+                                                                                id="taskcon_pp_name" name="taskcon_pp_name"
                                                                                 required>
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกรายการใช้จ่าย') }}
