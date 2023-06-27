@@ -52,7 +52,28 @@
                     </div>
                 </div>
 
+                <div class="col">
+                    <!--รอเบิก-->
+                    <div class="card">
+                        <div class="card-body">
 
+                            <button class="btn " style="width: 13rem;"
+                                data-bs-toggle="collapse" href="#collapseExample"
+                                role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                <div class="fs-4 fw-semibold text-info">
+                                    {{ number_format($budget['cost'], 2) }}
+                                </div>
+
+                                <small class="text-xl">
+                                    เบิกจ่ายใช้งบประมาณ
+                                </small>
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col">
                     <!--คงเหลือ-->
@@ -69,7 +90,7 @@
                                     {{ number_format(floatval($budget['balance']), 2) }}
                                 </div>
 
-                                <small class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                <small class="text-xl">กรอบงบประมาณคงเหลือ</small>
                             </button>
 
                         </div>
@@ -255,11 +276,32 @@
                                     </div>
                                     <div>
                                         <small
-                                            class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                            class="text-xl">กรอบงบประมาณคงเหลือ
+                                        </small>
                                     </div>
                                 </button>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <!--ยอดงบประมาณคงเหลือทั้งหมด-->
+                                <button class="btn " style="width: 12rem;"
+                                    data-bs-toggle="collapse" href="#collapseExample"
+                                    role="button" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    <div class="fs-4 fw-semibold btn btn-info"
+                                        style="btn btn-warning">
+                                        <!--ยอดงบประมาณคงเหลือทั้งหมด-->
+                                        {{ number_format($project['budget_it_operating'] , 2) }}
+                                    </div>
+                                    <div>
+                                        <small
+                                            class="text-xl">เบิกจ่ายงบประมาณแล้ว</small>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -462,7 +504,30 @@
                                     </div>
                                     <div>
                                         <small
-                                            class="text-xl  ">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                            class="text-xl">กรอบงบประมาณคงเหลือ
+                                        </small>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+                                <!--ยอดงบประมาณคงเหลือทั้งหมด-->
+                                <button class="btn "style="width: 12rem;"
+                                    data-bs-toggle="collapse" href="#collapseExample"
+                                    role="button" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    <div class="fs-4 fw-semibold btn btn-info">
+                                        <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
+
+                                        {{ number_format($project['budget_it_investment'] , 2) }}
+
+                                    </div>
+                                    <div>
+                                        <small
+                                            class="text-xl">เบิกจ่ายงบประมาณแล้ว</small>
                                     </div>
                                 </button>
                             </div>
@@ -512,7 +577,7 @@
                                             aria-expanded="false"
                                             aria-controls="collapseExample">
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($utpcs, 2) }}
+                                                {{ number_format($ut_budget_sum, 2) }}
                                             </div>
                                             <div>
                                                 <small class="text-xl">จำนวนเงิน แบบมี PA
@@ -528,7 +593,7 @@
                                             aria-expanded="false"
                                             aria-controls="collapseExample">
                                             <div class="fs-4 fw-semibold">
-                                                <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($utsc, 2) }}
+                                                <!--จำนวนเงินแบบไม่มี PA-->{{ number_format($ut_budget_sum_no, 2) }}
                                             </div>
                                             <div>
                                                 <small class="text-xl">จำนวนเงิน แบบไม่มี
@@ -537,6 +602,27 @@
                                             </div>
                                         </button>
                                     </div>
+
+                              {{--    <div class="card">
+                                        <div class="card-body">
+                                            <!--ยอดงบประมาณคงเหลือทั้งหมด-->
+                                            <button class="btn "style="width: 12rem;"
+                                                data-bs-toggle="collapse" href="#collapseExample"
+                                                role="button" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                <div class="fs-4 fw-semibold btn btn-light">
+                                                    <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
+
+                                                    {{ number_format($project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }}
+
+                                                </div>
+                                                <div>
+                                                    <small
+                                                        class="text-xl">งบประมาณทั้งหมด คงเหลือ</small>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -553,7 +639,7 @@
                                         aria-controls="collapseExample">
                                         <div class="fs-4 fw-semibold btn btn-warning">
                                             <!--รอการเบิกจ่ายทั้งหมด-->
-                                            {{ number_format($utpcs - $utsc_pay_pa + ($utsc - $utsc_pay), 2) }}
+                                            {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay), 2) }}
                                         </div>
                                         <div>
                                             <small
@@ -662,17 +748,44 @@
                                         aria-controls="collapseExample">
                                         <div class="fs-4 fw-semibold btn btn-success">
                                             <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
+                                            {{ number_format($project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }}
 
-                                            {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
-
+{{--                                             {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
+ --}}
                                         </div>
                                         <div>
                                             <small
-                                                class="text-xl">ยอดงบประมาณคงเหลือทั้งหมด</small>
+                                                class="text-xl">กรอบงบประมาณคงเหลือ</small>
                                         </div>
                                     </button>
                                 </div>
                             </div>
+
+
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <!--ยอดงบประมาณคงเหลือทั้งหมด-->
+                                    <button class="btn "style="width: 12rem;"
+                                        data-bs-toggle="collapse" href="#collapseExample"
+                                        role="button" aria-expanded="false"
+                                        aria-controls="collapseExample">
+                                        <div class="fs-4 fw-semibold btn btn-info">
+                                            <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
+
+                                            {{ number_format((($utpcs - $utsc_pay_pa) ), 2) }}
+
+                                        </div>
+                                        <div>
+                                            <small
+                                                class="text-xl">เบิกจ่ายงบประมาณแล้ว</small>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+
+
                         </div>
 
 

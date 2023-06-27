@@ -55,7 +55,7 @@
             @endif
 
 
-            @include('partials.x')
+            @include('partials.xx')
 
 
             @include('partials.y')

@@ -262,6 +262,7 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         ];
 
         $budget['total'] = $__budget;
+
       //  $tasks =  Project::find($id);
 
          $tasks = DB::table('tasks')
@@ -464,9 +465,13 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
 
 
-
+       // $budget['cost']    = $gantt[0]['total_cost'];
         $budget['cost']    = $gantt[0]['total_cost'];
         $budget['balance'] = $gantt[0]['balance'];
+      //  $budget['balance'] = $gantt[0]['balance'];
+
+
+
 
         $labels = [
             'project' => 'โครงการ/งานประจำ',
@@ -584,6 +589,34 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
 
 
+
+    ($ut_budget_sum = DB::table('tasks')
+    ->selectRaw('SUM(COALESCE(task_budget_gov_utility,0)) As ut_budget_sum')
+    ->where('tasks.task_type', 1)
+    ->where('project_id', ($id))
+    ->get());
+($json = json_decode($ut_budget_sum));
+($ut_budget_sum = $json[0]->ut_budget_sum);
+($ut_budget_sum = (float)$ut_budget_sum);
+
+    //dd($ut_budget_sum);
+
+($ut_budget_sum_no = DB::table('tasks')
+    ->selectRaw('SUM(COALESCE(task_budget_gov_utility,0)) As ut_budget_sum_no')
+    ->where('tasks.task_type', 2)
+    ->where('project_id', ($id))
+    ->get());
+($json = json_decode($ut_budget_sum_no));
+($ut_budget_sum_no = $json[0]->ut_budget_sum_no);
+($ut_budget_sum_no = (float)$ut_budget_sum_no);
+
+
+            //dd($ut_budget_sum_no);
+
+
+
+
+
     ($ut_pa_sum = DB::table('tasks')
         ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
         ->where('tasks.task_type', 1)
@@ -681,11 +714,13 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         //  dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
 
 
-        //  dd($gantt);
-
+      //    dd($gantt,$budget);
+    // dd($budget);
         $gantt = json_encode($gantt);
 
         return view('app.projects.show', compact(
+            'ut_budget_sum',
+            'ut_budget_sum_no',
             'taskconssubno',
             'project',
             'itpsa1',
@@ -2135,6 +2170,13 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $taskcon->taskcon_bd_budget                 =  $taskcon_bd_budget;
 
         //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
+
+        //dd($task,$taskcon);
+
+        if (!$task->save()) {
+            // If the Project failed to save, redirect back with an error message
+            return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
+        }  // <-- This closing bracket was missing
         // Save the Taskcon
         if (!$taskcon->save()) {
             // If the Taskcon failed to save, redirect back with an error message
@@ -2242,9 +2284,9 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
 
         $task->project_id = $id;
-        $task->task_name = $request->input('task_name');
+        $task->task_name = $request->input('taskcon_mm_name');
         $task->task_description = trim($request->input('task_description'));
-
+        $task->task_status = $request->input('task_status');
         $task->task_parent = $request->input('task_parent') ?? null;
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
@@ -2258,16 +2300,13 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
         $task->task_cost_it_investment = $task_cost_it_investment;
 
         $task->task_pay = $task_pay;
-        $task->task_cost_disbursement =  $taskcon_bd_budget + $taskcon_ba_budget;
+       // $task->task_cost_disbursement =  $taskcon_bd_budget + $taskcon_ba_budget;
 
         $task->task_type = $request->input('task_type');
 
         // dd($task);
         // Save the Project
-        if (!$task->save()) {
-            // If the Project failed to save, redirect back with an error message
-            return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
-        }  // <-- This closing bracket was missing
+
 
         // Create a new Taskcon object
         $taskcon = new Taskcon;
@@ -2397,6 +2436,12 @@ from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
 
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         // Save the Taskcon
+         dd($task,$taskcon);
+
+        if (!$task->save()) {
+            // If the Project failed to save, redirect back with an error message
+            return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
+        }  // <-- This closing bracket was missing
         if (!$taskcon->save()) {
             // If the Taskcon failed to save, redirect back with an error message
             return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
