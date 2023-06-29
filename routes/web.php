@@ -52,12 +52,16 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
     */
     // Project
+
     Route::resource('project', ProjectController::class);
     Route::get('/project/{project}/task/createcn', [ProjectController::class, 'taskCreatecn'])->name('project.task.createcn');
     Route::get('/project/{project}/task/createsubno', [ProjectController::class, 'taskCreatesubno'])->name('project.task.createsubno');
 
 
     Route::get('/project/gantt', [ProjectController::class, 'gantt'])->name('project.gantt');
+
+
+
 
 
     Route::get('/project/{project}/task/create', [ProjectController::class, 'taskCreate'])->name('project.task.create');
@@ -115,6 +119,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::post('/project/{project}/task/{task}/storesubnop', [ProjectController::class, 'taskStoreSubnop'])->name('project.task.storesubnop');
 
 
+    Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');
 
 
 

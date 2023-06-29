@@ -562,7 +562,7 @@
                                         </div>
                                         <div>
                                             <small class="text-xl">
-                                                งบประมาณ
+                                                งบประมาณ  1
                                             </small>
                                         </div>
                                     </button>
@@ -580,7 +580,7 @@
                                                 {{ number_format($ut_budget_sum, 2) }}
                                             </div>
                                             <div>
-                                                <small class="text-xl">จำนวนเงิน แบบมี PA
+                                                <small class="text-xl">จำนวนเงิน แบบมี PA 1.1
                                                 </small>
                                             </div>
                                         </button>
@@ -597,13 +597,12 @@
                                             </div>
                                             <div>
                                                 <small class="text-xl">จำนวนเงิน แบบไม่มี
-                                                    PA
+                                                    PA 1.2
                                                 </small>
                                             </div>
                                         </button>
                                     </div>
-
-                              {{--    <div class="card">
+    <div class="card">
                                         <div class="card-body">
                                             <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                             <button class="btn "style="width: 12rem;"
@@ -618,11 +617,11 @@
                                                 </div>
                                                 <div>
                                                     <small
-                                                        class="text-xl">งบประมาณทั้งหมด คงเหลือ</small>
+                                                        class="text-xl">งบประมาณทั้งหมด คงเหลือ  1.3</small>
                                                 </div>
                                             </button>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -643,7 +642,7 @@
                                         </div>
                                         <div>
                                             <small
-                                                class="text-xl">รอการเบิกจ่ายทั้งหมด</small>
+                                                class="text-xl">รอการเบิกจ่ายทั้งหมด 2</small>
                                         </div>
                                     </button>
                                 </div>
@@ -660,7 +659,7 @@
                                                 {{ number_format($utpcs - $utsc_pay_pa, 2) }}
                                             </div>
                                             <small class="text-xl">รอการเบิกจ่าย แบบมี
-                                                PA</small>
+                                                PA 2.1</small>
 
                                         </button>
                                     </div>
@@ -677,9 +676,26 @@
                                             </div>
                                             <div>
                                                 <small class="text-xl">รอการเบิกจ่าย ไม่แบบ
-                                                    PA</small>
+                                                    PA 2.2</small>
                                             </div>
 
+                                        </button>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <!--รอการเบิกจ่ายทั้งหมด 3-->
+                                        <button class="btn " style="width: 12rem;"
+                                            data-bs-toggle="collapse" href="#collapseExample3"
+                                            role="button" aria-expanded="false"
+                                            aria-controls="collapseExample">
+                                            <div class="fs-4 fw-semibold btn btn-warning">
+                                                <!--รอการเบิกจ่ายทั้งหมด-->
+                                                {{ number_format(($utpcs ) + ($utsc ), 2) }}
+                                            </div>
+                                            <div>
+                                                <small
+                                                    class="text-xl">2.3</small>
+                                            </div>
                                         </button>
                                     </div>
                                 </div>
@@ -699,7 +715,7 @@
                                         </div>
                                         <div>
                                             <small class="text-xl">
-                                                รวมเบิกจ่ายทั้งหมด</small>
+                                                รวมเบิกจ่ายทั้งหมด 3</small>
                                         </div>
                                     </button>
                                 </div>
@@ -714,7 +730,7 @@
                                             <div class="fs-4 fw-semibold text-primary">
                                                 {{ number_format($utsc_pay_pa, 2) }}
                                             </div>
-                                            <small class="text-xl">จำนวนเงิน แบบมี PA
+                                            <small class="text-xl">จำนวนเงิน แบบมี PA 3.1
                                             </small>
                                         </button>
                                     </div>
@@ -730,7 +746,7 @@
                                             </div>
                                             <div>
                                                 <small class="text-xl">จำนวนเงิน แบบไม่มี
-                                                    PA
+                                                    PA 3.2
                                                 </small>
                                             </div>
                                         </button>
@@ -748,10 +764,10 @@
                                         aria-controls="collapseExample">
                                         <div class="fs-4 fw-semibold btn btn-success">
                                             <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
-                                            {{ number_format($project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }}
+                                        {{--     {{ number_format($project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }} --}}
 
-{{--                                             {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
- --}}
+                                       {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
+
                                         </div>
                                         <div>
                                             <small

@@ -251,6 +251,17 @@
                                                                     name="task_end_date" name="task_start_date"   value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }} >
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4 mt-3">
+                                                            <label for="task_mm_budget"
+                                                                class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
+                                                            <span class="text-danger"></span>
+
+                                                            <input type="text" placeholder="0.00" step="0.01"
+                                                                class="form-control" id="task_mm_budget"
+                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                class="form-control numeral-mask"
+                                                                name="task_mm_budget" min="0"  value="{{ $task->task_mm_budget }}">
+                                                        </div>
                                                     </div>
                                                         <div class="callout callout-warning">
                                                         <div class="row ">
