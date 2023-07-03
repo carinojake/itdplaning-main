@@ -178,6 +178,29 @@
                         }
                     },
                     {
+                        name: "balance_pa",
+                        width: 100,
+                        label: "มี MM คงเหลือ",
+                        tree: true,
+                        resize: true,
+                        template: function(task) {
+                            if (task.budget_mm > task.balance) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget_mm) + '</span>';
+                            } else if (task.budget_mm <  task.balance) {
+                                return'<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget_mm) + '</span>';
+                            } else {
+                                return '-';
+                            }
+                        }
+                    },
+                    {
                         name: "cost_pa",
                         width: 150,
                         label: "PA",

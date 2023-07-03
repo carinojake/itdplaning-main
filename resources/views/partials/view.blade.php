@@ -72,6 +72,28 @@
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
+                            <button class="btn " style="width: 13rem;"
+                                data-bs-toggle="collapse" href="#collapseExample2"
+                                role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                @php
+                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success' : 'danger';
+                                @endphp
+                                <div class="fs-4 fw-semibold text-success">
+                                    {{ number_format(floatval($budget['budget_total_mm_pp']), 2) }}
+                                </div>
+
+                                <small class="text-xl">กรอบงบประมาณคงเหลือ mm/pr - pa</small>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <!--คงเหลือ-->
+                    <div class="card  ">
+                        <div class="card-body">
                             <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
@@ -711,12 +733,31 @@
                             @endphp --}}
 
                                 <div class="fs-4 fw-semibold text-pay">
-
+                                    {{ number_format(($ut_budget_sum + $ut_budget_sum_no) -$budget['cost'] +$project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }}
                                 </div>
 
                                 <small class="text-xl">5.1  &nbsp;</small>
                             </button>
                         </div>
+                        <div class="card-body">
+                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                href="#collapseExample2" role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                {{--  @php
+                                $tmp_class_bal = $budget['balance'] > 1000000 ? 'success' : 'danger';
+                            @endphp --}}
+
+                                <div class="fs-4 fw-semibold text-pay">
+                                    {{ number_format(($ut_budget_sum + $ut_budget_sum_no) -$budget['cost'] +$project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }}
+                                </div>
+
+                                <small class="text-xl">5.3  &nbsp;</small>
+                            </button>
+                        </div>
+
+
+
+
                     </div>
                 </div>
 
@@ -1087,10 +1128,22 @@
     {{--                   {{ number_format($project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no), 2) }} --}}
   {{--   $project['budget_gov_utility'] - ($ut_budget_sum + $ut_budget_sum_no) --}}
 
-                                     mm   {{ number_format($budget['budget_total_mm'] , 2) }}
-                                     mm1   {{ number_format(($project['budget_gov_utility']-$budget['budget_total_mm'] ), 2) }}
-                                     mm-pa   {{ number_format(($budget['budget_total_mm'] - ($ut_budget_sum + $ut_budget_sum_no)), 2) }}
-                                     pa  {{ number_format($project['budget_gov_utility'] - ($utpcs + $utsc), 2) }}
+                                  <p>   1. mm <p> {{ number_format($budget['budget_total_mm'] , 2) }}
+                                <p>   2.  0-1  <p> {{ number_format(($project['budget_gov_utility']-$budget['budget_total_mm'] ), 2) }}
+                                <p>  3. (0-1)+ <p> {{ number_format($project['budget_gov_utility']-(($utsc_mm_pa+$utsc_mm)- (($ut_budget_sum + $ut_budget_sum_no) -$budget['cost'])  ), 2) }}
+
+
+                                    <p>   4. mm <p> {{ number_format($budget['budget_total_mm'] , 2) }}
+
+
+
+
+
+                                    <p>  5. (0-1)+ <p> {{ number_format($project['budget_gov_utility'], 2) }}
+                                        <p>  6. (0-1)+ <p> {{ number_format(($utsc_mm_pa+$utsc_mm) , 2) }}
+                                            <p>  7. (0-1)+ <p> {{ number_format((($ut_budget_sum + $ut_budget_sum_no) -$budget['cost']), 2) }}
+                                                <p>  8. (0-1)+ <p> {{ number_format(($budget['cost']), 2) }}
+                                    <p>   9.  <p>{{ number_format($project['budget_gov_utility'] - ($utpcs + $utsc), 2) }}
                                       {{-- $utpcs - $utsc_pay_pa + ($utsc - $utsc_pay)  --}}
 
                                         </div>

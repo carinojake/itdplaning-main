@@ -343,6 +343,26 @@
                         }
                     },
                     {
+                        name: "balance_pa",
+                        width: 100,
+                        label: "อีกPAคงเหลือ",
+                        tree: true,
+                        resize: true,
+                        template: function(task) {
+                            if (task.balance_pa > 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.balance_pa) + '</span>';
+                            } else if (task.balanc_pa == 0) {
+                                return '-';
+                            } else {
+                                return '-';
+                            }
+                        }
+                    },
+                    {
                         name: "balance",
                         width: 100,
                         label: "คงเหลือ",

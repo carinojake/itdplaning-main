@@ -12,8 +12,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($project->main_task_activity as $index => $task)
-           {{--  {{ var_dump($task->hashid) }} --}}
+            @foreach ($project->main_task as $index => $task)
+           {{--  {{ var_dump($task->hashid) main_task_activity}} --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
 
