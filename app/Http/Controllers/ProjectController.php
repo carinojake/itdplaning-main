@@ -905,7 +905,8 @@ class ProjectController extends Controller
         $budget['total'] = $__budget;
         $budget['budget_total_refund_pa_budget'] = $__prmm;
         ($budget['budget_total_mm'] = $__mm);
-        $budget['budget_total_mm_pp'] = $__budget-($__mm-$__prmm);
+        $budget['budget_total_mm_pr'] = $__budget-($__mm-$__prmm);
+
         //  dd($budget);
 
         //  $tasks =  Project::find($id);
@@ -1195,7 +1196,7 @@ class ProjectController extends Controller
 
 
        ($gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost']);
-       ($gantt[0]['budget_total_mm_pp'] =  ($gantt[0]['budget_total_mm']+$gantt[0]['refund_pa_budget']));
+       ($gantt[0]['budget_total_mm_pr2'] =  ($gantt[0]['budget_total_mm']+$gantt[0]['refund_pa_budget']));
 
 
      //  dd($gantt,$tasks);
@@ -1204,7 +1205,7 @@ class ProjectController extends Controller
       //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
         $budget['pay']    = $gantt[0]['total_pay'];
         $budget['cost']    = $gantt[0]['total_cost'];
-        $budget['budget_total_mm_pp'] = $gantt[0]['budget_total_mm_pp'];
+        $budget['budget_total_mm_pr2'] = $gantt[0]['budget_total_mm_pr2'];
         $budget['balance'] = $gantt[0]['balance'];
         //  $budget['balance'] = $gantt[0]['balance'];
 
@@ -1502,7 +1503,7 @@ class ProjectController extends Controller
 
         $budget['z'] = max($budget['xx'], $budget['x']);
 
-  dd($budget,$tasks);
+        dd($budget,$tasks);
 
         //dd($budget = $request->all()); // รับข้อมูล budget ทั้งหมดจาก request
 
@@ -3107,7 +3108,7 @@ class ProjectController extends Controller
 
 
         $task->project_id = $id;
-        $task->task_name = $request->input('taskcon_mm_name');
+        $task->task_name = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
         $task->task_status = $request->input('task_status');
         $task->task_parent = $request->input('task_parent') ?? null;
@@ -3503,7 +3504,7 @@ class ProjectController extends Controller
 
 
         $task->project_id = $id_project;
-        $task->task_name = $request->input('taskcon_mm_name');
+        $task->task_name = $request->input('task_name');
         $task->task_status = $request->input('task_status');
 
         $task->task_description = trim($request->input('task_description'));
