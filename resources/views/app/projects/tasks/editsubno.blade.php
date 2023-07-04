@@ -229,7 +229,7 @@
 
 
                                                                 <input type="text" class="form-control"
-                                                                    id="taskcon_mm_name" name="taskcon_mm_name"   value="{{ $task->task_name }}" >
+                                                                    id="task_name" name="task_name"   value="{{ $task->task_name }}" >
                                                                 <div class="invalid-feedback">
                                                                     {{ __('ชื่อสัญญา ซ้ำ') }}
                                                                 </div>
@@ -594,7 +594,10 @@
 
     <script>
         function calculateRefund() {
-          var pr_budget = parseFloat(document.getElementById("task_budget_gov_utility").value);
+              // convert input to decimal or set it to null if empty
+
+
+        var pr_budget = parseFloat(document.getElementById("task_budget_gov_utility").value);
           var pa_budget = parseFloat(document.getElementById("task_cost_gov_utility").value);
           var refund = pr_budget - pa_budget;
           document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
