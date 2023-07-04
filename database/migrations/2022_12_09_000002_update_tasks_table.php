@@ -30,7 +30,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('task_description');
+
             $table->dropColumn('task_cost_gov_operating');
             $table->dropColumn('task_cost_gov_investment');
             $table->dropColumn('task_cost_gov_utility');

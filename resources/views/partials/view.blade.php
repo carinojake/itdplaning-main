@@ -75,8 +75,8 @@
                             <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
                                 href="#collapseExample" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
-                                <div class="fs-4 fw-semibold text-info">
-                                    {{ number_format($budget['cost'], 2) }}
+                                <div class="fs-4 fw-semibold text-warning">
+                                    {{ number_format($budget['cost']-$budget['pay'], 2) }}
                                 </div>
 
                                 <small class="text-xl">
@@ -89,7 +89,26 @@
                     </div>
                 </div>
 
+                <div class="col">
+                    <!--คงเหลือ-->
+                    <div class="card  ">
+                        <div class="card-body">
+                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                href="#collapseExample2" role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                @php
+                                    $tmp_class_bal = $budget['balance'] > 1000000 ? 'success' : 'danger';
+                                @endphp
+                                <div class="fs-4 fw-semibold text-danger">
+                                    {{ number_format(floatval($budget['pay']), 2) }}
+                                </div>
 
+                                <small class="text-xl">กรอบงบประมาณคงเหลือ ที่เบิกจ่าย</small>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col">
                     <!--คงเหลือ-->
@@ -101,7 +120,7 @@
                                 @php
                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success' : 'danger';
                                 @endphp
-                                <div class="fs-4 fw-semibold text-success">
+                                <div class="fs-4 fw-semibold text">
                                     {{ number_format(floatval($budget['balance']), 2) }}
                                 </div>
 
@@ -189,7 +208,7 @@
                                 <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
-                                    <div class="fs-4 fw-semibold">
+                                    <div class="fs-4 fw-semibold btn btn-success">
                                        {{ number_format(floatval($op_refund_mm_pr), 2) }}
                                     </div>
                                     <div>
@@ -411,7 +430,7 @@
                                 <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
-                                    <div class="fs-4 fw-semibold btn btn-success" style="btn btn-success">
+                                    <div class="fs-4 fw-semibold btn btn" style="btn btn">
                                         <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                        {{--  {{ number_format($project['budget_it_operating'] - ($ospa + $osa), 2) }} --}}
                                         {{ number_format($project['budget_it_operating'] - ($otpsa1 + $otpsa2), 2) }}
@@ -530,7 +549,7 @@
                                 <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
-                                    <div class="fs-4 fw-semibold">
+                                    <div class="fs-4 fw-semibold btn btn-success">
                                        {{ number_format(floatval($is_refund_mm_pr), 2) }}
                                     </div>
                                     <div>
@@ -761,7 +780,7 @@
                                 <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
-                                    <div class="fs-4 fw-semibold btn btn-success">
+                                    <div class="fs-4 fw-semibold ">
                                         <!--ยอดงบประมาณคงเหลือทั้งหมด-->
                                         {{ number_format($project['budget_it_investment'] - ($ispa + $isa), 2) }}
                                     </div>
@@ -1222,7 +1241,7 @@
                                     <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
                                         href="#collapseExample1" role="button" aria-expanded="false"
                                         aria-controls="collapseExample1">
-                                        <div class="fs-4 fw-semibold">
+                                        <div class="fs-4 fw-semibold btn btn-success">
                                             {{ number_format(floatval($ut_refund_mm_pr), 2) }}
                                         </div>
                                         <div>
@@ -1455,7 +1474,7 @@
                                     <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
                                         href="#collapseExample" role="button" aria-expanded="false"
                                         aria-controls="collapseExample">
-                                        <div class="fs-4 fw-semibold btn btn-success">
+                                        <div class="fs-4 fw-semibold">
                                             <!--ยอดงบประมาณคงเหลือทั้งหมด สาธารณูปโภค-->
                                             {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }}
 

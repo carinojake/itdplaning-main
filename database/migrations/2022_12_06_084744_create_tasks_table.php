@@ -18,8 +18,8 @@ class CreateTasksTable extends Migration
             $table->integer('project_id');
             $table->string('task_name');
             $table->text('task_description')->nullable();
-            $table->timestamp('task_start_date');
-            $table->timestamp('task_end_date');
+            $table->timestamp('task_start_date')->nullable();;
+            $table->timestamp('task_end_date')->nullable();;
             $table->decimal('task_budget_gov_operating', 11, 2)->nullable();
             $table->decimal('task_budget_gov_investment', 11, 2)->nullable();
             $table->decimal('task_budget_gov_utility', 11, 2)->nullable();

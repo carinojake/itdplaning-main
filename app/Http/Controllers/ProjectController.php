@@ -907,7 +907,7 @@ class ProjectController extends Controller
         $budget['budget_total_refund_pa_budget'] = $__prmm;
         $budget['budget_total_mm_pr'] = $__budget - ($__mm - $__prmm);
 
-        //  dd($budget);
+          //dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -1757,7 +1757,7 @@ class ProjectController extends Controller
         $result = ($budget['xx'] > $budget['x']) ? $budget['xx'] - $budget['cost'] : $budget['x'];
 
 
-        //dd($gantt,$budget,$result);
+      //  dd($gantt,$budget,$result);
 
         //  dd($gantt);
         $gantt = json_encode($gantt);
