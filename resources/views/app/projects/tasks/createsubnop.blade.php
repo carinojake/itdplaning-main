@@ -301,8 +301,9 @@
                                                             </div> --}}
 
                                                             <!-- Contract Type -->
+                                                            @if ($task->task_budget_it_operating > 0)
                                                             <div id="ICT" {{-- style="display:none;" --}}>
-                                                                @if ($task->task_budget_it_operating > 0)
+
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_it_operating"

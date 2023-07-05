@@ -286,28 +286,31 @@
                                                         <div class="callout callout-warning">
                                                         <div class="row ">
                                                             <div class="col-md-4 mt-3">
-                                                                <label for="project_select"
-                                                                    class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
+                                                                <label for="project_select" class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                                 <span class="text-danger">*</span>
-                                                                <select class="form-control" name="project_select"
-                                                                    id="project_select" required>
+                                                                <select class="form-control" name="project_select" id="project_select" required>
                                                                     <option selected disabled value="">เลือกประเภท...</option>
-                                                                    <option value="task_budget_it_operating">งบกลาง ICT
-                                                                    </option>
-                                                                    <option value="task_budget_it_investment">
-                                                                        งบดำเนินงาน</option>
-                                                                    <option value="task_budget_gov_utility">
-                                                                        ค่าสาธารณูปโภค</option>
+                                                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating > 0)
+                                                                        <option value="task_budget_it_operating">งบกลาง ICT</option>
+                                                                        @endif
+                                                                    @if ($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment > 0)
+                                                                        <option value="task_budget_it_investment">งบดำเนินงาน</option>
+                                                                        @endif
+                                                                    @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility> 0)
+                                                                        <option value="task_budget_gov_utility">ค่าสาธารณูปโภค</option>
+                                                                    @endif
                                                                 </select>
                                                             </div>
+
                                                                 {{--    <div class="project_select">
                                                                     {{ __('ประเภท งบประมาณ') }}
                                                                 </div> --}}
                                                             </div>
                                                             <!-- Contract Type -->
 
-
+                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating > 0)
                                                             <div id="ICT" {{-- style="display:none;" --}}>
+
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_it_operating"
@@ -340,8 +343,11 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
 
+                                                            @if ($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment > 0)
                                                             <div id="inv" {{-- style="display:none;" --}}>
+
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_it_investment"
@@ -375,7 +381,9 @@
                                                                 </div>
                                                             </div>
 
+                                                            @endif
 
+                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility> 0)
                                                             <div id="utility" {{-- style="display:none;" --}}>
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
@@ -410,6 +418,7 @@
                                                                 </div>
                                                             </div>
                                                             </div>
+                                                            @endif
                                                         </div>
                                                             {{--
 
@@ -1324,33 +1333,56 @@
                     </script>
 
 
+<script>
+    $(document).ready(function() {
+        $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            var max;
+            var fieldId = $(this).attr('id');
+
+            if (fieldId === "task_cost_it_investment") {
+                max = parseFloat($("#task_budget_it_investment").val().replace(/,/g , ""));
+            } else if (fieldId === "task_cost_it_operating") {
+                max = parseFloat($("#task_budget_it_operating").val().replace(/,/g , ""));
+            } else if (fieldId === "task_cost_gov_utility") {
+                max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g , ""));
+            }
+
+            var current = parseFloat($(this).val().replace(/,/g , ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
+    });
+    </script>
+
+
+
                 <script>
-                    $(document).ready(function() {
-                $("#task_pay").on("input", function() {
-                var max = 0;
-                var fieldId = $(this).attr('id');
+        $(document).ready(function() {
+    $("#task_pay").on("input", function() {
+        var max;
+        var budgetType = $("#project_select").val();
 
-                if (fieldId === "task_budget_it_investment") {
-                    max = parseFloat({{$projectDetails->budget_it_investment - $sum_task_budget_it_investment+$sum_task_refund_budget_it_investment }});
-                }  else if (fieldId === "task_budget_it_operating") {
-                    max = parseFloat({{$projectDetails->budget_it_operating -  $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating }});
-                } else if (fieldId === "task_budget_gov_utility") {
-                    max = parseFloat({{ $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility }});
-                }
+        if (budgetType === "task_budget_it_operating") {
+            max = parseFloat($("#task_cost_it_operating").val().replace(/,/g , ""));
+        } else if (budgetType === "task_budget_it_investment") {
+            max = parseFloat($("#task_cost_it_investment").val().replace(/,/g , ""));
+        } else if (budgetType === "task_budget_gov_utility") {
+            max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g , ""));
+        }
 
-                var current = parseFloat($(this).val().replace(/,/g , ""));
-                if (current > max) {
+        var current = parseFloat($(this).val().replace(/,/g , ""));
+        if (current > max) {
+            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+            $(this).val(max.toFixed(2));
+        }
+    });
+});
 
-
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-
-
-
-                    $(this).val(max.toFixed(2));
-                }
-                });
-                });
                 </script>
+
+
 
         </x-slot:javascript>
 </x-app-layout>

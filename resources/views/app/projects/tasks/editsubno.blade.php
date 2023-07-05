@@ -360,7 +360,7 @@
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_gov_utility"
                                                                             class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
-                                                                        <input type="number" placeholder="0.00"
+                                                                        <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                             class="form-control numeral-mask"
@@ -377,7 +377,7 @@
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_gov_utility"
                                                                         class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
-                                                                        <input type="number" placeholder="0.00" step="0.01"
+                                                                        <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_gov_utility"
                                                                          name="task_cost_gov_utility" min="0" value="{{ $task->task_cost_gov_utility }}" onchange="calculateRefund()"  >
@@ -594,15 +594,14 @@
 
     <script>
         function calculateRefund() {
-              // convert input to decimal or set it to null if empty
-
-
-        var pr_budget = parseFloat(document.getElementById("task_budget_gov_utility").value);
-          var pa_budget = parseFloat(document.getElementById("task_cost_gov_utility").value);
-          var refund = pr_budget - pa_budget;
-          document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
+            // convert input to decimal or set it to null if empty
+            var pr_budget = document.getElementById("task_budget_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_budget_gov_utility").value.replace(/,/g , "")) : 0;
+            var pa_budget = document.getElementById("task_cost_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_cost_gov_utility").value.replace(/,/g , "")) : 0;
+            var refund = pr_budget - pa_budget;
+            document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
         }
-      </script>
+    </script>
+
 
 {{--     <script>
         $(document).ready(function() {
