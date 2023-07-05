@@ -121,12 +121,12 @@
                                                     <div class="row mt-3">
                                                         <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                                         <div class="row">
-                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating > 0)
+                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating > 0)
                                                                 <div class="col-md-4">
                                                                     <label for="budget_it_operating"
                                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating  , 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
@@ -136,12 +136,12 @@
                                                                 </div>
                                                             @endif
 
-                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment > 0)
+                                                            @if ($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment > 0)
                                                                 <div class="col-4">
                                                                     <label for="budget_it_investment"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment, -$sum_task_budget_it_investment, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment, 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
@@ -151,12 +151,12 @@
                                                                 </div>
                                                             @endif
 
-                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility > 0)
+                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility> 0)
                                                                 <div class="col-md-4">
                                                                     <label for="budget_gov_utility"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility , 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
@@ -291,7 +291,7 @@
                                                                 <span class="text-danger">*</span>
                                                                 <select class="form-control" name="project_select"
                                                                     id="project_select" required>
-                                                                    <option selected>เลือกประเภท...</option>
+                                                                    <option selected disabled value="">เลือกประเภท...</option>
                                                                     <option value="task_budget_it_operating">งบกลาง ICT
                                                                     </option>
                                                                     <option value="task_budget_it_investment">
@@ -299,6 +299,7 @@
                                                                     <option value="task_budget_gov_utility">
                                                                         ค่าสาธารณูปโภค</option>
                                                                 </select>
+                                                            </div>
                                                                 {{--    <div class="project_select">
                                                                     {{ __('ประเภท งบประมาณ') }}
                                                                 </div> --}}
@@ -676,11 +677,11 @@
                                                                         <div class="col-md-4">
                                                                             <label for="contract_pay"
                                                                                 class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                            {{-- <span class="text-danger">*</span> --}}
 
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp" name="taskcon_pp"
-                                                                                required>
+                                                                                >
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกงบใบสำคัญ_PP') }}
                                                                             </div>
@@ -688,10 +689,10 @@
                                                                         <div class="col-md-8">
                                                                             <label for="taskcon_pp_name"
                                                                                 class="form-label">{{ __('รายการใช้จ่าย ') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                            {{-- <span class="text-danger">*</span> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp_name" name="taskcon_pp_name"
-                                                                                required>
+                                                                                >
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกรายการใช้จ่าย') }}
                                                                             </div>
@@ -710,17 +711,17 @@
                                                                         <div class="col-md-4">
                                                                             <label for="taskcon_pay_date"
                                                                                 class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                            {{-- <span class="text-danger">*</span> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pay_date"
-                                                                                name="taskcon_pay_date" required>
+                                                                                name="taskcon_pay_date" >
                                                                         </div>
 
 
                                                                         <div class="col-md-4">
                                                                             <label for="taskcon_pay"
                                                                                 class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                          {{--   <span class="text-danger">*</span> --}}
 
                                                                             <input type="text" placeholder="0.00"
                                                                                 step="0.01" class="form-control"
@@ -728,7 +729,7 @@
                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                 class="form-control numeral-mask"
                                                                                 name="task_pay" min="0"
-                                                                                required>
+                                                                                >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -951,7 +952,7 @@
 
             <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             {{--      <script>
                 $(document).ready(function() {
             // When any of the budget fields change, recalculate the refund
@@ -1042,10 +1043,6 @@
                     });
                 });
             </script>
-
-
-
-
 
 
 
@@ -1275,7 +1272,7 @@
                 });
             </script>
 
-            {{-- <script>
+      <script>
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
   'use strict'
@@ -1296,8 +1293,64 @@
       }, false)
     })
 })()
-</script>
- --}}
+                </script>
+
+                    <script>
+                        $(document).ready(function() {
+                    $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+                    var max = 0;
+                    var fieldId = $(this).attr('id');
+
+                    if (fieldId === "task_budget_it_investment") {
+                        max = parseFloat({{$projectDetails->budget_it_investment - $sum_task_budget_it_investment+$sum_task_refund_budget_it_investment }});
+                    }  else if (fieldId === "task_budget_it_operating") {
+                        max = parseFloat({{$projectDetails->budget_it_operating -  $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating }});
+                    } else if (fieldId === "task_budget_gov_utility") {
+                        max = parseFloat({{ $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility }});
+                    }
+
+                    var current = parseFloat($(this).val().replace(/,/g , ""));
+                    if (current > max) {
+
+
+                        Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+
+
+
+                        $(this).val(max.toFixed(2));
+                    }
+                    });
+                    });
+                    </script>
+
+
+                <script>
+                    $(document).ready(function() {
+                $("#task_pay").on("input", function() {
+                var max = 0;
+                var fieldId = $(this).attr('id');
+
+                if (fieldId === "task_budget_it_investment") {
+                    max = parseFloat({{$projectDetails->budget_it_investment - $sum_task_budget_it_investment+$sum_task_refund_budget_it_investment }});
+                }  else if (fieldId === "task_budget_it_operating") {
+                    max = parseFloat({{$projectDetails->budget_it_operating -  $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating }});
+                } else if (fieldId === "task_budget_gov_utility") {
+                    max = parseFloat({{ $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility }});
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g , ""));
+                if (current > max) {
+
+
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+
+
+
+                    $(this).val(max.toFixed(2));
+                }
+                });
+                });
+                </script>
 
         </x-slot:javascript>
 </x-app-layout>

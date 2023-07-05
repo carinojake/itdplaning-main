@@ -119,12 +119,12 @@
                                                     <div class="row mt-3">
                                                         <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                                         <div class="row">
-                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating > 0)
+                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating > 0)
                                                                 <div class="col-md-4">
                                                                     <label for="budget_it_operating"
                                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating  , 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
@@ -134,12 +134,12 @@
                                                                 </div>
                                                             @endif
 
-                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment > 0)
+                                                            @if ($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment > 0)
                                                                 <div class="col-4">
                                                                     <label for="budget_it_investment"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment, -$sum_task_budget_it_investment, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment -$sum_task_budget_it_investment+$sum_task_refund_budget_it_investment, 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
@@ -149,12 +149,12 @@
                                                                 </div>
                                                             @endif
 
-                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility > 0)
+                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility> 0)
                                                                 <div class="col-md-4">
                                                                     <label for="budget_gov_utility"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                                     <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility, 2) }} บาท"
+                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility , 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"

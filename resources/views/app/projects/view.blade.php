@@ -178,13 +178,13 @@
                         }
                     },
                     {
-                        name: "balance_pa",
+                        name: "budget_total_mm",
                         width: 100,
                         label: "มี MM คงเหลือ",
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            if (task.budget_mm > task.balance) {
+                            if (task.budget_mm ) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -194,7 +194,7 @@
                                 return'<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.budget_mm) + '</span>';
+                                }).format(task.budget_total_mm) + '</span>';
                             } else {
                                 return '-';
                             }
@@ -229,7 +229,7 @@
 
 
                             else {
-                                return '-';
+                                return '';
                             }
                         }
                     },
@@ -246,13 +246,16 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost);
+
+
                             } else if (task.cost_no_pa_2 > 0) {
+                                let cost_no_pa_2 = task.cost_no_pa_2;
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost_no_pa_2) + '</span>';
+                                }).format(cost_no_pa_2) + '</span>';
                             } else {
-                                return '-';
+                                return '';
                             }
                         }
                     },
@@ -361,27 +364,45 @@
                                     currency: 'THB'
                                 }).format(task.total_pay) + '</span>';
                             } else {
-                                return '-';
+                                return '';
                             }
                         }
                     },
                     {
-                        name: "balance",
+                        name: "balance_mm_pr",
                         width: 100,
-                        label: "คงเหลือ",
+                        label: "งบประมาณคงเหลือที่ไช้ได้",
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            if (task.balance > 0) {
+
+
+                            if (task.budget_total_mm_pr2 > 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget_total_mm_pr2) + '</span>';
+                            }
+                            else if (task.cost > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.balance) + '</span>';
-                            } else if (task.balance == 0) {
-                                return '-';
-                            } else {
-                                return '-';
+                            }
+                            else if (task.balance == 0) {
+                                return '';
+                            }
+
+                            else if (task.balance == 0) {
+                                return '';
+                            }
+
+
+
+                            else {
+                                return '';
                             }
                         }
                     }
