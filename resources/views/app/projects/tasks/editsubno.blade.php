@@ -212,7 +212,7 @@
                                                     <div class="callout callout-primary row mt-3">
                                                         <div class="row">
                                                             <div class="col-md-4 mt-3">
-                                                                <label for="c"
+                                                                <label for="taskcon_mm"
                                                                     class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
                                                                 <span class="text-danger">*</span>
 
@@ -248,7 +248,8 @@
                                                                     class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_end_date"
-                                                                    name="task_end_date" name="task_start_date"   value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }} >
+                                                                    name="task_end_date" name="task_start_date"
+                                                                     value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }} >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 mt-3">
@@ -264,28 +265,37 @@
                                                         </div>
                                                     </div>
                                                         <div class="callout callout-warning">
-                                                        <div class="row ">
-                                                            <div class="col-md-4 mt-3">
-                                                                <label for="project_select"
-                                                                    class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
-                                                                <span class="text-danger">*</span>
-                                                                <select class="form-control" name="project_select"
-                                                                    id="project_select" required>
-                                                                    <option selected>เลือกประเภท...</option>
-                                                                    <option value="task_budget_it_operating">งบกลาง ICT
-                                                                    </option>
-                                                                    <option value="task_budget_it_investment">
-                                                                        งบดำเนินงาน</option>
-                                                                    <option value="task_budget_gov_utility">
-                                                                        ค่าสาธารณูปโภค</option>
-                                                                </select>
+                                                            <div class="row ">
+                                                                <div class="col-md-4 mt-3">
+                                                                    <label for="project_select"
+                                                                        class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
+                                                                    <span class="text-danger">*</span>
+                                                                    <select class="form-control" name="project_select"
+                                                                        id="project_select" required>
+                                                                        <option selected disabled value="">
+                                                                            เลือกประเภท...</option>
+                                                                        @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                                            <option value="task_budget_it_operating">งบกลาง
+                                                                                ICT</option>
+                                                                        @endif
+                                                                        @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                                            <option value="task_budget_it_investment">
+                                                                                งบดำเนินงาน</option>
+                                                                        @endif
+                                                                        @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                                            <option value="task_budget_gov_utility">
+                                                                                ค่าสาธารณูปโภค</option>
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+
                                                                 {{--    <div class="project_select">
-                                                                    {{ __('ประเภท งบประมาณ') }}
-                                                                </div> --}}
+                                                                        {{ __('ประเภท งบประมาณ') }}
+                                                                    </div> --}}
                                                             </div>
                                                             <!-- Contract Type -->
 
-
+                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                             <div id="ICT" {{-- style="display:none;" --}}>
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
@@ -297,7 +307,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
-                                                                            min="0" value="{{ $task->task_budget_it_operating }}"
+                                                                            min="0" value="{{ $task->task_budget_it_operating }}"  onchange="calculateRefund()"
                                                                            >
 
                                                                         <div class="invalid-feedback">
@@ -311,7 +321,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                                         name="task_cost_it_operating" min="0" value="{{ $task->task_cost_it_operating }}"  >
+                                                                         name="task_cost_it_operating" min="0" value="{{ $task->task_cost_it_operating }}"   onchange="calculateRefund()" >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบกลาง ICT') }}
@@ -319,7 +329,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
 
+                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                                             <div id="inv" {{-- style="display:none;" --}}>
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
@@ -331,7 +343,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
-                                                                            min="0" value="{{ $task->task_budget_it_investment }}"
+                                                                            min="0" value="{{ $task->task_budget_it_investment }} "  onchange="calculateRefund()"
                                                                            >
 
                                                                         <div class="invalid-feedback">
@@ -345,7 +357,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_investment"
-                                                                         name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}"  >
+                                                                         name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}"  onchange="calculateRefund()"  >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบดำเนินงาน') }}
@@ -353,7 +365,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endif
 
+                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
 
                                                             <div id="utility" {{-- style="display:none;" --}}>
                                                                 <div class="row mt-3">
@@ -388,20 +402,17 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-6">
-                                                                <label for="task_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
-                                                                <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_refund_pa_budget" name="task_refund_pa_budget" min="0" value="{{ $task->task_refund_pa_budget }}" >
-                                                              </div>
-
-
-
+                                                            @endif
                                                             </div>
+                                                            <div class="d-none col-md-4 mt-3">
+                                                                <label for="task_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
+                                                                <input type="text" placeholder="0.00" step="0.01" class="form-control" id="task_refund_pa_budget" name="task_refund_pa_budget" min="0" value="{{ $task->task_refund_pa_budget }}">
+                                                              </div>
 
                                                     </div>
                                                     <div class="callout callout-light">
                                                             <div id="ba_form" {{-- style="display:none;" --}}>
-                                                                <div class="row mt-3">
+                                                                <div class="d-none row mt-3">
                                                                     <div class="col-md-4">
                                                                         <label for="taskcon_ba "
                                                                             class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
@@ -431,7 +442,7 @@
                                                             </div>
 
                                                             <div id="bd_form" {{-- style="display:none; --}}>
-                                                                <div class="row mt-3">
+                                                                <div class="d-none row mt-3">
                                                                     <div class="col-md-4">
                                                                         <label for="taskcon_bd "
                                                                             class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
@@ -510,7 +521,7 @@
                                                                         <div class="col-md-4">
                                                                             <label for="taskcon_pp"
                                                                                 class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                            {{-- <span class="text-danger">*</span> --}}
 
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp" name="taskcon_pp"
@@ -522,7 +533,7 @@
                                                                         <div class="col-md-8">
                                                                             <label for="taskcon_pp_name"
                                                                                 class="form-label">{{ __('รายการใช้จ่าย ') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                          {{--   <span class="text-danger">*</span> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp_name" name="taskcon_pp_name"
                                                                                 value="{{ $task->taskcon_pp_name }}"   >
@@ -534,19 +545,21 @@
                                                                     <div class="row mt-3">
 
                                                                         <div class="col-md-4">
-                                                                            <label for="taskcon_pay_date"
+                                                                            <label for="task_pay_date"
                                                                                 class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-                                                                            <span class="text-danger">*</span>
-                                                                            <input type="text" class="form-control"
-                                                                                id="taskcon_pay_date"
-                                                                                name="taskcon_pay_date" value="{{ $task->taskcon_pay_date }}" >
+                                                                         {{--    <span class="text-danger">*</span> --}}
+                                                                            <input  class="form-control"
+                                                                                id="task_pay_date"
+                                                                                name="task_pay_date"  value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_pay_date )) }}>
+
+
                                                                         </div>
 
 
                                                                         <div class="col-md-4">
                                                                             <label for="task_pay"
                                                                                 class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
-                                                                            <span class="text-danger">*</span>
+                                                                           {{--  <span class="text-danger">*</span> --}}
 
                                                                             <input type="text" placeholder="0.00"
                                                                                 step="0.01" class="form-control"
@@ -591,16 +604,94 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
-        function calculateRefund() {
-            // convert input to decimal or set it to null if empty
-            var pr_budget = document.getElementById("task_budget_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_budget_gov_utility").value.replace(/,/g , "")) : 0;
-            var pa_budget = document.getElementById("task_cost_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_cost_gov_utility").value.replace(/,/g , "")) : 0;
-            var refund = pr_budget - pa_budget;
-            document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
-        }
+        $(document).ready(function() {
+            // Initialize Select2 on the select element
+            $('.js-example-basic-single').select2();
+
+            $('.js-example-basic-single').on('change', function() {
+                // Get the selected value
+                const selectedValue = $(this).val();
+                // Handle the selected value as needed
+                console.log(selectedValue);
+            });
+        });
     </script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+          'use strict'
+
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          const forms = document.querySelectorAll('.needs-validation')
+
+          // Loop over them and prevent submission
+          Array.prototype.slice.call(forms)
+            .forEach(form => {
+              form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                  event.preventDefault()
+                  event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+              }, false)
+            })
+        })()
+                        </script>
+
+<script>
+    $("#task_pay").on("input", function() {
+        calculateRefund();
+    });
+
+    function calculateRefund() {
+        var pr_budget, pa_budget, refund;
+
+        if (parseFloat($("#task_cost_it_operating").val().replace(/,/g , "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g , "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g , "")) || 0;
+            refund = pr_budget - pa_budget;
+        }  if (parseFloat($("#task_cost_it_investment").val().replace(/,/g , "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g , "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g , "")) || 0;
+            refund = pr_budget - pa_budget;
+        }  if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g , "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g , "")) || 0;
+            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g , "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+
+        $("#task_refund_pa_budget").val(refund.toFixed(2));
+    }
+</script>
+
+                <script>
+                    $(document).ready(function() {
+                $('#project_select').change(function() {
+                // ซ่อนทุกฟิลด์ก่อน
+                $('#ICT').hide();
+                $('#inv').hide();
+                $('#utility').hide();
+
+                // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                if ($(this).val() == 'task_budget_it_operating') {
+                $('#ICT').show();
+                } else if ($(this).val() == 'task_budget_it_investment') {
+                $('#inv').show();
+                } else if ($(this).val() == 'task_budget_gov_utility') {
+                $('#utility').show();
+                }
+                });
+                });
+                </script>
+
+
 
 
 {{--     <script>
@@ -687,6 +778,101 @@
 
 
 
+                  <script>
+                        $(document).ready(function() {
+                    $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+                    var max = 0;
+                    var fieldId = $(this).attr('id');
 
+                    if (fieldId === "task_budget_it_investment") {
+                        max = parseFloat({{$projectDetails->budget_it_investment - $sum_task_budget_it_investment+$sum_task_refund_budget_it_investment }});
+                    }  else if (fieldId === "task_budget_it_operating") {
+                        max = parseFloat({{$projectDetails->budget_it_operating -  $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating }});
+                    } else if (fieldId === "task_budget_gov_utility") {
+                        max = parseFloat({{ $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility }});
+                    }
+
+                    var current = parseFloat($(this).val().replace(/,/g , ""));
+                    if (current > max) {
+
+
+                        Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+
+
+
+                        $(this).val(max.toFixed(2));
+                    }
+                    });
+                    });
+                    </script>
+
+<script>
+    $(document).ready(function() {
+        $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            var max;
+            var fieldId = $(this).attr('id');
+
+            if (fieldId === "task_cost_it_investment") {
+                max = parseFloat($("#task_budget_it_investment").val().replace(/,/g , ""));
+            } else if (fieldId === "task_cost_it_operating") {
+                max = parseFloat($("#task_budget_it_operating").val().replace(/,/g , ""));
+            } else if (fieldId === "task_cost_gov_utility") {
+                max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g , ""));
+            }
+
+            var current = parseFloat($(this).val().replace(/,/g , ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
+    });
+    </script>
+
+
+
+                <script>
+        $(document).ready(function() {
+    $("#task_pay").on("input", function() {
+        var max;
+        var budgetType = $("#project_select").val();
+
+        if (budgetType === "task_budget_it_operating") {
+            max = parseFloat($("#task_cost_it_operating").val().replace(/,/g , ""));
+        } else if (budgetType === "task_budget_it_investment") {
+            max = parseFloat($("#task_cost_it_investment").val().replace(/,/g , ""));
+        } else if (budgetType === "task_budget_gov_utility") {
+            max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g , ""));
+        }
+
+        var current = parseFloat($(this).val().replace(/,/g , ""));
+        if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2).toLocaleString('en-US') + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+    });
+});
+
+                </script>
+
+<script>
+    $(document).ready(function() {
+        $('#project_select').change(function() {
+            // ซ่อนทุกฟิลด์ก่อน
+            $('#ICT').hide();
+            $('#inv').hide();
+            $('#utility').hide();
+
+            // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+            if ($(this).val() == 'task_budget_it_operating') {
+                $('#ICT').show();
+            } else if ($(this).val() == 'task_budget_it_investment') {
+                $('#inv').show();
+            } else if ($(this).val() == 'task_budget_gov_utility') {
+                $('#utility').show();
+            }
+        });
+    });
+</script>
     </x-slot:javascript>
 </x-app-layout>

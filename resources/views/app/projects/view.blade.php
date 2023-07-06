@@ -28,14 +28,19 @@
                                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a> --}}
 
                                         <a href="{{ route('project.task.createsubno', ['project' => $project->hashid]) }}"
-                                            class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย1 </a>
+                                            class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
 
 
                                         <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
                            {{--  @include('partials.budgettotaloverview') --}}
                            @include('partials.view')
-                            <div id="gantt_here" style='width:100%; height:50vh;'></div>
+
+
+                          {{-- เปลี่ยน ict ดำเนิน สา --}}
+                           <div id="gantt_here" style='width:100%; height:50vh;'></div>
+
+                        {{-- เปลี่ยน ict ดำเนิน สา --}}
 
                             <div class="callout callout-primary row mt-3">
                             <ul class="nav nav-pills">
@@ -140,7 +145,7 @@
 
                     {
                         name: "text",
-                        width: 300,
+                        width: 150,
                         label: "โครงการ/งานประจำ",
                         tree: true,
                         resize: true,
@@ -163,29 +168,52 @@
                 columns: [{
                         name: "budget",
                         width: 120,
-                        label: "งบประมาณ",
+                        label: "งบประมาณที่ได้รับการจัดสรร",
                         tree: true,
                         resize: true,
                         template: function(task) {
-                            if (task.budget) {
+
+
+                            let pbalance = task.pbalance;
+                            if (pbalance) {
                                 return new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.budget);
+                                }).format(pbalance);
+
+
+
+                /*             if (task.budget) {
+                                return new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget_total_mm); */
+
+                            }else if (task.budget_mm <  task.balance) {
+                                return'<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget_total_mm) + '</span>';
                             } else {
-                                return '-';
+                                return '';
                             }
+
+
+
+
+
+
                         }
                     },
                     {
                         name: "budget_total_mm",
                         width: 100,
-                        label: "มี MM คงเหลือ",
+                        label: " MM ",
                         tree: true,
                         resize: true,
                         template: function(task) {
                             if (task.budget_mm ) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'red' : 'dark';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -268,14 +296,14 @@
                         template: function(task) {
 
                              if (task.total_cost > 0) {
-                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_cost - task.total_pay) + '</span>';
                             }
 
                            else if (task.total_pay > 0) {
-                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_cost - task.total_pay) + '</span>';
@@ -344,22 +372,23 @@
                         resize: true,
                         template: function(task) {
                             if (task.task_total_pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.task_total_pay) + '</span>';
                             } else if (task.task_type == 1 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
                             } else if (task.task_type == 2 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
                             } else if (task.total_pay > 0) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
+                                    /* style="color:#6010f6;" */
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_pay) + '</span>';
@@ -543,7 +572,7 @@
                             },
                             {
                                 view: "grid",
-                                width: 500,
+                                width: 1200,
                                 bind: "task",
                                 scrollY: "scrollVer",
                                 config: rightGridColumns
