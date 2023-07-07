@@ -3004,24 +3004,32 @@ class ProjectController extends Controller
 
         $messages = [
               'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-            /*'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-             'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+
+             // 'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+
+              'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
              'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-             'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+
+            // 'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+
              'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
              'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
-             'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+
+            // 'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+
              'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
              'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
-             'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ', */];
+
+
+             'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ', ];
 
         $request->validate([
             //    'task_name' => 'required',
-               'task_start_date' => 'required|date_format:d/m/Y',
+            //   'task_start_date' => 'required|date_format:d/m/Y',
              'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            //'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->input('budget_it_operating') - $sum_task_budget_it_operating),
-            //'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->input('budget_it_investment') - $sum_task_budget_it_investment),
-            //'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->input('budget_gov_utility') - $sum_task_budget_gov_utility),
+            //'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->input('budget_it_operating') ),
+            //'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->input('budget_it_investment') ),
+            //'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->input('budget_gov_utility') ),
         ], $messages);
 
 
@@ -3285,7 +3293,7 @@ class ProjectController extends Controller
         $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
         $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
         $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
-        $taskcon->taskcon_pay                 =  $taskcon_pay;
+        $taskcon->taskcon_pay                 =  $task_pay;
         $taskcon->taskcon_mm_budget                 =  $task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment;
         $taskcon->taskcon_ba_budget                 =  $taskcon_ba_budget;
         $taskcon->taskcon_bd_budget                 =  $taskcon_bd_budget;

@@ -188,12 +188,12 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_mm); */
-
+/*
                             }else if (task.budget_mm <  task.balance) {
                                 return'<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.budget_total_mm) + '</span>';
+                                }).format(task.budget_total_mm) + '</span>'; */
                             } else {
                                 return '';
                             }
@@ -308,6 +308,10 @@
                                     currency: 'THB'
                                 }).format(task.total_cost - task.total_pay) + '</span>';
                             }
+
+
+
+
 
                             else if (task.task_total_pay > 0) {
                                 let remainingCost = task.cost - task.task_total_pay;

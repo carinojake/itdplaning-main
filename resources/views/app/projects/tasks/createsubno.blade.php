@@ -338,7 +338,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_it_operating"
-                                                                            class="form-label">{{ __('รอการเบิก งบกลาง ICT') }}</label>
+                                                                            class="form-label">{{ __('รอการเบิก งบกลาง ICT ( ยอด pa / ไม่ pa )') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -379,7 +379,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_it_investment"
-                                                                            class="form-label">{{ __('รอการเบิก งบดำเนินงาน') }}</label>
+                                                                            class="form-label">{{ __('รอการเบิก งบดำเนินงาน ( ยอด pa /ไม่ pa )') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -419,7 +419,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_gov_utility"
-                                                                            class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
+                                                                            class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค (ยอด pa / ไม่ pa )') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -772,7 +772,7 @@
                                                         </div>
 
 
-                                                        <div class="col-md-4">
+                                                        <div  id="task_pay_d" class="col-md-4">
                                                             <label for="task_pay"
                                                                 class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
                                                            {{--  <span class="text-danger">*</span> --}}
@@ -785,6 +785,7 @@
                                                                 name="task_pay" min="0"
                                                                 >
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1009,10 +1010,13 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-            <script>
+          {{--   <script>
                 $(document).ready(function() {
                     $('#project_select').change(function() {
                         // ซ่อนทุกฟิลด์ก่อน
+                        var project_select = $(this).val();
+
+
                         $('#ICT').hide();
                         $('#inv').hide();
                         $('#utility').hide();
@@ -1027,7 +1031,7 @@
                         }
                     });
                 });
-            </script>
+            </script> --}}
 
 
 
@@ -1045,8 +1049,83 @@
                 });
             </script>
 
-            <script>
+
+
+                <script>
+                    $(document).ready(function() {
+                        $('#project_select').change(function() {
+                            // ซ่อนทุกฟิลด์ก่อน
+                            $('#ICT').hide();
+                            $('#inv').hide();
+                            $('#utility').hide();
+                            $('#task_pay_d').hide();
+
+
+                            // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                            if ($(this).val() == 'task_budget_it_operating') {
+                                $('#ICT').show();
+                              //  $('#task_pay_d').show();
+                            } else if ($(this).val() == 'task_budget_it_investment') {
+                                $('#inv').show();
+                               // $('#task_pay_d').show();
+                            } else if ($(this).val() == 'task_budget_gov_utility') {
+                                $('#utility').show();
+                              //  $('#task_pay_d').show();
+                            }
+                        });
+
+                        // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
+                        $('#project_select').change();
+                    });
+                </script>
+                <script>
+                    $(document).ready(function() {
+                        // Initially hide the fields
+                        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+                        $("#task_pay_d").hide();
+
+                        // Show the fields when a value is entered in task_budget_it_operating
+                        $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+                            var fieldId = $(this).attr('id');
+
+                            if ($(this).val() != '') {
+                                if (fieldId === "task_budget_it_operating") {
+                                    $("#task_cost_it_operating").parent().show();
+                                    $("#task_pay_d").hide();
+                                } else if (fieldId === "task_budget_it_investment") {
+                                    $("#task_cost_it_investment").parent().show();
+                                    $("#task_pay_d").hide();
+                                } else if (fieldId === "task_budget_gov_utility") {
+                                    $("#task_cost_gov_utility").parent().show();
+                                    $("#task_pay_d").hide();
+                                }
+                                $("#task_pay_d").hide();
+                            } else {
+                                $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+                                $("#task_pay_d").hide();
+                            }
+                        });
+
+                        // Show the fields when a value is entered in task_cost_it_operating
+                        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+                            if ($(this).val() != '') {
+                                $("#task_pay_d").show();
+                            } else {
+                                $("#task_pay_d").hide();
+                            }
+                        });
+                    });
+                </script>
+
+
+
+          {{--   <script>
                 $(document).ready(function() {
+
+
+
+
+
                     // Hide all budget fields initially
                     $('#task_budget_it_operating').closest('.col-md-3').hide();
                     $('#task_budget_it_investment').closest('.col-md-3').hide();
@@ -1070,7 +1149,7 @@
                         }
                     });
                 });
-            </script>
+            </script> --}}
 
 
 
@@ -1250,7 +1329,7 @@
                     var d = new Date();
                     var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                    $("#taskcon_pay_date,#task_start_date,#task_end_date,#project_start_date,#project_end_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
+                    $("#task_pay_date,#taskcon_pay_date,#task_start_date,#task_end_date,#project_start_date,#project_end_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
@@ -1346,23 +1425,18 @@
 
                             var current = parseFloat($(this).val().replace(/,/g, ""));
                             if (current > max) {
+    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+    $(this).val(max.toFixed(2));
+}
 
 
-                                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-
-
-
-                                $(this).val(max.toFixed(2));
-                            }
                         });
                 });
             </script>
-
-
             <script>
                 $(document).ready(function() {
                     $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
-                        var max;
+                        var max ;
                         var fieldId = $(this).attr('id');
 
                         if (fieldId === "task_cost_it_investment") {
@@ -1375,7 +1449,7 @@
 
                         var current = parseFloat($(this).val().replace(/,/g, ""));
                         if (current > max) {
-                            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                             $(this).val(max.toFixed(2));
                         }
                     });
@@ -1383,30 +1457,41 @@
             </script>
 
 
+<script>
+    $(document).ready(function() {
+        $("#task_pay").on("input", function() {
+            var max;
+            var budgetType = $("#project_select").val();
 
-            <script>
-                $(document).ready(function() {
-                    $("#task_pay").on("input", function() {
-                        var max;
-                        var budgetType = $("#project_select").val();
+            // Disable the fields
+            $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
 
-                        if (budgetType === "task_budget_it_operating") {
-                            max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
-                        } else if (budgetType === "task_budget_it_investment") {
-                            max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
-                        } else if (budgetType === "task_budget_gov_utility") {
-                            max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
-                        }
+            if (budgetType === "task_budget_it_operating") {
+                max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
+            } else if (budgetType === "task_budget_it_investment") {
+                max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
+            } else if (budgetType === "task_budget_gov_utility") {
+                max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
+            }
 
-                        var current = parseFloat($(this).val().replace(/,/g, ""));
-                        if (current > max) {
-                            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2).toLocaleString('en-US') +
-                                " บาท");
-                            $(this).val(max.toFixed(2));
-                        }
-                    });
-                });
-            </script>
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                    " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
+
+        // Enable the fields when input in #task_pay is finished
+        $("#task_pay").on("blur", function() {
+            $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
+        });
+    });
+</script>
+
+
+
+
 
 
             {{-- <script>
@@ -1463,6 +1548,18 @@
                     $("#task_refund_pa_budget").val(refund.toFixed(2));
                 }
             </script>
+
+
+
+
+
+
+
+
+
+
+
+
 
         </x-slot:javascript>
 </x-app-layout>

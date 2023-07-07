@@ -401,19 +401,19 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                         <div class="row">
                             @if ($task->task_budget_it_operating > 0)
                                 <div class="col-6 ">{{ __('งบกลาง ICT') }}</div>
-                                {{ number_format($task->task_budget_it_operating) }} บาท
+                               {{--  {{ number_format($task->task_budget_it_operating) }} บาท --}}
                             @endif
                         </div>
                         <div class="row">
                             @if ($task->task_budget_it_investment > 0)
                                 <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
-                                {{ number_format($task->task_budget_it_investment) }} บาท
+                               {{--  {{ number_format($task->task_budget_it_investment) }} บาท --}}
                             @endif
                         </div>
                         <div class="row">
                             @if ($task->task_budget_gov_utility > 0)
                                 <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                {{ number_format($task->task_budget_gov_utility) }} บาท
+                            {{--     {{ number_format($task->task_budget_gov_utility) }} บาท --}}
                             @endif
                         </div>
                     </td>

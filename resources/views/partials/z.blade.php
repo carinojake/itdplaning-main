@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-3">{{ __('จำนวนเงิน (บาท) PP') }}</div>
-                                    <div class="col-9">{{ number_format($taskcon->taskcon_pay) }}</div>
+                                    <div class="col-9">{{ number_format($task->task_pay) }}</div>
                                 </div>
 
                             </div>

@@ -65,6 +65,13 @@
 
 
                                     <div class="col-md-12">
+                                        <label for="task_mm" class="form-label">{{ __('MM') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="task_mm" name="task_mm"
+                                       >
+                                    </div>
+
+                                    <div class="col-md-12 mt-3">
                                         <label for="task_name" class="form-label">{{ __('ชื่อสัญญา') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
@@ -306,6 +313,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             $(document).ready(function() {
@@ -382,7 +390,7 @@
 
         var current = parseFloat($(this).val().replace(/,/g , ""));
         if (current > max) {
-            alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
             $(this).val(max.toFixed(2));
         }
     });

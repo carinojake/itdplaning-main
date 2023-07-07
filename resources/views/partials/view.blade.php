@@ -362,7 +362,7 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
