@@ -429,6 +429,10 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                             <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
                         </form>
 
+
+
+
+
                     @endif
 
                         </form>
@@ -441,3 +445,4 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
         </tbody>
         </table>
     </ul>
+

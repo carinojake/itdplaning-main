@@ -718,7 +718,7 @@ class ProjectController extends Controller
         //  dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
 
 
-            //dd($gantt,$budget);
+          //  dd($gantt,$budget);
         // dd($budget);
         $gantt = json_encode($gantt);
 
@@ -3870,8 +3870,18 @@ class ProjectController extends Controller
 
                     // Assign the project_id to the Taskcon
                     $taskcon = Taskcon::where('task_id', $task->task_id)->first();
-
-                    // If the Taskcon doesn't exist, return an error
+                    if ($taskcon === null) {
+                        // Handle the error, e.g., create a new Taskcon, show an error message, etc.
+                        // For example, to create a new Taskcon:
+                        //$taskcon = new Taskcon;
+                        //$taskcon->task_id = $task->task_id;
+                        // Set other properties of $taskcon as needed
+                        return redirect()->route('project.show', $project->hashid);
+                    } else {
+                        // If $taskcon is not null, you can safely set its properties
+                        $taskcon->task_id = $task->task_id;
+                        // Set other properties of $taskcon as needed
+                    }
 
                     $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
                     $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));

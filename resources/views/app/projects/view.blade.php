@@ -104,9 +104,35 @@
 
 
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
         <script>
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                var rowid = $(this).data('rowid');
+                var form = $(this).closest('form');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ลบเลย!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        </script>
+
+
+
+      <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const popoverEl = document.querySelectorAll('[data-coreui-toggle="popover"]');
                 Array.from(popoverEl).forEach(function(el) {
@@ -165,22 +191,33 @@
             };
 
             var rightGridColumns = {
-                columns: [{
-                        name: "budget",
-                        width: 120,
-                        label: "งบประมาณที่ได้รับการจัดสรร",
-                        tree: true,
-                        resize: true,
-                        template: function(task) {
+                columns: [
+                    {
+    name: "budget",
+    width: 120,
+    label: "งบประมาณที่ได้รับการจัดสรร",
+    tree: true,
+    resize: true,
+    template: function(task) {
+        let pbalance = task.pbalance;
+        let tmp_class = "someColor"; // You need to define this variable
 
-
-                            let pbalance = task.pbalance;
-                            if (pbalance) {
-                                return new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(pbalance);
-
+        if (pbalance) {
+            return new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB'
+            }).format(pbalance);
+        } else if (task.task_type === null) {
+            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB'
+            }).format(task.tbalance) + '</span>';
+        } else {
+            return '';
+        }
+    }
+}
+,
 
 
                 /*             if (task.budget) {
@@ -194,40 +231,33 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_mm) + '</span>'; */
-                            } else {
-                                return '';
+                                                            {
+                                name: "budget_total_mm",
+                                width: 100,
+                                label: " MM ",
+                                tree: true,
+                                resize: true,
+                                template: function(task) {
+                                    var tmp_class = task.balance < 0 ? 'red' : 'dark';
+                                     if (task.task_type === null) {
+                                        return '';
+                                    }
+                                    else if (task.budget_mm) {
+                                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                            style: 'currency',
+                                            currency: 'THB'
+                                        }).format(task.budget_mm) + '</span>';
+                                    } else if (task.budget_mm < task.balance) {
+                                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                            style: 'currency',
+                                            currency: 'THB'
+                                        }).format(task.budget_total_mm) + '</span>';
+                                    }  else {
+                                        return '';
+                                    }
+                                }
                             }
-
-
-
-
-
-
-                        }
-                    },
-                    {
-                        name: "budget_total_mm",
-                        width: 100,
-                        label: " MM ",
-                        tree: true,
-                        resize: true,
-                        template: function(task) {
-                            if (task.budget_mm ) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'dark';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.budget_mm) + '</span>';
-                            } else if (task.budget_mm <  task.balance) {
-                                return'<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.budget_total_mm) + '</span>';
-                            } else {
-                                return '-';
-                            }
-                        }
-                    },
+                            ,
                     {
                         name: "cost_pa",
                         width: 150,
@@ -628,5 +658,11 @@
                 data: {!! $gantt !!}
             });
         </script>
+
+
+
+
+
+
     </x-slot:javascript>
 </x-app-layout>
