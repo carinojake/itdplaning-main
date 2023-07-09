@@ -2777,13 +2777,8 @@ class ProjectController extends Controller
             $fiscal_year = date('Y') + 543; // Use current year if not provided
         }
 
-        $tasksDetails = $task;
-
-
-
-       //dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
+        //  dd($projectDetails,$projectyear ,$contracts,$tasks,$task);
         return view('app.projects.tasks.createsubnop', compact(
-            'tasksDetails',
             'request',
             'projectDetails',
             'contracts',
@@ -2793,10 +2788,7 @@ class ProjectController extends Controller
             'fiscal_year',
             'sum_task_budget_it_operating',
             'sum_task_budget_it_investment',
-            'sum_task_budget_gov_utility',
-            'sum_task_refund_budget_it_operating',
-            'sum_task_refund_budget_it_investment',
-            'sum_task_refund_budget_gov_utility'
+            'sum_task_budget_gov_utility'
         ));
     }
 
