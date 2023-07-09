@@ -1055,3 +1055,200 @@
 
         </x-slot:javascript>
 </x-app-layout>
+{{--  <div class="accordion-item">
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-coreui-toggle="collapse"
+                                                    data-coreui-target="#panelsStayOpen-collapseThree"
+                                                    aria-expanded="false"
+                                                    aria-controls="panelsStayOpen-collapseThree">
+                                                    ข้อมูลค่าใช้จ่าย #3
+                                                </button>
+                                            </h2>
+                                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                                                aria-labelledby="panelsStayOpen-headingThree">
+                                                <div class="accordion-body">
+                                                    <div class="d-none col-md-3">
+                                                        <label for="contract_type"
+                                                            class="form-label">{{ __('ประเภท') }} </label>
+                                                        {{ Form::select('contract_type', \Helper::contractType(), '4', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                                                    </div>
+
+
+                                                    <div>
+
+
+
+                                                        <div class="accordion-body">
+                                                            <h4> ข้อมูลค่าใช้จ่าย </h4>
+                                                            <div id="mm_form">
+
+
+                                                                <div class="callout callout-primary row mt-3">
+
+                                                                    <div class="col-md-12 mt-3">
+                                                                        <label for="taskcon_mm_name"
+                                                                            class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
+
+
+                                                                        <input type="text" class="form-control"
+                                                                            id="taskcon_mm_name"
+                                                                            name="taskcon_mm_name" required>
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="col-md-4 mt-3">
+                                                                        <label for="taskcon_mm"
+                                                                            class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
+                                                                        <span class="text-danger"></span>
+
+                                                                        <input type="text" class="form-control"
+                                                                            id="taskcon_mm" name="taskcon_mm">
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __(' ') }}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="col-md-4 mt-3">
+                                                                        <label for="taskcon_mm_budget"
+                                                                            class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
+                                                                        <span class="text-danger"></span>
+
+                                                                        <input type="text" placeholder="0.00"
+                                                                            step="0.01" class="form-control"
+                                                                            id="taskcon_mm_budget"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            name="taskcon_mm_budget" min="0">
+                                                                    </div>
+
+
+
+                                                                    <div id="ba_form" >
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="taskcon_ba "
+                                                                                    class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
+
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="taskcon_ba" name="taskcon_ba">
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __(' ') }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="taskcon_ba_budget"
+                                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BA') }}</label>
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text"
+                                                                                    placeholder="0.00" step="0.01"
+                                                                                    class="form-control"
+                                                                                    id="taskcon_ba_budget"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    name="taskcon_ba_budget"
+                                                                                    min="0">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="bd_form" >
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="taskcon_bd "
+                                                                                    class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
+
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="taskcon_bd" name="taskcon_bd">
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __(' ') }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="contract_bd_budget"
+                                                                                    class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text"
+                                                                                    placeholder="0.00" step="0.01"
+                                                                                    class="form-control"
+                                                                                    id="taskcon_bd_budget"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    name="taskcon_bd_budget"
+                                                                                    min="0">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="pp_form"
+                                                                    class="callout callout-danger">
+
+
+
+                                                                    <div class="row mt-3">
+                                                                        <div class="col-md-4">
+                                                                            <label for="contract_pay"
+                                                                                class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
+                                                                            <span class="text-danger"></span>
+
+                                                                            <input type="text" class="form-control"
+                                                                                id="taskcon_pp" name="taskcon_cn">
+                                                                            <div class="invalid-feedback">
+                                                                                {{ __(' ') }}
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-4">
+                                                                            <label for="taskcon_pay"
+                                                                                class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
+
+
+                                                                            <input type="text" placeholder="0.00"
+                                                                                step="0.01" class="form-control"
+                                                                                id="taskcon_pay"
+                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                class="form-control numeral-mask"
+                                                                                name="taskcon_pay" min="0">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row mt-3">
+                                                                        <div class="col-md-4">
+                                                                            <label for="taskcon_pay_date"
+                                                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+
+                                                                            <input type="text" class="form-control"
+                                                                                id="taskcon_pay_date"
+                                                                                name="taskcon_pay_date">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> --}}
+        {{--           <div class="col-md-6">
+                                            <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
+                                            <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" readonly>
+                                          </div>
+                                    </div> --}}

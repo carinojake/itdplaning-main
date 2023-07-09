@@ -329,7 +329,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
-                                                                            min="0">
+                                                                            min="0" onchange="calculateRefund()">>
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ระบุงบกลาง ICT') }}
@@ -436,7 +436,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        <div id="utility" {{-- style="display:none;" --}}>
+                                                        <div id="refund" {{-- style="display:none;" --}}>
                                                             <div class="d-none row mt-3">
                                                                 <div class="col-md-4">
                                                                     <label for="task_refund_pa_budget"

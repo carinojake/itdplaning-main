@@ -423,7 +423,6 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                        <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
 
                         @if ($task->task_parent == 0)
-
                         <form class="delete-form" action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                             @method('DELETE')
                             @csrf
