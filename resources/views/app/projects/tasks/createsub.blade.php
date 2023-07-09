@@ -24,9 +24,17 @@
 
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3 needs-validation" novalidate>
                                 @csrf
+
+
                                 <h2>เพิ่ม สัญญา</h2>
-                                <input {{--  type="hidden" --}} class="form-control" id="task_parent_display"
-                                    value="{{ $task->task_name }}" disabled readonly>
+
+
+                                <div class="callout callout-primary row mt-3">
+                                <div class="row">
+                                    <div class="col-3">{{ __('กิจกรรม') }}</div>
+                                    <div class="col-3"> {{ $task->task_name }}</div>
+                                </div>
+
 
                                 <input type="hidden" class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
@@ -34,24 +42,24 @@
                                     <div class="row mt-3">
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
-                                                <div class="col-6">{{ __('งบกลาง ICT') }}</div>
-                                                {{ number_format($task->task_budget_it_operating) }}
+                                                <div class="col-3">{{ __('งบกลาง ICT') }}</div>
+                                                <div class="col-3">   {{ number_format($task->task_budget_it_operating) }}</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_it_investment > 0)
-                                                <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
-                                                {{ number_format($task->task_budget_it_investment) }}
+                                                <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
+                                                <div class="col-3"> {{ number_format($task->task_budget_it_investment) }}</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
-                                                <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                {{ number_format($task->task_budget_gov_utility) }}
+                                                <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                <div class="col-3">   {{ number_format($task->task_budget_gov_utility) }}</div>
                                             @endif
                                         </div>
                                     </div>
-
+                                </div>
 
                                 <div class=" row mt-3">
 
@@ -127,12 +135,61 @@
                     @endif
 
                                     </div >
+
+
                                     <div class="row">
-                                        <div class="col-md-9">
+                                        <div class="col-md-4 mt-3">
+                                            <label for="taskcon_mm"
+                                                class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
+                                            <span class="text-danger">*</span>
+
+                                            <input type="text" class="form-control"
+                                                id="taskcon_mm" name="taskcon_mm" required>
+                                            <div class="invalid-feedback">
+                                                {{ __('เลขที่ MM/เลขที่ สท. ') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-8 mt-3">
+                                            <label for="taskcon_mm_name"
+                                                class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
+
+
+                                            <input type="text" class="form-control"
+                                                id="taskcon_mm_name" name="taskcon_mm_name">
+                                            <div class="invalid-feedback">
+                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 mt-3">
+
+                                            <label for="task_mm_budget"
+                                                class="form-label">{{ __('mm_budget') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                class="form-control numeral-mask"
+                                                id="task_mm_budget" name="task_mm_budget"
+                                                min="0"  value={{ session('contract_mm_budget') }} >
+
+                                            <div class="invalid-feedback">
+                                                {{ __('mm') }}
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-9 mt-3">
                                             <div class="form-group">
                                                 <label for="task_contract"
-                                                    class="form-label">{{ __('สัญญา') }}</label> <span
-                                                    class="text-danger">*</span>
+                                                    class="form-label">{{ __('สัญญา') }}</label>
+                                                    {{-- <span class="text-danger">*</span> --}}
                                                 <select name="task_contract" id="task_contract" class="form-control">
                                                     <option value="">ไม่มี</option>
                                                     @foreach ($contracts as $contract)
@@ -151,23 +208,28 @@
                                         </div>
 
                                         @if (session('contract_id') == 0)
-                                        <div class="col-md-3 mt-4">
+                                        <div class="col-md-3  mt-4">
+                                            <div class="form-group">
+                                                <label for="task_contract"
+                                                class="form-label">{{ __('สัญญา') }}</label>
+                                                {{-- <span class="text-danger">*</span> --}}
                                             {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                            <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            <span class="text-danger"> <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
                                                 class="btn btn-success text-white"
-                                                target="contractCreate">เพิ่มสัญญา</a>
+                                                target="contractCreate">เพิ่มสัญญา</a></span>
+                                            </div>
                                         </div>
                                         @endif
                                     </div>
 
                                     <div class="col-md-12 mt-3">
                                         <label for="task_name"
-                                            class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
-                                            class="text-danger">*</span>
+                                            class="form-label">{{ __('ชื่อรายการ') }}</label>
+                                           {{--  <span class="text-danger">*</span> --}}
                                         <input type="text" class="form-control" id="task_name" name="task_name"
                                         value= {{ session('contract_name') }}>
                                         <div class="invalid-feedback">
-                                            {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                            {{ __('ชื่อรายการ') }}
                                         </div>
 
                                     </div>
@@ -337,7 +399,26 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                            <div id="refund" {{-- style="display:none;" --}}>
+                                                <div class=" row mt-3">
+                                                    <div class="col-md-4">
+                                                        <label for="task_refund_pa_budget"
+                                                            class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
+                                                        <span class="text-danger"></span>
 
+                                                        <input type="text" placeholder="0.00"
+                                                            step="0.01"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
+                                                            id="task_refund_pa_budget"
+                                                            name="task_refund_pa_budget" min="0">
+
+                                                        {{--  <div class="invalid-feedback">
+                                                                {{ __('ค่าสาธารณูปโภค') }}
+                                                            </div> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -366,6 +447,34 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                // Initialize Select2 on the select element
+                $('.js-example-basic-single').select2();
+
+                $('.js-example-basic-single').on('change', function() {
+                    // Get the selected value
+                    const selectedValue = $(this).val();
+                    // Handle the selected value as needed
+                    console.log(selectedValue);
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
 
         <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -390,42 +499,97 @@
         })()
         </script>
 
-       <script>
-            $(document).ready(function() {
-                $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating      ,#task_cost_it_investment,#task_cost_gov_utility,#task_cost_it_operating").on("input",
-                    function() {
-                        var max = 0;
-                        var fieldId = $(this).attr('id');
+<script>
+    $(document).ready(function() {
+        $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+            var max = parseFloat($(this).val().replace(/,/g, ""));
+            var fieldId = $(this).attr('id');
 
-                        if (fieldId === "task_budget_it_investment" ) {
-                            max = parseFloat({{ $task->task_budget_it_investment }});
-                        } else if (fieldId === "task_budget_gov_utility"   ) {
-                            max = parseFloat({{ $task->task_budget_gov_utility }});
-                        } else if (fieldId === "task_budget_it_operating"  ) {
-                            max = parseFloat({{ $task->task_budget_it_operating }});
-                        } else if (fieldId === "task_cost_it_investment"  ) {
-                            max = parseFloat({{ $task->task_budget_it_investment }});
-                        } else if (fieldId === "task_cost_gov_utility"  ) {
-                            max = parseFloat({{ $task->task_budget_gov_utility }});
-                        } else if (fieldId === "task_cost_it_operating"  ) {
-                            max = parseFloat({{ $task->task_budget_it_operating }});
-                        }
+            if (fieldId === "task_budget_it_investment") {
+                max = parseFloat({{ $tasksDetails->task_budget_it_investment }});
+            } else if (fieldId === "task_budget_it_operating") {
+                max = parseFloat({{ $tasksDetails->task_budget_it_operating }});
+            } else if (fieldId === "task_budget_gov_utility") {
+                max = parseFloat({{ $tasksDetails->task_budget_gov_utility }});
+            }
 
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
 
+        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            var max = parseFloat($(this).val().replace(/,/g, ""));
+            var fieldId = $(this).attr('id');
 
+            if (fieldId === "task_cost_it_investment") {
+                max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+            } else if (fieldId === "task_cost_it_operating") {
+                max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+            } else if (fieldId === "task_cost_gov_utility") {
+                max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+            }
 
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
 
+        $("#task_pay").on("input", function() {
+            var max = 0;
 
+            if ($("#task_budget_it_investment").length) {
+                max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
+            } else if ($("#task_budget_it_operating").length) {
+                max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
+            } else if ($("#task_budget_gov_utility").length) {
+                max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
+            }
 
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
 
-                        var current = parseFloat($(this).val().replace(/,/g, ""));
-                        if (current > max) {
-                            alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-                            $(this).val(max.toFixed(2));
-                        }
-                    });
-            });
-        </script>
+        $("#task_pay").on("blur", function() {
+            $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
+        });
+    });
+</script>
+
+<script>
+    $("#task_pay").on("input", function() {
+        calculateRefund();
+    });
+
+    function calculateRefund() {
+        var pr_budget , pa_budget , refund ;
+
+        if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+        else if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+        else if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+
+        $("#task_refund_pa_budget").val(refund.toFixed(2));
+    }
+</script>
 
 
 

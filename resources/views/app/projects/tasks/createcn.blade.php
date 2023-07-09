@@ -315,7 +315,27 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <script>
+            $(document).ready(function() {
+                // Initialize Select2 on the select element
+                $('.js-example-basic-single').select2();
+
+                $('.js-example-basic-single').on('change', function() {
+                    // Get the selected value
+                    const selectedValue = $(this).val();
+                    // Handle the selected value as needed
+                    console.log(selectedValue);
+                });
+            });
+        </script>
+
+
+
+
+       <script>
             $(document).ready(function() {
                 $(".numeral-mask").inputmask();
             });

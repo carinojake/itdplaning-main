@@ -2561,9 +2561,9 @@ class ProjectController extends Controller
             $task = null;
         }
 
-
+        $tasksDetails = $task;
         //  dd($contracts);
-        return view('app.projects.tasks.createsub', compact('request', 'contracts', 'project', 'tasks', 'task'));
+        return view('app.projects.tasks.createsub', compact('request','tasksDetails', 'contracts', 'project', 'tasks', 'task'));
 
         /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
@@ -2772,23 +2772,29 @@ class ProjectController extends Controller
         } else {
             $task = null;
         }
+
+
         $fiscal_year = $request->input('fiscal_year');
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
         }
 
-        //  dd($projectDetails,$projectyear ,$contracts,$tasks,$task);
+
+        $tasksDetails = $task;
+   //dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
         return view('app.projects.tasks.createsubnop', compact(
             'request',
+            'tasksDetails',
             'projectDetails',
             'contracts',
             'project',
             'tasks',
             'task',
             'fiscal_year',
-            'sum_task_budget_it_operating',
-            'sum_task_budget_it_investment',
-            'sum_task_budget_gov_utility'
+            'sum_task_budget_gov_utility',
+            'sum_task_refund_budget_it_operating',
+            'sum_task_refund_budget_it_investment',
+            'sum_task_refund_budget_gov_utility'
         ));
     }
 
@@ -2815,9 +2821,17 @@ class ProjectController extends Controller
         $task_cost_it_operating = $request->input('task_cost_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_operating')) : null;
         $task_cost_gov_utility = $request->input('task_cost_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_cost_gov_utility')) : null;
         $task_cost_it_investment = $request->input('task_cost_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_investment')) : null;
+        $task_refund_pa_budget = $request->input('task_refund_pa_budget') !== '' ? (float) str_replace(',', '', $request->input('task_refund_pa_budget')) : null;
 
         $task_pay = $request->input('task_pay') !== '' ? (float) str_replace(',', '', $request->input('task_pay')) : null;
         $taskcon_pay = $request->input('taskcon_pay') !== '' ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
+        $task_mm_budget = $request->input('task_mm_budget') !== '' ? (float) str_replace(',', '', $request->input('task_mm_budget')) : null;
+        $taskcon_pay = $request->input('taskcon_pay') !== '' ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
+
+
+
+
+
 
         // $tasks = Task::where('project_id', $id)->get(); // Fetch all tasks for the project
 
@@ -2884,6 +2898,9 @@ class ProjectController extends Controller
 
 
         $task->project_id = $id;
+        $task->task_mm = $request->input('taskcon_mm');
+        $task->task_mm_name = $request->input('taskcon_mm_name');
+
         $task->task_name = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
 
@@ -2899,8 +2916,16 @@ class ProjectController extends Controller
 
         $task->task_pay = $task_pay;
 
+        $task->task_mm_budget = $task_mm_budget;
+
+        $task->task_refund_pa_budget = $task_refund_pa_budget;
+
+
+
+
+
         $task->task_type = $request->input('task_type');
-        // dd($task);
+         //dd($task);
         if ($task->save()) {
             //insert contract
             if ($request->input('task_contract')) {

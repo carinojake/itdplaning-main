@@ -424,10 +424,11 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
 
                         @if ($task->task_parent == 0)
 
-                        <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                        <form class="delete-form" action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                             @method('DELETE')
                             @csrf
-                            <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
+
+                            <button class="btn btn-danger text-white btn-delete" data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
                         </form>
 
                     @endif
@@ -444,18 +445,6 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
     </ul>
 
 
-    <script>
-        $(document).on('click', '.btn-delete', function(e) {
-            e.preventDefault();
-
-            var rowid = $(this).data('rowid');
-            var form = $(this).closest('form');
-
-            if (confirm('Are you sure?')) {
-                form.submit();
-            }
-        });
-    </script>
 
 
 

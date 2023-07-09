@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($project->main_task_activity as $index => $task)
+            @foreach ($project->main_task as $index => $task)
            {{--  {{ var_dump($task->hashid) main_task_activity}} --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
@@ -423,10 +423,12 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
 
                         @if ($task->task_parent == 0)
 
-                        <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+
+                        <form class="delete-form" action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                             @method('DELETE')
                             @csrf
-                            <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
+
+                            <button class="btn btn-danger text-white btn-delete" data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
                         </form>
 
 

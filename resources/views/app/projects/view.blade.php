@@ -106,6 +106,18 @@
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <script src="https://unpkg.com/@popperjs/core@2.11.4/dist/umd/popper.min.js"></script>
+        <script src="https://unpkg.com/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script>
+    // เรียกใช้ Popover
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+</script>
 
         <script>
             $(document).on('click', '.btn-delete', function(e) {

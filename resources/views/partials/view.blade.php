@@ -29,17 +29,42 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
-                                href="#collapseExample" role="button" aria-expanded="false"
-                                aria-controls="collapseExample">
-                                <div class="fs-4 fw-semibold  ">
+                            <button class="btn"  data-bs-toggle="popover"
+                            data-bs-placement="bottom"
+                            data-bs-custom-class="custom-popover"
+                            data-bs-title="งบประมาณที่ได้รับการจัดสรร"
+                            data-bs-content="
+                            @if ($project['budget_it_operating'] > 0)
+                            งบกลาง ICT :  {{ number_format($project['budget_it_operating']) }} บาท
+                            @endif
+                            @if ($project['budget_it_investment'] > 0)
+                            งบดำเนินงาน :{{ number_format($project['budget_it_investment']) }} บาท
+                            @endif
+                            @if ($project['budget_gov_utility'] > 0)
+                            งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']) }} บาท
+                            @endif"
+
+
+                            data-bs-trigger="hover focus">
+                                <div class="fs-4 fw-semibold">
                                     {{ number_format($budget['total'], 2) }}
                                 </div>
-
                                 <small class="text-xl">
                                     งบประมาณที่ได้รับการจัดสรร
                                 </small>
                             </button>
+
+{{--
+                            <button class="btn" style="width: 13rem;" data-bs-toggle="popover" data-bs-content="งบประมาณที่ได้รับการจัดสรร"
+                            disabled data-bs-trigger="hover focus">
+                            <div class="fs-4 fw-semibold">
+                                {{ number_format($budget['total'], 2) }}
+                            </div>
+                            <small class="text-xl">
+                                งบประมาณที่ได้รับการจัดสรร
+                            </small>
+                        </button> --}}
+
 
 
                         </div>

@@ -432,7 +432,7 @@ class ContractController extends Controller
                 $ta = Task::find($id_task);
             }
         }
-        ($tasks     = Task::where('project_id', $id)->get());
+       ($tasks     = Task::where('project_id', $id)->get());
                                 // Sum the task_budget_it_operating for all tasks
         ($task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating'));
 
@@ -440,7 +440,12 @@ class ContractController extends Controller
         ($task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment'));
 
         // Sum the task_budget_gov_utility for all tasks
-        $task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
+        ($task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility'));
+
+
+
+
+
 
         $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
 

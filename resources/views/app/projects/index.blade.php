@@ -169,34 +169,42 @@
                 })
 
                 $(document).on('click', '.btn-delete', function() {
-                    if (!Swal.fire("Are you sure?" )) return;
-
-                    var rowid = $(this).data('rowid')
-                    var el = $(this)
-                    if (!rowid) return;
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: 'JSON',
-                        url: "{{ url('project') }}/" + rowid,
-                        data: {
-                            _method: 'delete',
-                            _token: token
-                        },
-                        success: function(data) {
-                            if (data.success) {
-                                // Check if there is any project inside before delete
-                                if (data.project_inside) {
-                                    Swal.fire("กกกกCannot delete because there is a project inside." + rowid);
-                                    return;
-                                }
-                                table.row(el.parents('tr'))
-                                    .remove()
-                                    .draw();
-                            }
+    var rowid = $(this).data('rowid');
+    var el = $(this);
+    if (!rowid) return;
+    Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+                    text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ลบเลย!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                dataType: 'JSON',
+                url: "{{ url('project') }}/" + rowid,
+                data: {
+                    _method: 'delete',
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    if (data.success) {
+                        // Check if there is any project inside before delete
+                        if (data.project_inside) {
+                            Swal.fire("Cannot delete because there is a project inside." + rowid);
+                            return;
                         }
-                    }); //end ajax
-                })
+                        table.row(el.parents('tr')).remove().draw();
+                    }
+                    location.reload(); // Reload the page only once after the deletion
+                }
+            }); //end ajax
+        }
+    });
+});
 
 
 
