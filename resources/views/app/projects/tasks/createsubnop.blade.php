@@ -109,55 +109,55 @@
                                                     </div>
 
 
-                                                   {{--  <div class="row mt-3">
+                                                    <div class="row mt-3">
                                                         <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                                         <div class="row">
                                                             @if ($tasksDetails->task_budget_it_operating > 0)
                                                                 <div class="col-md-4">
-                                                                    <label for="task_budget_it_operating0"
+                                                                    <label for="task_budget_it_operating"
                                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                                     <input type="text"
                                                                         placeholder="{{ number_format($tasksDetails->task_budget_it_operating, 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        id="task_budget_it_operating0"
-                                                                        name="task_budget_it_operating0" min="0"
+                                                                        id="task_budget_it_operating"
+                                                                        name="task_budget_it_operating" min="0"
                                                                         disabled readonly>
                                                                 </div>
                                                             @endif
 
                                                             @if ($tasksDetails->task_budget_it_investment > 0)
                                                                 <div class="col-4">
-                                                                    <label for="task_budget_it_investment0"
+                                                                    <label for="task_budget_it_investment"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                                     <input type="text"
                                                                         placeholder="{{ number_format($tasksDetails->task_budget_it_investment, 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        id="task_budget_it_investment0"
-                                                                        name="task_budget_it_investment0"
+                                                                        id="task_budget_it_investment"
+                                                                        name="task_budget_it_investment"
                                                                         min="0" disabled readonly>
                                                                 </div>
                                                             @endif
 
                                                             @if ($tasksDetails->task_budget_gov_utility > 0)
                                                                 <div class="col-md-4">
-                                                                    <label for="task_budget_gov_utility0"
+                                                                    <label for="task_budget_gov_utility"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                                     <input type="text"
                                                                         placeholder=" {{ number_format($tasksDetails->task_budget_gov_utility, 2) }} บาท"
                                                                         step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        id="task_budget_gov_utility0"
-                                                                        name="task_budget_gov_utility0" min="0"
+                                                                        id="task_budget_gov_utility"
+                                                                        name="task_budget_gov_utility" min="0"
                                                                         disabled readonly>
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                    </div> --}}
+                                                    </div>
 
 
 
@@ -314,7 +314,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
-                                                                            min="0" onchange="calculateRefund()"
+                                                                            min="0"
                                                                            >
 
                                                                         <div class="invalid-feedback">
@@ -328,7 +328,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                                         name="task_cost_it_operating" min="0"  onchange="calculateRefund()" >
+                                                                         name="task_cost_it_operating" min="0"   >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบกลาง ICT') }}
@@ -350,7 +350,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
-                                                                            min="0" onchange="calculateRefund()"
+                                                                            min="0"
                                                                            >
 
                                                                         <div class="invalid-feedback">
@@ -364,7 +364,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_investment"
-                                                                         name="task_cost_it_investment" min="0" onchange="calculateRefund()"  >
+                                                                         name="task_cost_it_investment" min="0"   >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบดำเนินงาน') }}
@@ -387,7 +387,7 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_gov_utility"
                                                                             name="task_budget_gov_utility"
-                                                                            min="0" onchange="calculateRefund()"
+                                                                            min="0"
                                                                            >
 
                                                                         <div class="invalid-feedback">
@@ -401,7 +401,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_gov_utility"
-                                                                         name="task_cost_gov_utility" min="0"  onchange="calculateRefund()" >
+                                                                         name="task_cost_gov_utility" min="0"   >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('ค่าสาธารณูปโภค') }}
@@ -935,97 +935,158 @@
                     $(":input").inputmask();
                 });
             </script>
-                                    <script>
-                                        $(document).ready(function() {
-                                            $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
-                                                var max = parseFloat($(this).val().replace(/,/g, ""));
-                                                var fieldId = $(this).attr('id');
 
-                                                if (fieldId === "task_budget_it_investment") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_investment }});
-                                                } else if (fieldId === "task_budget_it_operating") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating }});
-                                                } else if (fieldId === "task_budget_gov_utility") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility }});
-                                                }
+<script>
+    $(document).ready(function() {
+        $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
+            function() {
+                var max = 0;
+                var fieldId = $(this).attr('id');
 
-                                                var current = parseFloat($(this).val().replace(/,/g, ""));
-                                                if (current > max) {
-                                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                                                    $(this).val(max.toFixed(2));
-                                                }
-                                            });
+                if (fieldId === "task_budget_it_investment") {
+                    max = parseFloat(
+                        {{ $tasksDetails->task_budget_it_investment   }}
+                        );
+                } else if (fieldId === "task_budget_it_operating") {
+                    max = parseFloat(
+                        {{ $tasksDetails->task_budget_it_operating }}
+                        );
+                } else if (fieldId === "task_budget_gov_utility") {
+                    max = parseFloat(
+                        {{ $tasksDetails->task_budget_gov_utility }}
+                        );
+                }
 
-                                            $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
-                                                var max = parseFloat($(this).val().replace(/,/g, ""));
-                                                var fieldId = $(this).attr('id');
+                var current = parseFloat($(this).val().replace(/,/g, ""));
+                if (current > max) {
+Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+$(this).val(max.toFixed(2));
+}
 
-                                                if (fieldId === "task_cost_it_investment") {
-                                                    max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
-                                                } else if (fieldId === "task_cost_it_operating") {
-                                                    max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
-                                                } else if (fieldId === "task_cost_gov_utility") {
-                                                    max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
-                                                }
 
-                                                var current = parseFloat($(this).val().replace(/,/g, ""));
-                                                if (current > max) {
-                                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                                                    $(this).val(max.toFixed(2));
-                                                }
-                                            });
+            });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            var max ;
+            var fieldId = $(this).attr('id');
 
-                                            $("#task_pay").on("input", function() {
-                                                var max = 0;
+            if (fieldId === "task_cost_it_investment") {
+                max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+            }
 
-                                                if ($("#task_budget_it_investment").length) {
-                                                    max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
-                                                } else if ($("#task_budget_it_operating").length) {
-                                                    max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
-                                                } else if ($("#task_budget_gov_utility").length) {
-                                                    max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
-                                                }
+            else if (fieldId === "task_cost_it_operating") {
+                max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+            }
 
-                                                var current = parseFloat($(this).val().replace(/,/g, ""));
-                                                if (current > max) {
-                                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                                                    $(this).val(max.toFixed(2));
-                                                }
-                                            });
+            else if (fieldId === "task_cost_gov_utility") {
+                max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+            }
 
-                                            $("#task_pay").on("blur", function() {
-                                                $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
-                                            });
-                                        });
-                                    </script>
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                $(this).val(max.toFixed(2));
+            }
+        });
+    });
+</script>
 
-                                    <script>
-                                        $("#task_pay").on("input", function() {
-                                            calculateRefund();
-                                        });
 
-                                        function calculateRefund() {
-                                            var pr_budget , pa_budget , refund ;
+<script>
+$(document).ready(function() {
+$("#task_pay").on("input", function() {
+var max;
+//var budgetType = $("#project_select").val();
 
-                                            if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
-                                                pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
-                                                pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
-                                                refund = pr_budget - pa_budget;
-                                            }
-                                            else if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
-                                                pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
-                                                pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
-                                                refund = pr_budget - pa_budget;
-                                            }
-                                            else if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
-                                                pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
-                                                pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
-                                                refund = pr_budget - pa_budget;
-                                            }
+// Disable the fields
+$("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
 
-                                            $("#task_refund_pa_budget").val(refund.toFixed(2));
-                                        }
-                                    </script>
+if ("task_budget_it_operating") {
+    max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
+} else if ("task_budget_it_investment") {
+    max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
+} else if ("task_budget_gov_utility") {
+    max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
+}
+
+var current = parseFloat($(this).val().replace(/,/g, ""));
+if (current > max) {
+    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+        " บาท");
+    $(this).val(max.toFixed(2));
+}
+});
+
+// Enable the fields when input in #task_pay is finished
+$("#task_pay").on("blur", function() {
+$("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
+});
+});
+</script>
+
+
+
+
+
+
+{{-- <script>
+$("#task_refund_pa_budget").on("input", function() {
+calculateRefund();
+});
+
+function calculateRefund() {
+var pr_budget, pa_budget, refund;
+
+if (("task_cost_it_operating") > 1) {
+pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g , "")) || 0;
+pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g , "")) || 0;
+var pr_budget = document.getElementById("task_budget_it_operating").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_budget_it_operating").value.replace(/,/g , "")) : 0;
+var pa_budget = document.getElementById("task_cost_it_operating").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_cost_it_operating").value.replace(/,/g , "")) : 0;
+refund = pr_budget - pa_budget;
+} else if (("task_cost_it_investment") > 1) {
+
+var pr_budget = document.getElementById("task_budget_it_investment").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_budget_it_investment").value.replace(/,/g , "")) : 0;
+var pa_budget = document.getElementById("task_cost_it_investment").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_cost_it_investment").value.replace(/,/g , "")) : 0;
+refund = pr_budget - pa_budget;
+} else if (("task_cost_gov_utility") > 1) {
+var pr_budget = document.getElementById("task_budget_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_budget_gov_utility").value.replace(/,/g , "")) : 0;
+var pa_budget = document.getElementById("task_cost_gov_utility").value.replace(/,/g , "") ? parseFloat(document.getElementById("task_cost_gov_utility").value.replace(/,/g , "")) : 0;
+refund = pr_budget - pa_budget;
+}
+
+$("#task_refund_pa_budget").val(refund.toFixed(2));
+}
+</script>
+--}}
+<script>
+    $("#task_pay").on("input", function() {
+        calculateRefund();
+    });
+
+    function calculateRefund() {
+        var pr_budget, pa_budget, refund;
+
+        if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }  if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }  if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+
+        $("#task_refund_pa_budget").val(refund.toFixed(2));
+    }
+</script>
+
 
         </x-slot:javascript>
 </x-app-layout>
