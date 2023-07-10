@@ -11,19 +11,19 @@
         </div>
         <div class="col-sm">
             <div class="row">
-                @if($task->task_budget_it_operating)
+                @if($task->task_budget_it_operating > 0)
                 <div class="col-6">{{ __('งบกลาง ICT') }}</div>
                 {{ number_format($task->task_budget_it_operating) }}
                 @endif
             </div>
             <div class="row">
-                @if($task->task_budget_it_investment)
+                @if($task->task_budget_it_investment  > 0)
                 <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
                 {{ number_format($task->task_budget_it_investment) }}
                 @endif
             </div>
             <div class="row">
-                @if($task->task_budget_gov_utility)
+                @if($task->task_budget_gov_utility  > 0)
                 <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
                 {{ number_format($task->task_budget_gov_utility) }}
                 @endif
@@ -31,21 +31,21 @@
         </div>
              <div class="col-sm">
             <div class="row">
-                @if($task->task_budget_it_operating)
+                @if($task->task_budget_it_operating  > 0)
                 <div class="col-6">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-                {{ number_format($task->task_budget_it_operating) }}
+               {{--  {{ number_format(floatval($op_refund_mm_pr), 2) }} --}}
                 @endif
             </div>
             <div class="row">
-                @if($task->task_budget_it_investment)
+                @if($task->task_budget_it_investment > 0)
                 <div class="col-6">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
-                {{ number_format($task->task_budget_it_investment) }}
+            {{--     {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
                 @endif
             </div>
             <div class="row">
-                @if($task->task_budget_gov_utility)
+                @if($task->task_budget_gov_utility > 0)
                 <div class="col-6">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
-                {{ number_format($task->task_budget_gov_utility) }}
+             {{--    {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
             </div>
             @endif
         </div>

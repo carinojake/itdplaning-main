@@ -55,10 +55,10 @@
             @endif
 
 
-            @include('partials.xx')
+            @include('partials.xx')  {{-- กิจกรรม --}}
 
 
-            @include('partials.y')
+       @include('partials.y')  {{-- สญ. --}}
 
 
             @include('partials.z')

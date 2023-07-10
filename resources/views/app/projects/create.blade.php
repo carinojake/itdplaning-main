@@ -61,7 +61,7 @@
                                         <label for="reguiar_id"
                                             class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
+                                        <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"
                                             required autofocus>
                                         <!-- <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
                                                 @for ($i = $reguiar_id; $i <= $reguiar_id; $i++)

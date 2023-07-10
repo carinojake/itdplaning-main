@@ -86,17 +86,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label for="contract_number"
-                                                    class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
-                                                {{--    <span class="text-danger">*</span> --}}
-                                                <input type="text" class="form-control" id="contract_number"
-                                                    name="contract_number" required autofocus>
 
-                                                <div class="invalid-feedback">
-                                                    {{ __('เลขที่สัญญา ซ้ำ') }}
-                                                </div>
-                                            </div>
                                             <!-- Task Parent -->
                                             {{--  <div class="col-md-3">
                                                 <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
@@ -217,7 +207,7 @@
                                                             data-coreui-toggle="collapse"
                                                             data-coreui-target="#flush-collapseOne"
                                                             aria-expanded="false" aria-controls="flush-collapseOne">
-                                                            ข้อมูลการจัดซื้อจัดจ้าง
+                                                            ข้อมูลการจัดซื้อจัดจ้าง (เลขที่สัญญา,MM,PR)
                                                         </button>
                                                     </h2>
                                                     <div id="flush-collapseOne" class="accordion-collapse collapse"
@@ -228,6 +218,19 @@
 
                                                             <div id="mm_form" style="display:none;">
                                                                 <div class="callout callout-primary row mt-3">
+
+                                                                    <div class="col-md-3">
+                                                                        <label for="contract_number"
+                                                                            class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
+                                                                         <span class="text-danger">*</span>
+                                                                        <input type="text" class="form-control" id="contract_number"
+                                                                            name="contract_number" required autofocus>
+
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt-3">
                                                                     <div class="col-md-4">
 
                                                                         <label for="contract_mm"
@@ -250,6 +253,7 @@
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                             class="form-control numeral-mask"
                                                                             name="contract_mm_budget" min="0">
+                                                                    </div>
                                                                     </div>
 
 
@@ -295,8 +299,11 @@
 
                                                                 </div>
                                                             </div>
-                                                            <div class="callout callout-success">
+
+
+
                                                                 <div id="pa_form" style="display:none;">
+                                                                    <div class="callout callout-warning">
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-4">
                                                                             <label for="contract_pa"
@@ -324,18 +331,28 @@
                                                                                 min="0">
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                    <div id="contract_refund_pa_budget" {{-- style="display:none;" --}}>
+                                                                        <div class=" row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="contract_refund_pa_budget"
+                                                                                    class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="contract_refund_pa_budget"
+                                                                                    name="contract_refund_pa_budget" min="0">
+
+                                                                                {{--  <div class="invalid-feedback">
+                                                                                        {{ __('ค่าสาธารณูปโภค') }}
+                                                                                    </div> --}}
+                                                                            </div>
 
 
-
-
-
-
-
-
-
-
-
+                                                                        </div>
+                                                                    </div>
 
 
                                                                 <div id="po_form" style="display:none;">
@@ -565,7 +582,7 @@
                                                     </div>
  --}}
 
-                                                            <div id="rounds_form" class="callout callout-warning"
+                                                            <div id="rounds_form" class="callout callout-light"
                                                                 style="display:none;">
                                                                 <div class="row mt-3">
                                                                     <div class="col-md-12">
@@ -580,6 +597,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
                                                         </div><!-- 1  -->
                                                     </div>
                                                 </div>
@@ -592,7 +610,7 @@
                                                             data-coreui-target="#collapseTwo" aria-expanded="false"
                                                             aria-controls="collapseTwo">
                                                             ข้อมูลสัญญา 2
-                                                            (เลขที่สัญญา,เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา,
+                                                            (เลขทะเบียนคู่ค้า,วันที่เริ่มต้น-สิ้นสุด,ลงนามสัญญา,
                                                             ประก้น)
                                                         </button>
                                                     </h2>
@@ -727,7 +745,7 @@
 
                                                             <!--ข้อมูลสัญญา 3 -->
                                                             <div class="col-md-12 mt-3">
-                                                                <label for="contract_name"
+                                                                <label for="contract_mm_name"
                                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
 

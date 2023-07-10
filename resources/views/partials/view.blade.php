@@ -29,23 +29,25 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <button class="btn"  data-bs-toggle="popover"
-                            data-bs-placement="bottom"
-                            data-bs-custom-class="custom-popover"
-                            data-bs-title="งบประมาณที่ได้รับการจัดสรร"
-                            data-bs-content="
+                            <button id="popover_content_wrapper"
+                            class="btn " style="width: 13rem;" data-bs-toggle="popover"
+                             data-bs-placement="bottom"
+                             data-bs-custom-class="custom-popover"
+                             data-bs-title="งบประมาณที่ได้รับการจัดสรร" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
-                            งบกลาง ICT :  {{ number_format($project['budget_it_operating']) }} บาท
+                                งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท <br>
                             @endif
                             @if ($project['budget_it_investment'] > 0)
-                            งบดำเนินงาน :{{ number_format($project['budget_it_investment']) }} บาท
+                                งบดำเนินงาน :{{ number_format($project['budget_it_investment']),2 }} บาท <br>
                             @endif
                             @if ($project['budget_gov_utility'] > 0)
-                            งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']) }} บาท
-                            @endif"
+                                งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท <br>
+                            @endif
+                            " data-bs-trigger="hover focus">
 
 
-                            data-bs-trigger="hover focus">
+
+
                                 <div class="fs-4 fw-semibold">
                                     {{ number_format($budget['total'], 2) }}
                                 </div>
@@ -74,7 +76,7 @@
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;"
+                            {{-- <button class="btn " style="width: 13rem;"
                                 data-bs-toggle="collapse" href="#collapseExample2"
                                 role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
@@ -86,7 +88,35 @@
                                 </div>
 
                                 <small class="text-xl">งบประมาณคงเหลือที่ไช้ได้</small>
+                            </button> --}}
+
+                            <button id="popover_content_wrapper"
+                            class="btn" data-bs-toggle="popover"
+                             data-bs-placement="bottom"
+                             data-bs-custom-class="custom-popover"
+                             data-bs-title="งบประมาณคงเหลือที่ไช้ได้" data-bs-content="
+                            @if ($project['budget_it_operating'] > 0)
+                                งบกลาง ICT :   {{ number_format(floatval($op_refund_mm_pr), 2) }} บาท <br>
+                            @endif
+                            @if ($project['budget_it_investment'] > 0)
+                                งบดำเนินงาน : {{ number_format(floatval($is_refund_mm_pr), 2) }}บาท <br>
+                            @endif
+                            @if ($project['budget_gov_utility'] > 0)
+                                งบสาธารณูปโภค :  {{ number_format(floatval($ut_refund_mm_pr), 2) }} บาท <br>
+                            @endif
+                            " data-bs-trigger="hover focus">
+
+
+
+
+                                <div class="fs-4 fw-semibold text-success">
+                                    {{ number_format(floatval($budget['budget_total_mm_pr']), 2) }}
+                                </div>
+                                <small class="text-xl">
+                                    งบประมาณคงเหลือที่ไช้ได้
+                                </small>
                             </button>
+
 
                         </div>
                     </div>

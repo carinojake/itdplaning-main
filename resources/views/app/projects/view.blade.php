@@ -36,11 +36,18 @@
                            {{--  @include('partials.budgettotaloverview') --}}
                            @include('partials.view')
 
+                           @include('partials.gantt_ict_here')
+                          {{-- เปลี่ยน ict ดำเนิน สา --}}
+
+                          <div id="gantt_here" style='width:100%; height:50vh;'></div>
+
+                          <div id="gantt_ict_here" style='width:100%; height:50vh;'></div>
+
+                          <div id="gantt_in_here" style='width:100%; height:50vh;'></div>
+
+                          <div id="gantt_u_here" style='width:100%; height:50vh;'></div>
 
                           {{-- เปลี่ยน ict ดำเนิน สา --}}
-                           <div id="gantt_here" style='width:100%; height:50vh;'></div>
-
-                        {{-- เปลี่ยน ict ดำเนิน สา --}}
 
                             <div class="callout callout-primary row mt-3">
                             <ul class="nav nav-pills">
@@ -82,7 +89,16 @@
     </x-slot:content>
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
-
+        <style>
+            .custom-popover {
+                --cui-popover-max-width: 200px;
+                --cui-popover-border-color: var(--cui-primary);
+                --cui-popover-header-bg: var(--cui-primary);
+                --cui-popover-header-color: var(--cui-white);
+                --cui-popover-body-padding-x: 1rem;
+                --cui-popover-body-padding-y: .5rem;
+            }
+        </style>
         <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
         <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
 
@@ -111,13 +127,15 @@
 
 
 
-<script>
-    // เรียกใช้ Popover
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-</script>
+        <script>
+            // เรียกใช้ Popover
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl, {
+                    html: true
+                });
+            });
+        </script>
 
         <script>
             $(document).on('click', '.btn-delete', function(e) {

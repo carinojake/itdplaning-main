@@ -2414,12 +2414,14 @@ class ProjectController extends Controller
 
         //  dd($results2);
 
+        //dd($task->subtask);
 
-
-        // dd($results,$taskcons,$contract,$project,$task);
 
         ($latestContract = Contract::latest()->first());
 
+
+
+        //dd($latestContract,$results,$taskcons,$contract,$project,$task);
         return view('app.projects.tasks.show', compact('taskcons', 'project', 'task', 'results', 'contract', 'latestContract', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 

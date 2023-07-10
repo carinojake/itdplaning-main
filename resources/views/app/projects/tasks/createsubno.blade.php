@@ -437,7 +437,7 @@
                                                             </div>
                                                         @endif
                                                         <div id="utility" {{-- style="display:none;" --}}>
-                                                            <div class="d-none row mt-3">
+                                                            <div class=" row mt-3">
                                                                 <div class="col-md-4">
                                                                     <label for="task_refund_pa_budget"
                                                                         class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
@@ -1464,8 +1464,8 @@
             var budgetType = $("#project_select").val();
 
             // Disable the fields
-            $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
-
+/*             $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
+ */
             if (budgetType === "task_budget_it_operating") {
                 max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
             } else if (budgetType === "task_budget_it_investment") {
@@ -1483,12 +1483,39 @@
         });
 
         // Enable the fields when input in #task_pay is finished
-        $("#task_pay").on("blur", function() {
+       /*  $("#task_pay").on("blur", function() {
             $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
-        });
+        }); */
     });
 </script>
 
+<script>
+    $("#task_refund_pa_budget").on("input", function() {
+        calculateRefund();
+    });
+
+    function calculateRefund() {
+        var pr_budget, pa_budget, refund;
+        var budgetType = $("#project_select").val();
+/*         $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
+ */
+        if (budgetType === "task_budget_it_operating")  {
+            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }else if (budgetType === "task_budget_it_investment" ) {
+            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }else  if (budgetType === "task_budget_gov_utility") {
+            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+
+        $("#task_refund_pa_budget").val(refund.toFixed(2));
+    }
+</script>
 
 
 
@@ -1523,31 +1550,6 @@
     }
 </script>
  --}}
-            <script>
-                $("#task_pay").on("input", function() {
-                    calculateRefund();
-                });
-
-                function calculateRefund() {
-                    var pr_budget, pa_budget, refund;
-
-                    if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
-                        pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
-                        pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
-                        refund = pr_budget - pa_budget;
-                    }  if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
-                        pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
-                        pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
-                        refund = pr_budget - pa_budget;
-                    }  if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
-                        pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
-                        pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
-                        refund = pr_budget - pa_budget;
-                    }
-
-                    $("#task_refund_pa_budget").val(refund.toFixed(2));
-                }
-            </script>
 
 
 

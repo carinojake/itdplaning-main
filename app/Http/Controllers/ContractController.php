@@ -560,6 +560,8 @@ class ContractController extends Controller
 
         $contract_oe_budget = str_replace(',', '', $request->input('contract_oe_budget'));
 
+        $contract_refund_pa_budget = str_replace(',', '', $request->input('contract_refund_pa_budget'));
+
         $contract_pay = str_replace(',', '', $request->input('contract_pay'));
 
         if ($contract_pr_budget === '') {
@@ -589,12 +591,16 @@ class ContractController extends Controller
         if ($contract_pay === '') {
             $contract_pay = null; // or '0'
         }
-
+        if ($contract_refund_pa_budget === '') {
+            $contract_refund_pa_budget = null; // or '0'
+        }
 
         $contract->contract_type_pa        = $request->input('contract_type_pa');
 
 
         $contract->contract_name        = $request->input('contract_name');
+        $contract->contract_mm_name        = $request->input('contract_mm_name');
+
         $contract->contract_number      = $request->input('contract_number');
         $contract->contract_description = trim($request->input('contract_description'));
         $contract->contract_fiscal_year = $request->input('contract_fiscal_year');
@@ -630,6 +636,9 @@ class ContractController extends Controller
         $contract->contract_cn_budget = $contract_cn_budget;
         $contract->contract_oe_budget = $contract_oe_budget;
 
+
+
+        $contract->contract_refund_pa_budget =  $contract_refund_pa_budget;
         $contract->contract_pay = $contract_pay;
 
         //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
@@ -796,9 +805,12 @@ class ContractController extends Controller
             session()->flash('contract_id', $contract->contract_id);
             session()->flash('contract_number', $contract->contract_number);
             session()->flash('contract_name', $contract->contract_name);
+            session()->flash('contract_mm', $contract->contract_mm);
+            session()->flash('contract_mm_name', $contract->contract_mm_name);
             session()->flash('contract_mm_budget', $contract->contract_mm_budget);
             session()->flash('contract_pr_budget', $contract->contract_pr_budget);
             session()->flash('contract_pa_budget', $contract->contract_pa_budget);
+            session()->flash('contract_refund_pa_budget', $contract->contract_refund_pa_budget);
             session()->flash('contract_pay', $contract->contract_pay);
             session()->flash('contract_start_date', $contract->contract_start_date);
             session()->flash('contract_end_date', $contract->contract_end_date);

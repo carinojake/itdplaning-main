@@ -105,13 +105,19 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="d-none">
+                                    <div {{-- class="d-none" --}}>
                                     @if (session('contract_id'))
                                         ID: {{ session('contract_id') }}
                                     @endif
                                     @if (session('contract_number'))
                                         Number: {{ session('contract_number') }}
                                     @endif
+                                    @if (session('contract_mm'))
+                                    Name_mm: {{ session('contract_mm') }}
+                                @endif
+                                    @if (session('contract_mm_name'))
+                                    Name_mm: {{ session('contract_mm_name') }}
+                                @endif
                                     @if (session('contract_name'))
                                         Name: {{ session('contract_name') }}
                                     @endif
@@ -124,6 +130,9 @@
                                 @if (session('contract_pa_budget'))
                                 pa: {{ session('contract_pa_budget') }}
                             @endif
+                            @if (session('contract_refund_pa_budget'))
+                            refund_pa_budget: {{ session('contract_refund_pa_budget') }}
+                        @endif
                             @if (session('contract_start_date'))
                             start_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
 
@@ -411,7 +420,7 @@
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                             class="form-control numeral-mask"
                                                             id="task_refund_pa_budget"
-                                                            name="task_refund_pa_budget" min="0">
+                                                            name="task_refund_pa_budget" min="0"   value={{ session('contract_refund_pa_budget') }} >
 
                                                         {{--  <div class="invalid-feedback">
                                                                 {{ __('ค่าสาธารณูปโภค') }}
