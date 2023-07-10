@@ -581,22 +581,6 @@
                     });
                 });
             </script>
-{{--
-           <script>
-                $(document).ready(function() {
-                    // When any of the budget fields change, recalculate the refund
-                    // $('#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility').change(calculateRefund);
-
-                    function calculateRefund() {
-                        var task_budget_it_operating = parseFloat($('#task_budget_it_operating').val()) || 0;
-                        var task_budget_it_investment = parseFloat($('#task_budget_it_investment').val()) || 0;
-                        var task_budget_gov_utility = parseFloat($('#task_budget_gov_utility').val()) || 0;
-                        var refund = task_budget_it_operating + task_budget_it_investment + task_budget_gov_utility;
-
-                        document.getElementById("contract_refund_pa_budget").value = refund.toFixed(2);
-                    }
-                });
-            </script> --}}
 
 
                     <script>
@@ -645,34 +629,6 @@
                     });
                 });
             </script>
-
-
-          {{--   <script>
-                // Example starter JavaScript for disabling form submissions if there are invalid fields
-                (function() {
-                    'use strict'
-
-                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                    var forms = document.querySelectorAll('.needs-validation')
-
-                    // Loop over them and prevent submission
-                    Array.prototype.slice.call(forms)
-                        .forEach(function(form) {
-                            form.addEventListener('submit', function(event) {
-                                if (!form.checkValidity()) {
-                                    event.preventDefault()
-                                    event.stopPropagation()
-                                }
-
-                                form.classList.add('was-validated')
-                            }, false)
-                        })
-                })()
-            </script> --}}
-
-
-
-
 
 
 
@@ -740,112 +696,6 @@
 </script>
 
 
-
-            {{-- <script>
-            $(document).ready(function() {
-                $('#contract_type').change(function() {
-                    var contract_type = $(this).val();
-                    var contract_name_label = $('#contract_name_label');
-                    var rounds_form = $('#rounds_form');
-                    var rounds_label = $('#rounds_label');
-
-
-
-                    if (contract_type == 1) {
-                        contract_name_label.text('ชื่อ PO');
-                        rounds_label.text('จำนวนงวด');
-                        $('#mm_form').show();
-                        $('#pr_form').show();
-                        $('#pa_form').show();
-                        $('#po_form').show();
-                        $('#er_form').hide();
-                        $('#cn_form').show();
-                        $('#oe_form').hide();
-                        $('#pp_form').hide();
-                        $('#rounds_form').show();
-                    } else if (contract_type == 2) {
-                        contract_name_label.text('ชื่อ ER');
-                        rounds_label.text('จำนวนงวด');
-                        $('#mm_form').show();
-                        $('#pr_form').show();
-                        $('#pa_form').show();
-                        $('#po_form').hide();
-                        $('#er_form').show();
-                        $('#cn_form').show();
-                        $('#oe_form').hide();
-                        $('#pp_form').hide();
-                        $('#rounds_form').show();
-                    } else if (contract_type == 3) {
-                        contract_name_label.text('ชื่อ CN');
-                        rounds_label.text('จำนวนงวด');
-                        $('#mm_form').show();
-                        $('#pr_form').show();
-                        $('#pa_form').show();
-                        $('#po_form').show();
-                        $('#er_form').hide();
-                        $('#cn_form').show();
-                        $('#oe_form').hide();
-                        $('#pp_form').hide();
-                        $('#rounds_form').show();
-                    } else if (contract_type == 4) {
-                        contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
-                        rounds_label.text('ค่าใช้จ่ายสำนักงาน');
-                        $('#mm_form').show();
-                        $('#pr_form').hide();
-                        $('#pa_form').hide();
-                        $('#po_form').hide();
-                        $('#er_form').hide();
-                        $('#cn_form').hide();
-                        $('#oe_form').show();
-                        $('#pp_form').show();
-                        $('#ba_form').show();
-                        $('#bd_form').show();
-                        $('#rounds_form').show();
-                    } else {
-                        contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
-                        $('#mm_form').show();
-                        $('#pr_form').show();
-                        $('#pa_form').show();
-                        $('#po_form').show();
-                        $('#er_form').show();
-                        $('#cn_form').show();
-                        $('#oe_form').show();
-                        $('#pp_form').show();
-                        $('#ba_form').show();
-                        $('#bd_form').show();
-                        $('#rounds_form').show();
-                    }
-                });
-            });
-        </script> --}}
-
-
-            <!--<script>
-                function formatDate(date) {
-                    var parts = date.split("/");
-                    return parts[1] + "/" + parts[0] + "/" + parts[2];
-                }
-
-                $(document).ready(function() {
-                    $("#insurance_start_date, #insurance_end_date").change(function() {
-                        var start = new Date(formatDate($("#insurance_start_date").val()));
-                        var end = new Date(formatDate($("#insurance_end_date").val()));
-
-                        // Calculate the difference in milliseconds
-                        var diff = Math.abs(end - start);
-
-                        // Calculate days
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                        // Calculate months
-                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-
-                        // Display result
-                        $("#insurance_duration_months").text(months + " เดือน");
-                        $("#insurance_duration_days").text(days + " วัน");
-                    });
-                });
-            </script> -->
 
             <script>
                 $(function() {
@@ -1000,3 +850,147 @@
 
         </x-slot:javascript>
 </x-app-layout>
+  {{-- <script>
+            $(document).ready(function() {
+                $('#contract_type').change(function() {
+                    var contract_type = $(this).val();
+                    var contract_name_label = $('#contract_name_label');
+                    var rounds_form = $('#rounds_form');
+                    var rounds_label = $('#rounds_label');
+
+
+
+                    if (contract_type == 1) {
+                        contract_name_label.text('ชื่อ PO');
+                        rounds_label.text('จำนวนงวด');
+                        $('#mm_form').show();
+                        $('#pr_form').show();
+                        $('#pa_form').show();
+                        $('#po_form').show();
+                        $('#er_form').hide();
+                        $('#cn_form').show();
+                        $('#oe_form').hide();
+                        $('#pp_form').hide();
+                        $('#rounds_form').show();
+                    } else if (contract_type == 2) {
+                        contract_name_label.text('ชื่อ ER');
+                        rounds_label.text('จำนวนงวด');
+                        $('#mm_form').show();
+                        $('#pr_form').show();
+                        $('#pa_form').show();
+                        $('#po_form').hide();
+                        $('#er_form').show();
+                        $('#cn_form').show();
+                        $('#oe_form').hide();
+                        $('#pp_form').hide();
+                        $('#rounds_form').show();
+                    } else if (contract_type == 3) {
+                        contract_name_label.text('ชื่อ CN');
+                        rounds_label.text('จำนวนงวด');
+                        $('#mm_form').show();
+                        $('#pr_form').show();
+                        $('#pa_form').show();
+                        $('#po_form').show();
+                        $('#er_form').hide();
+                        $('#cn_form').show();
+                        $('#oe_form').hide();
+                        $('#pp_form').hide();
+                        $('#rounds_form').show();
+                    } else if (contract_type == 4) {
+                        contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
+                        rounds_label.text('ค่าใช้จ่ายสำนักงาน');
+                        $('#mm_form').show();
+                        $('#pr_form').hide();
+                        $('#pa_form').hide();
+                        $('#po_form').hide();
+                        $('#er_form').hide();
+                        $('#cn_form').hide();
+                        $('#oe_form').show();
+                        $('#pp_form').show();
+                        $('#ba_form').show();
+                        $('#bd_form').show();
+                        $('#rounds_form').show();
+                    } else {
+                        contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
+                        $('#mm_form').show();
+                        $('#pr_form').show();
+                        $('#pa_form').show();
+                        $('#po_form').show();
+                        $('#er_form').show();
+                        $('#cn_form').show();
+                        $('#oe_form').show();
+                        $('#pp_form').show();
+                        $('#ba_form').show();
+                        $('#bd_form').show();
+                        $('#rounds_form').show();
+                    }
+                });
+            });
+        </script> --}}
+
+
+            <!--<script>
+                function formatDate(date) {
+                    var parts = date.split("/");
+                    return parts[1] + "/" + parts[0] + "/" + parts[2];
+                }
+
+                $(document).ready(function() {
+                    $("#insurance_start_date, #insurance_end_date").change(function() {
+                        var start = new Date(formatDate($("#insurance_start_date").val()));
+                        var end = new Date(formatDate($("#insurance_end_date").val()));
+
+                        // Calculate the difference in milliseconds
+                        var diff = Math.abs(end - start);
+
+                        // Calculate days
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                        // Calculate months
+                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+
+                        // Display result
+                        $("#insurance_duration_months").text(months + " เดือน");
+                        $("#insurance_duration_days").text(days + " วัน");
+                    });
+                });
+            </script> -->
+
+                {{--   <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function() {
+                    'use strict'
+
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.querySelectorAll('.needs-validation')
+
+                    // Loop over them and prevent submission
+                    Array.prototype.slice.call(forms)
+                        .forEach(function(form) {
+                            form.addEventListener('submit', function(event) {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                })()
+            </script> --}}
+{{--
+           <script>
+                $(document).ready(function() {
+                    // When any of the budget fields change, recalculate the refund
+                    // $('#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility').change(calculateRefund);
+
+                    function calculateRefund() {
+                        var task_budget_it_operating = parseFloat($('#task_budget_it_operating').val()) || 0;
+                        var task_budget_it_investment = parseFloat($('#task_budget_it_investment').val()) || 0;
+                        var task_budget_gov_utility = parseFloat($('#task_budget_gov_utility').val()) || 0;
+                        var refund = task_budget_it_operating + task_budget_it_investment + task_budget_gov_utility;
+
+                        document.getElementById("contract_refund_pa_budget").value = refund.toFixed(2);
+                    }
+                });
+            </script> --}}
