@@ -355,8 +355,8 @@ class ContractController extends Controller
 
 
 
-      // dd($gantt);
-     //   dd  ($taskcons);
+        dd($gantt);
+     //  dd  ($taskcons);
         ($gantt = json_encode($gantt));
 
 

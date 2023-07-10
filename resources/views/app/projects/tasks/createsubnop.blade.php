@@ -697,6 +697,141 @@
 
 
 
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
+                                function() {
+                                    var max = 0;
+                                    var fieldId = $(this).attr('id');
+
+                                    if (fieldId === "task_budget_it_investment") {
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_investment }});
+                                                } else if (fieldId === "task_budget_it_operating") {
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating }});
+                                                } else if (fieldId === "task_budget_gov_utility") {
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility }});
+                                                }
+
+                                    var current = parseFloat($(this).val().replace(/,/g, ""));
+                                    if (current > max) {
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                    $(this).val(max.toFixed(2));
+                    }
+
+
+                                });
+                        });
+                    </script>
+                    <script>
+                        $(document).ready(function() {
+                            $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+                                var max ;
+                                var fieldId = $(this).attr('id');
+
+                                if (fieldId === "task_cost_it_investment") {
+                                    max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+                                } else if (fieldId === "task_cost_it_operating") {
+                                    max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+                                } else if (fieldId === "task_cost_gov_utility") {
+                                    max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+                                }
+
+                                var current = parseFloat($(this).val().replace(/,/g, ""));
+                                if (current > max) {
+                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                                    $(this).val(max.toFixed(2));
+                                }
+                            });
+                        });
+                    </script>
+
+
+                <script>
+                $(document).ready(function() {
+                $("#task_pay").on("input", function() {
+                var max;
+                var fieldId = $(this).attr('id');
+                // Disable the fields
+                /*             $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
+                */
+                if (fieldId === "task_cost_it_investment") {
+                    max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
+                } else if (fieldId === "task_cost_it_operating") {
+                    max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
+                } else if (fieldId === "task_cost_gov_utility") {
+                    max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g, ""));
+                if (current > max) {
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                        " บาท");
+                    $(this).val(max.toFixed(2));
+                }
+                });
+
+
+                });
+                </script>
+
+                <script>
+                $("#task_refund_pa_budget").on("input", function() {
+                calculateRefund();
+                });
+
+                function calculateRefund() {
+                var pr_budget, pa_budget, refund;
+
+
+                if (fieldId === "task_cost_it_investment")  {
+                pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }else if (fieldId === "task_cost_it_operating" ) {
+                pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }else  if (fieldId === "task_cost_gov_utility") {
+                pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }
+
+                $("#task_refund_pa_budget").val(refund.toFixed(2));
+                }
+                </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <script>
                 $(function() {
                     if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
@@ -707,7 +842,7 @@
                     var d = new Date();
                     var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                    $("#task_start_date,_end_date,task_pay_date,taskcon_pay_date,#project_start_date,#project_end_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
+                    $("#task_start_date,#task_end_date,#task_pay_date,#taskcon_pay_date,#project_start_date,#project_end_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
@@ -756,7 +891,19 @@
                     $(":input").inputmask();
                 });
             </script>
-                                    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+{{--        <script>
                                         $(document).ready(function() {
                                             $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
                                                 var max = parseFloat($(this).val().replace(/,/g, ""));
@@ -814,12 +961,16 @@
                                                 }
                                             });
 
-                                            $("#task_pay").on("blur", function() {
+                                           /*  $("#task_pay").on("blur", function() {
                                                 $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").prop('disabled', false);
-                                            });
+                                            }); */
                                         });
-                                    </script>
+                                    </script> --}}
 
+
+
+
+{{--
                                     <script>
                                         $("#task_pay").on("input", function() {
                                             calculateRefund();
@@ -846,7 +997,7 @@
 
                                             $("#task_refund_pa_budget").val(refund.toFixed(2));
                                         }
-                                    </script>
+                                    </script> --}}
 
         </x-slot:javascript>
 </x-app-layout>

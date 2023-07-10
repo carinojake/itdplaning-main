@@ -36,16 +36,16 @@
                            {{--  @include('partials.budgettotaloverview') --}}
                            @include('partials.view')
 
-                           @include('partials.gantt_ict_here')
+                     {{--       @include('partials.gantt_ict_here') --}}
                           {{-- เปลี่ยน ict ดำเนิน สา --}}
 
                           <div id="gantt_here" style='width:100%; height:50vh;'></div>
-
+{{--
                           <div id="gantt_ict_here" style='width:100%; height:50vh;'></div>
 
                           <div id="gantt_in_here" style='width:100%; height:50vh;'></div>
 
-                          <div id="gantt_u_here" style='width:100%; height:50vh;'></div>
+                          <div id="gantt_u_here" style='width:100%; height:50vh;'></div> --}}
 
                           {{-- เปลี่ยน ict ดำเนิน สา --}}
 

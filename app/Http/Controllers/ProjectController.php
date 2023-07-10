@@ -2358,6 +2358,10 @@ class ProjectController extends Controller
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->select('contracts.*', 'projects.*', 'tasks.*')
+
+
+
+
             ->where('projects.project_id', $project->project_id)
             ->where('tasks.task_id', $task->task_id)
             ->first();
@@ -2412,7 +2416,13 @@ class ProjectController extends Controller
             ->where('tasks.task_id', $task->task_id)
             ->get();
 
-        //  dd($results2);
+
+
+
+
+
+
+//dd($results,$results2);
 
         //dd($task->subtask);
 
@@ -2421,7 +2431,9 @@ class ProjectController extends Controller
 
 
 
-        //dd($latestContract,$results,$taskcons,$contract,$project,$task);
+      //  dd($contract);
+
+       // dd($latestContract,$results,$taskcons,$contract,$project,$task);
         return view('app.projects.tasks.show', compact('taskcons', 'project', 'task', 'results', 'contract', 'latestContract', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 
