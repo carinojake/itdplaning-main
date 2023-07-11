@@ -93,7 +93,7 @@
                             <button id="popover_content_wrapper"
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover"
+                             data-bs-custom-class="custom-popover-2"
                              data-bs-title="งบประมาณคงเหลือที่ไช้ได้" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
                                 งบกลาง ICT :   {{ number_format(floatval($op_refund_mm_pr), 2) }} บาท <br>

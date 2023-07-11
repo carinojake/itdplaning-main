@@ -2346,13 +2346,18 @@ class ProjectController extends Controller
         ($id_contract = Hashids::decode($contract)[0]);
         $id_taskcon    = Hashids::decode($taskcon)[0]; */
 
-
+       ($tasks=$task->subtask);
         //  dd($task);
         //   dd($project,$task);
-        $sum_task_budget_it_operating = $task->whereNull('task_parent')->sum('task_budget_it_operating');
+        ($sum_task_budget_it_operating = $task->whereNull('task_parent')->sum('task_budget_it_operating'));
         $sum_task_budget_it_investment = $task->whereNull('task_parent')->sum('task_budget_it_investment');
         $sum_task_budget_gov_utility = $task->whereNull('task_parent')->sum('task_budget_gov_utility');
 
+        ($sum_task_budget_it_operating_ts = $tasks->where('task_parent')->sum('task_budget_it_operating'));
+        $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+
+
+       // dd($sum_task_budget_it_operating_ts, $sum_task_refund_budget_it_operating);
 
         $contract = Contract::join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -2429,12 +2434,18 @@ class ProjectController extends Controller
 
         ($latestContract = Contract::latest()->first());
 
-
+      //  dd($task->subtask);
 
       //  dd($contract);
 
        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('taskcons', 'project', 'task', 'results', 'contract', 'latestContract', 'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
+        return view('app.projects.tasks.show', compact('taskcons',
+         'project', 'task', 'results', 'contract', 'latestContract',
+         'sum_task_budget_it_operating_ts','sum_task_refund_budget_it_operating',
+          'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'
+
+
+        ));
     }
 
 
