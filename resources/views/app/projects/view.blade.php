@@ -19,6 +19,8 @@
                                 <a href="{{ route('project.edit', $project->hashid) }}" class="btn btn-warning text-dark"
                                     target="_blank">แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
 
+
+
                                     <a href="{{ route('project.task.create', $project->hashid) }}"
                                         class="btn btn-info text-white" target="_blank">เพิ่มกิจกรรม</a>
 
@@ -89,7 +91,7 @@
     </x-slot:content>
     <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <x-slot:css>
-        <style>
+   {{--      <style>
             .custom-popover {
                 --cui-popover-max-width: 200px;
                 --cui-popover-border-color: var(--cui-primary);
@@ -99,6 +101,17 @@
                 --cui-popover-body-padding-y: .5rem;
             }
         </style>
+
+<style>
+    .custom-popover-2 {
+        --cui-popover-max-width: 200px;
+        --cui-popover-border-color: var(--cui-success);
+        --cui-popover-header-bg: var(--cui-success);
+        --cui-popover-header-color: var(--cui-white);
+        --cui-popover-body-padding-x: 1rem;
+        --cui-popover-body-padding-y: .5rem;
+    }
+</style> --}}
         <!--  <link href="{{ asset('css/styleitp.css') }}" rel="stylesheet"> -->
         <link rel="stylesheet" href="{{ asset('/vendors/dhtmlx/dhtmlxgantt.css') }}" type="text/css">
 
