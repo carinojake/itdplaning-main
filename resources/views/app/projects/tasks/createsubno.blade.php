@@ -45,17 +45,14 @@
                                                     <div class="col-md-3">
                                                         <label for="project_fiscal_year"
                                                             class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                                        <input class="form-control" id="project_fiscal_year"
-                                                            name="project_fiscal_year"
-                                                            value="{{ $projectDetails->project_fiscal_year }}" disabled
-                                                            readonly>
+                                                       {{ $projectDetails->project_fiscal_year }}
+
                                                     </div>
                                                     <div class="col-md-9">
                                                         <label for="reguiar_id"
                                                             class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                                        <input class="form-control" id="reguiar_id" name="reguiar_id"
-                                                            value="{{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
-                                                            disabled readonly>
+                                                    {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
+
                                                     </div>
                                                     <div class="d-none col-md-3 ">
                                                         <label for="project_type"
@@ -89,20 +86,16 @@
                                                         <div class="col-md-6">
                                                             <label for="task_start_date2"
                                                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                                            <span class="text-danger">*</span>
-                                                            <input class="form-control" id="task_start_date2"
-                                                                name="task_start_date2" name="task_start_date2"
-                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
-                                                                disabled readonly>
+                                                          {{--   <span class="text-danger">*</span> --}}
+                                                  {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="task_end_date2"
                                                                 class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                                            <span class="text-danger">*</span>
-                                                            <input class="form-control" id="task_end_date2"
-                                                                name="task_end_date2" name="task_start_date2"
-                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
-                                                                disabled readonly>
+                                                      {{--       <span class="text-danger">*</span> --}}
+                                                       {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+
                                                         </div>
                                                     </div>
 
@@ -112,7 +105,7 @@
                                                         <div class="col-md-12">
                                                             <label for="project_description"
                                                                 class="form-label">{{ __('รายละเอียดโครงการ') }}</label>
-                                                            <textarea class="form-control" id="project_description" name="project_description" disabled readonly>{{ $projectDetails->project_description }}</textarea>
+                                                         {{ $projectDetails->project_description }}
                                                         </div>
 
                                                     </div>

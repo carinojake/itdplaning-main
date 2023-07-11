@@ -271,34 +271,6 @@
 
                                                             <div id="mm_form" style="display:none;">
                                                                 <div class="callout callout-primary row mt-3">
-                                                                    <div class="row ">
-                                                                        <div class="col-md-3 mt-3">
-                                                                            <label for="project_select"
-                                                                                class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
-                                                                            <span class="text-danger">*</span>
-                                                                            <select class="form-control" name="project_select"
-                                                                                id="project_select" required>
-                                                                                <option selected disabled value="">
-                                                                                    เลือกประเภท...</option>
-                                                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                                                                    <option value="1">งบกลาง
-                                                                                        ICT</option>
-                                                                                @endif
-                                                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
-                                                                                    <option value="2">
-                                                                                        งบดำเนินงาน</option>
-                                                                                @endif
-                                                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                                                                    <option value="3">
-                                                                                        ค่าสาธารณูปโภค</option>
-                                                                                @endif
-                                                                            </select>
-                                                                        </div>
-
-                                                                        {{--    <div class="project_select">
-                                                                                {{ __('ประเภท งบประมาณ') }}
-                                                                            </div> --}}
-                                                                    </div>
                                                                     <div class="row mt-3">
                                                                     <div class="col-md-3">
                                                                         <label for="contract_number"
@@ -314,19 +286,18 @@
                                                                     </div>
 
                                                                     <div class="col-md-9 ">
-                                                                        <label for="contract_name" id="contract_name_label"
-                                                                        class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
+                                                                        <label for="contract_mm_name"
+                                                                            class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_name" name="contract_name" required
-                                                                        autofocus>
-                                                                    <div class="invalid-feedback">
-                                                                        {{ __('ชื่อสัญญา ซ้ำ') }}
+
+                                                                        <input type="text" class="form-control"
+                                                                            id="contract_mm_name"
+                                                                            name="contract_mm_name" required autofocus>
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                        </div>
                                                                     </div>
                                                                     </div>
-
-
-                                                                </div>
 
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-3">
@@ -340,20 +311,6 @@
                                                                                 {{ __(' ') }}
                                                                             </div>
                                                                         </div>
-
-
-                                                                    <div class="col-md-6 ">
-                                                                        <label for="contract_mm_name"
-                                                                            class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
-
-
-                                                                        <input type="text" class="form-control"
-                                                                            id="contract_mm_name"
-                                                                            name="contract_mm_name" required autofocus>
-                                                                        <div class="invalid-feedback">
-                                                                            {{ __('ชื่อสัญญา ซ้ำ') }}
-                                                                        </div>
-                                                                    </div>
                                                                         <div class="col-md-3 ">
                                                                             <label for="contract_mm_budget"
                                                                                 class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
@@ -404,15 +361,198 @@
                                                                 </div>
                                                             </div>
 
+                                                            <div class="callout callout-warning">
+                                                                <div class="row ">
+                                                                    <div class="col-md-4 mt-3">
+                                                                        <label for="project_select"
+                                                                            class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
+                                                                        <span class="text-danger">*</span>
+                                                                        <select class="form-control" name="project_select"
+                                                                            id="project_select" required>
+                                                                            <option selected disabled value="">
+                                                                                เลือกประเภท...</option>
+                                                                            @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                                                <option value="1">งบกลาง
+                                                                                    ICT</option>
+                                                                            @endif
+                                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                                                <option value="2">
+                                                                                    งบดำเนินงาน</option>
+                                                                            @endif
+                                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                                                <option value="3">
+                                                                                    ค่าสาธารณูปโภค</option>
+                                                                            @endif
+                                                                        </select>
+                                                                    </div>
+
+                                                                    {{--    <div class="project_select">
+                                                                            {{ __('ประเภท งบประมาณ') }}
+                                                                        </div> --}}
+                                                                </div>
+                                                                <!-- Contract Type -->
+
+                                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                                    <div id="ICT" {{-- style="display:none;" --}}>
+
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_budget_it_operating"
+                                                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_budget_it_operating"
+                                                                                    name="task_budget_it_operating"
+                                                                                    min="0">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('ระบุงบกลาง ICT') }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_cost_it_operating"
+                                                                                    class="form-label">{{ __('รอการเบิก งบกลาง ICT ( ยอด pa / ไม่ pa )') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_cost_it_operating"
+                                                                                    name="task_cost_it_operating"
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('งบกลาง ICT') }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
+                                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                                    <div id="inv" {{-- style="display:none;" --}}>
+
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_budget_it_investment"
+                                                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_budget_it_investment"
+                                                                                    name="task_budget_it_investment"
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('งบดำเนินงาน') }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_cost_it_investment"
+                                                                                    class="form-label">{{ __('รอการเบิก งบดำเนินงาน ( ยอด pa /ไม่ pa )') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_cost_it_investment"
+                                                                                    name="task_cost_it_investment"
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('งบดำเนินงาน') }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
+                                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                                    <div id="utility" {{-- style="display:none;" --}}>
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_budget_gov_utility"
+                                                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_budget_gov_utility"
+                                                                                    name="task_budget_gov_utility"
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('ค่าสาธารณูปโภค') }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="task_cost_gov_utility"
+                                                                                    class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค (ยอด pa / ไม่ pa )') }}</label>
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    id="task_cost_gov_utility"
+                                                                                    name="task_cost_gov_utility"
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
+
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('ค่าสาธารณูปโภค') }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                                <div id="refund" {{-- style="display:none;" --}}>
+                                                                    <div class=" row mt-3">
+                                                                        <div class="col-md-4">
+                                                                            <label for="task_refund_pa_budget"
+                                                                                class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
+                                                                            <span class="text-danger"></span>
+
+                                                                            <input type="text" placeholder="0.00"
+                                                                                step="0.01"
+                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                class="form-control numeral-mask"
+                                                                                id="task_refund_pa_budget"
+                                                                                name="task_refund_pa_budget" min="0">
+
+                                                                            {{--  <div class="invalid-feedback">
+                                                                                    {{ __('ค่าสาธารณูปโภค') }}
+                                                                                </div> --}}
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                </div>
+
+
+                                                                {{--
+                                                                 <div class="row mt-3">
+                                                                    <div class="col-md-3">
+                                                                        <label for="task_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
+                                                                        <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_refund_pa_budget" name="task_refund_pa_budget" min="0" value="{{ $task->task_refund_pa_budget }}" >
+                                                                      </div>
+                                                                    </div> --}}
+
+                                                            </div>
 
 
 
 
 
                                                             <div id="pa_form" style="display:none;">
-                                                                <div class="callout callout-warning">
-
-                                                                  <div class="row mt-3">
+                                                                <div class="callout callout-light">
+                                                                  {{--   <div class="row mt-3">
                                                                         <div class="col-md-4">
                                                                             <label for="contract_pa"
                                                                                 class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
@@ -438,8 +578,8 @@
                                                                                 name="contract_pa_budget"
                                                                                 min="0">
                                                                         </div>
-                                                                    </div>
-                                                                 <div id="contract_refund_pa_budget"
+                                                                    </div> --}}
+                                                          {{--           <div id="contract_refund_pa_budget"
                                                                        >
                                                                         <div class=" row mt-3">
                                                                             <div class="col-md-4">
@@ -459,7 +599,8 @@
 
 
                                                                         </div>
-                                                                    </div>
+                                                                    </div> --}}
+
 
                                                                     <div id="po_form" style="display:none;">
                                                                         <!-- PO form fields -->
@@ -589,16 +730,6 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="col-md-12">
-                                                                        <label for="contract_description"
-                                                                            class="form-label">{{ __('รายละเอียดสัญญา') }}</label>
-                                                                        <textarea class="form-control" name="contract_description" id="contract_description" rows="10"></textarea>
-                                                                        <div class="invalid-feedback">
-                                                                            {{ __('รายละเอียดงาน/โครงการ') }}
-                                                                        </div>
-                                                                    </div>
-
                                                                     <div id="ba_form" style="display:none;">
                                                                         <div class="row mt-3">
                                                                             <div class="col-md-4">
@@ -877,14 +1008,7 @@
                                                         <div class="accordion-body">
 
                                                             <!--ข้อมูลสัญญา 3 -->
-                                                            <div class="col-md-12">
-                                                                <label for="contract_file" class="form-label">{{ __('อัปโหลดไฟล์') }}</label>
-                                                                <input type="file" class="form-control" id="contract_file" name="contract_file">
-                                                                <div class="invalid-feedback">
-                                                                    {{ __('เลือกไฟล์สัญญา') }}
-                                                                </div>
-                                                            </div>
-                                                           {{--  <div class="col-md-12 mt-3">
+                                                            <div class="col-md-12 mt-3">
                                                                 <label for="contract_mm_name"
                                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
@@ -915,7 +1039,7 @@
                                                                     {{ __('รายละเอียดงาน/โครงการ') }}
                                                                 </div>
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
 
 
 

@@ -244,6 +244,19 @@
                                             <div class="col-6">
                                                 {{ number_format($contract->contract_peryear_pa_budget) }}</div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-6 fw-semibold">{{ __('contract_file') }}</div>
+                                            <div class="col-6">
+                                                @if ($contract->contract_file)
+                                                    <a href="{{ asset('uploads/contracts/' . $id . '/' . $contract->contract_file) }}" target="_blank">{{ $contract->contract_file }}</a>
+                                                @else
+                                                    {{ __('No file uploaded') }}
+                                                @endif
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
             </div>

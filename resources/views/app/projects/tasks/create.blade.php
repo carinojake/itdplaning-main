@@ -158,7 +158,7 @@
                                                 </div>
 
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating) }}
+                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
                                                 บาท
 
 
@@ -177,7 +177,7 @@
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment) }}
+                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
                                                 บาท
                                             </div>
                                             <div class="col-md-4">
@@ -191,8 +191,7 @@
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility) }}
-                                                บาท
+                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) }}                                                บาท
                                             </div>
                                         </div>
                                     </div>
@@ -281,11 +280,11 @@
         var fieldId = $(this).attr('id');
 
         if (fieldId === "task_budget_it_investment") {
-            max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment }});
+            max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
         } else if (fieldId === "task_budget_gov_utility") {
-            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility }});
+            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
         } else if (fieldId === "task_budget_it_operating") {
-            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating }});
+            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
         }
 
         var current = parseFloat($(this).val().replace(/,/g , ""));

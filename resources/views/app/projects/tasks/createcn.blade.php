@@ -113,12 +113,24 @@
                                 @if (session('contract_mm_budget'))
                                     MM: {{ session('contract_mm_budget') }}
                                 @endif
+
+                                @if (session('contract_budget_project'))
+                                contract_budget_project : {{ session('contract_budget_project') }}
+                            @endif
+
+
                                 @if (session('contract_pr_budget'))
                                 Pr: {{ session('contract_pr_budget') }}
                             @endif
+
                             @if (session('contract_pa_budget'))
                             pa: {{ session('contract_pa_budget') }}
                         @endif
+
+
+
+
+
                         @if (session('contract_start_date'))
                         start_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
 
@@ -249,7 +261,8 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_it_operating"
-                                                    name="task_budget_it_operating">
+                                                    name="task_budget_it_operating"     value=
+                                                    {{ session('contract_budget_type') == 1 ? session('contract_pa_budget') : '' }}>
 
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
@@ -257,7 +270,7 @@
                                                 </div>
 
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating) }}
+                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
                                                 บาท
 
 
@@ -271,12 +284,13 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_it_investment"
-                                                    name="task_budget_it_investment">
+                                                    name="task_budget_it_investment"   value=
+                                                    {{ session('contract_budget_type') == 2 ? session('contract_pa_budget') : ''  }}>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment) }}
+                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
                                                 บาท
                                             </div>
                                             <div class="col-md-4">
@@ -285,12 +299,13 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_gov_utility"
-                                                    name="task_budget_gov_utility">
+                                                    name="task_budget_gov_utility"  value=
+                                                    {{ session('contract_budget_type') == 3 ?  session('contract_pa_budget') : '' }}>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility) }}
+                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) }}
                                                 บาท
                                             </div>
                                         </div>
@@ -401,16 +416,16 @@
         var fieldId = $(this).attr('id');
 
         if (fieldId === "task_budget_it_investment") {
-            max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment }});
+            max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
         } else if (fieldId === "task_budget_gov_utility") {
-            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility }});
+            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
         } else if (fieldId === "task_budget_it_operating") {
-            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating }});
+            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
         }
 
         var current = parseFloat($(this).val().replace(/,/g , ""));
         if (current > max) {
-            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน "  + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
             $(this).val(max.toFixed(2));
         }
     });

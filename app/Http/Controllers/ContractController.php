@@ -355,7 +355,7 @@ class ContractController extends Controller
 
 
 
-        dd($gantt);
+       // dd($gantt);
      //  dd  ($taskcons);
         ($gantt = json_encode($gantt));
 
@@ -415,7 +415,14 @@ class ContractController extends Controller
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
+
+
+
         $id = $project ? Hashids::decode($project) : null;
+
+        $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
+
+
 
 
         $id_project = $id_task = $pro = $ta = null;
@@ -432,16 +439,20 @@ class ContractController extends Controller
                 $ta = Task::find($id_task);
             }
         }
+
+       // dd($ta);
+
        ($tasks     = Task::where('project_id', $id)->get());
-                                // Sum the task_budget_it_operating for all tasks
-        ($task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating'));
+       $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+       $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
 
-        // Sum the task_budget_it_investment for all tasks
-        ($task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment'));
+       // Sum the task_budget_it_investment for all tasks
+       $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+       $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
 
-        // Sum the task_budget_gov_utility for all tasks
-        ($task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility'));
-
+       // Sum the task_budget_gov_utility for all tasks
+       $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
+       $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
 
 
@@ -481,16 +492,39 @@ class ContractController extends Controller
         });
 
 
+       /*  if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        } */
 
 
 
+        $tasksDetails = $task;
 
 
-       // dd($tasksData);
+       // dd($ta,$tasksData,$projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
 
         $tasksJson = json_encode($tasksData);
 
-        return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year', 'tasks', 'tasksJson','task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
+        return view('app.contracts.create', compact
+
+        ('origin', 'project', 'task'
+        , 'pro', 'ta', 'fiscal_year', 'tasks',
+         'tasksJson',
+         'request',
+         'tasksDetails',
+         'projectDetails',
+
+
+         'sum_task_budget_it_operating',
+            'sum_task_budget_it_investment',
+            'sum_task_budget_gov_utility',
+            'sum_task_refund_budget_it_operating',
+            'sum_task_refund_budget_it_investment',
+            'sum_task_refund_budget_gov_utility'
+        ));
     }
 
 
@@ -620,6 +654,8 @@ class ContractController extends Controller
         $contract->contract_acquisition = $request->input('contract_acquisition') ?? null;
         $contract->contract_sign_date   = $sign_date ?? null;
         $contract->contract_projectplan        = $request->input('contract_projectplan');
+        $contract->contract_budget_type        = $request->input('project_select');
+
 
 
         $contract->contract_mm        = $request->input('contract_mm');
@@ -659,7 +695,7 @@ class ContractController extends Controller
         // Get the ID of the newly created contract
         $idproject =  $project;
         $idtask =  $task;
-        $id = $project . '/' . $task;
+      $id = $idproject . '/' . $idtask;
         // Create a new directory for the contract if it doesn't exist
         $contractDir = public_path('uploads/contracts/' . $id);
         if (!file_exists($contractDir)) {
@@ -759,7 +795,7 @@ class ContractController extends Controller
         //      return redirect()->route('contract.index');
         // }
         //
-        //dd($contract);
+       // dd($contract);
         if ($contract->save()) {
 
 
@@ -808,8 +844,12 @@ class ContractController extends Controller
             session()->flash('contract_mm', $contract->contract_mm);
             session()->flash('contract_mm_name', $contract->contract_mm_name);
             session()->flash('contract_mm_budget', $contract->contract_mm_budget);
+
+            session()->flash('contract_budget_type', $contract->contract_budget_type);
             session()->flash('contract_pr_budget', $contract->contract_pr_budget);
             session()->flash('contract_pa_budget', $contract->contract_pa_budget);
+
+
             session()->flash('contract_refund_pa_budget', $contract->contract_refund_pa_budget);
             session()->flash('contract_pay', $contract->contract_pay);
             session()->flash('contract_start_date', $contract->contract_start_date);
