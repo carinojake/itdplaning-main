@@ -137,6 +137,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
 
     // Contract
+    Route::get('/contract/createsubcn',  [ContractController::class, 'createsubcn' ])->name('contract.createsubcn');
+
+
     Route::resource('contract', ContractController::class);
     Route::get('/contract/modal', [ContractController::class, 'createModal'])->name('contract.createModal');
 

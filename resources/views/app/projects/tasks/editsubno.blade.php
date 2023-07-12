@@ -404,7 +404,7 @@
                                                             </div>
                                                             @endif
                                                             </div>
-                                                            <div class="d-none col-md-4 mt-3">
+                                                            <div class=" col-md-4 mt-3">
                                                                 <label for="task_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
                                                                 <input type="text" placeholder="0.00" step="0.01" class="form-control" id="task_refund_pa_budget" name="task_refund_pa_budget" min="0" value="{{ $task->task_refund_pa_budget }}">
                                                               </div>

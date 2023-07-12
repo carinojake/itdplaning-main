@@ -528,6 +528,134 @@ class ContractController extends Controller
     }
 
 
+
+    public function createsubcn(Request $request, $project = null)
+    {
+        $origin = $request->origin;
+        $project = $request->project;
+        $task = $request->taskHashid;
+
+
+
+        $id = $project ? Hashids::decode($project) : null;
+
+        $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
+
+
+
+
+        $id_project = $id_task = $pro = $ta = null;
+
+        if ($project && $task) {
+            $decodedProject = Hashids::decode($project);
+            $decodedTask = Hashids::decode($task);
+
+            if (isset($decodedProject[0]) && isset($decodedTask[0])) {
+                $id_project = $decodedProject[0];
+                $id_task = $decodedTask[0];
+
+                $pro = Project::find($id_project);
+                $ta = Task::find($id_task);
+            }
+        }
+
+       // dd($ta);
+
+       ($tasks     = Task::where('project_id', $id)->get());
+       $sum_task_budget_it_operating = $tasks->where('task_parent')->sum('task_budget_it_operating');
+       $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+
+       // Sum the task_budget_it_investment for all tasks
+       $sum_task_budget_it_investment = $tasks->where('task_parent')->sum('task_budget_it_investment');
+       $sum_task_refund_budget_it_investment= $tasks->where('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
+
+       // Sum the task_budget_gov_utility for all tasks
+       $sum_task_budget_gov_utility = $tasks->where('task_parent')->sum('task_budget_gov_utility');
+       $sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+
+
+
+
+
+        $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
+
+        $project_fiscal_year = $pro ? $pro->project_fiscal_year : null;
+        $tasksData = DB::table('tasks')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('tasks.*', 'projects.*')
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+
+
+
+
+        $tasksData = $tasksData->map(function ($task) {
+            return [
+                'id' => $task->task_id,
+                'project_fiscal_year' => $task->project_fiscal_year,
+
+
+                'project_id' => $task->project_id,
+                'project_name' => $task->project_name,
+
+
+
+                'task_parent_id' => $task->task_parent,
+                'text' => $task->task_name,
+
+
+                'budget_it_operating' => $task->task_budget_it_operating,
+                'budget_it_investment' => $task->task_budget_it_investment,
+                'budget_gov_utility' => $task->task_budget_gov_utility,
+            ];
+        });
+
+
+       /*  if ($task) {
+            $taskId = Hashids::decode($task)[0];
+            $task = Task::find($taskId);
+        } else {
+            $task = null;
+        } */
+
+
+
+        $tasksDetails = $task;
+
+
+       // dd($ta,$tasksData,$projectDetails, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility);
+
+        $tasksJson = json_encode($tasksData);
+
+        return view('app.contracts.createsubcn', compact
+
+        ('origin', 'project', 'task'
+        , 'pro', 'ta', 'fiscal_year', 'tasks',
+         'tasksJson',
+         'request',
+         'tasksDetails',
+         'projectDetails',
+
+
+         'sum_task_budget_it_operating',
+            'sum_task_budget_it_investment',
+            'sum_task_budget_gov_utility',
+            'sum_task_refund_budget_it_operating',
+            'sum_task_refund_budget_it_investment',
+            'sum_task_refund_budget_gov_utility'
+        ));
+    }
+
+
+
+
+
+
+
+
+
+
+
     public function createModal(Request $request) {
         // เตรียมข้อมูลที่ต้องการส่งไปยัง view ถ้ามี
 
@@ -844,6 +972,7 @@ class ContractController extends Controller
             session()->flash('contract_mm', $contract->contract_mm);
             session()->flash('contract_mm_name', $contract->contract_mm_name);
             session()->flash('contract_mm_budget', $contract->contract_mm_budget);
+
 
             session()->flash('contract_budget_type', $contract->contract_budget_type);
             session()->flash('contract_pr_budget', $contract->contract_pr_budget);
