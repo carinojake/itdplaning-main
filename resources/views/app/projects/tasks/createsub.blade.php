@@ -223,7 +223,7 @@
                                                 class="form-label">{{ __('สัญญา') }}</label>
                                                 {{-- <span class="text-danger">*</span> --}}
                                             {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                            <span class="text-danger"> <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา</a></span>
                                             </div>

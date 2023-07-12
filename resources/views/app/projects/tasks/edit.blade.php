@@ -280,7 +280,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
             const taskContractContainer = document.getElementById('task-contract-container');
@@ -342,7 +342,7 @@
 
                         var current = parseFloat($(this).val().replace(/,/g, ""));
                         if (current > max) {
-                            alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                            Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                             $(this).val(max.toFixed(2));
                         }
                     });

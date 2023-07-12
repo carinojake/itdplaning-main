@@ -28,7 +28,7 @@
                     @endif
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <x-card title="{{ __('เพิ่มสัญญา CN ') }}">
+                            <x-card title="{{ __('เพิ่มสัญญา CN 2222 ') }}">
                                 <x-slot:toolbar>
                                     {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -181,7 +181,7 @@
 
                                         <!--  1  -->
                                         <div class="row fw-semibold mt-3">
-
+                                            <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                             <div class="row">
                                                 @if ($sum_task_budget_it_operating > 0)
                                                     <div class="col-6">{{ __('งบกลาง ICT') }}</div>
@@ -202,7 +202,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="row mt-3">
+                                    {{--     <div class="row mt-3">
                                             <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                             <div class="row">
                                                 @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
@@ -250,7 +250,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="callout callout-info">
                                             <div class="accordion accordion-flush" id="accordionFlushExample">

@@ -33,7 +33,7 @@
             <div class="row">
                 @if($task->task_budget_it_operating  > 0)
                 <div class="col-6">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-               {{ number_format(floatval( $task->task_budget_it_operating -$sum_task_budget_it_operating_ts + $sum_task_refund_budget_it_operating      ), 2) }}
+        {{ number_format(floatval($task->task_budget_it_operating-$task_sub_sums['operating']['task_budget']+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }}
                 @endif
             </div>
             <div class="row">

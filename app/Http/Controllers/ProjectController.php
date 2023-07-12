@@ -2427,25 +2427,81 @@ class ProjectController extends Controller
 
 
 
-//dd($results,$results2);
+        //dd($results,$results2);
 
-        //dd($task->subtask);
+       // dd($task->subtask);
 
 
+
+                $task_sub = $task->subtask;
+
+                $sum_tasksub_budget_it_operating = $task_sub->sum('task_budget_it_operating');
+                $sum_tasksub_cost_budget_it_operating= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_cost_it_operating');
+                $sum_tasksub_refund_budget_it_operating= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+                $sum_tasksub_mm_budget= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_mm_budget');
+
+
+/*
+                $task_sub_op_sums = $task_sub->reduce(function ($carry, $subtask) {
+                    if ($subtask->task_budget_it_operating > 1) {
+                        $carry['task_budget_it_operating'] += $subtask->task_budget_it_operating;
+                        $carry['task_cost_it_operating'] += $subtask->task_cost_it_operating;
+                        $carry['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                        $carry['task_mm_budget'] += $subtask->task_mm_budget;
+                    }
+                    return $carry;
+                }, ['task_budget_it_operating' => 0, 'task_cost_it_operating' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]); */
+
+
+
+                $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+                    if ($subtask->task_budget_it_operating > 1) {
+                        $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+                        $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+                        $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                        $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+                    }
+
+                    if ($subtask->task_budget_it_investment > 1) {
+                        $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+                        $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+                        $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                        $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                        // Add other fields as necessary...
+                    }
+
+                    if ($subtask->task_budget_gov_utility > 1) {
+                        $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+                        $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+                        $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                        $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                        // Add other fields as necessary...
+                    }
+
+                    return $carry;
+                }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+                    'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+                    'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+
+
+
+
+
+              //  dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
         ($latestContract = Contract::latest()->first());
 
       //  dd($task->subtask);
 
-      //  dd($contract);
+       //dd($contract);
 
        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('taskcons',
-         'project', 'task', 'results', 'contract', 'latestContract',
-         'sum_task_budget_it_operating_ts','sum_task_refund_budget_it_operating',
-          'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'
-
-
-        ));
+        return view('app.projects.tasks.show', compact('task_sub_sums','taskcons',
+        'project', 'task', 'results', 'contract', 'latestContract',
+        'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
 
 
@@ -2496,11 +2552,18 @@ class ProjectController extends Controller
     {
         $id        = Hashids::decode($project)[0];
         $project = $request->project;
+        $projectDetails = Project::find($id);
         //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
         ($tasks     = Task::where('project_id', $id)->get());
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
+        $projectyear = Project::where('project_id', $id)->first(); // เปลี่ยนจาก get() เป็น first()
 
         ($request = Project::find($id));
+
+
+
+
+
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
         $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
@@ -2538,6 +2601,38 @@ class ProjectController extends Controller
         } else {
             $task = null;
         }
+
+
+        $projectData = DB::table('projects')
+        //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('projects.*')
+        ->where('project_id', $id)
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+    //  dd($projectData);
+    $projectData = $projectData->map(function ($p) {
+        return [
+            'id' => $p->project_id,
+            'project_fiscal_year' => $p->project_fiscal_year,
+            'project_id' => $p->project_id,
+            'project_name' => $p->project_name,
+            // 'task_parent_id' => $task->task_parent,
+            //'text' => $task->task_name,
+            'budget_it_operating' => $p->budget_it_operating,
+            'budget_it_investment' => $p->budget_it_investment,
+            'budget_gov_utility' => $p->budget_gov_utility,
+        ];
+    });
+
+    // dd($projectData);
+
+    $projectsJson = json_encode($projectData);
+
+
+
+
+
+
         //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.createcn', compact('request',
         'contracts', 'project', 'tasks', 'task',
@@ -2546,7 +2641,11 @@ class ProjectController extends Controller
         'sum_task_budget_gov_utility',
         'sum_task_refund_budget_it_operating',
         'sum_task_refund_budget_it_investment',
-        'sum_task_refund_budget_gov_utility'));
+        'sum_task_refund_budget_gov_utility',
+    'projectData',
+        'projectsJson',
+    'projectyear',
+    'projectDetails'));
     }
 
     public function taskCreateTo(Request $request, $project, $task = null)
@@ -2992,7 +3091,7 @@ class ProjectController extends Controller
 
 
         $task->task_type = $request->input('task_type');
-         //dd($task);
+        // dd($task);
         if ($task->save()) {
             //insert contract
             if ($request->input('task_contract')) {
@@ -3749,7 +3848,7 @@ class ProjectController extends Controller
         $task_budget_gov_utility = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
 
 
-        //   dd($tasks);
+         // dd($tasks);
 
         return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
@@ -3883,22 +3982,33 @@ class ProjectController extends Controller
                             $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
 
 
-                            if ($start_date_obj === false || $end_date_obj === false || $pay_date_obj === false) {
+                            if ($start_date_obj === false || $end_date_obj === false) {
                                 // Handle date conversion error
                                 // You can either return an error message or use a default date
                             } else {
                                 $start_date_obj->modify('-543 years');
                                 $end_date_obj->modify('-543 years');
-                                $pay_date_obj->modify('-543 years');
+
                                 $start_date = date_format($start_date_obj, 'Y-m-d');
                                 $end_date = date_format($end_date_obj, 'Y-m-d');
-                                $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
 
                                 // Check if $pay_date_obj is not null before trying to modify and format it
 
                             }
 
+                            if ($pay_date_obj === false) {
+                                // Handle date conversion error
+                                // You can either return an error message or use a default date
+                            } else {
 
+                                $pay_date_obj->modify('-543 years');
+
+                                $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
+                                // Check if $pay_date_obj is not null before trying to modify and format it
+
+                            }
 
 
                             $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
@@ -3945,7 +4055,7 @@ class ProjectController extends Controller
                             // Update other task attributes as needed
                             //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
                             // $task->taskcon_pp        = $request->input('taskcon_pp');
-                          //   dd($task);
+                         //   dd($task);
 
 
                             if ($task->save()) {

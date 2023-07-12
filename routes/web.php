@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SortableController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\UploadController;
 /*
 | Core Route
  */
@@ -137,6 +138,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
 
     // Contract
+    Route::get('/contract/createsubcn',  [ContractController::class, 'createsubcn' ])->name('contract.createsubcn');
+
+
     Route::resource('contract', ContractController::class);
     Route::get('/contract/modal', [ContractController::class, 'createModal'])->name('contract.createModal');
 
@@ -252,4 +256,15 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
 
     Route::get('/sortable/post', 'App\Http\Controllers\PostController@index');
     Route::post('post-sortable', 'App\Http\Controllers\PostController@update');
+
+/*     Route::get('file','FileController@create');
+Route::post('file','FileController@store'); */
+
+Route::get('/fileupload', [UploadController::class, 'index'])->name('fileupload.index');
+/* Route::get('/fileupload/upload',[UploadController::class,'upload'])->name('fileupload.upload');; */
+Route::post('/fileupload/store',[UploadController::class,'store'])->name('upload.file');
+
+
+/* Route::get('/fileupload/upload','UploadController@index');
+Route::post('/fileupload/store','UploadController@store')->name('upload.file'); */
 });
