@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\Taskcon;
 use App\Models\ContractHasTask;
 use App\Models\ContractHasTaskcon;
+use App\Models\File; //add File Model
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Double;
 use Vinkla\Hashids\Facades\Hashids;
@@ -777,35 +778,25 @@ class ProjectController extends Controller
         // ->get();
         //  $taskid = Hashids::decode($task)[0];
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
-        ($project = Project::select('projects.*', 'a.total_task_refund_pa_budget', 'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay', 'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+        ($project = Project::select(
+            'projects.*', 'a.total_task_refund_pa_budget', 'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay', 'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
-
-
-
-
                     sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
-
                 sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
                 sum( COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget,
-
                 sum( COALESCE(tasks.task_pay,0)) as total_pay,
-
-
                 sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0))
                    as tta,
-
                    CASE
                    WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) = 0 THEN  sum(COALESCE(tasks.task_mm_budget,0))
                    WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) > 1 THEN sum( COALESCE(tasks.task_pay,0))
                    ELSE 0
                END as ttb
-
-
                 from tasks  group by tasks.project_id) as a'),
                 'a.project_id',
                 '=',
@@ -949,10 +940,7 @@ class ProjectController extends Controller
                 'ac.cost_no_pa_2',
                 'cc.s',
                 'cc.c',
-                'cc.taskcon_pay'
-
-
-
+                'ad.total_taskcon_pay'
             )
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
@@ -1002,14 +990,31 @@ class ProjectController extends Controller
             ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
             taskcons.contract_id as c,
             taskcons.taskcon_pay
-
-
-
-
-
             FROM taskcons) as cc'), function ($join) {
                 $join->on('cc.s', '=', 'tasks.task_id');
             })
+            ->leftJoin(
+                DB::raw('(select tasks.task_id,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay
+                from tasks
+                INNER JOIN
+                contract_has_tasks
+                ON
+                    tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN
+                contracts
+                ON
+                    contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN
+                taskcons
+                ON
+                    contracts.contract_id = taskcons.contract_id
+                where tasks.task_type=1 group by tasks.task_id) as ad'),
+                'ad.task_id',
+                '=',
+                'tasks.task_id'
+            )
 
 
 
@@ -1017,89 +1022,11 @@ class ProjectController extends Controller
             ->get()
             ->toArray());
 
-        //  dd($tasks);
-
-
-
-
-        /*  sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
-            +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
-            +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
-            as cost_con_no_pa_2 ,
-            sum( COALESCE(taskcons.taskcon_mm_budget,0))  as total_taskcon_mm_budget_2,
-            sum( COALESCE(taskcons.taskcon_pay,0)) as total_con_pay */
-        //->Join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
-
-        //->select('tasks.*', 'taskcons.*')
-
-
-
-
-
-
-
-        /*  ($tasks = DB::table('tasks')
-            ->select('tasks.*', 'a.cost_disbursement', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
-            ->leftJoin(
-                DB::raw('(select tasks.task_parent,
-        sum( COALESCE(tasks.task_cost_gov_utility,0))
-        +sum( COALESCE(tasks.task_cost_it_operating,0))
-        +sum( COALESCE(tasks.task_cost_it_investment,0))
-        as cost_disbursement,
-        sum( COALESCE(tasks.task_pay,0))  as total_pay
-        from tasks  group by tasks.task_parent) as a'),
-                'a.task_parent',
-                '=',
-                'tasks.task_id'
-            )
-
-            ->leftJoin(
-                DB::raw('(select tasks.task_parent,
-        sum(COALESCE(tasks.task_cost_gov_utility,0))
-        +sum(COALESCE(tasks.task_cost_it_operating,0))
-        +sum(COALESCE(tasks.task_cost_it_investment,0))
-        as cost_pa_1 ,
-        sum( COALESCE(tasks.task_pay,0)) as total_pay
-        from tasks
-        where tasks.task_type=1 group by tasks.task_parent) as ab'),
-                'ab.task_parent',
-                '=',
-                'tasks.task_id'
-            )
-            ->leftJoin(
-                DB::raw('(select tasks.task_parent,
-         sum(COALESCE(tasks.task_cost_gov_utility,0))
-        +sum(COALESCE(tasks.task_cost_it_operating,0))
-        +sum(COALESCE(tasks.task_cost_it_investment,0))
-        as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
-        as total_pay
-        from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
-                'ac.task_parent',
-                '=',
-                'tasks.task_id'
-            )
-            ->where('project_id', ($id))
-            ->get()
-            ->toArray()); */
-
-        /*        $check_parent = DB::table('projects')
-                ->join('tasks', 'projects.project_id', '=', 'tasks.project_id')
-                ->select(
-                    'tasks.task_id',
-                    'tasks.task_parent'
-                )
-                ->where('projects.project_id', $project->project_id)
-                ->where('tasks.task_id', $task->task_id)
-                ->get();
-
-
-
-            dd($check_parent);
- */
-
+        // dd($tasks);
 
 
         ($tasks = json_decode(json_encode($tasks), true));
+
         foreach ($tasks as $task) {
             (float) $__budget_gov = (float) $task['task_budget_gov_operating'] + (float) $task['task_budget_gov_utility'] + (float) $task['task_budget_gov_investment'];
             (float) $__budget_it  = (float) $task['task_budget_it_operating'] + (float) $task['task_budget_it_investment'];
@@ -1142,7 +1069,7 @@ class ProjectController extends Controller
                 'end_date'              => date('Y-m-d', strtotime($task['task_end_date'])),
                 'parent'                => $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id'],
                 'parent_sum'            => '' . $task['task_id'] . $task['project_id'],
-                'type'                  => 'task',
+
                 'open'                  => true,
                 'budget_gov_operating'  => $task['task_budget_gov_operating'],
                 'budget_gov_investment' => $task['task_budget_gov_investment'],
@@ -1171,7 +1098,9 @@ class ProjectController extends Controller
                 'budget_total_mm'             => $task['total_task_mm_budget'],
                 //'cost_disbursement'     => $task['cost_disbursement'],
                 'task_total_pay'             => $task['total_pay'],
-                'task_type'             => $task['task_type']
+                'total_taskcon_pay'         =>  $task['total_taskcon_pay'],
+                'task_type'             => $task['task_type'],
+                'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);
 
@@ -1183,10 +1112,167 @@ class ProjectController extends Controller
 
 
 
-        //  dd($gantt,$tasks);
+         dd($gantt,$tasks);
 
 
-        // ($gntt[0]['cost']    =array_sum($__project_cost));
+                    $contractgannt = DB::table('tasks')
+
+                    ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+                    ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+                    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+                    ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+
+                    ->select('tasks.*','tasks.*', 'contract_has_tasks.*', 'contracts.*','taskcons.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2', 'projects.*')
+
+                    ->leftJoin(
+                        DB::raw('(select taskcons.taskcon_parent,
+                sum( COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum( COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum( COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as total_cost,
+                sum( COALESCE(taskcons.taskcon_pay,0))  as total_pay
+                from taskcons  group by taskcons.taskcon_parent) as a'),
+                        'a.taskcon_parent',
+                        '=',
+                        'taskcons.taskcon_id'
+                    )
+                    ->leftJoin(
+                        DB::raw('(select taskcons.taskcon_parent,
+                sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as cost_pa_1 ,
+                sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
+                from taskcons
+                where taskcons.taskcon_type=1 group by taskcons.taskcon_parent) as ab'),
+                        'ab.taskcon_parent',
+                        '=',
+                        'taskcons.taskcon_id'
+                    )
+                    ->leftJoin(
+                        DB::raw('(select taskcons.taskcon_parent,
+                 sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as cost_no_pa_2 ,sum( COALESCE(taskcons.taskcon_pay,0))
+                as total_pay
+                from taskcons  where taskcons.taskcon_type=2 group by taskcons.taskcon_parent) as ac'),
+                        'ac.taskcon_parent',
+                        '=',
+                        'taskcons.taskcon_id'
+                    )
+
+
+
+
+
+                    ->where('tasks.project_id', ($id))
+                    ->get()
+                    ->toArray();
+
+
+                 //  dd($contractgannt);
+
+
+        /*     $contractgannt = json_decode(json_encode($contractgannt), true);
+           foreach ($contractgannt as $contract) {
+            $gantt[] = [
+                'id'                    =>'T' . $task['task_id'] . $task['project_id']. $contract['contract_id'],
+                'task_parentd'           => $contract['task_parent'],
+                'text'                  => $contract['contract_name'],
+
+                'start_date' => date('Y-m-d', strtotime($contract['contract_start_date'])),
+                'end_date'   => date('Y-m-d', strtotime($contract['contract_end_date'])),
+
+
+                'open'                  => true,
+                //'type'                  => 'project',
+                'duration'              => 360,
+                'contract_mm_budget'    => $contract['contract_mm_budget'],
+                'contract_pr_budget'    => $contract['contract_pr_budget'],
+                'contract_pa_budget'    => $contract['contract_pa_budget'],
+                'contract_po_budget'    => $contract['contract_pa_budget'],
+                'contract_er_budget'    => $contract['contract_er_budget'],
+                'contract_cn_budget'    => $contract['contract_cn_budget'],
+                'contract_oe_budget'    => $contract['contract_oe_budget'],
+                'contract_ba_budget'    => $contract['contract_ba_budget'],
+                'contract_bd_budget'    => $contract['contract_bd_budget'],
+                'contract_pay'          => $contract['contract_pay'],
+                'taskcon_pay'           => $contract['taskcon_pay'],
+                'total_cost'            => $contract['total_cost'],
+                'total_pay'             => $contract['total_pay'],
+                'type'                  => 'contract',
+            ];
+
+        } */
+           // dd($gantt);
+
+          // dd($gantt);
+
+
+
+
+
+
+
+           $data = DB::table('tasks')
+           ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+           ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+           ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+           ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+           ->select(
+
+               'taskcons.*'
+           )
+           ->where('tasks.project_id', ($id))
+           ->get();
+
+
+      //  dd($data);
+
+        $data = json_decode(json_encode($data), true);
+        /* foreach ($data as $taskcon) {
+         $gantt[] = [
+
+             'id'                    =>'T' . $task['task_id'] . $task['project_id']. $contract['contract_id'], $taskcon['taskcon_id'],
+             'contract_id'                    => $taskcon['contract_id'],
+             'task_parentd'           => $contract['task_parent'],
+             'text'                  => $contract['contract_name'],
+
+             'start_date' => date('Y-m-d', strtotime($contract['contract_start_date'])),
+             'end_date'   => date('Y-m-d', strtotime($contract['contract_end_date'])),
+
+
+             'open'                  => true,
+             //'type'                  => 'project',
+             'duration'              => 360,
+             'contract_mm_budget'    => $contract['contract_mm_budget'],
+             'contract_pr_budget'    => $contract['contract_pr_budget'],
+             'contract_pa_budget'    => $contract['contract_pa_budget'],
+             'contract_po_budget'    => $contract['contract_pa_budget'],
+             'contract_er_budget'    => $contract['contract_er_budget'],
+             'contract_cn_budget'    => $contract['contract_cn_budget'],
+             'contract_oe_budget'    => $contract['contract_oe_budget'],
+             'contract_ba_budget'    => $contract['contract_ba_budget'],
+             'contract_bd_budget'    => $contract['contract_bd_budget'],
+             'contract_pay'          => $contract['contract_pay'],
+
+            // 'total_cost'            => $contractgannt['total_cost'],
+
+             //'total_pay'             => $contractgannt['total_pay'],
+             'type'                  => 'contract',
+         ];
+
+     } */
+
+
+
+
+
+
+
+
+            // ($gntt[0]['cost']    =array_sum($__project_cost));
         //  ($gantt[0]['pay']    = array_sum($__project_pay));
         /*  if($__cost == 0)
         {
@@ -1208,7 +1294,6 @@ class ProjectController extends Controller
 
              //$gantt[0]['refund_pa_budget']= $gantt[0]['refund_pa_budget'];
        // ($gantt[0]['balance'] = $gantt[0]['balance'] - $gantt[0]['total_cost']);
-       ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
 
 
 
@@ -1216,6 +1301,7 @@ class ProjectController extends Controller
         //  dd($gantt);
         // ($budget['mm']    = $gantt[0]['total_task_mm_budget']);
         //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
+        ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
         $budget['pay']    = $gantt[0]['total_pay'];
         $budget['cost']    = $gantt[0]['total_cost'];
         //$budget['budget_total_mm_pr2'] = $gantt[0]['budget_total_mm_pr2'];
@@ -2482,12 +2568,19 @@ class ProjectController extends Controller
                         // Add other fields as necessary...
                     }
 
+
+
+
+
+
                     return $carry;
                 }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
                     'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
                     'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
 
-
+                    ($files = File::join('tasks', 'files.task_id', '=', 'tasks.task_id')
+                    ->where('tasks.task_id', $task->task_id)
+                    ->get());
 
 
 
@@ -2499,7 +2592,7 @@ class ProjectController extends Controller
        //dd($contract);
 
        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('task_sub_sums','taskcons',
+        return view('app.projects.tasks.show', compact('files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
         'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
@@ -3359,12 +3452,17 @@ class ProjectController extends Controller
         // $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
         // $task->taskcon_pp        = $request->input('taskcon_pp');
         $task->task_type = $request->input('task_type');
+        //
+
         //dd($task);
         // Save the Project
         if (!$task->save()) {
+
+
             // If the Project failed to save, redirect back with an error message
             return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
         }  // <-- This closing bracket was missing
+
 
         // Create a new Taskcon object
         $taskcon = new Taskcon;
@@ -3373,10 +3471,6 @@ class ProjectController extends Controller
         // replace 'field1', 'field2', 'field3' with the actual fields of Taskcon
 
         // Assign the project_id to the Taskcon
-
-
-
-
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
         $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
@@ -3492,6 +3586,47 @@ class ProjectController extends Controller
         //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
 
         // dd($task,$taskcon);
+
+
+        $origin = $request->input('origin');
+
+
+
+        $files = new File;
+        $idproject = $id;
+        $idtask = $task->task_id;
+        $idup = $idproject . '/' . $idtask;
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time().'_'.$file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/',$filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                //$fileModel->project_id = $idproject;
+                $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+                if (!$fileModel->save()) {
+                    // If the file failed to save, redirect back with an error message
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
+
+
+
+
+
 
         if (!$task->save()) {
             // If the Project failed to save, redirect back with an error message
