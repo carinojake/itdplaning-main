@@ -10,7 +10,12 @@
                 @endif
 
                 @if ($ta)
-                    {{ $ta->task_name }}
+                               {{ $ta->task_name }}
+                    {{ $ta->task_budget_it_operating }}
+                    {{ $ta->task_budget_it_investment }}
+                    {{ $ta->task_budget_gov_utility }}
+
+
                 @else
                 @endif
 
@@ -183,21 +188,21 @@
                                         <div class="row fw-semibold mt-3">
                                             <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                             <div class="row">
-                                                @if ($sum_task_budget_it_operating > 0)
+                                                @if ( $ta->task_budget_it_operating > 0)
                                                     <div class="col-6">{{ __('งบกลาง ICT') }}</div>
-                                                    {{ number_format($sum_task_budget_it_operating) }} บาท
+                                                    {{ number_format( $ta->task_budget_it_operating) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
-                                                @if ($sum_task_budget_it_investment > 0)
+                                                @if ( $ta->task_budget_it_investment > 0)
                                                     <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
-                                                    {{ number_format($sum_task_budget_it_investment) }} บาท
+                                                    {{ number_format($ta->task_budget_it_investment) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
-                                                @if ($sum_task_budget_gov_utility > 0)
+                                                @if ($ta->task_budget_gov_utility > 0)
                                                     <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                    {{ number_format($sum_task_budget_gov_utility) }} บาท
+                                                    {{ number_format($ta->task_budget_gov_utility) }} บาท
                                                 @endif
                                             </div>
                                         </div>
@@ -280,15 +285,15 @@
                                                                                 id="project_select" required>
                                                                                 <option selected disabled value="">
                                                                                     เลือกประเภท...</option>
-                                                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                                                @if ($ta->task_budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                                                     <option value="1">งบกลาง
                                                                                         ICT</option>
                                                                                 @endif
-                                                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                                                @if ($ta->task_budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                                                                     <option value="2">
                                                                                         งบดำเนินงาน</option>
                                                                                 @endif
-                                                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                                                @if ($ta->task_budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
                                                                                     <option value="3">
                                                                                         ค่าสาธารณูปโภค</option>
                                                                                 @endif
@@ -879,7 +884,7 @@
                                                             <!--ข้อมูลสัญญา 3 -->
                                                             <div class="col-md-12">
                                                                 <label for="contract_file" class="form-label">{{ __('อัปโหลดไฟล์') }}</label>
-                                                                <input type="file" class="form-control" id="contract_file" name="contract_file">
+                                                                <input type="file" class="form-control" id="contract_file" name="contract_file" multiple>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลือกไฟล์สัญญา') }}
                                                                 </div>
@@ -1134,11 +1139,6 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
-
-
-
             <script>
                 $(document).ready(function() {
                     // Initialize Select2 on the select element
@@ -1154,10 +1154,7 @@
             </script>
 
 
-
-
-
-<script>
+    <script>
     $(document).ready(function() {
         $('#project_select').change(function() {
             // ซ่อนทุกฟิลด์ก่อน
@@ -1183,62 +1180,62 @@
         // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
         $('#project_select').change();
     });
-</script>
+        </script>
 
 
 
 
 
-<script>
-   $(document).ready(function() {
-    var task_budget_it_operating = {{ $sum_task_budget_it_operating }};
-    var task_budget_it_investment = {{ $sum_task_budget_it_investment }};
-    var task_budget_gov_utility = {{ $sum_task_budget_gov_utility }};
+                                                <script>
+                                                $(document).ready(function() {
+                                                    var task_budget_it_operating = {{ $ta->task_budget_it_operating }};
+                                                    var task_budget_it_investment = {{ $ta->task_budget_it_investment }};
+                                                    var task_budget_gov_utility = {{ $ta->task_budget_gov_utility }};
 
 
-    $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
-        var max = 0;
-        var fieldId = $(this).attr('id');
+                                                    $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
+                                                        var max = 0;
+                                                        var fieldId = $(this).attr('id');
 
-        if (fieldId === "contract_mm_budget" || fieldId === "contract_pr_budget" ) {
-            if (task_budget_it_operating > 0) {
-                max = parseFloat(task_budget_it_operating);
-            } else if (task_budget_it_investment > 0) {
-                max = parseFloat(task_budget_it_investment);
-            } else if (task_budget_gov_utility > 0) {
-                max = parseFloat(task_budget_gov_utility);
-            }
-        }
+                                                        if (fieldId === "contract_mm_budget" || fieldId === "contract_pr_budget" ) {
+                                                            if (task_budget_it_operating > 0) {
+                                                                max = parseFloat(task_budget_it_operating);
+                                                            } else if (task_budget_it_investment > 0) {
+                                                                max = parseFloat(task_budget_it_investment);
+                                                            } else if (task_budget_gov_utility > 0) {
+                                                                max = parseFloat(task_budget_gov_utility);
+                                                            }
+                                                        }
 
-        var current = parseFloat($(this).val().replace(/,/g, ""));
-        if (current > max) {
-            Swal.fire({
-                title: "เกิดข้อผิดพลาด",
-                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                icon: "error",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "ตกลง"
-            });
-            $(this).val(max.toFixed(2));
-        }
-    });
+                                                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                                                        if (current > max) {
+                                                            Swal.fire({
+                                                                title: "เกิดข้อผิดพลาด",
+                                                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                                                icon: "error",
+                                                                confirmButtonColor: "#3085d6",
+                                                                confirmButtonText: "ตกลง"
+                                                            });
+                                                            $(this).val(max.toFixed(2));
+                                                        }
+                                                    });
 
-   /*  $("#contract_pa_budget").on("input", function() {
-        var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
-        if (current > contract_mm_budget) {
-            Swal.fire({
-                title: "เกิดข้อผิดพลาด",
-                text: "จำนวนเงิน PA ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                icon: "error",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "ตกลง"
-            });
-            $(this).val(contract_mm_budget.toFixed(2));
-        }
-    }); */
-});
+                                                /*  $("#contract_pa_budget").on("input", function() {
+                                                        var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                                                        if (current > contract_mm_budget) {
+                                                            Swal.fire({
+                                                                title: "เกิดข้อผิดพลาด",
+                                                                text: "จำนวนเงิน PA ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                                                icon: "error",
+                                                                confirmButtonColor: "#3085d6",
+                                                                confirmButtonText: "ตกลง"
+                                                            });
+                                                            $(this).val(contract_mm_budget.toFixed(2));
+                                                        }
+                                                    }); */
+                                                });
 
-</script>
+                                                </script>
 <script>
     $(document).ready(function() {
         $("#contract_pa_budget").on("input", function() {
@@ -1295,101 +1292,6 @@
         });
     });
 </script>
-
-
-
-
-
-            {{--          <script>
-                    $(document).ready(function() {
-                        $("#contract_mm_budget, #contract_PR_butget").on("input", function() {
-                            var max;
-                            var fieldId = $(this).attr('id');
-
-                            if (fieldId === "contract_mm_budget") {
-                                max = parseFloat('{{ number_format($task_budget_it_investment) }}'.replace(/,/g,
-                                    ""));
-                            } else if (fieldId === "contract_mm_budget") {
-                                max = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(/,/g,
-                                    ""));
-                            }
-
-                            var current = parseFloat($(this).val().replace(/,/g, ""));
-                            if (current > max) {
-                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-                                $(this).val(max.toFixed(2));
-                            }
-                        });
-
-
-
-                        $("#contract_PR").on("input", function() {
-                            var maxUtility = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(
-                                /,/g, ""));
-                            var current = parseFloat($(this).val().replace(/,/g, ""));
-                            if (current > maxUtility) {
-                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + maxUtility.toFixed(2) + " บาท (ค่าสาธารณูปโภค)");
-                                $(this).val(maxUtility.toFixed(2));
-                            }
-                        });
-                    });
-            </script> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            {{--   <script>
-            $(document).ready(function() {
-                // Initialize Select2 on the select element
-                $('.js-example-basic-single').select2();
-
-                $('.js-example-basic-single').on('change', function() {
-                    // Get the selected value
-                    const selectedValue = $(this).val();
-                    // Handle the selected value as needed
-                    console.log(selectedValue);
-                });
-            });
-        </script> --}}
-
-            {{-- <script>
-                $(document).ready(function() {
-                    var tasksData = {!! $tasksJson !!};
-
-                    $('#task_parent').select2({
-                        placeholder: 'เลือกกิจกรรม',
-                        allowClear: true,
-                        data: tasksData
-                    });
-
-                    $('#task_parent').on('select2:select', function(e) {
-                        var data = e.params.data;
-                        var budget = parseFloat(data.budget_it_investment) || parseFloat(data
-                            .budget_it_operating) || parseFloat(data.budget_gov_utility) || 0;
-
-                        if (typeof budget === 'number') {
-                            budget = new Intl.NumberFormat('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(budget);
-                        }
-
-                        $('#contract-type-budget').val(budget);
-                    });
-                });
-            </script>
- --}}
 
             <script>
                 $(document).ready(function() {
@@ -1472,66 +1374,6 @@
                     });
                 });
             </script>
-
-
-
-       {{--      <script>
-                $(document).ready(function() {
-                    // เมื่อมีการเลือกค่าในฟอร์ม task_parent
-                    $('#contract_type_budget').on('change', function() {
-                        // อ่านค่าของวงเงินที่เป็นตัวหลักจาก contract_type_budget
-                        var contractTypeBudget = parseFloat($('#contract-type-budget').val());
-
-                        // อ่านค่าของวงเงินในฟอร์มต่าง ๆ
-                        var mmBudget = parseFloat($('#contract_mm_budget').val());
-                        var prBudget = parseFloat($('#contract_pr_budget').val());
-                        var paBudget = parseFloat($('#contract_pa_budget').val());
-                        var poBudget = parseFloat($('#contract_po_budget').val());
-                        var erBudget = parseFloat($('#contract_er_budget').val());
-                        var cnBudget = parseFloat($('#contract_cn_budget').val());
-                        var baBudget = parseFloat($('#contract_ba_budget').val());
-                        var bdBudget = parseFloat($('#contract_bd_budget').val());
-
-                        // ตรวจสอบเงื่อนไขว่าวงเงินในฟอร์มต่าง ๆ ต้องไม่เกินวงเงินตัวหลัก
-                        if (mmBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงิน (บาท) MM เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (prBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบขอดำเนินการซื้อ/จ้าง (PR) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (paBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบขออนุมัติซื้อ/จ้าง (PA) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (poBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบสั่งซื้อ (PO) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (erBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบสั่งจ้าง (ER) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (cnBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในสัญญา (CN) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (baBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบยืมเงินรองจ่าย (BA) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (bdBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบยืมเงินหน่อยงาน (BD) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                    });
-                });
-            </script> --}}
-
-
-
-
 
             <script>
                 $(document).ready(function() {
@@ -1635,32 +1477,7 @@
             </script>
 
 
-            <!--<script>
-                function formatDate(date) {
-                    var parts = date.split("/");
-                    return parts[1] + "/" + parts[0] + "/" + parts[2];
-                }
 
-                $(document).ready(function() {
-                    $("#insurance_start_date, #insurance_end_date").change(function() {
-                        var start = new Date(formatDate($("#insurance_start_date").val()));
-                        var end = new Date(formatDate($("#insurance_end_date").val()));
-
-                        // Calculate the difference in milliseconds
-                        var diff = Math.abs(end - start);
-
-                        // Calculate days
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                        // Calculate months
-                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-
-                        // Display result
-                        $("#insurance_duration_months").text(months + " เดือน");
-                        $("#insurance_duration_days").text(days + " วัน");
-                    });
-                });
-            </script> -->
 
             <script>
                 $(function() {
@@ -1731,3 +1548,185 @@
 
         </x-slot:javascript>
     </x-app-layout>
+
+
+
+     {{--      <script>
+                $(document).ready(function() {
+                    // เมื่อมีการเลือกค่าในฟอร์ม task_parent
+                    $('#contract_type_budget').on('change', function() {
+                        // อ่านค่าของวงเงินที่เป็นตัวหลักจาก contract_type_budget
+                        var contractTypeBudget = parseFloat($('#contract-type-budget').val());
+
+                        // อ่านค่าของวงเงินในฟอร์มต่าง ๆ
+                        var mmBudget = parseFloat($('#contract_mm_budget').val());
+                        var prBudget = parseFloat($('#contract_pr_budget').val());
+                        var paBudget = parseFloat($('#contract_pa_budget').val());
+                        var poBudget = parseFloat($('#contract_po_budget').val());
+                        var erBudget = parseFloat($('#contract_er_budget').val());
+                        var cnBudget = parseFloat($('#contract_cn_budget').val());
+                        var baBudget = parseFloat($('#contract_ba_budget').val());
+                        var bdBudget = parseFloat($('#contract_bd_budget').val());
+
+                        // ตรวจสอบเงื่อนไขว่าวงเงินในฟอร์มต่าง ๆ ต้องไม่เกินวงเงินตัวหลัก
+                        if (mmBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงิน (บาท) MM เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (prBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบขอดำเนินการซื้อ/จ้าง (PR) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (paBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบขออนุมัติซื้อ/จ้าง (PA) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (poBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบสั่งซื้อ (PO) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (erBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบสั่งจ้าง (ER) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (cnBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในสัญญา (CN) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (baBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบยืมเงินรองจ่าย (BA) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                        if (bdBudget > contractTypeBudget) {
+                            $('#modal-message').text('วงเงินในใบยืมเงินหน่อยงาน (BD) เกินวงเงินที่กำหนด');
+                            $('#modal').modal('show');
+                        }
+                    });
+                });
+            </script> --}}
+
+
+
+
+
+
+               <!--<script>
+                function formatDate(date) {
+                    var parts = date.split("/");
+                    return parts[1] + "/" + parts[0] + "/" + parts[2];
+                }
+
+                $(document).ready(function() {
+                    $("#insurance_start_date, #insurance_end_date").change(function() {
+                        var start = new Date(formatDate($("#insurance_start_date").val()));
+                        var end = new Date(formatDate($("#insurance_end_date").val()));
+
+                        // Calculate the difference in milliseconds
+                        var diff = Math.abs(end - start);
+
+                        // Calculate days
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                        // Calculate months
+                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+
+                        // Display result
+                        $("#insurance_duration_months").text(months + " เดือน");
+                        $("#insurance_duration_days").text(days + " วัน");
+                    });
+                });
+            </script> -->
+
+
+
+
+            {{--          <script>
+                    $(document).ready(function() {
+                        $("#contract_mm_budget, #contract_PR_butget").on("input", function() {
+                            var max;
+                            var fieldId = $(this).attr('id');
+
+                            if (fieldId === "contract_mm_budget") {
+                                max = parseFloat('{{ number_format($task_budget_it_investment) }}'.replace(/,/g,
+                                    ""));
+                            } else if (fieldId === "contract_mm_budget") {
+                                max = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(/,/g,
+                                    ""));
+                            }
+
+                            var current = parseFloat($(this).val().replace(/,/g, ""));
+                            if (current > max) {
+                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
+                                $(this).val(max.toFixed(2));
+                            }
+                        });
+
+
+
+                        $("#contract_PR").on("input", function() {
+                            var maxUtility = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(
+                                /,/g, ""));
+                            var current = parseFloat($(this).val().replace(/,/g, ""));
+                            if (current > maxUtility) {
+                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + maxUtility.toFixed(2) + " บาท (ค่าสาธารณูปโภค)");
+                                $(this).val(maxUtility.toFixed(2));
+                            }
+                        });
+                    });
+            </script> --}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {{--   <script>
+            $(document).ready(function() {
+                // Initialize Select2 on the select element
+                $('.js-example-basic-single').select2();
+
+                $('.js-example-basic-single').on('change', function() {
+                    // Get the selected value
+                    const selectedValue = $(this).val();
+                    // Handle the selected value as needed
+                    console.log(selectedValue);
+                });
+            });
+        </script> --}}
+
+            {{-- <script>
+                $(document).ready(function() {
+                    var tasksData = {!! $tasksJson !!};
+
+                    $('#task_parent').select2({
+                        placeholder: 'เลือกกิจกรรม',
+                        allowClear: true,
+                        data: tasksData
+                    });
+
+                    $('#task_parent').on('select2:select', function(e) {
+                        var data = e.params.data;
+                        var budget = parseFloat(data.budget_it_investment) || parseFloat(data
+                            .budget_it_operating) || parseFloat(data.budget_gov_utility) || 0;
+
+                        if (typeof budget === 'number') {
+                            budget = new Intl.NumberFormat('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(budget);
+                        }
+
+                        $('#contract-type-budget').val(budget);
+                    });
+                });
+            </script>
+ --}}

@@ -285,8 +285,9 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
-                                                                            min="0" onchange="calculateRefund()"
-                                                                           >
+                                                                            min="0"
+                                                                            onchange="calculateRefund()"
+                                                                           />
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ระบุงบกลาง ICT') }}
@@ -299,7 +300,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                                         name="task_cost_it_operating" min="0"  onchange="calculateRefund()" >
+                                                                         name="task_cost_it_operating" min="0"  onchange="calculateRefund()" />
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบกลาง ICT') }}
@@ -321,8 +322,9 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
-                                                                            min="0" onchange="calculateRefund()"
-                                                                           >
+                                                                            min="0"
+                                                                            onchange="calculateRefund()"
+                                                                           />
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('งบดำเนินงาน') }}
@@ -335,7 +337,8 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_investment"
-                                                                         name="task_cost_it_investment" min="0" onchange="calculateRefund()"  >
+                                                                         name="task_cost_it_investment" min="0"
+                                                                          onchange="calculateRefund()"  />
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบดำเนินงาน') }}
@@ -358,8 +361,9 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_gov_utility"
                                                                             name="task_budget_gov_utility"
-                                                                            min="0" onchange="calculateRefund()"
-                                                                           >
+                                                                            min="0"
+                                                                            onchange="calculateRefund()"
+                                                                           />
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ค่าสาธารณูปโภค') }}
@@ -372,7 +376,8 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_gov_utility"
-                                                                         name="task_cost_gov_utility" min="0"  onchange="calculateRefund()" >
+                                                                         name="task_cost_gov_utility" min="0"
+                                                                         onchange="calculateRefund()" />
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('ค่าสาธารณูปโภค') }}
@@ -466,7 +471,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="callout callout-light">
-                                                    <div class=" col-md-12 mt-3">
+                                                     <div class=" col-md-12 mt-3">
                                                         <label for="task_description"
                                                             class="form-label">{{ __('หมายเหตุ') }}</label>
                                                         <textarea class="form-control" name="task_description" id="task_description" rows="5"></textarea>
@@ -474,7 +479,28 @@
                                                             {{ __('รายละเอียดกิจกรรม') }}
                                                         </div>
                                                     </div>
+
+                                                    <div class=" col-md-12 mt-3">
+                                                        <label for="file"
+                                                            class="form-label">{{ __('File') }}</label>
+                                                    <div class="input-group control-group increment " >
+                                                        <input type="file" name="file[]" class="form-control" multiple >
+                                                        <div class="input-group-btn">
+                                                          <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                                        </div>
+                                                      </div>
+                                                      <div class="clone d-none">
+                                                        <div class="control-group input-group" style="margin-top:10px">
+                                                          <input type="file" name="file[]" class="form-control" multiple>
+                                                          <div class="input-group-btn">
+                                                            <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                                          </div>
+                                                        </div>
+                                                      </div>
                                                     </div>
+
+
+                                            </div>
                                                     <div id="pp_form"
                                                         class="callout callout-danger"{{--  style="display:none;" --}}>
 
@@ -581,56 +607,6 @@
                     });
                 });
             </script>
-
-
-                    <script>
-                        $(document).ready(function() {
-                            $('#project_select').change(function() {
-                                // ซ่อนทุกฟิลด์ก่อน
-                                $('#ICT').hide();
-                                $('#inv').hide();
-                                $('#utility').hide();
-                                $('#task_pay_d').hide();
-
-
-                                // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
-                                if ($(this).val() == 'task_budget_it_operating') {
-                                    $('#ICT').show();
-                                //  $('#task_pay_d').show();
-                                } else if ($(this).val() == 'task_budget_it_investment') {
-                                    $('#inv').show();
-                                // $('#task_pay_d').show();
-                                } else if ($(this).val() == 'task_budget_gov_utility') {
-                                    $('#utility').show();
-                                //  $('#task_pay_d').show();
-                                }
-                            });
-
-                            // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
-                            $('#project_select').change();
-                        });
-                    </script>
-            <script>
-                $(document).ready(function() {
-                    $('#project_select').change(function() {
-                        // ซ่อนทุกฟิลด์ก่อน
-                        $('#task_budget_it_operating').parent().hide();
-                        $('#task_budget_it_investment').parent().hide();
-                        $('#task_budget_gov_utility').parent().hide();
-
-                        // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
-                        if ($(this).val() == 'task_budget_it_operating') {
-                            $('#task_budget_it_operating').parent().show();
-                        } else if ($(this).val() == 'task_budget_it_investment') {
-                            $('#task_budget_it_investment').parent().show();
-                        } else if ($(this).val() == 'task_budget_gov_utility') {
-                            $('#task_budget_gov_utility').parent().show();
-                        }
-                    });
-                });
-            </script>
-
-
 
             <script>
                 $(document).ready(function() {
@@ -774,63 +750,59 @@
 
                 });
                 </script>
+<script>
+    var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+    var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
 
-                <script>
-                $("#task_refund_pa_budget").on("input", function() {
-                calculateRefund();
-                });
+    function calculateRefund() {
+        var totalRefund = 0;
 
-                function calculateRefund() {
-                var pr_budget, pa_budget, refund;
+        costFields.forEach(function(costField, index) {
+            var pa_value = $("#" + costField).val();
+            var pr_value = $("#" + budgetFields[index]).val();
 
+            if (pa_value && pr_value) {
+                var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
 
-                if (fieldId === "task_cost_it_investment")  {
-                pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
-                pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
-                refund = pr_budget - pa_budget;
-                }else if (fieldId === "task_cost_it_operating" ) {
-                pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
-                pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
-                refund = pr_budget - pa_budget;
-                }else  if (fieldId === "task_cost_gov_utility") {
-                pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
-                pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
-                refund = pr_budget - pa_budget;
+                if (pa_budget != 0) {
+                    var refund = pr_budget - pa_budget;
+                    totalRefund += refund;
                 }
+            }
+        });
 
-                $("#task_refund_pa_budget").val(refund.toFixed(2));
-                }
+        $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
+    }
+
+    $(document).ready(function() {
+        costFields.forEach(function(costField, index) {
+            $("#" + costField).on("input", calculateRefund);
+        });
+    });
+</script>
+
+
+
+   {{--         <script>
+                    function calculateRefund() {
+                        var fields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+                        fields.forEach(function(fieldId) {
+                            var pr_budget_field = fieldId.replace('cost', 'budget');
+                            var pr_budget = parseFloat(document.getElementById(pr_budget_field).value.replace(/,/g, "")) || 0;
+                            var pa_budget = parseFloat(document.getElementById(fieldId).value.replace(/,/g, "")) || 0;
+                            var refund = 0;
+
+                            if (pa_budget !== 0) {
+                                refund = pr_budget - pa_budget;
+                            }
+                            console.log("Setting refund value for", fieldId, "to", refund);
+
+                            document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
+                        });
+                    }
                 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ --}}
 
             <script>
                 $(function() {
@@ -862,7 +834,8 @@
                         });
                 });
             </script>
-            <script>
+
+           <script>
                 function calculateDuration() {
                     var startDate = $('#insurance_start_date').datepicker('getDate');
                     var endDate = $('#insurance_end_date').datepicker('getDate');
@@ -892,13 +865,103 @@
                 });
             </script>
 
+        </x-slot:javascript>
+</x-app-layout>
+
+ {{--   <script>
+                        $(document).ready(function() {
+                            $('#project_select').change(function() {
+                                // ซ่อนทุกฟิลด์ก่อน
+                                $('#ICT').hide();
+                                $('#inv').hide();
+                                $('#utility').hide();
+                                $('#task_pay_d').hide();
+
+
+                                // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                                if ($(this).val() == 'task_budget_it_operating') {
+                                    $('#ICT').show();
+                                //  $('#task_pay_d').show();
+                                } else if ($(this).val() == 'task_budget_it_investment') {
+                                    $('#inv').show();
+                                // $('#task_pay_d').show();
+                                } else if ($(this).val() == 'task_budget_gov_utility') {
+                                    $('#utility').show();
+                                //  $('#task_pay_d').show();
+                                }
+                            });
+
+                            // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
+                            $('#project_select').change();
+                        });
+                    </script>
+            <script>
+                $(document).ready(function() {
+                    $('#project_select').change(function() {
+                        // ซ่อนทุกฟิลด์ก่อน
+                        $('#task_budget_it_operating').parent().hide();
+                        $('#task_budget_it_investment').parent().hide();
+                        $('#task_budget_gov_utility').parent().hide();
+
+                        // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                        if ($(this).val() == 'task_budget_it_operating') {
+                            $('#task_budget_it_operating').parent().show();
+                        } else if ($(this).val() == 'task_budget_it_investment') {
+                            $('#task_budget_it_investment').parent().show();
+                        } else if ($(this).val() == 'task_budget_gov_utility') {
+                            $('#task_budget_gov_utility').parent().show();
+                        }
+                    });
+                });
+            </script> --}}
+
+
+{{--
+                <script>
+                $("#task_refund_pa_budget").on("input", function() {
+                calculateRefund();
+                });
+
+                function calculateRefund() {
+                var pr_budget, pa_budget, refund;
+
+
+                if (fieldId === "task_cost_it_investment")  {
+                pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }else if (fieldId === "task_cost_it_operating" ) {
+                pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }else  if (fieldId === "task_cost_gov_utility") {
+                pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+                pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+                refund = pr_budget - pa_budget;
+                }
+
+                $("#task_refund_pa_budget").val(refund.toFixed(2));
+                }
+                </script> --}}
 
 
 
-
-
-
-
+{{-- <script>
+    function calculateRefund() {
+        task_cost_it_operating
+        var pr_budget = parseFloat(document.getElementById("task_budget_it_operating").value);
+      var pa_budget = parseFloat(document.getElementById("task_cost_it_operating").value);
+        task_cost_it_investmen
+        var pr_budget = parseFloat(document.getElementById("task_budget_it_investment").value);
+      var pa_budget = parseFloat(document.getElementById("task_cost_it_investment").value);
+      var refund = pr_budget - pa_budget;
+        task_cost_gov_utility
+      var pr_budget = parseFloat(document.getElementById("task_budget_gov_utility").value);
+      var pa_budget = parseFloat(document.getElementById("task_cost_it_investment").value);
+      var refund = pr_budget - pa_budget;
+      document.getElementById("task_refund_pa_budget").value = refund.toFixed(2);
+    }
+  </script> --}}
 
 
 
@@ -999,9 +1062,11 @@
                                         }
                                     </script> --}}
 
-        </x-slot:javascript>
-</x-app-layout>
-  {{-- <script>
+
+
+
+
+{{-- <script>
             $(document).ready(function() {
                 $('#contract_type').change(function() {
                     var contract_type = $(this).val();

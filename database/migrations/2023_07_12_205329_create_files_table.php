@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('project_id')->nullable();
+            $table->integer('task_id')->nullable();
+            $table->integer('contract_id');
             $table->string('name');
             $table->string('size');
             $table->string('location');

@@ -486,15 +486,12 @@
                                                 <span class="text-danger">*</span>
                                                 <select class="form-control" name="project_select" id="project_select" required>
                                                     <option selected disabled value="">เลือกประเภท...</option>
-                                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                         <option value="1" {{ session('contract_budget_type') == 1 ? 'selected' : '' }}>งบกลาง ICT</option>
-                                                    @endif
-                                                    @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+
                                                         <option value="2" {{ session('contract_budget_type') == 2 ? 'selected' : '' }}>งบดำเนินงาน</option>
-                                                    @endif
-                                                    @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+
                                                         <option value="3" {{ session('contract_budget_type') == 3 ? 'selected' : '' }}>ค่าสาธารณูปโภค</option>
-                                                    @endif
+
                                                 </select>
 
                                             </div>

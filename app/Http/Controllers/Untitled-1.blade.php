@@ -1,3 +1,73 @@
+
+
+
+
+/*  sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
++sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
++sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+as cost_con_no_pa_2 ,
+sum( COALESCE(taskcons.taskcon_mm_budget,0))  as total_taskcon_mm_budget_2,
+sum( COALESCE(taskcons.taskcon_pay,0)) as total_con_pay */
+//->Join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+
+//->select('tasks.*', 'taskcons.*')
+/*  ($tasks = DB::table('tasks')
+->select('tasks.*', 'a.cost_disbursement', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+->leftJoin(
+    DB::raw('(select tasks.task_parent,
+sum( COALESCE(tasks.task_cost_gov_utility,0))
++sum( COALESCE(tasks.task_cost_it_operating,0))
++sum( COALESCE(tasks.task_cost_it_investment,0))
+as cost_disbursement,
+sum( COALESCE(tasks.task_pay,0))  as total_pay
+from tasks  group by tasks.task_parent) as a'),
+    'a.task_parent',
+    '=',
+    'tasks.task_id'
+)
+
+->leftJoin(
+    DB::raw('(select tasks.task_parent,
+sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))
++sum(COALESCE(tasks.task_cost_it_investment,0))
+as cost_pa_1 ,
+sum( COALESCE(tasks.task_pay,0)) as total_pay
+from tasks
+where tasks.task_type=1 group by tasks.task_parent) as ab'),
+    'ab.task_parent',
+    '=',
+    'tasks.task_id'
+)
+->leftJoin(
+    DB::raw('(select tasks.task_parent,
+sum(COALESCE(tasks.task_cost_gov_utility,0))
++sum(COALESCE(tasks.task_cost_it_operating,0))
++sum(COALESCE(tasks.task_cost_it_investment,0))
+as cost_no_pa_2 ,sum( COALESCE(tasks.task_pay,0))
+as total_pay
+from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+    'ac.task_parent',
+    '=',
+    'tasks.task_id'
+)
+->where('project_id', ($id))
+->get()
+->toArray()); */
+
+/*        $check_parent = DB::table('projects')
+    ->join('tasks', 'projects.project_id', '=', 'tasks.project_id')
+    ->select(
+        'tasks.task_id',
+        'tasks.task_parent'
+    )
+    ->where('projects.project_id', $project->project_id)
+    ->where('tasks.task_id', $task->task_id)
+    ->get();
+dd($check_parent);
+*/
+
+
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">

@@ -225,7 +225,7 @@ class ContractController extends Controller
 
 
 
-        $taskcons =  Contract::find($id);
+     ($taskcons =  Contract::find($id));
         ($taskcons = DB::table('taskcons')
             ->select('taskcons.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
             ->leftJoin(
@@ -272,7 +272,7 @@ class ContractController extends Controller
 
 
 
-        ($taskcons = json_decode(json_encode($taskcons), true));
+       ($taskcons = json_decode(json_encode($taskcons), true));
         foreach ($taskcons as $task) {
             (float) $__budget_gov = (float) $task['taskcon_budget_gov_operating'] + (float) $task['taskcon_budget_gov_utility'] + (float) $task['taskcon_budget_gov_investment'];
             (float) $__budget_it  = (float) $task['taskcon_budget_it_operating'] + (float) $task['taskcon_budget_it_investment'];

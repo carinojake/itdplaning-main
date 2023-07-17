@@ -205,6 +205,12 @@
                                             <div class="col-6 fw-semibold">{{ __('หมายเหตุ') }}</div>
                                             <div class="col-6">{{ $contract->contract_projectplan }}</div>
                                         </div>
+
+
+                                        <div class="row">
+                                            <div class="col-6 fw-semibold">{{ __('งบประมาณ') }}</div>
+                                             <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-6 fw-semibold">{{ __('เลขที่ MM') }}</div>
                                             <div class="col-6">{{ $contract->contract_mm }}</div>
@@ -245,7 +251,7 @@
                                                 {{ number_format($contract->contract_peryear_pa_budget) }}</div>
                                         </div>
 
-                                        <div class="row">
+                               {{--          <div class="row">
                                             <div class="col-6 fw-semibold">{{ __('contract_file') }}</div>
                                             <div class="col-6">
                                                 @if ($contract->contract_file)
@@ -254,7 +260,7 @@
                                                     {{ __('No file uploaded') }}
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
 
 
                                     </div>

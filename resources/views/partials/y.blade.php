@@ -146,8 +146,7 @@
                             <td>{{ $result->disbursement_taskcons_status }}</td>
                             <td>{{ number_format($result->taskcon_pay) }}</td>
 
-
-{{--                               <td class="text-end">
+                             {{--  <td class="text-end">
 
                                 <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
                                     class="btn-sm btn btn-primary text-white"><i
@@ -163,7 +162,7 @@
                                     <button class="btn btn-danger text-white"><i
                                             class="cil-trash"></i></button>
                                 </form>
-                            </td> --}}
+                            </td>
 
                             @foreach ($taskcons as $taskcon)
                             <td class="text-end">
@@ -181,7 +180,7 @@
                                     <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
                                 </form>
                             </td>
-                        @endforeach
+                        @endforeach --}}
 
                             <!-- Changed from contract_description to contract_year  -->
 

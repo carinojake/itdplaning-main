@@ -280,18 +280,16 @@
                                                                                 id="project_select" required>
                                                                                 <option selected disabled value="">
                                                                                     เลือกประเภท...</option>
-                                                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+
                                                                                     <option value="1">งบกลาง
                                                                                         ICT</option>
-                                                                                @endif
-                                                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+
                                                                                     <option value="2">
                                                                                         งบดำเนินงาน</option>
-                                                                                @endif
-                                                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+
                                                                                     <option value="3">
                                                                                         ค่าสาธารณูปโภค</option>
-                                                                                @endif
+
                                                                             </select>
                                                                         </div>
 
