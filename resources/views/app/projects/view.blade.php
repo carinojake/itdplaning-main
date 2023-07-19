@@ -263,7 +263,14 @@
                                     var tmp_class = task.balance < 0 ? 'red' : 'dark';
                                      if (task.task_type === null) {
                                         return '';
+                                    }else if (task.budget_total_mm ) {
+                                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                            style: 'currency',
+                                            currency: 'THB'
+                                        }).format(task.budget_total_mm) + '</span>';
                                     }
+
+
                                     else if (task.budget_mm) {
                                         return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                             style: 'currency',
@@ -274,7 +281,10 @@
                                             style: 'currency',
                                             currency: 'THB'
                                         }).format(task.budget_total_mm) + '</span>';
-                                    }  else {
+                                    }
+
+
+                                    else {
                                         return '';
                                     }
                                 }
@@ -353,6 +363,9 @@
                                     currency: 'THB'
                                 }).format(task.total_cost - task.total_pay) + '</span>';
                             }
+
+
+
 
                            else if (task.total_pay > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
