@@ -779,7 +779,14 @@ class ProjectController extends Controller
         //  $taskid = Hashids::decode($task)[0];
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
         ($project = Project::select(
-            'projects.*', 'a.total_task_refund_pa_budget', 'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay', 'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+            'projects.*', 'a.total_task_refund_pa_budget',
+             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
+             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
+             'ad.total_taskcon_pay_con'
+
+
+
+             )
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
                     sum(COALESCE(tasks.task_cost_gov_utility,0))
@@ -826,6 +833,33 @@ class ProjectController extends Controller
                 '=',
                 'projects.project_id'
             )
+
+            ->leftJoin(
+                DB::raw('(select tasks.project_id,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay,
+                sum( COALESCE(taskcons.taskcon_pay,0)) as  total_taskcon_pay_con
+                from tasks
+                INNER JOIN
+                contract_has_tasks
+                ON
+                    tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN
+                contracts
+                ON
+                    contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN
+                taskcons
+                ON
+                    contracts.contract_id = taskcons.contract_id
+                where tasks.task_type=1 group by tasks.project_id) as ad'),
+                'ad.project_id',
+                '=',
+                'projects.project_id'
+            )
+
+
+
             // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
             //->groupBy('projects.project_id')
             ->where('projects.project_id', $id)
@@ -833,7 +867,7 @@ class ProjectController extends Controller
 
             // ->toArray()
         );
-        // dd($project);
+         //dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -851,6 +885,7 @@ class ProjectController extends Controller
         (float) $__budget     = $__budget_gov + $__budget_it;
         ((float) $__cost       = (float) $project['project_cost']);
         ((float) $__mm       = (float) $project['total_task_mm_budget']);
+        ((float) $__paycon       = (float) $project['total_taskcon_pay_con']);
         ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
         ((float) $__balance    = $__budget + (float) $project['project_cost']);
         $__project_cost     = [];
@@ -879,7 +914,8 @@ class ProjectController extends Controller
             'cost_no_pa_2'             => $project['cost_no_pa_2'],
             'cost_disbursement'     => $project['cost_disbursement'],
             'pay'                   => $project['pay'],
-            'total_pay'              => $project['total_pay'],
+            'total_pay'              => $project['total_pay']+$__paycon,
+            'total_taskcon_pay_con'  => $__paycon,
             'budget_mm'             => $project['task_mm_budget'],
             'refund_pa_budget'      => $__prmm,
             'budget_total_mm'             => $__mm,
@@ -890,11 +926,12 @@ class ProjectController extends Controller
             // 'duration'              => 360,
         ];
 
-        // dd($gantt);
+       //  dd($gantt);
 
 
         $budget['total'] = $__budget;
         ($budget['budget_total_mm'] = $__mm);
+        $budget['budget_total_taskcon_pay_con'] = $__paycon;
         $budget['budget_total_refund_pa_budget'] = $__prmm;
         $budget['budget_total_mm_pr'] = $__budget - ($__mm - $__prmm);
 
@@ -934,13 +971,16 @@ class ProjectController extends Controller
                 'a.costs_disbursement',
                 'a.total_pay',
                 'a.total_task_mm_budget',
+                'a.total_taskcon_cost',
+                'a.total_taskcon_pay',
                 'ab.total_task_mm_budget_1',
                 'ac.total_task_mm_budget_2',
                 'ab.cost_pa_1',
                 'ac.cost_no_pa_2',
                 'cc.s',
                 'cc.c',
-                'ad.total_taskcon_pay'
+                'ad.total_taskcon_cost_pa_1',
+                'ad.total_taskcon_pay_pa_1'
             )
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
@@ -948,11 +988,31 @@ class ProjectController extends Controller
         +sum( COALESCE(tasks.task_cost_it_operating,0))
         +sum( COALESCE(tasks.task_cost_it_investment,0))
         as costs_disbursement,
+
+        sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as total_taskcon_cost ,
+
+        sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay,
         sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
-
-
         sum( COALESCE(tasks.task_pay,0))  as total_pay
-        from tasks  group by tasks.task_parent) as a'),
+        from tasks
+        INNER JOIN
+        contract_has_tasks
+        ON
+            tasks.task_id = contract_has_tasks.task_id
+        INNER JOIN
+        contracts
+        ON
+            contract_has_tasks.contract_id = contracts.contract_id
+        INNER JOIN
+        taskcons
+        ON
+            contracts.contract_id = taskcons.contract_id
+
+
+        group by tasks.task_parent) as a'),
                 'a.task_parent',
                 '=',
                 'tasks.task_id'
@@ -996,7 +1056,12 @@ class ProjectController extends Controller
             ->leftJoin(
                 DB::raw('(select tasks.task_id,
                 sum(COALESCE(tasks.task_pay,0)) as total_pay,
-                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay
+                sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as total_taskcon_cost_pa_1 ,
+                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1
+
                 from tasks
                 INNER JOIN
                 contract_has_tasks
@@ -1046,6 +1111,8 @@ class ProjectController extends Controller
                 $task['task_cost_gov_utility'],
                 $task['task_cost_it_operating'],
                 $task['task_cost_it_investment'],
+              //  $task['total_taskcon_cost']
+              //  $task['total_taskcon_cost_pa_1']
                 // $task['task_cost_disbursement'],
                 // $task['taskcon_ba_budget'],
                 //$task['taskcon_bd_budget'],
@@ -1084,12 +1151,12 @@ class ProjectController extends Controller
                 'balance'               => $__balance,
                 'tbalance'               => $__balance,
                 'cost'                  => $__cost,
-
+                'total_taskcon_cost_pa_1'  => $task['total_taskcon_cost_pa_1'],
 
 
                 'cost_pa_1'             => $task['cost_pa_1'],
                 'cost_no_pa_2'             => $task['cost_no_pa_2'],
-                //  'cost_disbursement'     => $project['cost_disbursement'],
+                'cost_disbursement'     => $project['cost_disbursement'],
                 'pay'                   => $task['task_pay'],
                 'budget_mm'             => $task['task_mm_budget'],
                 'task_refund_pa_budget'             => $task['task_refund_pa_budget'],
@@ -1097,7 +1164,7 @@ class ProjectController extends Controller
                 'balanc_mmpr_sum'             => $__balance_mmpr_sum,
                 'budget_total_mm'             => $task['total_task_mm_budget'],
                 //'cost_disbursement'     => $task['cost_disbursement'],
-                'task_total_pay'             => $task['total_pay'],
+                'task_total_pay'             => $task['total_pay']+$task['total_taskcon_pay'],
                 'total_taskcon_pay'         =>  $task['total_taskcon_pay'],
                 'task_type'             => $task['task_type'],
                 'type'                  => 'task',
@@ -1112,7 +1179,7 @@ class ProjectController extends Controller
 
 
 
-         dd($gantt,$tasks);
+        // dd($gantt,$tasks);
 
 
                     $contractgannt = DB::table('tasks')
@@ -1301,8 +1368,12 @@ class ProjectController extends Controller
         //  dd($gantt);
         // ($budget['mm']    = $gantt[0]['total_task_mm_budget']);
         //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
+        //$budget['budget_total_taskcon_pay_con'] = $__paycon;
         ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
-        $budget['pay']    = $gantt[0]['total_pay'];
+       // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
+        $budget['pay']    = $gantt[0]['total_pay']+$gantt[0]['total_taskcon_pay_con'];
+
+
         $budget['cost']    = $gantt[0]['total_cost'];
         //$budget['budget_total_mm_pr2'] = $gantt[0]['budget_total_mm_pr2'];
         $budget['balance'] = $gantt[0]['balance'];
@@ -1820,7 +1891,7 @@ class ProjectController extends Controller
         // dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
 
         //dd($project);
-        // dd($gantt,$budget);
+       // dd($gantt,$budget);
 
         //  $budget['total'] = $__budget;
         // ($budget['budget_total_mm'] = $__mm);
