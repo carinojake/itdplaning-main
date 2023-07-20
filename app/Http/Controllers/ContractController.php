@@ -1278,6 +1278,7 @@ class ContractController extends Controller
         $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
         $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
         $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
+        $taskcon->taskcon_pp                 =   $request->input('taskcon_pp');
         $taskcon->taskcon_pay                 =  $taskcon_pay;
 
 
@@ -1497,6 +1498,10 @@ class ContractController extends Controller
        $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
        $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
        $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
+
+
+       $taskcon->taskcon_pp                 =   $request->input('taskcon_pp');
+
        $taskcon->taskcon_pay                 =  $taskcon_pay;
 
         $taskcon->taskcon_type                 = $request->input('taskcon_type');

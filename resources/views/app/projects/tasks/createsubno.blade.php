@@ -534,7 +534,7 @@
 
                                                     <div class=" col-md-12 mt-3">
                                                         <label for="file"
-                                                            class="form-label">{{ __('File') }}</label>
+                                                            class="form-label">{{ __('เอกสารแนบ') }}</label>
                                                     <div class="input-group control-group increment " >
                                                         <input type="file" name="file[]" class="form-control" multiple >
                                                         <div class="input-group-btn">

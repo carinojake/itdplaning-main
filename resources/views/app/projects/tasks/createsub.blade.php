@@ -153,7 +153,7 @@
                                             <span class="text-danger">*</span>
 
                                             <input type="text" class="form-control"
-                                                id="taskcon_mm" name="taskcon_mm" required>
+                                                id="taskcon_mm" name="taskcon_mm" value={{ session('contract_mm') }} >
                                             <div class="invalid-feedback">
                                                 {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                             </div>
@@ -165,7 +165,7 @@
 
 
                                             <input type="text" class="form-control"
-                                                id="taskcon_mm_name" name="taskcon_mm_name">
+                                                id="taskcon_mm_name" name="taskcon_mm_name" value={{ session('contract_mm_name') }}>
                                             <div class="invalid-feedback">
                                                 {{ __('ชื่อสัญญา ซ้ำ') }}
                                             </div>

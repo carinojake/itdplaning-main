@@ -129,7 +129,7 @@
                     <tr>
                         <th>งวด</th>
                         <th>วันที่เบิกจ่าย</th>
-                        <th>สถานะการเบิกจ่าย</th>
+                        <th>ใบเลขการเบิกจ่าย</th>
                         <th>ใช้จ่าย</th>
                         <th class="text-end"> คำสั่ง</th>
                         <!-- Changed from Contract Description to Contract Year -->
@@ -143,19 +143,19 @@
                             <td>{{ $result->taskcon_name }}</td>
                             <td>{{ Helper::Date4(date('Y-m-d H:i:s', strtotime($result->taskcon_pay_date))) }}
                             </td>
-                            <td>{{ $result->disbursement_taskcons_status }}</td>
+                            <td>{{ $result->taskcon_pp }}</td>
                             <td>{{ number_format($result->taskcon_pay) }}</td>
 
-                             {{--  <td class="text-end">
+                               <td class="text-end">
 
-                                <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
+                                <a href="{{ route('contract.task.show',  ['contract' => Hashids::encode($result->contract_id), 'taskcon' => Hashids::encode($result->taskcon_id)])}}"
                                     class="btn-sm btn btn-primary text-white"><i
                                         class="cil-folder-open ">ข้อมูล </i></a>
-                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
+                                <a href="{{ route('contract.task.edit',  ['contract' => Hashids::encode($result->contract_id), 'taskcon' => Hashids::encode($result->taskcon_id)]) }}"
                                     class="btn-sm btn btn-warning text-white"> <i class="cil-cog"> เบิกจ่าย</i>
                                 </a>
                                 <form
-                                    action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
+                                    action="{{ route('contract.task.destroy',  ['contract' => Hashids::encode($result->contract_id), 'taskcon' => Hashids::encode($result->taskcon_id)]) }}"
                                     method="POST" style="display:inline">
                                     @method('DELETE')
                                     @csrf
@@ -180,7 +180,7 @@
                                     <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
                                 </form>
                             </td>
-                        @endforeach --}}
+                        @endforeach
 
                             <!-- Changed from contract_description to contract_year  -->
 

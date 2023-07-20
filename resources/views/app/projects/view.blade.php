@@ -253,10 +253,10 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_mm) + '</span>'; */
-                                                            {
+                                                               {
                                 name: "budget_total_mm",
                                 width: 100,
-                                label: " MM ",
+                                label: " PR ",
                                 tree: true,
                                 resize: true,
                                 template: function(task) {
@@ -428,6 +428,11 @@
                                 }}
 
 
+
+
+
+
+
                                 else {
                                 return '';
                             }
@@ -482,15 +487,38 @@
                                     currency: 'THB'
                                 }).format(task.budget_total_mm_pr2) + '</span>';
                             }
+
+
+
+
                             else if (task.cost > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.balance) + '</span>';
+                                }).format(task.budget-task.cost) + '</span>';
                             }
-                            else if (task.balance == 0) {
-                                return '';
+                            else if (task.cost_no_pa_2 > 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget-task.cost_no_pa_2) + '</span>';
+                            }
+
+
+
+
+
+
+
+
+                            else if (task.budget > 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget-task.cost) + '</span>';
                             }
 
                             else if (task.balance == 0) {

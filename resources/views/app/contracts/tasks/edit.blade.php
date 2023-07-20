@@ -151,11 +151,22 @@
 
                                     <div class="row mt-3">
                                         <h4>เบิกจ่าย</h4>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-                                            <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date" >
+
+                                            <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', strtotime($taskcon->taskcon_pay_date))) }}">
+
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <label for="taskcon_pay" class="form-label">{{ __('PP เบิก') }}</label>
+                                            <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
+
+                                            <div class="invalid-feedback">
+                                                {{ __('เบิกจ่าย') }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
                                             <div class="invalid-feedback">

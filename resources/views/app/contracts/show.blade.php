@@ -144,7 +144,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-3 fw-semibold">{{ __('ประเภท') }}</div>
-                                            <div class="col-9">{{ \Helper::contractType($contract->contract_type) }}
+                                          {{--   <div class="col-9">{{ \Helper::contractType($contract->contract_type) }} --}}
                                             </div>
                                         </div>
                                         {{-- <div class="row">
@@ -209,8 +209,8 @@
 
                                         <div class="row">
                                             <div class="col-6 fw-semibold">{{ __('งบประมาณ') }}</div>
-                                             <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
-                                        </div>
+{{--                                              <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
+ --}}                                        </div>
                                         <div class="row">
                                             <div class="col-6 fw-semibold">{{ __('เลขที่ MM') }}</div>
                                             <div class="col-6">{{ $contract->contract_mm }}</div>

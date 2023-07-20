@@ -180,7 +180,7 @@
             $trail->push('contract', route('contract.index'));
             $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
             $trail->push('กิจกรรม',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]));
-            $trail->push($taskcon->taskcon_name);
+           $trail->push($taskcon->taskcon_name);
         });
 
       //   7 contract.task.edit
