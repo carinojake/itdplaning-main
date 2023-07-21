@@ -93,7 +93,7 @@
 
 
                                     <div class="row mt-3">
-                                        <h4>งบประมาณที่ได้รับจัดสรร</h4>
+                                        <h5>งบประมาณที่ได้รับจัดสรร</h5>
                                         <div class="row">
                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                 <div class="col-md-4">

@@ -10,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Taskcon;
+use App\Models\File; //add File Model
 use App\Models\ContractHasTask;
 use App\Models\ContractHasTaskcon;
 use Illuminate\Support\Facades\DB;
@@ -359,8 +360,15 @@ class ContractController extends Controller
      //  dd  ($taskcons);
         ($gantt = json_encode($gantt));
 
+        ($files_contract = File::where('contract_id', ($id))
 
-        return view('app.contracts.show', compact('contract', 'gantt', 'duration_p', 'latestContract', 'taskcons'));
+         ->get());
+
+
+
+
+        return view('app.contracts.show', compact('files_contract','contract',
+         'gantt', 'duration_p', 'latestContract', 'taskcons'));
     }
 
 
@@ -563,14 +571,20 @@ class ContractController extends Controller
 
        ($tasks     = Task::where('project_id', $id)->get());
        $sum_task_budget_it_operating = $tasks->where('task_parent')->sum('task_budget_it_operating');
+       ($sum_task_cost_it_operating= $tasks->where('task_parent')->sum('task_cost_it_operating'));
+
        $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
 
        // Sum the task_budget_it_investment for all tasks
        $sum_task_budget_it_investment = $tasks->where('task_parent')->sum('task_budget_it_investment');
+       ($sum_task_cost_it_investment= $tasks->where('task_parent')->sum('task_cost_it_investment'));
+
        $sum_task_refund_budget_it_investment= $tasks->where('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
 
        // Sum the task_budget_gov_utility for all tasks
        $sum_task_budget_gov_utility = $tasks->where('task_parent')->sum('task_budget_gov_utility');
+       ($sum_task_cost_gov_utility= $tasks->where('task_parent')->sum('task_cost_gov_utility'));
+
        $sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
 
@@ -642,7 +656,10 @@ class ContractController extends Controller
             'sum_task_budget_gov_utility',
             'sum_task_refund_budget_it_operating',
             'sum_task_refund_budget_it_investment',
-            'sum_task_refund_budget_gov_utility'
+            'sum_task_refund_budget_gov_utility',
+            'sum_task_cost_it_operating',
+            'sum_task_cost_it_investment',
+            'sum_task_cost_gov_utility'
         ));
     }
 
@@ -820,15 +837,14 @@ class ContractController extends Controller
 
 
 
-        // Get the ID of the newly created contract
-        $idproject =  $project;
-        $idtask =  $task;
-      $id = $idproject . '/' . $idtask;
-        // Create a new directory for the contract if it doesn't exist
-        $contractDir = public_path('uploads/contracts/' . $id);
+
+
+
+      // Create a new directory for the contract if it doesn't exist
+       /*  $contractDir = public_path('uploads/contracts/' . $id);
         if (!file_exists($contractDir)) {
             mkdir($contractDir, 0755, true);
-        }
+        } */
 
 
         // Handle file upload
@@ -925,6 +941,43 @@ class ContractController extends Controller
         //
        // dd($contract);
         if ($contract->save()) {
+
+
+ // Get the ID of the newly created contract
+ $idproject =  $project;
+ // $idtask = $task->task_id;
+  $idcon = $contract->contract_id ;
+  $idup = $idcon . '/' ;
+
+
+
+
+$contractDir = public_path('storage/uploads/contracts/' . $idup);
+if (!file_exists($contractDir)) {
+    mkdir($contractDir, 0755, true);
+}
+// dd($contractDir);  // print the path
+if($request->hasFile('file')) {
+    foreach ($request->file('file') as $file) {
+        $filename = time().'_'.$file->getClientOriginalName();
+        $filesize = $file->getSize();
+        $file->storeAs('public/',$filename);
+        $file->move($contractDir, $filename);
+
+        $fileModel = new File;
+        $fileModel->name = $filename;
+        //$fileModel->project_id = $idproject;
+        $fileModel->contract_id = $idcon;
+        $fileModel->size = $filesize;
+        $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+        if (!$fileModel->save()) {
+            // If the file failed to save, redirect back with an error message
+            return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+        }
+    }
+}
+
 
 
             //insert contract

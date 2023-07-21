@@ -1183,7 +1183,10 @@ class ProjectController extends Controller
                 'task_refund_pa_budget'             => $task['task_refund_pa_budget'],
 
                 'balanc_mmpr_sum'             => $__balance_mmpr_sum,
-                'budget_total_task_mm'             => $task['total_task_mm_budget_task'],
+                'budget_total_task_mm'             => $task['total_task_mm_budget_task']+$task['total_task_mm_budget_1']+$task['total_task_mm_budget_2'],
+                'budget_task_mm_1'             => $task['total_task_mm_budget_1'],
+                'budget_task_mm_2'             => $task['total_task_mm_budget_2'],
+
                 'cost_disbursement_task'     => $__costs,
                 'task_total_pay'             => $task['total_pay']+$task['total_taskcon_pay']+$task['total_pay_1']+$task['total_pay_2'],
 
@@ -2704,6 +2707,16 @@ class ProjectController extends Controller
                     ->get());
 
 
+                    ($files_contract = File::join('contracts', 'files.contract_id', '=', 'contracts.contract_id')
+                   // ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            ->join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+            ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+
+                    ->where('tasks.task_id', $task->task_id)
+
+
+                    ->get());
 
                //dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
         ($latestContract = Contract::latest()->first());
@@ -2713,7 +2726,7 @@ class ProjectController extends Controller
        //dd($contract);
 
        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('files','task_sub_sums','taskcons',
+        return view('app.projects.tasks.show', compact('files_contract','files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
         'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
@@ -2903,6 +2916,53 @@ class ProjectController extends Controller
         //$project = Project::find($projectId);
         $tasks = Task::where('project_id', $id)->get();
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
+
+
+
+
+
+
+
+        // Sum the task_budget_it_operating for all tasks
+        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+        ($sum_task_cost_it_operating= $tasks->where('task_parent')->sum('task_cost_it_operating'));
+
+        $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->sum('task_refund_pa_budget');
+
+        // Sum the task_budget_it_investment for all tasks
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+        ($sum_task_cost_it_investment= $tasks->where('task_parent')->sum('task_cost_it_investment'));
+
+
+        ($sum_task_refund_budget_it_investment= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
+
+        // Sum the task_budget_gov_utility for all tasks
+        ($sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility'));
+        ($sum_task_cost_gov_utility= $tasks->where('task_parent')->sum('task_cost_gov_utility'));
+        ($sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (!empty($contracts['results'])) {
             foreach ($contracts['results'] as $group) {
                 if (isset($group['text']) && isset($group['children']) && is_array($group['children'])) {
@@ -2939,7 +2999,30 @@ class ProjectController extends Controller
 
         $tasksDetails = $task;
         //  dd($contracts);
-        return view('app.projects.tasks.createsub', compact('request','tasksDetails', 'contracts', 'project', 'tasks', 'task'));
+        return view('app.projects.tasks.createsub', compact('request',
+        'tasksDetails', 'contracts',
+         'project', 'tasks',
+          'task',
+
+          'sum_task_budget_it_operating',
+          'sum_task_budget_it_investment',
+          'sum_task_budget_gov_utility',
+          'sum_task_refund_budget_it_operating',
+          'sum_task_refund_budget_it_investment',
+          'sum_task_refund_budget_gov_utility',
+          'sum_task_cost_it_operating',
+          'sum_task_cost_it_investment',
+          'sum_task_cost_gov_utility'
+
+
+
+
+
+
+
+
+
+        ));
 
         /*   return view('app.projects.tasks.createsub', compact(   'request','contracts', 'project', 'tasks', 'task')); */
     }
@@ -3097,24 +3180,37 @@ class ProjectController extends Controller
         // $projectDetails = Project::find($id);
         $projectDetails = Project::find($id);
 
+
+
         //$project = Project::find($projectId);
         $projectyear = Project::where('project_id', $id)->first(); // เปลี่ยนจาก get() เป็น first()
-        $tasks = Task::where('project_id', $id)->get();
+        ($tasks = Task::where('project_id', $id)->get());
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
 
         // Sum the task_budget_it_operating for all tasks
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
-        $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->sum('task_refund_pa_budget');
+        ($sum_task_cost_it_operating= $tasks->where('task_parent')->sum('task_cost_it_operating'));
+
+        $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->sum('task_refund_pa_budget');
 
         // Sum the task_budget_it_investment for all tasks
         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
-        $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent')->sum('task_refund_pa_budget');
+        ($sum_task_cost_it_investment= $tasks->where('task_parent')->sum('task_cost_it_investment'));
+
+
+        ($sum_task_refund_budget_it_investment= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
 
         // Sum the task_budget_gov_utility for all tasks
-        $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
-        $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->sum('task_refund_pa_budget');
+        ($sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility'));
+        ($sum_task_cost_gov_utility= $tasks->where('task_parent')->sum('task_cost_gov_utility'));
+        ($sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
 
-       // dd( $sum_task_refund_budget_it_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
+
+
+
+
+      //  dd ($sum_task_cost_gov_utility);
+       // ($sum_task_refund_budget_it_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
 
         if (!empty($contracts['results'])) {
             foreach ($contracts['results'] as $group) {
@@ -3174,7 +3270,10 @@ class ProjectController extends Controller
             'sum_task_budget_gov_utility',
             'sum_task_refund_budget_it_operating',
             'sum_task_refund_budget_it_investment',
-            'sum_task_refund_budget_gov_utility'
+            'sum_task_refund_budget_gov_utility',
+            'sum_task_cost_it_operating',
+            'sum_task_cost_it_investment',
+            'sum_task_cost_gov_utility'
         ));
     }
 

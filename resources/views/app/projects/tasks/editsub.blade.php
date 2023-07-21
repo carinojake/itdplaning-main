@@ -321,6 +321,26 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="refund" {{-- style="display:none;" --}}>
+                                                <div class=" row mt-3">
+                                                    <div class="col-md-4">
+                                                        <label for="task_refund_pa_budget"
+                                                            class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
+                                                        <span class="text-danger"></span>
+
+                                                        <input type="text" placeholder="0.00"
+                                                            step="0.01"
+                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                            class="form-control numeral-mask"
+                                                            id="task_refund_pa_budget"
+                                                            name="task_refund_pa_budget" min="0"   value={{ $task->task_refund_pa_budget }} >
+
+                                                        {{--  <div class="invalid-feedback">
+                                                                {{ __('ค่าสาธารณูปโภค') }}
+                                                            </div> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-3">

@@ -43,19 +43,19 @@
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-3">{{ __('งบกลาง ICT') }}</div>
-                                                <div class="col-3">   {{ number_format($task->task_budget_it_operating) }}</div>
+                                                <div class="col-3">   {{ number_format($task->task_budget_it_operating-$sum_task_cost_it_operating) }}</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
-                                                <div class="col-3"> {{ number_format($task->task_budget_it_investment) }}</div>
+                                                <div class="col-3"> {{ number_format($task->task_budget_it_investment-$sum_task_cost_it_investment) }}</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                <div class="col-3">   {{ number_format($task->task_budget_gov_utility) }}</div>
+                                                <div class="col-3">   {{ number_format($task->task_budget_gov_utility-$sum_task_cost_gov_utility) }}</div>
                                             @endif
                                         </div>
                                     </div>
@@ -284,19 +284,19 @@
                                             <div class="row">
                                                 @if ($task->task_budget_it_operating > 0)
                                                     <div class="col-2">{{ __('งบกลาง ICT') }}</div>
-                                                    {{ number_format($task->task_budget_it_operating) }} บาท
+                                                    {{ number_format($task->task_budget_it_operating-$sum_task_cost_it_operating) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_it_investment > 0)
                                                     <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
-                                                    {{ number_format($task->task_budget_it_investment) }} บาท
+                                                    {{ number_format($task->task_budget_it_investment-$sum_task_cost_it_investment) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_gov_utility > 0)
                                                     <div class="col-2">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                    {{ number_format($task->task_budget_gov_utility) }} บาท
+                                                    {{ number_format($task->task_budget_gov_utility-$sum_task_cost_gov_utility) }} บาท
                                                 @endif
                                             </div>
                                         </div>
@@ -509,7 +509,7 @@
             var fieldId = $(this).attr('id');
 
             if (fieldId === "task_budget_it_investment") {
-                max = parseFloat({{ $tasksDetails->task_budget_it_investment }});
+                max = parseFloat({{ $tasksDetails->task_budget_it_investment-$sum_task_cost_it_investment }});
             } else if (fieldId === "task_budget_it_operating") {
                 max = parseFloat({{ $tasksDetails->task_budget_it_operating }});
             } else if (fieldId === "task_budget_gov_utility") {

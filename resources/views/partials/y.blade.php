@@ -111,19 +111,50 @@
                     <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget) }}</div>
                 </div>
 
-                <!--<div class="row">
-    <div class="col-6">{{ __('refund_pa_status') }}</div>
-    <div class="col-6">{{ $contract->contract_refund_pa_status }}</div>
-    </div>-->
+                                <!--<div class="row">
+                    <div class="col-6">{{ __('refund_pa_status') }}</div>
+                    <div class="col-6">{{ $contract->contract_refund_pa_status }}</div>
+                    </div>-->
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ') }}</div>
                     <div class="col-6">{{ $contract->contract_owner }}</div>
                 </div>
             </div>
+
+            <table class="table table-bordered table-striped  mt-3">
+                <thead>
+
+                    <th>เอกสารแนบ</th>
+
+                    <th>File</th>
+
+                </thead>
+                <tbody>
+                    @if(count($files_contract) > 0)
+                        @foreach($files_contract as $file)
+                            <tr>
+                                <td>{{ $file->name }}</td>
+
+                                <td><a href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/'  . $file->name) }}">{{ $file->name }}</a></td>
+
+
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="5" class="text-center">No Table Data</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+
+
+
+
         </div>
 
         @if ($results->count() > 0)
-            <table class="table">
+            <table class="table mt-3">
 
                 <thead>
                     <tr>

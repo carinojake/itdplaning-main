@@ -190,19 +190,19 @@
                                             <div class="row">
                                                 @if ( $ta->task_budget_it_operating > 0)
                                                     <div class="col-6">{{ __('งบกลาง ICT') }}</div>
-                                                    {{ number_format( $ta->task_budget_it_operating) }} บาท
+                                                    {{ number_format( $ta->task_budget_it_operating-$sum_task_cost_it_operating) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ( $ta->task_budget_it_investment > 0)
                                                     <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
-                                                    {{ number_format($ta->task_budget_it_investment) }} บาท
+                                                    {{ number_format($ta->task_budget_it_investment-$sum_task_cost_it_investment) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($ta->task_budget_gov_utility > 0)
                                                     <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                    {{ number_format($ta->task_budget_gov_utility) }} บาท
+                                                    {{ number_format($ta->task_budget_gov_utility-$sum_task_cost_gov_utility) }} บาท
                                                 @endif
                                             </div>
                                         </div>
@@ -882,14 +882,34 @@
                                                         <div class="accordion-body">
 
                                                             <!--ข้อมูลสัญญา 3 -->
-                                                            <div class="col-md-12">
+                                                      {{--       <div class="col-md-12">
                                                                 <label for="contract_file" class="form-label">{{ __('อัปโหลดไฟล์') }}</label>
                                                                 <input type="file" class="form-control" id="contract_file" name="contract_file" multiple>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลือกไฟล์สัญญา') }}
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
 
+
+
+                                                            <div class=" col-md-12 mt-3">
+                                                                <label for="file"
+                                                                    class="form-label">{{ __('เอกสารแนบ') }}</label>
+                                                            <div class="input-group control-group increment " >
+                                                                <input type="file" name="file[]" class="form-control" multiple >
+                                                                <div class="input-group-btn">
+                                                                  <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                                                </div>
+                                                              </div>
+                                                              <div class="clone d-none">
+                                                                <div class="control-group input-group" style="margin-top:10px">
+                                                                  <input type="file" name="file[]" class="form-control" multiple>
+                                                                  <div class="input-group-btn">
+                                                                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
                                                            {{--  <div class="col-md-12 mt-3">
                                                                 <label for="contract_mm_name"
                                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
@@ -1139,6 +1159,26 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+            <script type="text/javascript">
+
+
+                $(document).ready(function() {
+
+                  $(".btn-success").click(function(){
+                      var html = $(".clone").html();
+                      $(".increment").after(html);
+                  });
+
+                  $("body").on("click",".btn-danger",function(){
+                      $(this).parents(".control-group").remove();
+                  });
+
+                });
+
+            </script>
+
+
             <script>
                 $(document).ready(function() {
                     // Initialize Select2 on the select element
@@ -1188,9 +1228,9 @@
 
                                                 <script>
                                                 $(document).ready(function() {
-                                                    var task_budget_it_operating = {{ $ta->task_budget_it_operating }};
-                                                    var task_budget_it_investment = {{ $ta->task_budget_it_investment }};
-                                                    var task_budget_gov_utility = {{ $ta->task_budget_gov_utility }};
+                                                    var task_budget_it_operating = {{ $ta->task_budget_it_operating-$sum_task_cost_it_operating }};
+                                                    var task_budget_it_investment = {{ $ta->task_budget_it_investment-$sum_task_cost_it_investment}};
+                                                    var task_budget_gov_utility = {{ $ta->task_budget_gov_utility-$sum_task_cost_gov_utility }};
 
 
                                                     $("#contract_mm_budget, #contract_pr_budget").on("input", function() {

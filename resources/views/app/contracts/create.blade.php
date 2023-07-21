@@ -875,14 +875,31 @@
                                                         <div class="accordion-body">
 
                                                             <!--ข้อมูลสัญญา 3 -->
-                                                            <div class="col-md-12">
+                                                     {{--        <div class="col-md-12">
                                                                 <label for="contract_file" class="form-label">{{ __('อัปโหลดไฟล์') }}</label>
                                                                 <input type="file" class="form-control" id="contract_file" name="contract_file">
                                                                 <div class="invalid-feedback">
-                                                                    {{ __('เลือกไฟล์สัญญา') }}
+                                                                    {{ __('เอกสารแนบ') }}
                                                                 </div>
+                                                            </div> --}}
+                                                            <div class=" col-md-12 mt-3">
+                                                                <label for="file"
+                                                                    class="form-label">{{ __('เอกสารแนบ') }}</label>
+                                                            <div class="input-group control-group increment " >
+                                                                <input type="file" name="file[]" class="form-control" multiple >
+                                                                <div class="input-group-btn">
+                                                                  <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                                                </div>
+                                                              </div>
+                                                              <div class="clone d-none">
+                                                                <div class="control-group input-group" style="margin-top:10px">
+                                                                  <input type="file" name="file[]" class="form-control" multiple>
+                                                                  <div class="input-group-btn">
+                                                                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
                                                             </div>
-
                                                            {{--  <div class="col-md-12 mt-3">
                                                                 <label for="contract_mm_name"
                                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
@@ -1135,7 +1152,23 @@
 
 
 
+            <script type="text/javascript">
 
+
+                $(document).ready(function() {
+
+                  $(".btn-success").click(function(){
+                      var html = $(".clone").html();
+                      $(".increment").after(html);
+                  });
+
+                  $("body").on("click",".btn-danger",function(){
+                      $(this).parents(".control-group").remove();
+                  });
+
+                });
+
+            </script>
 
             <script>
                 $(document).ready(function() {

@@ -43,11 +43,11 @@
               </div>
               <div class="row">
                 <div class="col-3">{{ __('เลขที่ PA') }}</div>
-                <div class="col-9">{{ $taskcon->taskcon_cost_it_operating }}</div>
+                <div class="col-9">{{ $taskcon->taskcon_pp }}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('จำนวนเงิน PA') }}</div>
-                <div class="col-9">{{ $taskcon->taskcon_cost_gov_investment}}</div>
+                <div class="col-9">{{ $taskcon->taskcon_pay}}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('บันทึก PP') }}</div>
@@ -55,7 +55,8 @@
               </div>
               <div class="row">
                 <div class="col-3">{{ __('เวลา PP') }}</div>
-                <div class="col-9">{{ $taskcon->disbursement_taskcons_date}}</div>
+                <div class="col-9">{{ Helper::Date4(date('Y-m-d', strtotime($taskcon->taskcon_pay_date))) }}
+                </div>
               </div>
 
 

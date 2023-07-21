@@ -101,7 +101,7 @@
 
 
                                                     <div class="row mt-3">
-                                                        <h4>งบประมาณที่ได้รับจัดสรร</h4>
+                                                        <h5>งบประมาณที่ได้รับจัดสรร</h5>
                                                         <div class="row">
                                                             @if ($tasksDetails->task_budget_it_operating > 0)
                                                                 <div class="col-md-4">
@@ -115,7 +115,7 @@
                                                                 <div class="col-4">
                                                                     <label for="task_budget_it_investment0"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                                    <span>{{ number_format($tasksDetails->task_budget_it_investment, 2) }} บาท</span>
+                                                                    <span>{{ number_format($tasksDetails->task_budget_it_investment- $sum_task_cost_it_investment, 2) }} บาท</span>
                                                                 </div>
                                                             @endif
 
@@ -123,7 +123,7 @@
                                                                 <div class="col-md-4">
                                                                     <label for="task_budget_gov_utility0"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                                    <span>{{ number_format($tasksDetails->task_budget_gov_utility, 2) }} บาท</span>
+                                                                    <span>{{ number_format($tasksDetails->task_budget_gov_utility , 2) }} บาท</span>
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -482,7 +482,7 @@
 
                                                     <div class=" col-md-12 mt-3">
                                                         <label for="file"
-                                                            class="form-label">{{ __('File') }}</label>
+                                                            class="form-label">{{ __('เอกสารแนบ') }}</label>
                                                     <div class="input-group control-group increment " >
                                                         <input type="file" name="file[]" class="form-control" multiple >
                                                         <div class="input-group-btn">
@@ -594,7 +594,26 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            <script>
+            <script type="text/javascript">
+
+
+                $(document).ready(function() {
+
+                  $(".btn-success").click(function(){
+                      var html = $(".clone").html();
+                      $(".increment").after(html);
+                  });
+
+                  $("body").on("click",".btn-danger",function(){
+                      $(this).parents(".control-group").remove();
+                  });
+
+                });
+
+            </script>
+
+
+           <script>
                 $(document).ready(function() {
                     // Initialize Select2 on the select element
                     $('.js-example-basic-single').select2();
@@ -682,11 +701,11 @@
                                     var fieldId = $(this).attr('id');
 
                                     if (fieldId === "task_budget_it_investment") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_investment }});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_investment- $sum_task_cost_it_investment }});
                                                 } else if (fieldId === "task_budget_it_operating") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating }});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $sum_task_cost_it_operating}});
                                                 } else if (fieldId === "task_budget_gov_utility") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility }});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $sum_task_cost_gov_utility}});
                                                 }
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));

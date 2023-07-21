@@ -36,6 +36,7 @@
                                         <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
                            {{--  @include('partials.budgettotaloverview') --}}
+
                            @include('partials.view')
 
                      {{--       @include('partials.gantt_ict_here') --}}
@@ -277,10 +278,7 @@
                                             currency: 'THB'
                                         }).format(task.budget_mm) + '</span>';
                                     } else if (task.budget_mm < task.balance) {
-                                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(task.budget_total_mm) + '</span>';
+                                        ''
                                     }
 
 
@@ -491,12 +489,21 @@
 
 
 
+
                             else if (task.cost > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget-task.cost) + '</span>';
+                            }
+
+                            else if (task.budget_total_task_mm > 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget-task.budget_total_task_mm) + '</span>';
                             }
                             else if (task.cost_no_pa_2 > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
