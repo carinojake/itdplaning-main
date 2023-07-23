@@ -33,13 +33,13 @@
             <div class="row">
                 @if($task->task_budget_it_operating  > 0)
                 <div class="col-6">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-        {{ number_format(floatval($task->task_budget_it_operating-$task_sub_sums['operating']['task_cost']), 2) }}
+        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if($task->task_budget_it_investment > 0)
                 <div class="col-6">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
-                {{ number_format(floatval($task->task_budget_it_investment-$task_sub_sums['investment']['task_cost']), 2) }}
+                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }}
 
             {{--     {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
                 @endif
@@ -47,7 +47,7 @@
             <div class="row">
                 @if($task->task_budget_gov_utility > 0)
                 <div class="col-6">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
-                {{ number_format(floatval($task->task_budget_gov_utility-$task_sub_sums['utility']['task_cost']), 2) }}
+                {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget'] ), 2) }}
              {{--    {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
             </div>
             @endif

@@ -107,7 +107,8 @@
                                                                 <div class="col-md-4">
                                                                     <label for="task_budget_it_operating0"
                                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                                    <span>{{ number_format($tasksDetails->task_budget_it_operating, 2) }} บาท</span>
+                                                                    <span>        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }}บาท
+                                                                    </span>
                                                                 </div>
                                                             @endif
 
@@ -115,7 +116,8 @@
                                                                 <div class="col-4">
                                                                     <label for="task_budget_it_investment0"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                                    <span>{{ number_format($tasksDetails->task_budget_it_investment- $sum_task_cost_it_investment, 2) }} บาท</span>
+                                                                    <span>                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }}บาท
+                                                                    </span>
                                                                 </div>
                                                             @endif
 
@@ -123,7 +125,7 @@
                                                                 <div class="col-md-4">
                                                                     <label for="task_budget_gov_utility0"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                                    <span>{{ number_format($tasksDetails->task_budget_gov_utility , 2) }} บาท</span>
+                                                                    <span>{{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget']), 2) }} บาท</span>
                                                                 </div>
                                                             @endif
                                                         </div>

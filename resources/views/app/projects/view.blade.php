@@ -265,10 +265,7 @@
                                      if (task.task_type === null) {
                                         return '';
                                     }else if (task.budget_total_mm ) {
-                                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(task.budget_total_mm) + '</span>';
+
                                     }
 
 
