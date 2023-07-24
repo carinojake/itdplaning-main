@@ -180,7 +180,7 @@
                             </div> --}}
 
                                         <!--  1  -->
-                                        <div class="row fw-semibold mt-3">
+                                      {{--   <div class="row fw-semibold mt-3">
 
                                             <div class="row">
                                                 @if ($sum_task_budget_it_operating > 0)
@@ -200,8 +200,8 @@
                                                     {{ number_format($sum_task_budget_gov_utility) }} บาท
                                                 @endif
                                             </div>
-                                        </div>
-
+                                        </div> --}}
+                                        @if($projectDetails != null)
                                         <div class="row mt-3">
                                             <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                             <div class="row">
@@ -251,6 +251,7 @@
                                                 @endif
                                             </div>
                                         </div>
+                                        @endif
 
                                         <div class="callout callout-info">
                                             <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -493,6 +494,10 @@
                                                                             </div>
 
 
+
+
+
+
                                                                             <div class="col-md-4">
                                                                                 <label for="contract_po_start_date"
                                                                                     class="form-label">{{ __('กำหนดวันที่ส่งของ') }}</label>
@@ -535,7 +540,7 @@
                                                                                     id="contract_er_budget"
                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                     class="form-control numeral-mask"
-                                                                                    name="contract_po_budget"
+                                                                                    name="contract_er_budget"
                                                                                     min="0">
                                                                             </div>
 
@@ -608,7 +613,7 @@
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_ba"
-                                                                                    name="contract_cn">
+                                                                                    name="contract_ba">
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
@@ -674,7 +679,7 @@
                                                                             <span class="text-danger"></span>
 
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_pp" name="contract_cn">
+                                                                                id="contract_pp" name="contract_pp">
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' ') }}
                                                                             </div>
@@ -1218,13 +1223,73 @@
 
 
 
+                    <script>
+                        $(document).ready(function() {
+                            var project_budget_it_operating = {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
+
+var project_budget_it_investment = {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
+
+var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
+                            $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
+                               // var max = 0;
+                                var fieldId = $(this).attr('id');
+                                var budgetType = $("#project_select").val();
+
+
+
+                                if (budgetType === "task_budget_it_operating") {
+                                    max = parseFloat(project_budget_it_operating);
+                    } else if (budgetType === "task_budget_it_investment") {
+                        max = parseFloat(project_budget_it_investment);
+                    } else if (budgetType === "task_budget_gov_utility") {
+                        max = parseFloat(project_budget_gov_utility);
+                    }
+
+
+                                var current = parseFloat($(this).val().replace(/,/g, ""));
+                                if (current > max) {
+                                    Swal.fire({
+                                        title: "เกิดข้อผิดพลาด",
+                                        text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                        icon: "error",
+                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonText: "ตกลง"
+                                    });
+                                    $(this).val(max.toFixed(2));
+                                }
+                            });
+
+                        /*  $("#contract_pa_budget").on("input", function() {
+                                var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                                if (current > contract_mm_budget) {
+                                    Swal.fire({
+                                        title: "เกิดข้อผิดพลาด",
+                                        text: "จำนวนเงิน PA ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                        icon: "error",
+                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonText: "ตกลง"
+                                    });
+                                    $(this).val(contract_mm_budget.toFixed(2));
+                                }
+                            }); */
+                        });
+
+                        </script>
+
+
+{{--
 <script>
    $(document).ready(function() {
-    var task_budget_it_operating = {{ $sum_task_budget_it_operating }};
+ /*    var task_budget_it_operating = {{ $sum_task_budget_it_operating }};
     var task_budget_it_investment = {{ $sum_task_budget_it_investment }};
-    var task_budget_gov_utility = {{ $sum_task_budget_gov_utility }};
+    var task_budget_gov_utility = {{ $sum_task_budget_gov_utility }}; */
+
+
+    var project_budget_it_operating = {{ $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }};
+    var project_budget_it_investment = {{  $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment }};
+    var project_budget_gov_utility = {{  $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility }};
 
 
     $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
@@ -1232,12 +1297,12 @@
         var fieldId = $(this).attr('id');
 
         if (fieldId === "contract_mm_budget" || fieldId === "contract_pr_budget" ) {
-            if (task_budget_it_operating > 0) {
-                max = parseFloat(task_budget_it_operating);
-            } else if (task_budget_it_investment > 0) {
-                max = parseFloat(task_budget_it_investment);
-            } else if (task_budget_gov_utility > 0) {
-                max = parseFloat(task_budget_gov_utility);
+            if (project_budget_it_operating > 0) {
+                max = parseFloat(project_budget_it_operating);
+            } else if (project_budget_it_investment > 0) {
+                max = parseFloat(project_budget_it_investment);
+            } else if (project_budget_gov_utility > 0) {
+                max = parseFloat(project_budget_gov_utility);
             }
         }
 
@@ -1269,7 +1334,7 @@
     }); */
 });
 
-</script>
+</script> --}}
 <script>
     $(document).ready(function() {
         $("#contract_pa_budget").on("input", function() {
