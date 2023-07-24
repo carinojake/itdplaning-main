@@ -8,23 +8,18 @@
                         <x-card title="{{ $contract->contract_name }}">
 
                             <x-slot:toolbar>
-                                <div class="row">
-                                    <div class="col-3">{{ __('เตือน เหลือเวลา') }}</div>
-                                    <div class="col-9">
-                                        <?php
-                                        echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
-                                        ?> เดือน
 
-
-                                    </div>
-                                </div>
                                 <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning">Edit</a>
                                 <a href="{{ route('contract.task.create', $contract->hashid) }}"
                                     class="text-white btn btn-success">เพิ่มค่าใช้จ่าย</a>
 
                                 <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
-                           {{--  <div class="row  callout callout-primary mb-3">
+                            <div class="row  callout callout-primary mb-3">
+
+
+
+
                                 <div class="col-sm-6 col-md-3 col-lg-4">
                                     <div class="card">
                                         <div class="card-body">
@@ -32,7 +27,23 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
+                                                เตือน เหลือเวลา  <?php
+                                                echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
+                                                ?> เดือน                                            </div><small
+                                                class="text-medium-emphasis text-uppercase fw-semibold">เตือน เหลือเวลา</small>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "row">
+                                <div class=" col-sm-6 col-md-3 col-lg-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-medium-emphasis text-end mb-4">
+
+                                            </div>
+                                            <div class="fs-4 fw-semibold">
+                                                {{ number_format($contractgannt['contract_pa_budget'] ) }}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
                                             <div class="progress progress-thin mt-3 mb-0">
@@ -51,7 +62,8 @@
                                             </div>
                                             <div class="fs-4 fw-semibold">
 
-                                                {{ number_format($contract->contract_pa_budget + $contract->contract_oe_budget ) }}
+                                                {{ number_format($contractgannt['total_cost']-$contractgannt['total_pay']) }}
+
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย</small>
                                             <div class="progress progress-thin mt-3 mb-0">
@@ -68,6 +80,7 @@
                                             <div class="text-medium-emphasis text-end mb-4">
                                             </div>
                                             <div class="fs-4 fw-semibold">
+                                                {{ number_format($contractgannt['total_pay']) }}
 
 
                                             </div><small
@@ -79,7 +92,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
+                            </div>
 
 
                             <table class="table callout callout-danger">
@@ -123,27 +137,27 @@
                                 <div class="row  ">
                                     <div class="col-sm ">
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('สถานะสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.สถานะสัญญา') }}</h5></div>
                                             <div class="col-9">
-                                                <?php
+                                                <h5> <?php
                                                 echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
-                                                ?>
+                                                ?></h5>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('เลขที่ สัญญา') }}</div>
-                                            <div class="col-9">{{ $contract->contract_number }} </div>
+                                            <div  class="col-3 fw-semibold"> <h5>{{ __('1.เลขที่ สัญญา') }}</h5></div>
+                                            <div class="col-9"><h5>{{ $contract->contract_number }} </h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('เลขที่ คู่ค้า') }}</div>
-                                            <div class="col-9">{{ $contract->contract_juristic_id }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.เลขที่ คู่ค้า') }}</h5></div>
+                                            <div class="col-9"><h5>{{ $contract->contract_juristic_id }}</h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('เลขที่สั่งซื้อ') }}</div>
-                                            <div class="col-9">{{ $contract->contract_order_no }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.เลขที่สั่งซื้อ') }}</h5></div>
+                                            <div class="col-9"><h5>{{ $contract->contract_order_no }}</h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('ประเภท') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.ประเภท') }}</h5></div>
                                           {{--   <div class="col-9">{{ \Helper::contractType($contract->contract_type) }} --}}
                                             </div>
                                         </div>
@@ -154,45 +168,45 @@
                                             </div>
                                         </div> --}}
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('วันที่เริ่มสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.วันที่เริ่มสัญญา') }}</h5></div>
                                             <div class="col-9">
-                                                {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
+                                                <h5>     {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}</h5>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('วันที่สิ้นสุดสัญญา') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.วันที่สิ้นสุดสัญญา') }}</h5></div>
                                             <div class="col-9">
-                                                {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                                <h5>   {{ Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</h5>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('จำนวนเดือน') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.จำนวนเดือน') }}</h5></div>
                                             <div class="col-3">
-                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
-                                                เดือน</div>
-                                            <div class="col-3 fw-semibold">{{ __('จำนวนวัน') }}</div>
+                                                <h5> {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                เดือน</h5></div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.จำนวนวัน') }}</div>
                                             <div class="col-3">
-                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
-                                                วัน</div>
+                                                <h5>    {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                วัน</h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('ดำเนินการมาแล้ว') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.ดำเนินการมาแล้ว') }}</h5></div>
                                             <div class="col-3">
-                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }}
-                                                เดือน</div>
-                                            <div class="col-3 fw-semibold">{{ __('ดำเนินการมาแล้ว') }}</div>
+                                                <h5> {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }}
+                                                เดือน</h5></div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.ดำเนินการมาแล้ว') }}</h5></div>
                                             <div class="col-3">
-                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse()) }}
-                                                วัน</div>
+                                                <h5>   {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse()) }}
+                                                วัน</h5></div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-3 fw-semibold">{{ __('เตือน เหลือเวลา') }}</div>
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.เตือน เหลือเวลา') }}</h5></div>
                                             <div class="col-9">
-                                                <?php
+                                                <h5><?php
                                                 echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
-                                                ?> เดือน
+                                                ?> เดือน</h5>
 
 
                                             </div>
@@ -202,53 +216,56 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('หมายเหตุ') }}</div>
-                                            <div class="col-6">{{ $contract->contract_projectplan }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('1.หมายเหตุ') }}</h5></div>
+                                            <div class="col-6"><h5>{{ $contract->contract_projectplan }}</h5></div>
                                         </div>
 
 
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('งบประมาณ') }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.งบประมาณ') }}</h5></div>
 {{--                                              <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
  --}}                                        </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('เลขที่ MM') }}</div>
-                                            <div class="col-6">{{ $contract->contract_mm }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.1เลขที่ MM') }}</h5></div>
+                                            <div class="col-6"><h5>{{ $contract->contract_mm }}</h5></div>
+
                                         </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน MM') }}</div>
-                                            <div class="col-6">{{ $contract->contract_mm_bodget }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.1จำนวนเงิน MM') }}</h5></div>
+                                            <div class="col-6"><h5>{{ $contract->contract_mm_bodget }}</h5></div>
+
+
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('เลขที่ PR') }}</div>
-                                            <div class="col-6">{{ $contract->contract_pr }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.2เลขที่ PR') }}</h5></div>
+                                            <div class="col-6"><h5>{{ $contract->contract_pr }}</h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PR') }}</div>
-                                            <div class="col-6">{{ number_format($contract->contract_pr_budget) }}
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.2จำนวนเงิน PR') }}</h5></div>
+                                            <div class="col-6"><h5>{{ number_format($contract->contract_pr_budget) }}</h5>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('เลขที่ PA') }}</div>
-                                            <div class="col-6">{{ $contract->contract_pa }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.3เลขที่ PA') }}</h5></div>
+                                            <div class="col-6"><h5>{{ $contract->contract_pa }}</h5></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PA') }}</div>
-                                            <div class="col-6">{{ number_format($contract->contract_pa_budget) }}
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.3จำนวนเงิน PA') }}</h5></div>
+                                            <div class="col-6"><h5>{{ number_format($contract->contract_pa_budget) }}</h5>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.3จำนวนคงเหลือหลังเงิน PA') }}</h5></div>
                                             <div class="col-6">
-                                                {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
-                                            </div>
+                                                <h5>   {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
+                                                </h5>  </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-6 fw-semibold">{{ __('จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</div>
+                                            <div class="col-6 fw-semibold"><h5>{{ __('2.3จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</h5></div>
                                             <div class="col-6">
-                                                {{ number_format($contract->contract_peryear_pa_budget) }}</div>
+                                                <h5>    {{ number_format($contract->contract_peryear_pa_budget) }}</h5></div>
                                         </div>
 
                                {{--          <div class="row">
@@ -266,6 +283,129 @@
                                     </div>
                                 </div>
             </div>
+
+
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
+                            <p class="card-text">
+                                {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-danger">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-success">อยู่ในระหว่างดำเนินการ</span>' !!}
+                            </p>
+
+                            <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
+                            <p class="card-text">{{ $contract->contract_number }}</p>
+
+                            <h5 class="card-title">{{ __('เลขที่ คู่ค้า') }}</h5>
+                            <p class="card-text">{{ $contract->contract_juristic_id }}</p>
+
+                            <h5 class="card-title">{{ __('เลขที่สั่งซื้อ') }}</h5>
+                            <p class="card-text">{{ $contract->contract_order_no }}</p>
+
+                            <h5 class="card-title">{{ __('ประเภท') }}</h5>
+                            <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}</p>
+
+                            <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} - {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                            <p class="card-text">{{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }} - {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</p>
+
+                            <h5 class="card-title">{{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                            <p class="card-text">{{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</p>
+
+                            <h5 class="card-title">{{ __('จำนวนเดือน') }}</h5>
+                            <p class="card-text">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }} เดือน</p>
+
+                            <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
+                            <p class="card-text">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }} วัน</p>
+
+                            <!-- Continue with the rest of your details -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
+                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
+
+                            <h5 class="card-title">{{ __('2.งบประมาณ') }} </h5>
+                            <p class="card-text">{{ $contract->contract_budget_type }}</p>
+
+                            <h5 class="card-title">{{ __('2.1 เลขที่ MM') }} </h5>
+                            <p class="card-text">{{ $contract->contract_mm }}</p>
+
+                            <h5 class="card-title">{{ __('2.1 จำนวนเงิน MM') }}</h5>
+                            <p class="card-text">{{ $contract->contract_mm_bodget }}</p>
+
+                            <h5 class="card-title">{{ __('2.2 เลขที่ PR') }}</h5>
+                            <p class="card-text">{{ $contract->contract_pr }}</p>
+
+                            <h5 class="card-title">{{ __('2.2 จำนวนเงิน PR') }}</h5>
+                            <p class="card-text">{{ number_format($contract->contract_pr_budget) }}</p>
+
+                            <h5 class="card-title">{{ __('2.3 เลขที่ PA') }}</h5>
+                            <p class="card-text">{{ $contract->contract_pa }}</p>
+
+                            <h5 class="card-title">{{ __('2.3 จำนวนเงิน PA') }}</h5>
+                            <p class="card-text">{{ number_format($contract->contract_pa_budget) }}</p>
+
+                            <h5 class="card-title">{{ __('2.3 จำนวนคงเหลือหลังเงิน PA') }}</h5>
+                            <p class="card-text">{{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}</p>
+
+                            <h5 class="card-title">{{ __('2.3 จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</h5>
+                            <p class="card-text">{{ number_format($contract->contract_peryear_pa_budget) }}</p>
+
+                            <!-- Continue with the rest of your details -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card mb-3">
+                <table class="table h5">
+                    <tr>
+                        <th>2.1 เลขที่ MM</th>
+                        <th>2.2 เลขที่ PR</th>
+                        <th>2.3 เลขที่ PA</th>
+                        <th>2.4 เลขที่ ER/PO</th>
+                        <th>2.5 เลขที่ CN</th>
+                    </tr>
+                    <tr>
+                        <td>{{ $contract->contract_mm }}</td>
+                        <td>{{ $contract->contract_pr }}</td>
+                        <td>{{ $contract->contract_pa }}</td>
+                        @if($contract->contract_er_budget > 1)
+                        <td>{{ ($contract->contract_er) }}</td>
+@elseif($contract->contract_po_budget > 1)
+                      <td>{{ ($contract->contract_po) }}</td>
+@endif
+<td>{{ ($contract->contract_cn) }}</td>
+                    </tr>
+                    <tr>
+                        <th>2.1 จำนวนเงิน MM</th>
+                        <th>2.2 จำนวนเงิน PR</th>
+                        <th>2.3 จำนวนเงิน PA</th>
+                        <th>2.4 จำนวนเงิน ER/PO</th>
+                        <th>2.5 จำนวนเงิน CN</th>
+                    </tr>
+                    <tr>
+                        <td>{{ $contract->contract_mm_bodget }}</td>
+                        <td>{{ number_format($contract->contract_pr_budget) }}</td>
+                        <td>{{ number_format($contract->contract_pa_budget) }}</td>
+
+                        @if($contract->contract_er_budget > 1)
+                        <td>{{ number_format($contract->contract_er_budget) }}</td>
+                        @elseif($contract->contract_po_budget > 1)
+                        <td>{{ number_format($contract->contract_po_budget) }}</td>
+                        @endif
+                        <td>{{  number_format($contract->contract_cn_budget)}}</td>
+
+                    </tr>
+                </table>
+            </div>
+
+
+
+
 
 
             <table class="table table-bordered table-striped  mt-3">

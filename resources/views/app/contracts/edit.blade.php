@@ -69,15 +69,15 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" value="{{ $contract->contract_juristic_id }}" maxlength="13" required>
+                  <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
+                  <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" value="{{ $contract->contract_juristic_id }}" maxlength="13" >
                   <div class="invalid-feedback">
                     {{ __('คู่ค้าซ้ำ') }}
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" value="{{ $contract->contract_order_no }}" maxlength="50" required>
+                  <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ') }}</label>
+                  <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" value="{{ $contract->contract_order_no }}" maxlength="50" >
                   <div class="invalid-feedback">
                     {{ __('เลขที่ใบสั่งซื้อ') }}
                   </div>
@@ -120,7 +120,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <label for="contract_acquisition" class="form-label">{{ __('ประเภทการได้มาของสัญญา') }}</label> <span class="text-danger">*</span>
+                  <label for="contract_acquisition" class="form-label">{{ __('ประเภทการได้มาของสัญญา') }}</label>
                   {{ Form::select('contract_acquisition', \Helper::contractAcquisition(), $contract->contract_acquisition, ['class' => 'form-control', 'placeholder' => 'เลือกประเภทการได้มาของสัญญา...']) }}
                   <div class="invalid-feedback">
                     {{ __('สัญญา') }}
@@ -160,11 +160,6 @@
 
 
 
-                  <div class="col-md-6">
-                    <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> <span class="text-danger">*</span>
-                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
-                  </div>
 
 
 
@@ -191,7 +186,13 @@
                     <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}">
                   </div>
 
-                  <div class="col-md-12">
+
+                  <div class="col-md-6">
+                    <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label>
+                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                    <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
+                  </div>
+                  <div class="col-md-12 d-none">
                     <label for="contract_refund_pa_status" class="form-label">{{ __('contract_refund_pa_status') }}</label> <span class="text-danger"></span>
                     <div class="form-check form-check-inline ms-5">
                       <input class="form-check-input" type="radio" name="contract_refund_pa_status" id="contract_refund_pa_status" value="1" checked>

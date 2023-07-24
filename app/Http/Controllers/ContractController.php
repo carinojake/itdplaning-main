@@ -156,7 +156,7 @@ class ContractController extends Controller
 
             ->toArray()
         );
-         ($contractgannt);
+       // dd ($contractgannt);
 
         //   คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         //   (float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility'];
@@ -367,7 +367,7 @@ class ContractController extends Controller
 
 
 
-        return view('app.contracts.show', compact('files_contract','contract',
+        return view('app.contracts.show', compact('contractgannt','files_contract','contract',
          'gantt', 'duration_p', 'latestContract', 'taskcons'));
     }
 
@@ -807,6 +807,10 @@ class ContractController extends Controller
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
 
+        $contract->contract_po        = $request->input('contract_po');
+        $contract->contract_er        = $request->input('contract_er');
+        $contract->contract_cn        = $request->input('contract_cn');
+
         $contract->contract_pr_budget = $contract_pr_budget;
         $contract->contract_pa_budget = $contract_pa_budget;
 
@@ -1100,16 +1104,17 @@ if($request->hasFile('file')) {
         //convert date
         $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
         $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
-        $sign_date  = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_sign_date')), 'Y-m-d');
 
         $sign_date_input = $request->input('date-picker-contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
 
         if ($sign_date_object !== false) {
-            $sign_date = $sign_date_object->format('Y-m-d');
+            $sign_date = date_format($sign_date_object, 'Y-m-d');
         } else {
-            $sign_date = null; // ค่าเริ่มต้นเมื่อไม่สามารถแปลงข้อมูลวันที่
+            $sign_date = null; // Default value when the date could not be converted
         }
+
+
 
 
 

@@ -93,34 +93,33 @@
 
 
 
-
                                         <div class="col-md-9">
                                             <div class="form-group">
-                                                <label for="task_contract"
-                                                    class="form-label">{{ __('สัญญา') }}</label> <span
-                                                    class="text-danger">*</span>
-                                                <select name="task_contract" id="task_contract" class="form-control">
-                                                    <option value="">ไม่มี</option>
-                                                    @foreach ($contracts as $contract)
-                                                        <option value="{{ $contract->contract_id }}"
-                                                            {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                            [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-
-                                                <div class="invalid-feedback">
-                                                    {{ __('สัญญา') }}
-                                                </div>
+                                                <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
+                                                @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
+                                                    {{ $contract_s->contract_number }}
+                                                @else
+                                                    <select name="task_contract" id="task_contract" class="form-control">
+                                                        <option value="">ไม่มี</option>
+                                                        @foreach ($contracts as $contract)
+                                                            <option value="{{ $contract->contract_id }}"
+                                                                {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                                [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        {{ __('สัญญา') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-md-3 mt-4">
-                                            {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
                                             <a href="{{ route('contract.create', ['origin' => $project->hashid, 'project' => $project->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>
-                                    </div>
+
                                {{--      <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label for="task_start_date"

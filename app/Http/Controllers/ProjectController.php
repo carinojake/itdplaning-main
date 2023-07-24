@@ -62,7 +62,9 @@ class ProjectController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
-                    $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
+                   // $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
+                    $html .= '<a href="' . route('project.view', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
+
                     //if (Auth::user()->hasRole('admin')) {
                     $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " target="_blank"><i class="cil-pencil "></i></a>';
                     $html .= '<button data-rowid="' . $row->hashid . '" class="text-white btn btn-danger btn-delete"><i class="cil-trash "></i></button>';
@@ -4197,6 +4199,10 @@ class ProjectController extends Controller
             ->get();
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
+
+
+
+
         ($request = Project::find($id_project));
 
          // Sum the task_budget_it_operating for all tasks
@@ -4244,6 +4250,22 @@ class ProjectController extends Controller
         ($contract = $contracts->toJson()); // Convert the collection to JSON
         //  $contract = $contracts->first();
 
+
+        $contract_s = Contract::join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+        ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('contracts.*', 'projects.*', 'tasks.*')
+
+
+
+
+        ->where('projects.project_id', $project->project_id)
+        ->where('tasks.task_id', $task->task_id)
+        ->first();
+
+       // dd($contract_s);
+
+
         $task_budget_it_operating = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_it_operating');
         $task_budget_it_investment = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_it_investment');
         $task_budget_gov_utility = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
@@ -4251,7 +4273,10 @@ class ProjectController extends Controller
 
          // dd($tasks);
 
-        return view('app.projects.tasks.editsub', compact('contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
+        return view('app.projects.tasks.editsub', compact(
+
+            'contract_s',
+            'contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
     /**
      * Remove the specified resource from storage.
@@ -4314,6 +4339,7 @@ class ProjectController extends Controller
         //dd($tasks);
 
         return view('app.projects.tasks.editsubno', compact(
+
 
         'sum_task_refund_budget_it_operating', 'sum_task_refund_budget_it_investment', 'sum_task_refund_budget_gov_utility','sum_task_budget_gov_utility', 'sum_task_budget_it_investment', 'sum_task_budget_it_operating', 'projectDetails', 'contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
@@ -4663,6 +4689,6 @@ class ProjectController extends Controller
         if ($task) {
             $task->delete();
         }
-        return redirect()->route('project.show', $project);
+        return redirect()->route('project.view', $project);
     }
 }

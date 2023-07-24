@@ -35,7 +35,7 @@
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
                     @endif
-                    <a href="{{ route('project.show', ['project' => $project->hashid]) }}"
+                    <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
                         class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
