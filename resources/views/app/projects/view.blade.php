@@ -76,10 +76,11 @@
                            </div>
                                 <div class="tab-pane fade" id="contract">
                                     <!-- Content for Contract tab -->
-                                    @include('partials.contract', ['contracts' => $project->contracts])
+                                    @include('partials.contract')
                                 </div>
                             </div>
-                            </div>
+
+                        </div>
 
                     </div>
                 </div>
@@ -120,7 +121,9 @@
 
 
 
-        <script>
+
+
+       <script>
             // เรียกใช้ Popover
             var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
             var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
