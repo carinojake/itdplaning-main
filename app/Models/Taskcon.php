@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int    $taskcon_id
@@ -22,6 +23,7 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class Taskcon extends Model
 {
+    use SoftDeletes;
     protected $table = 'taskcons';
 
      /**

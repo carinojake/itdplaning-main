@@ -107,11 +107,14 @@
                         <td>
                             <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" target="_blank"><i class="cil-folder-open">ข้อมูล</i></a>
                             <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
-                            <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
+                            <form class="delete-form"  action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                 @method('DELETE')
                                 @csrf
-                                <button class="btn btn-danger btn-sm"><i class="cil-trash"></i></button>
+                                <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
+
                             </form>
+
+
                         </td>
                     </tr>
                 @endforeach
@@ -268,7 +271,7 @@
 
 
                             <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}" class="btn-sm btn btn-warning text-white"><i class="cil-cog">เพิ่มค่าใช้จ่าย</i></a>
-                            <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}" method="POST" style="display:inline">
+                            <form class="delete-form"  action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}" method="POST" style="display:inline">
                                 @method('DELETE')
                                 @csrf
                                 <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
@@ -288,3 +291,6 @@
     @endif
 @endif
 @endif
+
+
+

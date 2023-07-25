@@ -79,31 +79,35 @@
         </x-card>
     </x-slot:content>
     <x-slot:css>
-        <link rel="stylesheet" href="sweetalert2.min.css">
+
 
     </x-slot:css>
     <x-slot:javascript>
-        <script src="sweetalert2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const popoverEl = document.querySelectorAll('[data-coreui-toggle="popover"]');
-                Array.from(popoverEl).forEach(function(el) {
-                    new coreui.Popover(el);
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                var rowid = $(this).data('rowid');
+                var form = $(this).closest('form');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ลบเลย!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
-        </script>
-
-
-        <script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Do you want to continue',
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
         </script>
 
 

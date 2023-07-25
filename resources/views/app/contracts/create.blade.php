@@ -299,7 +299,50 @@
                                                                             </div> --}}
                                                                     </div>
                                                                     <div class="row mt-3">
-                                                                    <div class="col-md-3">
+
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-md-3">
+
+                                                                                <label for="contract_mm"
+                                                                                    class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
+                                                                                <span class="text-danger"></span>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="contract_mm" name="contract_mm">
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __(' ') }}
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                        <div class="col-md-6 ">
+                                                                            <label for="contract_mm_name"
+                                                                                class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
+
+
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_mm_name"
+                                                                                name="contract_mm_name" required autofocus>
+                                                                            <div class="invalid-feedback">
+                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="col-md-3 ">
+                                                                                <label for="contract_mm_budget"
+                                                                                    class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text" placeholder="0.00"
+                                                                                    step="0.01" class="form-control"
+                                                                                    id="contract_mm_budget"
+                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                    class="form-control numeral-mask"
+                                                                                    name="contract_mm_budget"
+                                                                                    min="0">
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                    <div class="col-md-3 mt-3">
                                                                         <label for="contract_number"
                                                                             class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
                                                                         <span class="text-danger">*</span>
@@ -312,7 +355,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-9 ">
+                                                                    <div class="col-md-9 mt-3 ">
                                                                         <label for="contract_name" id="contract_name_label"
                                                                         class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
 
@@ -327,46 +370,7 @@
 
                                                                 </div>
 
-                                                                    <div class="row mt-3">
-                                                                        <div class="col-md-3">
 
-                                                                            <label for="contract_mm"
-                                                                                class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
-                                                                            <span class="text-danger"></span>
-                                                                            <input type="text" class="form-control"
-                                                                                id="contract_mm" name="contract_mm">
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __(' ') }}
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                    <div class="col-md-6 ">
-                                                                        <label for="contract_mm_name"
-                                                                            class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
-
-
-                                                                        <input type="text" class="form-control"
-                                                                            id="contract_mm_name"
-                                                                            name="contract_mm_name" required autofocus>
-                                                                        <div class="invalid-feedback">
-                                                                            {{ __('ชื่อสัญญา ซ้ำ') }}
-                                                                        </div>
-                                                                    </div>
-                                                                        <div class="col-md-3 ">
-                                                                            <label for="contract_mm_budget"
-                                                                                class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
-                                                                            <span class="text-danger"></span>
-
-                                                                            <input type="text" placeholder="0.00"
-                                                                                step="0.01" class="form-control"
-                                                                                id="contract_mm_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                                class="form-control numeral-mask"
-                                                                                name="contract_mm_budget"
-                                                                                min="0">
-                                                                        </div>
-                                                                    </div>
 
                                                                     <div id="pr_form" style="display:none;">
                                                                         <div class="row mt-3">

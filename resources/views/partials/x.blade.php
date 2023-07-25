@@ -127,11 +127,11 @@
                                     class="btn btn-warning btn-sm" target="_blank">
                                     <i class="cil-cog"></i></a>
                                 <form
-                                    action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                class="delete-form"   action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                     method="POST" style="display:inline">
                                     @method('DELETE')
                                     @csrf
-                                    <button class="btn btn-danger btn-sm"><i
+                                    <button class="btn btn-danger  text-white btn-delete"><i
                                             class="cil-trash"></i></button>
                                 </form>
                             </td>

@@ -204,11 +204,11 @@
                                     class="btn-sm btn btn-warning text-white"> <i class="cil-cog"> เบิกจ่าย</i>
                                 </a>
 
-                                <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
+                                <form class="delete-form"  action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
                                     method="POST" style="display:inline">
                                     @method('DELETE')
                                     @csrf
-                                    <button class="btn btn-danger text-white"><i class="cil-trash"></i></button>
+                                    <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
                                 </form>
                             </td>
                         @endforeach

@@ -782,93 +782,89 @@ class ProjectController extends Controller
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
         ($project = Project::select(
             'projects.*', 'a.total_task_refund_pa_budget',
-             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
-             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
-             'ad.total_taskcon_pay_con'
-
-
-
-             )
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
-                    sum(COALESCE(tasks.task_cost_gov_utility,0))
+            'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
+            'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
+            'ad.total_taskcon_pay_con'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
-                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
-                sum( COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget,
-                sum( COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
                 sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
-                +sum(COALESCE(tasks.task_cost_it_investment,0))
-                   as tta,
-                   CASE
-                   WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) = 0 THEN  sum(COALESCE(tasks.task_mm_budget,0))
-                   WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) > 1 THEN sum( COALESCE(tasks.task_pay,0))
-                   ELSE 0
-               END as ttb
-                from tasks  group by tasks.project_id) as a'),
-                'a.project_id',
-                '=',
-                'projects.project_id'
-            )
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
-                    sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as tta,
+                CASE
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) = 0 THEN  sum(COALESCE(tasks.task_mm_budget,0))
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) > 1 THEN sum( COALESCE(tasks.task_pay,0))
+                ELSE 0
+                END as ttb
+                from tasks
+                where tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as a'),
+            'a.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
                 sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
                 sum( COALESCE(tasks.task_pay,0)) as total_pay
-                from tasks  where tasks.task_type=1 group by tasks.project_id) as ab'),
-                'ab.project_id',
-                '=',
-                'projects.project_id'
-            )
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
+                from tasks
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ab'),
+            'ab.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
-                +sum(COALESCE(tasks.task_cost_it_investment,0))as cost_no_pa_2 ,
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_no_pa_2 ,
                 sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
                 sum( COALESCE(tasks.task_pay,0)) as total_pay
-                from tasks  where tasks.task_type=2 group by tasks.project_id) as ac'),
-                'ac.project_id',
-                '=',
-                'projects.project_id'
-            )
-
-            ->leftJoin(
-                DB::raw('(select tasks.project_id,
+                from tasks
+                where tasks.task_type = 2 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ac'),
+            'ac.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
                 sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
                 sum( COALESCE(tasks.task_pay,0)) as total_pay,
-                sum( COALESCE(taskcons.taskcon_pay,0)) as  total_taskcon_pay_con
+                sum( COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_con
                 from tasks
-                INNER JOIN
-                contract_has_tasks
-                ON
-                    tasks.task_id = contract_has_tasks.task_id
-                INNER JOIN
-                contracts
-                ON
-                    contract_has_tasks.contract_id = contracts.contract_id
-                INNER JOIN
-                taskcons
-                ON
-                    contracts.contract_id = taskcons.contract_id
-                where tasks.task_type=1 group by tasks.project_id) as ad'),
-                'ad.project_id',
-                '=',
-                'projects.project_id'
-            )
+                INNER JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ad'),
+            'ad.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->where('projects.project_id', $id)
+        ->first());
 
-
-
-            // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
-            //->groupBy('projects.project_id')
-            ->where('projects.project_id', $id)
-            ->first()
 
             // ->toArray()
-        );
+
        //  dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
@@ -942,12 +938,14 @@ class ProjectController extends Controller
         //  $tasks =  Project::find($id);
 
         $tasks = DB::table('tasks')
-            ->Join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+        ->join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+        ->select('tasks.*', 'taskcons.*')
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+        ->get();
 
-            ->select('tasks.*', 'taskcons.*')
-            ->get();
+//dd($tasks);
 
-        // dd ($tasks);
 
         $taskconsSubquery = DB::table('tasks')
             ->select(
@@ -1033,7 +1031,7 @@ class ProjectController extends Controller
         ON
             contracts.contract_id = taskcons.contract_id
 
-
+            where tasks.deleted_at IS NULL
         group by tasks.task_parent) as a'),
                 'a.task_parent',
                 '=',
@@ -1051,7 +1049,7 @@ class ProjectController extends Controller
         sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_1
 
         from tasks
-        where tasks.task_type=1 group by tasks.task_parent) as ab'),
+        where tasks.task_type=1   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ab'),
                 'ab.task_parent',
                 '=',
                 'tasks.task_id'
@@ -1067,7 +1065,7 @@ class ProjectController extends Controller
         sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_2,
         sum( COALESCE(tasks.task_pay,0)) as total_pay_2,
         sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_2
-        from tasks  where tasks.task_type=2 group by tasks.task_parent) as ac'),
+        from tasks  where tasks.task_type=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ac'),
                 'ac.task_parent',
                 '=',
                 'tasks.task_id'
@@ -1100,18 +1098,20 @@ class ProjectController extends Controller
                 taskcons
                 ON
                     contracts.contract_id = taskcons.contract_id
-                where tasks.task_type=1 group by tasks.task_id) as ad'),
+                where tasks.task_type=1  AND tasks.deleted_at IS NULL  group by tasks.task_id) as ad'),
                 'ad.task_id',
                 '=',
                 'tasks.task_id'
             )
 
 
+           ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
 
             ->where('project_id', ($id))
+
             ->get()
             ->toArray());
-       // dd($tasks);
+        //dd($tasks);
 
 
         ($tasks = json_decode(json_encode($tasks), true));
@@ -1448,6 +1448,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_budget_it_operating,0)) As operating_budget_sum')
             ->where('tasks.task_type', 1)
             ->where('project_id', ($id))
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->get());
         ($json = json_decode($operating_budget_sum));
         ($operating_budget_sum = $json[0]->operating_budget_sum);
@@ -1459,6 +1461,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_budget_it_operating,0)) As operating_budget_sum_no')
             ->where('tasks.task_type', 2)
             ->where('project_id', ($id))
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->get());
         ($json = json_decode($operating_budget_sum_no));
         ($operating_budget_sum_no = $json[0]->operating_budget_sum_no);
@@ -1471,6 +1475,8 @@ class ProjectController extends Controller
         ($operating_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As ospa')
             //->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('tasks.task_type', 1)
             ->where('project_id', ($id))
             ->get());
@@ -1482,6 +1488,8 @@ class ProjectController extends Controller
         ($operating_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As osa')
             //->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('tasks.task_type', 2)
             ->where('project_id', ($id))
             ->get());
@@ -1496,6 +1504,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As operating_mm_pa  ')
             ->where('tasks.task_budget_it_operating', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
             ->get());
@@ -1510,6 +1520,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As operating_mm_pa_no')
             ->where('tasks.task_budget_it_operating', '>', 1)
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
 
@@ -1528,6 +1540,8 @@ class ProjectController extends Controller
         ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As operating_refund_pa  ')
         ->where('tasks.task_budget_it_operating', '>', 1)
         ->where('tasks.task_type', 1)
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         //->where('task_cost_gov_utility', '>', 1)
         ->where('project_id', ($id))
         ->get());
@@ -1540,6 +1554,8 @@ class ProjectController extends Controller
         ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As operating_refund_pa_no  ')
         ->where('tasks.task_budget_it_operating', '>', 1)
         ->where('tasks.task_type', 2)
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         //->where('task_cost_gov_utility', '>', 1)
         ->where('project_id', ($id))
         ->get());
@@ -1564,6 +1580,8 @@ class ProjectController extends Controller
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
             ->where('tasks.task_cost_it_operating', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('projects.project_id', ($id))
             ->get());
 
@@ -1580,6 +1598,8 @@ class ProjectController extends Controller
             ->where('tasks.task_cost_it_operating', '>', 1)
             ->where('tasks.task_type', 2)
             ->where('project_id', ($id))
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->get());
         ($json = json_decode($operating_pay_sum_2));
         ($otpsa2 = $json[0]->iv2);
@@ -1595,6 +1615,8 @@ class ProjectController extends Controller
         ->selectRaw('SUM(COALESCE(task_budget_it_investment,0)) As investment_budget_sum')
         ->where('tasks.task_type', 1)
         ->where('project_id', ($id))
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         ->get());
     ($json = json_decode($investment_budget_sum));
     ($investment_budget_sum = $json[0]->investment_budget_sum);
@@ -1605,6 +1627,8 @@ class ProjectController extends Controller
     ($investment_budget_sum_no = DB::table('tasks')
         ->selectRaw('SUM(COALESCE(task_budget_it_investment,0)) As investment_budget_sum_no')
         ->where('tasks.task_type', 2)
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         ->where('project_id', ($id))
         ->get());
     ($json = json_decode($investment_budget_sum_no));
@@ -1625,6 +1649,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
             ->where('tasks.task_cost_it_investment', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($investment_pa_sum));
@@ -1636,6 +1662,8 @@ class ProjectController extends Controller
 
         ->where('tasks.task_cost_it_investment', '>', 1)
         ->where('tasks.task_type', 2)
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         ->where('project_id', ($id))
         ->get());
     ($json = json_decode($investment_sum));
@@ -1646,6 +1674,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As investment_mm_pa  ')
             ->where('tasks.task_budget_it_investment', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
             ->get());
@@ -1658,6 +1688,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As investment_mm_pa_no')
             ->where('tasks.task_budget_it_investment', '>', 1)
             ->where('tasks.task_type', 2)
+              ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
 
@@ -1677,6 +1709,8 @@ class ProjectController extends Controller
                     ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As investment_refund_pa  ')
                     ->where('tasks.task_budget_it_investment', '>', 1)
                     ->where('tasks.task_type', 1)
+                     ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
                     //->where('task_cost_gov_utility', '>', 1)
                     ->where('project_id', ($id))
                     ->get());
@@ -1689,6 +1723,8 @@ class ProjectController extends Controller
                     ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As investment_refund_pa_no  ')
                     ->where('tasks.task_budget_it_investment', '>', 1)
                     ->where('tasks.task_type', 2)
+                     ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
                     //->where('task_cost_gov_utility', '>', 1)
                     ->where('project_id', ($id))
                     ->get());
@@ -1720,6 +1756,8 @@ class ProjectController extends Controller
 
             ->where('tasks.task_cost_it_investment', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('projects.project_id', ($id))
             ->get());
         ($json = json_decode($investment_pay_sum_1));
@@ -1730,6 +1768,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
             ->where('tasks.task_cost_it_investment', '>', 1)
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($investment_pay_sum_2));
@@ -1740,6 +1780,8 @@ class ProjectController extends Controller
         ($investment_total_pay_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
             ->where('tasks.task_cost_it_investment', '>', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($investment_total_pay_sum));
@@ -1762,6 +1804,8 @@ class ProjectController extends Controller
         ($ut_budget_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_budget_gov_utility,0)) As ut_budget_sum')
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($ut_budget_sum));
@@ -1773,6 +1817,8 @@ class ProjectController extends Controller
         ($ut_budget_sum_no = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_budget_gov_utility,0)) As ut_budget_sum_no')
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($ut_budget_sum_no));
@@ -1785,6 +1831,8 @@ class ProjectController extends Controller
         ($ut_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($ut_pa_sum));
@@ -1794,6 +1842,8 @@ class ProjectController extends Controller
         ($ut_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utsc')
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get());
         ($json = json_decode($ut_sum));
@@ -1806,6 +1856,8 @@ class ProjectController extends Controller
         ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As utsc_mm_pa  ')
         ->where('tasks.task_budget_gov_utility', '>', 1)
         ->where('tasks.task_type', 1)
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
         //->where('task_cost_gov_utility', '>', 1)
         ->where('project_id', ($id))
         ->get());
@@ -1821,6 +1873,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_mm_budget,0)) As utsc_mm_pa_no  ')
             ->where('tasks.task_budget_gov_utility', '>', 1)
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
 
@@ -1835,6 +1889,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As ut_refund_pa  ')
             ->where('tasks.task_budget_gov_utility', '>', 1)
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
             ->get());
@@ -1847,6 +1903,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_refund_pa_budget,0)) As ut_refund_pa_no  ')
             ->where('tasks.task_budget_gov_utility', '>', 1)
             ->where('tasks.task_type', 2)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             //->where('task_cost_gov_utility', '>', 1)
             ->where('project_id', ($id))
             ->get());
@@ -1868,6 +1926,8 @@ class ProjectController extends Controller
             ->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay  ')
             ->where('tasks.task_type', 2)
             ->where('task_cost_gov_utility', '>', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
 
             ->get());
@@ -1891,6 +1951,8 @@ class ProjectController extends Controller
 
 
             ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('task_cost_gov_utility', '>', 1)
             ->where('projects.project_id', ($id))
             ->get());
@@ -1921,6 +1983,8 @@ class ProjectController extends Controller
                 'tasks.task_id'
             )
             ->whereNotNull('tasks.task_parent')
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', $id)
             ->get();
 
@@ -1932,6 +1996,8 @@ class ProjectController extends Controller
         ($parent_sum_cd = DB::table('tasks')
             ->select('task_parent', DB::raw('sum(task_pay) as cost_app'))
             ->whereNotNull('task_parent')
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->groupBy('task_parent')
             ->get()
         );
@@ -1940,6 +2006,8 @@ class ProjectController extends Controller
         $taskconoverview = DB::table('tasks')
             ->select('tasks.task_id as task_id', 'tasks.project_id as project_id', 'taskcons.taskcon_id as taskcons_id', 'tasks.task_name as task_name', 'taskcons.taskcon_name as taskcons_name')
             ->leftJoin('taskcons', 'tasks.task_id', '=', 'taskcons.task_id') // assuming 'id' is the primary key in 'tasks' and 'task_id' is the foreign key in 'taskcons'
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('tasks.project_id', $id)
             ->get();
         $taskconoverviewcon = DB::table('tasks')
@@ -1947,12 +2015,16 @@ class ProjectController extends Controller
             ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('tasks.project_id', $id)
             ->get();
         $contractoverviewcon = DB::table('tasks')
             ->select('tasks.task_id', 'projects.project_id', 'tasks.project_id', 'projects.project_name as project_name', 'taskcons.taskcon_id as taskcons_id', 'tasks.task_name as task_name', 'taskcons.taskcon_name as taskcons_name')
             ->join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->get();
 
 
@@ -3441,10 +3513,11 @@ class ProjectController extends Controller
 
 
         $task->project_id = $id;
-        $task->task_mm = $request->input('taskcon_mm');
+        $task->task_name = $request->input('taskcon_mm_name');
+        $task->task_mm = $request->input('task_mm');
         $task->task_mm_name = $request->input('taskcon_mm_name');
 
-        $task->task_name = $request->input('task_name');
+        //$task->task_name = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
 
         $task->task_parent = $request->input('task_parent') ?? null;
@@ -3468,7 +3541,7 @@ class ProjectController extends Controller
 
 
         $task->task_type = $request->input('task_type');
-        // dd($task);
+         //dd($task);
         if ($task->save()) {
             //insert contract
             if ($request->input('task_contract')) {
