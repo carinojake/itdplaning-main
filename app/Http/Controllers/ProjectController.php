@@ -1279,7 +1279,7 @@ class ProjectController extends Controller
                     ->toArray();
 
 
-                 //  dd($contractgannt);
+                 // dd($contractgannt);
 
 
         /*     $contractgannt = json_decode(json_encode($contractgannt), true);
@@ -1990,7 +1990,23 @@ class ProjectController extends Controller
          // dd($gantt);
         $gantt = json_encode($gantt);
 
+
+        ($projectcontract = $project->contract);
+
+        $contractIds = $projectcontract->pluck('contract_id');
+   //    dd ($contractIds);
+        $contract_tasks = Contract::whereIn('contract_id', $contractIds)->get();
+
+
+      ($contract_tasks);
+       // $contractId = $projectcontract->contract_id;
+
+        //dd($contractId);
+
+        ($project->main_task);
+
         return view('app.projects.view', compact(
+            'contract_tasks',
             'is_refund_mm_pr',
             'is_budget',
 
@@ -3499,7 +3515,7 @@ class ProjectController extends Controller
 
 
               //dd($task);
-            return redirect()->route('project.show', $project);
+            return redirect()->route('project.view', $project);
         }
     }
 
@@ -3907,7 +3923,7 @@ class ProjectController extends Controller
         }
 
         // If both the Project and Taskcon saved successfully, redirect to project.index
-        return redirect()->route('project.show', $project);
+        return redirect()->route('project.view', $project);
     }
 
 
@@ -4646,7 +4662,7 @@ class ProjectController extends Controller
 
 
                                 //  dd($task);
-                                return redirect()->route('project.show', $project->hashid);
+                                return redirect()->route('project.view', $project->hashid);
                             }
 
                             // Create a new Taskcon object
@@ -4657,7 +4673,7 @@ class ProjectController extends Controller
 
 
                             // If both the Project and Taskcon saved successfully, redirect to project.index
-                            return redirect()->route('project.show', $project);
+                            return redirect()->route('project.view', $project);
                         }
 
 

@@ -5,7 +5,7 @@
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ $contract->contract_name }}">
+                        <x-card title="เลขที่ สัญญา {{ $contract->contract_number }} {{ $contract->contract_name }}">
 
                             <x-slot:toolbar>
 
@@ -27,10 +27,25 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
+                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-danger">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-success">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            </div><small
+                                                class="text-medium-emphasis text-uppercase fw-semibold"></small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-3 col-lg-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-medium-emphasis text-end mb-4">
+
+                                            </div>
+                                            <div class="fs-4 fw-semibold">
                                                 เตือน เหลือเวลา  <?php
                                                 echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
                                                 ?> เดือน                                            </div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">เตือน เหลือเวลา</small>
+                                                class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
                                         </div>
                                     </div>
@@ -62,7 +77,7 @@
                                             </div>
                                             <div class="fs-4 fw-semibold">
 
-                                                {{ number_format($contractgannt['total_cost']-$contractgannt['total_pay']) }}
+                                                {{ number_format($contractgannt['contract_pa_budget']-$contractgannt['total_pay']) }}
 
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย</small>
@@ -142,6 +157,18 @@
                                                 <h5> <?php
                                                 echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
                                                 ?></h5>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-3 fw-semibold"><h5>{{ __('1.งบ') }}</h5></div>
+                                            <div class="col-9">
+                                                @if($contract->contract_budget_type != null)
+                                                <h5>{{ \Helper::project_select($contract->contract_budget_type) }}</h5>
+                                            @else
+                                                <h5>-</h5>
+                                            @endif
+
                                             </div>
                                         </div>
                                         <div class="row">
@@ -448,7 +475,7 @@
                                         <th>รอการเบิกจ่าย</th>
                                         <th>การเบิกจ่าย</th>
                                         <th>วันที่ ใช้จ่าย</th>
-                                        <th width="250"> work</th>
+                                        <th width="250"> คำสั่ง</th>
                                     </tr>
                                 </thead>
                                 <tbody>

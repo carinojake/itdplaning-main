@@ -1000,6 +1000,7 @@ if($request->hasFile('file')) {
                     Taskcon::create([
                         'contract_id' => $contract->contract_id,
                         'taskcon_name' => $taskName,
+                        'taskcon_start_date' =>$contract->contract_start_date,
                         'updated_at' => now(),
                         'created_at' => now()
                     ]);
@@ -1394,6 +1395,8 @@ if($request->hasFile('file')) {
             ->get();
         $tasks = task::get();
         $contractcons = Contract::get();
+
+      // dd ($taskcons, $contract);
 
         //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
         // $id_contract = Hashids::decode($contract)[0];

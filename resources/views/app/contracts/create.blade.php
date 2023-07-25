@@ -1239,11 +1239,11 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
 
 
 
-                                if (budgetType === "task_budget_it_operating") {
+                                if (budgetType === "1") {
                                     max = parseFloat(project_budget_it_operating);
-                    } else if (budgetType === "task_budget_it_investment") {
+                    } else if (budgetType === "2") {
                         max = parseFloat(project_budget_it_investment);
-                    } else if (budgetType === "task_budget_gov_utility") {
+                    } else if (budgetType === "3") {
                         max = parseFloat(project_budget_gov_utility);
                     }
 
@@ -1342,13 +1342,14 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
             var current = parseFloat($(this).val().replace(/,/g, ""));
             if (current > contract_mm_budget) {
                 Swal.fire({
-                    title: "เกิดข้อผิดพลาด",
+                    title: "จำนวนเงินเกินกรอบ",
                     text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
                 });
-                $(this).val(contract_mm_budget.toFixed(2));
+              /*   $(this).val(contract_mm_budget.toFixed(2)); */
+                $(this).val(0);
             }
         });
     });
@@ -1361,13 +1362,14 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
             var current = parseFloat($(this).val().replace(/,/g, ""));
             if (current > contract_pa_budget) {
                 Swal.fire({
-                    title: "เกิดข้อผิดพลาด",
+                    title: "จำนวนเงินเกินกรอบ",
                     text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                    icon: "error",
+                    /* icon: "error", */
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
                 });
-                $(this).val(contract_pa_budget.toFixed(2));
+             /*    $(this).val(contract_pa_budget.toFixed(2)); */
+                $(this).val(0);
             }
         });
     });
@@ -1380,13 +1382,14 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
             var current = parseFloat($(this).val().replace(/,/g, ""));
             if (current > contract_pa_budget) {
                 Swal.fire({
-                    title: "เกิดข้อผิดพลาด",
+                    title: "จำนวนเงินเกินกรอบ",
                     text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
                 });
-                $(this).val(contract_pa_budget.toFixed(2));
+               /*  $(this).val(contract_pa_budget.toFixed(2)); */
+                $(this).val(0);
             }
         });
     });

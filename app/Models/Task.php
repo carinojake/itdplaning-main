@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int    $task_id
  * @property int    $project_id
@@ -18,6 +18,7 @@ use Vinkla\Hashids\Facades\Hashids;
  */
 class Task extends Model
 {
+   /*  use SoftDeletes; */
     /**
      * The database table used by the model.
      *

@@ -47,35 +47,26 @@
 
 
                                                        <!-- Button trigger modal -->
-                                                       @if (($contract->task_type == 2))
-                                                       <button
 
 
+                     {{--                                   <button
                                                        type="button"
                                                        class="badge btn btn-primary text-white "
                                                 data-coreui-toggle="modal"
                                                 data-coreui-target="#exampleModal{{ $contract->hashid }}">
-
-
-
                                                  {{ \Helper::contractType($contract->contract_type) }}"_"{{  strtolower($contract->contract_number)  }}
 
-
-
-                                                 @else
-
                                                     สญ.ที่ {{  strtolower($contract->contract_number)  }}
-                                                 @endif
-                                            </button>
 
-                                            @if (($contract->task_type == 1 ))
+                                            </button> --}}
+
                                             <button
                                                        type="button"
                                                        class="badge btn btn-success text-white "
                                                 data-coreui-toggle="modal"
                                                 data-coreui-target="#exampleModal{{ $contract->hashid }}">
                                                     สญ.ที่ {{  strtolower($contract->contract_number)  }}
-                                                    @endif
+
                                             </button>
 
                                             <!-- Modal -->
@@ -354,11 +345,11 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                             <div>
                                                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" target="_blank"><i class="cil-folder-open"></i></a>
                                                                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
-                                                                <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
+                                                              {{--   <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                                                     @method('DELETE')
                                                                     @csrf
                                                                     <button class="btn btn-danger btn-sm"><i class="cil-trash"></i></button>
-                                                                </form>
+                                                                </form> --}}
                                                             </div>
 
 

@@ -185,7 +185,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row mt-3">
                                         <h4>งบประมาณ</h4>
                                         <div class="col-md-4 mt-3">
                                             <label for="task_mm_budget"
@@ -198,9 +198,9 @@
                                                 class="form-control numeral-mask"
                                                 name="task_mm_budget" min="0"  value="{{ $task->task_mm_budget }}">
                                         </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <strong>วงเงินที่ขออนุมัติ</strong>
+                                        <div class="row mt-3">
+                                            <div class="col-6 mt-3">
+                                                <strong><h4>วงเงินที่ขออนุมัติ</h4></strong>
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
@@ -260,8 +260,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-6 ">
-                                                <strong>ค่าใช้จ่าย</strong>
+                                            <div class="col-6 mt-3">
+                                                <strong><h4>ค่าใช้จ่าย</h4></strong>
                                                 <div class="col-md-12">
                                                     <label for="task_cost_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
@@ -373,7 +373,7 @@
 
 
 
-
+                                </div>
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button link="{{ route('project.show', $project->hashid) }}"
                                     class="btn-light text-black">

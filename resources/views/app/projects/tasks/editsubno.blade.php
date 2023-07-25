@@ -122,7 +122,7 @@
                                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating > 0)
                                                                 <div class="col-md-4">
                                                                     <label for="budget_it_operating"
-                                                                        class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                                                        class="form-label">{{ __('งบกลาง ICT ') }}</label>  {{-- $project_task_budget_it_operating --}}
                                                                     <input type="text"
                                                                         placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating+$sum_task_refund_budget_it_operating  , 2) }} บาท"
                                                                         step="0.01"

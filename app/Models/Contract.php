@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int    $contract_id
@@ -28,6 +29,7 @@ use Vinkla\Hashids\Facades\Hashids;
  */
 class Contract extends Model
 {
+   /*  use SoftDeletes; */
     /**
      * The database table used by the model.
      *
