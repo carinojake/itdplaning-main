@@ -55,6 +55,7 @@
             @endif
 
               {{--   @include('partials.taskx') กิจกรรม --}}
+              @include('partials.taskx')
             @include('partials.xx')  {{-- กิจกรรม --}}
 
 

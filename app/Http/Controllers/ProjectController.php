@@ -781,13 +781,17 @@ class ProjectController extends Controller
         //  $taskid = Hashids::decode($task)[0];
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
         ($project = Project::select(
-            'projects.*', 'a.total_task_refund_pa_budget',
+            'projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
             'ad.total_taskcon_pay_con'
         )
         ->leftJoin(
             DB::raw('(select tasks.project_id,
+            sum(COALESCE(tasks.task_budget_gov_utility,0))
+            +sum(COALESCE(tasks.task_budget_it_operating,0))
+            +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_budget ,
+
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
@@ -865,7 +869,7 @@ class ProjectController extends Controller
 
             // ->toArray()
 
-       // dd($project);
+     //  dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -882,6 +886,7 @@ class ProjectController extends Controller
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
         (float) $__budget     = $__budget_gov + $__budget_it;
         ((float) $__cost       = (float) $project['project_cost']);
+        ((float) $__total_task_budget       = (float) $project['total_task_budget']);
         ((float) $__mm       = (float) $project['total_task_mm_budget']);
         ((float) $__paycon       = (float) $project['total_taskcon_pay_con']);
         ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
@@ -913,6 +918,7 @@ class ProjectController extends Controller
            // 'cost_disbursement'     => $project['cost_disbursement'],
             'pay'                   => $project['pay'],
             'total_pay'              => $project['total_pay']+$__paycon,
+            'total_task_budget'      => $__total_task_budget,
             'total_taskcon_pay_con'  => $__paycon,
             'budget_mm'             => $project['task_mm_budget'],
             'refund_pa_budget'      => $__prmm,
@@ -924,16 +930,20 @@ class ProjectController extends Controller
             // 'duration'              => 360,
         ];
 
-       //  dd($gantt);
+        // dd($gantt);
+
 
 
         $budget['total'] = $__budget;
         ($budget['budget_total_mm'] = $__mm);
         $budget['budget_total_taskcon_pay_con'] = $__paycon;
-        $budget['budget_total_refund_pa_budget'] = $__prmm;
-        $budget['budget_total_mm_pr'] = $__budget - ($__mm - $__prmm);
+        $budget['total_task_budget']= $__total_task_budget;
 
-          //dd($budget);
+        $budget['budget_total_task_budget']= $__budget-$__total_task_budget;
+        $budget['budget_total_refund_pa_budget'] = $__prmm;
+        $budget['budget_total_mm_pr'] = ($__budget) - ($__total_task_budget-$__prmm);
+
+//dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -3952,7 +3962,12 @@ class ProjectController extends Controller
         if ($taskcon_bd_budget === '') {
             $taskcon_bd_budget = null; // or '0'
         }
-
+        if ($task_po_budget === '') {
+            $task_po_budget = null; // or '0'
+        }
+        if ($task_er_budget === '') {
+            $task_er_budget = null; // or '0'
+        }
 
 
 
@@ -3969,8 +3984,8 @@ class ProjectController extends Controller
         // $taskcon->taskcon_name        = $request->input('task_name');
 
 
-        $taskcon->taskcon_po_budget = $task_po_budget;
-        $taskcon->taskcon_er_budget = $task_er_budget;
+      //  $taskcon->taskcon_po_budget = $task_po_budget;
+//$taskcon->taskcon_er_budget = $task_er_budget;
 
 
         $taskcon->taskcon_mm_name        = $request->input('task_mm_name');

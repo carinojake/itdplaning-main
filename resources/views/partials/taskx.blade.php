@@ -1,4 +1,5 @@
-@if ($task->task_mm != null)
+@if ($task->subtask->count() == 0)
+@if ($task->task_parent === null)
     <h2>{{ $task->task_name }}</h2>
     <div class="container">
         <div class="row mt-5">
@@ -58,4 +59,5 @@
 
         </div>
     </div>
+@endif
 @endif
