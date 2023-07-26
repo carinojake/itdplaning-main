@@ -54,11 +54,14 @@
                 </x-slot:toolbar>
             @endif
 
-
+              {{--   @include('partials.taskx') กิจกรรม --}}
             @include('partials.xx')  {{-- กิจกรรม --}}
 
 
        @include('partials.y')  {{-- สญ. --}}
+
+      {{--  @include('partials.yy')  {{-- สญ. --}}
+
 
 
             @include('partials.z')

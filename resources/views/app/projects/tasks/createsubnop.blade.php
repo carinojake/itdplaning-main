@@ -412,62 +412,62 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <div id="ba_form " {{-- style="display:none;" --}}>
-                                                            <div class="d-none row mt-3">
+                                                        <div id="Po_form " {{-- style="display:none;" --}}>
+                                                            <div class=" row mt-3">
                                                                 <div class="col-md-4">
-                                                                    <label for="taskcon_ba "
-                                                                        class="form-label">{{ __('ใบยืมเงินรองจ่าย (BA) ') }}</label>
+                                                                    <label for="task_po_name "
+                                                                        class="form-label">{{ __('ใบสั่งซื้อ (PO) ') }}</label>
                                                                     {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" class="form-control"
-                                                                        id="taskcon_ba" name="taskcon_ba">
+                                                                        id="task_po_name" name="task_po_name">
                                                                     <div class="invalid-feedback">
                                                                         {{ __(' ') }}
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label for="taskcon_ba_budget"
-                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) BA') }}</label>
+                                                                    <label for="task_po_budget"
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) PO') }}</label>
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" placeholder="0.00"
                                                                         step="0.01" class="form-control"
-                                                                        id="taskcon_ba_budget"
+                                                                        id="task_po_budget"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        name="taskcon_ba_budget" min="0">
+                                                                        name="task_po_budget" min="0">
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div id="bd_form" {{-- style="display:none; --}}>
-                                                            <div class="d-none row mt-3">
+                                                        <div id="ER_form" {{-- style="display:none; --}}>
+                                                            <div class=" row mt-3">
                                                                 <div class="col-md-4">
-                                                                    <label for="taskcon_bd "
-                                                                        class="form-label">{{ __('ใบยืมเงินหน่อยงาน (BD)') }}</label>
+                                                                    <label for="task_er_name "
+                                                                        class="form-label">{{ __('ใบสั่งจ้าง (ER)') }}</label>
                                                                     {{--  officeexpenses ค่าใช้จ่ายสำนักงาน --}}
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" class="form-control"
-                                                                        id="taskcon_bd" name="taskcon_bd">
+                                                                        id="task_er_name" name="task_er_name">
                                                                     <div class="invalid-feedback">
                                                                         {{ __(' ') }}
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label for="taskcon_bd_budget"
+                                                                    <label for="task_er_budget"
                                                                         class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" placeholder="0.00"
                                                                         step="0.01" class="form-control"
-                                                                        id="taskcon_bd_budget"
+                                                                        id="task_er_budget"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
-                                                                        name="taskcon_bd_budget" min="0">
+                                                                        name="task_er_budget" min="0">
                                                                 </div>
                                                             </div>
                                                         </div>

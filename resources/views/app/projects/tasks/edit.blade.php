@@ -186,9 +186,9 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
-                                                ไม่เกิน
+                                            {{--     ไม่เกิน
                                                 {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating) }}
-                                                บาท
+                                                บาท --}}
                                             </div>
                                             <div class="col-4">
                                                 <label for="task_budget_it_investment"
@@ -201,9 +201,9 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
-                                                ไม่เกิน
+                                              {{--   ไม่เกิน
                                                 {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment) }}
-                                                บาท
+                                                บาท --}}
                                             </div>
 
                                             <div class="col-md-4">
@@ -217,9 +217,9 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
-                                                ไม่เกิน
+                                            {{--     ไม่เกิน
                                                 {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility) }}
-                                                บาท
+                                                บาท --}}
                                             </div>
                                         </div>
 
@@ -227,6 +227,26 @@
 
 
                                     </div>
+
+
+                                    <div class="col-md-12 mt-3">
+                                        <label for="task_refund_pa_status" class="form-label">{{ __('การคืนงบประมาณ ') }}</label> <span class="text-danger"></span>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
+                                            <label class="form-check-label" for="task_refund_pa_status2" @checked($task->task_refund_pa_status == 2) >
+                                              ไม่คืน
+                                            </label>
+                                          </div>
+                                        <div class="form-check form-check-inline ms-5">
+                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
+                                          <label class="form-check-label" for="1"  @checked($task->task_refund_pa_status == 1)>
+                                            คืน
+                                          </label>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
 
@@ -324,7 +344,7 @@
                     })
             })()
         </script>
-        <script>
+{{--         <script>
             $(document).ready(function() {
                 $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input",
                     function() {
@@ -348,7 +368,7 @@
                     });
             });
         </script>
-
+ --}}
 
 
 

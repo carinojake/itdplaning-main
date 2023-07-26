@@ -29,9 +29,9 @@
                             <table class="table table-responsive-sm table-striped" id="datatables">
                                 <thead>
                                     <tr>
-                                        <th>{{ __('ลำดับ') }}</th>
+                                        <th>{{ __('ที่') }}</th>
                                         <th>{{ __('ปีงบประมาณ') }}</th>
-                                        <th>{{ __('สำดับ') }}</th>
+                                        <th>{{ __('ลำดับตามแผน') }}</th>
                                         <th>{{ __('งาน/โครงการ') }}</th>
 
                                         <th></th>

@@ -192,7 +192,7 @@
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
                   </div>
-                  <div class="col-md-12 d-none">
+                  <div class="col-md-12">
                     <label for="contract_refund_pa_status" class="form-label">{{ __('contract_refund_pa_status') }}</label> <span class="text-danger"></span>
                     <div class="form-check form-check-inline ms-5">
                       <input class="form-check-input" type="radio" name="contract_refund_pa_status" id="contract_refund_pa_status" value="1" checked>

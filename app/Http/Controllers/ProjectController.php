@@ -865,7 +865,7 @@ class ProjectController extends Controller
 
             // ->toArray()
 
-       //  dd($project);
+       // dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -1444,6 +1444,21 @@ class ProjectController extends Controller
         //dd($labels,$fields);
         // งบict
         //1
+        ($operating_budget_sum_task = DB::table('tasks')
+        ->selectRaw('SUM(COALESCE(task_budget_it_operating,0)) As operating_budget_sum_task')
+       // ->where('tasks.task_type', 1)
+        ->where('project_id', ($id))
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+// เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+        ->get());
+    ($json = json_decode($operating_budget_sum_task));
+    ($operating_budget_sum_task = $json[0]->operating_budget_sum_task);
+    ($operating_budget_sum_task = (float)$operating_budget_sum_task);
+
+    $op_budget_task = $operating_budget_sum_task;
+
+   // dd($op_budget_task);
+
         ($operating_budget_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_budget_it_operating,0)) As operating_budget_sum')
             ->where('tasks.task_type', 1)
@@ -1470,7 +1485,8 @@ class ProjectController extends Controller
 
         ($op_budget= $operating_budget_sum+$operating_budget_sum_no);
 
-        //dd($operating_budget_sum_no);
+        //dd($operating_budget_sum);
+        //($operating_budget_sum_no);
 //2
         ($operating_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As ospa')
@@ -1611,6 +1627,23 @@ class ProjectController extends Controller
 
         //ดำเนิน
         //1
+ //1
+/*  ($investment_budget_sum = DB::table('tasks')
+ ->selectRaw('SUM(COALESCE(task_budget_it_investment,0)) As investment_budget_sum')
+ //->where('tasks.task_type', 1)
+ ->where('project_id', ($id))
+  ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+// เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ ->get());
+($json = json_decode($investment_budget_sum));
+($investment_budget_sum = $json[0]->investment_budget_sum);
+($investment_budget_sum = (float)$investment_budget_sum);
+
+        dd($investment_budget_sum); */
+
+
+
+
         ($investment_budget_sum = DB::table('tasks')
         ->selectRaw('SUM(COALESCE(task_budget_it_investment,0)) As investment_budget_sum')
         ->where('tasks.task_type', 1)
@@ -1640,7 +1673,7 @@ class ProjectController extends Controller
     $is_budget = $investment_budget_sum + $investment_budget_sum_no ;
 
 
-   // dd($is_budget);
+   //dd($is_budget);
 
 
 
@@ -2084,6 +2117,7 @@ class ProjectController extends Controller
 
             'op_refund_mm_pr',
             'op_budget',
+            'operating_budget_sum_task',
 
 
 
@@ -3513,11 +3547,11 @@ class ProjectController extends Controller
 
 
         $task->project_id = $id;
-        $task->task_name = $request->input('taskcon_mm_name');
+       // $task->task_name = $request->input('taskcon_mm_name');
         $task->task_mm = $request->input('task_mm');
         $task->task_mm_name = $request->input('taskcon_mm_name');
 
-        //$task->task_name = $request->input('task_name');
+        $task->task_name = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
 
         $task->task_parent = $request->input('task_parent') ?? null;
@@ -3724,7 +3758,9 @@ class ProjectController extends Controller
         $taskcon_ba_budget = str_replace(',', '', $request->input('taskcon_ba_budget'));
 
         $taskcon_bd_budget = str_replace(',', '', $request->input('taskcon_bd_budget'));
+        $task_po_budget = str_replace(',', '', $request->input('task_po_budget'));
 
+        $task_er_budget = str_replace(',', '', $request->input('task_er_budget'));
 
         if ($taskcon_budget_it_operating === '') {
             $taskcon_budget_it_operating = null; // or '0'
@@ -3769,6 +3805,15 @@ class ProjectController extends Controller
             $taskcon_bd_budget = null; // or '0'
         }
 
+        if ($task_po_budget === '') {
+            $task_po_budget = null; // or '0'
+        }
+        if ($task_er_budget === '') {
+            $task_er_budget = null; // or '0'
+        }
+
+
+
         if ($start_date_obj === false || $end_date_obj === false) {
             // Handle date conversion error
             // You can either return an error message or use a default date
@@ -3811,6 +3856,13 @@ class ProjectController extends Controller
         $task->task_type = $request->input('task_type');
         //
 
+
+        $task->task_po_name = $request->input('task_po_name');
+        $task->task_er_name = $request->input('task_er_name');
+
+
+        $task->task_po_budget = $task_po_budget;
+        $task->task_er_budget = $task_er_budget;
         //dd($task);
         // Save the Project
         if (!$task->save()) {
@@ -3915,6 +3967,11 @@ class ProjectController extends Controller
         $taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
         $taskcon->taskcon_pp        = $request->input('taskcon_pp');
         // $taskcon->taskcon_name        = $request->input('task_name');
+
+
+        $taskcon->taskcon_po_budget = $task_po_budget;
+        $taskcon->taskcon_er_budget = $task_er_budget;
+
 
         $taskcon->taskcon_mm_name        = $request->input('task_mm_name');
         $taskcon->taskcon_mm        = $request->input('task_mm');
@@ -4046,6 +4103,12 @@ class ProjectController extends Controller
 
         $taskcon_bd_budget = str_replace(',', '', $request->input('taskcon_bd_budget'));
 
+        $task_po_budget = str_replace(',', '', $request->input('task_po_budget'));
+
+        $task_er_budget = str_replace(',', '', $request->input('task_er_budget'));
+
+
+
 
         if ($taskcon_budget_it_operating === '') {
             $taskcon_budget_it_operating = null; // or '0'
@@ -4084,6 +4147,14 @@ class ProjectController extends Controller
             $taskcon_bd_budget = null; // or '0'
         }
 
+        if ($task_po_budget === '') {
+            $task_po_budget = null; // or '0'
+        }
+        if ($task_er_budget === '') {
+            $task_er_budget = null; // or '0'
+        }
+
+
         if ($start_date_obj === false || $end_date_obj === false) {
             // Handle date conversion error
             // You can either return an error message or use a default date
@@ -4113,6 +4184,12 @@ class ProjectController extends Controller
         $task->task_cost_it_operating = $task_cost_it_operating;
         $task->task_cost_it_investment = $task_cost_it_investment;
 
+        $task->task_po_name = $request->input('task_po_name');
+        $task->task_er_name = $request->input('task_er_name');
+
+
+        $task->task_po_budget = $task_po_budget;
+        $task->task_er_budget = $task_er_budget;
 
         $task->task_refund_pa_budget = $task_refund_pa_budget;
         $task->task_pay = $task_pay;
@@ -4120,7 +4197,7 @@ class ProjectController extends Controller
 
         $task->task_type = $request->input('task_type');
 
-        // dd($task);
+       //  dd($task);
         // Save the Project
 
 
@@ -4214,10 +4291,20 @@ class ProjectController extends Controller
 
         $taskcon->task_id = $task->task_id; // Use the id of the newly created project
 
+
+        $taskcon->taskcon_po_name = $request->input('task_po_name');
+        $taskcon->taskcon_er_name = $request->input('task_er_name');
+        $taskcon->taskcon_po_budget = $task_po_budget;
+        $taskcon->taskcon_er_budget = $task_er_budget;
+
+
         $taskcon->taskcon_name        = $request->input('task_name');
         $taskcon->taskcon_mm_name        = $request->input('task_name');
         $taskcon->taskcon_mm        = $request->input('taskcon_mm');
         $taskcon->taskcon_ba        = $request->input('taskcon_ba');
+        $taskcon->taskcon_bd       = $request->input('taskcon_bd');
+
+         $taskcon->taskcon_ba        = $request->input('taskcon_ba');
         $taskcon->taskcon_bd       = $request->input('taskcon_bd');
 
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
@@ -4285,6 +4372,7 @@ class ProjectController extends Controller
         $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
+
             ->get();
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
@@ -4294,17 +4382,18 @@ class ProjectController extends Controller
 
         ($request = Project::find($id_project));
 
-         // Sum the task_budget_it_operating for all tasks
-         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
-         $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+         // Sum the task_budget_it_operating for all tasks               ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+
+         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL) ->sum('task_budget_it_operating');
+         $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL) ->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
 
          // Sum the task_budget_it_investment for all tasks
-         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
-         $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
+         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL) ->sum('task_budget_it_investment');
+         $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)  ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
 
          // Sum the task_budget_gov_utility for all tasks
-         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
-         $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL) ->sum('task_budget_gov_utility');
+         $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL) ->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
         return view('app.projects.tasks.edit', compact('request',
          'contracts', 'project', 'task', 'tasks'
@@ -4527,6 +4616,8 @@ class ProjectController extends Controller
                             }
 
 
+                            $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+
                             $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
                             $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
                             $task->task_pay_date = $pay_date ?? date('Y-m-d 00:00:00');
@@ -4571,7 +4662,7 @@ class ProjectController extends Controller
                             // Update other task attributes as needed
                             //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
                             // $task->taskcon_pp        = $request->input('taskcon_pp');
-                         //   dd($task);
+                        //   dd($task);
 
 
                             if ($task->save()) {

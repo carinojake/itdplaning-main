@@ -171,9 +171,9 @@
                                 <thead>
                                    {{--  <th>Photo</th> --}}
                                     <th>File Name</th>
-                                    <th>File project_id</th>
+                                  {{--   <th>File project_id</th>
                                     <th>File task_id</th>
-                                    <th>File contract_id</th>
+                                    <th>File contract_id</th> --}}
                                     <th>File Size</th>
                                     <th>Date Uploaded</th>
                                     <th>File Location</th>
@@ -185,9 +185,9 @@
                                             <tr>
                                                {{--  <td><img src='storage/{{$file->name}}' name="{{$file->name}}" style="width:90px;height:90px;"></td> --}}
                                                 <td>{{ $file->name }}</td>
-                                                <td>{{ $file->project_id }}</td>
+                                       {{--          <td>{{ $file->project_id }}</td>
                                                 <td>{{ $file->task_id }}</td>
-                                                <td>{{ $file->contract_id }}</td>
+                                                <td>{{ $file->contract_id }}</td> --}}
 
 
                                                 <td>

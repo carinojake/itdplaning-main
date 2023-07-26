@@ -260,7 +260,7 @@
                                                                {
                                 name: "budget_total_mm",
                                 width: 100,
-                                label: " PR ",
+                                label: " MM/PR ",
                                 tree: true,
                                 resize: true,
                                 template: function(task) {
@@ -291,7 +291,7 @@
                     {
                         name: "cost_pa",
                         width: 150,
-                        label: "PA",
+                        label: "มี PA",
                         tree: true,
                         resize: true,
                         template: function(task) {
