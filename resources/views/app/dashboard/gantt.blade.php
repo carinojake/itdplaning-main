@@ -201,7 +201,7 @@
 
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.total_cost - task.total_pay) + '</span>';
+                                }).format(task.total_cost - task.total_pay_paycon) + '</span>';
                             } else {
                                 return '';
                             }
@@ -234,7 +234,7 @@
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.task_total_pay) + '</span>';
+                                }).format(task.total_pay_paycon) + '</span>';
 
                             } else
                             if (task.task_type == 1) {
@@ -248,12 +248,12 @@
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
 
-                            } else if (task.total_pay > 0) {
+                            } else if (task.total_pay_paycon > 0) {
 
                                 return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.total_pay) + '</span>';
+                                }).format(task.total_pay_paycon) + '</span>';
                             } else {
                                 return '-';
                             }
@@ -274,7 +274,7 @@
 
                         template: function(task) {
 
-                            var tmp_class = task.total_cost > 0 ? 'red' : 'green';
+                            var tmp_class = task.total_cost > 0 ? 'green' : 'green';
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
                             if (task.budget - task.total_cost === 0) {
                                 return '-';

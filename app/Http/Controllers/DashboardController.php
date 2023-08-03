@@ -558,9 +558,112 @@ as d')
 
 
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
-        ($project = Project::select('projects.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+        ($project = Project::select('projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
+        'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
+        'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
+        'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3')
 
-            ->leftJoin(
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+
+            sum(COALESCE(tasks.task_budget_gov_utility,0))
+            +sum(COALESCE(tasks.task_budget_it_operating,0))
+            +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_budget ,
+
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+                sum(COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as tta,
+                CASE
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) = 0 THEN  sum(COALESCE(tasks.task_mm_budget,0))
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) > 1 THEN sum( COALESCE(tasks.task_pay,0))
+                ELSE 0
+                END as ttb
+                from tasks
+                where tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as a'),
+            'a.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay
+                from tasks
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ab'),
+            'ab.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_no_pa_2 ,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay
+                from tasks
+                where tasks.task_type = 2 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ac'),
+            'ac.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay,
+                sum( COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_con
+                from tasks
+                INNER JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ad'),
+            'ad.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+
+                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget_3
+
+                from tasks
+                LEFT JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                LEFT JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                LEFT JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+
+                where  tasks.task_refund_pa_status = 3 AND tasks.deleted_at IS NULL
+
+                group by tasks.project_id
+            ) as ae'), // Changed the alias from `as` to `ae`
+            'ae.project_id',
+            '=',
+            'projects.project_id'
+        )
+
+        /* ->leftJoin(
                 DB::raw('(select tasks.project_id,
                  sum(COALESCE(tasks.task_cost_gov_utility,0))
            +sum(COALESCE(tasks.task_cost_it_operating,0))
@@ -598,11 +701,11 @@ as d')
 
             // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
             //->groupBy('projects.project_id')
-            ->where('project_fiscal_year', $fiscal_year)
+            ->where('project_fiscal_year', $fiscal_year) */
 
             ->get()
             ->toArray());
-        ($project = ($project));
+       // dd($project = ($project));
 
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
 
@@ -616,9 +719,56 @@ as d')
             ((float) $__budget    = $__budget_gov + $__budget_it);
             (float) $__cost       = (float) $project['project_cost'];
             (float) $__balance    = $__budget + (float) $project['project_cost'];
+            ((float) $__total_task_budget       = (float) $project['total_task_budget']);
+            ((float) $__mm       = (float) $project['total_task_mm_budget']);
+            ((float) $__paycon       = (float) $project['total_taskcon_pay_con']);
+            ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
+            ((float) $__total_task_refund_pa_budget_3       = (float) $project['total_task_refund_pa_budget_3']);
+
+            ((float) $__balance    = $__budget + (float) $project['project_cost']);
+
+
+
 
             $__project_cost     = [];
-            $gantt[] = [
+
+        $gantt[] = [
+            'id'                    => $project['project_id'],
+            'text'                  => $project['project_name'],
+            'start_date'            => date('Y-m-d', $project['project_start_date']),
+            'p'                  => $project['project_type'],
+            'end_date' => date('Y-m-d', $project['project_end_date']),
+            'budget_gov_operating'  => $project['budget_gov_operating'],
+            'budget_gov_investment' => $project['budget_gov_investment'],
+            'budget_gov_utility'    => $project['budget_gov_utility'],
+            'budget_gov'            => $__budget_gov,
+            'budget_it_operating'   => str_replace(',', '', $project['budget_it_operating']),
+            'budget_it_investment'  => $project['budget_it_investment'],
+            'budget_it'             => $__budget_it,
+            'budget'                => $__budget,
+            'balance'               => $__balance,
+            'pbalance'               => $__balance,
+           // 'project_cost_disbursement'     => $project['project_cost_disbursemen'],
+            'total_cost'                => $project['total_cost'],
+            'cost'                  => $project['project_cost'],
+            'cost_pa_1'             => $project['cost_pa_1'],
+            'cost_no_pa_2'             => $project['cost_no_pa_2'],
+           // 'cost_disbursement'     => $project['cost_disbursement'],
+          //  'pay'                   => $project['pay'],
+            'total_pay'              => $project['total_pay']+$__paycon,
+            'total_task_budget'      => $__total_task_budget,
+            'total_taskcon_pay_con'  => $__paycon,
+           // 'budget_mm'             => $project['task_mm_budget'],
+            'refund_pa_budget'      => $__prmm,
+            'refund_pa_budget_end'  => $__total_task_refund_pa_budget_3 ,
+            'budget_total_mm'             => $__mm,
+            //'budget_total_pr_sum'  =>   $__balance_pr_sum,
+            'owner'                 => $project['project_owner'],
+            'open'                  => true,
+            'type'                  => 'project',
+            // 'duration'              => 360,
+        ];
+         /*    $gantt[] = [
                 'id'                    => $project['project_id'],
                 'text'                  => $project['project_name'],
                 'start_date' => date('Y-m-d', ($project['project_start_date'])),
@@ -656,7 +806,7 @@ as d')
                 'total_pay'              => $project['total_pay'],
 
 
-            ];
+            ]; */
 
 
             ($budget['total'] = $__budget);
@@ -816,11 +966,17 @@ as d')
 
 
             ($operating_pay_sum_1 = DB::table('tasks')
-                ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
-                ->where('tasks.task_cost_it_operating', '>', 1)
-                ->where('tasks.task_type', 1)
-                ->where('tasks.deleted_at', NULL)
-                ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as iv,
+            SUM(COALESCE(task_pay,0)) as total_task_pay ,
+            sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay')
+            ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+            ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            ->where('tasks.task_cost_it_operating', '>', 1)
+            ->where('tasks.task_type', 1)
+             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at'))
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
             ($json = json_decode($operating_pay_sum_1));
@@ -911,6 +1067,12 @@ as d')
 
 
 
+
+
+
+
+
+
             ($investment_pa_sum = DB::table('tasks')
                 ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
                 ->where('tasks.task_type', 1)
@@ -978,12 +1140,25 @@ as d')
 
 
 
-            ($investment_pay_sum_1 = DB::table('tasks')
-                ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
-                ->where('tasks.task_cost_it_investment', '>', 1)
-                ->where('tasks.task_type', 1)
-                ->where('tasks.deleted_at', NULL)
-                ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+ ($investment_pay_sum_1 = DB::table('tasks')
+
+
+ ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as iv,
+ SUM(COALESCE(task_pay,0)) as total_task_pay ,
+ sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay')
+ ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+ ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+ ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+ ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+
+
+
+
+
+ ->where('tasks.task_cost_it_investment', '>', 1)
+ ->where('tasks.task_type', 1)
+  ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+// เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
             ($json = json_decode($investment_pay_sum_1));
@@ -1052,12 +1227,23 @@ as d')
 
 
                ($ut_pay_pa_sum = DB::table('tasks')
-      ->selectRaw('SUM(COALESCE(task_pay,0)) As utsc_pay_pa  ')
+               ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as utsc_pay_pa,
+               SUM(COALESCE(task_pay,0)) as utsc_pay_pa ,
+               sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay')
+               ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+               ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+               ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+               ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+
+
+
+
+
       ->where('tasks.task_cost_gov_utility', '>', 1)
       ->where('tasks.task_type',1)
       ->where('tasks.deleted_at', NULL)
 
-      ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+
              ->where('project_fiscal_year',  $fiscal_year)
       ->get());
       ($json = json_decode($ut_pay_pa_sum));
@@ -1197,7 +1383,7 @@ as d')
 
 
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
-        ($project = Project::select('projects.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
+      /*   ($project = Project::select('projects.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
 
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
@@ -1241,15 +1427,127 @@ as d')
                 'ac.project_id',
                 '=',
                 'projects.project_id'
-            )
+            ) */
 
             // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
             //->groupBy('projects.project_id')
+
+
+           // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
+        ($project = Project::select(
+            'projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
+            'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
+            'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
+            'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+
+            sum(COALESCE(tasks.task_budget_gov_utility,0))
+            +sum(COALESCE(tasks.task_budget_it_operating,0))
+            +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_budget ,
+
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
+                sum(COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as tta,
+                CASE
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) = 0 THEN  sum(COALESCE(tasks.task_mm_budget,0))
+                WHEN sum(COALESCE(tasks.task_cost_gov_utility,0)) > 1 THEN sum( COALESCE(tasks.task_pay,0))
+                ELSE 0
+                END as ttb
+                from tasks
+                where tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as a'),
+            'a.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay
+                from tasks
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ab'),
+            'ab.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0))
+                +sum(COALESCE(tasks.task_cost_it_operating,0))
+                +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_no_pa_2 ,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay
+                from tasks
+                where tasks.task_type = 2 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ac'),
+            'ac.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget,
+                sum( COALESCE(tasks.task_pay,0)) as total_pay,
+                sum( COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_con
+                from tasks
+                INNER JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                group by tasks.project_id
+            ) as ad'),
+            'ad.project_id',
+            '=',
+            'projects.project_id'
+        )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+
+                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget_3
+
+                from tasks
+                LEFT JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                LEFT JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                LEFT JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+
+                where  tasks.task_refund_pa_status = 3 AND tasks.deleted_at IS NULL
+
+                group by tasks.project_id
+            ) as ae'), // Changed the alias from `as` to `ae`
+            'ae.project_id',
+            '=',
+            'projects.project_id'
+        )
+
+
             ->where('project_fiscal_year', $fiscal_year)
 
             ->get()
             ->toArray());
-        ($project = ($project));
+
+
+           // dd($project = ($project));
 
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
 
@@ -1260,9 +1558,15 @@ as d')
         foreach ($project as $project) {
             ((float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] + (float) $project['budget_gov_investment']);
             ((float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment']);
-            ((float) $__budget    = $__budget_gov + $__budget_it);
-            (float) $__cost       = (float) $project['project_cost'];
-            (float) $__balance    = $__budget + (float) $project['project_cost'];
+            (float) $__budget     = $__budget_gov + $__budget_it;
+            ((float) $__cost       = (float) $project['project_cost']);
+            ((float) $__total_task_budget       = (float) $project['total_task_budget']);
+            ((float) $__mm       = (float) $project['total_task_mm_budget']);
+            ((float) $__paycon       = (float) $project['total_taskcon_pay_con']);
+            ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
+            ((float) $__total_task_refund_pa_budget_3       = (float) $project['total_task_refund_pa_budget_3']);
+
+            ((float) $__balance    = $__budget + (float) $project['project_cost']);
 
             $__project_cost     = [];
             $gantt[] = [
@@ -1299,9 +1603,20 @@ as d')
                 'cost_no_pa_2'             => $project['cost_no_pa_2'],
                 //'cost_disbursement'     => $project['cost_disbursement'],
 
-                // 'pay'                   => $project['pay'],
-                'total_pay'              => $project['total_pay'],
 
+               // 'pay'                   => $project['pay'],
+                'total_pay'              => $project['total_pay'],
+                'total_pay_paycon'              => $project['total_pay']+$__paycon,
+                'total_task_budget'      => $__total_task_budget,
+                'total_taskcon_pay_con'  => $__paycon,
+                //'budget_mm'             => $project['task_mm_budget'],
+                'refund_pa_budget'      => $__prmm,
+                'refund_pa_budget_end'  => $__total_task_refund_pa_budget_3 ,
+                'budget_total_mm'             => $__mm,
+                // 'pay'                   => $project['pay'],
+
+                'open'                  => true,
+                'type'                  => 'project',
 
             ];
 
@@ -1428,7 +1743,7 @@ as d')
         }
 
 
-        ($gantt);
+      //  dd($gantt);
         // dd ($costsum = ($__project_cost))  ;
         ($gantt = json_encode($gantt));
         return view(
