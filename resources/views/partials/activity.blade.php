@@ -35,7 +35,7 @@
                                 <ul>
                                     @foreach ($task->subtask as $subtask)
                                         <li>
-                                            {{ $subtask->task_name }}
+                                            {{ $subtask->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
 
                                             @if ($subtask->contract->count() > 0)
 

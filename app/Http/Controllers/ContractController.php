@@ -67,7 +67,7 @@ class ContractController extends Controller
 
                     return $html;
                 })
-                ->addColumn('contract_fiscal_year', function ($row) {
+                ->addColumn('contract_fiscal_year_output', function ($row) {
                     return $row->contract_fiscal_year;
                 })
 
@@ -83,7 +83,7 @@ class ContractController extends Controller
 
                     return $html;
                 })
-                ->rawColumns(['contract_name_output', 'action'])
+                ->rawColumns(['contract_fiscal_year','contract_name_output', 'action'])
                 ->toJson();
         }
 
@@ -588,10 +588,74 @@ class ContractController extends Controller
        $sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
 
+       if ($task) {
+        $taskId = Hashids::decode($task)[0];
+        $task = Task::find($taskId);
+    } else {
+        $task = null;
+    }
+
+       if ($task) {
+        $task_sub = $task->subtask;
+
+    if ($task_sub) {
+
+
+    $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+        if ($subtask->task_budget_it_operating > 1) {
+            $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+            $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+            $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+        }
+
+        if ($subtask->task_budget_it_investment > 1) {
+            $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+            $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+            $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        if ($subtask->task_budget_gov_utility > 1) {
+            $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+            $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+            $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        return $carry;
+    }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+      // dd($task_sub_sums);
+    } else {
+        // จัดการเมื่อ $task_sub เป็น null
+        $task_sub = null;
+        // เพิ่มโค้ดเพิ่มเติมหากต้องการ...
+    }
+} else {
+    // จัดการเมื่อ $task เป็น null
+    // ตัวอย่างเช่น นำไป redirect ไปยังหน้าแสดงข้อผิดพลาดหรือคืนค่า response ข้อผิดพลาด
+    // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
+}
 
 
 
-        $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
+           // dd($task_sub_sums);
+
+
+
+
+
+
+
+       $fiscal_year = $request->input('fiscal_year', date('Y') + 543);
 
         $project_fiscal_year = $pro ? $pro->project_fiscal_year : null;
         $tasksData = DB::table('tasks')
@@ -649,7 +713,7 @@ class ContractController extends Controller
          'request',
          'tasksDetails',
          'projectDetails',
-
+        'task_sub_sums',
 
          'sum_task_budget_it_operating',
             'sum_task_budget_it_investment',
@@ -1042,14 +1106,13 @@ if($request->hasFile('file')) {
             session()->flash('contract_start_date', $contract->contract_start_date);
             session()->flash('contract_end_date', $contract->contract_end_date);
 
-
             if ($task) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             } elseif ($project) {
-                return redirect()->route('project.task.createcn', ['project' => $project]);}
-
-
+                return redirect()->route('project.task.createcn', ['project' => $project]);
+            }
             return redirect()->route('contract.index');
+
         }
     }
 

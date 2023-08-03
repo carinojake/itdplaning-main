@@ -14,15 +14,21 @@
                                     <div class="input-group mb-3">
 
 
-                                        <div>เลือกปีงบประมาณ</div>
-                                        <select name="fiscal_year" class="form-select">
+                                        <div class="col-sm-6 mt-3" >เลือกปีงบประมาณ &nbsp;</div>
+                                    {{--     <select name="fiscal_year" class="form-select">
                                             @for ($i = 2564; $i <= date('Y') + 543 + 3; $i++)
                                                 <option value="{{ $i }}"
                                                     {{ $fiscal_year == $i ? 'selected' : '' }}>{{ $i }}
                                                 </option>
                                             @endfor
                                             <!-- เพิ่มตัวเลือกเพิ่มเติมตามที่จำเป็น -->
+                                        </select> --}}
+                                        <select name="fiscal_year" class="form-select">
+                                            @foreach($fiscal_years as $year)
+                                                <option value="{{ $year }}" {{ ($fiscal_year == $year) ? 'selected' : '' }}>{{ $year }}</option>
+                                            @endforeach
                                         </select>
+
 
                                         <button class="btn btn-secondary" type="submit">ค้นหา</button>
                                     </div>
@@ -182,7 +188,7 @@
                     {
                         name: "-",
                         width: 100,
-                        label: '<div class="text-warning">รอการเบิกจ่าย</div>',
+                        label: '<div class="text-danger">รอการเบิกจ่าย</div>',
                         tree: true,
 
                         template: function(task) {
@@ -217,7 +223,7 @@
                         name: "pay",
                         width: 100,
 
-                        label: '<div class="text-primary">การเบิกจ่าย</div>',
+                        label: '<div class="text-warning">การเบิกจ่าย</div>',
 
                         tree: true,
 
@@ -262,7 +268,7 @@
 
 
 
-                        label: '<div class="text-danger">คงเหลือ</div>',
+                        label: '<div class="text-primary">คงเหลือ</div>',
 
                         tree: true,
 

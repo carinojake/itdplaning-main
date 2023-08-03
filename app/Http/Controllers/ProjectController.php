@@ -54,10 +54,10 @@ class ProjectController extends Controller
 
                     return $html;
                 })
-                ->addColumn('project_fiscal_year', function ($row) {
+                ->addColumn('project_fiscal_year_output', function ($row) {
                     return $row->project_fiscal_year;
                 })
-                ->addColumn('reguiar_id', function ($row) {
+                ->addColumn('reguiar_id_output', function ($row) {
                     return $row->reguiar_id;
                 })
                 ->addColumn('action', function ($row) {
@@ -784,10 +784,11 @@ class ProjectController extends Controller
             'projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
-            'ad.total_taskcon_pay_con'
+            'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3'
         )
         ->leftJoin(
             DB::raw('(select tasks.project_id,
+
             sum(COALESCE(tasks.task_budget_gov_utility,0))
             +sum(COALESCE(tasks.task_budget_it_operating,0))
             +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_budget ,
@@ -863,13 +864,38 @@ class ProjectController extends Controller
             '=',
             'projects.project_id'
         )
+        ->leftJoin(
+            DB::raw('(select tasks.project_id,
+
+                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as total_task_refund_pa_budget_3
+
+                from tasks
+                LEFT JOIN contract_has_tasks
+                ON tasks.task_id = contract_has_tasks.task_id
+                LEFT JOIN contracts
+                ON contract_has_tasks.contract_id = contracts.contract_id
+                LEFT JOIN taskcons
+                ON contracts.contract_id = taskcons.contract_id
+
+                where  tasks.task_refund_pa_status = 3 AND tasks.deleted_at IS NULL
+
+                group by tasks.project_id
+            ) as ae'), // Changed the alias from `as` to `ae`
+            'ae.project_id',
+            '=',
+            'projects.project_id'
+        )
+
+
+
+
         ->where('projects.project_id', $id)
         ->first());
 
 
             // ->toArray()
 
-     //  dd($project);
+   // dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -890,6 +916,8 @@ class ProjectController extends Controller
         ((float) $__mm       = (float) $project['total_task_mm_budget']);
         ((float) $__paycon       = (float) $project['total_taskcon_pay_con']);
         ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
+        ((float) $__total_task_refund_pa_budget_3       = (float) $project['total_task_refund_pa_budget_3']);
+
         ((float) $__balance    = $__budget + (float) $project['project_cost']);
         $__project_cost     = [];
 
@@ -922,6 +950,7 @@ class ProjectController extends Controller
             'total_taskcon_pay_con'  => $__paycon,
             'budget_mm'             => $project['task_mm_budget'],
             'refund_pa_budget'      => $__prmm,
+            'refund_pa_budget_end'  => $__total_task_refund_pa_budget_3 ,
             'budget_total_mm'             => $__mm,
             //'budget_total_pr_sum'  =>   $__balance_pr_sum,
             'owner'                 => $project['project_owner'],
@@ -936,14 +965,22 @@ class ProjectController extends Controller
 
         $budget['total'] = $__budget;
         ($budget['budget_total_mm'] = $__mm);
-        $budget['budget_total_taskcon_pay_con'] = $__paycon;
+        $budget['budget_total_taskcon_pay_con'] = $project['total_pay']+$__paycon;
         $budget['total_task_budget']= $__total_task_budget;
 
-        $budget['budget_total_task_budget']= $__budget-$__total_task_budget;
-        $budget['budget_total_refund_pa_budget'] = $__prmm;
-        $budget['budget_total_mm_pr'] = ($__budget) - ($__total_task_budget-$__prmm);
 
-//dd($budget);
+        $budget['budget_total_refund_pa_budget'] = $__prmm;
+        $budget['budget_total_refund_pa_budget_end'] = $__total_task_refund_pa_budget_3;
+        $budget['budget_total_task_budget']= $__budget-($__total_task_budget-$__mm);
+
+        $budget['budget_total_task_budget_end']= $__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3);
+
+        $budget['budget_total_mm_pr'] = ($__budget) - ($__mm-$__prmm);
+        $budget['budget_total_pay_con'] = ($__budget)-($project['total_pay']+$__paycon) ;
+
+
+
+         //dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -978,17 +1015,17 @@ class ProjectController extends Controller
         ($tasks = DB::table('tasks')
             ->select(
                 'tasks.*',
+                'asum.total_task_mm_budget_task_sum',
+                'asum.costs_disbursement_sum',
+                'asum.total_task_task_budget',
                 'a.total_task_mm_budget_task',
                 'a.costs_disbursement',
 
                 'a.total_taskcon_cost',
-
                 'a.total_task_refund_pa_budget',
+                'a.total_taskcon_pay',
                 'ab.total_task_refund_pa_budget_1',
                 'ac.total_task_refund_pa_budget_2',
-
-
-
                 'ab.total_task_mm_budget_1',
                 'ac.total_task_mm_budget_2',
                 'ab.cost_pa_1',
@@ -1000,26 +1037,48 @@ class ProjectController extends Controller
                 'cc.s',
                 'cc.c',
                 'ad.total_taskcon_cost_pa_1',
-                'ad.total_taskcon_pay_pa_1'
+                'ad.total_taskcon_pay_pa_1',
+                'astatus_pa.total_task_refund_pa_budget_status',
+                'astatus.total_task_refund_no_pa_budget_status'
             )
+
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
-                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_sum,
+
+                sum(COALESCE(tasks.task_budget_gov_utility,0))
+                +sum(COALESCE(tasks.task_budget_it_operating,0))
+                +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_task_budget ,
 
 
                 sum( COALESCE(tasks.task_cost_gov_utility,0))
         +sum( COALESCE(tasks.task_cost_it_operating,0))
         +sum( COALESCE(tasks.task_cost_it_investment,0))
-        as costs_disbursement,
+        as costs_disbursement_sum
 
+
+        from tasks
+
+
+                    where tasks.deleted_at IS NULL
+
+        group by tasks.task_parent) as asum'),
+                'asum.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task,
+                sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as costs_disbursement,
         sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
         +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
         as total_taskcon_cost ,
-
-
-
-        sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay,
+         sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay,
 
 
         sum( COALESCE(tasks.task_pay,0))  as total_pay,
@@ -1028,6 +1087,7 @@ class ProjectController extends Controller
 
 
         from tasks
+
         INNER JOIN
         contract_has_tasks
         ON
@@ -1040,13 +1100,16 @@ class ProjectController extends Controller
         taskcons
         ON
             contracts.contract_id = taskcons.contract_id
-
             where tasks.deleted_at IS NULL
+
         group by tasks.task_parent) as a'),
                 'a.task_parent',
                 '=',
                 'tasks.task_id'
             )
+
+
+
 
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
@@ -1080,6 +1143,28 @@ class ProjectController extends Controller
                 '=',
                 'tasks.task_id'
             )
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_status
+        from tasks  where tasks.task_type=1  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus_pa'),
+                'astatus_pa.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_status
+        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus'),
+                'astatus.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
             ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
             taskcons.contract_id as c,
             taskcons.taskcon_pay
@@ -1115,13 +1200,15 @@ class ProjectController extends Controller
             )
 
 
-           ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+
+
+            ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
 
             ->where('project_id', ($id))
 
             ->get()
             ->toArray());
-        //dd($tasks);
+       //dd($tasks);
 
 
         ($tasks = json_decode(json_encode($tasks), true));
@@ -1142,10 +1229,6 @@ class ProjectController extends Controller
             (float) $__cost = array_sum([
                 (float)
                 //$task['cost_disbursement'],
-
-
-
-
                 $task['task_cost_gov_operating'],
                 $task['task_cost_gov_investment'],
                 $task['task_cost_gov_utility'],
@@ -1204,8 +1287,15 @@ class ProjectController extends Controller
                 'total_task_refund_pa_budget_1'             => $task['total_task_refund_pa_budget_1'],
                 'total_task_refund_pa_budget_2'             => $task['total_task_refund_pa_budget_2'],
 
+                'total_task_refund_budget_status'      => $task['total_task_refund_pa_budget_status']+$task['total_task_refund_no_pa_budget_status'],
+
+                'task_refund_pa_budget_status'      => $task['total_task_refund_pa_budget_status'],
+                'task_refund_no_pa_budget_status'      => $task['total_task_refund_no_pa_budget_status'],
+
+
                 'balanc_mmpr_sum'             => $__balance_mmpr_sum,
-                'budget_total_task_mm'             => $task['total_task_mm_budget_task']+$task['total_task_mm_budget_1']+$task['total_task_mm_budget_2'],
+                'budget_total_task_mm'             => $task['total_task_mm_budget_task'],
+                'budget_total_task_mm_sum'             => $task['total_task_mm_budget_task_sum'],
                 'budget_task_mm_1'             => $task['total_task_mm_budget_1'],
                 'budget_task_mm_2'             => $task['total_task_mm_budget_2'],
 
@@ -1218,6 +1308,9 @@ class ProjectController extends Controller
 
                 'total_taskcon_pay_pa_1'    =>  $task['total_taskcon_pay_pa_1'],
                 'task_type'             => $task['task_type'],
+                'task_status'             => $task['task_status'],
+                'task_refund_pa_status'             => $task['task_refund_pa_status'],
+
                 'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);
@@ -1230,7 +1323,7 @@ class ProjectController extends Controller
 
 
 
-        //dd($gantt);
+    // dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
@@ -1421,7 +1514,10 @@ class ProjectController extends Controller
         //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
         //$budget['budget_total_taskcon_pay_con'] = $__paycon;
         ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
-       // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
+      ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
+
+
+        // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
         $budget['pay']    = $gantt[0]['total_pay']+$gantt[0]['total_taskcon_pay_con'];
 
 
@@ -1465,7 +1561,7 @@ class ProjectController extends Controller
     ($operating_budget_sum_task = $json[0]->operating_budget_sum_task);
     ($operating_budget_sum_task = (float)$operating_budget_sum_task);
 
-    $op_budget_task = $operating_budget_sum_task;
+    ($op_budget_task = $operating_budget_sum_task);
 
    // dd($op_budget_task);
 
@@ -1592,7 +1688,10 @@ class ProjectController extends Controller
 
             $op_mm=$operating_mm_pa+$operating_mm_pa_no;
             ($op_refund = $operating_refund_pa+$operating_refund_pa_no);
-            $op_refund_mm_pr = $project['budget_it_operating']-($op_mm-$op_refund);
+            $op_refund_mm_pr = $project['budget_it_operating'] -($op_mm-$op_refund);
+
+            $op_refund_budget_pr = $project['budget_it_operating'] -($op_budget_task-$op_refund);
+
 
            // dd($op_refund_mm_pr);
 //6
@@ -2066,7 +2165,7 @@ class ProjectController extends Controller
             ->select('tasks.task_id', 'projects.project_id', 'tasks.project_id', 'projects.project_name as project_name', 'taskcons.taskcon_id as taskcons_id', 'tasks.task_name as task_name', 'taskcons.taskcon_name as taskcons_name')
             ->join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+             ->whereNotNull('tasks.deleted_at') // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
  // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->get();
 
@@ -2125,6 +2224,7 @@ class ProjectController extends Controller
             'is_refund_mm_pr',
             'is_budget',
 
+            'op_refund_budget_pr',
             'op_refund_mm_pr',
             'op_budget',
             'operating_budget_sum_task',
@@ -2697,7 +2797,7 @@ class ProjectController extends Controller
     {
 
         ($project = Project::find(Hashids::decode($project)[0]));
-        ($task = Task::find(Hashids::decode($task)[0]));
+       ($task = Task::find(Hashids::decode($task)[0]));
 
         /*
         $contract    = Contract::find($contract_id);
@@ -2824,11 +2924,23 @@ class ProjectController extends Controller
                     if ($subtask->task_budget_it_investment > 1) {
                         $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
                         $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
-                        $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+
+
+                        $carry['investment']['task_refund_pa_status'] =  $subtask->task_refund_pa_status;
+                       // ($carry); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
+
+
+                        $refundPaBudget = is_int($subtask->task_refund_pa_status) ? collect([$subtask->task_refund_pa_status]) : $subtask->task_refund_pa_status;
+                        ($refundPaBudget); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
+
+                        // ใช้ฟังก์ชัน where() กับคอลเลกชัน
+                   //  ($filteredRefundTasks = $refundPaBudget->where('task_refund_pa_status', 2));
+                    //    $carry['investment']['task_refund_pa_budget'] += $filteredRefundTasks->sum('task_refund_pa_budget');
+
+
+                        $carry['investment']['task_refund_pa_budget_2'] += $subtask->task_refund_pa_budget;
                         $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
-
-
-                        // Add other fields as necessary...
                     }
 
                     if ($subtask->task_budget_gov_utility > 1) {
@@ -2843,13 +2955,50 @@ class ProjectController extends Controller
 
                     return $carry;
                 }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
-                    'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+                    'investment' => ['task_budget' => 0, 'task_cost' => 0,  'task_refund_pa_budget' => 0, 'task_refund_pa_budget_2' => 0, 'task_mm_budget' => 0],
                     'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+
+
+               // dd($task_sub_sums);
+
+               $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+           //    dd($task_sub_refund);
+
+
+
+
+               $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+                if ($subtask->task_budget_it_operating > 1) {
+                    $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                }
+
+                if ($subtask->task_budget_it_investment > 1) {
+                    $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                }
+
+                if ($subtask->task_budget_gov_utility > 1) {
+
+                    $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                    // Add other fields as necessary...
+                }
+
+                return $carry;
+            }, ['operating' => ['task_refund_pa_budget' => 0],
+                'investment' => [ 'task_refund_pa_budget' => 0],
+                'utility' => ['task_refund_pa_budget' => 0]]);
+
+
+               // dd($task_sub_refund_pa_budget);
+
+
+
+
 
                     ($files = File::join('tasks', 'files.task_id', '=', 'tasks.task_id')
                     ->where('tasks.task_id', $task->task_id)
                     ->get());
-
 
                     ($files_contract = File::join('contracts', 'files.contract_id', '=', 'contracts.contract_id')
                    // ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
@@ -2870,7 +3019,7 @@ class ProjectController extends Controller
        //dd($contract);
 
        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('files_contract','files','task_sub_sums','taskcons',
+        return view('app.projects.tasks.show', compact('task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
         'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
@@ -2889,16 +3038,17 @@ class ProjectController extends Controller
 
         ($request = Project::find($id));
 
+
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
-        $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
         // Sum the task_budget_it_investment for all tasks
         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
-        $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent') ->where('task_budget_it_investment', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
-        $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
         if ($task) {
             $taskId = Hashids::decode($task)[0];
@@ -2906,6 +3056,10 @@ class ProjectController extends Controller
         } else {
             $task = null;
         }
+
+
+
+
         //dd ($taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.create', compact('request',
          'taskcons', 'contracts', 'project', 'tasks', 'task',
@@ -3003,6 +3157,57 @@ class ProjectController extends Controller
 
 
 
+    if ($task) {
+        $task_sub = $task->subtask;
+
+    if ($task_sub) {
+
+
+    $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+        if ($subtask->task_budget_it_operating > 1) {
+            $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+            $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+            $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+        }
+
+        if ($subtask->task_budget_it_investment > 1) {
+            $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+            $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+            $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        if ($subtask->task_budget_gov_utility > 1) {
+            $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+            $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+            $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        return $carry;
+    }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+      //วใ dd($task_sub_sums);
+    } else {
+        // จัดการเมื่อ $task_sub เป็น null
+        $task_sub = null;
+        // เพิ่มโค้ดเพิ่มเติมหากต้องการ...
+    }
+} else {
+    // จัดการเมื่อ $task เป็น null
+    // ตัวอย่างเช่น นำไป redirect ไปยังหน้าแสดงข้อผิดพลาดหรือคืนค่า response ข้อผิดพลาด
+    // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
+}
+
+
 
         //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.createcn', compact('request',
@@ -3019,6 +3224,7 @@ class ProjectController extends Controller
     'projectDetails'));
     }
 
+
     public function taskCreateTo(Request $request, $project, $task = null)
     {
         $id = Hashids::decode($project)[0];
@@ -3028,13 +3234,13 @@ class ProjectController extends Controller
         ($request = Project::find($id));
 
         // Get the task_budget_it_operating for $task->task_id tasks
-        $task_budget_it_operating = $tasks->where('task_parent', null)->pluck('task_budget_it_operating')->sum();
+        $task_budget_it_operating = $tasks->where('task_parent', null)->whereNotNull('tasks.deleted_at')->pluck('task_budget_it_operating')->sum();
 
         // Get the task_budget_it_investment for $task->task_id tasks
-        $task_budget_it_investment = $tasks->where('task_parent', null)->pluck('task_budget_it_investment')->sum();
+        $task_budget_it_investment = $tasks->where('task_parent', null)->whereNotNull('tasks.deleted_at')->pluck('task_budget_it_investment')->sum();
 
         // Get the task_budget_gov_utility for $task->task_id tasks
-        $task_budget_gov_utility = $tasks->where('task_parent', null)->pluck('task_budget_gov_utility')->sum();
+        $task_budget_gov_utility = $tasks->where('task_parent', null)->whereNotNull('tasks.deleted_at')->pluck('task_budget_gov_utility')->sum();
 
 
 
@@ -3074,37 +3280,16 @@ class ProjectController extends Controller
         $sum_task_refund_budget_it_operating= $tasks->where('task_parent')->sum('task_refund_pa_budget');
 
         // Sum the task_budget_it_investment for all tasks
-        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
-        ($sum_task_cost_it_investment= $tasks->where('task_parent')->sum('task_cost_it_investment'));
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->whereNotNull('tasks.deleted_at')->sum('task_budget_it_investment');
+        ($sum_task_cost_it_investment= $tasks->where('task_parent')->whereNotNull('tasks.deleted_at')->sum('task_cost_it_investment'));
 
 
         ($sum_task_refund_budget_it_investment= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
 
         // Sum the task_budget_gov_utility for all tasks
-        ($sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility'));
-        ($sum_task_cost_gov_utility= $tasks->where('task_parent')->sum('task_cost_gov_utility'));
+        ($sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->whereNotNull('tasks.deleted_at')->sum('task_budget_gov_utility'));
+        ($sum_task_cost_gov_utility= $tasks->where('task_parent')->whereNotNull('tasks.deleted_at')->sum('task_cost_gov_utility'));
         ($sum_task_refund_budget_gov_utility= $tasks->where('task_parent')->sum('task_refund_pa_budget'));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         if (!empty($contracts['results'])) {
@@ -3141,9 +3326,49 @@ class ProjectController extends Controller
             $task = null;
         }
 
+
+        ($task_sub = $task->subtask);
+        $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+                $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+                $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+                $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+                $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+          //วใ dd($task_sub_sums);
+
+
         $tasksDetails = $task;
         //  dd($contracts);
-        return view('app.projects.tasks.createsub', compact('request',
+        return view('app.projects.tasks.createsub', compact(
+
+            'task_sub_sums',
+            'request',
         'tasksDetails', 'contracts',
          'project', 'tasks',
           'task',
@@ -3187,17 +3412,16 @@ class ProjectController extends Controller
         $contractText = ''; // กำหนดค่าเริ่มต้นให้กับ $contractText
 
         //$taskcons     = new Taskcon ;
-         // Sum the task_budget_it_operating for all tasks
-         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
-         $sum_task_refund_budget_it_operating= $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
+        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+        $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
 
-         // Sum the task_budget_it_investment for all tasks
-         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
-         $sum_task_refund_budget_it_investment= $tasks->whereNull('task_parent') ->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
+        // Sum the task_budget_it_investment for all tasks
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+        $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
 
-         // Sum the task_budget_gov_utility for all tasks
-         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
-         $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+        // Sum the task_budget_gov_utility for all tasks
+        $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
+        $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
          //dd( $sum_task_refund_budget_it_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
 
@@ -3284,6 +3508,57 @@ class ProjectController extends Controller
             ];
         });
 
+
+
+    if ($task) {
+        $task_sub = $task->subtask->whereNotNull('tasks.deleted_at') ;
+
+    if ($task_sub) {
+
+
+    $task_sub_sums = $task_sub->whereNotNull('tasks.deleted_at')->reduce(function ($carry, $subtask) {
+        if ($subtask->task_budget_it_operating > 1) {
+            $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+            $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+            $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+        }
+
+        if ($subtask->task_budget_it_investment > 1) {
+            $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+            $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+            $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        if ($subtask->task_budget_gov_utility > 1) {
+            $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+            $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+            $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+            // Add other fields as necessary...
+        }
+
+        return $carry;
+    }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+        'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+      // dd($task_sub_sums);
+    } else {
+        // จัดการเมื่อ $task_sub เป็น null
+        $task_sub = null;
+        // เพิ่มโค้ดเพิ่มเติมหากต้องการ...
+    }
+} else {
+    // จัดการเมื่อ $task เป็น null
+    // ตัวอย่างเช่น นำไป redirect ไปยังหน้าแสดงข้อผิดพลาดหรือคืนค่า response ข้อผิดพลาด
+    // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
+}
         // dd($projectData);
 
         $projectsJson = json_encode($projectData);
@@ -3330,6 +3605,7 @@ class ProjectController extends Controller
         $projectyear = Project::where('project_id', $id)->first(); // เปลี่ยนจาก get() เป็น first()
         ($tasks = Task::where('project_id', $id)->get());
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
+
 
         // Sum the task_budget_it_operating for all tasks
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
@@ -3430,11 +3706,11 @@ class ProjectController extends Controller
         }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
             'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
             'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
-         //   dd($task_sub_sums);
+          //วใ dd($task_sub_sums);
 
 
         $tasksDetails = $task;
-   //dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
+  // dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
         return view('app.projects.tasks.createsubnop', compact(
             'request',
             'task_sub_sums',
@@ -3561,7 +3837,7 @@ class ProjectController extends Controller
         $task->task_mm = $request->input('task_mm');
         $task->task_mm_name = $request->input('taskcon_mm_name');
 
-        $task->task_name = $request->input('task_name');
+        $task->task_name = $request->input('taskcon_mm_name');
         $task->task_description = trim($request->input('task_description'));
 
         $task->task_parent = $request->input('task_parent') ?? null;
@@ -3580,7 +3856,7 @@ class ProjectController extends Controller
 
         $task->task_refund_pa_budget = $task_refund_pa_budget;
 
-
+        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
 
 
 
@@ -3857,8 +4133,8 @@ class ProjectController extends Controller
 
         $task->task_refund_pa_budget = $task_refund_pa_budget;
         $task->task_mm_budget                 =  $task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment;
-        $task->task_mm_name        = $request->input('task_mm_name');
-        $task->task_mm        = $request->input('task_mm');
+        $task->task_mm_name        = $request->input('taskcon_mm_name');
+        $task->task_mm        = $request->input('taskcon_mm');
         //$task->task_cost_disbursement =  $taskcon_bd_budget +$taskcon_ba_budget  ;
         $task->task_pay = $task_pay;
         // $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
@@ -3988,8 +4264,8 @@ class ProjectController extends Controller
 //$taskcon->taskcon_er_budget = $task_er_budget;
 
 
-        $taskcon->taskcon_mm_name        = $request->input('task_mm_name');
-        $taskcon->taskcon_mm        = $request->input('task_mm');
+        $taskcon->taskcon_mm_name        = $request->input('taskcon_mm_name');
+        $taskcon->taskcon_mm        = $request->input('taskcon_mm');
         $taskcon->taskcon_ba        = $request->input('taskcon_ba');
         $taskcon->taskcon_bd       = $request->input('taskcon_bd');
 
@@ -4464,10 +4740,49 @@ class ProjectController extends Controller
         $task_budget_gov_utility = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
 
 
+
+
+        ($task_sub = $task->subtask);
+        $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+                $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+                $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+                $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+                $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+          //วใ dd($task_sub_sums);
+
+          $tasksDetails = $task;
          // dd($tasks);
 
         return view('app.projects.tasks.editsub', compact(
-
+            'tasksDetails',
+            'task_sub_sums',
             'contract_s',
             'contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
@@ -4529,10 +4844,47 @@ class ProjectController extends Controller
       $sum_task_refund_budget_gov_utility= $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 
 
+
+      ($task_sub = $task->subtask);
+      $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+          if ($subtask->task_budget_it_operating > 1) {
+              $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+              $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+              $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+              $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+          }
+
+          if ($subtask->task_budget_it_investment > 1) {
+              $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+              $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+              $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+              $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+              // Add other fields as necessary...
+          }
+
+          if ($subtask->task_budget_gov_utility > 1) {
+              $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+              $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+              $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+              $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+              // Add other fields as necessary...
+          }
+
+          return $carry;
+      }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+          'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+          'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+        //วใ dd($task_sub_sums);
+
+        $tasksDetails = $task;
         //dd($tasks);
 
         return view('app.projects.tasks.editsubno', compact(
-
+            'task_sub_sums','tasksDetails',
 
         'sum_task_refund_budget_it_operating', 'sum_task_refund_budget_it_investment', 'sum_task_refund_budget_gov_utility','sum_task_budget_gov_utility', 'sum_task_budget_it_investment', 'sum_task_budget_it_operating', 'projectDetails', 'contracts', 'project', 'task', 'tasks', 'contract', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
@@ -4677,7 +5029,7 @@ class ProjectController extends Controller
                             // Update other task attributes as needed
                             //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
                             // $task->taskcon_pp        = $request->input('taskcon_pp');
-                        //   dd($task);
+                          // dd($task);
 
 
                             if ($task->save()) {
@@ -4689,7 +5041,7 @@ class ProjectController extends Controller
                                         'task_id' => $id_task,
                                     ]);
                                 } else {
-                                    ContractHasTask::where('task_id', $id_task)->delete();
+
                                 }
 
                     // Assign the project_id to the Taskcon
@@ -4700,7 +5052,7 @@ class ProjectController extends Controller
                         //$taskcon = new Taskcon;
                         //$taskcon->task_id = $task->task_id;
                         // Set other properties of $taskcon as needed
-                        return redirect()->route('project.show', $project->hashid);
+                        return redirect()->route('project.view', $project->hashid);
                     } else {
                         // If $taskcon is not null, you can safely set its properties
                         $taskcon->task_id = $task->task_id;
@@ -4886,4 +5238,529 @@ class ProjectController extends Controller
         }
         return redirect()->route('project.view', $project);
     }
+
+    public function taskRefund($project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+        $task = Task::find($id);
+        if ($task) {
+            $task->task_refund_pa_status = '2';
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
+
+    }
+
+
+    public function taskRefundbudget(Request $request,$project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+
+        ($task = Task::find($id));
+        ($idproject = Hashids::decode($project)[0]);
+        $tasks = DB::table('tasks')
+        ->join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+        ->select('tasks.*', 'taskcons.*')
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+        ->get();
+
+//dd($tasks);
+
+(       $tasks = DB::table('tasks')
+            ->select(
+                'tasks.*',
+                'asum.tt',
+                'asum.total_task_mm_budget_task_sum',
+                'asum.costs_disbursement_sum',
+                'asum.total_task_task_budget',
+                'a.total_task_mm_budget_task',
+                'a.costs_disbursement',
+
+                'a.total_taskcon_cost',
+                'a.total_task_refund_pa_budget',
+                'a.total_taskcon_pay',
+                'ab.total_task_refund_pa_budget_1',
+                'ac.total_task_refund_pa_budget_2',
+                'ab.total_task_mm_budget_1',
+                'ac.total_task_mm_budget_2',
+                'ab.cost_pa_1',
+                'ac.cost_no_pa_2',
+                'a.total_pay',
+                'ab.total_pay_1',
+                'ac.total_pay_2',
+                'a.total_taskcon_pay',
+                'cc.s',
+                'cc.c',
+                'ad.total_taskcon_cost_pa_1',
+                'ad.total_taskcon_pay_pa_1',
+                'astatus_pa.total_task_refund_pa_budget_status',
+                'astatus.total_task_refund_no_pa_budget_status'
+            )
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+
+                sum(tasks.task_budget_gov_utility) +
+                sum(tasks.task_budget_it_operating) +
+                sum(tasks.task_budget_it_investment) as tt,
+
+
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_sum,
+
+                sum(COALESCE(tasks.task_budget_gov_utility,0))
+                +sum(COALESCE(tasks.task_budget_it_operating,0))
+                +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_task_budget ,
+
+
+                sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as costs_disbursement_sum
+
+
+        from tasks
+
+
+                    where tasks.deleted_at IS NULL
+
+        group by tasks.task_parent) as asum'),
+                'asum.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task,
+                sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as costs_disbursement,
+        sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as total_taskcon_cost ,
+         sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay,
+
+
+        sum( COALESCE(tasks.task_pay,0))  as total_pay,
+
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget
+
+
+        from tasks
+
+        INNER JOIN
+        contract_has_tasks
+        ON
+            tasks.task_id = contract_has_tasks.task_id
+        INNER JOIN
+        contracts
+        ON
+            contract_has_tasks.contract_id = contracts.contract_id
+        INNER JOIN
+        taskcons
+        ON
+            contracts.contract_id = taskcons.contract_id
+            where tasks.deleted_at IS NULL
+
+        group by tasks.task_parent) as a'),
+                'a.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_pa_1 ,
+        sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_1,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay_1,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_1
+
+        from tasks
+        where tasks.task_type=1   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ab'),
+                'ab.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_no_pa_2 ,
+        sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_2,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay_2,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_2
+        from tasks  where tasks.task_type=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ac'),
+                'ac.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_status
+        from tasks  where tasks.task_type=1  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus_pa'),
+                'astatus_pa.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_status
+        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus'),
+                'astatus.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+            ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
+            taskcons.contract_id as c,
+            taskcons.taskcon_pay
+            FROM taskcons) as cc'), function ($join) {
+                $join->on('cc.s', '=', 'tasks.task_id');
+            })
+            ->leftJoin(
+                DB::raw('(select tasks.task_id,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as total_taskcon_cost_pa_1 ,
+                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1
+
+                from tasks
+                INNER JOIN
+                contract_has_tasks
+                ON
+                    tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN
+                contracts
+                ON
+                    contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN
+                taskcons
+                ON
+                    contracts.contract_id = taskcons.contract_id
+                where tasks.task_type=1  AND tasks.deleted_at IS NULL  group by tasks.task_id) as ad'),
+                'ad.task_id',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+
+            ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+
+            ->where('project_id', ($idproject))
+
+            ->get()
+            ->toArray());
+      // dd($tasks);
+
+
+
+
+
+      // ค้นหาข้อมูลงานที่ตรงกับ ID ที่คุณต้องการ
+      $tasksum = collect($tasks)->firstWhere('task_id', $id);
+
+      //dd($tasksum);
+
+
+
+
+
+        if ($task) {
+
+            $task->task_status = '2';
+            $task->task_refund_pa_status = '3';
+
+            $task->task_refund_pa_budget = ($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment + $tasksum->task_budget_gov_utility)-$tasksum->costs_disbursement_sum;
+
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
+
+    }
+
+
+
+
+
+    public function taskRefundbudget_1(Request $request,$project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+
+        ($task = Task::find($id));
+        ($idproject = Hashids::decode($project)[0]);
+        $tasks = DB::table('tasks')
+        ->join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
+        ->select('tasks.*', 'taskcons.*')
+         ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+ // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+        ->get();
+
+//dd($tasks);
+
+(       $tasks = DB::table('tasks')
+            ->select(
+                'tasks.*',
+                'asum.tt',
+                'asum.total_task_mm_budget_task_sum',
+                'asum.costs_disbursement_sum',
+                'asum.total_task_task_budget',
+                'a.total_task_mm_budget_task',
+                'a.costs_disbursement',
+
+                'a.total_taskcon_cost',
+                'a.total_task_refund_pa_budget',
+                'a.total_taskcon_pay',
+                'ab.total_task_refund_pa_budget_1',
+                'ac.total_task_refund_pa_budget_2',
+                'ab.total_task_mm_budget_1',
+                'ac.total_task_mm_budget_2',
+                'ab.cost_pa_1',
+                'ac.cost_no_pa_2',
+                'a.total_pay',
+                'ab.total_pay_1',
+                'ac.total_pay_2',
+                'a.total_taskcon_pay',
+                'cc.s',
+                'cc.c',
+                'ad.total_taskcon_cost_pa_1',
+                'ad.total_taskcon_pay_pa_1',
+                'astatus_pa.total_task_refund_pa_budget_status',
+                'astatus.total_task_refund_no_pa_budget_status'
+            )
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+
+                sum(tasks.task_budget_gov_utility) +
+                sum(tasks.task_budget_it_operating) +
+                sum(tasks.task_budget_it_investment) as tt,
+
+
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_sum,
+
+                sum(COALESCE(tasks.task_budget_gov_utility,0))
+                +sum(COALESCE(tasks.task_budget_it_operating,0))
+                +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_task_budget ,
+
+
+                sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as costs_disbursement_sum
+
+
+        from tasks
+
+
+                    where tasks.deleted_at IS NULL
+
+        group by tasks.task_parent) as asum'),
+                'asum.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task,
+                sum( COALESCE(tasks.task_cost_gov_utility,0))
+        +sum( COALESCE(tasks.task_cost_it_operating,0))
+        +sum( COALESCE(tasks.task_cost_it_investment,0))
+        as costs_disbursement,
+        sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+        +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+        as total_taskcon_cost ,
+         sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay,
+
+
+        sum( COALESCE(tasks.task_pay,0))  as total_pay,
+
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget
+
+
+        from tasks
+
+        INNER JOIN
+        contract_has_tasks
+        ON
+            tasks.task_id = contract_has_tasks.task_id
+        INNER JOIN
+        contracts
+        ON
+            contract_has_tasks.contract_id = contracts.contract_id
+        INNER JOIN
+        taskcons
+        ON
+            contracts.contract_id = taskcons.contract_id
+            where tasks.deleted_at IS NULL
+
+        group by tasks.task_parent) as a'),
+                'a.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_pa_1 ,
+        sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_1,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay_1,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_1
+
+        from tasks
+        where tasks.task_type=1   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ab'),
+                'ab.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+         sum(COALESCE(tasks.task_cost_gov_utility,0))
+        +sum(COALESCE(tasks.task_cost_it_operating,0))
+        +sum(COALESCE(tasks.task_cost_it_investment,0))
+        as cost_no_pa_2 ,
+        sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_2,
+        sum( COALESCE(tasks.task_pay,0)) as total_pay_2,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_2
+        from tasks  where tasks.task_type=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as ac'),
+                'ac.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_pa_budget_status
+        from tasks  where tasks.task_type=1  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus_pa'),
+                'astatus_pa.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_status
+        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus'),
+                'astatus.task_parent',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+            ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
+            taskcons.contract_id as c,
+            taskcons.taskcon_pay
+            FROM taskcons) as cc'), function ($join) {
+                $join->on('cc.s', '=', 'tasks.task_id');
+            })
+            ->leftJoin(
+                DB::raw('(select tasks.task_id,
+                sum(COALESCE(tasks.task_pay,0)) as total_pay,
+                sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
+                +sum(COALESCE(taskcons.taskcon_cost_it_investment,0))
+                as total_taskcon_cost_pa_1 ,
+                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1
+
+                from tasks
+                INNER JOIN
+                contract_has_tasks
+                ON
+                    tasks.task_id = contract_has_tasks.task_id
+                INNER JOIN
+                contracts
+                ON
+                    contract_has_tasks.contract_id = contracts.contract_id
+                INNER JOIN
+                taskcons
+                ON
+                    contracts.contract_id = taskcons.contract_id
+                where tasks.task_type=1  AND tasks.deleted_at IS NULL  group by tasks.task_id) as ad'),
+                'ad.task_id',
+                '=',
+                'tasks.task_id'
+            )
+
+
+
+
+            ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+
+            ->where('project_id', ($idproject))
+
+            ->get()
+            ->toArray());
+      // dd($tasks);
+
+
+
+
+
+      // ค้นหาข้อมูลงานที่ตรงกับ ID ที่คุณต้องการ
+      $tasksum = collect($tasks)->firstWhere('task_id', $id);
+
+      //dd($tasksum);
+
+
+
+
+
+        if ($task) {
+            $task->task_refund_pa_status = '3';
+
+            $task->task_refund_pa_budget = ($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment + $tasksum->task_budget_gov_utility)-($tasksum->task_cost_it_operating+$tasksum->task_cost_it_investment+$tasksum->task_cost_gov_utility);
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
+
+    }
+
+
+    public function taskRefundbudget_4($project, $task)
+    {
+        $id = Hashids::decode($task)[0];
+        $task = Task::find($id);
+
+        if ($task) {
+            $subtasks = $task->subtask;
+
+            foreach ($subtasks as $subtask) {
+                $subtask->task_refund_pa_status = '4';
+                $subtask->save();
+            }
+        }
+
+        return redirect()->route('project.view', $project);
+    }
+
 }

@@ -79,7 +79,8 @@
               searchable: false
             },
             {
-              data: 'contract_fiscal_year'
+              data: 'contract_fiscal_year_output',
+              name: 'contract_fiscal_year'
             },
             {
               data: 'contract_number_output',

@@ -21,7 +21,7 @@
   <a href="{{ route('project.task.createsub', $project) }}" class="btn btn-primary text-white">ไปยังหน้าการใช้จ่ายของงาน</a> --}}
                             </x-slot:toolbar>
                             <form method="POST" action="{{ route('project.task.storesubno', ['project' => $project]) }}"
-                                class="row needs-validation" novalidate>
+                                class="row needs-validation" enctype="multipart/form-data"  novalidate>
                                 @csrf
 
 
@@ -107,7 +107,7 @@
                                                                 <div class="col-md-4">
                                                                     <label for="task_budget_it_operating0"
                                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                                    <span>        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }}บาท
+                                                                    <span>        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท
                                                                     </span>
                                                                 </div>
                                                             @endif
@@ -116,7 +116,7 @@
                                                                 <div class="col-4">
                                                                     <label for="task_budget_it_investment0"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                                    <span>                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }}บาท
+                                                                    <span>                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }} บาท
                                                                     </span>
                                                                 </div>
                                                             @endif
@@ -403,7 +403,7 @@
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
                                                                         id="task_refund_pa_budget"
-                                                                        name="task_refund_pa_budget" min="0">
+                                                                        name="task_refund_pa_budget" min="0"  readonly>
 
                                                                     {{--  <div class="invalid-feedback">
                                                                             {{ __('ค่าสาธารณูปโภค') }}
@@ -500,6 +500,12 @@
                                                         </div>
                                                       </div>
                                                     </div>
+
+
+
+
+
+
 
 
                                             </div>
@@ -703,17 +709,19 @@
                                     var fieldId = $(this).attr('id');
 
                                     if (fieldId === "task_budget_it_investment") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_investment- $sum_task_cost_it_investment }});
+
+                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
                                                 } else if (fieldId === "task_budget_it_operating") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $sum_task_cost_it_operating}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
                                                 } else if (fieldId === "task_budget_gov_utility") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $sum_task_cost_gov_utility}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
                                                 }
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
                                     if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                    $(this).val(max.toFixed(2));
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกินwwww " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                     /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
                     }
 
 
@@ -737,7 +745,8 @@
                                 var current = parseFloat($(this).val().replace(/,/g, ""));
                                 if (current > max) {
                                     Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                                    $(this).val(max.toFixed(2));
+                                    /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
                                 }
                             });
                         });
@@ -764,7 +773,8 @@
                 if (current > max) {
                     Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
                         " บาท");
-                    $(this).val(max.toFixed(2));
+                    /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
                 }
                 });
 

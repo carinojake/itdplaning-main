@@ -30,7 +30,7 @@
                         <div class="card-body">
 
                             <button id="popover_content_wrapper"
-                            class="btn " style="width: 13rem;" data-bs-toggle="popover"
+                            class="col-md-12 btn " data-bs-toggle="popover"
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover"
                              data-bs-title="งบประมาณที่ได้รับการจัดสรร" data-bs-content="
@@ -72,11 +72,14 @@
                         </div>
                     </div>
                 </div>
+
+
+
                 <div class="col">
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
-                            {{-- <button class="btn " style="width: 13rem;"
+                            {{-- <button class="col-md-12 btn "
                                 data-bs-toggle="collapse" href="#collapseExample2"
                                 role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
@@ -110,7 +113,9 @@
 
 
                                 <div class="fs-4 fw-semibold text-success">
-                                    {{ number_format(floatval($budget['budget_total_mm_pr']), 2) }}
+{{--                                     {{ number_format(floatval($budget['budget_total_mm_pr']), 2) }} --}}
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
                                 </div>
                                 <small class="text-xl">
                                     งบประมาณคงเหลือที่ไช้ได้
@@ -127,7 +132,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 <div class="fs-4 fw-semibold text-warning">
@@ -148,7 +153,7 @@
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 @php
@@ -169,7 +174,7 @@
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 @php
@@ -218,7 +223,7 @@
 
                         <div class="card">
                             <div class="card-body">
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
@@ -421,7 +426,8 @@
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
-                                       {{ number_format(floatval($op_refund_mm_pr), 2) }}
+                                       {{-- {{ number_format(floatval($op_refund_budget_pr), 2) }} --}}
+                                       {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -431,7 +437,7 @@
                                     </div>
                                 </button>
                             </div>
-                            <div class="collapse" id="collapseExample1">
+                          {{--   <div class="collapse" id="collapseExample1">
                                 <div class="card-body">
 
                                     <button class="col-md-12 btn " style="color:   #06268e"
@@ -461,7 +467,7 @@
                                     </button>
                                 </div>
 
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -758,7 +764,7 @@
                                     href="#collapseExample1" role="button" aria-expanded="false"
                                     aria-controls="collapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
-                                       {{ number_format(floatval($is_refund_mm_pr), 2) }}
+                                    {{--    {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -883,7 +889,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
                                     <div class="fs-4 fw-semibold">
@@ -905,7 +911,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
                                     <div class="fs-4 fw-semibold">
@@ -924,7 +930,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
                                     <div class="fs-4 fw-semibold">
@@ -949,7 +955,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
                                     <div class="fs-4 fw-semibold text-warning">
@@ -969,7 +975,7 @@
                         <!--คงเหลือ-->
                         <div class="card  ">
                             <div class="card-body">
-                                <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                     href="#collapseExample2" role="button" aria-expanded="false"
                                     aria-controls="collapseExample">
 
@@ -998,7 +1004,7 @@
                     คำนวน 4
                     <div class="card  ">
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 @php
@@ -1015,7 +1021,7 @@
                         </div>
 
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 {{--  @php
@@ -1031,7 +1037,7 @@
                         </div>
 
                      <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
 
@@ -1055,7 +1061,7 @@
                     คำนวน 5
                     <div class="card  ">
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 @php
@@ -1071,7 +1077,7 @@
 
                         </div>
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 {{--  @php
@@ -1086,7 +1092,7 @@
                             </button>
                         </div>
                         <div class="card-body">
-                            <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                            <button class="col-md-12 btn " data-bs-toggle="collapse"
                                 href="#collapseExample2" role="button" aria-expanded="false"
                                 aria-controls="collapseExample">
                                 {{--  @php
@@ -1116,7 +1122,7 @@
                 คำนวน 6
                 <div class="card  ">
                     <div class="card-body">
-                        <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                        <button class="col-md-12 btn " data-bs-toggle="collapse"
                             href="#collapseExample2" role="button" aria-expanded="false"
                             aria-controls="collapseExample">
                             @php
@@ -1132,7 +1138,7 @@
 
                     </div>
                     <div class="card-body">
-                        <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                        <button class="col-md-12 btn " data-bs-toggle="collapse"
                             href="#collapseExample2" role="button" aria-expanded="false"
                             aria-controls="collapseExample">
                             {{--  @php
@@ -1156,7 +1162,7 @@
                 คำนวน 7
                 <div class="card  ">
                     <div class="card-body">
-                        <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                        <button class="col-md-12 btn " data-bs-toggle="collapse"
                             href="#collapseExample2" role="button" aria-expanded="false"
                             aria-controls="collapseExample">
                             @php
@@ -1172,7 +1178,7 @@
 
                     </div>
                     <div class="card-body">
-                        <button class="btn " style="width: 13rem;" data-bs-toggle="collapse"
+                        <button class="col-md-12 btn " data-bs-toggle="collapse"
                             href="#collapseExample2" role="button" aria-expanded="false"
                             aria-controls="collapseExample">
                             {{--  @php

@@ -20,11 +20,11 @@
         <div class="col-sm-6 mt-3" >เลือกปีงบประมาณ &nbsp;</div>
 
         <select name="fiscal_year" class="form-select">
-            @for($i = 2564; $i <= date('Y')+543+3; $i++)
-            <option value="{{ $i }}" {{ ($fiscal_year == $i) ? 'selected' : '' }}>{{ $i }}</option>
-            @endfor
-            <!-- เพิ่มตัวเลือกเพิ่มเติมตามที่จำเป็น -->
+            @foreach($fiscal_years as $year)
+                <option value="{{ $year }}" {{ ($fiscal_year == $year) ? 'selected' : '' }}>{{ $year }}</option>
+            @endforeach
         </select>
+
 
         <button class="btn btn-secondary" type="submit">ค้นหา</button>
 
@@ -44,7 +44,7 @@
                                         <div class="card">
                                             <div class="card-body">
 
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample" role="button" aria-expanded="false"
                                                     aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold">
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="collapse" id="collapseExample">
                                                 <div class="card-body">
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
@@ -72,7 +72,7 @@
                                                             </button>
                                                 </div>
                                                 <div class="card-body">
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
@@ -86,7 +86,7 @@
                                                             </button>
                                                 </div>
                                                 <div class="card-body">
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
@@ -108,7 +108,7 @@
                                         <div class="card ">
                                             <div class="card-body ">
 
-                                                <button class="btn btn btn-danger " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn btn btn-primary" data-bs-toggle="collapse"
                                                     href="#collapseExample1" role="button" aria-expanded="false"
                                                     aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold ">
@@ -126,11 +126,11 @@
                                             <div class="collapse" id="collapseExample1">
                                                 <div class="card-body">
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn "   data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold text-danger" >
+                                                                <div class="fs-4 fw-semibold text-primary" >
                                                                     {{ number_format((($ospa +$osa)), 2) }}
                                                                 </div>
                                                                 <small
@@ -141,11 +141,11 @@
                                                 </div>
                                                 <div class="card-body">
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold text-danger" >
+                                                                <div class="fs-4 fw-semibold text-primary" >
                                                                     {{ number_format((($ispa ) + ($isa)), 2) }}
                                                                 </div>
                                                                 <small
@@ -157,11 +157,11 @@
 
                                                 <div class="card-body">
 
-                                                    <button class="btn "  style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                                 href="#collapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold text-danger" >
+                                                                <div class="fs-4 fw-semibold text-primary" >
                                                                     {{ number_format($utpcs + $utsc, 2) }}
                                                                 </div>
                                                                 <small
@@ -178,7 +178,8 @@
     <div class="card">
         <div class="card-body">
             <!--รอการเบิกจ่ายทั้งหมด 3-->
-            <button class="btn btn-warning " style="width: 12rem;" data-bs-toggle="collapse"
+            <button class="col-md-12 btn btn-danger "
+             data-bs-toggle="collapse"
                 href="#collapseExample3" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
                 <div class="fs-4 fw-semibold ">
@@ -198,10 +199,10 @@
         <div class="collapse" id="collapseExample3">
             <div class="card-body ">
 
-                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                <button class="col-md-12 btn " data-bs-toggle="collapse"
                 href="#collapseExample3" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
-                <div class="fs-4 fw-semibold text-warning"
+                <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
                     {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
@@ -217,10 +218,10 @@
 
             <div class="card-body">
 
-                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                <button class="col-md-12 btn " data-bs-toggle="collapse"
                 href="#collapseExample3" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
-                <div class="fs-4 fw-semibold text-warning"
+                <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
                     {{ number_format($ispa - $itpsa1 - ($itpsa2 - $isa), 2) }}
@@ -235,13 +236,13 @@
             </div>
             <div class="card-body">
 
-                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                <button class="col-md-12 btn " data-bs-toggle="collapse"
                 href="#collapseExample3" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
-                <div class="fs-4 fw-semibold text-warning"
+                <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
-                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)) }}
+                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc_pay)) }}
 
                 </div>
                 <div>
@@ -264,7 +265,7 @@
                                     <div class="col">
                                         <div class="card">
                                             <div class="card-body ">
-                                                <button class="btn btn-primary " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn btn-warning "  data-bs-toggle="collapse"
                                                     href="#collapseExample2" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     <div class="fs-4 fw-semibold "
@@ -284,10 +285,10 @@
                                             <div class="collapse" id="collapseExample2">
                                                 <div class="card-body">
 
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample2" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
+                                                    <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
                                                         {{ number_format($otpsa1 + $otpsa2, 2) }}
@@ -302,10 +303,10 @@
                                                 </div>
                                                 <div class="card-body">
 
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample2" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
+                                                    <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
                                                         {{ number_format($itpsa1 + $itpsa2, 2) }}
@@ -321,10 +322,10 @@
                                                 </div>
                                                 <div class="card-body">
 
-                                                    <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample2" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold text-primary"
+                                                    <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
                                                         {{ number_format(($utsc_pay_pa +  $utsc_pay), 2) }}
@@ -354,7 +355,7 @@
                                         <!--คงเหลือ-->
                                         <div class="card  ">
                                             <div class="card-body ">
-                                                <button class="btn btn-success" style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn btn-success"  data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
@@ -371,7 +372,7 @@
                                             </div>
                                             <div class="collapse" id="collapseExample5">
                                             <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
@@ -387,7 +388,7 @@
 
                                             </div>
                                             <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php
@@ -403,7 +404,7 @@
 
                                             </div>
                                             <div class="card-body">
-                                                <button class="btn " style="width: 12rem;" data-bs-toggle="collapse"
+                                                <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
                                                     @php

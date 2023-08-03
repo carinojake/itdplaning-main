@@ -97,7 +97,10 @@
                                             <div class="form-group">
                                                 <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
                                                 @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
-                                                    {{ $contract_s->contract_number }}
+                                                <input type="text" class="form-control" id="contract_number"
+                                                value=" {{ $contract_s->contract_number }}" disabled readonly>
+
+
                                                 @else
                                                     <select name="task_contract" id="task_contract" class="form-control">
                                                         <option value="">ไม่มี</option>
@@ -111,7 +114,7 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('สัญญา') }}
                                                     </div>
-                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="col-md-3 mt-4">
@@ -119,7 +122,9 @@
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>
-
+                                        @endif
+                                    </div>
+                                </div>
                                {{--      <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label for="task_start_date"
@@ -370,14 +375,14 @@
                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>
 
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
-                                            <label class="form-check-label" for="task_refund_pa_status2" @checked($task->task_refund_pa_status == 2) >
+                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
+                                            <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1) >
                                               ไม่ได้คืน
                                             </label>
                                           </div>
                                         <div class="form-check form-check-inline ms-5">
-                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
-                                          <label class="form-check-label" for="1"  @checked($task->task_refund_pa_status == 1)>
+                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
+                                          <label class="form-check-label" for="task_refund_pa_status2"  @checked($task->task_refund_pa_status == 2)>
                                             คืน
                                           </label>
                                         </div>
@@ -437,14 +442,38 @@
         });
         </script>
  --}}
+ <script type="text/javascript">
 
 
+    $(document).ready(function() {
+
+      $(".btn-success").click(function(){
+          var html = $(".clone").html();
+          $(".increment").after(html);
+      });
+
+      $("body").on("click",".btn-danger",function(){
+          $(this).parents(".control-group").remove();
+      });
+
+    });
+
+</script>
 
 
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 on the select element
+        $('.js-example-basic-single').select2();
 
-
-
-
+        $('.js-example-basic-single').on('change', function() {
+            // Get the selected value
+            const selectedValue = $(this).val();
+            // Handle the selected value as needed
+            console.log(selectedValue);
+        });
+    });
+</script>
 
         <script>
             $(document).ready(function() {
@@ -496,7 +525,161 @@
                 </script>
 
 
+{{-- <script>
+    $(document).ready(function() {
+        // Initially hide the fields
+        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+        $("#task_pay_d").hide();
 
+        // Show the fields when a value is entered in task_budget_it_operating
+        $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+            var fieldId = $(this).attr('id');
+
+
+
+
+            /* if ($(this).val() != '') {
+            if (fieldId === "task_budget_it_operating" && $(this).val() > 1) {
+                $("#task_cost_it_operating").parent().show();
+                $("#task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+                $("#task_pay_d").hide();
+            } else if (fieldId === "task_budget_it_investment" && $(this).val() > 1) {
+                $("#task_cost_it_investment").parent().show();
+                $("#task_cost_it_operating, #task_cost_gov_utility").parent().hide();
+                $("#task_pay_d").hide();
+            } else if (fieldId === "task_budget_gov_utility" && $(this).val() > 1) {
+                $("#task_cost_gov_utility").parent().show();
+                $("#task_cost_it_operating, #task_cost_it_investment").parent().hide();
+                $("#task_pay_d").hide();
+            }
+        } else {
+            $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+            $("#task_pay_d").hide();
+            }
+        }); */
+
+        // Show the fields when a value is entered in task_cost_it_operating
+        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            if ($(this).val() != '') {
+                $("#task_pay_d").show();
+            } else {
+                $("#task_pay_d").hide();
+            }
+        });
+    });
+</script> --}}
+
+<script>
+                        $(document).ready(function() {
+                            $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
+                                function() {
+                                    var max = 0;
+                                    var fieldId = $(this).attr('id');
+
+                                    if (fieldId === "task_budget_it_investment") {
+
+                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+                                                } else if (fieldId === "task_budget_it_operating") {
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+                                                } else if (fieldId === "task_budget_gov_utility") {
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+                                                }
+
+                                    var current = parseFloat($(this).val().replace(/,/g, ""));
+                                    if (current > max) {
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกินwwww " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                     /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
+                    }
+
+
+                                });
+                        });
+                    </script>
+                    <script>
+                        $(document).ready(function() {
+                            $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+                                var max ;
+                                var fieldId = $(this).attr('id');
+
+                                if (fieldId === "task_cost_it_investment") {
+                                    max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+                                } else if (fieldId === "task_cost_it_operating") {
+                                    max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+                                } else if (fieldId === "task_cost_gov_utility") {
+                                    max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+                                }
+
+                                var current = parseFloat($(this).val().replace(/,/g, ""));
+                                if (current > max) {
+                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                                    /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
+                                }
+                            });
+                        });
+                    </script>
+
+
+                <script>
+                $(document).ready(function() {
+                $("#task_pay").on("input", function() {
+                var max;
+                var fieldId = $(this).attr('id');
+                // Disable the fields
+                /*             $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
+                */
+                if (fieldId === "task_cost_it_investment") {
+                    max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
+                } else if (fieldId === "task_cost_it_operating") {
+                    max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
+                } else if (fieldId === "task_cost_gov_utility") {
+                    max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g, ""));
+                if (current > max) {
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                        " บาท");
+                    /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
+                }
+                });
+
+
+                });
+                </script>
+<script>
+    var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+    var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
+
+    function calculateRefund() {
+        var totalRefund = 0;
+
+        costFields.forEach(function(costField, index) {
+            var pa_value = $("#" + costField).val();
+            var pr_value = $("#" + budgetFields[index]).val();
+
+            if (pa_value && pr_value) {
+                var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                if (pa_budget != 0) {
+                    var refund = pr_budget - pa_budget;
+                    totalRefund += refund;
+                }
+            }
+        });
+
+        $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
+    }
+
+    $(document).ready(function() {
+        costFields.forEach(function(costField, index) {
+            $("#" + costField).on("input", calculateRefund);
+        });
+    });
+</script>
 
 
     </x-slot:javascript>

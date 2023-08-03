@@ -404,11 +404,26 @@
                                                             </div>
                                                             @endif
                                                             </div>
-                                                            <div class=" col-md-4 mt-3">
-                                                                <label for="task_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
-                                                                <input type="text" placeholder="0.00" step="0.01" class="form-control" id="task_refund_pa_budget" name="task_refund_pa_budget" min="0" value="{{ $task->task_refund_pa_budget }}">
-                                                              </div>
+                                                            <div id="refund" {{-- style="display:none;" --}}>
+                                                                <div class=" row mt-3">
+                                                                    <div class="col-md-4">
+                                                                        <label for="task_refund_pa_budget"
+                                                                            class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
+                                                                        <span class="text-danger"></span>
 
+                                                                        <input type="text" placeholder="0.00"
+                                                                            step="0.01"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            id="task_refund_pa_budget"
+                                                                            name="task_refund_pa_budget" min="0"   value={{ $task->task_refund_pa_budget }} readonly>
+
+                                                                        {{--  <div class="invalid-feedback">
+                                                                                {{ __('ค่าสาธารณูปโภค') }}
+                                                                            </div> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                     </div>
                                                     <div class="callout callout-light">
                                                             <div id="ba_form" {{-- style="display:none;" --}}>
@@ -800,7 +815,8 @@
 
 
 
-                        $(this).val(max.toFixed(2));
+                         /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
                     }
                     });
                     });
@@ -823,7 +839,8 @@
             var current = parseFloat($(this).val().replace(/,/g , ""));
             if (current > max) {
                 Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                $(this).val(max.toFixed(2));
+             /*  $(this).val(max.toFixed(2)); */
+             $(this).val(0);
             }
         });
     });
@@ -848,7 +865,8 @@
         var current = parseFloat($(this).val().replace(/,/g , ""));
         if (current > max) {
                 Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})+ " บาท");
-                $(this).val(max.toFixed(2));
+                 /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
             }
     });
 });
@@ -874,5 +892,35 @@
         });
     });
 </script>
+
+<script>
+    $("#task_pay").on("input", function() {
+        calculateRefund();
+    });
+
+    function calculateRefund() {
+        var pr_budget , pa_budget , refund ;
+
+        if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+        else if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+        else if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
+            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
+            refund = pr_budget - pa_budget;
+        }
+
+        $("#task_refund_pa_budget").val(refund.toFixed(2));
+    }
+</script>
+
+
     </x-slot:javascript>
 </x-app-layout>

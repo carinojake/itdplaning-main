@@ -119,6 +119,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/project/{project}/task/{task}/createsubnop', [ProjectController::class, 'taskCreateSubnop'])->name('project.task.createsubnop');
     Route::post('/project/{project}/task/{task}/storesubnop', [ProjectController::class, 'taskStoreSubnop'])->name('project.task.storesubnop');
 
+    Route::post('/project/{project}/task/{task}/taskRefund', [ProjectController::class, 'taskRefund'])->name('project.task.taskRefund');
+    Route::post('/project/{project}/task/{task}/taskRefundbudget', [ProjectController::class, 'taskRefundbudget'])->name('project.task.taskRefundbudget');
+    Route::post('/project/{project}/task/{task}/taskRefundbudget_1', [ProjectController::class, 'taskRefundbudget_1'])->name('project.task.taskRefundbudget_1');
 
     Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');
 

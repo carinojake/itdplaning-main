@@ -22,9 +22,9 @@
                                 @csrf
                                 <div class="row mt-3">
                                     <div class="col-md-12">
-                                        <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
+                                        <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="task_name" name="task_name"
+                                        <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name"
                                             required autofocus>
                                     </div>
 
@@ -195,6 +195,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div type="hidden" class="form-check form-check-inline">
+                                        <input type="hidden" class="form-check-input" type="radio" name="task_refund_pa_status"
+                                            id="task_refund_pa_status" value="4" checked>
+
+                                    </div>
                                 </div>
 
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
@@ -293,9 +298,9 @@
 
             Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
 
+            $(this).val(0);
 
-
-            $(this).val(max.toFixed(2));
+            /* $(this).val(max.toFixed(2)); */
         }
     });
 });

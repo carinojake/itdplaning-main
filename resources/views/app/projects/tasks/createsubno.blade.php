@@ -443,7 +443,7 @@
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                         class="form-control numeral-mask"
                                                                         id="task_refund_pa_budget"
-                                                                        name="task_refund_pa_budget" min="0">
+                                                                        name="task_refund_pa_budget" min="0" readonly>
 
                                                                     {{--  <div class="invalid-feedback">
                                                                             {{ __('ค่าสาธารณูปโภค') }}
@@ -912,7 +912,8 @@
                             var current = parseFloat($(this).val().replace(/,/g, ""));
                             if (current > max) {
     Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-    $(this).val(max.toFixed(2));
+   /*  $(this).val(max.toFixed(2)); */
+   $(this).val(0);
 }
 
 
@@ -936,7 +937,8 @@
                         var current = parseFloat($(this).val().replace(/,/g, ""));
                         if (current > max) {
                             Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                            $(this).val(max.toFixed(2));
+                          /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
                         }
                     });
                 });
@@ -964,7 +966,8 @@
             if (current > max) {
                 Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
                     " บาท");
-                $(this).val(max.toFixed(2));
+                 /*  $(this).val(max.toFixed(2)); */
+           $(this).val(0);
             }
         });
 

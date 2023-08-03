@@ -400,7 +400,7 @@
                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_pr_budget"
-                                                                                    min="0">
+                                                                                    min="0"  onchange="calculateRefund()">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -439,10 +439,11 @@
                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_pa_budget"
-                                                                                min="0">
+                                                                                min="0"
+                                                                                onchange="calculateRefund()">
                                                                         </div>
                                                                     </div>
-                                                                 <div id="contract_refund_pa_budget"
+                                                                 <div id="contract_refund_pa_budget_2"
                                                                        >
                                                                         <div class=" row mt-3">
                                                                             <div class="col-md-4">
@@ -456,7 +457,7 @@
                                                                                     class="form-control numeral-mask"
                                                                                     id="contract_refund_pa_budget"
                                                                                     name="contract_refund_pa_budget"
-                                                                                    min="0">
+                                                                                    min="0"  readonly>
 
                                                                             </div>
 
@@ -1159,7 +1160,37 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+            <script>
+                var costFields = ['contract_pa_budget', 'task_cost_it_investment', 'task_cost_gov_utility'];
+                var budgetFields = ['contract_pr_budget', 'task_budget_it_investment', 'task_budget_gov_utility'];
 
+                function calculateRefund() {
+                    var totalRefund = 0;
+
+                    costFields.forEach(function(costField, index) {
+                        var pa_value = $("#" + costField).val();
+                        var pr_value = $("#" + budgetFields[index]).val();
+
+                        if (pa_value && pr_value) {
+                            var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                            var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                            if (pa_budget != 0) {
+                                var refund = pr_budget - pa_budget;
+                                totalRefund += refund;
+                            }
+                        }
+                    });
+
+                    $("#contract_refund_pa_budget").val(totalRefund.toFixed(2));
+                }
+
+                $(document).ready(function() {
+                    costFields.forEach(function(costField, index) {
+                        $("#" + costField).on("input", calculateRefund);
+                    });
+                });
+            </script>
 
             <script type="text/javascript">
 
@@ -1261,7 +1292,7 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
                                         confirmButtonColor: "#3085d6",
                                         confirmButtonText: "ตกลง"
                                     });
-                                    $(this).val(max.toFixed(2));
+                                    $(this).val(0);
                                 }
                             });
 
@@ -1831,6 +1862,9 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
                     $('#contract_type option[value="4"]').remove();
                 });
             </script>
+
+
+
 
         </x-slot:javascript>
     </x-app-layout>

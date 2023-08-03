@@ -73,7 +73,7 @@
                     @foreach ($task->subtask as $index => $subtask)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $subtask->task_name }}</td>
+                            <td>{{ $subtask->task_name }}{!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
                             <td>
                                 <span
                                     class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
