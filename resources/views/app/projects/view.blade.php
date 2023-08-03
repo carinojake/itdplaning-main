@@ -203,6 +203,7 @@
                         resize: true,
                         template(task) {
                             var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'black';
+                            var tmp_class2 = task.task_status == 2 ? 'blue' : 'black';
                             if (gantt.getState().selected_task == task.id) {
 
                                 return '<span style="color:' + tmp_class + ';">'+"<b>" + task.text + "</b>"+ '</span>';
@@ -525,8 +526,18 @@
 }
 
 
+else if (task.task_refund_pa_status == 3  && (task.task_status == 1)) {
 
-                                else if (task.task_refund_pa_status == 3) {
+var tmp_class = task.task_refund_pa_status == 3 ? 'green' : 'red';
+return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+    style: 'currency',
+    currency: 'THB'
+}).format(task.budget-task.budget_total_task_mm_sum+task.total_task_refund_budget_status) + '</span>';
+}
+
+
+
+                                else if (task.task_refund_pa_status == 3  && (task.task_status == 2)) {
 
                                 var tmp_class = task.task_refund_pa_status == 3 ? 'red' : 'red';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {

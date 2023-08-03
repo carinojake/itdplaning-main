@@ -765,6 +765,7 @@
                                     aria-controls="collapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
                                     {{--    {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -774,7 +775,7 @@
                                     </div>
                                 </button>
                             </div>
-                            <div class="collapse" id="collapseExample1">
+                           {{--  <div class="collapse" id="collapseExample1">
                                 <div class="card-body">
 
                                     <button class="col-md-12 btn " style="color:   #06268e"
@@ -820,8 +821,8 @@
                                             </div>
                                         </button>
                                     </div>
-                                </div> --}}
-                            </div>
+                                </div>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -1211,6 +1212,7 @@
                                         aria-controls="collapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-transparent ">
                                             {{ number_format($project['budget_gov_utility'], 2) }}
+
                                         </div>
                                         <div>
                                             <small class="text-xl">
@@ -1541,7 +1543,9 @@
                                         href="#collapseExample1" role="button" aria-expanded="false"
                                         aria-controls="collapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                            {{ number_format(floatval($ut_refund_mm_pr), 2) }}
+                                           {{--  {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
+
+                                            {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
                                         </div>
                                         <div>
                                             <small class="text-xl">
@@ -1551,7 +1555,7 @@
                                         </div>
                                     </button>
                                 </div>
-                                <div class="collapse" id="collapseExample1">
+                              {{--   <div class="collapse" id="collapseExample1">
                                     <div class="card-body">
 
                                         <button class="col-md-12 btn " style="color:   #06268e"
@@ -1597,8 +1601,8 @@
                                                 </div>
                                             </button>
                                         </div>
-                                    </div> --}}
-                                </div>
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
 

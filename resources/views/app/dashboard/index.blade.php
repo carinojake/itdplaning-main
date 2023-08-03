@@ -31,7 +31,7 @@
     </div>
 </form>
 <!-- Add the rest of your code here -->
-<a href="{{ route('dashboard.gantt') }}" class="btn btn-primary text-white">ดูรายงานและโครงการ</a>
+<a href="{{ route('dashboard.gantt') }}" class="btn btn-primary text-white">ดูงานและโครงการ</a>
 
                           </x-slot:toolbar>
                     <div class="col-sm-12">
@@ -241,8 +241,8 @@
                 aria-expanded="false" aria-controls="collapseExample">
                 <div class="fs-4 fw-semibold text-danger"
                     >
-                    <!--รวมเบิกจ่ายทั้งหมด-->
-                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc_pay)) }}
+                    <!--รวมเบิกจ่ายทั้งหมด 03082566-->
+                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc-$utsc_pay)) }}
 
                 </div>
                 <div>

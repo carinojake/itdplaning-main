@@ -1007,8 +1007,9 @@ as d')
             ($ut_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
             ->where('tasks.task_type',1)
-            ->where('tasks.deleted_at', NULL)
+
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+             ->where('tasks.deleted_at', NULL)
              ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_pa_sum));
@@ -1020,8 +1021,9 @@ as d')
            ($ut_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utsc')
             ->where('tasks.task_type',2)
-            ->where('tasks.deleted_at', NULL)
+
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->where('tasks.deleted_at', NULL)
             ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_sum));

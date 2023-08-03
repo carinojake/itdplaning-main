@@ -659,8 +659,38 @@
             })
         })()
                         </script>
-
 <script>
+    var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+    var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
+
+    function calculateRefund() {
+        var totalRefund = 0;
+
+        costFields.forEach(function(costField, index) {
+            var pa_value = $("#" + costField).val();
+            var pr_value = $("#" + budgetFields[index]).val();
+
+            if (pa_value && pr_value) {
+                var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                if (pa_budget != 0) {
+                    var refund = pr_budget - pa_budget;
+                    totalRefund += refund;
+                }
+            }
+        });
+
+        $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
+    }
+
+    $(document).ready(function() {
+        costFields.forEach(function(costField, index) {
+            $("#" + costField).on("input", calculateRefund);
+        });
+    });
+</script>
+{{-- <script>
     $("#task_pay").on("input", function() {
         calculateRefund();
     });
@@ -684,7 +714,7 @@
 
         $("#task_refund_pa_budget").val(refund.toFixed(2));
     }
-</script>
+</script> --}}
 
                 <script>
                     $(document).ready(function() {
@@ -893,7 +923,7 @@
     });
 </script>
 
-<script>
+{{-- <script>
     $("#task_pay").on("input", function() {
         calculateRefund();
     });
@@ -919,7 +949,7 @@
 
         $("#task_refund_pa_budget").val(refund.toFixed(2));
     }
-</script>
+</script> --}}
 
 
     </x-slot:javascript>

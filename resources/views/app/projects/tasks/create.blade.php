@@ -197,7 +197,7 @@
                                     </div>
                                     <div type="hidden" class="form-check form-check-inline">
                                         <input type="hidden" class="form-check-input" type="radio" name="task_refund_pa_status"
-                                            id="task_refund_pa_status" value="4" checked>
+                                            id="task_refund_pa_status" value="3" checked>
 
                                     </div>
                                 </div>
