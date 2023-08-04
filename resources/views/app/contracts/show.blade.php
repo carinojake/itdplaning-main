@@ -148,15 +148,13 @@
                             </table>
 
 
-                                <div class="callout callout-info">
+                        {{-- <div class="callout callout-info">
                                 <div class="row  ">
                                     <div class="col-sm ">
                                         <div class="row">
                                             <div class="col-3 fw-semibold"><h5>{{ __('1.สถานะสัญญา') }}</h5></div>
                                             <div class="col-9">
-                                                <h5> <?php
-                                                echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
-                                                ?></h5>
+
                                             </div>
                                         </div>
 
@@ -185,15 +183,15 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-3 fw-semibold"><h5>{{ __('1.ประเภท') }}</h5></div>
-                                          {{--   <div class="col-9">{{ \Helper::contractType($contract->contract_type) }} --}}
+                                          {{--   <div class="col-9">{{ \Helper::contractType($contract->contract_type) }}
                                             </div>
                                         </div>
-                                        {{-- <div class="row">
+                                    <div class="row">
                                             <div class="col-3">{{ __('วิธีการได้มา') }}</div>
                                             <div class="col-9">
                                                 {{ \Helper::contractAcquisition($contract->contract_acquisition) }}
                                             </div>
-                                        </div> --}}
+                                        </div>
                                         <div class="row">
                                             <div class="col-3 fw-semibold"><h5>{{ __('1.วันที่เริ่มสัญญา') }}</h5></div>
                                             <div class="col-9">
@@ -231,9 +229,7 @@
                                         <div class="row">
                                             <div class="col-3 fw-semibold"><h5>{{ __('1.เตือน เหลือเวลา') }}</h5></div>
                                             <div class="col-9">
-                                                <h5><?php
-                                                echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
-                                                ?> เดือน</h5>
+                                                <h5> เดือน</h5>
 
 
                                             </div>
@@ -250,8 +246,8 @@
 
                                         <div class="row">
                                             <div class="col-6 fw-semibold"><h5>{{ __('2.งบประมาณ') }}</h5></div>
-{{--                                              <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
- --}}                                        </div>
+                                            <div class="col-6">{{ \Helper::project_select($contract->contract_budget_type) }}</div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-6 fw-semibold"><h5>{{ __('2.1เลขที่ MM') }}</h5></div>
                                             <div class="col-6"><h5>{{ $contract->contract_mm }}</h5></div>
@@ -295,7 +291,7 @@
                                                 <h5>    {{ number_format($contract->contract_peryear_pa_budget) }}</h5></div>
                                         </div>
 
-                               {{--          <div class="row">
+                                         <div class="row">
                                             <div class="col-6 fw-semibold">{{ __('contract_file') }}</div>
                                             <div class="col-6">
                                                 @if ($contract->contract_file)
@@ -304,12 +300,12 @@
                                                     {{ __('No file uploaded') }}
                                                 @endif
                                             </div>
-                                        </div> --}}
+                                        </div>
 
 
                                     </div>
                                 </div>
-            </div>
+            </div> --}}
 
 
             <div class="card mb-3">
@@ -332,6 +328,18 @@
 
                             <h5 class="card-title">{{ __('ประเภท') }}</h5>
                             <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}</p>
+                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
+                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
+                            <!-- Continue with the rest of your details -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+
+
+                            <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
+                            <p class="card-text">{{ $contract->contract_budget_type }}</p>
+
 
                             <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} - {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
                             <p class="card-text">{{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }} - {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</p>
@@ -345,40 +353,6 @@
                             <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
                             <p class="card-text">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }} วัน</p>
 
-                            <!-- Continue with the rest of your details -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
-                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
-
-                            <h5 class="card-title">{{ __('2.งบประมาณ') }} </h5>
-                            <p class="card-text">{{ $contract->contract_budget_type }}</p>
-
-                            <h5 class="card-title">{{ __('2.1 เลขที่ MM') }} </h5>
-                            <p class="card-text">{{ $contract->contract_mm }}</p>
-
-                            <h5 class="card-title">{{ __('2.1 จำนวนเงิน MM') }}</h5>
-                            <p class="card-text">{{ $contract->contract_mm_bodget }}</p>
-
-                            <h5 class="card-title">{{ __('2.2 เลขที่ PR') }}</h5>
-                            <p class="card-text">{{ $contract->contract_pr }}</p>
-
-                            <h5 class="card-title">{{ __('2.2 จำนวนเงิน PR') }}</h5>
-                            <p class="card-text">{{ number_format($contract->contract_pr_budget) }}</p>
-
-                            <h5 class="card-title">{{ __('2.3 เลขที่ PA') }}</h5>
-                            <p class="card-text">{{ $contract->contract_pa }}</p>
-
-                            <h5 class="card-title">{{ __('2.3 จำนวนเงิน PA') }}</h5>
-                            <p class="card-text">{{ number_format($contract->contract_pa_budget) }}</p>
-
-                            <h5 class="card-title">{{ __('2.3 จำนวนคงเหลือหลังเงิน PA') }}</h5>
-                            <p class="card-text">{{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}</p>
-
-                            <h5 class="card-title">{{ __('2.3 จำนวนเงิน ที่ใช้จ่ายต่อปี') }}</h5>
-                            <p class="card-text">{{ number_format($contract->contract_peryear_pa_budget) }}</p>
 
                             <!-- Continue with the rest of your details -->
                         </div>
