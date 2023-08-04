@@ -1041,7 +1041,7 @@ as d')
                 ->diffInMonths(\Carbon\Carbon::parse()));
             // do something with $duration and $duration_p
             ($contractsstart = Contract::paginate(10));
-
+        }
 
 
             ($operating_pay_sum_1 = DB::table('tasks')
@@ -1358,7 +1358,9 @@ as d')
 
             ($total_expenses = (($osa) + ($isa) + ($utsc)));;
 
-            return view(
+
+
+ return view (
                 'app.dashboard.index',
                 compact(
                     'fiscal_years',
@@ -1439,8 +1441,8 @@ as d')
                     'projects',
                     'project_groupby_fiscal_years'
                 )
-            );
-        }
+      );
+
     }
 
 
@@ -1820,6 +1822,8 @@ as d')
       //  dd($gantt);
         // dd ($costsum = ($__project_cost))  ;
         ($gantt = json_encode($gantt));
+
+
         return view(
             'app.dashboard.gantt',
 
