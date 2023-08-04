@@ -375,9 +375,9 @@
                                                 <button class="col-md-12 btn btn-success"  data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
+                                                  {{--   @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
+                                                  @endphp --}}
                                                 <div class="fs-4 fw-semibold ">
                                                     @if ($ospa > 1)
                                                     {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc)),2) }}
@@ -394,9 +394,9 @@
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
+                                               {{--      @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
+                                                  @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($ospa > 1)
                                                     {{ number_format(($budgetscentralict- ($ospa + $osa)), 2) }}
@@ -412,9 +412,9 @@
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
+                                                  {{--   @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
+                                                  @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($ispa > 1)
                                                     {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
@@ -430,9 +430,9 @@
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
                                                     href="#collapseExample5" role="button"
                                                     aria-expanded="false" aria-controls="collapseExample">
-                                                    @php
+                                                   {{--  @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
-                                                  @endphp
+                                                  @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($utpcs > 1)
                                                     {{ number_format(($budgetsut- ($utpcs + $utsc) ), 2) }}
