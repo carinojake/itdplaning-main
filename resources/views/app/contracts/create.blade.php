@@ -166,7 +166,7 @@
                                             <label for="contract_type_budget"
                                                 class="form-label">{{ __('วงเงิน') }}</label>
                                             <input type="text" class="form-control" name="contract_type_budget"
-                                                id="contract-type-budget" value="N/A">
+                                                id="contract-type-budget" value="-">
                                         </div>
                                         @endif
                                         {{--
@@ -1260,11 +1260,12 @@
 
                     <script>
                         $(document).ready(function() {
+
                             var project_budget_it_operating = {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
 
-var project_budget_it_investment = {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
+                            var project_budget_it_investment = {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
 
-var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
+                            var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
                             $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
@@ -1274,7 +1275,11 @@ var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->bu
 
 
 
-                                if (budgetType === "1") {
+
+                                 if ( $projectDetails = null) {
+
+                                                }
+                        else if (budgetType === "1") {
                                     max = parseFloat(project_budget_it_operating);
                     } else if (budgetType === "2") {
                         max = parseFloat(project_budget_it_investment);
