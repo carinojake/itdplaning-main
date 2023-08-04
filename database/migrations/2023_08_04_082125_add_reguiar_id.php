@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             //
-            $table->softDeletes();
-
+            $table->integer('reguiar_id')->nullable();//
         });
     }
 
@@ -29,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             //
+            $table->dropColumn('reguiar_id');
         });
     }
 };
