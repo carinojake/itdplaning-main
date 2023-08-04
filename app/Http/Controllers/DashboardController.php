@@ -39,6 +39,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
+
         $fiscal_years= [];
         $fiscal_year= [];
         $task_pay_xy= [];
@@ -116,6 +117,9 @@ class DashboardController extends Controller
         $contract_groupby_fiscal_years= [];
         $projects= [];
         $project_groupby_fiscal_years=[];
+
+
+
 
 
         $fiscal_year = $request->input('fiscal_year');
@@ -1648,8 +1652,8 @@ as d')
             $gantt[] = [
                 'id'                    => $project['project_id'],
                 'text'                  => $project['project_name'],
-                'start_date' => date('Y-m-d', ($project['project_start_date'])),
-                'end_date' => date('Y-m-d', ($project['project_end_date'])),
+                'start_date' =>     date('Y-m-d', ($project['project_start_date'])),
+                'end_date' =>       date('Y-m-d', ($project['project_end_date'])),
                 'project_type'                  => $project['project_type'],
 
                 'budget_gov_operating'  => $project['budget_gov_operating'],
