@@ -379,7 +379,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold ">
-                                                    @if ($budgets > 1)
+                                                    @if ($ospa > 1)
                                                     {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc)),2) }}
                                                     @endif
                                                 </div>
@@ -398,7 +398,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgetscentralict > 1)
+                                                    @if ($ospa > 1)
                                                     {{ number_format(($budgetscentralict- ($ospa + $osa)), 2) }}
                                                     @endif
                                                     </div>
@@ -416,7 +416,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgetsinvestment > 1)
+                                                    @if ($ispa > 1)
                                                     {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
                                                     @endif
                                                     </div>
@@ -434,7 +434,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgetsut > 1)
+                                                    @if ($utpcs > 1)
                                                     {{ number_format(($budgetsut- ($utpcs + $utsc) ), 2) }}
                                                     @endif
                                                     </div>

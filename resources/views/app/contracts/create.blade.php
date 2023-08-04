@@ -1258,7 +1258,7 @@
 
 
 
-                    {{-- <script>
+                    <script>
                         $(document).ready(function() {
 
                             var project_budget_it_operating = {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
@@ -1316,7 +1316,7 @@
                             }); */
                         });
 
-                        </script> --}}
+                        </script>
 
 
 {{--
