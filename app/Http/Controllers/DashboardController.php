@@ -39,6 +39,85 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
+        $fiscal_years= [];
+        $fiscal_year= [];
+        $task_pay_xy= [];
+        $chart_data_xy= [];
+        $chart_data= [];
+        $total_budget_cost= [];
+        $project= [];
+        $itpsa1= [];
+        $itpsa2= [];
+        $otpsa1= [];
+        $parent_sum_cd= []; //task= [];
+        $utsc_pay_pa= [];
+        $otpsa2= [];
+        $ispa= [];
+        $isa= [];
+        $utsc= [];
+        $utpcs= [];
+        $ospa= [];
+        $osa= [];
+        $itpsa= [];
+        $utsc_pay= [];
+        $contractsre= [];
+        //taskconcosttotals= [];
+        $cpr= [];
+        $cpre= [];
+        $cpa= [];
+        $cpb= [];
+        $contracts_pa_budget= [];
+        $contracts_pr_budget= [];
+        $taskcosttotals2_json= [];
+        $taskcosttotals2= [];
+        $project_groupby= [];
+        $duration_p= [];
+        $contractsstart= [];
+        $project_type_p= [];
+        $project_type_j= [];
+        $totals_budgets= [];
+        $totals_ict= [];
+        $totals_inv= [];
+        $totals_ut= [];
+        $total_ict= [];
+        $total_inv= [];
+        $total_ut= [];
+        $taskcostict= [];
+        $taskcostinvestment= [];
+        $budgetscentralict= [];
+        $budgetsinvestment= [];
+        $taskcosttotals= [];
+        $project_bu_fiscal_years= [];
+        $coats_inv= [];
+        $coats_gov= [];
+        $coats_ict= [];
+        $coats_ut= [];
+        $coatcons_inv= [];
+        $coatcons_gov= [];
+        $coatcons_ict= [];
+        $coatcons_ut= [];
+        $coatcons= [];
+        $budgetsgov= [];
+        $budgetsict= [];
+        $budgetsut= [];
+        $total_budgets= [];
+        $coats= [];
+        $taskcosttotal= [];
+        $__cost= [];
+        $budget= [];
+        $budgets2= [];
+        $budgets= [];
+        $gantt= [];
+        $project_groupby_reguiar= [];
+        $project_groupby_task= [];
+        $tasks= [];
+        $projects_amount= [];
+        $contracts= [];
+        $contract_groupby_fiscal_years= [];
+        $projects= [];
+        $project_groupby_fiscal_years=[];
+
+
         $fiscal_year = $request->input('fiscal_year');
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
@@ -1278,10 +1357,9 @@ as d')
 
 
             ($total_expenses = (($osa) + ($isa) + ($utsc)));;
+
             return view(
                 'app.dashboard.index',
-
-
                 compact(
                     'fiscal_years',
                     'fiscal_year',
@@ -1296,11 +1374,6 @@ as d')
                     'parent_sum_cd', //'task',
                     'utsc_pay_pa',
                     'otpsa2',
-
-
-
-
-
                     'ispa',
                     'isa',
                     'utsc',
@@ -1322,7 +1395,6 @@ as d')
                     'project_groupby',
                     'duration_p',
                     'contractsstart',
-
                     'project_type_p',
                     'project_type_j',
                     'totals_budgets',
@@ -1374,6 +1446,8 @@ as d')
 
     public function gantt(Request $request)
     {
+
+        $gantt= [];
         $fiscal_year = $request->input('fiscal_year');
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
