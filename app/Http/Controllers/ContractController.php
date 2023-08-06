@@ -541,10 +541,12 @@ class ContractController extends Controller
     {
         $origin = $request->origin;
         $project = $request->project;
+
         $task = $request->taskHashid;
+        $encodedProjectId = Hashids::encode($request->project);
 
 
-
+        //dd($encodedProjectId);
         $id = $project ? Hashids::decode($project) : null;
 
         $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
@@ -695,10 +697,10 @@ class ContractController extends Controller
         } else {
             $task = null;
         } */
+//dd($task);
 
-
-
-        $tasksDetails = $task;
+        ($tasksDetails = $task);
+       // dd($tasksDetails = $task);
 
 
        // dd($ta,$tasksData,$projectDetails, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility);
@@ -707,7 +709,7 @@ class ContractController extends Controller
 
         return view('app.contracts.createsubcn', compact
 
-        ('origin', 'project', 'task'
+        ('origin', 'project', 'task','encodedProjectId'
         , 'pro', 'ta', 'fiscal_year', 'tasks',
          'tasksJson',
          'request',
@@ -915,7 +917,7 @@ class ContractController extends Controller
         } */
 
 
-        // Handle file upload
+     /*    // Handle file upload
         if ($request->hasFile('contract_file')) {
             // Delete the old file if it exists
             if ($contract->contract_file) {
@@ -992,7 +994,7 @@ class ContractController extends Controller
             $filename = $id . '_mm_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/contracts/'), $filename);
             $contract->mm_file = $filename;
-        }
+        } */
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');
@@ -1060,16 +1062,44 @@ if($request->hasFile('file')) {
             if (is_array($request->tasks) || is_object($request->tasks)) {
                 foreach ($request->tasks as $task) {
                     $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
+                    $taskbudget = null;
+                    $taskcost = null;
 
-                    Taskcon::create([
+                    if ($contract->contract_budget_type == 1)
+                        $taskbudget = isset($task['taskbudget']) ? $task['taskbudget'] : 'Default budget';
+
+                    elseif ($contract->contract_budget_type == 2)
+                        $taskbudget = isset($task['taskbudget']) ? $task['taskbudget'] : 'Default budget';
+                    elseif ($contract->contract_budget_type == 3)
+                        $taskbudget = isset($task['taskbudget']) ? $task['taskbudget'] : 'Default budget';
+
+
+                    if ($contract->contract_budget_type == 1)
+                    $taskcost = isset($task['taskcost']) ? $task['taskcost'] : 'Default cost';
+                    elseif ($contract->contract_budget_type == 2)
+                    $taskcost = isset($task['taskcost']) ? $task['taskcost'] : 'Default cost';
+                elseif ($contract->contract_budget_type == 3)
+                    $taskcost = isset($task['taskcost']) ? $task['taskcost'] : 'Default cost';
+
+                        Taskcon::create([
                         'contract_id' => $contract->contract_id,
                         'taskcon_name' => $taskName,
-                        'taskcon_start_date' =>$contract->contract_start_date,
+                        'taskcon_budget_it_operating' => ($contract->contract_budget_type == 1) ? $taskbudget : null,
+                        'taskcon_budget_it_investment' => ($contract->contract_budget_type == 2) ? $taskbudget : null,
+                        'task_budget_gov_utility' => ($contract->contract_budget_type == 3) ? $taskbudget : null,
+
+                        'taskcon_cost_it_operating' => ($contract->contract_budget_type == 1) ? $taskcost : null,
+                        'taskcon_cost_it_investment' => ($contract->contract_budget_type == 2) ? $taskcost : null,
+                        'task_cost_gov_utility' => ($contract->contract_budget_type == 3) ? $taskcost : null,
+                        'taskcon_start_date' => $contract->contract_start_date,
                         'updated_at' => now(),
                         'created_at' => now()
                     ]);
                 }
             }
+
+
+
         }
 
 
@@ -1086,7 +1116,7 @@ if($request->hasFile('file')) {
             $origin = $request->input('origin');
             $project = $request->input('project');
             $task = $request->input('task');
-
+            $encodedProjectId = $request->input('encodedProjectId');
             // บันทึกข้อมูลลงใน session
             session()->flash('contract_id', $contract->contract_id);
             session()->flash('contract_number', $contract->contract_number);
@@ -1106,6 +1136,10 @@ if($request->hasFile('file')) {
             session()->flash('contract_start_date', $contract->contract_start_date);
             session()->flash('contract_end_date', $contract->contract_end_date);
 
+
+            if ($encodedProjectId) {
+                return redirect()->route('project.task.editsub', ['project' => $encodedProjectId, 'task' => $task]);
+            }
             if ($task) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             } elseif ($project) {

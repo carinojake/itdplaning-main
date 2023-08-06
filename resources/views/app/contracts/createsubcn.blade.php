@@ -4,21 +4,32 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
+                <div class="d-none" >
                 @if ($pro)
-                    {{ $pro->project_name }}
-                @else
-                @endif
+                {{ $pro->project_name }}
+            @endif
 
-                @if ($ta)
+            @if ($ta)
+            111
                 {{ $ta->task_id }}
-                               {{ $ta->task_name }}
-                    {{ $ta->task_budget_it_operating }}
-                    {{ $ta->task_budget_it_investment }}
-                    {{ $ta->task_budget_gov_utility }}
+                {{ $ta->task_name }}
+                {{ $ta->task_budget_it_operating }}
+                {{ $ta->task_budget_it_investment }}
+                {{ $ta->task_budget_gov_utility }}
+            @elseif ($tasksDetails)
+            222
+                {{ $tasksDetails->project_id }}
 
-
-                @else
-                @endif
+                {{ $tasksDetails->task_id }}
+                {{ $tasksDetails->task_name }}
+                {{ $tasksDetails->task_mm }}
+                {{ $tasksDetails->task_mm_name }}
+                {{ $tasksDetails->task_mm_budget }}
+                {{ $tasksDetails->task_budget_it_operating }}
+                {{ $tasksDetails->task_budget_it_investment }}
+                {{ $tasksDetails->task_budget_gov_utility }}
+            @endif
+                </div>
 
 
 
@@ -34,11 +45,11 @@
                     @endif
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <x-card title="{{ __('เพิ่มสัญญา CN 2222 ') }}">
+                            <x-card title="{{ __('เพิ่มสัญญา CN ') }}">
                                 <x-slot:toolbar>
                                     {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
-  <a href="{{ route('project.task.createsub', $project) }}" class="btn btn-primary text-white">ไปยังหน้าการใช้จ่ายของงาน</a> --}}
+  <a href="{{ type="hidden" route('project.task.createsub', $project) }}" class="btn btn-primary text-white">ไปยังหน้าการใช้จ่ายของงาน</a> --}}
                                 </x-slot:toolbar>
 
 
@@ -46,9 +57,10 @@
                                     class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
                                     @csrf
 
-                                    <input  type="hidden" name="origin" value="{{ $origin }}">
+                                    <input type="hidden" name="origin" value="{{ $origin }}">
 
-                                    <input type="hidden" name="project" value="{{ $origin }}">
+                                    <input type="hidden" name="project" value="{{ $project }}">
+                                    <input type="hidden" name="encodedProjectId" value="{{ $encodedProjectId }}">
 
                                     <input  type="hidden" name="task" value="{{  $task->hashid}}">
                                     <div class="row g-3 align-items-center callout callout-success ">
@@ -292,13 +304,13 @@
                                                                             <select class="form-control" name="project_select" id="project_select" required>
                                                                                 <option selected disabled value="">เลือกประเภท...</option>
                                                                                 @if ($tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] > 0)
-                                                                                    <option value="1">งบกลาง ICT</option>
+                                                                                    <option selected value="1">งบกลาง ICT</option>
                                                                                 @endif
                                                                                 @if ($tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] > 0)
-                                                                                    <option value="2">งบดำเนินงาน</option>
+                                                                                    <option selected value="2">งบดำเนินงาน</option>
                                                                                 @endif
                                                                                 @if ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0)
-                                                                                    <option value="3">ค่าสาธารณูปโภค</option>
+                                                                                    <option selected value="3">ค่าสาธารณูปโภค</option>
                                                                                 @endif
                                                                             </select>
                                                                         </div>
@@ -314,7 +326,7 @@
                                                                                 class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
                                                                             <span class="text-danger"></span>
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_mm" name="contract_mm">
+                                                                                id="contract_mm" name="contract_mm"    value="{{ $tasksDetails->task_mm }}">
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' ') }}
                                                                             </div>
@@ -328,7 +340,7 @@
 
                                                                         <input type="text" class="form-control"
                                                                             id="contract_mm_name"
-                                                                            name="contract_mm_name" required autofocus>
+                                                                            name="contract_mm_name"     value="{{ $tasksDetails->task_mm_name }}" required autofocus>
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ชื่อสัญญา ซ้ำ') }}
                                                                         </div>
@@ -344,7 +356,9 @@
                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_mm_budget"
-                                                                                min="0">
+                                                                                min="0"
+                                                                                value="{{ $tasksDetails->task_mm_budget }}"
+                                                                                >
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mt-3">
@@ -408,6 +422,7 @@
                                                                                     id="contract_pr_budget"
                                                                                     name="contract_pr_budget"
                                                                                     min="0"
+                                                                                    value="{{ $tasksDetails->task_mm_budget }}"
                                                                                     onchange="calculateRefund()"
 
                                                                                     >
@@ -1475,15 +1490,20 @@
                                     <label>ชื่องวด ` + (i + 1) +
                                 ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
                                 `][task_name]" value="งวด ` + (i + 1) + `"required>
-                                </div>
 
-                                <label>ชื่องวด ` + (i + 1) +
+
+                                <label>เงินงวด ` + (i + 1) +
                                 ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                                `][task_name]" value="งวด ` + (i + 1) + `"required>
-                                </div>
+                                `][taskbudget]" value="` + (i + 1) + `"required>
+
+
+                                <label>เงินเบิก ` + (i + 1) +
+                                ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
+                                `][taskcost]" value="` + (i + 1) + `"required>
 
 
                                 </div>
+
                         </div>
                     `);
                         }

@@ -14,7 +14,7 @@
                 @endif
                 <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ ') }}{{ $task->task_name }}">
+                        <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ 3333') }}{{ $task->task_name }}">
 
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -58,7 +58,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 d-none">
                                         <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label> <span
                                             class="text-danger">*</span>
                                         <div>
@@ -80,19 +80,49 @@
                                     </div>
 
 
-                                    @if (session('contract_id'))
-                                        ID: {{ session('contract_id') }}
+                                    <div {{-- class="d-none" --}}>
+                                        @if (session('contract_id'))
+                                            ID: {{ session('contract_id') }}
+                                        @endif
+                                        @if (session('contract_number'))
+                                            Number: {{ session('contract_number') }}
+                                        @endif
+                                        @if (session('contract_mm'))
+                                        Name_mm: {{ session('contract_mm') }}
                                     @endif
-                                    @if (session('contract_number'))
-                                        Number: {{ session('contract_number') }}
+                                        @if (session('contract_mm_name'))
+                                        Name_mm: {{ session('contract_mm_name') }}
                                     @endif
-                                    @if (session('contract_name'))
-                                        Name: {{ session('contract_name') }}
+                                        @if (session('contract_name'))
+                                            Name: {{ session('contract_name') }}
+                                        @endif
+                                        @if (session('contract_mm_budget'))
+                                            MM: {{ session('contract_mm_budget') }}
+                                        @endif
+                                        @if (session('contract_pr_budget'))
+                                        Pr: {{ session('contract_pr_budget') }}
                                     @endif
+                                    @if (session('contract_pa_budget'))
+                                    pa: {{ session('contract_pa_budget') }}
+                                @endif
+                                @if (session('contract_refund_pa_budget'))
+                                refund_pa_budget: {{ session('contract_refund_pa_budget') }}
+                            @endif
+                                @if (session('contract_start_date'))
+                                start_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+
+
+
+                            @endif
+                            @if (session('contract_end_date'))
+                            end_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                        @endif
+
+                                        </div >
                                     <div class="row">
 
 
-
+                                        @if ($task->task_type == 1)
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
@@ -118,13 +148,15 @@
                                             </div>
                                         </div>
                                         <div class="col-md-3 mt-4">
-                                            <a href="{{ route('contract.create', ['origin' => $project->hashid, 'project' => $project->hashid]) }}"
+                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => $project, 'project' => $project,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>
                                         @endif
                                     </div>
+                                    @endif
                                 </div>
+
                                {{--      <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label for="task_start_date"
@@ -206,6 +238,7 @@
                                         <div class="row mt-3">
                                             <div class="col-6 mt-3">
                                                 <strong><h4>วงเงินที่ขออนุมัติ</h4></strong>
+                                                @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
@@ -227,6 +260,8 @@
 
 
                                                 </div>
+                                                @endif
+                                                @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
@@ -243,8 +278,8 @@
                                                         {{ __('ระบุงบดำเนินงาน') }}
                                                     </div>
                                                 </div>
-
-
+                                                @endif
+                                                @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
@@ -263,10 +298,14 @@
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
                                                 </div>
+                                                @endif
                                             </div>
+
 
                                             <div class="col-6 mt-3">
                                                 <strong><h4>ค่าใช้จ่าย</h4></strong>
+
+                                                @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_cost_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
@@ -278,12 +317,14 @@
                                                         <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                         name="task_cost_it_operating" min="0"   value="{{ $task->task_cost_it_operating }}">
+                                                         name="task_cost_it_operating" min="0"  value={{ session('contract_pa_budget') }} value="{{ $task->task_cost_it_operating }}">
 
                                                         <div class="invalid-feedback">
                                                         {{ __('งบกลาง ICT') }}
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_cost_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
@@ -296,7 +337,7 @@
                                                         <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                          class="form-control numeral-mask" id="task_cost_it_investment"
-                                                         name="task_cost_it_investment" min="0"   value="{{ $task->task_cost_it_investment }}">
+                                                         name="task_cost_it_investment" min="0" value={{ session('contract_pa_budget') }}  value="{{ $task->task_cost_it_investment }}">
 
 
 
@@ -305,6 +346,8 @@
                                                         {{ __('งบดำเนินงาน') }}
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_cost_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
@@ -316,7 +359,7 @@
                                                         <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                          class="form-control numeral-mask" id="task_cost_gov_utility"
-                                                         name="task_cost_gov_utility" min="0"   value="{{ $task->task_cost_gov_utility }}">
+                                                         name="task_cost_gov_utility" min="0"  value={{ session('contract_pa_budget') }} value="{{ $task->task_cost_gov_utility }}">
 
 
 
@@ -324,7 +367,9 @@
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
                                                 </div>
+                                                @endif
                                             </div>
+
                                             <div id="refund" {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
@@ -337,7 +382,7 @@
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                             class="form-control numeral-mask"
                                                             id="task_refund_pa_budget"
-                                                            name="task_refund_pa_budget" min="0"   value={{ $task->task_refund_pa_budget }} >
+                                                            name="task_refund_pa_budget" min="0"   value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget }} readonly >
 
                                                         {{--  <div class="invalid-feedback">
                                                                 {{ __('ค่าสาธารณูปโภค') }}
@@ -347,29 +392,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($task->task_type == 2)
                                     <div class="row mt-3">
                                         <h4>เบิกจ่าย</h4>
                                         <div class="col-md-6">
-                                            <label for="task_pay_date"
-                                                class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-                                                <input class="form-control" id="task_pay_date" name="task_pay_date"
-                                                value="{{  \Helper::date4(date('Y-m-d H:i:s', $task->task_pay_date))  }}">
+                                            <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+                                            <input class="form-control" id="task_pay_date" name="task_pay_date"
+                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_pay_date)) }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-
                                             <input type="text" placeholder="0.00" step="0.01"
-                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                              class="form-control numeral-mask" id="task_pay"
-                                              name="task_pay" min="0"   value="{{ $task->task_pay }}">
-
-                                         <!--   <input type="number" placeholder="0.00" step="0.01"
-                                                class="form-control" id="task_pay" name="task_pay" min="0"  value="{{ $task->task_pay }}">-->
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
+                                                id="task_pay" name="task_pay" min="0" value="{{ $task->task_pay }}">
+                                            <!-- <input type="number" placeholder="0.00" step="0.01"
+                                                class="form-control" id="task_pay" name="task_pay" min="0" value="{{ $task->task_pay }}"> -->
                                             <div class="invalid-feedback">
                                                 {{ __('เบิกจ่าย') }}
                                             </div>
                                         </div>
                                     </div>
+                                @endif
 
                                     <div class="col-md-12 mt-3">
                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>

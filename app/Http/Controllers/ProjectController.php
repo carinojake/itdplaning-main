@@ -3834,7 +3834,8 @@ class ProjectController extends Controller
 
         $task->project_id = $id;
        // $task->task_name = $request->input('taskcon_mm_name');
-        $task->task_mm = $request->input('task_mm');
+        $task->task_mm = $request->input('taskcon_mm');
+
         $task->task_mm_name = $request->input('taskcon_mm_name');
 
         $task->task_name = $request->input('taskcon_mm_name');
@@ -4710,6 +4711,9 @@ class ProjectController extends Controller
         ($project    = Project::find($id_project));
 
 
+
+
+
         $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
@@ -4777,8 +4781,21 @@ class ProjectController extends Controller
             'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
           //วใ dd($task_sub_sums);
 
+
+          if ($project && $task) {
+            $decodedProject = Hashids::decode($project);
+            $decodedTask = Hashids::decode($task);
+
+            if (isset($decodedProject[0]) && isset($decodedTask[0])) {
+                $id_project = $decodedProject[0];
+                $id_task = $decodedTask[0];
+
+                $pro = Project::find($id_project);
+                $ta = Task::find($id_task);
+            }
+        }
           $tasksDetails = $task;
-         // dd($tasks);
+        // dd($tasks);
 
         return view('app.projects.tasks.editsub', compact(
             'tasksDetails',
@@ -4808,6 +4825,7 @@ class ProjectController extends Controller
             ->get();
 
         //dd($task);
+
 
         $task = Task::join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
             ->select(
@@ -4882,6 +4900,8 @@ class ProjectController extends Controller
 
         $tasksDetails = $task;
         //dd($tasks);
+
+
 
         return view('app.projects.tasks.editsubno', compact(
             'task_sub_sums','tasksDetails',
