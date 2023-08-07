@@ -385,7 +385,7 @@
                                                 </div>
 
                                                     <small
-                                                        class="text-xl">คงเหลือ</small>
+                                                        class="text-xl">คงเหลือ </small>
                                                 </button>
 
                                             </div>
@@ -404,7 +404,7 @@
                                                     </div>
 
                                                     <small
-                                                        class="text-xl">คงเหลือ</small>
+                                                        class="text-xl">คงเหลือ งบกลางICT</small>
                                                 </button>
 
                                             </div>
@@ -422,7 +422,7 @@
                                                     </div>
 
                                                     <small
-                                                        class="text-xl">คงเหลือ</small>
+                                                        class="text-xl">คงเหลือ งบดำเนินงาน</small>
                                                 </button>
 
                                             </div>
@@ -440,7 +440,7 @@
                                                     </div>
 
                                                     <small
-                                                        class="text-xl">คงเหลือ</small>
+                                                        class="text-xl">คงเหลือ งบสาธารณูปโภค</small>
                                                 </button>
 
                                             </div>

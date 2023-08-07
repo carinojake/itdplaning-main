@@ -42,7 +42,7 @@
                                     <div class="row mt-3">
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
-                                                <div class="col-3">{{ __('งบกลาง ICT') }}</div>
+                                                <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
                                                 <div class="col-3">      {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท</div>
                                             @endif
                                         </div>
@@ -283,20 +283,20 @@
                                             <div class="row fw-semibold mt-3">
                                             <div class="row">
                                                 @if ($task->task_budget_it_operating > 0)
-                                                    <div class="col-2">{{ __('งบกลาง ICT') }}</div>
+                                                    <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
                                                     {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_it_investment > 0)
-                                                    <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
+                                                    <div class="col-2">{{ __('งบดำเนินงาน ') }}</div>
 
                                                     {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_gov_utility > 0)
-                                                    <div class="col-2">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                    <div class="col-2">{{ __('ค่าสาธารณูปโภค ') }}</div>
 
                                                     {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget']), 2) }} บาท
                                                 @endif
@@ -311,7 +311,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_it_operating > 0)
                                                     <label for="task_budget_it_operating"
-                                                        class="form-label">{{ __('งบกลาง ICT') }}</label>
+                                                        class="form-label">{{ __('งบกลาง ICT (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
@@ -327,7 +327,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_it_investment > 0)
                                                     <label for="task_budget_it_investment"
-                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                        class="form-label">{{ __('งบดำเนินงาน (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
@@ -342,7 +342,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_gov_utility > 0)
                                                     <label for="task_budget_gov_utility"
-                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                        class="form-label">{{ __('ค่าสาธารณูปโภค (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
@@ -361,7 +361,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_it_operating > 0)
                                                     <label for="task_cost_it_operating"
-                                                        class="form-label">{{ __('งบกลาง ICT') }}</label>
+                                                        class="form-label">{{ __('งบกลาง ICT (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_it_operating"
@@ -376,7 +376,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_it_investment > 0)
                                                     <label for="task_cost_it_investment"
-                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                        class="form-label">{{ __('งบดำเนินงาน (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_it_investment"
@@ -391,7 +391,7 @@
                                                 <div class="col-md-12">
                                                     @if ($task->task_budget_gov_utility > 0)
                                                     <label for="task_cost_gov_utility"
-                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                        class="form-label">{{ __('ค่าสาธารณูปโภค (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_gov_utility"

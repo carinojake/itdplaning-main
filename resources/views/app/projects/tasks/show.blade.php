@@ -9,7 +9,7 @@
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}
                     @csrf
-                    <button class="btn btn-Light text-dark btn-delete"><i class="cil-money"></i></button>
+                    <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
                 </form>
 
                     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -94,29 +94,73 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-
         <script>
-            $(document).on('click', '.btn-delete', function(e) {
-                e.preventDefault();
+            $(document).ready(function() {
+                // Add click event listener for the delete button กิจกรรม
+                $('.btn-taskRefund-sub').click(function(e) {
+                    e.preventDefault();
 
-                var rowid = $(this).data('rowid');
-                var form = $(this).closest('form');
+                    var form = $(this).closest('form');
 
-                Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, ลบเลย!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+                    Swal.fire({
+                        title: 'คืนเงิน กิจกรรม คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, คือเงิน'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+
+
+                  // Add click event listener for the delete button
+                  $('.btn-taskRefund').click(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this).closest('form');
+
+                    Swal.fire({
+                        title: 'คืนเงิน งานประจำ คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, คือเงิน'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+                // Add click event listener for the delete_1 button
+                $('.btn-delete').click(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this).closest('form');
+
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'ใช่, ลบข้อมูล'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 });
             });
         </script>
+
 
 
 

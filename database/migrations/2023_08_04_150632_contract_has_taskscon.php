@@ -17,7 +17,7 @@ class ContractHasTaskconTable extends Migration
         Schema::create('contract_has_taskscon', function (Blueprint $table) {
             $table->unsignedBigInteger('taskcon_id');
             $table->unsignedBigInteger('task_id');
-            $table->index('taskcon_id', 'contract_has_taskscon');
+            $table->index('contract_id', 'contract_has_taskscon');
 
             // $table->foreign('contract_id')
             //     ->references('task_id')

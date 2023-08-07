@@ -282,7 +282,7 @@
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_it_operating"
-                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT') }}</label>
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT (PR)') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -300,7 +300,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_it_operating"
-                                                                        class="form-label">{{ __('รอการเบิก งบกลาง ICT') }}</label>
+                                                                        class="form-label">{{ __('รอการเบิก งบกลาง ICT (PA)') }}</label>
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
@@ -319,7 +319,7 @@
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_it_investment"
-                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน') }}</label>
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน (PR)') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -337,7 +337,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_it_investment"
-                                                                        class="form-label">{{ __('รอการเบิก งบดำเนินงาน') }}</label>
+                                                                        class="form-label">{{ __('รอการเบิก งบดำเนินงาน (PA)') }}</label>
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_investment"
@@ -358,7 +358,7 @@
                                                                 <div class="row mt-3">
                                                                   <div class="col-md-4">
                                                                         <label for="task_budget_gov_utility"
-                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
+                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค (PR)') }}</label>
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01"
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -376,7 +376,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <label for="task_cost_gov_utility"
-                                                                        class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
+                                                                        class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค (PA)') }}</label>
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_gov_utility"

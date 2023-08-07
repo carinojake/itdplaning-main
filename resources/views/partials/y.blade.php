@@ -3,11 +3,11 @@
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-warning text-white btn-delete"><i class="cil-money"></i></button>
+        <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
     </form>
 
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_1', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST') {{-- Use POST method to submit the form --}}
+        @method('POST')
         @csrf
         <button class="btn btn-danger text-white btn-delete"><i class="cil-money"></i></button>
     </form>

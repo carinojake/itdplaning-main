@@ -80,7 +80,7 @@
                                     </div>
 
 
-                                    <div {{-- class="d-none" --}}>
+                                    <div  class="d-none">
                                         @if (session('contract_id'))
                                             ID: {{ session('contract_id') }}
                                         @endif
