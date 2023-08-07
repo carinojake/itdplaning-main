@@ -122,7 +122,7 @@
         </tbody>
     </table>
 @endif
-@if ($task['task_parent'] )
+@if ($task['task_parent'] == 1 )
 <h5>มีสัญญา</h5>
 <div class="container">
     <div class="row">
