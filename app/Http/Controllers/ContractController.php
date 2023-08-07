@@ -1092,6 +1092,9 @@ if($request->hasFile('file')) {
                         'taskcon_cost_it_investment' => ($contract->contract_budget_type == 2) ? $taskcost : null,
                         'task_cost_gov_utility' => ($contract->contract_budget_type == 3) ? $taskcost : null,
                         'taskcon_start_date' => $contract->contract_start_date,
+                        'taskcon_end_date' => $contract->contract_end_date,
+                        'taskcon_pay_date' => $contract->contract_end_date,
+
                         'updated_at' => now(),
                         'created_at' => now()
                     ]);
@@ -1564,7 +1567,10 @@ if($request->hasFile('file')) {
             $end_date = date_format($end_date_obj, 'Y-m-d');
 
         }
-        $pay_date_str = $request->input('taskcon_pay_date');
+
+
+       // $pay_date_str = $request->input('taskcon_pay_date');
+        $pay_date_str = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
         $pay_date_obj = date_create_from_format('d/m/Y', $pay_date_str);
 
         if ($pay_date_obj !== false) {

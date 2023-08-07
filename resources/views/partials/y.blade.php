@@ -1,4 +1,4 @@
-@if ($task['task_parent'] !== null)
+@if ($task['task_parent'] === 2)
 <x-slot:toolbar>
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}

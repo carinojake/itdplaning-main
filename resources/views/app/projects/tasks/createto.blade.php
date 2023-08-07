@@ -20,7 +20,7 @@
 
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
                                 @csrf
-                                <h2> เพิ่มรายการ กิจกรรม </h2>
+                                <h2> เพิ่ม กิจกรรม </h2>
 
                                 <input {{-- type="hidden" --}} class="form-control" id="task_parent_display"
                                     value="{{ $task->task_name }}" disabled readonly>
@@ -28,7 +28,12 @@
                                 <input type="hidden" class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
 
+                                    <div class="d-none col-md-3">
 
+                                        </label>
+                                        {{ Form::select('task_parent_sub', \Helper::contractType(), '2', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                                    </div>
                                 {{--
                                     <div class="col-md-3">
 
@@ -194,12 +199,12 @@
 
 
                                 <div class="col-md-12 mt-3">
-                                    <label for="task_name" class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label>
+                                    <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อรายการกิจกรรม') }}</label>
 
-                                    <input type="text" class="form-control" id="task_name" name="task_name" required
+                                    <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name" required
                                         autofocus>
                                     <div class="invalid-feedback">
-                                        {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                        {{ __('ชื่อรายการ กิจกรรม') }}
                                     </div>
                                 </div>
                                 <div class="row mt-3">
@@ -349,6 +354,8 @@
                                             </div>
 
                                         </div>
+
+
                                         {{--       <div class="col-6 ">
                                             <strong>ค่าใช้จ่าย</strong>
                                             <div class="col-md-12">

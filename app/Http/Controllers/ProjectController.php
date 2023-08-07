@@ -808,7 +808,7 @@ class ProjectController extends Controller
                 ELSE 0
                 END as ttb
                 from tasks
-                where tasks.deleted_at IS NULL
+                where tasks.deleted_at IS NULL AND tasks.task_parent_sub IS NULL
                 group by tasks.project_id
             ) as a'),
             'a.project_id',
@@ -2804,7 +2804,7 @@ class ProjectController extends Controller
         $taskcon       = taskcon::find($taskcon_id);
         ($id_contract = Hashids::decode($contract)[0]);
         $id_taskcon    = Hashids::decode($taskcon)[0]; */
-
+        //dd($task);
        ($tasks=$task->subtask);
         //  dd($task);
         //   dd($project,$task);
@@ -3014,7 +3014,9 @@ class ProjectController extends Controller
              //  dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
         ($latestContract = Contract::latest()->first());
 
-      //  dd($task->subtask);
+       // dd($task);
+
+       // dd($task->subtask);
 
        //dd($contract);
 
@@ -3842,6 +3844,7 @@ class ProjectController extends Controller
         $task->task_description = trim($request->input('task_description'));
 
         $task->task_parent = $request->input('task_parent') ?? null;
+        $task->task_parent_sub = $request->input('task_parent_sub') ?? null;
 
         $task->task_budget_gov_utility = $task_budget_gov_utility;
         $task->task_budget_it_operating = $task_budget_it_operating;
