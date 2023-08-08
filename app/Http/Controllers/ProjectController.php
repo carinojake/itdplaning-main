@@ -62,11 +62,11 @@ class ProjectController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
-                   // $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
-                    $html .= '<a href="' . route('project.view', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
+                   // $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" ><i class="cil-folder-open "></i></a>';
+                    $html .= '<a href="' . route('project.view', $row->hashid) . '" class="text-white btn btn-success" ><i class="cil-folder-open "></i></a>';
 
                     //if (Auth::user()->hasRole('admin')) {
-                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " target="_blank"><i class="cil-pencil "></i></a>';
+                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " ><i class="cil-pencil "></i></a>';
                     $html .= '<button data-rowid="' . $row->hashid . '" class="text-white btn btn-danger btn-delete"><i class="cil-trash "></i></button>';
                     //}
                     $html .= '</div>';
@@ -1039,7 +1039,9 @@ class ProjectController extends Controller
                 'ad.total_taskcon_cost_pa_1',
                 'ad.total_taskcon_pay_pa_1',
                 'astatus_pa.total_task_refund_pa_budget_status',
-                'astatus.total_task_refund_no_pa_budget_status'
+                'astatus.total_task_refund_no_pa_budget_status',
+                'astaaksub.task_tasksub',
+                'astaaksub.total_task_refund_no_pa_budget_parent'
             )
 
             ->leftJoin(
@@ -1163,6 +1165,19 @@ class ProjectController extends Controller
                 'tasks.task_id'
             )
 
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent as task_tasksub,
+        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_parent
+        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astaaksub'),
+
+
+                'astaaksub.task_tasksub',
+                '=',
+                'tasks.task_parent'
+            )
+
+
+
 
 
             ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
@@ -1208,7 +1223,7 @@ class ProjectController extends Controller
 
             ->get()
             ->toArray());
-       //dd($tasks);
+       dd($tasks);
 
 
         ($tasks = json_decode(json_encode($tasks), true));
@@ -1310,7 +1325,7 @@ class ProjectController extends Controller
                 'task_type'             => $task['task_type'],
                 'task_status'             => $task['task_status'],
                 'task_refund_pa_status'             => $task['task_refund_pa_status'],
-
+                'task_parent_sub'             => $task['task_parent_sub'],
                 'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);

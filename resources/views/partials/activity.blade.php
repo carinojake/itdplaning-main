@@ -21,6 +21,7 @@
                         <div>
                             <span style="color: green;">{{ isset($task->taskcon_mm) ? $task->taskcon_mm . ' - ' : '' }}</span> {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
                         </div>
+
                         @if ($task->contract->count() > 0)
                             <div class="mt-2">
                                 <h6>สัญญา</h6>
@@ -29,13 +30,15 @@
                                 @endforeach
                             </div>
                         @endif
+
                         @if ($task->subtask->count() > 0)
                             <div class="mt-2">
                                 <h6>กิจกรรมย่อย</h6>
                                 <ul>
                                     @foreach ($task->subtask as $subtask)
                                         <li>
-                                            {{ $subtask->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+                                            {{ $subtask->task_name }}  {{ $subtask->task_id }}  {{ $subtask->task_parent }}{!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+
 
                                             @if ($subtask->contract->count() > 0)
 
@@ -343,8 +346,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                         <div class="modal-footer">
 
                                                             <div>
-                                                                <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" target="_blank"><i class="cil-folder-open"></i></a>
-                                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
+                                                                <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>
+                                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                                                               {{--   <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                                                     @method('DELETE')
                                                                     @csrf
@@ -369,13 +372,28 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                 </div>
                                             </div>
                                         @endforeach
-                                    @endif
+
+
+
+                                        @endif
 
 
 
 
 
                                         </li>
+
+
+                                        @foreach ($subtask->subtaskparent as $parent)
+
+                                    <div>- {{ $parent->task_name }} ({{ $parent->task_id }})  ({{ $parent->task_parent }})</div>
+
+
+                                       @endforeach
+
+
+
+
                                     @endforeach
                                 </ul>
                             </div>
@@ -409,8 +427,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                     </td>
 
                        <td class="text-end">
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
-                       <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" ><i class="cil-folder-open"></i></a>
+                       <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" ><i class="cil-cog"></i></a>
 
 
 

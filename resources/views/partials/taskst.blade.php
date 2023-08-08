@@ -1,6 +1,6 @@
-@if ($task->subtask->count() > 0)
-@if ($task['task_parent'] == null)
-<h2>{{ $task->task_name }}</h2>
+
+
+<h2>{{ $task->task_name }} 222</h2>
 <div class="container">
     <div class="row mt-5">
         <div class="col-sm">
@@ -66,18 +66,27 @@
                 <th width="50">ลำดับ</th>
                 <th>กิจกรรม</th>
                 <th>วันที่</th>
-                <th>ที่สัญญา</th>
-                <th width="200"> ดูสัญญา</th>
+
+                <th width="200"> </th>
             </tr>
+
             @if ($task->subtask->count() > 0)
                 @foreach ($task->subtask as $index => $subtask)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $subtask->task_name }}     {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
+
+
+
+
+
+
                         <td>
                             <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                             <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                         </td>
+
+
                         <td>
                             @if ($subtask->contract->count() > 0)
                                 @foreach ($subtask->contract as $contract)
@@ -105,8 +114,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" target="_blank"><i class="cil-folder-open">ข้อมูล</i></a>
-                            <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
+                            <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" ><i class="cil-folder-open">ข้อมูล</i></a>
+                            <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                             <form class="delete-form"  action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                 @method('DELETE')
                                 @csrf
@@ -116,13 +125,35 @@
 
 
                         </td>
+
+
+
                     </tr>
+
+
+
+                    <td> {{-- เพิ่ม <td> เพื่อแสดงข้อมูลในความสัมพันธ์ subtaskparent --}}
+
+                    </td>
+                    <td> {{-- เพิ่ม <td> เพื่อแสดงข้อมูลในความสัมพันธ์ subtaskparent --}}
+                        @foreach ($subtask->subtaskparent as $parent)
+
+                        <div>- {{ $parent->task_name }} ({{ $parent->task_id }})  ({{ $parent->task_parent }})</div>
+                        @endforeach
+                    </td>
+
                 @endforeach
-            @endif
+
+
+
+
         </tbody>
     </table>
 @endif
-@if ($task['task_parent'] )
+
+
+
+@if ($task['task_parent'] == 2 )
 <h5>มีสัญญา</h5>
 <div class="container">
     <div class="row">
@@ -290,7 +321,7 @@
         </table>
     @endif
 @endif
-@endif
+
 
 
 

@@ -1,18 +1,5 @@
-@if ($task['task_parent'] === 2)
-<x-slot:toolbar>
-    <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST') {{-- Use POST method to submit the form --}}
-        @csrf
-        <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
-    </form>
 
-    <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_1', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-danger text-white btn-delete"><i class="cil-money"></i></button>
-    </form>
 
-</x-slot:toolbar>
 @isset($contract)
     <h5>มีสัญญา</h5>
     <div class="container">
@@ -238,4 +225,4 @@
             @endisset
         </table>
     @endif
-@endif
+

@@ -17,15 +17,15 @@
 
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}" class="btn btn-warning text-dark"
-                                    target="_blank">แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
+                                    >แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
 
 
 
                                     <a href="{{ route('project.task.create', $project->hashid) }}"
-                                        class="btn btn-info text-white" target="_blank">เพิ่มกิจกรรม</a>
+                                        class="btn btn-info text-white" >เพิ่มกิจกรรม</a>
 
                                      <a href="{{ route('project.task.createcn', $project->hashid) }}"
-                                    class="btn btn-success text-white" target="_blank">เพิ่มสัญญา</a>
+                                    class="btn btn-success text-white" >เพิ่มสัญญา</a>
                                    {{--<a href="{{ route('project.task.createcn', $project->hashid) }}"
                                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a> --}}
 
@@ -241,7 +241,15 @@
                 style: 'currency',
                 currency: 'THB'
             }).format(task.tbalance) + '</span>';
-        } else if (task.task_refund_pa_status === 4) {
+        }
+        else if (task.task_parent_sub === 2) {
+            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB'
+            }).format(task.tbalance) + '</span>';
+        }
+
+         else if (task.task_refund_pa_status === 4) {
             return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                 style: 'currency',
                 currency: 'THB'
@@ -499,6 +507,14 @@
                                 }).format(task.budget_total_task_budget_end) + '</span>';
                             }
 
+                            else if (task.task_parent_sub == 2) {
+
+                                var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                        return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                            style: 'currency',
+                            currency: 'THB'
+                        }).format(task.total_task_refund_pa_budget) + '</span>';
+                        }
 
 
 

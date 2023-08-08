@@ -74,7 +74,7 @@
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status1" value="1" checked>
+                                                id="task_status1" value="1" >
                                             <label class="form-check-label" for="task_status1">
                                                 ระหว่างดำเนินการ
                                             </label>
@@ -93,7 +93,7 @@
 
                                         <div>
                                             <input class="form-check-input" type="radio" name="task_type"
-                                                id="task_type1" value="1" checked>
+                                                id="task_type1" value="1" >
                                             <label class="form-check-label" for="task_type1">
                                                 มี PA
                                             </label>

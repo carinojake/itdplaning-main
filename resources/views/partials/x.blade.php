@@ -121,10 +121,10 @@
                             </td>
                             <td>
                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                    class="btn btn-primary btn-sm" target="_blank"><i
+                                    class="btn btn-primary btn-sm" ><i
                                         class="cil-folder-open">ข้อมูล</i></a>
                                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                    class="btn btn-warning btn-sm" target="_blank">
+                                    class="btn btn-warning btn-sm" >
                                     <i class="cil-cog"></i></a>
                                 <form
                                 class="delete-form"   action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
