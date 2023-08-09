@@ -25,8 +25,8 @@
 
                         <td>
                         <div>
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
-                            <a href="{{ route('project.edit', ['project' => $project->hashid, ]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
+                            <a href="{{ route('project.edit', ['project' => $project->hashid, ]) }}" class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
                            {{--  <form action="{{ route('project.task.destroy', ['project' => $project->hashid, ]) }}" method="POST" style="display:inline">
                                 @method('DELETE')
                                 @csrf

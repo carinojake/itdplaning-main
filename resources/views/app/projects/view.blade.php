@@ -17,15 +17,15 @@
 
                             <x-slot:toolbar>
                                 <a href="{{ route('project.edit', $project->hashid) }}" class="btn btn-warning text-dark"
-                                    target="_blank">แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
+                                   >แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
 
 
 
                                     <a href="{{ route('project.task.create', $project->hashid) }}"
-                                        class="btn btn-info text-white" target="_blank">เพิ่มกิจกรรม</a>
+                                        class="btn btn-info text-white">เพิ่มกิจกรรม</a>
 
                                      <a href="{{ route('project.task.createcn', $project->hashid) }}"
-                                    class="btn btn-success text-white" target="_blank">เพิ่มสัญญา</a>
+                                    class="btn btn-success text-white">เพิ่มสัญญา</a>
                                    {{--<a href="{{ route('project.task.createcn', $project->hashid) }}"
                                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a> --}}
 
@@ -241,7 +241,16 @@
                 style: 'currency',
                 currency: 'THB'
             }).format(task.tbalance) + '</span>';
-        } else if (task.task_refund_pa_status === 4) {
+        }else if (task.task_parent_sub == 2 ) {
+            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB'
+            }).format(task.tbalance) + '</span>';
+        }
+
+
+
+        else if (task.task_refund_pa_status === 4) {
             return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                 style: 'currency',
                 currency: 'THB'
@@ -369,6 +378,9 @@
                         resize: true,
                         template: function(task) {
 
+
+
+
                              if (task.total_cost > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -387,7 +399,12 @@
                             }
 
 
-
+                             else if (task.total_task_cost > 0 ) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_task_cost - task.task_total_pay) + '</span>';
+                            }
 
 
                             else if (task.task_total_pay > 0) {
@@ -400,9 +417,7 @@
                                 }
 
 
-                                else {
-                                    return '-';
-                                }
+
                             }
 
                             else if (task.task_type == 1) {
@@ -411,8 +426,6 @@
                                         style: 'currency',
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
-                                } else {
-                                    return '-';
                                 }
                             }
 
@@ -423,9 +436,7 @@
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
                                 }
-                                else {
-                                    return '';
-                                }}
+                               }
 
 
                                 else if (task.cost > 0) {
@@ -435,15 +446,7 @@
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
                                 }
-                                else {
-                                    return '';
-                                }}
-
-
-
-
-
-
+                               }
 
                                 else {
                                 return '';
@@ -498,6 +501,46 @@
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end) + '</span>';
                             }
+
+
+
+
+
+                            else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1 && task.task_refund_pa_status == 2)  {
+
+                                var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.tbalance_sub - (task.budget_total_task_mm_sum-task.total_task_refund_pa_budget ))+ '</span>';
+                                }
+
+
+
+                            else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1) {
+
+                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.tbalance_sub - (task.budget_total_task_mm_sum ))+ '</span>';
+                            }
+
+
+
+
+                            else if (task.task_parent_sub == 2) {
+
+                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.tbalance_sub) + '</span>';
+                            }
+
+
+
+
 
 
 

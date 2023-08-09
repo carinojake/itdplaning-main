@@ -353,8 +353,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                         <div class="modal-footer">
 
                                                             <div>
-                                                                <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm" target="_blank"><i class="cil-folder-open"></i></a>
-                                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm" target="_blank"><i class="cil-cog"></i></a>
+                                                                <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+                                                                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
                                                                 <form action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                                                     @method('DELETE')
                                                                     @csrf
@@ -419,8 +419,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                     </td>
 
                        <td class="text-end">
-                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" target="_blank"><i class="cil-folder-open"></i></a>
-                       <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" target="_blank"><i class="cil-cog"></i></a>
+                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
+                       <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white"><i class="cil-cog"></i></a>
 
                         @if ($task->task_parent == 0)
 

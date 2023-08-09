@@ -97,6 +97,11 @@ class Task extends Model
         return $this->hasMany('App\Models\Task', 'task_parent');
     }
 
+
+    public function subtaskparent()
+    {
+        return $this->hasMany('App\Models\Task', 'task_parent');
+    }
     public function project()
     {
         return $this->belongsTo('App\Models\Project');

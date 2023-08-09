@@ -3,6 +3,7 @@
 ttt
 
 
+
 <h2>{{ $task->task_name }}</h2>
 <div class="container">
     <div class="row mt-5">
@@ -37,23 +38,24 @@ ttt
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-{{--                     <div class="col-6">{{ number_format($task->task_budget_it_operating - $sum_task_budget_it_operating_ts + $sum_task_refund_budget_it_operating            ) }}</div>
- --}}                @endif
+                    {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
-                    <div class="col-6">{{ number_format($task->task_budget_it_investment) }}</div>
+                    {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
-                    <div class="col-6">{{ number_format($task->task_budget_gov_utility) }}</div>
+                    <div class="col-6">
+                        {{ number_format(floatval($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }}
+                    </div>
                 @endif
             </div>
         </div>
-
         @if ($task->subtask)
         <div class="row mt-3">
             <div class="col-12">
@@ -70,7 +72,7 @@ ttt
                     <th width="50">ลำดับ</th>
                     <th>กิจกรรม</th>
                     <th>วันที่</th>
-                    <th>ที่สัญญา</th>
+                    <th></th>
                     <th>ที่ค่าใช้จ่าย</th>
                     <th width="200"> ดู</th>
                 </tr>
@@ -122,7 +124,7 @@ ttt
                                 @endif
                             </td>
                             <td>
-                                ที่ค่าใช้จ่าย
+
                             </td>
                             <td>
                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"

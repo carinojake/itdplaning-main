@@ -98,11 +98,13 @@
                         class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
+
             @include('partials.x')
 
+            @include('partials.tasksubx')
               {{--   @include('partials.taskx') กิจกรรม --}}
-              @include('partials.tasksub')
-              @include('partials.tasksubx')
+            {{--
+              @include('partials.tasksubx') --}}
              {{--  @include('partials.taskx')
              @include('partials.xx') --}}  {{-- กิจกรรม --}}
 

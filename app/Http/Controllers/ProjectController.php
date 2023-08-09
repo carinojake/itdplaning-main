@@ -62,11 +62,11 @@ class ProjectController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">';
-                   // $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
-                    $html .= '<a href="' . route('project.view', $row->hashid) . '" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open "></i></a>';
+                   // $html .= '<a href="' . route('project.show', $row->hashid) . '" class="text-white btn btn-success"><i class="cil-folder-open "></i></a>';
+                    $html .= '<a href="' . route('project.view', $row->hashid) . '" class="text-white btn btn-success"><i class="cil-folder-open "></i></a>';
 
                     //if (Auth::user()->hasRole('admin')) {
-                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " target="_blank"><i class="cil-pencil "></i></a>';
+                    $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit "><i class="cil-pencil "></i></a>';
                     $html .= '<button data-rowid="' . $row->hashid . '" class="text-white btn btn-danger btn-delete"><i class="cil-trash "></i></button>';
                     //}
                     $html .= '</div>';
@@ -1273,7 +1273,9 @@ class ProjectController extends Controller
                 'budget'                => $__budget,
                 'balance'               => $__balance,
                 'tbalance'               => $__balance,
-                'cost'                  => $__cost+$task['cost_pa_1']+$task['cost_no_pa_2'],
+                'tbalance_sub'               => $__balance,
+                'cost'                  => $__cost,
+                'total_task_cost'                  => $__cost+$task['cost_pa_1']+$task['cost_no_pa_2'],
                 'total_taskcon_cost_pa_1'  => $task['total_taskcon_cost_pa_1'],
 
 
@@ -1310,7 +1312,7 @@ class ProjectController extends Controller
                 'task_type'             => $task['task_type'],
                 'task_status'             => $task['task_status'],
                 'task_refund_pa_status'             => $task['task_refund_pa_status'],
-
+                'task_parent_sub'                => $task['task_parent_sub'],
                 'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);
@@ -1323,7 +1325,7 @@ class ProjectController extends Controller
 
 
 
-    // dd($gantt);
+     //dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
