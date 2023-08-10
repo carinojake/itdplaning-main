@@ -370,35 +370,40 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                             </div>
                                                     </div>
                                                 </div>
-                                            </div>
+
+
+
                                         @endforeach
 
 
 
                                         @endif
 
+                        @foreach ($subtask->subtaskparent as $subtask_sub)
+                            <div>
 
-
-
-
-                                        </li>
-
-
-                                        @foreach ($subtask->subtaskparent as $parent)
-
-                                    <div>- {{ $parent->task_name }} ({{ $parent->task_id }})  ({{ $parent->task_parent }})</div>
-
-
-                                       @endforeach
-
-
-
+                           - {{ $subtask_sub->task_name }}
+                            </div>
+                        @endforeach
 
                                     @endforeach
+
+
+
+
+
+
+
+
                                 </ul>
+
+
+
                             </div>
+
                         @endif
                     </td>
+
 
 
                     <td>
@@ -427,8 +432,8 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                     </td>
 
                        <td class="text-end">
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white" ><i class="cil-folder-open"></i></a>
-                       <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white" ><i class="cil-cog"></i></a>
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
+                       <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-warning text-white"><i class="cil-cog"></i></a>
 
 
 

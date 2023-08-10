@@ -377,6 +377,9 @@
                         resize: true,
                         template: function(task) {
 
+
+
+
                              if (task.total_cost > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -395,7 +398,12 @@
                             }
 
 
-
+                             else if (task.total_task_cost > 0 ) {
+                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_task_cost - task.task_total_pay) + '</span>';
+                            }
 
 
                             else if (task.task_total_pay > 0) {
@@ -408,9 +416,7 @@
                                 }
 
 
-                                else {
-                                    return '-';
-                                }
+
                             }
 
                             else if (task.task_type == 1) {
@@ -419,8 +425,6 @@
                                         style: 'currency',
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
-                                } else {
-                                    return '-';
                                 }
                             }
 
@@ -431,9 +435,7 @@
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
                                 }
-                                else {
-                                    return '';
-                                }}
+                               }
 
 
                                 else if (task.cost > 0) {
@@ -443,15 +445,7 @@
                                         currency: 'THB'
                                     }).format(task.cost - task.pay) + '</span>';
                                 }
-                                else {
-                                    return '';
-                                }}
-
-
-
-
-
-
+                               }
 
                                 else {
                                 return '';
@@ -515,6 +509,46 @@
                             currency: 'THB'
                         }).format(task.total_task_refund_pa_budget) + '</span>';
                         }
+
+
+
+
+                            else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1 && task.task_refund_pa_status == 2)  {
+
+                                var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.tbalance_sub - (task.budget_total_task_mm_sum-task.total_task_refund_pa_budget ))+ '</span>';
+                                }
+
+
+
+                            else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1) {
+
+                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.tbalance_sub - (task.budget_total_task_mm_sum ))+ '</span>';
+                            }
+
+
+
+
+                            else if (task.task_parent_sub == 2) {
+
+                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
+                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                style: 'currency',
+                                currency: 'THB'
+                            }).format(task.tbalance_sub) + '</span>';
+                            }
+
+
+
+
+
 
 
 

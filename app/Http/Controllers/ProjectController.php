@@ -1288,7 +1288,9 @@ class ProjectController extends Controller
                 'budget'                => $__budget,
                 'balance'               => $__balance,
                 'tbalance'               => $__balance,
-                'cost'                  => $__cost+$task['cost_pa_1']+$task['cost_no_pa_2'],
+                'tbalance_sub'               => $__balance,
+                'cost'                  => $__cost,
+                'total_task_cost'                  => $__cost+$task['cost_pa_1']+$task['cost_no_pa_2'],
                 'total_taskcon_cost_pa_1'  => $task['total_taskcon_cost_pa_1'],
 
 
@@ -1338,7 +1340,7 @@ class ProjectController extends Controller
 
 
 
-    // dd($gantt);
+     //dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
