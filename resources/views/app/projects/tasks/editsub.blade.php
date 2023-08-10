@@ -432,7 +432,73 @@
 
                                     </div>
 
+                                    @if ($task->task_parent_sub == 2)
 
+                                    <div id="task_parent_sub_budget" {{-- style="display:none;" --}}>
+                                        <div class=" row mt-3">
+                                            <div class="col-md-4">
+                                                <label for="task_parent_sub_budget"
+                                                    class="form-label">{{ __('task_parent_sub_budget ') }}</label>
+                                                <span class="text-danger"></span>
+
+                                                <input type="text" placeholder="0.00"
+                                                    step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                    class="form-control numeral-mask"
+                                                    id="task_parent_sub_budget"
+                                                    name="task_parent_sub_budget" min="0"    value={{ $task->task_parent_sub_budget }} readonly >
+
+                                                {{--  <div class="invalid-feedback">
+                                                        {{ __('ค่าสาธารณูปโภค') }}
+                                                    </div> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="task_parent_sub_cost" {{-- style="display:none;" --}}>
+                                        <div class=" row mt-3">
+                                            <div class="col-md-4">
+                                                <label for="task_parent_sub_cost"
+                                                    class="form-label">{{ __('task_parent_sub_cost') }}</label>
+                                                <span class="text-danger"></span>
+
+                                                <input type="text" placeholder="0.00"
+                                                    step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                    class="form-control numeral-mask"
+                                                    id="task_parent_sub_cost"
+                                                    name="task_parent_sub_cost" min="0"    value={{ $task->task_parent_sub_cost }} readonly >
+
+                                                {{--  <div class="invalid-feedback">
+                                                        {{ __('ค่าสาธารณูปโภค') }}
+                                                    </div> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="task_parent_sub_refund_budget" {{-- style="display:none;" --}}>
+                                        <div class=" row mt-3">
+                                            <div class="col-md-4">
+                                                <label for="task_parent_sub_refund_budget"
+                                                    class="form-label">{{ __('task_parent_sub_refund_budget') }}</label>
+                                                <span class="text-danger"></span>
+
+                                                <input type="text" placeholder="0.00"
+                                                    step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                    class="form-control numeral-mask"
+                                                    id="task_parent_sub_refund_budget"
+                                                    name="task_parent_sub_refund_budget" min="0"  value={{ $task->task_parent_sub_refund_budget }} readonly >
+
+                                                {{--  <div class="invalid-feedback">
+                                                        {{ __('ค่าสาธารณูปโภค') }}
+                                                    </div> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @endif
                                 </div>
 
 

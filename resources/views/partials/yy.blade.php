@@ -1,18 +1,18 @@
-@if ($task['task_id'] !== null)
+{{-- @if ($task['task_id'] !== null)
 <x-slot:toolbar>
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST') {{-- Use POST method to submit the form --}}
+        @method('POST')
         @csrf
         <button class="btn btn-warning text-white btn-delete"><i class="cil-money"></i></button>
     </form>
 
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_1', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST') {{-- Use POST method to submit the form --}}
+        @method('POST')
         @csrf
         <button class="btn btn-rad text-white btn-delete"><i class="cil-money"></i></button>
     </form>
 
-</x-slot:toolbar>
+</x-slot:toolbar> --}}
 @isset($contract)
     <h5>มีสัญญา</h5>
     <div class="container">
@@ -238,4 +238,4 @@
             @endisset
         </table>
     @endif
-@endif
+

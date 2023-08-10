@@ -15,8 +15,8 @@
                     class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                 </a>
 
-                <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
+              {{--   <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a> --}}
 
 
                 @if ($task->task_budget_it_operating > 0)
@@ -98,13 +98,17 @@
                 </x-slot:toolbar>
             @endif
 
-            @if ($task->subtask->count() == 0)
-            @include('partials.taskx')
-            @endif
 
-            @if ($task->subtask->count() > 0)
+           {{--  @include('partials.taskx') --}}
+
+
+
             @include('partials.taskst')  {{-- กิจกรรม --}}
-        @endif
+            @include('partials.tasksub')
+
+            @include('partials.y')
+           {{--  @include('partials.yy')  --}}
+            @include('partials.z')
         {{-- @if ($task->subtaskparent->count() > 0)
             @include('partials.tasksub')
         @endif --}}

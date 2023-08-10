@@ -1034,13 +1034,14 @@ class ProjectController extends Controller
                 'ab.total_pay_1',
                 'ac.total_pay_2',
                 'a.total_taskcon_pay',
-                'cc.s',
-                'cc.c',
+                'cc.taskcons_task_id',
+                'cc.taskcons_contract_id',
                 'ad.total_taskcon_cost_pa_1',
                 'ad.total_taskcon_pay_pa_1',
                 'astatus_pa.total_task_refund_pa_budget_status',
                 'astatus.total_task_refund_no_pa_budget_status',
-                'astaaksub.task_tasksub',
+
+                'astaaksub.task_tasksub_type2',// taaksub 2
                 'astaaksub.total_task_refund_no_pa_budget_parent'
             )
 
@@ -1159,19 +1160,25 @@ class ProjectController extends Controller
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
         sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_status
-        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus'),
+        from tasks  where tasks.task_type=2
+        AND  tasks.task_refund_pa_status=2
+        AND tasks.deleted_at IS NULL group by tasks.task_parent) as astatus'),
                 'astatus.task_parent',
                 '=',
                 'tasks.task_id'
             )
 
+
+
             ->leftJoin(
-                DB::raw('(select tasks.task_parent as task_tasksub,
-        sum( COALESCE(tasks.task_refund_pa_budget,0))  as total_task_refund_no_pa_budget_parent
-        from tasks  where tasks.task_type=2  AND  tasks.task_refund_pa_status=2   AND tasks.deleted_at IS NULL group by tasks.task_parent) as astaaksub'),
-
-
-                'astaaksub.task_tasksub',
+                DB::raw('(select tasks.task_parent as task_tasksub_type2,
+                    sum(COALESCE(tasks.task_refund_pa_budget, 0)) as total_task_refund_no_pa_budget_parent
+                    from tasks
+                    where tasks.task_type=2
+                    AND tasks.task_refund_pa_status=2
+                    AND tasks.deleted_at IS NULL
+                    group by tasks.task_parent) as astaaksub'),
+                'astaaksub.task_tasksub_type2',
                 '=',
                 'tasks.task_parent'
             )
@@ -1180,11 +1187,13 @@ class ProjectController extends Controller
 
 
 
-            ->leftJoin(DB::raw('(SELECT taskcons.task_id as s,
-            taskcons.contract_id as c,
+
+
+            ->leftJoin(DB::raw('(SELECT taskcons.task_id as taskcons_task_id,
+            taskcons.contract_id as taskcons_contract_id,
             taskcons.taskcon_pay
             FROM taskcons) as cc'), function ($join) {
-                $join->on('cc.s', '=', 'tasks.task_id');
+                $join->on('cc.taskcons_task_id', '=', 'tasks.task_id');
             })
             ->leftJoin(
                 DB::raw('(select tasks.task_id,
@@ -1223,7 +1232,7 @@ class ProjectController extends Controller
 
             ->get()
             ->toArray());
-       dd($tasks);
+     //dd($tasks);
 
 
         ($tasks = json_decode(json_encode($tasks), true));
@@ -3240,7 +3249,8 @@ class ProjectController extends Controller
     'projectData',
         'projectsJson',
     'projectyear',
-    'projectDetails'));
+    'projectDetails',
+        ));
     }
 
 
@@ -3270,10 +3280,99 @@ class ProjectController extends Controller
             $task = null;
         }
 
+       // dd($task->subtask);
 
+        if ($task) {
+            $task_sub = $task->subtask ;
+
+        if ($task_sub) {
+
+
+        $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
+                $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+                $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+                $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+                $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+                $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
+            'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+          // dd($task_sub_sums);
+        } else {
+            // จัดการเมื่อ $task_sub เป็น null
+           // $task_sub = null;
+            // เพิ่มโค้ดเพิ่มเติมหากต้องการ...
+        }
+    } else {
+        // จัดการเมื่อ $task เป็น null
+        // ตัวอย่างเช่น นำไป redirect ไปยังหน้าแสดงข้อผิดพลาดหรือคืนค่า response ข้อผิดพลาด
+        // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
+    }
         // dd($tasks);
+        //dd($task_sub_sums);
+       $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+       //    dd($task_sub_refund);
 
-        return view('app.projects.tasks.createto', compact('request', 'contracts', 'project', 'tasks', 'task', 'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
+
+
+
+           $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_refund_pa_budget' => 0],
+            'investment' => [ 'task_refund_pa_budget' => 0],
+            'utility' => ['task_refund_pa_budget' => 0]]);
+
+
+           // dd($task_sub_refund_pa_budget);
+
+
+
+
+        return view('app.projects.tasks.createto', compact('request',
+
+        'task_sub_sums',
+        'task_sub_refund_pa_budget',
+        'contracts', 'project', 'tasks', 'task',
+        'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'));
     }
 
 
@@ -3381,11 +3480,40 @@ class ProjectController extends Controller
             'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
           //วใ dd($task_sub_sums);
 
+          $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+          //    dd($task_sub_refund);
 
+
+
+
+              $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+               if ($subtask->task_budget_it_operating > 1) {
+                   $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+               }
+
+               if ($subtask->task_budget_it_investment > 1) {
+                   $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+               }
+
+               if ($subtask->task_budget_gov_utility > 1) {
+
+                   $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                   // Add other fields as necessary...
+               }
+
+               return $carry;
+           }, ['operating' => ['task_refund_pa_budget' => 0],
+               'investment' => [ 'task_refund_pa_budget' => 0],
+               'utility' => ['task_refund_pa_budget' => 0]]);
+
+
+              // dd($task_sub_refund_pa_budget);
         $tasksDetails = $task;
         //  dd($contracts);
         return view('app.projects.tasks.createsub', compact(
-
+            'task_sub_refund_pa_budget',
             'task_sub_sums',
             'request',
         'tasksDetails', 'contracts',
@@ -3530,12 +3658,12 @@ class ProjectController extends Controller
 
 
     if ($task) {
-        $task_sub = $task->subtask->whereNotNull('tasks.deleted_at') ;
+        $task_sub = $task->subtask ;
 
     if ($task_sub) {
 
 
-    $task_sub_sums = $task_sub->whereNotNull('tasks.deleted_at')->reduce(function ($carry, $subtask) {
+    $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
         if ($subtask->task_budget_it_operating > 1) {
             $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
             $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
@@ -3580,6 +3708,37 @@ class ProjectController extends Controller
 }
         // dd($projectData);
 
+       // $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+       //    dd($task_sub_refund);
+
+
+
+
+        /*    $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_refund_pa_budget' => 0],
+            'investment' => [ 'task_refund_pa_budget' => 0],
+            'utility' => ['task_refund_pa_budget' => 0]]);
+ */
+
+           // dd($task_sub_refund_pa_budget);
+
         $projectsJson = json_encode($projectData);
 
         //dd($projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
@@ -3588,6 +3747,7 @@ class ProjectController extends Controller
 
         return view('app.projects.tasks.createsubno', compact(
             'request',
+
             'projectData',
             'projectsJson',
             'contracts',
@@ -3729,8 +3889,43 @@ class ProjectController extends Controller
 
 
         $tasksDetails = $task;
+
+
+        $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+       //    dd($task_sub_refund);
+
+
+
+
+           $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_refund_pa_budget' => 0],
+            'investment' => [ 'task_refund_pa_budget' => 0],
+            'utility' => ['task_refund_pa_budget' => 0]]);
+
+
+           // dd($task_sub_refund_pa_budget);
+
+
   // dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
         return view('app.projects.tasks.createsubnop', compact(
+            'task_sub_refund_pa_budget',
             'request',
             'task_sub_sums',
             'tasksDetails',
@@ -3879,12 +4074,20 @@ class ProjectController extends Controller
 
         $task->task_refund_pa_status = $request->input('task_refund_pa_status');
 
+        $task->task_parent_sub_refund_pa_status = $request->input('task_refund_pa_status') ?? null;
+        $task->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
+        $task->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+        $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
 
 
         $task->task_type = $request->input('task_type');
          //dd($task);
         if ($task->save()) {
             //insert contract
+            if( $task->task_parent_sub= 2){
+
+            }
+
             if ($request->input('task_contract')) {
                 //insert contract
                 $contract_has_task = new ContractHasTask;
@@ -4350,12 +4553,24 @@ class ProjectController extends Controller
         }
 
 
+      // $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+
+       // dd($task,$task_parent_sub);
 
 
 
 
         if (!$task->save()) {
             // If the Project failed to save, redirect back with an error message
+
+            $task_parent_sub = Task::where('task_id', $task->task_parent)->get();
+
+
+            $task_parent_sub->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
+            $task_parent_sub->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+            $task_parent_sub->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
+
+            $task_parent_sub->save();
             return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
         }  // <-- This closing bracket was missing
         // Save the Taskcon

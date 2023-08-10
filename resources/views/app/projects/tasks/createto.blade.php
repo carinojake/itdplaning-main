@@ -297,7 +297,7 @@
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-6 fw-semibold ">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                {{ number_format($task->task_budget_gov_utility) }} บาท
+                                                {{ number_format($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
                                             @endif
                                         </div>
                                     </div>
@@ -355,6 +355,23 @@
 
                                         </div>
 
+
+                                        <div class="col-md-3 mt-3">
+
+                                            <label for="task_mm_budget"
+                                                class="form-label">{{ __('budget') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                class="form-control numeral-mask"
+                                                id="task_mm_budget" name="task_mm_budget"
+                                                min="0"  value={{ session('contract_mm_budget') }} >
+
+                                            <div class="invalid-feedback">
+                                                {{ __('mm') }}
+                                            </div>
+
+
+                                        </div>
 
                                         {{--       <div class="col-6 ">
                                             <strong>ค่าใช้จ่าย</strong>

@@ -55,7 +55,7 @@
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                <div class="col-3">  {{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget']), 2) }} บาท</div>
+                                                <div class="col-3">  {{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])), 2) }} บาท</div>
                                             @endif
                                         </div>
                                     </div>
