@@ -591,7 +591,7 @@
                                 }).format(task.budget-task.budget_total_task_mm_sum+task.total_task_refund_budget_status) + '</span>';
                                 }
 
-
+/*
                                 else if (task.task_refund_pa_status == 4 && (task.task_status == 2)&& (task.task_type == null)  ) {
 
                             var tmp_class = task.task_refund_pa_status == 4 ? 'blue' : 'blue';
@@ -599,7 +599,7 @@
                                 style: 'currency',
                                 currency: 'THB'
                             }).format(task.total_task_refund_pa_budget) + '</span>';
-                            }
+                            } */
 
 
                         /*     else if (total_task_mm_budget_2> 0) {

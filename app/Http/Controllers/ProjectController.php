@@ -1354,6 +1354,9 @@ class ProjectController extends Controller
                 'task_refund_pa_status'             => $task['task_refund_pa_status'],
                 'task_parent_sub'             => $task['task_parent_sub'],
                 'task_parent_sub_refund'             =>    $task['total_task_refund_sub_budget_parent'],
+                'task_parent_sub_budget'                                     =>     $task['task_parent_sub_budget'],
+                'task_parent_sub_cost'                                       =>     $task['task_parent_sub_cost'],
+                'task_parent_sub_refund_budget'                                      =>      $task['task_parent_sub_refund_budget'],
                 'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);

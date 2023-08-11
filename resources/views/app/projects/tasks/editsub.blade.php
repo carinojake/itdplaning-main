@@ -221,6 +221,7 @@
                                             {{ __('รายละเอียดการที่ใช้จ่าย') }}
                                         </div>
                                     </div>
+                                    @if ($task->task_parent_sub < 2)
 
                                     <div class="row mt-3">
                                         <h4>งบประมาณ</h4>
@@ -235,6 +236,8 @@
                                                 class="form-control numeral-mask"
                                                 name="task_mm_budget" min="0"  value="{{ $task->task_mm_budget }}">
                                         </div>
+                                        @endif
+
                                         <div class="row mt-3">
                                             <div class="col-6 mt-3">
                                                 <strong><h4>วงเงินที่ขออนุมัติ</h4></strong>
@@ -301,7 +304,7 @@
                                                 @endif
                                             </div>
 
-
+                                            @if ($task->task_parent_sub < 2)
                                             <div class="col-6 mt-3">
                                                 <strong><h4>ค่าใช้จ่าย</h4></strong>
 
@@ -391,6 +394,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
                                     @if ($task->task_type == 2)
                                     <div class="row mt-3">
@@ -434,8 +438,8 @@
 
                                     @if ($task->task_parent_sub == 2)
 
-                                    <div id="task_parent_sub_budget" {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3">
+                                    <div id="task_parent_sub_budget"  {{-- style="display:none;" --}}>
+                                        <div class=" row mt-3 d-none">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_budget"
                                                     class="form-label">{{ __('task_parent_sub_budget ') }}</label>
@@ -456,7 +460,7 @@
                                     </div>
 
                                     <div id="task_parent_sub_cost" {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3">
+                                        <div class=" row mt-3 d-none">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_cost"
                                                     class="form-label">{{ __('task_parent_sub_cost') }}</label>
@@ -477,7 +481,7 @@
                                     </div>
 
                                     <div id="task_parent_sub_refund_budget" {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3">
+                                        <div class=" row mt-3 d-none">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_refund_budget"
                                                     class="form-label">{{ __('task_parent_sub_refund_budget') }}</label>
