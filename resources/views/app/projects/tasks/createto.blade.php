@@ -356,7 +356,7 @@
                                         </div>
 
 
-                                        <div class="col-md-3 mt-3">
+                                        <div class="col-md-3 mt-3 d-none">
 
                                             <label for="task_mm_budget_1"
                                                 class="form-label">{{ __('budget') }}</label>
