@@ -959,7 +959,7 @@ class ProjectController extends Controller
             // 'duration'              => 360,
         ];
 
-        // dd($gantt);
+         ($gantt);
 
 
 
@@ -980,7 +980,7 @@ class ProjectController extends Controller
 
 
 
-         //dd($budget);
+        // dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -1042,7 +1042,8 @@ class ProjectController extends Controller
                 'astatus.total_task_refund_no_pa_budget_status',
 
                 'astaaksub.task_tasksub_type2',// taaksub 2
-                'astaaksub.total_task_refund_no_pa_budget_parent'
+                'astaaksub.total_task_refund_no_pa_budget_parent',
+                'astaaksubrefund.total_task_refund_sub_budget_parent'
             )
 
             ->leftJoin(
@@ -1170,6 +1171,10 @@ class ProjectController extends Controller
 
 
 
+
+
+
+
             ->leftJoin(
                 DB::raw('(select tasks.task_parent as task_tasksub_type2,
                     sum(COALESCE(tasks.task_refund_pa_budget, 0)) as total_task_refund_no_pa_budget_parent
@@ -1184,7 +1189,18 @@ class ProjectController extends Controller
             )
 
 
-
+            ->leftJoin(
+                DB::raw('(select tasks.task_parent as task_tasksub_type2,
+                    sum(COALESCE(tasks.task_refund_pa_budget, 0)) as total_task_refund_sub_budget_parent
+                    from tasks
+                    where tasks.task_type=3
+                    AND tasks.task_refund_pa_status=2
+                    AND tasks.deleted_at IS NULL
+                    group by tasks.task_parent) as astaaksubrefund'),
+                'astaaksubrefund.task_tasksub_type2',
+                '=',
+                'tasks.task_parent'
+            )
 
 
 
@@ -1337,6 +1353,7 @@ class ProjectController extends Controller
                 'task_status'             => $task['task_status'],
                 'task_refund_pa_status'             => $task['task_refund_pa_status'],
                 'task_parent_sub'             => $task['task_parent_sub'],
+                'task_parent_sub_refund'             =>    $task['total_task_refund_sub_budget_parent'],
                 'type'                  => 'task',
                 // 'owner' => $project['project_owner'],
             ]);
@@ -1349,7 +1366,7 @@ class ProjectController extends Controller
 
 
 
-     //dd($gantt);
+  // dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
@@ -4074,19 +4091,25 @@ class ProjectController extends Controller
 
         $task->task_refund_pa_status = $request->input('task_refund_pa_status');
 
+
         $task->task_parent_sub_refund_pa_status = $request->input('task_refund_pa_status') ?? null;
         $task->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
         $task->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
         $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
-
-
         $task->task_type = $request->input('task_type');
          //dd($task);
         if ($task->save()) {
             //insert contract
-            if( $task->task_parent_sub= 2){
+         /*    if( $task->task_parent_sub= 2){
 
-            }
+
+        $task->task_parent_sub_refund_pa_status = $request->input('task_refund_pa_status') ?? null;
+        $task->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
+        $task->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+        $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
+        $task->save();
+
+            } */
 
             if ($request->input('task_contract')) {
                 //insert contract
@@ -4553,24 +4576,41 @@ class ProjectController extends Controller
         }
 
 
-      // $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+       $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
 
-       // dd($task,$task_parent_sub);
+        //dd($task,$task_parent_sub);
 
+
+  //dd($task_parent_sub) แปล;
+      // $task_parent_sub->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
+     /*
+       if($task_parent_sub->task_parent_sub_cost == null){
+        $task_parent_sub->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+        $task_parent_sub->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
+
+      } else { }
+
+
+
+
+      */
+
+      $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+
+      $task_parent_sub->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+
+
+      $task_parent_sub->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
+
+
+      $task_parent_sub->save();
 
 
 
         if (!$task->save()) {
             // If the Project failed to save, redirect back with an error message
 
-            $task_parent_sub = Task::where('task_id', $task->task_parent)->get();
 
-
-            $task_parent_sub->task_parent_sub_budget = $task_budget_gov_utility+$task_budget_it_operating+$task_budget_it_investment ?? null;
-            $task_parent_sub->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
-            $task_parent_sub->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
-
-            $task_parent_sub->save();
             return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
         }  // <-- This closing bracket was missing
         // Save the Taskcon

@@ -242,12 +242,7 @@
                 currency: 'THB'
             }).format(task.tbalance) + '</span>';
         }
-        else if (task.task_parent_sub === 2) {
-            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                style: 'currency',
-                currency: 'THB'
-            }).format(task.tbalance) + '</span>';
-        }
+
 
          else if (task.task_refund_pa_status === 4) {
             return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
@@ -508,7 +503,7 @@
 
                            else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1 && task.task_refund_pa_status == 2)  {
 
-                                var tmp_class = task.task_refund_pa_status == 2 ? 'yellow' : 'yellow';
+                                var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'yellow';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -523,7 +518,7 @@
                             return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                 style: 'currency',
                                 currency: 'THB'
-                            }).format(task.tbalance_sub - (task.budget_total_task_mm_sum - task.task_refund_no_pa_budget_status))+ '</span>';
+                            }).format((task.tbalance_sub - task.budget_total_task_mm_sum )+task.total_task_refund_budget_status )+ '</span>';
                             }
 
 
@@ -589,7 +584,7 @@
 
                                 else if (task.task_refund_pa_status == 3  && (task.task_status == 2)) {
 
-                                var tmp_class = task.task_refund_pa_status == 3 ? 'red' : 'red';
+                                var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -625,7 +620,7 @@
 
 
                              else if (task.budget_total_task_mm_sum > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -651,7 +646,7 @@
                             } */
 
                             else if (task.cost > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
 
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -660,7 +655,7 @@
                             }
 
                             else if (task.budget > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -668,7 +663,7 @@
                             }
 
                             else if (task.budget_total_task_mm > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
 
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -676,7 +671,7 @@
                                 }).format(task.budget-task.budget_total_task_mm) + '</span>';
                             }
                             else if (task.cost_no_pa_2 > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
@@ -692,7 +687,7 @@
 
 
                             else if (task.budget_mm > 0) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'

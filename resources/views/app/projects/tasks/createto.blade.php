@@ -358,13 +358,13 @@
 
                                         <div class="col-md-3 mt-3">
 
-                                            <label for="task_mm_budget"
+                                            <label for="task_mm_budget_1"
                                                 class="form-label">{{ __('budget') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                 class="form-control numeral-mask"
                                                 id="task_mm_budget" name="task_mm_budget"
-                                                min="0"  value={{ session('contract_mm_budget') }} >
+                                                min="0"  value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
 
                                             <div class="invalid-feedback">
                                                 {{ __('mm') }}
@@ -473,6 +473,37 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+        <script>
+            var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
+
+            function calculateRefund() {
+                var totalRefund = 0;
+
+                budgetFields.forEach(function(costField, index) {
+                    var pr_value = $("#" + costField).val();
+
+                    if (pr_value) {
+                        var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                        if (pr_budget != 0) { // Corrected comparison operator from '=' to '!='
+                            var refund = pr_budget;
+                            totalRefund += refund;
+                        }
+                    }
+                });
+
+                $("#task_mm_budget").val(totalRefund.toFixed(2));
+            }
+
+            $(document).ready(function() {
+                budgetFields.forEach(function(costField, index) {
+                    $("#" + costField).on("input", calculateRefund);
+                });
+            });
+        </script>
+
 
 
         <script>
