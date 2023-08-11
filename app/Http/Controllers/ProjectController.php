@@ -1369,7 +1369,7 @@ class ProjectController extends Controller
 
 
 
-  // dd($gantt);
+   //dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
@@ -4503,17 +4503,17 @@ class ProjectController extends Controller
         //   $start_date = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_start_date')), 'Y-m-d');
         // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_end_date')), 'Y-m-d');
         // $taskcon->taskcon_name        = $request->input('task_name');
-        $taskcon->task_id = $task->task_id; // Use the id of the newly created project
-        $taskcon->taskcon_name        = $request->input('task_name');
-        $taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
-        $taskcon->taskcon_pp        = $request->input('taskcon_pp');
-        // $taskcon->taskcon_name        = $request->input('task_name');
+
 
 
       //  $taskcon->taskcon_po_budget = $task_po_budget;
 //$taskcon->taskcon_er_budget = $task_er_budget;
 
-
+$taskcon->task_id = $task->task_id; // Use the id of the newly created project
+$taskcon->taskcon_name        = $request->input('task_name');
+$taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
+$taskcon->taskcon_pp        = $request->input('taskcon_pp');
+// $taskcon->taskcon_name        = $request->input('task_name');
         $taskcon->taskcon_mm_name        = $request->input('taskcon_mm_name');
         $taskcon->taskcon_mm        = $request->input('taskcon_mm');
         $taskcon->taskcon_ba        = $request->input('taskcon_ba');
@@ -4581,7 +4581,7 @@ class ProjectController extends Controller
 
        $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
 
-        //dd($task,$task_parent_sub);
+
 
 
   //dd($task_parent_sub) แปล;
@@ -4598,15 +4598,35 @@ class ProjectController extends Controller
 
       */
 
-      $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
-
-      $task_parent_sub->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
+      $totol_task_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
 
 
-      $task_parent_sub->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
+
+      $task_parent_sub->task_parent_sub_cost = $task_parent_sub['task_parent_sub_cost'] + $totol_task_cost;
 
 
-      $task_parent_sub->save();
+      $task_parent_sub->task_parent_sub_refund_budget = $task_parent_sub['task_parent_sub_refund_budget'] +$task_refund_pa_budget ?? null;
+
+
+
+      $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+      if ($task_parent_st !== null) {
+          $task_parent_st->task_parent_sub_cost = $totol_task_cost;
+          $task_parent_st->task_parent_sub_refund_budget = $task_refund_pa_budget;
+
+      }
+
+
+
+
+     //dd($task,$task_parent_sub, $task_parent_st);
+
+
+
+
+
+
 
 
 
@@ -4618,10 +4638,13 @@ class ProjectController extends Controller
         }  // <-- This closing bracket was missing
         // Save the Taskcon
         if (!$taskcon->save()) {
+
+
             // If the Taskcon failed to save, redirect back with an error message
             return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
         }
-
+        $task_parent_st->save();
+        $task_parent_sub->save();
         // If both the Project and Taskcon saved successfully, redirect to project.index
         return redirect()->route('project.view', $project);
     }

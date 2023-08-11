@@ -285,13 +285,13 @@
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-6 fw-semibold ">{{ __('งบกลาง ICT') }}</div>
-                                                {{ number_format($task->task_budget_it_operating) }} บาท
+                                                {{ number_format($task->task_budget_it_operating- $task_sub_sums['operating']['task_mm_budget']-$task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] ) }}  บาท
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-6 fw-semibold ">{{ __('งบดำเนินงาน') }}</div>
-                                                {{ number_format($task->task_budget_it_investment) }} บาท
+                                                {{ number_format($task->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} บาท
                                             @endif
                                         </div>
                                         <div class="row">
