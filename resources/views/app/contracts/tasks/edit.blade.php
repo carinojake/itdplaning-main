@@ -239,7 +239,7 @@
                                             <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
 
                                             <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', strtotime($taskcon->taskcon_pay_date))) }}">
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_pay_date))) }}">
 
                                         </div>
                                         <div class="col-md-4">

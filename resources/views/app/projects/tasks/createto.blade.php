@@ -281,26 +281,30 @@
                                     <h4>งบประมาณ </h4>
 
 
-                                    <div class="row mt-3">
+
+
+
+
+                                  {{--   <div class="row mt-3">
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
-                                                <div class="col-6 fw-semibold ">{{ __('งบกลาง ICT') }}</div>
+                                                <div id="task_budget_it_operating" class="col-6 fw-semibold ">{{ __('งบกลาง ICT') }}</div>
                                                 {{ number_format($tasksDetails->task_budget_it_operating- $task_sub_sums['operating']['task_mm_budget']-$task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] ) }}  บาท
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_it_investment > 0)
-                                                <div class="col-6 fw-semibold ">{{ __('งบดำเนินงาน') }}</div>
+                                                <div  id="task_budget_it_investment"  class="col-6 fw-semibold ">{{ __('งบดำเนินงาน') }}</div>
                                                 {{ number_format($tasksDetails->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} บาท
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
-                                                <div class="col-6 fw-semibold ">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                <div  id="task_budget_gov_utility" class="col-6 fw-semibold ">{{ __('ค่าสาธารณูปโภค') }}</div>
                                                 {{ number_format($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="row mt-3">
                                         <div class="col-6">
@@ -320,6 +324,9 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
+                                                    ไม่เกิน   {{ number_format($tasksDetails->task_budget_it_operating- $task_sub_sums['operating']['task_mm_budget']-$task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] ) }}  บาท
+
+
                                                 @endif
 
                                             </div>
@@ -336,6 +343,8 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบดำเนินงาน') }}
                                                     </div>
+                                                    ไม่เกิน  {{ number_format($tasksDetails->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} บาท
+
                                                 @endif
                                             </div>
                                             <div class="col-md-12">
@@ -350,6 +359,8 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
+                                                    ไม่เกิน  {{ number_format($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
+
                                                 @endif
                                             </div>
 
@@ -473,14 +484,43 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
 
+    </script>
+
+    <script>
+       $(document).ready(function() {
+$("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
+    var max = 0;
+    var fieldId = $(this).attr('id');
+
+    if (fieldId === "task_budget_it_investment") {
+        max = parseFloat({{  $tasksDetails->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+    } else if (fieldId === "task_budget_it_operating") {
+        max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+    } else if (fieldId === "task_budget_gov_utility") {
+        max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+    }
+
+    var current = parseFloat($(this).val().replace(/,/g , ""));
+    if (current > max) {
 
 
+        Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
 
-        <script>
+        $(this).val(0);
+
+        /* $(this).val(max.toFixed(2)); */
+    }
+});
+});
+    </script>
+
+
+     {{--    <script>
             $(document).ready(function() {
                 $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
                     function() {
@@ -506,7 +546,7 @@ $(this).val(0);
 
                     });
             });
-        </script>
+        </script> --}}
 
 
 

@@ -52,9 +52,15 @@
 
                           {{-- เปลี่ยน ict ดำเนิน สา --}}
 
+                          <span style="color:rgb(255, 0, 0);" class="d-inline-block" tabindex="0" data-coreui-toggle="popover" data-coreui-trigger="hover focus"
+                           data-coreui-content="Disabled popover">
+                            <button class="btn " type="button" disabled>หมายเหตุ</button>
+                          </span>
                           <div class="tab-content">
-                            <div class=" mt-3">
-                            หมายเหตุ: ตัวเลขน้ำเงิน=คืน
+                            <div class="mt-3">
+                                หมายเหตุ: <span style="color:blue;">ตัวเลขน้ำเงิน= งบประมาณ คืน</span>
+                            </div>
+
                         </div>
                                                         </div>
 
@@ -540,7 +546,7 @@
 
                       else if (task.task_parent_sub == 2 && task.budget_total_task_mm_sum > 1) {
 
-                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'magenta';
+                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
                             return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                 style: 'currency',
                                 currency: 'THB'
@@ -615,7 +621,7 @@
 
                                 else if (task.task_refund_pa_status == 3  && task.task_parent_sub_refund_pa_status == 3  && (task.task_status == 1)) {
 
-                                        var tmp_class = task.task_refund_pa_status == 3 ? 'magenta' : 'magenta';
+                                        var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
                                         return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                             style: 'currency',
                                             currency: 'THB'
@@ -634,7 +640,7 @@
 
 
                             else if (task.task_refund_pa_status == 3 && task.task_status == 2 && task.task_parent_sub_refund_pa_status == 3) {
-    var tmp_class = task.task_refund_pa_status == 3 ? 'magenta' : 'green';
+    var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
 
     // ตรวจสอบค่าที่ใช้ในการคำนวณว่าถูกกำหนดและมีค่าที่ถูกต้องหรือไม่
     var calculatedValue = task.budget - task.budget_total_task_mm_sum + task.task_parent_sub_refund_budget;

@@ -1374,7 +1374,7 @@ class ProjectController extends Controller
 
 
 
-// dd($gantt);
+//dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
@@ -5566,7 +5566,7 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
 
 
-                   /*  if ($task_parent_sub !== null) {
+                    if ($task_parent_sub !== null) {
                         $totol_task_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
 
                         if ($task->task_parent_sub_cost > 1) {
@@ -5578,8 +5578,8 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
                         } elseif ($task->task_parent_sub_cost !== null) {
                             $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
-                            $task_parent_sub->task_parent_sub_cost = $task_parent_sub->task_parent_sub_cost + $totol_task_cost;
-                            dd($task_parent_sub);
+                           // $task_parent_sub->task_parent_sub_cost = $task_parent_sub->task_parent_sub_cost + $totol_task_cost;
+                            //dd($task_parent_sub);
                             $task_parent_sub->save();
                         } else {
 
@@ -5587,13 +5587,13 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
                             $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
 
                             if ($task_parent_st !== null) {
-                                $task_parent_st->task_parent_sub_cost = $task_parent_st->task_parent_sub_cost + $totol_task_cost;
+                              //  $task_parent_st->task_parent_sub_cost = $task_parent_st->task_parent_sub_cost + $totol_task_cost;
                                 $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $task_pay;
                                 $task_parent_st->save();
                             }
                         }
 
-                    } */
+                    }
 
 
 
