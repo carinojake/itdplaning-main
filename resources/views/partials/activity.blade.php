@@ -52,7 +52,7 @@
                                                        <!-- Button trigger modal -->
 
 
-                     {{--                                   <button
+                                                      {{--                                   <button
                                                        type="button"
                                                        class="badge btn btn-primary text-white "
                                                 data-coreui-toggle="modal"
@@ -377,7 +377,21 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
                                         @endif
+
+
 
                         @foreach ($subtask->subtaskparent as $subtask_sub)
                             <div>

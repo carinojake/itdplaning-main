@@ -439,7 +439,7 @@
                                     @if ($task->task_parent_sub == 2)
 
                                     <div id="task_parent_sub_budget"  {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3 d-none">
+                                        <div class=" row mt-3 ">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_budget"
                                                     class="form-label">{{ __('task_parent_sub_budget ') }}</label>
@@ -460,7 +460,7 @@
                                     </div>
 
                                     <div id="task_parent_sub_cost" {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3 d-none">
+                                        <div class=" row mt-3 ">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_cost"
                                                     class="form-label">{{ __('task_parent_sub_cost') }}</label>
@@ -481,7 +481,7 @@
                                     </div>
 
                                     <div id="task_parent_sub_refund_budget" {{-- style="display:none;" --}}>
-                                        <div class=" row mt-3 d-none">
+                                        <div class=" row mt-3 ">
                                             <div class="col-md-4">
                                                 <label for="task_parent_sub_refund_budget"
                                                     class="form-label">{{ __('task_parent_sub_refund_budget') }}</label>

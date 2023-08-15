@@ -1496,6 +1496,8 @@ if($request->hasFile('file')) {
         $tasks = task::get();
         $contractcons = Contract::get();
 
+
+
       // dd ($taskcons, $contract);
 
         //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
@@ -1528,6 +1530,20 @@ if($request->hasFile('file')) {
         $id_taskcon    = Hashids::decode($taskcon)[0];
         $contract    = Contract::find($id_contract);
         $taskcon       = taskcon::find($id_taskcon);
+
+        ($task_sub_contract=$contract->taskcont);
+        $tb = $task_sub_contract->first();
+        $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
+         $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+
+
+
+ // dd($tb);
+      // dd($task_parent_sub);
+         //dd($task_sub_contract, $task_parent_sub,$task_parent_st);
+
+       // dd ($id_contract,$taskcon, $contract);
 
         $request->validate([
             'taskcon_name'                   => 'required',
@@ -1643,7 +1659,7 @@ if($request->hasFile('file')) {
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00')?? null;
 
 
 
@@ -1669,6 +1685,59 @@ if($request->hasFile('file')) {
        $taskcon->taskcon_pay                 =  $taskcon_pay;
 
         $taskcon->taskcon_type                 = $request->input('taskcon_type');
+
+
+
+
+
+
+
+
+
+
+
+
+        ($task_sub_contract=$contract->taskcont);
+        $tb = $task_sub_contract->first();
+        $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
+         $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+        //dd($task_sub_contract, $task_parent_sub,$task_parent_st);
+         if ($task_parent_sub !== null) {
+
+            if ($task_parent_sub->task_parent_sub_cost > 1) {
+               // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+               // dd($task_parent_sub);
+               // $task_parent_sub->save();
+            } elseif ($task_parent_sub->task_parent_sub_pay !== null) {
+                //$task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+               // $task_parent_sub->save();
+            } else {
+
+               // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+                //$task_parent_sub->save();
+
+                $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+                ($task_parent_st);
+
+
+            }
+        }
+
+        if ($task_parent_st !== null) {
+        if ($task_parent_st->task_parent_sub_cost >1) {
+
+            $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $taskcon_pay;
+            //dd($task_parent_st);
+
+            $task_parent_st->save();
+        }
+
+    }
+
+
+
         if ($taskcon->save()) {
 
             //update contract
@@ -1683,6 +1752,15 @@ if($request->hasFile('file')) {
             } else {
                 ContractHasTaskcon::where('taskcon_id', $id_taskcon)->delete();
             }
+
+
+
+
+
+
+
+
+
 
             return redirect()->route('contract.show',  $contract->hashid);
         }

@@ -129,7 +129,7 @@
                                             <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                                         </td>
                                         <td class="text-end">
-                                            <a href="{{ route('project.show', ['project' => $task->project_hashid]) }}"
+                                            <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
                                                 class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
                                             <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>

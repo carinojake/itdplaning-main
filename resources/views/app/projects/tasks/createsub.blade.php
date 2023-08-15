@@ -43,19 +43,19 @@
                                         <div class="row">
                                             @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
-                                                <div class="col-3">      {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท</div>
+                                                <div class="col-3">          {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
-                                                <div class="col-3">   {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }} บาท</div>
+                                                <div class="col-3">   {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget ['investment']['task_refund_pa_budget']), 2) }} บาท</div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                <div class="col-3">  {{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])), 2) }} บาท</div>
+                                                <div class="col-3"> {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_refund_pa_budget ['utility']['task_refund_pa_budget']), 2) }} บาท</div>
                                             @endif
                                         </div>
                                     </div>
@@ -284,21 +284,21 @@
                                             <div class="row">
                                                 @if ($task->task_budget_it_operating > 0)
                                                     <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
-                                                    {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท
+                                                    {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_it_investment > 0)
                                                     <div class="col-2">{{ __('งบดำเนินงาน ') }}</div>
 
-                                                    {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }} บาท
+                                                    {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget ['investment']['task_refund_pa_budget']), 2) }} บาท
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($task->task_budget_gov_utility > 0)
                                                     <div class="col-2">{{ __('ค่าสาธารณูปโภค ') }}</div>
 
-                                                    {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget']), 2) }} บาท
+                                                    {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_refund_pa_budget ['utility']['task_refund_pa_budget']), 2) }}บาท
                                                 @endif
                                             </div>
                                         </div>

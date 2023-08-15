@@ -5,6 +5,15 @@
             @if ($task['task_parent_sub'] === 2)
             <x-slot:toolbar>
 
+            <form class="taskRefund-form" action="{{ route('project.task.taskRefundDestroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                @method('POST') {{-- Use POST method to submit the form --}}
+                @csrf
+                <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
+            </form>
+
+
+
+
             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                 @method('POST') {{-- Use POST method to submit the form --}}
                 @csrf
@@ -44,6 +53,13 @@
         @endif
             @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
+
+                <form class="taskRefund-form" action="{{ route('project.task.taskRefundDestroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                    @method('POST') {{-- Use POST method to submit the form --}}
+                    @csrf
+                    <button class="btn btn-dark text-dark btn-taskRefund"><i class="cil-money"></i></button>
+                </form>
+
 
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}
@@ -108,6 +124,7 @@
 
        {{--      @include('partials.y') --}}
            {{--  @include('partials.yy')  --}}
+           @include('partials.y')
             @include('partials.z')
         {{-- @if ($task->subtaskparent->count() > 0)
             @include('partials.tasksub')

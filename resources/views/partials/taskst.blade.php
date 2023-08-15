@@ -1,7 +1,7 @@
 
 
 @if ($task['task_parent'] == null)
-    <h2>{{ $task->task_name }}xxx</h2>
+    <h2>{{ $task->task_name }}</h2>
     <div class="container">
         <div class="row mt-5">
             <div class="col-sm">
@@ -70,8 +70,10 @@
                     <th width="50">ลำดับ</th>
                     <th>กิจกรรม</th>
                     <th>วันที่</th>
-                    <th></th>
+                    <th>งบ</th>
+                    <th>คงเหลือ</th>
                     <th>ที่ค่าใช้จ่าย</th>
+                    <th></th>
                     <th width="200">ดู</th>
                 </tr>
                 @if ($task->subtask->count() > 0)
@@ -83,6 +85,9 @@
                                 <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                                 <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                             </td>
+
+                            <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
+                            <td>คงเหลือ</td>
                             <td>
                                 @if ($subtask->contract->count() > 0)
                                     @foreach ($subtask->contract as $contract)
