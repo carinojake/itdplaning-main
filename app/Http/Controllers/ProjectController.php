@@ -1012,6 +1012,64 @@ class ProjectController extends Controller
         //dd($taskconsSubquery);
 
 
+
+        $results = DB::query()
+        ->withRecursiveExpression('cte_tasks', function ($rec) use ($id) {
+            // Anchor Query
+            $rec->select('*')
+                ->from('tasks')
+                ->where('project_id', $id)
+                ->whereNull('deleted_at');
+
+            // Recursive Query
+            $rec->unionAll(function ($uni) use ($id) {
+                $uni->select('t.*')
+                    ->from('tasks AS t')
+                    ->join('cte_tasks AS cte', 't.task_parent', '=', 'cte.task_id')
+                    ->where('t.project_id', $id)
+                    ->whereNull('t.deleted_at');
+            });
+        })
+        ->select(
+            'cte_tasks.*',
+            'asum.total_task_mm_budget_task_sum',
+            'asum.total_task_task_budget',
+            'asum.costs_disbursement_sum'
+        )
+        ->from('cte_tasks')
+        ->leftJoin(
+            DB::raw('(select tasks.task_parent,
+                sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_sum,
+                sum(COALESCE(tasks.task_budget_gov_utility,0)) + sum(COALESCE(tasks.task_budget_it_operating,0)) + sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_task_budget,
+                sum( COALESCE(tasks.task_cost_gov_utility,0)) + sum( COALESCE(tasks.task_cost_it_operating,0)) + sum( COALESCE(tasks.task_cost_it_investment,0)) as costs_disbursement_sum
+                from tasks
+                where tasks.deleted_at IS NULL
+                group by tasks.task_parent) as asum'),
+            'asum.task_parent',
+            '=',
+            'cte_tasks.task_id'
+        )
+        ->get();
+
+    dd($results->toArray());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         ($tasks = DB::table('tasks')
             ->select(
                 'tasks.*',
@@ -1045,6 +1103,12 @@ class ProjectController extends Controller
                 'astaaksub.total_task_refund_no_pa_budget_parent',
                 'astaaksubrefund.total_task_refund_sub_budget_parent'
             )
+
+
+
+
+
+
 
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
