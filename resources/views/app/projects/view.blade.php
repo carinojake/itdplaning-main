@@ -406,6 +406,16 @@
                             }).format(task.total_task_cost - task.pay) + '</span>';
                             }
 
+                            else if (task.total_task_payzo > 0) {
+
+
+return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+    style: 'currency',
+    currency: 'THB'
+}).format(task.total_cost_it_operatingzo-(task.total_task_payzo+task.total_taskcon_payzo)) + '</span>';
+}
+
+
                             else if (task.task_parent_sub_cost > 0) {
 
 
@@ -505,6 +515,15 @@
                                     currency: 'THB'
                                 }).format(task.total_pay) + '</span>';
                             }
+
+                            else if (task.total_task_payzo > 0) {
+
+
+                        return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
+                            style: 'currency',
+                            currency: 'THB'
+                        }).format(task.total_task_payzo+task.total_taskcon_payzo) + '</span>';
+                        }
 
                             else if (task.task_parent_sub_cost > 0) {
 
@@ -619,9 +638,10 @@
 
 
 
+
                                 else if (task.task_refund_pa_status == 3  && task.task_parent_sub_refund_pa_status == 3  && (task.task_status == 1)) {
 
-                                        var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
+                                        var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'purple';
                                         return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                             style: 'currency',
                                             currency: 'THB'
@@ -640,10 +660,10 @@
 
 
                             else if (task.task_refund_pa_status == 3 && task.task_status == 2 && task.task_parent_sub_refund_pa_status == 3) {
-    var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
+    var tmp_class = task.task_refund_pa_status == 3 ? 'purple' : 'green';
 
     // ตรวจสอบค่าที่ใช้ในการคำนวณว่าถูกกำหนดและมีค่าที่ถูกต้องหรือไม่
-    var calculatedValue = task.budget - task.budget_total_task_mm_sum + task.task_parent_sub_refund_budget;
+    var calculatedValue = task.task_parent_sub_budget - task.task_parent_sub_cost ;
 
     // ใช้ Intl.NumberFormat จัดรูปแบบเลขเป็นสกุลเงิน (THB) และแสดงผลในแท็ก <span>
     return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
