@@ -406,13 +406,13 @@
                             }).format(task.total_task_cost - task.pay) + '</span>';
                             }
 
-                            else if (task.total_task_payzo > 0) {
+                            else if (task.totalLeastPay > 0) {
 
 
 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
     style: 'currency',
     currency: 'THB'
-}).format(task.total_cost_it_operatingzo-(task.total_task_payzo+task.total_taskcon_payzo)) + '</span>';
+}).format((task.totalLeastPay)) + '</span>';
 }
 
 
@@ -516,13 +516,13 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                 }).format(task.total_pay) + '</span>';
                             }
 
-                            else if (task.total_task_payzo > 0) {
+                            else if (task.totalLeastPay > 0) {
 
 
                         return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                             style: 'currency',
                             currency: 'THB'
-                        }).format(task.total_task_payzo+task.total_taskcon_payzo) + '</span>';
+                        }).format(task.totalLeastPay) + '</span>';
                         }
 
                             else if (task.task_parent_sub_cost > 0) {

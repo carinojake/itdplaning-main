@@ -1010,6 +1010,11 @@ class ProjectController extends Controller
             ->groupBy('tasks.task_id')
             ->toSql();
 
+
+
+
+
+
         //dd($taskconsSubquery);
 
        /*  $tasks = DB::table('t')
@@ -1032,35 +1037,159 @@ class ProjectController extends Controller
          // dd($id,$id_tasks);
          // $task_ids = array_column($id_tasks, 'task_id');
          // dd($id_tasks);
-
          $id_tasks = Task::select('task_id')->where('project_id', $id)
-         ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
-        // dd($id_tasks);
-         $cteQuery = DB::table('tasks')
-             ->withRecursiveExpression('cte', function ($rec) use ($id, $id_tasks) {
-                 $rec->select('task_id', 'project_id as pid', 'task_name', 'task_parent',
-                     'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility',
-                     'task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility',
-                     'task_pay')
-                     ->from('tasks')
-                     ->wherein('tasks.task_id',  $id_tasks) // use whereIn instead of where
-                     ->unionAll(function ($uni) use ($id, $id_tasks) {
-                         $uni->select('tasks.task_id', 'tasks.project_id', 'tasks.task_name', 'tasks.task_parent',
-                             'tasks.task_budget_it_operating', 'tasks.task_budget_it_investment', 'tasks.task_budget_gov_utility',
-                             'tasks.task_cost_it_operating', 'tasks.task_cost_it_investment', 'tasks.task_cost_gov_utility',
-                             'tasks.task_pay')
-                             ->from('tasks')
-                             ->join('cte', 'tasks.task_parent', '=', 'cte.task_id');
-                     });
-             })
-             ->from('cte')
-            ->get()
-          //  ->toSql()
-         ;
-
-         dd($cteQuery);
+->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
+// dd($id_tasks);
 
 
+/* $taskcontract = DB::table('tasks')
+         ->withRecursiveExpression('cte', function ($rec) use ($id_tasks) {
+             $rec->select('t.task_id', 't.project_id', 't.task_parent',
+                 DB::raw('t.task_id AS root'),
+                 DB::raw('COALESCE(t.task_budget_gov_utility, 0) + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
+                 DB::raw('COALESCE(t.task_cost_gov_utility, 0) + COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
+                 DB::raw('COALESCE(t.task_pay, 0) AS LeastPay'),
+                 DB::raw('COALESCE(t.task_refund_pa_budget, 0) AS Leasttask_refund_pa_budget'),
+                 DB::raw('SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay'),
+                 DB::raw('SUM(COALESCE(t.task_pay, 0)) AS total_pay'),
+                 'contracts.contract_id')
+             ->leftJoin('contract_has_tasks', 't.task_id', '=', 'contract_has_tasks.task_id')
+             ->leftJoin('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+             ->leftJoin('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+             ->from('tasks as t')
+             ->whereIn('t.task_id', $id_tasks)
+             ->whereNull('t.deleted_at')
+             ->groupBy('t.task_id', 't.project_id', 't.task_parent', 'contracts.contract_id')
+             ->unionAll(function ($uni) {
+                 $uni->select(
+                     'tasks.task_id',
+                     'tasks.task_parent',
+                     'cte.root',
+                     DB::raw('tasks.task_budget_it_operating + tasks.task_budget_it_investment + tasks.task_budget_gov_utility + cte.LeastBudget AS LeastBudget'),
+                     DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + cte.LeastCost AS LeastCost'),
+                     DB::raw('tasks.task_pay + cte.LeastPay AS LeastPay'),
+                     DB::raw('tasks.task_refund_pa_budget + cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget')
+                 )
+                 ->from('tasks')
+                 ->whereNull('tasks.deleted_at')
+                 ->join('cte', 'tasks.task_parent', '=', 'cte.task_id');
+             });
+         });
+
+     $taskcontract = $taskcontract->select('root',
+         DB::raw('MIN(LeastBudget) AS totalLeastBudget'),
+         DB::raw('SUM(LeastCost) AS totalLeastCost'),
+         DB::raw('SUM(LeastPay) AS totalLeastPay'),
+         DB::raw('SUM(Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget'))
+         ->from('cte')
+         ->groupBy('root')
+         ->orderBy('root');
+
+     dd($taskcontract->get()); */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $cteQuery = DB::table('tasks')
+        ->withRecursiveExpression('cte', function ($rec) use ($id_tasks) {
+            $rec->select(
+                't.task_id',
+                't.task_parent',
+                't.task_id AS root',
+                DB::raw('COALESCE(t.task_budget_gov_utility, 0) + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
+                DB::raw('COALESCE(t.task_cost_gov_utility, 0) + COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
+                't.task_pay as LeastPay',
+                't.task_refund_pa_budget as Leasttask_refund_pa_budget',
+               // DB::raw('0 as Least_taskcon_pay') // Initialize with 0 for the base case
+            )
+            ->from('tasks as t')
+            ->whereIn('t.task_id', $id_tasks)
+            ->whereNull('t.deleted_at')
+            ->unionAll(function ($uni) {
+                $uni->select(
+                    'tasks.task_id',
+                    'tasks.task_parent',
+                    'cte.root',
+                    DB::raw('tasks.task_budget_it_operating + tasks.task_budget_it_investment + tasks.task_budget_gov_utility + cte.LeastBudget AS LeastBudget'),
+                    DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + cte.LeastCost AS LeastCost'),
+                    DB::raw('tasks.task_pay + cte.LeastPay AS LeastPay'),
+                    DB::raw('tasks.task_refund_pa_budget + cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget'),
+                   // DB::raw('cte.Least_taskcon_pay + COALESCE(taskcons.taskcon_pay, 0) AS Least_taskcon_pay') // Add the previous sum to the current value
+                )
+                ->from('tasks')
+                ->whereNull('tasks.deleted_at')
+                ->join('cte', 'tasks.task_parent', '=', 'cte.task_id')
+                /* ->leftJoin('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+                ->leftJoin('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+                ->leftJoin('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id') */
+
+
+                ;
+            });
+
+        });
+
+
+
+
+        $subQuery = DB::table('tasks')
+        ->select('tasks.task_parent',
+            DB::raw('sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay'),
+            DB::raw('sum(COALESCE(tasks.task_pay,0)) as total_pay')
+        )
+        ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->whereNull('tasks.deleted_at')
+        ->groupBy('tasks.task_parent')
+
+       // ->get()
+        ;
+
+       // dd($subQuery);
+
+
+
+       $combinedQuery = $cteQuery
+    ->from('cte')
+    ->leftJoinSub($subQuery, 'subquery', function ($join) {
+        $join->on('cte.root', '=', 'subquery.task_parent');
+    })
+    ->groupBy('cte.root', 'subquery.total_taskcon_pay', 'subquery.total_pay') // Add these columns to the GROUP BY clause
+    ->select(
+        'cte.root',
+        DB::raw('MIN(cte.LeastBudget) AS totalLeastBudget'),
+        DB::raw('SUM(cte.LeastCost) AS totalLeastCost'),
+        DB::raw('SUM(cte.LeastPay) AS totalLeastPay'),
+        DB::raw('SUM(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget'),
+        'subquery.total_taskcon_pay',
+        'subquery.total_pay'
+    )
+    ->orderBy('cte.root')
+    ->get();
+
+//dd($combinedQuery);
+
+   // dd($cteQuery->get());
+
+
+
+
+
+/*
       $subQuery = DB::table('tasks')
           ->select('tasks.task_parent',
           DB::raw('sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay'),
@@ -1070,25 +1199,25 @@ class ProjectController extends Controller
           ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
           ->whereNull('tasks.deleted_at')
           ->groupBy('tasks.task_parent')
-//->get()
+        ->get()
           ;
-       //   dd($subQuery);
-       $mainQuery = DB::table(DB::raw("({$cteQuery->toSql()}) as cte"))
-       ->mergeBindings($cteQuery)
-       ->select(
-           'cte.task_id','cte.pid', 'cte.task_parent',
-           DB::raw('SUM(cte.task_cost_it_operating) AS total_cost_it_operatingzo'),
-           DB::raw('SUM(cte.task_cost_it_investment) AS total_cost_it_investmentzo'),
-           DB::raw('SUM(cte.task_cost_gov_utility) AS total_cost_gov_utilityzo'),
-           DB::raw(' sum( COALESCE(cte.task_cost_gov_utility,0))
-           +sum( COALESCE(cte.task_cost_it_operating,0))
-           +sum( COALESCE(cte.task_cost_it_investment,0))
-           as costs_disbursement_sumzo'),
-           DB::raw('SUM(cte.task_pay) AS total_task_payzo'),
-           DB::raw('sum(a.total_pay) as total_payazo'),
-           DB::raw('SUM(a.total_taskcon_pay) AS total_taskcon_payzo')
-       )
-       ->leftJoin(DB::raw("({$subQuery->toSql()}) as a"), 'a.task_parent', '=', 'cte.task_id')
+          dd($subQuery); */
+    //    $mainQuery = DB::table(DB::raw("({$cteQuery->toSql()}) as cte"))
+    //    ->mergeBindings($cteQuery)
+    //    ->select(
+    //        'cte.task_id','cte.pid', 'cte.task_parent',
+    //        DB::raw('SUM(cte.task_cost_it_operating) AS total_cost_it_operatingzo'),
+    //        DB::raw('SUM(cte.task_cost_it_investment) AS total_cost_it_investmentzo'),
+    //        DB::raw('SUM(cte.task_cost_gov_utility) AS total_cost_gov_utilityzo'),
+    //        DB::raw(' sum( COALESCE(cte.task_cost_gov_utility,0))
+    //        +sum( COALESCE(cte.task_cost_it_operating,0))
+    //        +sum( COALESCE(cte.task_cost_it_investment,0))
+    //        as costs_disbursement_sumzo'),
+    //        DB::raw('SUM(cte.task_pay) AS total_task_payzo'),
+    //        DB::raw('sum(a.total_pay) as total_payazo'),
+    //        DB::raw('SUM(a.total_taskcon_pay) AS total_taskcon_payzo')
+    //    )
+    //    ->leftJoin(DB::raw("({$subQuery->toSql()}) as a"), 'a.task_parent', '=', 'cte.task_id')
       // ->whereNull('cte.task_parent')
       // ->groupBy('cte.task_id') // Removed the aggregate fields from the GROUP BY clause
       // ->havingRaw('SUM(a.total_taskcon_pay) ') // Example condition: total_cost_it_operatingzo must be greater than 0
@@ -1100,11 +1229,11 @@ class ProjectController extends Controller
       // $mainQuery = $mainQuery->get();
       // dd($mainQuery);
          // Manually merge the bindings
-($mergedBindings = array_merge($cteQuery->getBindings(), $subQuery->getBindings()));
+//($mergedBindings = array_merge($cteQuery->getBindings(), $subQuery->getBindings()));
 
 // Get the results
 
-($results = DB::select($mainQuery->toSql(), $mergedBindings));
+//($results = DB::select($mainQuery->toSql(), $mergedBindings));
 
      //  dd($results);
 
@@ -1112,6 +1241,25 @@ class ProjectController extends Controller
 
 //dd($results);
 
+/*  $cteQuery = DB::table('tasks')
+    ->withRecursiveExpression('Final', function ($rec) use ($id, $id_tasks) {
+        $rec->select('task_id as Origin', 'task_parent as Destination',
+                     DB::raw('COALESCE(task_cost_gov_utility, 0) + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0) as LeastCost'))
+            ->from('tasks')
+            ->whereIn('tasks.task_id', [1616,1617])
+            ->unionAll(function ($uni) use ($id, $id_tasks) {
+                $uni->select('tasks.task_id as Origin', 'Final.Destination',
+                             DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + Final.LeastCost as LeastCost'))
+                    ->from('tasks')
+                    ->join('Final', 'tasks.task_parent', '=', 'Final.Origin');
+            });
+    })
+    ->from('Final')
+    ->groupBy('Origin', 'Destination')
+    ->select('Origin', 'Destination', DB::raw('min(LeastCost) as LeastCost'))
+   ->tosql();
+
+dd($cteQuery); */
 
     ($tasks = DB::table('tasks')
             ->select(
@@ -1146,13 +1294,14 @@ class ProjectController extends Controller
                 'astaaksub.task_tasksub_type2',// taaksub 2
                 'astaaksub.total_task_refund_no_pa_budget_parent',
                 'astaaksubrefund.total_task_refund_sub_budget_parent',
-                'cte.total_cost_it_operatingzo',
-                'cte.costs_disbursement_sumzo',
-                'cte.pid',
-                'cte.task_id as tt',
-                'cte.total_task_payzo',
-                'cte.total_payazo',
-                'cte.total_taskcon_payzo'
+                //'cte.total_cost_it_operatingzo',
+                //'cte.costs_disbursement_sumzo',
+                //'cte.pid',
+                'cte.root as tt',
+                'cte.totalLeastBudget',
+                'cte.totalLeastCost',
+                'cte.totalLeastPay',
+                'cte.totalLeasttask_refund_pa_budget'
 
             )
 
@@ -1352,14 +1501,14 @@ class ProjectController extends Controller
             )
 
 
-            ->leftJoin(DB::raw("({$mainQuery->toSql()} )  as cte"), 'cte.task_id', '=', 'tasks.task_id')
-            ->mergeBindings($mainQuery) // Merge the bindings from the main query
+            ->leftJoin(DB::raw("({$cteQuery->toSql()} )  as cte"), 'cte.root', '=', 'tasks.task_id')
+            ->mergeBindings($cteQuery) // Merge the bindings from the main query
             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('project_id', ($id))
             ->get()
             ->toArray());
 
-          // dd($tasks);
+           //dd($tasks);
 
 
            $tasks = json_decode(json_encode($tasks), true);
@@ -1383,12 +1532,12 @@ class ProjectController extends Controller
 
             ((float) $__task_parent_sub_refund_pa_budget  = (float) $task['task_parent_sub_refund_budget']);
 
-            ((float) $__total_cost_it_operatingzo = (float) $task['total_cost_it_operatingzo']);
-            ((float) $__total_task_payzo = (float) $task['total_task_payzo']);
-            ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
+           // ((float) $__total_cost_it_operatingzo = (float) $task['total_cost_it_operatingzo']);
+            ((float) $__totalLeastPay = (float) $task['totalLeastPay']);
+           // ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
 
 
-            (float) $__total_task_taskcon_payzo =  $__total_task_payzo + $__total_taskcon_payzo;
+            (float) $__totalLeastPay_t =  $__totalLeastPay ;
             (float) $__budget     = $__budget_gov + $__budget_it;
 
             (float) $__cost = array_sum([
@@ -1486,10 +1635,10 @@ class ProjectController extends Controller
                 'task_parent_sub_cost'                    =>    $__task_parent_sub_cost,
                 'task_parent_sub_refund_budget'            =>      $__task_parent_sub_refund_pa_budget,
                 'task_parent_sub_pay'                    =>      $task['task_parent_sub_pay']+$task['total_taskcon_pay'],
-                'total_cost_it_operatingzo'             =>  $__total_cost_it_operatingzo,
-                    'total_task_payzo'              =>  $__total_task_payzo ,
-                'total_taskcon_payzo'  => $__total_taskcon_payzo,
-                   'total_task_taskcon_payzo '                     => $__total_task_taskcon_payzo ,
+                //'total_cost_it_operatingzo'             =>  $__total_cost_it_operatingzo,
+                    'totalLeastPay'              =>  $__totalLeastPay ,
+                //'total_taskcon_payzo'  => $__total_taskcon_payzo,
+                   //'total_task_taskcon_payzo '                     => $__total_task_taskcon_payzo ,
 
 
                 'type'                  => 'task',
