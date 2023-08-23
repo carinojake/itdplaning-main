@@ -34,83 +34,106 @@
 <a href="{{ route('dashboard.gantt') }}" class="btn btn-primary text-white">ดูงานและโครงการ</a>
 
                           </x-slot:toolbar>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="card-title fs-5 fw-semibold"> </div>
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col">
+                          <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
 
-                                        <div class="card">
-                                            <div class="card-body">
+                                </div>
+                                <div class="col-md-auto">
 
-                                                <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample" role="button" aria-expanded="false"
-                                                    aria-controls="collapseExample">
-                                                    <div class="fs-4 fw-semibold">
-                                                        {{ number_format($budgets) }}
+                                </div>
+                                <div class="col-md-auto">
+                            <button class="btn btn-info"
+                             type="button"
+                             data-bs-toggle="collapse" data-bs-target=".multi-collapse"
+                              aria-expanded="true"
+                              aria-controls="multiCollapseExample
+                              multiCollapseExample1 multiCollapseExample2
+                              multiCollapseExample3">
+                              <i class="cil-plus"></i>
+
+                            </button>
+
+                                </div>
+                              </div>
+
+
+
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="row">
+                                <div class="card-title fs-5 fw-semibold"> </div>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                                            href="#multiCollapseExample1" role="button"
+                                                            aria-expanded="true"
+                                                            aria-controls="multiCollapseExample1">
+                                                        <div class="fs-4 fw-semibold">
+                                                            {{ number_format($budgets) }}
+                                                        </div>
+                                                        <small class="text-xl">
+                                                            งบประมาณ
+                                                        </small>
+                                                    </button>
+                                                </div>
+                                                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                                    <div class="card-body">
+                                                        <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                                                href="#multiCollapseExample" role="button"
+                                                                aria-expanded="true"
+                                                                aria-controls="multiCollapseExample1">
+                                                            <div class="fs-4 fw-semibold">
+                                                                {{ number_format($budgetscentralict) }}
+                                                            </div>
+                                                            <small class="text-xl">
+                                                                งบกลาง ICT
+                                                            </small>
+                                                        </button>
                                                     </div>
-                                                    <small
-                                                        class="text-xl ">
-                                                        งบประมาณ
-                                                    </small>
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseExample">
-                                                <div class="card-body">
-                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
+                                                    <div class="card-body">
+                                                        <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                                                href="#multiCollapseExample1" role="button"
+                                                                aria-expanded="true"
+                                                                aria-controls="multiCollapseExample1">
+                                                            <div class="fs-4 fw-semibold">
+                                                                {{ number_format($budgetsinvestment) }}
+                                                            </div>
+                                                            <small class="text-xl">
+                                                                งบดำเนินงาน
+                                                            </small>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                                                href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetscentralict) }}
-                                                                </div>
-                                                                <small
-                                                                    class="text-xl">
-                                                                    งบกลาง ICT
-                                                                </small>
-                                                            </button>
-                                                </div>
-                                                <div class="card-body">
-                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetsinvestment) }}
-                                                                </div>
-                                                                <small
-                                                                    class="text-xl">
-                                                                    งบดำเนินงาน
-                                                                </small>
-                                                            </button>
-                                                </div>
-                                                <div class="card-body">
-                                                    <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample1">
-                                                                <div class="fs-4 fw-semibold" >
-                                                                    {{ number_format($budgetsut) }}
-                                                                </div>
-                                                                <small
-                                                                    class="text-xl">
-                                                                    งบสาธารณูปโภค
-                                                                </small>
-                                                           </button>
+                                                                aria-controls="multiCollapseExample1">
+                                                            <div class="fs-4 fw-semibold">
+                                                                {{ number_format($budgetsut) }}
+                                                            </div>
+                                                            <small class="text-xl">
+                                                                งบสาธารณูปโภค
+                                                            </small>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div> <!--จบปี-->
+                                        </div> <!--จบปี-->
 
                                     <div class="col ">
                                         <!--งบประมาณ-->
                                         <div class="card ">
                                             <div class="card-body ">
 
-                                                <button class="col-md-12 btn btn btn-primary" data-bs-toggle="collapse"
-                                                    href="#collapseExample1" role="button" aria-expanded="false"
-                                                    aria-controls="collapseExample">
+                                                <button class="col-md-12 btn btn btn-primary"
+                                                 data-bs-toggle="collapse"
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false"
+                                                    aria-controls="multiCollapseExample1">
                                                     <div class="fs-4 fw-semibold ">
 
                                                         @if ($ospa > 1)
@@ -125,13 +148,13 @@
 
                                                 </button>
                                             </div>
-                                            <div class="collapse" id="collapseExample1">
+                                            <div class="collapse multi-collapse" id="multiCollapseExample1">
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn "   data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
+                                                                href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
-                                                                aria-controls="collapseExample1">
+                                                                aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
                                                                     @if ($ospa > 1)
                                                                     {{ number_format((($ospa +$osa)), 2) }}
@@ -146,9 +169,9 @@
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
+                                                                href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
-                                                                aria-controls="collapseExample1">
+                                                                aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
                                                                     @if ($ispa > 1)
                                                                     {{ number_format((($ispa ) + ($isa)), 2) }}
@@ -164,9 +187,9 @@
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                                href="#collapseExample1" role="button"
+                                                                href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
-                                                                aria-controls="collapseExample1">
+                                                                aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
                                                                     @if ($utpcs > 1)
                                                                     {{ number_format($utpcs + $utsc, 2) }}
@@ -188,8 +211,8 @@
             <!--รอการเบิกจ่ายทั้งหมด 3-->
             <button class="col-md-12 btn btn-danger "
              data-bs-toggle="collapse"
-                href="#collapseExample3" role="button"
-                aria-expanded="false" aria-controls="collapseExample">
+                href="#multiCollapseExample1" role="button"
+                aria-expanded="false" aria-controls="multiCollapseExample1">
                 <div class="fs-4 fw-semibold ">
                     <!--รอการเบิกจ่ายทั้งหมด-->
                     @if ($ospa > 1)
@@ -206,12 +229,12 @@
             </button>
         </div>
 
-        <div class="collapse" id="collapseExample3">
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
             <div class="card-body ">
 
                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                href="#collapseExample3" role="button"
-                aria-expanded="false" aria-controls="collapseExample">
+                href="#multiCollapseExample1" role="button"
+                aria-expanded="false" aria-controls="multiCollapseExample1">
                 <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
@@ -230,8 +253,8 @@
             <div class="card-body">
 
                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                href="#collapseExample3" role="button"
-                aria-expanded="false" aria-controls="collapseExample">
+                href="#multiCollapseExample1" role="button"
+                aria-expanded="false" aria-controls="multiCollapseExample1">
                 <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
@@ -249,8 +272,8 @@
             <div class="card-body">
 
                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                href="#collapseExample3" role="button"
-                aria-expanded="false" aria-controls="collapseExample">
+                href="#multiCollapseExample1" role="button"
+                aria-expanded="false" aria-controls="multiCollapseExample1">
                 <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด 03082566-->
@@ -279,8 +302,8 @@
                                         <div class="card">
                                             <div class="card-body ">
                                                 <button class="col-md-12 btn btn-warning "  data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                     <div class="fs-4 fw-semibold "
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
@@ -296,12 +319,12 @@
                                                 </button>
 
                                             </div>
-                                            <div class="collapse" id="collapseExample2">
+                                            <div class="collapse multi-collapse" id="multiCollapseExample1">
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
@@ -319,8 +342,8 @@
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
@@ -339,8 +362,8 @@
                                                 <div class="card-body">
 
                                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample2" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
@@ -373,8 +396,8 @@
                                         <div class="card  ">
                                             <div class="card-body ">
                                                 <button class="col-md-12 btn btn-success"  data-bs-toggle="collapse"
-                                                    href="#collapseExample5" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                   {{--   @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
@@ -389,11 +412,11 @@
                                                 </button>
 
                                             </div>
-                                            <div class="collapse" id="collapseExample5">
+                                            <div class="collapse multi-collapse" id="multiCollapseExample1">
                                             <div class="card-body">
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                {{--      @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
@@ -410,8 +433,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample5" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                   {{--   @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
@@ -428,8 +451,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
-                                                    href="#collapseExample5" role="button"
-                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    href="#multiCollapseExample1" role="button"
+                                                    aria-expanded="false" aria-controls="multiCollapseExample1">
                                                    {{--  @php
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
