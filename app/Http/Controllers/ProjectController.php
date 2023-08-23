@@ -1166,7 +1166,7 @@ class ProjectController extends Controller
      ->get();
 
 
-dd($combinedQuery);
+//dd($combinedQuery);
 
    // dd($cteQuery->get());
 
@@ -1286,6 +1286,7 @@ dd($cteQuery); */
                 'cte.totalLeastBudget',
                 'cte.totalLeastCost',
                 'cte.totalLeastPay',
+                'cte.totalLeastconPay',
                 'cte.totalLeasttask_refund_pa_budget'
 
             )
@@ -1493,7 +1494,7 @@ dd($cteQuery); */
             ->get()
             ->toArray());
 
-           dd($tasks);
+          // dd($tasks);
 
 
            $tasks = json_decode(json_encode($tasks), true);
@@ -1518,11 +1519,18 @@ dd($cteQuery); */
             ((float) $__task_parent_sub_refund_pa_budget  = (float) $task['task_parent_sub_refund_budget']);
 
            // ((float) $__total_cost_it_operatingzo = (float) $task['total_cost_it_operatingzo']);
-            ((float) $__totalLeastPay = (float) $task['totalLeastPay']);
+
+           ((float) $__totalLeastBudget = (float) $task['totalLeastBudget']);
+           ((float) $__totalLeastCost = (float) $task['totalLeastCost']);
+           ((float) $__totalLeastPay = (float) $task['totalLeastPay']);
+            ((float) $__totalLeastconPay = (float) $task['totalLeastconPay']);
+            ((float) $__totalLeasttask_refund_pa_budget = (float) $task['totalLeasttask_refund_pa_budget']);
+
+
            // ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
 
 
-            (float) $__totalLeastPay_t =  $__totalLeastPay ;
+            (float) $__totalLeastPay_Least =  $__totalLeastPay+$__totalLeastconPay ;
             (float) $__budget     = $__budget_gov + $__budget_it;
 
             (float) $__cost = array_sum([
@@ -1621,7 +1629,10 @@ dd($cteQuery); */
                 'task_parent_sub_refund_budget'            =>      $__task_parent_sub_refund_pa_budget,
                 'task_parent_sub_pay'                    =>      $task['task_parent_sub_pay']+$task['total_taskcon_pay'],
                 //'total_cost_it_operatingzo'             =>  $__total_cost_it_operatingzo,
-                    'totalLeastPay'              =>  $__totalLeastPay ,
+
+
+                'totalLeastCost'              =>  $__totalLeastCost ,
+                'totalLeastPay_Least'              =>  $__totalLeastPay_Least ,
                 //'total_taskcon_payzo'  => $__total_taskcon_payzo,
                    //'total_task_taskcon_payzo '                     => $__total_task_taskcon_payzo ,
 
