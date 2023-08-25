@@ -35,6 +35,7 @@
 
                                         <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
+
                            {{--  @include('partials.budgettotaloverview') --}}
 
                            @include('partials.view')
@@ -334,7 +335,17 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.cost);
-                            } else
+                            }
+                            else
+                           if (task.total_Leasttask_cost_1 > 0) {
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_Leasttask_cost_1) + '</span>';
+                            }
+
+
+                            else
 
 
                            if (task.cost_pa_1 > 0) {
@@ -367,13 +378,24 @@
                                 }).format(task.cost);
 
 
-                            } else if (task.cost_no_pa_2 > 0) {
+                            }
+                            else if (task.total_Leasttask_cost_2 > 0) {
+                                let total_Leasttask_cost_2 = task.total_Leasttask_cost_2;
+                                return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(total_Leasttask_cost_2) + '</span>';
+                            }
+                            else if (task.cost_no_pa_2 > 0) {
                                 let cost_no_pa_2 = task.cost_no_pa_2;
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(cost_no_pa_2) + '</span>';
-                            } else {
+                            }
+
+
+                            else {
                                 return '';
                             }
                         }
@@ -584,6 +606,8 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                             }).format(task.tbalance_sub) + '</span>';
                             }
 
+
+
 /*
                             else if (task.task_parent_sub == 2) {
 
@@ -663,13 +687,13 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
     var tmp_class = task.task_refund_pa_status == 3 ? 'purple' : 'green';
 
     // ตรวจสอบค่าที่ใช้ในการคำนวณว่าถูกกำหนดและมีค่าที่ถูกต้องหรือไม่
-    var calculatedValue = task.task_parent_sub_budget - task.task_parent_sub_cost ;
+
 
     // ใช้ Intl.NumberFormat จัดรูปแบบเลขเป็นสกุลเงิน (THB) และแสดงผลในแท็ก <span>
     return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
         style: 'currency',
         currency: 'THB'
-    }).format(calculatedValue) + '</span>';
+    }).format(  task.totalLeasttask_refund_pa_budget ) + '</span>';
 }
 
 

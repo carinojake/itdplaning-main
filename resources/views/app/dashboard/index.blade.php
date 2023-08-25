@@ -62,7 +62,7 @@
                           </div>
                           <div class="col-sm-12">
                             <div class="row">
-                                <div class="card-title fs-5 fw-semibold"> </div>
+                             <div class="card-title fs-5 fw-semibold"> </div>
                                 <div class="col-sm-12">
                                     <div class="row">
                                         <div class="col">
@@ -80,6 +80,8 @@
                                                         </small>
                                                     </button>
                                                 </div>
+
+
                                                 <div class="collapse multi-collapse" id="multiCollapseExample1">
                                                     <div class="card-body">
                                                         <button class="col-md-12 btn " data-bs-toggle="collapse"

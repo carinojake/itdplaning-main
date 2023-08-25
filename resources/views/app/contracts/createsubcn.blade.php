@@ -1476,7 +1476,7 @@
                     });
                 });
             </script>
-
+{{--
             <script>
                 $(document).ready(function() {
                     $('#rounds').change(function() {
@@ -1509,7 +1509,44 @@
                         }
                     });
                 });
-            </script>
+            </script> --}}
+
+                            <script>
+                                $(document).ready(function() {
+                $('#rounds').change(function() {
+                var rounds = $(this).val();
+                $('#tasksContainer').empty(); // clear the container
+                for (var i = 0; i < rounds; i++) {
+                var content = `
+                <div class="row mt-3">
+                <div class="col-md-12">
+                <br> <!-- Line break for spacing -->
+                <div class="col-md-3">
+                <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
+                </div>
+
+                <br> <!-- Line break for spacing -->
+                <div class="col-md-3">
+                <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                <input type="text" name="tasks[` + i + `][taskbudget]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+                </div>
+                <br> <!-- Line break for spacing -->
+                <div class="col-md-3">
+                <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
+                <input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+                </div>
+                </div>
+                </div>
+                `;
+                $('#tasksContainer').append(content);
+                }
+
+                // ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
+                $(":input").inputmask();
+                });
+                });
+                </script>
 
 
             <script>
@@ -1706,7 +1743,7 @@
         $(":input").inputmask();
     });
 });
-            </script
+</script>
 
 
 

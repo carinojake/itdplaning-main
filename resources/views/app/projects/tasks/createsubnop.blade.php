@@ -461,7 +461,7 @@
 
                                                                 <div class="col-md-4">
                                                                     <label for="task_er_budget"
-                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) BD') }}</label>
+                                                                        class="form-label">{{ __('จำนวนเงิน (บาท) ER') }}</label>
                                                                     <span class="text-danger"></span>
 
                                                                     <input type="text" placeholder="0.00"

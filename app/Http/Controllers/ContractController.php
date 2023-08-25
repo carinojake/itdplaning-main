@@ -1010,6 +1010,12 @@ class ContractController extends Controller
         // }
         //
        // dd($contract);
+
+
+
+
+
+
         if ($contract->save()) {
 
 
@@ -1049,7 +1055,7 @@ if($request->hasFile('file')) {
 }
 
 
-
+/*
             //insert contract
             if ($request->input('task_parent')) {
                 //insert contract
@@ -1062,8 +1068,19 @@ if($request->hasFile('file')) {
             if (is_array($request->tasks) || is_object($request->tasks)) {
                 foreach ($request->tasks as $task) {
                     $taskName = isset($task['task_name']) ? $task['task_name'] : 'Default Task Name';
-                    $taskbudget = null;
-                    $taskcost = null;
+                    $taskbudget = str_replace(',', '', null);
+                    $taskcost = str_replace(',', '', null);
+                    if ($taskbudget === '') {
+                        $taskbudget = null; // or '0'
+                    }
+
+                    if ($taskcost === '') {
+                        $taskcost = null; // or '0'
+                    }
+                    $taskbudget  = $task['taskbudget'];
+                    $taskcost= $task['taskcost'];
+                    //$taskbudget = null;
+                   // $taskcost = null;
 
                     if ($contract->contract_budget_type == 1)
                         $taskbudget = isset($task['taskbudget']) ? $task['taskbudget'] : 'Default budget';
@@ -1099,8 +1116,42 @@ if($request->hasFile('file')) {
                         'created_at' => now()
                     ]);
                 }
-            }
+            } */
+// Insert contract
+if ($request->input('task_parent')) {
+    $contract_has_task = new ContractHasTask;
+    $contract_has_task->contract_id = $contract->contract_id;
+    $contract_has_task->task_id = $request->input('task_parent');
+    $contract_has_task->save();
+}
 
+if (is_array($request->tasks) || is_object($request->tasks)) {
+    foreach ($request->tasks as $task) {
+        $taskName = $task['task_name'] ?? 'Default Task Name';
+
+        $taskbudget = str_replace(',', '', $task['taskbudget'] ?? null);
+        $taskcost = str_replace(',', '', $task['taskcost'] ?? null);
+
+        $defaultBudget = 'Default budget';
+        $defaultCost = 'Default cost';
+
+        Taskcon::create([
+            'contract_id' => $contract->contract_id,
+            'taskcon_name' => $taskName,
+            'taskcon_budget_it_operating' => $contract->contract_budget_type == 1 ? $taskbudget : null,
+            'taskcon_budget_it_investment' => $contract->contract_budget_type == 2 ? $taskbudget : null,
+            'taskcon_budget_gov_utility' => $contract->contract_budget_type == 3 ? $taskbudget : null,
+            'taskcon_cost_it_operating' => $contract->contract_budget_type == 1 ? $taskcost : null,
+            'taskcon_cost_it_investment' => $contract->contract_budget_type == 2 ? $taskcost : null,
+            'taskcon_cost_gov_utility' => $contract->contract_budget_type == 3 ? $taskcost : null,
+            'taskcon_start_date' => $contract->contract_start_date,
+            'taskcon_end_date' => $contract->contract_end_date,
+            'taskcon_pay_date' => $contract->contract_end_date,
+            'updated_at' => now(),
+            'created_at' => now(),
+        ]);
+    }
+}
 
 
         }

@@ -24,6 +24,8 @@
                 aria-selected="false">งบสาธารณูปโภค</button>
         @endif
     </div>
+
+
     <div class="tab-content" id="v-pills-tabContent">
         <!-- 1 งาน -->
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
@@ -107,6 +109,27 @@
                 <div class="row">
 
                     <div class="col">
+                             <div class="row">
+                                <div class="col">
+
+                                </div>
+                                <div class="col-md-auto">
+
+                                </div>
+                                <div class="col-md-auto">
+                            <button class="btn btn-info"
+                             type="button"
+                             data-bs-toggle="collapse" data-bs-target=".multi-collapse"
+                              aria-expanded="true"
+                              aria-controls="multiCollapseExample
+                              multiCollapseExample1 multiCollapseExample2
+                              multiCollapseExample3">
+                              <i class="cil-plus"></i>
+
+                            </button>
+
+                                </div>
+                              </div>
                         <div class="card">
                             <div class="card-body">
                                 <button class="btn " style="width: 13rem;"

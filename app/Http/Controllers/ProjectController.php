@@ -1110,16 +1110,64 @@ class ProjectController extends Controller
              't.project_id',
              't.task_parent',
              't.task_id AS root',
-             DB::raw('COALESCE(t.task_budget_gov_utility, 0) + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
-             DB::raw('COALESCE(t.task_cost_gov_utility, 0) + COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
+             DB::raw('COALESCE(t.task_budget_gov_utility, 0)
+              + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
+             DB::raw('COALESCE(t.task_cost_gov_utility, 0) +
+             COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
+
+
              't.task_pay as LeastPay',
              't.task_refund_pa_budget as Leasttask_refund_pa_budget',
-             DB::raw('(SELECT sum(COALESCE(taskcons.taskcon_pay,0))
+
+             DB::raw('(
+                SELECT MAX(temp.total_cost_1)
+                FROM (
+                    SELECT inner_tasks.task_parent,
+                           SUM(COALESCE(inner_tasks.task_cost_gov_utility, 0)) +
+                           SUM(COALESCE(inner_tasks.task_cost_it_operating, 0)) +
+                           SUM(COALESCE(inner_tasks.task_cost_it_investment, 0)) AS total_cost_1
+                    FROM tasks as inner_tasks
+                    WHERE inner_tasks.task_type = 1 AND inner_tasks.deleted_at IS NULL
+                    GROUP BY inner_tasks.task_parent
+                ) AS temp
+                WHERE temp.task_parent = t.task_id  -- assuming t is the alias of tasks in your main query
+            ) AS ab_1
+    ')
+
+    ,
+
+    DB::raw('(
+        SELECT MAX(temp.total_cost_2)
+        FROM (
+            SELECT inner_tasks.task_parent,
+                   SUM(COALESCE(inner_tasks.task_cost_gov_utility, 0)) +
+                   SUM(COALESCE(inner_tasks.task_cost_it_operating, 0)) +
+                   SUM(COALESCE(inner_tasks.task_cost_it_investment, 0)) AS total_cost_2
+            FROM tasks as inner_tasks
+            WHERE inner_tasks.task_type = 2 AND inner_tasks.deleted_at IS NULL
+            GROUP BY inner_tasks.task_parent
+        ) AS temp
+        WHERE temp.task_parent = t.task_id  -- assuming t is the alias of tasks in your main query
+    ) AS ab_2
+'),
+             DB::raw('(
+                SELECT sum(COALESCE(taskcons.taskcon_pay,0))
              FROM contract_has_tasks
              JOIN contracts ON contract_has_tasks.contract_id = contracts.contract_id
              JOIN taskcons ON contracts.contract_id = taskcons.contract_id
-             WHERE contracts.deleted_at IS NULL AND contract_has_tasks.task_id = t.task_id) as Leasttask_taskcon_pay')
-         )
+             WHERE contracts.deleted_at IS NULL AND contract_has_tasks.task_id = t.task_id
+             )
+
+             as Leasttask_taskcon_pay')
+
+             )
+
+
+
+
+
+
+
              ->from('tasks as t')
              ->whereIn('t.task_id', $id_tasks)
              ->whereNull('t.deleted_at')
@@ -1132,7 +1180,41 @@ class ProjectController extends Controller
                      DB::raw('tasks.task_budget_it_operating + tasks.task_budget_it_investment + tasks.task_budget_gov_utility + cte.LeastBudget AS LeastBudget'),
                      DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + cte.LeastCost AS LeastCost'),
                      DB::raw('tasks.task_pay + cte.LeastPay AS LeastPay'),
-                     DB::raw('tasks.task_refund_pa_budget + cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget'),
+                     DB::raw('tasks.task_refund_pa_budget +
+                     cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget'),
+                     DB::raw('(
+                        SELECT MAX(temp.total_cost_1)
+                        FROM (
+                            SELECT inner_tasks.task_parent,
+                                   SUM(COALESCE(inner_tasks.task_cost_gov_utility, 0)) +
+                                   SUM(COALESCE(inner_tasks.task_cost_it_operating, 0)) +
+                                   SUM(COALESCE(inner_tasks.task_cost_it_investment, 0)) AS total_cost_1
+                            FROM tasks as inner_tasks
+                            WHERE inner_tasks.task_type = 1 AND inner_tasks.deleted_at IS NULL
+                            GROUP BY inner_tasks.task_parent
+                        ) AS temp
+                        WHERE temp.task_parent = tasks.task_id  -- assuming t is the alias of tasks in your main query
+                    ) AS ab_1
+            '),
+
+            DB::raw('(
+                SELECT MAX(temp.total_cost_2)
+                FROM (
+                    SELECT inner_tasks.task_parent,
+                           SUM(COALESCE(inner_tasks.task_cost_gov_utility, 0)) +
+                           SUM(COALESCE(inner_tasks.task_cost_it_operating, 0)) +
+                           SUM(COALESCE(inner_tasks.task_cost_it_investment, 0)) AS total_cost_2
+                    FROM tasks as inner_tasks
+                    WHERE inner_tasks.task_type = 2 AND inner_tasks.deleted_at IS NULL
+                    GROUP BY inner_tasks.task_parent
+                ) AS temp
+                WHERE temp.task_parent = tasks.task_id  -- assuming t is the alias of tasks in your main query
+            ) AS ab_2
+    '),
+
+
+
+
                      DB::raw('(SELECT sum(COALESCE(taskcons.taskcon_pay,0))
                      FROM contract_has_tasks
                      JOIN contracts ON contract_has_tasks.contract_id = contracts.contract_id
@@ -1140,6 +1222,7 @@ class ProjectController extends Controller
                      WHERE contracts.deleted_at IS NULL AND contract_has_tasks.task_id = tasks.task_id)
                      AS Leasttask_taskcon_pay
                      ')
+
                  )
                      ->from('tasks')
                      ->whereNull('tasks.deleted_at')
@@ -1157,8 +1240,16 @@ class ProjectController extends Controller
          DB::raw('MIN(cte.LeastBudget) AS totalLeastBudget'),
          DB::raw('SUM(cte.LeastCost) AS totalLeastCost'),
          DB::raw('SUM(cte.LeastPay) AS totalLeastPay'),
+
+
          DB::raw('sum(cte.Leasttask_taskcon_pay) AS totalLeastconPay'),
-         DB::raw('SUM(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget'),
+         DB::raw('max(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget'),
+         DB::raw('sum(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget1'),
+         DB::raw('min(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget2'),
+         DB::raw('SUM(cte.LeastCost) AS totalLeastCost_1'),
+
+         DB::raw('SUM(cte.ab_1) AS total_Leasttask_cost_1'), // Updated this line
+         DB::raw('SUM(cte.ab_2) AS total_Leasttask_cost_2'), // Updated this line
 
      )
      ->orderBy('cte.root')
@@ -1168,7 +1259,7 @@ class ProjectController extends Controller
 
 //dd($combinedQuery);
 
-   // dd($cteQuery->get());
+   //dd($cteQuery->get());
 
 
 
@@ -1287,7 +1378,9 @@ dd($cteQuery); */
                 'cte.totalLeastCost',
                 'cte.totalLeastPay',
                 'cte.totalLeastconPay',
-                'cte.totalLeasttask_refund_pa_budget'
+                'cte.totalLeasttask_refund_pa_budget',
+                'cte.total_Leasttask_cost_1',
+                'cte.total_Leasttask_cost_2',
 
             )
 
@@ -1525,6 +1618,10 @@ dd($cteQuery); */
            ((float) $__totalLeastPay = (float) $task['totalLeastPay']);
             ((float) $__totalLeastconPay = (float) $task['totalLeastconPay']);
             ((float) $__totalLeasttask_refund_pa_budget = (float) $task['totalLeasttask_refund_pa_budget']);
+            ((float) $__total_Leasttask_cost_1 = (float) $task['total_Leasttask_cost_1']);
+
+            ((float) $__total_Leasttask_cost_2 = (float) $task['total_Leasttask_cost_2']);
+
 
 
            // ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
@@ -1633,6 +1730,12 @@ dd($cteQuery); */
 
                 'totalLeastCost'              =>  $__totalLeastCost ,
                 'totalLeastPay_Least'              =>  $__totalLeastPay_Least ,
+
+               'totalLeasttask_refund_pa_budget' => $__totalLeasttask_refund_pa_budget,
+                'total_Leasttask_cost_1'       => $__total_Leasttask_cost_1,
+                'total_Leasttask_cost_2'       => $__total_Leasttask_cost_2,
+
+
                 //'total_taskcon_payzo'  => $__total_taskcon_payzo,
                    //'total_task_taskcon_payzo '                     => $__total_task_taskcon_payzo ,
 
@@ -1651,7 +1754,7 @@ dd($cteQuery); */
 
 
 
-       // dd($gantt);
+      // dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
