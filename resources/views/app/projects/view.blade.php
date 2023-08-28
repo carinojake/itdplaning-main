@@ -59,7 +59,9 @@
                           </span>
                           <div class="tab-content">
                             <div class="mt-3">
-                                หมายเหตุ: <span style="color:blue;">ตัวเลขน้ำเงิน= งบประมาณ คืน</span>
+                                หมายเหตุ: <span style="color:rgb(7, 173, 7);">[ตัวเลขเขียว=  งบประมาณคงเหลือ]</span>
+                                <span ></span>
+                                <span style="color:blue;">[ตัวเลขน้ำเงิน= งบประมาณ คืน]</span>
                             </div>
 
                         </div>

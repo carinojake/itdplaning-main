@@ -71,9 +71,9 @@
                     <th>กิจกรรม</th>
                     <th>วันที่</th>
                     <th>งบ</th>
-                    <th>คงเหลือ</th>
-                    <th>ที่ค่าใช้จ่าย</th>
                     <th></th>
+                    <th>ที่ค่าใช้จ่าย</th>
+                    <th>เบิก</th>
                     <th width="200">ดู</th>
                 </tr>
                 @if ($task->subtask->count() > 0)
@@ -87,9 +87,10 @@
                             </td>
 
                             <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
-                            <td>คงเหลือ</td>
+                            <td></td>
                             <td>
-                                @if ($subtask->contract->count() > 0)
+                                {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}
+                               {{--  @if ($subtask->contract->count() > 0)
                                     @foreach ($subtask->contract as $contract)
                                         <button type="button" class="badge btn btn-success text-white"
                                             data-bs-toggle="modal"
@@ -117,9 +118,10 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                @endif
+                                @endif --}}
                             </td>
-                            <td></td>
+                            <td>  {{ number_format($subtask->task_pay,2) }}
+                            </td>
                             <td>
                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                     class="btn btn-primary btn-sm" ><i class="cil-folder-open">ข้อมูล</i></a>

@@ -25,8 +25,8 @@
     <div class="tab-content" id="v-pills-tabContent">
         <!-- 1 งาน -->
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <div class="row">
-                <div class="col">
+            <div class="row g-3">
+                <div class="col-md-6">
                     <!--งบประมาณ-->
                     <div class="card">
                         <div class="card-body">
@@ -74,7 +74,7 @@
 
 
 
-                <div class="col">
+                <div class="col-md-6">
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">

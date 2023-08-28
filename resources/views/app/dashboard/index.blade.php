@@ -43,16 +43,22 @@
 
                                 </div>
                                 <div class="col-md-auto">
-                            <button class="btn btn-info"
-                             type="button"
-                             data-bs-toggle="collapse" data-bs-target=".multi-collapse"
-                              aria-expanded="true"
-                              aria-controls="multiCollapseExample
-                              multiCollapseExample1 multiCollapseExample2
-                              multiCollapseExample3">
-                              <i class="cil-plus"></i>
+                                    <div class="col-1">
+                                        <div class="card-1 ">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       role="switch"
+                                                       id="flexSwitchCheckDefault"
+                                                       data-bs-toggle="collapse"
+                                                       data-bs-target=".multi-collapse"
+                                                       aria-expanded="true"
+                                                       aria-controls="multiCollapseExample">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">เปิด</label>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            </button>
 
                                 </div>
                               </div>

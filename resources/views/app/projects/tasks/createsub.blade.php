@@ -436,7 +436,7 @@
                             </div>
 
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                                <x-button link="{{ route('project.show', $project) }}" class="text-black btn-light">
+                                <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>
                             </form>
                         </x-card>

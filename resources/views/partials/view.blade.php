@@ -21,6 +21,10 @@
                 type="button" role="tab" aria-controls="v-pills-settings"
                 aria-selected="false">งบสาธารณูปโภค</button>
         @endif
+
+
+
+
     </div>
     <div class="tab-content" id="v-pills-tabContent">
         <!-- 1 งาน -->
@@ -84,12 +88,7 @@
                                 งบสาธารณูปโภค :  {{ number_format(floatval($ut_refund_mm_pr), 2) }} บาท <br>
                             @endif
                             " data-bs-trigger="hover focus">
-
-
-
-
                                 <div class="fs-4 fw-semibold text-success">
-{{--                                     {{ number_format(floatval($budget['budget_total_mm_pr']), 2) }} --}}
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
 
                                 </div>
@@ -97,8 +96,6 @@
                                     งบประมาณคงเหลือที่ไช้ได้
                                 </small>
                             </button>
-
-
                         </div>
                     </div>
                 </div>
@@ -110,12 +107,12 @@
         <!-- 2 งาน -->
         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 
-            <div>
+            <div class="col">
                 <div class="row">
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <button class="btn "style="width: 12rem;" data-bs-toggle="collapse"
+                                <button class="col-md-12 btn "data-bs-toggle="collapse"
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
@@ -312,28 +309,22 @@
 
                     </div>
 
-                    <div class="col-1">
-                        <div class="card-1 ">
+                    <div class="col">
+                        <div class="card ">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input "
 
-                                <button class="btn btn-info"
-                                type="button"
-                                data-bs-toggle="collapse" data-bs-target=".multi-collapse"
-                                 aria-expanded="true"
-                                 aria-controls="multiCollapseExample
-                                 multiCollapseExample1 multiCollapseExample2
-                                 multiCollapseExample3">
-                                 <i class="cil-plus"></i>
-
-                               </button>
-
-
-
-
-
+                                       type="checkbox"
+                                       role="switch"
+                                       id="flexSwitchCheckDefault"
+                                       data-bs-toggle="collapse"
+                                       data-bs-target=".multi-collapse"
+                                       aria-expanded="true"
+                                       aria-controls="multiCollapseExample">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">เปิด</label>
+                            </div>
                         </div>
-
                     </div>
-
 
 
 
@@ -558,28 +549,21 @@
                         </div>
                     </div>
 
-                    <div class="col-1">
-                        <div class="card-1 ">
-
-                                <button class="btn btn-info"
-                                type="button"
-                                data-bs-toggle="collapse" data-bs-target=".multi-collapse"
-                                 aria-expanded="true"
-                                 aria-controls="multiCollapseExample
-                                 multiCollapseExample1 multiCollapseExample2
-                                 multiCollapseExample3">
-                                 <i class="cil-plus"></i>
-
-                               </button>
-
-
-
-
-
+                    <div class="col">
+                        <div class="card">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="flexSwitchCheckDefault"
+                                       data-bs-toggle="collapse"
+                                       data-bs-target=".multi-collapse"
+                                       aria-expanded="true"
+                                       aria-controls="multiCollapseExample">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
                         </div>
-
                     </div>
-
 
 
 
@@ -881,19 +865,19 @@
                             </div>
                         </div>
 
-                        <div class="col-1">
-                            <div class="card-1 ">
-
-                                    <button class="btn btn-info"
-                                    type="button"
-                                    data-bs-toggle="collapse" data-bs-target=".multi-collapse"
-                                     aria-expanded="true"
-                                     aria-controls="multiCollapseExample
-                                     multiCollapseExample1 multiCollapseExample2
-                                     multiCollapseExample3">
-                                     <i class="cil-plus"></i>
-
-                                   </button>
+                        <div class="col">
+                            <div class="card">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           role="switch"
+                                           id="flexSwitchCheckDefault"
+                                           data-bs-toggle="collapse"
+                                           data-bs-target=".multi-collapse"
+                                           aria-expanded="true"
+                                           aria-controls="multiCollapseExample">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                                </div>
                             </div>
                         </div>
                     </div>

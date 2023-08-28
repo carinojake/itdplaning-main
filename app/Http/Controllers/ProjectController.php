@@ -2706,6 +2706,9 @@ dd($cteQuery); */
         if (!$reguiar_id) {
             $reguiar_id = 1; // Use 1 as default if not provided
         }
+
+
+
         return view('app.projects.create', compact('fiscal_year', 'reguiar_id'));
     }
 
@@ -3329,7 +3332,7 @@ dd($cteQuery); */
                 $sum_tasksub_cost_budget_it_operating= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_cost_it_operating');
                 $sum_tasksub_refund_budget_it_operating= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
                 $sum_tasksub_mm_budget= $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_mm_budget');
-
+                $sum_tasksub_pay= $task_sub->where('task_pay', '>', 1);
 
 /*
                 $task_sub_op_sums = $task_sub->reduce(function ($carry, $subtask) {
@@ -3350,6 +3353,7 @@ dd($cteQuery); */
                         $carry['operating']['task_cost'] += $subtask->task_cost_it_operating;
                         $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
                         $carry['operating']['task_mm_budget'] += $subtask->task_mm_budget;
+                        $carry['operating']['task_pay'] += $subtask->task_pay;
                     }
 
                     if ($subtask->task_budget_it_investment > 1) {
@@ -3359,7 +3363,9 @@ dd($cteQuery); */
 
 
                         $carry['investment']['task_refund_pa_status'] =  $subtask->task_refund_pa_status;
-                       // ($carry); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
+                        $carry['investment']['task_pay'] += $subtask->task_pay;
+
+                        // ($carry); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
 
 
                         $refundPaBudget = is_int($subtask->task_refund_pa_status) ? collect([$subtask->task_refund_pa_status]) : $subtask->task_refund_pa_status;
@@ -3379,15 +3385,15 @@ dd($cteQuery); */
                         $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
                         $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
                         $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
-
+                        $carry['utility']['task_pay'] += $subtask->task_pay;
 
                         // Add other fields as necessary...
                     }
 
                     return $carry;
-                }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
-                    'investment' => ['task_budget' => 0, 'task_cost' => 0,  'task_refund_pa_budget' => 0, 'task_refund_pa_budget_2' => 0, 'task_mm_budget' => 0],
-                    'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
+                }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0, 'task_pay' => 0],
+                    'investment' => ['task_budget' => 0, 'task_cost' => 0,  'task_refund_pa_budget' => 0, 'task_refund_pa_budget_2' => 0, 'task_mm_budget' => 0, 'task_pay' => 0],
+                    'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0, 'task_pay' => 0]]);
 
 
                // dd($task_sub_sums);
@@ -4570,7 +4576,8 @@ dd($cteQuery); */
 
 
               //dd($task);
-            return redirect()->route('project.view', $project);
+              return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
+
         }
     }
 
@@ -5807,7 +5814,9 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
                         //$taskcon = new Taskcon;
                         //$taskcon->task_id = $task->task_id;
                         // Set other properties of $taskcon as needed
-                        return redirect()->route('project.view', $project->hashid);
+                            // หลังจากปรับปรุงข้อมูลเสร็จแล้ว ให้ใช้ back() เพื่อกลับหน้าเดิม
+                            return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
+                       // return redirect()->route('project.view', $project->hashid);
                     } else {
                         // If $taskcon is not null, you can safely set its properties
                         $taskcon->task_id = $task->task_id;
