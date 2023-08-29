@@ -74,7 +74,7 @@
                     <th></th>
                     <th>ที่ค่าใช้จ่าย</th>
                     <th>เบิก</th>
-                    <th width="200">ดู</th>
+                    <th width="200">ข้อมูล</th>
                 </tr>
                 @if ($task->subtask->count() > 0)
                     @foreach ($task->subtask as $index => $subtask)
@@ -124,7 +124,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                    class="btn btn-primary btn-sm" ><i class="cil-folder-open">ข้อมูล</i></a>
+                                    class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>
                                 <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                     class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                                 <form class="delete-form"

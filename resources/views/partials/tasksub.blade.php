@@ -2,7 +2,7 @@
 
 @if ($task['task_parent_sub'] === 2)
 
-tasksubsubsub
+
 
 
 <x-slot:toolbar>
@@ -15,7 +15,7 @@ tasksubsubsub
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub_st', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_sub_st</i></button>
+        <button class="btn btn-warning text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
     </form>
 
 
@@ -126,7 +126,7 @@ tasksubsubsub
             <th>วันที่</th>
             <th></th>
             <th>ที่ค่าใช้จ่าย</th>
-            <th width="200">ดู</th>
+            <th width="200">ข้อมูล</th>
         </tr>
         @if ($task->subtask->count() > 0)
             @foreach ($task->subtask as $index => $subtask)
@@ -171,7 +171,7 @@ tasksubsubsub
                     <td></td>
                     <td>
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                            class="btn btn-primary btn-sm" ><i class="cil-folder-open">ข้อมูล</i></a>
+                            class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                         <form class="delete-form"

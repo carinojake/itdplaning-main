@@ -4576,8 +4576,8 @@ dd($cteQuery); */
 
 
               //dd($task);
-              return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
-
+             // return redirect()->route('project.index');
+             return redirect()->route('project.view', $project);
         }
     }
 
@@ -5454,11 +5454,10 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
 
 
-
-
         $task       = Task::find($id_task);
         $tasks      = Task::where('project_id', $id_project)
             ->whereNot('task_id', $id_task)
+            ->whereNull('tasks.deleted_at')
             ->get();
 
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
@@ -5476,19 +5475,24 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
         ->where('projects.project_id', $project->project_id)
         ->where('tasks.task_id', $task->task_id)
+        ->whereNull('tasks.deleted_at')
         ->first();
 
        // dd($contract_s);
 
 
-        $task_budget_it_operating = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_it_operating');
-        $task_budget_it_investment = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_it_investment');
-        $task_budget_gov_utility = Task::where('project_id', $id_project)->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
+        $task_budget_it_operating = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_operating');
+        $task_budget_it_investment = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_investment');
+        $task_budget_gov_utility = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_gov_utility');
 
 
 
 
-        ($task_sub = $task->subtask);
+        $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+        $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+
+        ($task_sub = $task_parent_sub->subtask->whereNull('tasks.deleted_at'));
         $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 1) {
                 $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;
@@ -5521,8 +5525,32 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
         }, ['operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
             'investment' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0],
             'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]]);
-          //วใ dd($task_sub_sums);
+         // dd($task_sub_sums);
 
+         $task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+         $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+            if ($subtask->task_budget_it_operating > 1) {
+                $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+            }
+
+            if ($subtask->task_budget_it_investment > 1) {
+                $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+            }
+
+            if ($subtask->task_budget_gov_utility > 1) {
+
+                $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+                // Add other fields as necessary...
+            }
+
+            return $carry;
+        }, ['operating' => ['task_refund_pa_budget' => 0],
+            'investment' => [ 'task_refund_pa_budget' => 0],
+            'utility' => ['task_refund_pa_budget' => 0]]);
+
+// dd($task_sub_refund_pa_budget);
 
           if ($project && $task) {
             $decodedProject = Hashids::decode($project);
@@ -5537,9 +5565,16 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
             }
         }
           $tasksDetails = $task;
-        // dd($tasks);
+
+
+
+      // dd($tasksDetails,$task_sub_sums,$task_parent_sub,$task_parent_st);
+
+         //dd($tasksDetails);
 
         return view('app.projects.tasks.editsub', compact(
+            'task_parent_sub',
+            'task_sub_refund_pa_budget',
             'tasksDetails',
             'task_sub_sums',
             'contract_s',

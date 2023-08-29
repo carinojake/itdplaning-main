@@ -298,7 +298,7 @@
                                     <div>
                                         <small class="text-xl">
                                             งบประมาณคงเหลือที่ไช้ได้<p>
-                                                &nbsp;
+
                                         </small>
                                     </div>
                                 </button>
@@ -309,7 +309,7 @@
 
                     </div>
 
-                    <div class="col">
+                    <div class="col-1">
                         <div class="card ">
                             <div class="form-check form-switch">
                                 <input class="form-check-input "
