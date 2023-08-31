@@ -449,7 +449,7 @@
                 rows: [{
                         cols: [{
                                 view: "grid",
-                                width: 600,
+                                width: 200,
                                 scrollX: "scrollHor",
                                 scrollY: "scrollVer",
                                 config: leftGridColumns
@@ -469,7 +469,7 @@
                             },
                             {
                                 view: "grid",
-                                width: 500,
+                                width: 1200,
                                 bind: "task",
                                 scrollY: "scrollVer",
                                 config: rightGridColumns

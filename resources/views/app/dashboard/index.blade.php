@@ -355,7 +355,7 @@
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        @if ($itpsa1 > 1)
+                                                        @if ($itpsa1 > 1 || $itpsa2 > 1 )
                                                         {{ number_format($itpsa1 + $itpsa2, 2) }}
                                                         @endif
                                                     </div>
@@ -375,7 +375,7 @@
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        @if ($utsc_pay_pa > 1)
+                                                        @if ($utsc_pay_pa > 1 || $utsc_pay > 1)
                                                         {{ number_format(($utsc_pay_pa +  $utsc_pay), 2) }}
                                                         @endif
                                                     </div>

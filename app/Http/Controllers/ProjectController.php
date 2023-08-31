@@ -4866,7 +4866,7 @@ dd($cteQuery); */
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
-
+        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
 
         // convert input to decimal or set it to null if empty
         $task_budget_it_operating = $request->input('task_budget_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_operating')) : null;
@@ -4975,6 +4975,21 @@ dd($cteQuery); */
 
 
 
+        if ($pay_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+
+            $pay_date_obj->modify('-543 years');
+
+            $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
+            // Check if $pay_date_obj is not null before trying to modify and format it
+
+        }
+
+
+
         $task->project_id = $id;
         $task->task_name = $request->input('taskcon_mm_name');
         $task->task_description = trim($request->input('task_description'));
@@ -4984,6 +4999,7 @@ dd($cteQuery); */
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
+        $task->task_pay_date    = $pay_date ?? date('Y-m-d 00:00:00');
 
         $task->task_budget_it_operating = $task_budget_it_operating;
         $task->task_budget_it_investment = $task_budget_it_investment;
