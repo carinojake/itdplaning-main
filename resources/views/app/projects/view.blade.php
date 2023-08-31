@@ -20,7 +20,7 @@
                                     >แก้ไข {{ Helper::projectsType($project->project_type) }} </a>
 
 
-
+                                   @if($budget['budget_total_task_budget_end']>0)
                                     <a href="{{ route('project.task.create', $project->hashid) }}"
                                         class="btn btn-info text-white" >เพิ่มกิจกรรม</a>
 
@@ -31,7 +31,7 @@
 
                                         <a href="{{ route('project.task.createsubno', ['project' => $project->hashid]) }}"
                                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-
+                                                @endif
 
                                         <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
@@ -686,7 +686,7 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
 
 
                             else if (task.task_refund_pa_status == 3 && task.task_status == 2 && task.task_parent_sub_refund_pa_status == 3) {
-    var tmp_class = task.task_refund_pa_status == 3 ? 'purple' : 'green';
+    var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
 
     // ตรวจสอบค่าที่ใช้ในการคำนวณว่าถูกกำหนดและมีค่าที่ถูกต้องหรือไม่
 

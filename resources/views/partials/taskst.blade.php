@@ -77,7 +77,7 @@
                     <th width="200">ข้อมูล</th>
                 </tr>
                 @if ($task->subtask->count() > 0)
-                    @foreach ($task->subtask as $index => $subtask)
+                    @foreach ($task->subtask as $index => $subtask  )
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $subtask->task_name }}{!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
@@ -89,7 +89,13 @@
                             <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
                             <td></td>
                             <td>
-                                {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}
+                                @if($subtask->task_parent_sub_cost > 1)
+                                {{ number_format($subtask->task_parent_sub_cost, 2) }}
+                            @else
+                                {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
+                            @endif
+
+
                                {{--  @if ($subtask->contract->count() > 0)
                                     @foreach ($subtask->contract as $contract)
                                         <button type="button" class="badge btn btn-success text-white"
@@ -120,8 +126,18 @@
                                     @endforeach
                                 @endif --}}
                             </td>
-                            <td>  {{ number_format($subtask->task_pay,2) }}
+                            <td>
+                                @if($cteQuery->totalLeastconPay >1)
+                                {{ number_format($cteQuery->totalLeastconPay, 2) }}
+                                @elseif($subtask->task_parent_sub_cost > 1)
+                                    {{ number_format($subtask->task_parent_sub_pay, 2) }}
+
+                                @elseif($subtask->task_pay > 1)
+                                    {{ number_format($subtask->task_pay, 2) }}
+
+                                @endif
                             </td>
+
                             <td>
                                 <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                     class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>

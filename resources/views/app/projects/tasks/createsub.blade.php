@@ -316,7 +316,11 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_operating" name="task_budget_it_operating"
-                                                        min="0"  value={{ session('contract_mm_budget') }} >
+                                                        min="0"  value={{ session('contract_mm_budget') }}
+
+                                                        onchange="calculateRefund()"
+
+                                                        >
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
@@ -332,7 +336,7 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_investment"
-                                                        name="task_budget_it_investment" min="0" value={{ session('contract_mm_budget') }}  >
+                                                        name="task_budget_it_investment" min="0" value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบดำเนินงาน') }}
@@ -346,7 +350,7 @@
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
-                                                        name="task_budget_gov_utility" min="0" value={{ session('contract_mm_budget') }}  >
+                                                        name="task_budget_gov_utility" min="0" value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
@@ -365,7 +369,7 @@
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_it_operating"
-                                                        name="task_cost_it_operating" min="0" value={{ session('contract_pa_budget') }} >
+                                                        name="task_cost_it_operating" min="0" value={{ session('contract_pa_budget') }} onchange="calculateRefund()" >
 
 
                                                     <div class="invalid-feedback">
@@ -380,7 +384,7 @@
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_it_investment"
-                                                        name="task_cost_it_investment" min="0"  value={{ session('contract_pa_budget') }}>
+                                                        name="task_cost_it_investment" min="0"  value={{ session('contract_pa_budget') }}  onchange="calculateRefund()">
 
 
                                                     <div class="invalid-feedback">
@@ -395,7 +399,7 @@
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_cost_gov_utility"
-                                                        name="task_cost_gov_utility" min="0"  value={{ session('contract_pa_budget') }}>
+                                                        name="task_cost_gov_utility" min="0"  value={{ session('contract_pa_budget') }}  onchange="calculateRefund()">
 
 
                                                     <div class="invalid-feedback">
@@ -407,7 +411,7 @@
                                             <div id="refund" {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
-                                                        <label for="task_refund_pa_budget"
+                                                        <label for="task_refund_pa_budget_1"
                                                             class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
                                                         <span class="text-danger"></span>
 
@@ -578,32 +582,37 @@
 </script>
 
 <script>
-    $("#task_pay").on("input", function() {
-        calculateRefund();
-    });
+    var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+    var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
 
     function calculateRefund() {
-        var pr_budget , pa_budget , refund ;
+        var totalRefund = 0;
 
-        if (parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) > 1) {
-            pr_budget = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
-            pa_budget = parseFloat($("#task_cost_it_operating").val().replace(/,/g, "")) || 0;
-            refund = pr_budget - pa_budget;
-        }
-        else if (parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) > 1) {
-            pr_budget = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
-            pa_budget = parseFloat($("#task_cost_it_investment").val().replace(/,/g, "")) || 0;
-            refund = pr_budget - pa_budget;
-        }
-        else if (parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) > 1) {
-            pr_budget = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
-            pa_budget = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, "")) || 0;
-            refund = pr_budget - pa_budget;
-        }
+        costFields.forEach(function(costField, index) {
+            var pa_value = $("#" + costField).val();
+            var pr_value = $("#" + budgetFields[index]).val();
 
-        $("#task_refund_pa_budget").val(refund.toFixed(2));
+            if (pa_value && pr_value) {
+                var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                if (pa_budget != 0) {
+                    var refund = pr_budget - pa_budget;
+                    totalRefund += refund;
+                }
+            }
+        });
+
+        $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
     }
+
+    $(document).ready(function() {
+        costFields.forEach(function(costField, index) {
+            $("#" + costField).on("input", calculateRefund);
+        });
+    });
 </script>
+
 
 
 
@@ -676,6 +685,21 @@
                 });
             });
         </script>
+<script>
+    $(document).ready(function() {
+       $("#task_start_date").datepicker({});
+        $("#task_end_date").datepicker({ });
+        $('#task_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#task_end_date").datepicker("option", "minDate", startDate);
+                    })
 
+                    $('#task_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#task_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
     </x-slot:javascript>
 </x-app-layout>

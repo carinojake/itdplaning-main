@@ -303,9 +303,6 @@
                 monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
 
 
-
-
-
                    $("#datepicker-en").datepicker({ dateFormat: 'dd/mm/yy'});
 
               $("#inline").datepicker({ dateFormat: 'dd/mm/yy', inline: true });
@@ -314,7 +311,24 @@
               });
           </script>
 
+<script>
+    $(document).ready(function() {
+       $("#taskcon_start_date").datepicker({});
+        $("#taskcon_end_date").datepicker({ });
+        $('#taskcon_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#taskcon_end_date").datepicker("option", "minDate", startDate);
+                        $("#taskcon_pay_date").datepicker("option", "minDate", startDate);
 
+                    })
+
+                    $('#taskcon_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#taskcon_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
 
 
 

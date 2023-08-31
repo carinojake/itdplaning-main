@@ -219,7 +219,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
+
+
+
+
+
+
+
+      <script>
             $(document).ready(function() {
                 $(".numeral-mask").inputmask();
             });
@@ -254,6 +261,24 @@
                 });
             });
         </script>
+
+<script>
+    $(document).ready(function() {
+       $("#task_start_date").datepicker({});
+        $("#task_end_date").datepicker({ });
+        $('#task_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#task_end_date").datepicker("option", "minDate", startDate);
+                    })
+
+                    $('#task_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#task_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
+
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields

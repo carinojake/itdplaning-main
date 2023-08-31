@@ -29,7 +29,21 @@
                                        {{ $projectDetails->project_fiscal_year }}
 
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-3">
+                                        <label for="task_start_date2"
+                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+
+                              {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="task_end_date2"
+                                            class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+
+                                   {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+
+                                    </div>
+                                    <div class="col-md-12 mt-3">
                                         <label for="reguiar_id"
                                             class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
                                     {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
@@ -58,28 +72,28 @@
 
 
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 d-none">
                                         <label for="project_status"
                                             class="form-label">{{ __('สถานะงาน/โครงการ') }}</label>
                                         <!-- Here, you would need to fetch the actual status from $projectDetails -->
                                     </div>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">
+                                  {{--   <div class="row mt-3">
+                                        <div class="col-md-2">
                                             <label for="task_start_date2"
                                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                          {{--   <span class="text-danger">*</span> --}}
+
                                   {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
 
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <label for="task_end_date2"
                                                 class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                      {{--       <span class="text-danger">*</span> --}}
+
                                        {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
 
                                         </div>
                                     </div>
-
+ --}}
                                     <div class="col-md-12 mt-3">
 
 
@@ -93,7 +107,10 @@
 
 
                                     <div class="row mt-3">
-                                        <h5>งบประมาณที่ได้รับจัดสรร</h5>
+                                        <label
+                                        class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
+                                </div>
+
                                         <div class="row">
                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                 <div class="col-md-4">
@@ -824,7 +841,22 @@
                 });
             });
         </script>
+<script>
+    $(document).ready(function() {
+       $("#task_start_date").datepicker({});
+        $("#task_end_date").datepicker({ });
+        $('#task_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#task_end_date").datepicker("option", "minDate", startDate);
+                    })
 
+                    $('#task_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#task_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {

@@ -15,7 +15,7 @@
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub_st', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-warning text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
+        <button class="btn btn-Light text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
     </form>
 
 
@@ -68,19 +68,19 @@
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('งบกลาง ICT') }}</div>
-                    {{ number_format($task->task_budget_it_operating) }}
+                    {{ number_format(floatval($task->task_budget_it_operating), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('งบดำเนินงาน') }}</div>
-                    {{ number_format($task->task_budget_it_investment) }}
+                    {{ number_format(floatval($task->task_budget_it_investment), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('ค่าสาธารณูปโภค') }}</div>
-                    {{ number_format($task->task_budget_gov_utility) }}
+                    {{ number_format(floatval($task->task_budget_gov_utility), 2) }}
                 @endif
             </div>
         </div>
@@ -124,21 +124,27 @@
             <th width="50">ลำดับ</th>
             <th>กิจกรรม</th>
             <th>วันที่</th>
+            <th>งบ</th>
             <th></th>
             <th>ที่ค่าใช้จ่าย</th>
+            <th>เบิก</th>
             <th width="200">ข้อมูล</th>
         </tr>
         @if ($task->subtask->count() > 0)
             @foreach ($task->subtask as $index => $subtask)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $subtask->task_name }}{!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
+                    <td>{{ $subtask->task_name }}{!! $subtask->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
                     <td>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                     </td>
+
+                    <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
+                    <td></td>
                     <td>
-                        @if ($subtask->contract->count() > 0)
+                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}
+                       {{--  @if ($subtask->contract->count() > 0)
                             @foreach ($subtask->contract as $contract)
                                 <button type="button" class="badge btn btn-success text-white"
                                     data-bs-toggle="modal"
@@ -166,9 +172,10 @@
                                     </div>
                                 </div>
                             @endforeach
-                        @endif
+                        @endif --}}
                     </td>
-                    <td></td>
+                    <td>  {{ number_format($subtask->task_pay,2) }}
+                    </td>
                     <td>
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>

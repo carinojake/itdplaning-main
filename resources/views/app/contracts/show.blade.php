@@ -408,7 +408,7 @@
 
 
 
-
+            @if(count($files_contract) > 0)
             <table class="table table-bordered table-striped  mt-3">
                 <thead>
 
@@ -435,7 +435,7 @@
                     @endif
                 </tbody>
             </table>
-
+            @endif
 
 
 

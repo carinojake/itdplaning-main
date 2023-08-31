@@ -831,10 +831,12 @@
                                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
                             ],
 
-                            onSelect: calculateDuration
+
                         });
                 });
             </script>
+
+
             <script>
                 function calculateDuration() {
                     var startDate = $('#insurance_start_date').datepicker('getDate');
@@ -858,6 +860,26 @@
                     });
                 });
             </script>
+
+<script>
+    $(document).ready(function() {
+       $("#task_start_date").datepicker({});
+        $("#task_end_date").datepicker({ });
+        $("#task_pay_date").datepicker({ });
+        $('#task_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#task_end_date").datepicker("option", "minDate", startDate);
+                        $("#task_pay_date").datepicker("option", "minDate", startDate);
+                    })
+
+                    $('#task_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#task_start_date").datepicker("option", "maxDate", endDate);
+                      //  $("#task_pay_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
 
             <script>
                 $(document).ready(function() {

@@ -45,16 +45,21 @@
                                             aria-labelledby="panelsStayOpen-headingOne">
                                             <div class="accordion-body">
                                                 <div class="callout callout-primary row mt-3">
-
+                                                    <div class ="raw">
                                                     <div class="col-md-3">
                                                         <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                                        {{ $projectDetails->project_fiscal_year }}
+
                                                     </div>
-                                                    <div class="col-md-9">
-                                                        <label for="reguiar_id" class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                                        {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}
+                                                    {{ $projectDetails->project_fiscal_year }}
                                                     </div>
 
+                                                    <div class ="raw">
+                                                    <div class="col-md-12 mt-3">
+                                                        <label for="reguiar_id" class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
+
+                                                    </div>
+                                                    {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}
+                                                </div>
                                                     <div class="d-none col-md-3 ">
                                                         <label for="project_type"
                                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label>
@@ -88,20 +93,23 @@
                                                         <div class="col-md-12">
                                                             <label for="task_name1"
                                                                 class="form-label">{{ __('กิจกรรม') }}</label>
-                                                      {{ $tasksDetails->task_name }}
+
                                                         </div>
+                                                        {{ $tasksDetails->task_name }}
                                                         <div class="col-md-12 mt-3">
                                                             <label for="task_description1"
                                                                 class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
 
-                                                           {{ $tasksDetails->task_description }}
-                                                        </div>
 
+                                                        </div>
+                                                        {{ $tasksDetails->task_description }}
                                                     </div>
 
 
                                                     <div class="row mt-3">
-                                                        <h5>งบประมาณที่ได้รับจัดสรร</h5>
+                                                        <label for="bogg"
+                                                                class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
+
                                                         <div class="row">
                                                             @if ($tasksDetails->task_budget_it_operating > 0)
                                                                 <div class="col-md-4">
@@ -234,22 +242,19 @@
                                                 </div>
                                             </div>
 
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-6">
-                                                                <label for="task_start_date"
-                                                                    class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                                                <span class="text-danger"></span>
-                                                                <input class="form-control" id="task_start_date"
-                                                                    name="task_start_date" name="task_start_date">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="task_end_date"
-                                                                    class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                                                <span class="text-danger"></span>
-                                                                <input class="form-control" id="task_end_date"
-                                                                    name="task_end_date" name="task_start_date">
-                                                            </div>
-                                                        </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                                    <span class="text-danger"></span>
+                                                    <input class="form-control" id="task_start_date" name="task_start_date">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                                    <span class="text-danger"></span>
+                                                    <input class="form-control" id="task_end_date" name="task_end_date">
+                                                </div>
+                                            </div>
+
                                          </div>
                                                         <div class="callout callout-warning">
                                                          <div class="row ">
@@ -604,7 +609,12 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            <script type="text/javascript">
+
+
+
+
+
+           <script type="text/javascript">
 
 
                 $(document).ready(function() {
@@ -621,6 +631,8 @@
                 });
 
             </script>
+
+
 
 
            <script>
@@ -863,7 +875,7 @@
                                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
                             ],
 
-                            onSelect: calculateDuration
+
                         });
                 });
             </script>
@@ -891,6 +903,26 @@
                     });
                 });
             </script>
+
+<script>
+    $(document).ready(function() {
+       $("#task_start_date").datepicker({});
+        $("#task_end_date").datepicker({ });
+        $("#task_pay_date").datepicker({ });
+        $('#task_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#task_end_date").datepicker("option", "minDate", startDate);
+                        $("#task_pay_date").datepicker("option", "minDate", startDate);
+                    })
+
+                    $('#task_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#task_start_date").datepicker("option", "maxDate", endDate);
+                       // $("#task_pay_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
 
             <script>
                 $(document).ready(function() {

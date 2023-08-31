@@ -245,6 +245,23 @@
             });
         </script>
 
+<script>
+    $(document).ready(function() {
+       $("#project_start_date").datepicker({});
+        $("#project_end_date").datepicker({ });
+        $('#project_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#project_end_date").datepicker("option", "minDate", startDate);
+                    })
+
+                    $('#project_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#project_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+    </script>
+
         <script>
             // Example starter JavaScript for disabling form submissions if there are invalid fields
             (function() {

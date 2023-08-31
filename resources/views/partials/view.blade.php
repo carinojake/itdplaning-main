@@ -30,7 +30,7 @@
         <!-- 1 งาน -->
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
             <div class="row">
-                <div class="col">
+                <div class="col-md-auto">
                     <!--งบประมาณ-->
                     <div class="card">
                         <div class="card-body">
@@ -67,7 +67,7 @@
 
 
 
-                <div class="col">
+                <div class="col-md-auto">
                     <!--คงเหลือ-->
                     <div class="card  ">
                         <div class="card-body">
@@ -107,9 +107,9 @@
         <!-- 2 งาน -->
         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 
-            <div class="col">
+            <div class="col-md-auto">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn "data-bs-toggle="collapse"
@@ -130,7 +130,7 @@
                     </div>
 
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
 
                             <div class="card-body ">
@@ -186,7 +186,7 @@
 
 
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <!--รอการเบิกจ่ายทั้งหมด 3-->
@@ -236,7 +236,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body ">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -285,7 +285,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -298,7 +298,7 @@
                                     <div>
                                         <small class="text-xl">
                                             งบประมาณคงเหลือที่ไช้ได้<p>
-
+                                                &nbsp;
                                         </small>
                                     </div>
                                 </button>
@@ -309,7 +309,7 @@
 
                     </div>
 
-                    <div class="col-1">
+                    <div class="col-md-auto">
                         <div class="card ">
                             <div class="form-check form-switch">
                                 <input class="form-check-input "
@@ -343,7 +343,7 @@
             <!--งบประมาณ-->
             <div>
                 <div class="row mb-3">
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -364,7 +364,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card ">
 
                             <div class="card-body ">
@@ -417,7 +417,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <!--รอการเบิกจ่ายทั้งหมด 3-->
@@ -476,7 +476,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -527,7 +527,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -549,7 +549,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-auto">
                         <div class="card">
                             <div class="form-check form-switch">
                                 <input class="form-check-input"
@@ -585,7 +585,7 @@
                 <div>
                     <div class="row">
 
-                    <div class="col">
+                    <div class="col-md-auto">
                             <div class="card">
                                 <div class="card-body">
                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -607,7 +607,7 @@
                         </div>
 
 
-                        <div class="col">
+                        <div class="col-md-auto">
                             <div class="card">
 
                                 <div class="card-body ">
@@ -662,7 +662,7 @@
                         </div>
 
 
-                        <div class="col">
+                        <div class="col-md-auto">
                             <div class="card">
                                 <div class="card-body">
                                     <!--รอการเบิกจ่ายทั้งหมด 2-->
@@ -718,7 +718,7 @@
 
 
 
-                        <div class="col">
+                        <div class="col-md-auto">
                             <div class="card">
                                 <div class="card-body">
                                     <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -842,7 +842,7 @@
                             </div>
                         </div> --}}
 
-                        <div class="col">
+                        <div class="col-md-auto">
                             <div class="card">
                                 <div class="card-body">
                                     <button class="btn "class="col-md-12 btn " data-bs-toggle="collapse"
@@ -865,7 +865,7 @@
                             </div>
                         </div>
 
-                        <div class="col">
+                        <div class="col-md-auto">
                             <div class="card">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input"

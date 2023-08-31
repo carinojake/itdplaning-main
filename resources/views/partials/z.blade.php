@@ -8,6 +8,8 @@
                                 @csrf
                                 <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
                             </form>
+                            <a onclick="history.back()"
+                                class="btn btn-secondary">กลับ</a>
 {{--
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')

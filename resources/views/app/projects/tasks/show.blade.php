@@ -2,6 +2,7 @@
     <x-slot:content>
         {{ Breadcrumbs::render('project.task.show', $project, $task) }}
         <x-card>
+   {{--   @if ($task->task_refund_pa_status > 0) --}}
             @if ($task['task_parent_sub'] === 2)
             <x-slot:toolbar>
 
@@ -20,7 +21,7 @@
                 <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
             </form>
 
-                <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                     class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                 </a>
 
@@ -47,11 +48,12 @@
                     <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
                 @endif
-                <a onclick="history.back()"
+                <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
                     class="btn btn-secondary">กลับ</a>
             </x-slot:toolbar>
         @endif
-            @if ($task['task_parent'] == null)
+
+        @if ($task['task_parent'] == null)
                 <x-slot:toolbar>
 {{--
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundDestroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
@@ -67,34 +69,42 @@
                     <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
                 </form>
 
-                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                     </a>
 
+
+
+
+                    @if ($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] > 0)
                     <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
 
-
-                    @if ($task->task_budget_it_operating > 0)
-                        <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-                    @elseif ($task->task_budget_it_investment > 0)
-                        <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    @elseif ($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] > 0)
+                    <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                        class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
+
+                    <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-                    @elseif ($task->task_budget_gov_utility > 0)
-                        <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    @elseif ($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] > 0)
+                    <a href="{{ route('project.task.createto', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                        class="btn btn-info text-white">เพิ่มรายการ กิจกรรม </a>
+
+                    <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
                     @endif
-                    <a onclick="history.back()"
+                    <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
                         class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
@@ -102,18 +112,18 @@
 
             @if ($contract)
                 <x-slot:toolbar>
-                    <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark">แก้ไขeditsub
                         {{ Helper::projectsType($project->project_type) }} </a>
 
 
                     <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
-                    <a onclick="history.back()"
-                        class="btn btn-secondary">กลับ</a>
+                        <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
+                            class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
-
+        {{-- @endif --}}
 
            {{--  @include('partials.taskx') --}}
 
