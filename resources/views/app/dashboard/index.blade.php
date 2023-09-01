@@ -1111,7 +1111,7 @@
                     })
                 );
                 var data = {!! $chart_data_xy !!}
-
+              //  var data1 = {!! $taskcon_pay_sum_1 !!}
               //  var data1 = {!! $taskcosttotals !!}
               //  var date2 = {!! $taskcosttotals2_json !!}
 
@@ -1163,18 +1163,20 @@
 
                     });
 
-                    let yRenderer = yAxis.get("renderer");
-yRenderer.ticks.template.setAll({
-  minPosition: 0.0,
-  maxPosition: 1.1,
-  visible: true
-});
-yRenderer.labels.template.setAll({
-  minPosition: 0.0,
-  maxPosition: 1.1
-});
+                                        let yRenderer = yAxis.get("renderer");
+                    yRenderer.ticks.template.setAll({
+                    minPosition: 0.0,
+                    maxPosition: 1.1,
+                    visible: true
+                    });
+                    yRenderer.labels.template.setAll({
+                    minPosition: 0.0,
+                    maxPosition: 1.1
+                    });
 
                     series.data.setAll(data);
+
+
                     // Make stuff animate on load
                     // https://www.amcharts.com/docs/v5/concepts/animations/
                     series.appear();
@@ -1194,8 +1196,8 @@ yRenderer.labels.template.setAll({
                     legend.data.push(series);
                 };
                 //  makeSeries("การใช้จ่ายประมาณ", "total_cost");
-              makeSeries("ค่าใช้จ่ายเดือน", "total_cost");
-
+              makeSeries("ค่าใช้จ่ายเดือน", "total_cost_pay");
+              //makeSeries2("ค่าใช้จ่ายเดือน", "total_cost");
             }); // end am5.ready()
         </script>
 

@@ -1638,7 +1638,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
        // $pay_date_str = $request->input('taskcon_pay_date');
         $pay_date_str = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
-        $pay_date_obj = date_create_from_format('d/m/Y', $pay_date_str);
+        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
 
         if ($pay_date_obj !== false) {
             $pay_date_obj->modify('-543 years');
@@ -1740,6 +1740,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
 
 
+        //dd($taskcon);
 
 
 

@@ -121,7 +121,6 @@ class DashboardController extends Controller
 
 
 
-
         $fiscal_year = $request->input('fiscal_year');
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
@@ -131,29 +130,124 @@ class DashboardController extends Controller
 
         //($fiscal_years);
 
+         (
+            $taskcon_pay_sum_1 = DB::table('tasks')
+            ->selectRaw("
+                DATE_FORMAT((taskcons.taskcon_pay_date) + INTERVAL 543 YEAR, '%b %Y', 'th_TH') AS task_pay_month,
+                DATE_FORMAT((taskcons.taskcon_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS taskcon_month,
+                SUM(COALESCE(taskcons.taskcon_pay, 0)) AS iv,
+                SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay
+            ")
+          ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+            ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            //->where('tasks.task_cost_it_operating', '>', 1)
+            //->where('tasks.task_type', 1)
+            ->whereNull('tasks.deleted_at') // Replacing the original NULL check
+            //->where('projects.project_fiscal_year', '=', $fiscal_year)
+            ->where('projects.project_fiscal_year', '=', $fiscal_year)
+           ->groupBy('task_pay_month','taskcon_month')
+            ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
+            //->toSql()
+            ->get()
+           //->toJson(JSON_NUMERIC_CHECK)
+    );
 
-        ($task_pay_xy  =  Task::select(DB::raw(" DATE_FORMAT((tasks.task_pay_date)+ INTERVAL 543 YEAR, '%b %Y', 'th_TH') AS task_pay_month,
+       // dd($taskcon_pay_sum_1);
+        ($task_pay_xy  =
+        DB::table('tasks')
+            ->selectRaw("
+
+
+        DATE_FORMAT((tasks.task_pay_date)+ INTERVAL 543 YEAR, '%b %Y', 'th_TH') AS task_pay_month,
+
+        DATE_FORMAT((tasks.task_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS task_month,
+
+        DATE_FORMAT((taskcons.taskcon_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS taskcon_month,
 
         COALESCE(SUM(tasks.task_pay), 0)AS total_cost,
 
          COALESCE(SUM(tasks.task_cost_it_operating), 0) AS total_task_cost_it_operating,
          COALESCE(SUM(tasks.task_cost_it_investment), 0) AS total_task_cost_it_investment,
-         COALESCE(SUM(tasks.task_cost_gov_utility), 0) AS total_cost_gov_utility "))
+         COALESCE(SUM(tasks.task_cost_gov_utility), 0) AS total_cost_gov_utility,
+         SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay
 
 
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+
+
+         ")
+
+
+         //->leftJoin(DB::raw("($taskcon_pay_sum_1 )"), 'taskcon_pay_sum_1.task_month', '=', 'tasks.task_month')
+
+         ->leftJoin('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+         ->leftJoin('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+         ->leftJoin('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+         ->leftJoin('projects', 'tasks.project_id', '=', 'projects.project_id')
+
+
             ->where('projects.project_fiscal_year', '=', $fiscal_year)
+            ->where('tasks.deleted_at', NULL)
             ->whereNotNull('tasks.task_pay_date')
-            ->groupBy('task_pay_month')
+            ->groupBy('task_pay_month','task_month','taskcon_month')
             ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
             ->get()
-            ->toJson(JSON_NUMERIC_CHECK)
+           // ->toJson(JSON_NUMERIC_CHECK)
         );
+
+        //dd($task_pay_xy,$taskcon_pay_sum_1);
         // Convert the chart data to an array
+
+        $mergedCollection = $task_pay_xy->map(function($item) use ($taskcon_pay_sum_1) {
+            // Find the corresponding item in $taskcon_pay_sum_1 based on 'taskcon_month'
+            $correspondingItem = $taskcon_pay_sum_1->firstWhere('taskcon_month', $item->task_month);
+
+            // Find the corresponding item in $taskcon_pay_sum_1 based on 'total_taskcon_pay'
+            $correspondingItem2 = $taskcon_pay_sum_1->firstWhere('total_taskcon_pay', $item->total_taskcon_pay ?? null);
+
+            // Find the corresponding item in $taskcon_pay_sum_1 based on 'total_cost'
+            $correspondingItem3 = $taskcon_pay_sum_1->firstWhere('total_cost', $item->total_cost ?? null);
+
+            // Initialize 'total_cost_pay' to zero
+            $total_cost_pay = 0;
+
+            // If a corresponding item is found based on 'taskcon_month', merge the two items
+            if ($correspondingItem) {
+                $merged = (object) array_merge((array) $item, (array) $correspondingItem);
+                $total_cost_pay = ($merged->total_taskcon_pay ?? 0) + ($merged->total_cost ?? 0);
+                $merged->total_cost_pay = $total_cost_pay;
+                return $merged;
+            }
+
+            // If no corresponding item is found, set 'total_cost_pay' to the sum of 'total_taskcon_pay' and 'total_cost'
+            $total_cost_pay = ($item->total_taskcon_pay ?? 0) + ($item->total_cost ?? 0);
+
+            // Add the 'total_cost_pay' field to the original item and return it
+            $item->total_cost_pay = $total_cost_pay;
+            return $item;
+        });
+
+
+
+
+        $jsonMergedCollection = $mergedCollection->toJson(JSON_NUMERIC_CHECK);
+
+
+        ($jsonMergedCollection);
+        // Now, $mergedCollection contains the merged data.
+       // dd($mergedCollection);
+
         ($chart_data = $task_pay_xy);
 
         // Convert the chart data to JSON
-        ($chart_data_xy = ($chart_data));
+
+      //  dd($mergedCollection->toJson(JSON_NUMERIC_CHECK));
+
+       // dd($mergedCollection);
+       ($chart_data_xy = ($jsonMergedCollection));
+
+       // ($chart_data_xy = ($chart_data));
 
 
         ($contracts = Contract::where('contract_fiscal_year', $fiscal_year)->count());
@@ -1367,6 +1461,7 @@ as d')
  return view (
                 'app.dashboard.index',
                 compact(
+                    'taskcon_pay_sum_1',
                     'fiscal_years',
                     'fiscal_year',
                     'task_pay_xy',

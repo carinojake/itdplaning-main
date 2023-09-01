@@ -39,15 +39,15 @@
               </div>
               <div class="row">
                 <div class="col-3">{{ __('จำนวนเงิน PR') }}</div>
-                <div class="col-9">{{ $taskcon->taskcon_cost_gov_utility }}</div>
+                <div class="col-9">{{ number_format($taskcon->taskcon_cost_gov_utility) }}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('เลขที่ PA') }}</div>
                 <div class="col-9">{{ $taskcon->taskcon_pp }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('จำนวนเงิน PA') }}</div>
-                <div class="col-9">{{ $taskcon->taskcon_pay}}</div>
+                <div class="col-3">{{ __('จำนวนเงิน PP') }}</div>
+                <div class="col-9">{{ number_format($taskcon->taskcon_pay)}}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('บันทึก PP') }}</div>
