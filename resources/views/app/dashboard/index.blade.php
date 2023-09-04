@@ -614,7 +614,7 @@
     </x-slot:css>
     <x-slot:javascript>
         <!-- Resources -->
-        <script src="{{ asset('js/jquery-3.6.1.min.') }}"></script>
+
         <script src="{{ asset('vendors/amcharts5/index.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/xy.js') }}"></script>
         <script src="{{ asset('vendors/amcharts5/percent.js') }}"></script>
