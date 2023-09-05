@@ -555,8 +555,9 @@
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
                             changeYear: true,
-                            isBuddhist: true,
-                            defaultDate: toDay,
+                           // isBuddhist: true,
+                           // defaultDate: toDay,
+                           language:'th-th'
                             dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
                             dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
                             monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',

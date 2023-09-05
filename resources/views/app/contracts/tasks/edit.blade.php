@@ -237,14 +237,15 @@
                                         <h4>เบิกจ่าย</h4>
                                         <div class="col-md-4">
                                             <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-
                                             <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
-                                            @if (is_numeric($taskcon->taskcon_pay_date))
+                                            @if (($taskcon->taskcon_pay_date))
                                             value="{{ \Helper::date4(date('Y-m-d H:i:s', intval($taskcon->taskcon_pay_date))) }}"
                                         @endif
-
-                                            >
+                                        >
                                         </div>
+
+
+
                                         <div class="col-md-4">
                                             <label for="taskcon_pay" class="form-label">{{ __('PP เบิก') }}</label>
                                             <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
@@ -279,7 +280,7 @@
     <x-slot:css>
     </x-slot:css>
     <x-slot:javascript>
-        <script type="text/javascript">
+    {{--     <script type="text/javascript">
             $(function () {
               var d = new Date();
               var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
@@ -287,17 +288,27 @@
 
               // กรณีต้องการใส่ปฏิทินลงไปมากกว่า 1 อันต่อหน้า ก็ให้มาเพิ่ม Code ที่บรรทัดด้านล่างด้วยครับ (1 ชุด = 1 ปฏิทิน)
 
-              $("#taskcon_start_date").datepicker({  changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay, dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+              $("#taskcon_start_date").datepicker({  changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true,
+              // defaultDate: toDay,
+                dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
                 dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
                 monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
                 monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
 
-              $("#taskcon_end_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+              $("#taskcon_end_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true,
+             // defaultDate: toDay,
+              dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
                 dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
                 monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
                 monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
 
-                $("#taskcon_pay_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+                $("#taskcon_pay_date").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd/mm/yy',
+                     isBuddhist: true,
+               // defaultDate: toDay,
+                dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
                 dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
                 monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
                 monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
@@ -309,7 +320,46 @@
 
 
               });
-          </script>
+          </script> --}}
+
+<script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
+
+        var d = new Date();
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+        $("#taskcon_start_date,#taskcon_end_date, #taskcon_pay_date")
+            .datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                isBuddhist: true,
+                defaultDate: toDay,
+                dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+                monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                    'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                ],
+                monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                    'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                ],
+
+
+            });
+    });
+</script>
+
+
+
+
+
+
+
+
 
 <script>
     $(document).ready(function() {

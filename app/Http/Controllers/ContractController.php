@@ -1612,40 +1612,40 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
         $start_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_start_date'))->format('Y-m-d');
         $end_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_end_date'))->format('Y-m-d');
-
+        $pay_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
+        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
 
 
 
 
 
-
-        if ($start_date_obj === false || $end_date_obj === false  ) {
+        if ($start_date_obj === false || $end_date_obj === false   ) {
             // Handle date conversion error
             // You can either return an error message or use a default date
 
         } else {
             $start_date_obj->modify('-543 years');
             $end_date_obj->modify('-543 years');
-
+            $pay_date_obj->modify('-543 years');
             $start_date = date_format($start_date_obj, 'Y-m-d');
             $end_date = date_format($end_date_obj, 'Y-m-d');
-
+            $pay_date = date_format($pay_date_obj, 'Y-m-d');
         }
 
 
        // $pay_date_str = $request->input('taskcon_pay_date');
-        $pay_date_str = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
-        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
+       // $pay_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
+       // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
 
-        if ($pay_date_obj !== false) {
+       /*  if ($pay_date_obj !== false) {
             $pay_date_obj->modify('-543 years');
             $pay_date = $pay_date_obj->format('Y-m-d');
         } else {
             $pay_date = null; // or any default value
-        }
+        } */
 
 
 

@@ -207,8 +207,10 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
 
-
-
+    {{--     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" rel="stylesheet"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/locales/bootstrap-datepicker.th.min.js"></script>
+ --}}
 
         <script>
             $(document).ready(function() {
@@ -217,33 +219,35 @@
         </script>
 
 
-        <script>
-            $(function() {
-                if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                    alert("jQuery or jQuery UI is not loaded");
-                    return;
-                }
+<script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
 
-                var d = new Date();
-                var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        var d = new Date();
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                $("#project_start_date, #project_end_date").datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    changeMonth: true,
-                    changeYear: true,
-                    isBuddhist: true,
-                    defaultDate: toDay,
-                    dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                    dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                        'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                    ],
-                    monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                        'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                    ]
-                });
-            });
-        </script>
+        $("#project_start_date, #project_end_date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+
+
+            defaultDate: toDay,
+
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+            ],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                'ต.ค.', 'พ.ย.', 'ธ.ค.'
+            ]
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
