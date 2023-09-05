@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailables\Content;
 use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 
@@ -128,6 +128,9 @@ class DashboardController extends Controller
 
         $fiscal_years = Project::whereNotNull('project_fiscal_year')->pluck('project_fiscal_year')->unique()->sort()->values();
 
+
+
+
         //($fiscal_years);
 
          (
@@ -154,7 +157,7 @@ class DashboardController extends Controller
            //->toJson(JSON_NUMERIC_CHECK)
     );
 
-       // dd($taskcon_pay_sum_1);
+    //    dd($taskcon_pay_sum_1);
         ($task_pay_xy  =
         DB::table('tasks')
             ->selectRaw("
@@ -164,7 +167,7 @@ class DashboardController extends Controller
 
         DATE_FORMAT((tasks.task_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS task_month,
 
-        DATE_FORMAT((taskcons.taskcon_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS taskcon_month,
+
 
         COALESCE(SUM(tasks.task_pay), 0)AS total_cost,
 
@@ -174,11 +177,9 @@ class DashboardController extends Controller
          SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay
 
 
-
-
          ")
 
-
+// DATE_FORMAT((taskcons.taskcon_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS taskcon_month,
          //->leftJoin(DB::raw("($taskcon_pay_sum_1 )"), 'taskcon_pay_sum_1.task_month', '=', 'tasks.task_month')
 
          ->leftJoin('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
@@ -190,13 +191,13 @@ class DashboardController extends Controller
             ->where('projects.project_fiscal_year', '=', $fiscal_year)
             ->where('tasks.deleted_at', NULL)
             ->whereNotNull('tasks.task_pay_date')
-            ->groupBy('task_pay_month','task_month','taskcon_month')
+            ->groupBy('task_pay_month','task_month')
             ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
             ->get()
            // ->toJson(JSON_NUMERIC_CHECK)
         );
 
-        //dd($task_pay_xy,$taskcon_pay_sum_1);
+       // dd($task_pay_xy,$taskcon_pay_sum_1);
         // Convert the chart data to an array
 
         $mergedCollection = $task_pay_xy->map(function($item) use ($taskcon_pay_sum_1) {
@@ -210,7 +211,7 @@ class DashboardController extends Controller
             $correspondingItem3 = $taskcon_pay_sum_1->firstWhere('total_cost', $item->total_cost ?? null);
 
             // Initialize 'total_cost_pay' to zero
-            $total_cost_pay = 0;
+           // $total_cost_pay = 0;
 
             // If a corresponding item is found based on 'taskcon_month', merge the two items
             if ($correspondingItem) {
@@ -228,13 +229,13 @@ class DashboardController extends Controller
             return $item;
         });
 
-
+       // dd($mergedCollection);
 
 
         $jsonMergedCollection = $mergedCollection->toJson(JSON_NUMERIC_CHECK);
 
 
-        ($jsonMergedCollection);
+      //  dd($jsonMergedCollection);
         // Now, $mergedCollection contains the merged data.
        // dd($mergedCollection);
 
@@ -1457,6 +1458,28 @@ as d')
             ($total_expenses = (($osa) + ($isa) + ($utsc)));;
 
 
+// คัดเลือก tasks ที่เป็นในไตรมาสที่ 2 และปี 2566
+
+
+
+// First, let's get all tasks
+/* $tasks = DB::table('tasks')->select('tasks.*')->get();
+
+// Then, let's filter them for the 2nd quarter (มกราคม - มีนาคม) of 2566
+$tasksInQ2 = $tasks->filter(function ($task) {
+    return Carbon::parse($task->task_pay_date)->year = $fiscal_year
+        && in_array(Carbon::parse($task->task_pay_date)->month, [1, 2, 3]); // มกราคม, กุมภาพันธ์, มีนาคม
+});
+//dd($tasksInQ2);
+$summary = [
+    'งบดำเนินงาน' => $tasksInQ2->sum('task_cost_it_operating'),
+    'งบกลาง ICT' => $tasksInQ2->sum('task_cost_it_investment'),
+    'งบสาธารณูปโภค' => $tasksInQ2->sum('task_cost_gov_utility'),
+];
+
+$summary['รวมทั้งหมดในไตรมาสที่ 2'] = array_sum($summary);
+
+dd($summary); */
 
  return view (
                 'app.dashboard.index',
