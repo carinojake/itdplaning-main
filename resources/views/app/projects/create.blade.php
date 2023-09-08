@@ -128,7 +128,11 @@
                                         </div>
                                     </div>
 
-
+                                {{--     <div class="row">
+                                        <div class="col-lg-4">
+                                          <div data-coreui-locale="th-th" data-coreui-size="sm" data-coreui-toggle="date-picker"></div>
+                                        </div>
+                                      </div> --}}
 
                                     <div class="col-md-12 mt-3">
                                         <label for="project_description"
@@ -199,18 +203,22 @@
 
     </x-slot:content>
     <x-slot:css>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+
     </x-slot:css>
     <x-slot:javascript>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
 
-    {{--     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" rel="stylesheet"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/locales/bootstrap-datepicker.th.min.js"></script>
- --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+   {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
         <script>
             $(document).ready(function() {
@@ -221,21 +229,20 @@
 
 <script>
     $(function() {
-        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-            alert("jQuery or jQuery UI is not loaded");
-            return;
-        }
 
-        var d = new Date();
-        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+
+
+
+       // var d = new Date();
+       // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
         $("#project_start_date, #project_end_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
 
-
-            defaultDate: toDay,
+            language:"th-th",
+          /*   defaultDate: toDay,
 
             dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
             dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
@@ -244,27 +251,23 @@
             ],
             monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-            ]
+            ] */
+        });
+
+        $('#project_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#project_end_date").datepicker("setStartDate", startDate);
+        });
+
+        $('#project_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#project_start_date").datepicker("setEndDate", endDate);
         });
     });
 </script>
 
-<script>
-    $(document).ready(function() {
-       $("#project_start_date").datepicker({});
-        $("#project_end_date").datepicker({ });
-        $('#project_start_date').change(function() {
-                        startDate = $(this).datepicker('getDate');
-                        $("#project_end_date").datepicker("option", "minDate", startDate);
-                    })
 
-                    $('#project_end_date').change(function() {
-                        endDate = $(this).datepicker('getDate');
-                        $("#project_start_date").datepicker("option", "maxDate", endDate);
-                    })
 
-    });
-    </script>
 
         <script>
             // Example starter JavaScript for disabling form submissions if there are invalid fields

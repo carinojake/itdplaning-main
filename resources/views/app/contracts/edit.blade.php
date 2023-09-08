@@ -218,8 +218,20 @@
     </div>
   </x-slot:content>
   <x-slot:css>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+
   </x-slot:css>
   <x-slot:javascript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+           {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+
+
+
+
     <script>
         function calculateRefund() {
           var pr_budget = parseFloat(document.getElementById("contract_pr_budget").value);
@@ -231,29 +243,20 @@
 
 <script>
     $(function() {
-        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+/*         if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
             alert("jQuery or jQuery UI is not loaded");
             return;
         }
 
         var d = new Date();
-        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543); */
 
         $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                isBuddhist: true,
-                //defaultDate: toDay,
-                dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                    'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                ],
-                monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                    'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                ],
+            changeMonth: true,
+            changeYear: true,
+            language:"th-th",
 
                 onSelect: calculateDuration
             });
@@ -261,3 +264,6 @@
 </script>
   </x-slot:javascript>
 </x-app-layout>
+
+
+

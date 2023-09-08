@@ -1405,7 +1405,7 @@ as d')
 
 
                ($ut_pay_pa_sum = DB::table('tasks')
-               ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as utsc_pay_pa,
+               ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as iv,
                SUM(COALESCE(task_pay,0)) as utsc_pay_pa ,
                sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay')
                ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
@@ -1425,7 +1425,7 @@ as d')
              ->where('project_fiscal_year',  $fiscal_year)
       ->get());
       ($json = json_decode($ut_pay_pa_sum));
-      ($utsc_pay_pa = $json[0]->utsc_pay_pa);
+      ($utsc_pay_pa = $json[0]->iv);
        ($utsc_pay_pa = (float)$utsc_pay_pa);
 
 

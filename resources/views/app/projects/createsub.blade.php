@@ -354,35 +354,63 @@
             });
         </script>
 
-        <script>
-            $(function() {
-                if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                    alert("jQuery or jQuery UI is not loaded");
-                    return;
-                }
 
-                var d = new Date();
-                var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+<script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
+     //   var d = new Date();
+     //   var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                $("#task_start_date, #task_end_date").datepicker({
-
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: 'dd/mm/yy',
-                    isBuddhist: true,
-                  //  defaultDate: toDay,
-                  language:'th-th'
-                    dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                    dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                        'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                    ],
-                    monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                        'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                    ]
+        var dateBefore=null;
+        $("#project_start_date, #project_end_date").datepicker({
+            dateFormat: 'dd-mm-yy',
+       // showOn: 'button',
+//      buttonImage: 'http://jqueryui.com/demos/datepicker/images/calendar.gif',
+       // buttonImageOnly: false,
+        dayNamesMin: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNamesShort: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+        changeMonth: true,
+        changeYear: true,
+        beforeShow:function(){
+            if($(this).val()!=""){
+                var arrayDate=$(this).val().split("-");
+                arrayDate[2]=parseInt(arrayDate[2])-543;
+                $(this).val(arrayDate[0]+"-"+arrayDate[1]+"-"+arrayDate[2]);
+            }
+            setTimeout(function(){
+                $.each($(".ui-datepicker-year option"),function(j,k){
+                    var textYear=parseInt($(".ui-datepicker-year option").eq(j).val())+543;
+                    $(".ui-datepicker-year option").eq(j).text(textYear);
                 });
-            });
-        </script>
+            },50);
+        },
+        onChangeMonthYear: function(){
+            setTimeout(function(){
+                $.each($(".ui-datepicker-year option"),function(j,k){
+                    var textYear=parseInt($(".ui-datepicker-year option").eq(j).val())+543;
+                    $(".ui-datepicker-year option").eq(j).text(textYear);
+                });
+            },50);
+        },
+        onClose:function(){
+            if($(this).val()!="" && $(this).val()==dateBefore){
+                var arrayDate=dateBefore.split("-");
+                arrayDate[2]=parseInt(arrayDate[2])+543;
+                $(this).val(arrayDate[0]+"/"+arrayDate[1]+"/"+arrayDate[2]);
+            }
+        },
+        onSelect: function(dateText, inst){
+            dateBefore=$(this).val();
+            var arrayDate=dateText.split("-");
+            arrayDate[2]=parseInt(arrayDate[2])+543;
+            $(this).val(arrayDate[0]+"/"+arrayDate[1]+"/"+arrayDate[2]);
+        }
+    });
+});
+</script>
 
     </x-slot:javascript>
 </x-app-layout>

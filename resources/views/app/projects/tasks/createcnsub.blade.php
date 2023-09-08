@@ -749,6 +749,8 @@
         </div>
     </x-slot:content>
     <x-slot:css>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+
     </x-slot:css>
     <x-slot:javascript>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -758,6 +760,12 @@
 
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+       {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+        <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+        <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
 
         <script>
             $(document).ready(function() {
@@ -782,35 +790,28 @@
             });
         </script>
 
-        <script>
-            $(function() {
-                if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                    alert("jQuery or jQuery UI is not loaded");
-                    return;
-                }
+<script>
+    $(function() {
+        $("#task_start_date, #task_end_date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            language:"th-th",
 
-                var d = new Date();
-                var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        });
 
-                $("#task_start_date, #task_end_date").datepicker({
+        $('#task_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#task_end_date").datepicker("setStartDate", startDate);
+        });
 
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: 'dd/mm/yy',
+        $('#task_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#task_start_date").datepicker("setEndDate", endDate);
+        });
+    });
+</script>
 
-                    isBuddhist: true,
-                   // defaultDate: toDay,
-                    dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                    dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                        'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                    ],
-                    monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                        'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                    ]
-                });
-            });
-        </script>
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields

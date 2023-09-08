@@ -3243,15 +3243,18 @@ dd($cteQuery); */
        ($tasks=$task->subtask);
         //  dd($task);
         //   dd($project,$task);
+        ($tasks_sub=$task->subtask);
+
 
 
         //($id = Hashids::decode($project));
         $id_tasks = Task::select('task_id')->where('task_id', $task->task_id)
 ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
-
-               // dd($id_tasks);
+$id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
+->whereNull('tasks.deleted_at')->get()->pluck('task_id');
+               // dd($id_tasks,$id_tasks_sub);
         $cteQuery = DB::table('tasks')
-        ->withRecursiveExpression('cte', function ($rec) use ($id_tasks, $project) {
+        ->withRecursiveExpression('cte', function ($rec) use ($id_tasks, $project,$id_tasks_sub) {
             $rec->select(
                 't.task_id',
 
@@ -3317,7 +3320,7 @@ dd($cteQuery); */
 
 
                 ->from('tasks as t')
-                ->whereIn('t.task_id', $id_tasks)
+                ->whereIn('t.task_id', $id_tasks_sub)
                 ->whereNull('t.deleted_at')
                 ->unionAll(function ($uni) {
                     $uni->select(
@@ -3406,13 +3409,14 @@ dd($cteQuery); */
 
 
    //dd($combinedQuery);
+  // dd($task->subtask);
+      ($cteQuery->get());
 
-      //dd($cteQuery->get());
+     ($combinedQuery);
+      //$cteQuery = $cteQuery->first();
 
-      $cteQuery = $cteQuery->first();
 
-
-     // dd($cteQuery);
+      //dd($cteQuery);
 
 
 
@@ -3651,7 +3655,7 @@ dd($cteQuery); */
        //dd($contract);
 
       //  dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('cteQuery','task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
+        return view('app.projects.tasks.show', compact('combinedQuery','cteQuery','task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
         'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
@@ -4684,7 +4688,7 @@ dd($cteQuery); */
         $task->task_parent_sub_cost = $task_cost_gov_utility+$task_cost_it_operating+$task_cost_it_investment?? null;
         $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
         $task->task_type = $request->input('task_type');
-         //dd($task);
+        // dd($task);
         if ($task->save()) {
             //insert contract
          /*    if( $task->task_parent_sub= 2){

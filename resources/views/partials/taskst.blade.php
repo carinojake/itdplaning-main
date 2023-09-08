@@ -77,7 +77,10 @@
                     <th width="200">ข้อมูล</th>
                 </tr>
                 @if ($task->subtask->count() > 0)
-                    @foreach ($task->subtask as $index => $subtask  )
+                @foreach ($task->subtask as $index => $subtask)
+                @php
+                    $relatedData = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
+                @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $subtask->task_name }}{!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
@@ -94,41 +97,11 @@
                             @else
                                 {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
                             @endif
-
-
-                               {{--  @if ($subtask->contract->count() > 0)
-                                    @foreach ($subtask->contract as $contract)
-                                        <button type="button" class="badge btn btn-success text-white"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal{{ $contract->hashid }}">
-
-                                            @if ($contract->contract_type == 4)
-                                                {{ \Helper::contractType($contract->contract_type) }}"_"{{ strtolower($contract->contract_number) }}
-                                            @else
-                                                สญ.ที่ {{ strtolower($contract->contract_number) }}
-                                            @endif
-                                        </button>
-
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal{{ $contract->hashid }}" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-xl">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">สัญญา {{ $contract->contract_number }}</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <!-- ... (เนื้อหาในส่วนนี้เหมือนเดิม) ... -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif --}}
                             </td>
                             <td>
-                                @if($cteQuery->totalLeastconPay >1)
-                                {{ number_format($cteQuery->totalLeastconPay, 2) }}
+                                @if($relatedData->totalLeastconPay >1)
+                                {{ number_format($relatedData->totalLeastconPay, 2) }}
+
                                 @elseif($subtask->task_parent_sub_cost > 1)
                                     {{ number_format($subtask->task_parent_sub_pay, 2) }}
 

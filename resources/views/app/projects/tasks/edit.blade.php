@@ -294,6 +294,8 @@
         </div>
     </x-slot:content>
     <x-slot:css>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+
     </x-slot:css>
     <x-slot:javascript>
 
@@ -301,6 +303,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+       {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+        <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+        <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
         <script>
             const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
             const taskContractContainer = document.getElementById('task-contract-container');
@@ -378,34 +386,27 @@
             });
         </script>
 
-        <script>
-            $(function() {
-                if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                    alert("jQuery or jQuery UI is not loaded");
-                    return;
-                }
+<script>
+    $(function() {
+        $("#task_start_date, #task_end_date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            language:"th-th",
 
-                var d = new Date();
-                var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        });
 
-                $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
+        $('#task_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#task_end_date").datepicker("setStartDate", startDate);
+            $("#task_pay_date").datepicker("setStartDate", startDate);
+        });
 
-                    dateFormat: 'dd/mm/yy',
-                    isBuddhist: true,
-                   // defaultDate: toDay,
-                    dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                    dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                        'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                    ],
-                    monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                        'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                    ]
-                });
-            });
-        </script>
-
+        $('#task_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#task_start_date").datepicker("setEndDate", endDate);
+        });
+    });
+</script>
     </x-slot:javascript>
 </x-app-layout>
