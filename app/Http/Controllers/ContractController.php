@@ -1130,7 +1130,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $taskName = $task['task_name'] ?? 'Default Task Name';
 
         $taskbudget = str_replace(',', '', $task['taskbudget'] ?? null);
-        $taskcost = str_replace(',', '', $task['taskcost'] ?? null);
+        $taskcost = str_replace(',', '', $task['taskbudget'] ?? null);
 
         $defaultBudget = 'Default budget';
         $defaultCost = 'Default cost';
