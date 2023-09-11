@@ -14,7 +14,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('ค่าใช้จ่ายสำนักงาน 2') }}">
+                        <x-card title="{{ __('ค่าใช้จ่ายสำนักงาน') }}">
                             <x-slot:toolbar>
                                 {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 
@@ -604,10 +604,16 @@
 
         </x-slot:css>
         <x-slot:javascript>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
             <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
            {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
@@ -738,7 +744,7 @@
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
                                     if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกินwwww " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                      /*  $(this).val(max.toFixed(2)); */
            $(this).val(0);
                     }
@@ -855,7 +861,7 @@
  --}}
  <script>
     $(function() {
-        $("#task_start_date, #task_end_date").datepicker({
+        $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,

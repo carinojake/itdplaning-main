@@ -1160,11 +1160,11 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{{--             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script>
+       {{--   <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
-            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script> --}}
+            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
             <script>
@@ -1815,16 +1815,16 @@
                         return;
                     }
 
-                    var d = new Date();
-                    var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+                 //   var d = new Date();
+                   // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                    $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
+                    $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
                             changeYear: true,
-                            isBuddhist: true,
-                            defaultDate: toDay,
+                            language:"th-th",
+                       /*     defaultDate: toDay,
                             dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
                             dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
                             monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
@@ -1832,36 +1832,117 @@
                             ],
                             monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
                                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                            ],
+                            ], */
 
-                            onSelect: calculateDuration
+
                         });
-                });
-            </script>
-            <script>
-                function calculateDuration() {
-                    var startDate = $('#insurance_start_date').datepicker('getDate');
-                    var endDate = $('#insurance_end_date').datepicker('getDate');
-                    if (startDate && endDate) {
-                        var diff = Math.abs(endDate - startDate);
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-                        $('#insurance_duration_months').text(months + " เดือน");
-                        $('#insurance_duration_days').text(days + " วัน");
+
+
+
+
+
+                        $('#contract_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#contract_end_date").datepicker("setStartDate", startDate);
+            $("#contract_sign_date").datepicker("setStartDate", startDate);
+        });
+
+        $('#contract_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#contract_start_date").datepicker("setEndDate", endDate);
+        });
+    });
+
+
+
+
+
+           </script>
+
+
+{{-- <script>
+    $(document).ready(function() {
+       $("#contract_start_date").datepicker({});
+        $("#contract_end_date").datepicker({ });
+        $("#contract_sign_date").datepicker({ });
+
+
+
+        $('#contract_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#contract_end_date").datepicker("option", "minDate", startDate);
+                        $("#contract_sign_date").datepicker("option", "minDate", startDate);
+                        $("#insurance_start_date").datepicker("option", "minDate", startDate);
+                        $("#insurance_end_date").datepicker("option", "minDate", startDate);
+                    })
+
+                    $('#contract_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#contract_start_date").datepicker("option", "maxDate", endDate);
+
+                    })
+
+    });
+    </script> --}}
+
+
+    <script>
+     /*    function calculateDuration() {
+            var startDate = $('#insurance_start_date').datepicker('getDate');
+            var endDate = $('#insurance_end_date').datepicker('getDate');
+            if (startDate && endDate) {
+                var diff = Math.abs(endDate - startDate);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                $('#insurance_duration_months').text(months + " เดือน");
+                $('#insurance_duration_days').text(days + " วัน");
+            }
+        } */
+
+        $(document).ready(function() {
+            $('#insurance_start_date, #insurance_end_date').datepicker({
+
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                            changeYear: true,
+                            language:"th-th",
+
+            });
+        });
+
+        function calculateDuration() {
+            var startDate = $('#insurance_start_date').datepicker('getDate');
+            var endDate = $('#insurance_end_date').datepicker('getDate');
+            if (startDate && endDate) {
+                var diff = Math.abs(endDate - startDate);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                $('#insurance_duration_months').text(months + " เดือน");
+                $('#insurance_duration_days').text(days + " วัน");
+            }
+        }
+                        function grandTotal(){
+                    calculateDuration();
+                    var days = $("#insurance_start_date").val();
+                    var rooms = $("#insurance_end_date").val();
+
+                    if( days != "" && parseInt(days) >0 ){
+                        if( rooms != "" ){
+                            var total = parseInt(days) * parseInt(rooms) * roomPrice;
+                            $("#grandtotal").val(total.toFixed(2)).css("color","black");
+                        }else{
+                            $("#grandtotal").val("").css("color","black");
+                        }
                     }
                 }
 
-                $(document).ready(function() {
-                    $('#insurance_start_date, #insurance_end_date').datepicker({
-
-                        dateFormat: "dd/mm/yy",
-
-
-                        onSelect: calculateDuration
-                    });
+                $("#insurance_start_date, #insurance_end_date").on("change",function(){
+                    grandTotal();
+                    $(".datepicker").hide();
                 });
-            </script>
 
+
+    </script>
             <script>
                 $(document).ready(function() {
                     $(":input").inputmask();

@@ -911,6 +911,12 @@ class ProjectController extends Controller
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
+        (float) $__budget_it_operating  = (float) $project['budget_it_operating'];
+        (float) $__budget_it_investment = (float) $project['budget_it_investment'];
+        (float) $__budget_gov_utility    = (float) $project['budget_gov_utility'];
+
+
+
         (float) $__budget     = $__budget_gov + $__budget_it;
         ((float) $__cost       = (float) $project['project_cost']);
         ((float) $__total_task_budget       = (float) $project['total_task_budget']);
@@ -964,15 +970,27 @@ class ProjectController extends Controller
 
 
 
+         $budget['budget_it_operating'] = $__budget_it_operating ;
+         $budget['budget_it_investment'] = $__budget_it_investment ;
+         $budget['budget_gov_utility'] = $__budget_gov_utility  ;
+
+
         $budget['total'] = $__budget;
         ($budget['budget_total_mm'] = $__mm);
         $budget['budget_total_taskcon_pay_con'] = $project['total_pay']+$__paycon;
         $budget['total_task_budget']= $__total_task_budget;
 
 
+
+
+
+
         $budget['budget_total_refund_pa_budget'] = $__prmm;
         $budget['budget_total_refund_pa_budget_end'] = $__total_task_refund_pa_budget_3;
-        $budget['budget_total_task_budget']= $__budget-($__total_task_budget-$__mm);
+        $budget['budget_total_task_budget']= ($__total_task_budget-$__mm);
+
+        $budget['budget_total_task_budget_it']=  $budget['budget_it_investment'] ;
+       $budget['budget_total_task_budget_gov']=  $budget['budget_gov_utility'];
 
         $budget['budget_total_task_budget_end']= $__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3);
 
@@ -981,7 +999,7 @@ class ProjectController extends Controller
 
 
 
-        // dd($budget);
+         //dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -2511,19 +2529,13 @@ dd($cteQuery); */
 
 
         ($ut_pay_pa_sum = DB::table('tasks')
-
-
-            ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as utsc_pay_pa,
+            ->selectRaw('SUM(COALESCE(task_pay,0))+sum(COALESCE(taskcons.taskcon_pay,0)) as iv,
             SUM(COALESCE(task_pay,0)) as utsc_pay_pa ,
             sum(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay')
             ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
-
-
-
-
             ->where('tasks.task_type', 1)
              ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
  // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
@@ -2531,7 +2543,7 @@ dd($cteQuery); */
             ->where('projects.project_id', ($id))
             ->get());
         ($json = json_decode($ut_pay_pa_sum));
-        ($utsc_pay_pa = $json[0]->utsc_pay_pa);
+        ($utsc_pay_pa = $json[0]->iv);
         ($utsc_pay_pa = (float)$utsc_pay_pa);
 
 

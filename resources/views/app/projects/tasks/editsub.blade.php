@@ -14,7 +14,7 @@
                 @endif
                 <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ 3333') }}{{ $task->task_name }}">
+                        <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ') }}{{ $task->task_name }}">
 
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -608,7 +608,7 @@
 
 <script>
     $(function() {
-        $("#task_start_date, #task_end_date").datepicker({
+        $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,

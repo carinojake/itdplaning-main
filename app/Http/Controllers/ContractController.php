@@ -1742,7 +1742,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-        $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00')?? null;
+        $taskcon->taskcon_pay_date     =  $pay_date ?? null;
 
 
 

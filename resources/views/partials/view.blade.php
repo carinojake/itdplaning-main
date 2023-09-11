@@ -535,7 +535,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
                                     {{--    {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                    {{ number_format(floatval($project['budget_it_investment'] -$budget['budget_total_task_budget_it']), 2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -851,7 +851,7 @@
                                         <div class="fs-4 fw-semibold btn btn-success">
                                            {{--  {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
-                                            {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                            {{ number_format(floatval($project['budget_gov_utility']- $budget['budget_total_task_budget_gov']), 2) }}
                                         </div>
                                         <div>
                                             <small class="text-xl">

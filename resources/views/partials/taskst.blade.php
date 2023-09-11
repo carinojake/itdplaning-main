@@ -143,7 +143,7 @@
 
 
 
-@if ($task['task_parent'] == 2 )
+@if ($task['task_parent'] == 9999 )
 <h5>มีสัญญา</h5>
 <div class="container">
     <div class="row">

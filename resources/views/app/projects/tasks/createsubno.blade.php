@@ -14,7 +14,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('ค่าใช้จ่ายสำนักงาน 1') }}">
+                        <x-card title="{{ __('ค่าใช้จ่ายสำนักงาน') }}">
                             <x-slot:toolbar>
                                 {{-- <a href="{{ route('contract.create') }}" class="btn btn-success text-white">C</a>
 

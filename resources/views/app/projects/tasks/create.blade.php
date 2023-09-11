@@ -14,7 +14,7 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มกิจกรรม (1)') }}">
+                        <x-card title="{{ __('เพิ่มกิจกรรม') }}">
 
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row g-3 needs-validation" novalidate>

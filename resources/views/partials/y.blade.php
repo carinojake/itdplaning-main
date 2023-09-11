@@ -1,7 +1,7 @@
 
 
 @isset($contract)
-    <h5>มีสัญญา11</h5>
+    <h5>มีสัญญา</h5>
     <div class="container">
         <div class="row">
             <div class="col-sm">
