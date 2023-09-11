@@ -99,17 +99,34 @@
                 <div class="col-md-6">
                   <label for="contract_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="contract_start_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $contract->contract_start_date) }}"></div>
+                 {{--  <div data-coreui-toggle="date-picker" data-coreui-locale="th-th"
+                  id="contract_start_date" data-coreui-format="dd/MM/yyyy"
+                  data-coreui-date="{{ date('m/d/Y', $contract->contract_start_date) }}">
+                </div> --}}
+                <input class="form-control" id="contract_start_date" name="contract_start_date"
+                                    value="{{ \Helper::date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}">
                 </div>
                 <div class="col-md-6">
                   <label for="contract_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="contract_end_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ date('m/d/Y', $contract->contract_end_date) }}"></div>
+              {{--     <div data-coreui-toggle="date-picker"
+                   data-coreui-locale="th-th"id="contract_end_date"
+                   data-coreui-format="dd/MM/yyyy"
+                    data-coreui-date="{{ date('m/d/Y', $contract->contract_end_date) }}">
+                </div> --}}
+                <input class="form-control" id="contract_end_date" name="contract_end_date"
+                                    value="{{ \Helper::date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}">
                 </div>
                 <div class="col-md-6">
                   <label for="contract_sign_date" class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                  <div data-coreui-toggle="date-picker" id="contract_sign_date" data-coreui-format="dd/MM/yyyy" data-coreui-date="{{ $contract->contract_sign_date ? date('m/d/Y', $contract->contract_sign_date) : '' }}"></div>
+       {{--            <div data-coreui-toggle="date-picker"
+                   data-coreui-locale="th-th" id="contract_sign_date"
+                    data-coreui-format="dd/MM/yyyy"
+                    data-coreui-date="{{ $contract->contract_sign_date ? date('m/d/Y', $contract->contract_sign_date) : '' }}"></div> --}}
+                    <input class="form-control" id="contract_sign_date" name="contract_sign_date"
+                    value="{{ \Helper::date4(date('Y-m-d H:i:s', $contract->contract_sign_date)) }}">
+
                 </div>
 
                 <div class="col-md-12">
@@ -223,10 +240,11 @@
   </x-slot:css>
   <x-slot:javascript>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-           {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
-            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
-            <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+   {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
 
 
 
@@ -251,14 +269,14 @@
         var d = new Date();
         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543); */
 
-        $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date, #insurance_end_date,#contract_er_start_date,#contract_po_start_date")
+        $("#contract_sign_date,#contract_start_date, #contract_end_date, #insurance_start_date,#insurance_end_date,#contract_er_start_date,#contract_po_start_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
             language:"th-th",
 
-                onSelect: calculateDuration
+                //onSelect: calculateDuration
             });
     });
 </script>

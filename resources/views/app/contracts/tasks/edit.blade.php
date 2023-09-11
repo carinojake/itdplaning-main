@@ -238,9 +238,9 @@
                                         <div class="col-md-4">
                                             <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
                                             <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
-                                            @if (($taskcon->taskcon_pay_date))
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', intval($taskcon->taskcon_pay_date))) }}"
-                                        @endif
+
+                                            value="{{ \Helper::date4($taskcon->taskcon_pay_date) }}"
+
                                         >
                                         </div>
 
@@ -278,49 +278,16 @@
         </div>
     </x-slot:content>
     <x-slot:css>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+
     </x-slot:css>
     <x-slot:javascript>
-    {{--     <script type="text/javascript">
-            $(function () {
-              var d = new Date();
-              var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-
-              // กรณีต้องการใส่ปฏิทินลงไปมากกว่า 1 อันต่อหน้า ก็ให้มาเพิ่ม Code ที่บรรทัดด้านล่างด้วยครับ (1 ชุด = 1 ปฏิทิน)
-
-              $("#taskcon_start_date").datepicker({  changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true,
-              // defaultDate: toDay,
-                dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
-
-              $("#taskcon_end_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true,
-             // defaultDate: toDay,
-              dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
-                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
-
-                $("#taskcon_pay_date").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: 'dd/mm/yy',
-                     isBuddhist: true,
-               // defaultDate: toDay,
-                dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
-                dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-                monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-                monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
-
-
-                   $("#datepicker-en").datepicker({ dateFormat: 'dd/mm/yy'});
-
-              $("#inline").datepicker({ dateFormat: 'dd/mm/yy', inline: true });
-
-
-              });
-          </script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+   {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+    <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 <script>
     $(function() {
@@ -335,18 +302,10 @@
         $("#taskcon_start_date,#taskcon_end_date, #taskcon_pay_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                isBuddhist: true,
-                defaultDate: toDay,
-                dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                    'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                ],
-                monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                    'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                ],
+            changeMonth: true,
+            changeYear: true,
+
+            language:"th-th",
 
 
             });

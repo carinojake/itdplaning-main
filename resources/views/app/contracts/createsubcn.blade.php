@@ -1643,16 +1643,16 @@
                         return;
                     }
 
-                    var d = new Date();
-                    var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+                 //   var d = new Date();
+                   // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
                     $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
                             changeYear: true,
-                            isBuddhist: true,
-                           defaultDate: toDay,
+                            language:"th-th",
+                       /*     defaultDate: toDay,
                             dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
                             dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
                             monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
@@ -1660,15 +1660,35 @@
                             ],
                             monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
                                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                            ],
+                            ], */
 
 
                         });
-                });
-            </script>
 
 
-<script>
+
+
+
+                        $('#contract_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#contract_end_date").datepicker("setStartDate", startDate);
+            $("#contract_sign_date").datepicker("setStartDate", startDate);
+        });
+
+        $('#contract_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#contract_start_date").datepicker("setEndDate", endDate);
+        });
+    });
+
+
+
+
+
+           </script>
+
+
+{{-- <script>
     $(document).ready(function() {
        $("#contract_start_date").datepicker({});
         $("#contract_end_date").datepicker({ });
@@ -1691,53 +1711,66 @@
                     })
 
     });
-    </script>
+    </script> --}}
 
-<script>
-    function calculateDuration() {
-        // Retrieve the selected start and end dates as Date objects
-        var startDate = $('#insurance_start_date').datepicker('getDate');
-        var endDate = $('#insurance_end_date').datepicker('getDate');
 
-        // Check if both dates are selected
-        if (startDate && endDate) {
-            // Calculate the duration
-            var diff = Math.abs(endDate - startDate);
-            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+    <script>
+     /*    function calculateDuration() {
+            var startDate = $('#insurance_start_date').datepicker('getDate');
+            var endDate = $('#insurance_end_date').datepicker('getDate');
+            if (startDate && endDate) {
+                var diff = Math.abs(endDate - startDate);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                $('#insurance_duration_months').text(months + " เดือน");
+                $('#insurance_duration_days').text(days + " วัน");
+            }
+        } */
 
-            // Display the results
-            $('#insurance_duration_months').text(months + " เดือน");
-            $('#insurance_duration_days').text(days + " วัน");
-        }
-    }
+        $(document).ready(function() {
+            $('#insurance_start_date, #insurance_end_date').datepicker({
 
-    $(document).ready(function() {
-        // Initialize the datepickers with Thai calendar settings
-        var d = new Date();
-        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-        $('#insurance_start_date, #insurance_end_date')
-
-        .datepicker({
-            dateFormat: 'dd/mm/yy',
-                            changeMonth: true,
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
                             changeYear: true,
-                            isBuddhist: true,
-                          //  defaultDate: toDay,
-                            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                            ],
-                            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                                'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                            ],
+                            language:"th-th",
 
-                            onSelect: calculateDuration
+            });
+        });
 
-                        });
-    });
-</script>
+        function calculateDuration() {
+            var startDate = $('#insurance_start_date').datepicker('getDate');
+            var endDate = $('#insurance_end_date').datepicker('getDate');
+            if (startDate && endDate) {
+                var diff = Math.abs(endDate - startDate);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                $('#insurance_duration_months').text(months + " เดือน");
+                $('#insurance_duration_days').text(days + " วัน");
+            }
+        }
+                        function grandTotal(){
+                    calculateDuration();
+                    var days = $("#insurance_start_date").val();
+                    var rooms = $("#insurance_end_date").val();
+
+                    if( days != "" && parseInt(days) >0 ){
+                        if( rooms != "" ){
+                            var total = parseInt(days) * parseInt(rooms) * roomPrice;
+                            $("#grandtotal").val(total.toFixed(2)).css("color","black");
+                        }else{
+                            $("#grandtotal").val("").css("color","black");
+                        }
+                    }
+                }
+
+                $("#insurance_start_date, #insurance_end_date").on("change",function(){
+                    grandTotal();
+                    $(".datepicker").hide();
+                });
+
+
+    </script>
 
             <script>
                 $(document).ready(function() {

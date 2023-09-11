@@ -157,7 +157,7 @@ class DashboardController extends Controller
            //->toJson(JSON_NUMERIC_CHECK)
     );
 
-    //    dd($taskcon_pay_sum_1);
+       // dd($taskcon_pay_sum_1);
         ($task_pay_xy  =
         DB::table('tasks')
             ->selectRaw("
@@ -173,8 +173,8 @@ class DashboardController extends Controller
 
          COALESCE(SUM(tasks.task_cost_it_operating), 0) AS total_task_cost_it_operating,
          COALESCE(SUM(tasks.task_cost_it_investment), 0) AS total_task_cost_it_investment,
-         COALESCE(SUM(tasks.task_cost_gov_utility), 0) AS total_cost_gov_utility,
-         SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay
+         COALESCE(SUM(tasks.task_cost_gov_utility), 0) AS total_cost_gov_utility
+
 
 
          ")
