@@ -150,7 +150,9 @@ class DashboardController extends Controller
             ->whereNull('tasks.deleted_at') // Replacing the original NULL check
             //->where('projects.project_fiscal_year', '=', $fiscal_year)
             ->where('projects.project_fiscal_year', '=', $fiscal_year)
-           ->groupBy('task_pay_month','taskcon_month')
+           // ->where('total_taskcon_pay', '>', 1)
+            ->groupBy('task_pay_month','taskcon_month')
+            ->having('total_taskcon_pay', '>', 1)
             ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
             //->toSql()
             ->get()
@@ -189,7 +191,9 @@ class DashboardController extends Controller
 
 
             ->where('projects.project_fiscal_year', '=', $fiscal_year)
+           // ->where('total_cost', '>', 1)
             ->where('tasks.deleted_at', NULL)
+            ->having('total_cost', '>', 1)
             ->whereNotNull('tasks.task_pay_date')
             ->groupBy('task_pay_month','task_month')
             ->orderByRaw(Helper::budget_fiscal_year($fiscal_year))
