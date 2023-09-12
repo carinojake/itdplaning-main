@@ -1383,7 +1383,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
        // $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
-        $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
+       // $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
 
         // $contract->budget_gov = $request->input('budget_gov');
         // $contract->budget_it  = $request->input('budget_it');

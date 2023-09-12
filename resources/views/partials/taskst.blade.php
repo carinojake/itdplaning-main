@@ -100,7 +100,7 @@
                             </td>
                             <td>
                                 @if($relatedData->totalLeastconPay >1)
-                                {{ number_format($relatedData->totalLeastconPay, 2) }}
+
 
                                 @elseif($subtask->task_parent_sub_cost > 1)
                                     {{ number_format($subtask->task_parent_sub_pay, 2) }}
