@@ -187,29 +187,69 @@
 
                   <div class="col-md-6">
                     <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pr_budget" name="contract_pr_budget" min="0" value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
+
+
+
+                    <input type="text" placeholder="0.00"
+                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask" id="contract_pr_budget"
+                    name="contract_pr_budget" min="0"
+                    value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
                   </div>
                   <div class="col-md-6">
                     <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_pa_budget" name="contract_pa_budget" min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
+                    <input type="text" placeholder="0.00"
+                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask"
+                     id="contract_pa_budget" name="contract_pa_budget"
+                     min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
                   </div>
                   <div class="col-md-6">
                     <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}" readonly>
+                    <input type="text" placeholder="0.00"
+                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask"
+
+
+                    id="contract_refund_pa_budget" name="contract_refund_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}" readonly>
                   </div>
 
                   <div class="col-md-6">
                     <label for="contract_peryear_pa_budget" class="form-label">{{ __('ต่อปี') }}</label> <span class="text-danger"></span>
-                    <input type="number" placeholder="0.00" step="0.01" class="form-control" id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}">
+                    <input type="text" placeholder="0.00" step="0.01"
+                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask"
+
+                     id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}">
                   </div>
 
+                  <div class="col-md-4">
+                    <label for="contract_cn_budget"
+                        class="form-label">{{ __('จำนวนเงิน (บาท) cn') }}</label>
+                    <span class="text-danger"></span>
 
-                  <div class="col-md-6">
-                    <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label>
+                    <input type="text"
+                        placeholder="0.00" step="0.01"
+                        class="form-control"
+                        id="contract_cn_budget"
+                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                        class="form-control numeral-mask"
+                        name="contract_cn_budget"
+                        min="0"
+                        value="{{ $contract->contract_cn_budget }}"
+
+                        >
+                </div>
+
+
+            </div>
+        </div>
+         {{--          <div class="col-md-6">
+                    <label for="contract_owner" class="form-label">{{ __('เจ้าหน้าที่ผู้รับผิดชอบ ') }}</label> --}}
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
-                  </div>
-                  <div class="col-md-12">
+                    {{-- <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
+                  </div> --}}
+              {{--     <div class="col-md-12">
                     <label for="contract_refund_pa_status" class="form-label">{{ __('contract_refund_pa_status') }}</label> <span class="text-danger"></span>
                     <div class="form-check form-check-inline ms-5">
                       <input class="form-check-input" type="radio" name="contract_refund_pa_status" id="contract_refund_pa_status" value="1" checked>
@@ -223,7 +263,7 @@
                         ไม่ได้คืน
                       </label>
                     </div>
-                </div>
+                </div> --}}
 
                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
@@ -246,18 +286,46 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-
-
-
-
     <script>
-        function calculateRefund() {
-          var pr_budget = parseFloat(document.getElementById("contract_pr_budget").value);
-          var pa_budget = parseFloat(document.getElementById("contract_pa_budget").value);
-          var refund = pr_budget - pa_budget;
-          document.getElementById("contract_refund_pa_budget").value = refund.toFixed(2);
-        }
-      </script>
+        $(document).ready(function() {
+            $(":input").inputmask();
+        });
+    </script>
+
+
+
+
+<script>
+    var costFields = ['contract_pa_budget', 'task_cost_it_investment', 'task_cost_gov_utility'];
+    var budgetFields = ['contract_pr_budget', 'task_budget_it_investment', 'task_budget_gov_utility'];
+
+    function calculateRefund() {
+        var totalRefund = 0;
+
+        costFields.forEach(function(costField, index) {
+            var pa_value = $("#" + costField).val();
+            var pr_value = $("#" + budgetFields[index]).val();
+
+            if (pa_value && pr_value) {
+                var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                if (pa_budget != 0) {
+                    var refund = pr_budget - pa_budget;
+                    totalRefund += refund;
+                }
+            }
+        });
+
+        $("#contract_refund_pa_budget").val(totalRefund.toFixed(2));
+    }
+
+    $(document).ready(function() {
+        costFields.forEach(function(costField, index) {
+            $("#" + costField).on("input", calculateRefund);
+        });
+    });
+</script>
 
 <script>
     $(function() {

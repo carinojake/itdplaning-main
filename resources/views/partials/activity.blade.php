@@ -323,7 +323,7 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                                             </div>
                                                                             <div
                                                                                 class="col-6">
-                                                                                {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
+                                                                                {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget,2) }}
                                                                             </div>
                                                                         </div>
 
@@ -335,7 +335,7 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                                             </div>
                                                                             <div
                                                                                 class="col-6">
-                                                                                {{ number_format($contract->contract_peryear_pa_budget) }}
+                                                                                {{ number_format($contract->contract_peryear_pa_budget,2) }}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -428,19 +428,19 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                         <div class="row">
                             @if ($task->task_budget_it_operating > 0)
                                 <div class="col-6 ">{{ __('งบกลาง ICT') }}</div>
-                                {{ number_format($task->task_budget_it_operating) }} บาท
+                                {{ number_format($task->task_budget_it_operating,2) }} บาท
                             @endif
                         </div>
                         <div class="row">
                             @if ($task->task_budget_it_investment > 0)
                                 <div class="col-6">{{ __('งบดำเนินงาน') }}</div>
-                                {{ number_format($task->task_budget_it_investment) }} บาท
+                                {{ number_format($task->task_budget_it_investment,2) }} บาท
                             @endif
                         </div>
                         <div class="row">
                             @if ($task->task_budget_gov_utility > 0)
                                 <div class="col-6">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                {{ number_format($task->task_budget_gov_utility) }} บาท
+                                {{ number_format($task->task_budget_gov_utility,2) }} บาท
                             @endif
                         </div>
                     </td>

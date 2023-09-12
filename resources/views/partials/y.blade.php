@@ -90,7 +90,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PR') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_pr_budget) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_pr_budget,2) }}</div>
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('เลขที่ PA') }}</div>
@@ -98,18 +98,18 @@
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PA') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_pa_budget) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_pa_budget,2) }}</div>
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
                     <div class="col-6">
-                        {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget) }}
+                        {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget,2) }}
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงินคงต่อปี PA') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget,2) }}</div>
                 </div>
 
                                 <!--<div class="row">
@@ -176,7 +176,7 @@
                             <td>{{ Helper::Date4(date('Y-m-d H:i:s', strtotime($result->taskcon_pay_date))) }}
                             </td>
                             <td>{{ $result->taskcon_pp }}</td>
-                            <td>{{ number_format($result->taskcon_pay) }}</td>
+                            <td>{{ number_format($result->taskcon_pay,2) }}</td>
 
                                <td class="text-end">
 

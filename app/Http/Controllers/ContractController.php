@@ -1315,6 +1315,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $contract->contract_mm        = $request->input('contract_mm');
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
+        $contract->contract_cn_budget        = $request->input('contract_cn_budget');
         $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');

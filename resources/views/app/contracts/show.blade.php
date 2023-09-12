@@ -379,6 +379,7 @@
 @elseif($contract->contract_po_budget > 1)
                       <td>{{ ($contract->contract_po) }}</td>
 @endif
+<td></td>
 <td>{{ ($contract->contract_cn) }}</td>
                     </tr>
                     <tr>
@@ -398,6 +399,8 @@
                         @elseif($contract->contract_po_budget > 1)
                         <td>{{ number_format($contract->contract_po_budget,2) }}</td>
                         @endif
+                        <td></td>
+
                         <td>{{  number_format($contract->contract_cn_budget,2)}}</td>
 
                     </tr>

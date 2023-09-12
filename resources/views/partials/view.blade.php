@@ -116,7 +116,7 @@
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
-                                        {{ number_format($project['budget_it_operating']) }}
+                                        {{ number_format($project['budget_it_operating'],2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -351,7 +351,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
 
-                                        {{ number_format($project['budget_it_investment']) }}
+                                        {{ number_format($project['budget_it_investment'],2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
