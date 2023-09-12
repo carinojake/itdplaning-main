@@ -390,15 +390,15 @@
                     </tr>
                     <tr>
                         <td>{{ $contract->contract_mm_bodget }}</td>
-                        <td>{{ number_format($contract->contract_pr_budget) }}</td>
-                        <td>{{ number_format($contract->contract_pa_budget) }}</td>
+                        <td>{{ number_format($contract->contract_pr_budget,2) }}</td>
+                        <td>{{ number_format($contract->contract_pa_budget,2) }}</td>
 
                         @if($contract->contract_er_budget > 1)
-                        <td>{{ number_format($contract->contract_er_budget) }}</td>
+                        <td>{{ number_format($contract->contract_er_budget,2) }}</td>
                         @elseif($contract->contract_po_budget > 1)
-                        <td>{{ number_format($contract->contract_po_budget) }}</td>
+                        <td>{{ number_format($contract->contract_po_budget,2) }}</td>
                         @endif
-                        <td>{{  number_format($contract->contract_cn_budget)}}</td>
+                        <td>{{  number_format($contract->contract_cn_budget,2)}}</td>
 
                     </tr>
                 </table>
