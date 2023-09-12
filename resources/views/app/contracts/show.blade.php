@@ -58,7 +58,7 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($contractgannt['contract_pa_budget'] ) }}
+                                                {{ number_format($contractgannt['contract_pa_budget'],2 ) }}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
                                             <div class="progress progress-thin mt-3 mb-0">
@@ -77,7 +77,7 @@
                                             </div>
                                             <div class="fs-4 fw-semibold">
 
-                                                {{ number_format($contractgannt['contract_pa_budget']-$contractgannt['total_pay']) }}
+                                                {{ number_format($contractgannt['contract_pa_budget']-$contractgannt['total_pay'],2) }}
 
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย</small>
@@ -95,7 +95,7 @@
                                             <div class="text-medium-emphasis text-end mb-4">
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ number_format($contractgannt['total_pay']) }}
+                                                {{ number_format($contractgannt['total_pay'],2) }}
 
 
                                             </div><small

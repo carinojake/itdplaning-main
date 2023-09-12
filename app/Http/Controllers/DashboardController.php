@@ -139,7 +139,11 @@ class DashboardController extends Controller
                 DATE_FORMAT((taskcons.taskcon_pay_date) + INTERVAL 543 YEAR, '%b %Y', 'th_TH') AS task_pay_month,
                 DATE_FORMAT((taskcons.taskcon_pay_date)+ INTERVAL 543 YEAR, '%m', 'th_TH') AS taskcon_month,
                 SUM(COALESCE(taskcons.taskcon_pay, 0)) AS iv,
-                SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay
+                SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_taskcon_pay,
+
+         COALESCE(SUM(taskcons.taskcon_cost_it_operating), 0) AS total_taskcon_cost_it_operating,
+         COALESCE(SUM(taskcons.taskcon_cost_it_investment), 0) AS total_taskcon_cost_it_investment,
+         COALESCE(SUM(taskcons.taskcon_cost_gov_utility), 0) AS total_costcon_gov_utility
             ")
           ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
@@ -159,7 +163,7 @@ class DashboardController extends Controller
            //->toJson(JSON_NUMERIC_CHECK)
     );
 
-       // dd($taskcon_pay_sum_1);
+        ($taskcon_pay_sum_1);
         ($task_pay_xy  =
         DB::table('tasks')
             ->selectRaw("
@@ -233,7 +237,7 @@ class DashboardController extends Controller
             return $item;
         });
 
-       // dd($mergedCollection);
+        //dd($mergedCollection);
 
 
         $jsonMergedCollection = $mergedCollection->toJson(JSON_NUMERIC_CHECK);
@@ -1466,24 +1470,28 @@ as d')
 
 
 
-// First, let's get all tasks
-/* $tasks = DB::table('tasks')->select('tasks.*')->get();
+          /*   // First, let's get all tasks  $mergedCollection;
 
-// Then, let's filter them for the 2nd quarter (มกราคม - มีนาคม) of 2566
-$tasksInQ2 = $tasks->filter(function ($task) {
-    return Carbon::parse($task->task_pay_date)->year = $fiscal_year
-        && in_array(Carbon::parse($task->task_pay_date)->month, [1, 2, 3]); // มกราคม, กุมภาพันธ์, มีนาคม
-});
-//dd($tasksInQ2);
-$summary = [
-    'งบดำเนินงาน' => $tasksInQ2->sum('task_cost_it_operating'),
-    'งบกลาง ICT' => $tasksInQ2->sum('task_cost_it_investment'),
-    'งบสาธารณูปโภค' => $tasksInQ2->sum('task_cost_gov_utility'),
-];
+            $tasks = DB::table('tasks')->select('tasks.*')->get();
 
-$summary['รวมทั้งหมดในไตรมาสที่ 2'] = array_sum($summary);
 
-dd($summary); */
+            $mergedCollection;
+           // dd($mergedCollection);
+            $tasksInQ2 = $mergedCollection->filter(function ($task) use ($fiscal_year) {
+                $year = intval(substr($task->task_pay_month, -4)); // ตัดปีออกมาจาก task_pay_month
+                $month = intval($task->task_month); // ใช้ task_month ที่เป็นตัวเลข
+                return $year == $fiscal_year && in_array($month, [1, 2, 3]); // มกราคม, กุมภาพันธ์, มีนาคม
+            });
+            //dd($tasksInQ2);
+            $summary = [
+                'งบกลาง ICT' => $tasksInQ2->sum('total_task_cost_it_operating'),
+                'งบดำเนินงาน' => $tasksInQ2->sum('total_task_cost_it_investment'),
+                'งบสาธารณูปโภค' => $tasksInQ2->sum('total_cost_gov_utility'),
+            ];
+
+            $summary['รวมทั้งหมดในไตรมาสที่ 2'] = array_sum($summary);
+
+            dd($summary,$mergedCollection,$tasksInQ2);; */
 
  return view (
                 'app.dashboard.index',
