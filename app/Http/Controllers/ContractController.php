@@ -1254,14 +1254,40 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         ]);
 
         //convert date
-        $start_date = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_start_date')), 'Y-m-d');
-        $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('date-picker-contract_end_date')), 'Y-m-d');
+     //  $start_date_obj = date_format(date_create_from_format('d/m/Y', $request->input('contract_start_date')), 'Y-m-d');
+       // $end_date_obj   = date_format(date_create_from_format('d/m/Y', $request->input('contract_end_date')), 'Y-m-d');
 
-        $sign_date_input = $request->input('date-picker-contract_sign_date');
+        $sign_date_input = $request->input('contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
 
+        $start_date_obj = date_create_from_format('d/m/Y', $request->input('contract_start_date'));
+        $end_date_obj = date_create_from_format('d/m/Y', $request->input('contract_end_date'));
+       // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+
+
+        if ($start_date_obj === false || $end_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+            $start_date_obj->modify('-543 years');
+            $end_date_obj->modify('-543 years');
+
+            $start_date = date_format($start_date_obj, 'Y-m-d');
+            $end_date = date_format($end_date_obj, 'Y-m-d');
+
+
+            // Check if $pay_date_obj is not null before trying to modify and format it
+
+        }
+
+
         if ($sign_date_object !== false) {
+            $sign_date_object->modify('-543 years');
+
             $sign_date = date_format($sign_date_object, 'Y-m-d');
+
+
+
         } else {
             $sign_date = null; // Default value when the date could not be converted
         }
