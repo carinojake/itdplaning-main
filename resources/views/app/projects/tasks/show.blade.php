@@ -112,15 +112,16 @@
 
             @if ($contract)
                 <x-slot:toolbar>
-                    <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                        class="btn btn-warning text-dark">แก้ไขeditsub
-                        {{ Helper::projectsType($project->project_type) }} </a>
 
 
-                    <!-- <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                        class="btn btn-success text-white">เพิ่มรายการที่ใช้จ่าย</a>-->
-                        <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
-                            class="btn btn-secondary">กลับ</a>
+
+                <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                    @method('POST') {{-- Use POST method to submit the form --}}
+                    @csrf
+                    <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
+                </form>
+                <a onclick="history.back()"
+                    class="btn btn-secondary">กลับ</a>
                 </x-slot:toolbar>
             @endif
         {{-- @endif --}}

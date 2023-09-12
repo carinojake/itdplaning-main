@@ -79,7 +79,7 @@
                                                             aria-expanded="true"
                                                             aria-controls="multiCollapseExample1">
                                                         <div class="fs-4 fw-semibold">
-                                                            {{ number_format($budgets) }}
+                                                            {{ number_format($budgets,2) }}
                                                         </div>
                                                         <small class="text-xl">
                                                             งบประมาณ
@@ -95,7 +95,7 @@
                                                                 aria-expanded="true"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetscentralict) }}
+                                                                {{ number_format($budgetscentralict,2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบกลาง ICT
@@ -108,7 +108,7 @@
                                                                 aria-expanded="true"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetsinvestment) }}
+                                                                {{ number_format($budgetsinvestment,2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบดำเนินงาน
@@ -121,7 +121,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetsut) }}
+                                                                {{ number_format($budgetsut,2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบสาธารณูปโภค
@@ -224,7 +224,7 @@
                 <div class="fs-4 fw-semibold ">
                     <!--รอการเบิกจ่ายทั้งหมด-->
                     @if ($ospa > 1)
-                    {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay))) }}
+                    {{ number_format((($ospa - $otpsa1) - ($otpsa2 - $osa))+(($ispa - $itpsa1) - ($itpsa2 - $isa))+(($utpcs - $utsc_pay_pa) + ($utsc - $utsc_pay)),2) }}
                     @endif
                 </div>
                 <div>
@@ -286,7 +286,7 @@
                     >
                     <!--รวมเบิกจ่ายทั้งหมด 03082566-->
                     @if ($utpcs > 1)
-                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc-$utsc_pay)) }}
+                    {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc-$utsc_pay),2)}}
                     @endif
                 </div>
                 <div>
