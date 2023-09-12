@@ -15,19 +15,19 @@
                 <div class="row">
                     @if ($task->task_budget_it_operating > 0)
                         <div class="col-6 fw-semibold">{{ __('งบกลาง ICT') }}</div>
-                        {{ number_format($task->task_budget_it_operating) }}
+                        {{ number_format($task->task_budget_it_operating,2) }}
                     @endif
                 </div>
                 <div class="row">
                     @if ($task->task_budget_it_investment > 0)
                         <div class="col-6 fw-semibold">{{ __('งบดำเนินงาน') }}</div>
-                        {{ number_format($task->task_budget_it_investment) }}
+                        {{ number_format($task->task_budget_it_investment,2) }}
                     @endif
                 </div>
                 <div class="row">
                     @if ($task->task_budget_gov_utility > 0)
                         <div class="col-6 fw-semibold">{{ __('ค่าสาธารณูปโภค') }}</div>
-                        {{ number_format($task->task_budget_gov_utility) }}
+                        {{ number_format($task->task_budget_gov_utility,2) }}
                     @endif
                 </div>
             </div>
@@ -92,8 +92,8 @@
                             <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
                             <td></td>
                             <td>
-                                @if($subtask->task_parent_sub_cost > 1)
-                                {{ number_format($subtask->task_parent_sub_cost, 2) }}
+                                @if($relatedData->totalLeastCost > 1)
+                                {{ number_format($relatedData->totalLeastCost, 2) }}
                             @else
                                 {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
                             @endif
@@ -101,7 +101,7 @@
                             <td>
                                 @if($relatedData->totalLeastconPay >1)
 
-
+                                {{ number_format($relatedData->totalLeastconPay, 2) }}
                                 @elseif($subtask->task_parent_sub_cost > 1)
                                     {{ number_format($subtask->task_parent_sub_pay, 2) }}
 

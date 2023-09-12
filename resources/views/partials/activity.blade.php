@@ -290,7 +290,7 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                                             </div>
                                                                             <div
                                                                                 class="col-6">
-                                                                                {{ number_format($contract->contract_pr_budget) }}
+                                                                                {{ number_format($contract->contract_pr_budget,2) }}
                                                                             </div>
                                                                         </div>
                                                                         <div
@@ -312,7 +312,7 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                                                                             </div>
                                                                             <div
                                                                                 class="col-6">
-                                                                                {{ number_format($contract->contract_pa_budget) }}
+                                                                                {{ number_format($contract->contract_pa_budget,2) }}
                                                                             </div>
                                                                         </div>
                                                                         <div

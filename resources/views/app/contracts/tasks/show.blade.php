@@ -24,35 +24,48 @@
                 <div class="col-3">{{ __('เรื่อง') }}</div>
                 <div class="col-9">{{ $taskcon->taskcon_description }}</div>
               </div>
-              <div class="row">
+              {{-- <div class="row">
                 <div class="col-3">{{ __('parent') }}</div>
                 <div class="col-9">{{ $taskcon->taskcon_parent }}</div>
-              </div>
+              </div> --}}
 
 
 
             </div>
               <div class="col-sm">
-              <div class="row">
+               <div class="row">
                 <div class="col-3">{{ __('บันทึกข้อความ') }}</div>
-                <div class="col-9">{{ $taskcon->contract_projectplan }}</div>
+                <div class="col-9">{{ $taskcon->taskcon_projectplan }}</div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('จำนวนเงิน PR') }}</div>
-                <div class="col-9">{{ number_format($taskcon->taskcon_cost_gov_utility) }}</div>
+                <div class="col-3">{{ __('การเบิกจ่าย') }}</div>
+
+
+                <div class="col-9">
+
+                    @if($taskcon->taskcon_budget_it_operating > 0)
+                    {{ number_format($taskcon->taskcon_cost_it_operating,2) }}
+                    @elseif($taskcon->taskcon_budget_it_investment > 0)
+                    {{ number_format($taskcon->taskcon_cost_it_investment,2) }}
+                    @elseif ($taskcon->taskcon_budget_gov_utility > 0)
+                    {{ number_format($taskcon->taskcon_cost_gov_utility,2) }}
+                    @endif
+
+
+                </div>
               </div>
               <div class="row">
-                <div class="col-3">{{ __('เลขที่ PA') }}</div>
+                <div class="col-3">{{ __('เลขที่ PP') }}</div>
                 <div class="col-9">{{ $taskcon->taskcon_pp }}</div>
               </div>
               <div class="row">
                 <div class="col-3">{{ __('จำนวนเงิน PP') }}</div>
-                <div class="col-9">{{ number_format($taskcon->taskcon_pay)}}</div>
+                <div class="col-9">{{ number_format($taskcon->taskcon_pay,2)}}</div>
               </div>
-              <div class="row">
+             {{--  <div class="row">
                 <div class="col-3">{{ __('บันทึก PP') }}</div>
                 <div class="col-9">{{ $taskcon->disbursement_taskcons_status}}</div>
-              </div>
+              </div> --}}
               <div class="row">
                 <div class="col-3">{{ __('เวลา PP') }}</div>
                 <div class="col-9">{{ Helper::Date4(date('Y-m-d', strtotime($taskcon->taskcon_pay_date))) }}

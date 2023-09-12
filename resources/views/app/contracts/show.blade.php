@@ -42,9 +42,13 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                เตือน เหลือเวลา  <?php
-                                                echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>';
-                                                ?> เดือน                                            </div><small
+
+                                                เตือน เหลือเวลา
+                                                {!! isset($contract) && $contract->contract_status == 2 ?
+                                                    '-'
+                                                    :  (isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>')
+                                                !!} เดือน
+                                           </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
                                         </div>
@@ -338,7 +342,7 @@
 
 
                             <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
-                            <p class="card-text">{{ $contract->contract_budget_type }}</p>
+                            <p class="card-text">{{ \Helper::project_select($contract->contract_budget_type) }}</p>
 
 
                             <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} - {{ __('วันที่สิ้นสุดสัญญา') }}</h5>

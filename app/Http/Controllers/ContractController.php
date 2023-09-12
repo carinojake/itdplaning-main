@@ -1835,6 +1835,8 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
 
 
+        $taskcon->taskcon_projectplan = $request->input('taskcon_projectplan') ;
+
 
 
 
