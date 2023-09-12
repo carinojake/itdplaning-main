@@ -1293,6 +1293,51 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         }
 
 
+        $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
+        $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
+
+        $contract_po_budget = str_replace(',', '', $request->input('contract_po_budget'));
+        $contract_er_budget = str_replace(',', '', $request->input('contract_er_budget'));
+
+        $contract_cn_budget = str_replace(',', '', $request->input('contract_cn_budget'));
+        $contract_mm_budget = str_replace(',', '', $request->input('contract_mm_budget'));
+
+        $contract_oe_budget = str_replace(',', '', $request->input('contract_oe_budget'));
+
+        $contract_refund_pa_budget = str_replace(',', '', $request->input('contract_refund_pa_budget'));
+
+        $contract_pay = str_replace(',', '', $request->input('contract_pay'));
+
+        if ($contract_pr_budget === '') {
+            $contract_pr_budget = null; // or '0'
+        }
+
+        if ($contract_pa_budget === '') {
+            $contract_pa_budget = null; // or '0'
+        }
+
+        if ($contract_mm_budget === '') {
+            $contract_mm_budget = null; // or '0'
+        }
+        if ($contract_po_budget === '') {
+            $contract_po_budget = null; // or '0'
+        }
+        if ($contract_er_budget === '') {
+            $contract_er_budget = null; // or '0'
+        }
+        if ($contract_cn_budget === '') {
+            $contract_cn_budget = null; // or '0'
+        }
+
+        if ($contract_oe_budget === '') {
+            $contract_oe_budget = null; // or '0'
+        }
+        if ($contract_pay === '') {
+            $contract_pay = null; // or '0'
+        }
+        if ($contract_refund_pa_budget === '') {
+            $contract_refund_pa_budget = null; // or '0'
+        }
 
 
 
@@ -1315,10 +1360,27 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $contract->contract_mm        = $request->input('contract_mm');
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
-        $contract->contract_cn_budget        = $request->input('contract_cn_budget');
+       /*  $contract->contract_cn_budget        = $request->input('contract_cn_budget');
         $contract->contract_pr_budget        = $request->input('contract_pr_budget');
-        $contract->contract_pa_budget        = $request->input('contract_pa_budget');
-        $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
+        $contract->contract_pa_budget        = $request->input('contract_pa_budget'); */
+
+        $contract->contract_pr_budget = $contract_pr_budget;
+        $contract->contract_pa_budget = $contract_pa_budget;
+
+        $contract->contract_po_budget = $contract_po_budget;
+        $contract->contract_er_budget = $contract_er_budget;
+
+        $contract->contract_mm_budget = $contract_mm_budget;
+        $contract->contract_cn_budget = $contract_cn_budget;
+        $contract->contract_oe_budget = $contract_oe_budget;
+
+
+
+        $contract->contract_refund_pa_budget =  $contract_refund_pa_budget;
+        $contract->contract_pay = $contract_pay;
+
+
+       // $contract->contract_refund_pa_budget        = $request->input('contract_refund_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
