@@ -494,29 +494,29 @@
                                             </td>
                                             <td>
                                                 @if($taskcon->taskcon_budget_it_operating > 0)
-                                                {{ number_format($taskcon->taskcon_budget_it_operating) }}
+                                                {{ number_format($taskcon->taskcon_budget_it_operating,2) }}
 
                                                 @elseif($taskcon->taskcon_budget_it_investment > 0)
-                                                {{ number_format($taskcon->taskcon_budget_it_investment) }}
+                                                {{ number_format($taskcon->taskcon_budget_it_investment,2) }}
 
                                                 @elseif ($taskcon->taskcon_budget_gov_utility > 0)
-                                                {{ number_format($taskcon->taskcon_budget_gov_utility) }}
+                                                {{ number_format($taskcon->taskcon_budget_gov_utility,2) }}
                                                 @endif
 
                                             </td>
 
                                              <td>
                                                 @if($taskcon->taskcon_budget_it_operating > 0)
-                                                {{ number_format($taskcon->taskcon_cost_it_operating) }}
+                                                {{ number_format($taskcon->taskcon_cost_it_operating,2) }}
                                                 @elseif($taskcon->taskcon_budget_it_investment > 0)
-                                                {{ number_format($taskcon->taskcon_cost_it_investment) }}
+                                                {{ number_format($taskcon->taskcon_cost_it_investment,2) }}
                                                 @elseif ($taskcon->taskcon_budget_gov_utility > 0)
-                                                {{ number_format($taskcon->taskcon_cost_gov_utility) }}
+                                                {{ number_format($taskcon->taskcon_cost_gov_utility,2) }}
                                                 @endif
 
                                             </td>
                                             <td>
-                                                {{ number_format($taskcon->taskcon_pay) }}
+                                                {{ number_format($taskcon->taskcon_pay,2) }}
 
                                             </td>
                                             <td>
