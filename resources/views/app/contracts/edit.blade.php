@@ -68,6 +68,15 @@
                     {{ __('เลขที่สัญญา ซ้ำ') }}
                   </div>
                 </div>
+                <div class="col-md-3">
+                    <label for="reguiar_contract_id" class="form-label">{{ __('ลำดับ.') }}</label>
+                    <span class="text-danger"></span>
+                    <input type="text" class="form-control" id="reguiar_contract_id" name="reguiar_contract_id"
+                        value="{{ $contract->reguiar_contract_id }}">
+                    <div class="invalid-feedback">
+                        {{ __('ลำดับ ') }}
+                    </div>
+                </div>
                 <div class="col-md-12">
                   <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
                   <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" value="{{ $contract->contract_juristic_id }}" maxlength="13" >

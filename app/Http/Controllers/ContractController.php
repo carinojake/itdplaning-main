@@ -33,7 +33,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_fiscal_year', 'desc');
+            $records = contract::orderBy('contract_fiscal_year', 'desc')->orderBy('reguiar_contract_id', 'asc');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
@@ -1029,7 +1029,7 @@ class ContractController extends Controller
  // $idtask = $task->task_id;
   $idcon = $contract->contract_id ;
   $idup = $idcon . '/' ;
-
+  $contract->reguiar_contract_id =  $contract->contract_id ;
 
 
 
@@ -1347,6 +1347,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
 
 
+        $contract->reguiar_contract_id        = $request->input('reguiar_contract_id');
 
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_number      = $request->input('contract_number');
