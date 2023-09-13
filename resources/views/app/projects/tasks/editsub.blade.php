@@ -379,7 +379,7 @@
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                             class="form-control numeral-mask"
                                                             id="task_refund_pa_budget"
-                                                            name="task_refund_pa_budget" min="0"   value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget }} readonly >
+                                                            name="task_refund_pa_budget" min="0"   value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget,2 }} readonly >
 
                                                         {{--  <div class="invalid-feedback">
                                                                 {{ __('ค่าสาธารณูปโภค') }}

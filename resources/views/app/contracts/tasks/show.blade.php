@@ -68,7 +68,7 @@
               </div> --}}
               <div class="row">
                 <div class="col-3">{{ __('เวลา PP') }}</div>
-                <div class="col-9">{{ Helper::Date4(date('Y-m-d', strtotime($taskcon->taskcon_pay_date))) }}
+                <div class="col-9">  {{ $taskcon->taskcon_pay_date ? Helper::Date4($taskcon->taskcon_pay_date) : '' }}
                 </div>
               </div>
 
