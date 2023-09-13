@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->integer('task_refund_pa_budget')->nullable();
-
+            //$table->integer('task_refund_pa_budget')->nullable();
+            $table->decimal('task_refund_pa_budget', 11, 2)->nullable();
         });
     }
 
