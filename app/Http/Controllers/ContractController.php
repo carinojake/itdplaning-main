@@ -41,12 +41,6 @@ class ContractController extends Controller
                     return $row->contract_number;
                 })
                 ->addColumn('contract_name_output', function ($row) {
-                    $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '';
-                    $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
-                    $html        = $row->contract_name . ' ' . $flag_status;
-                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s', $row->contract_start_date)) . '</span> -';
-                    $html .= ' <span class="badge bg-info">' . Helper::date4(date('Y-m-d H:i:s', $row->contract_end_date)) . '</span>';
-
 
                     $startDate = Carbon::parse($row->contract_start_date);
                     $endDate = Carbon::parse($row->contract_end_date);
@@ -55,10 +49,21 @@ class ContractController extends Controller
                     $diffInDays = $endDate->diffInDays($startDate);
                     $diffInDaysend = $endDate->diffInDays($startDate) - \Carbon\Carbon::parse($row->contract_start_date)->diffInDays(\Carbon\Carbon::parse());;
 
-                    $html .= '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
+                    $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
+                    ? '<span class="badge bg-danger style="color:red;">เหลือเวลา ' . $diffInMonthsend . '  เดือน / เหลือ ' . $diffInDaysend . ' วัน</span>'
+                    : '<span class="badge bg-success  style="color:rgb(5, 255, 5);">เหลือเวลา ' . $diffInMonthsend . ' เดือน</span>')
+                    . ' ' . ' </span>';;
+                    $flag_status2 = $row->contract_refund_pa_status == 1 ? '<span class="badge bg-info">คืนเงิน PA </span>' : '<span class="badge bg-danger ">ยังไม่ได้คืนเงิน PA </span>';
+                    $html        = $row->contract_name . ' ' . $flag_status;
+                    $html .= '<br><span class="badge bg-info">' . Helper::Date4(date('Y-m-d H:i:s', $row->contract_start_date)) . '</span> -';
+                    $html .= ' <span class="badge bg-info">' . Helper::date4(date('Y-m-d H:i:s', $row->contract_end_date)) . '</span>';
+
+
+
+            /*         $html .= '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
                         ? '<span class="badge bg-danger style="color:red;">เหลือเวลา ' . $diffInMonthsend . '  เดือน / เหลือ ' . $diffInDaysend . ' วัน</span>'
                         : '<span class="badge bg-success  style="color:rgb(5, 255, 5);">เหลือเวลา ' . $diffInMonthsend . ' เดือน</span>')
-                        . ' ' . ' </span>';
+                        . ' ' . ' </span>'; */
                     if ($row->task->count() > 0) {
                         $html .= ' <span class="badge bg-warning">' . $row->task->count() . ' กิจกรรม</span>';
                     }
