@@ -28,7 +28,7 @@
                                         <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_parent_display"
-                                            value="{{ $task->task_name }}" disabled readonly>
+                                            value="{{ $task_parent_sub->task_name }}" disabled readonly>
 
                                         <input type="hidden" class="form-control" id="task_parent" name="task_parent"
                                             value="{{ $task->task_id }}">

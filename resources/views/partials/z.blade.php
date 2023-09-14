@@ -50,10 +50,10 @@
                                                 <div class="col-9">{{\Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</div>
                                             </div>
 
-                                          {{--   <div class="row">
-                                                <div class="col-3">{{ __('เรื่อง') }}</div>
-                                                <div class="col-9">{{ $taskcon->task_description }}</div>
-                                            </div> --}}
+                                            <div class="row">
+                                                <div class="col-3">{{ __('รายละเอียดที่ใช้จ่าย') }}</div>
+                                                <textarea  class="col-9" disabled readonly>{{ $taskcon->task_description }}</textarea>
+                                            </div>
                                            {{--  <div class="row">
                                                 <div class="col-3">{{ __('parent') }}</div>
                                                 <div class="col-9">{{ $taskcon->task_parent }}</div>
@@ -68,7 +68,7 @@
                                                     <div class="col-md-4">
                                                         <label for="task_budget_it_operating"
                                                             class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT') }}</label>
-                                                        <div>{{ number_format($taskcon->task_budget_it_operating,2) }}</div>
+                                                        <div>{{ number_format($taskcon->task_budget_it_operating,2) }} บาท</div>
 
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุงบกลาง ICT') }}
@@ -78,7 +78,7 @@
                                                     <div class="col-md-4">
                                                         <label for="task_cost_it_operating"
                                                             class="form-label">{{ __('รอการเบิก งบกลาง ICT') }}</label>
-                                                        <div>{{ number_format($taskcon->task_cost_it_operating,2) }}</div>
+                                                        <div>{{ number_format($taskcon->task_cost_it_operating,2) }} บาท</div>
 
 
                                                         <div class="invalid-feedback">
@@ -88,7 +88,7 @@
                                                     <div class="col-md-4">
                                                         <label for="task_refund_pa_budget"
                                                             class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
-                                                        <div>{{ number_format($taskcon->task_refund_pa_budget,2) }}</div>
+                                                        <div>{{ number_format($taskcon->task_refund_pa_budget,2) }} บาท</div>
 
 
                                                     </div>
@@ -103,7 +103,7 @@
                                         <div class="col-md-4">
                                             <label for="task_budget_it_investment"
                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน') }}</label>
-                                            <div>{{ number_format($taskcon->task_budget_it_investment,2) }}</div>
+                                            <div>{{ number_format($taskcon->task_budget_it_investment,2) }} บาท</div>
 
 
                                             <div class="invalid-feedback">
@@ -114,7 +114,7 @@
                                         <div class="col-md-4">
                                             <label for="task_cost_it_investment"
                                                 class="form-label">{{ __('รอการเบิก งบดำเนินงาน') }}</label>
-                                            <div>{{ number_format($taskcon->task_cost_it_investment,2) }}</div>
+                                            <div>{{ number_format($taskcon->task_cost_it_investment,2) }} บาท</div>
 
                                             <div class="invalid-feedback">
                                                 {{ __('งบดำเนินงาน') }}
@@ -123,7 +123,7 @@
                                         <div class="col-md-4">
                                             <label for="task_refund_pa_budget"
                                                 class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
-                                            <div>{{number_format ($taskcon->task_refund_pa_budget,2) }}</div>
+                                            <div>{{number_format ($taskcon->task_refund_pa_budget,2) }} บาท</div>
 
 
                                         </div>
@@ -138,7 +138,7 @@
                                         <div class="col-md-4">
                                             <label for="task_budget_gov_utility"
                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
-                                            <div>{{ number_format($taskcon->task_budget_gov_utility,2) }}</div>
+                                            <div>{{ number_format($taskcon->task_budget_gov_utility,2) }} บาท</div>
                                             <div class="invalid-feedback">
                                                 {{ __('ค่าสาธารณูปโภค') }}
                                             </div>
@@ -147,7 +147,7 @@
                                         <div class="col-md-4">
                                             <label for="task_cost_gov_utility"
                                                 class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
-                                            <div>{{ number_format($taskcon->task_cost_gov_utility,2) }}</div>
+                                            <div>{{ number_format($taskcon->task_cost_gov_utility,2) }} บาท</div>
 
                                             <div class="invalid-feedback">
                                                 {{ __('ค่าสาธารณูปโภค') }}
@@ -156,7 +156,7 @@
                                         <div class="col-md-4">
                                             <label for="task_refund_pa_budget"
                                                 class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label>
-                                            <div>{{ number_format($taskcon->task_refund_pa_budget,2) }}</div>
+                                            <div>{{ number_format($taskcon->task_refund_pa_budget,2) }} บาท</div>
 
 
                                         </div>
@@ -188,7 +188,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-3">{{ __('จำนวนเงิน (บาท) PP') }}</div>
-                                    <div class="col-9">{{ number_format($task->task_pay,2) }}</div>
+                                    <div class="col-9">{{ number_format($task->task_pay,2) }} บาท</div>
                                 </div>
 
                             </div>
@@ -238,7 +238,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center">No Table Data</td>
+                                            <td colspan="12" class="text-center">No Table Data</td>
                                         </tr>
                                     @endif
                                 </tbody>

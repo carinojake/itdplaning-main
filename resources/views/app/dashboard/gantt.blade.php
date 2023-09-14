@@ -381,41 +381,6 @@
                 var html = '<b>โครงการ/งาน:</b> ' + task.text + '<br/>';
                 html += task.owner ? '<b>เจ้าของ:</b> ' + task.owner + '<br/>' : '';
 
-                if (budget) {
-                    html += '<table class="table table-sm " style="font-size:9px">';
-                    html += '<tr class="text-center align-middle">\
-                                                                     <td colspan="3">เงินงบประมาณ<br></td>\
-                                                                     <td colspan="2">งบกลาง IT</td>\
-                                                                     <td rowspan="2">รวมทั้งหมด<br></td>\
-                                                                   </tr>';
-                    html += '<tr>\
-                                                                     <td>งบดำเนินงาน<br></td>\
-                                                                     <td>งบลงทุน IT<br></td>\
-                                                                     <td>ค่าสาธารณูปโภค</td>\
-                                                                     <td>งบดำเนินงาน<br></td>\
-                                                                     <td>งบลงทุน<br></td>\
-                                                                   </tr>';
-                    if (task.type == 'task') {
-                        html += '<tr class="text-end">\
-                                                                     <td>-' + +'</td>\
-                                                                     <td>' + +'</td>\
-                                                                     <td>-' + budget_gov_utility + '</td>\
-                                                                     <td>' + budget_it_operating + '</td>\
-                                                                     <td>' + budget_it_investment + '</td>\
-                                                                     <td class="text-success">' + budget + '</td>\
-                                                                   </tr>';
-                    } else {
-                        html += '<tr class="text-end">\
-                                                                     <td>' + +'</td>\
-                                                                     <td>' + +'</td>\
-                                                                     <td>' + +'</td>\
-                                                                     <td>' + +'</td>\
-                                                                     <td>' + +'</td>\
-                                                                     <td class="text-success">' + budget + '</td>\
-                                                                   </tr>';
-                    }
-                    html += '</table>';
-                }
 
                 if (task.cost) {
                     html += '<b>ค่าใช้จ่าย:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
@@ -428,7 +393,7 @@
                     html += '<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                         style: 'currency',
                         currency: 'THB'
-                    }).format(task.balance) + '</span><br/>';
+                    }).format(task.budget - task.total_cost) + '</span><br/>';
                 }
 
                 return html;

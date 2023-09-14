@@ -21,7 +21,7 @@ class ContractController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
+     *->orderBy('reguiar_contract_id', 'asc')
      * @return void
      */
     public function __construct()
@@ -33,7 +33,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_fiscal_year', 'desc')->orderBy('reguiar_contract_id', 'asc');
+            $records = contract::orderBy('contract_fiscal_year', 'desc');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
@@ -712,9 +712,7 @@ class ContractController extends Controller
 
         $tasksJson = json_encode($tasksData);
 
-        return view('app.contracts.createsubcn', compact
-
-        ('origin', 'project', 'task','encodedProjectId'
+        return view('app.contracts.createsubcn', compact('origin', 'project', 'task','encodedProjectId'
         , 'pro', 'ta', 'fiscal_year', 'tasks',
          'tasksJson',
          'request',
@@ -847,7 +845,7 @@ class ContractController extends Controller
 
         $contract->contract_type_pa        = $request->input('contract_type_pa');
 
-
+       // $contract->reguiar_contract_id  =  $request->input('reguiar_contract_id');
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_mm_name        = $request->input('contract_mm_name');
 
@@ -1029,7 +1027,8 @@ class ContractController extends Controller
  // $idtask = $task->task_id;
   $idcon = $contract->contract_id ;
   $idup = $idcon . '/' ;
-  $contract->reguiar_contract_id =  $contract->contract_id ;
+
+
 
 
 
@@ -1347,7 +1346,7 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
 
 
-        $contract->reguiar_contract_id        = $request->input('reguiar_contract_id');
+      //  $contract->reguiar_contract_id        = $request->input('reguiar_contract_id');
 
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_number      = $request->input('contract_number');

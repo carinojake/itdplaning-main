@@ -2649,14 +2649,14 @@ dd($cteQuery); */
         $gantt = json_encode($gantt);
 
 
-        ($projectcontract = $project->contract);
+       ($projectcontract = $project->contract);
 
         $contractIds = $projectcontract->pluck('contract_id');
    //    dd ($contractIds);
         $contract_tasks = Contract::whereIn('contract_id', $contractIds)->get();
 
 
-      ($contract_tasks);
+    // dd ($contract_tasks);
        // $contractId = $projectcontract->contract_id;
 
         //dd($contractId);
@@ -3325,12 +3325,6 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
 
                 )
 
-
-
-
-
-
-
                 ->from('tasks as t')
                 ->whereIn('t.task_id', $id_tasks_sub)
                 ->whereNull('t.deleted_at')
@@ -3374,9 +3368,6 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
                    WHERE temp.task_parent = tasks.task_id  -- assuming t is the alias of tasks in your main query
                ) AS ab_2
        '),
-
-
-
 
                         DB::raw('(SELECT sum(COALESCE(taskcons.taskcon_pay,0))
                         FROM contract_has_tasks
@@ -3429,17 +3420,6 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
 
 
       //dd($cteQuery);
-
-
-
-
-
-
-
-
-
-
-
 
         ($sum_task_budget_it_operating = $task->whereNull('task_parent') ->where('tasks.deleted_at', NULL)->sum('task_budget_it_operating'));
         $sum_task_budget_it_investment = $task->whereNull('task_parent') ->where('tasks.deleted_at', NULL)->sum('task_budget_it_investment');
@@ -3658,16 +3638,32 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
                     ->get());
 
              //  dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
-        ($latestContract = Contract::latest()->first());
+
+
+             ($latestContract = Contract::latest()->first());
 
        // dd($task);
 
        // dd($task->subtask);
 
-       //dd($contract);
+     //  dd($contract);
 
-      //  dd($latestContract,$results,$taskcons,$contract,$project,$task);
-        return view('app.projects.tasks.show', compact('combinedQuery','cteQuery','task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
+
+
+        //dd($latestContract,$results,$taskcons,$contract,$project,$task);
+
+      ($projectcontract = $project->contract);
+
+        $contractIds = $projectcontract->pluck('contract_id');
+       ($contractIds);
+        $contract_tasks = Contract::whereIn('contract_id', $contractIds)->get();
+
+
+       $single_contract = $contract_tasks->first();
+
+      // dd($single_contract);
+
+        return view('app.projects.tasks.show', compact('projectcontract','contractIds','single_contract','contract_tasks','combinedQuery','cteQuery','task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
         'sum_task_budget_it_operating', 'sum_task_budget_it_investment', 'sum_task_budget_gov_utility'));
     }
@@ -5295,24 +5291,32 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
 
 
-
+    if ($task) {
         if (!$task->save()) {
-            // If the Project failed to save, redirect back with an error message
-
-
             return redirect()->back()->withErrors('An error occurred while saving the project. Please try again.');
-        }  // <-- This closing bracket was missing
-        // Save the Taskcon
+        }
+    } else {
+        return redirect()->back()->withErrors('Task object is null.');
+    }
+
+    if ($taskcon) {
         if (!$taskcon->save()) {
-
-
-            // If the Taskcon failed to save, redirect back with an error message
             return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
         }
+    } else {
+        return redirect()->back()->withErrors('Taskcon object is null.');
+    }
 
-        $task_parent_sub->save();
-        // If both the Project and Taskcon saved successfully, redirect to project.index
+    if ($task_parent_sub) {
+        if (!$task_parent_sub->save()) {
+            return redirect()->back()->withErrors('An error occurred while saving the task parent sub. Please try again.');
+        }
+    } else {
         return redirect()->route('project.view', $project);
+    }
+
+    return redirect()->route('project.view', $project);
+
     }
 
 

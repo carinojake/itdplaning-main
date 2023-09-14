@@ -44,11 +44,11 @@
                 <div class="col-9">
 
                     @if($taskcon->taskcon_budget_it_operating > 0)
-                    {{ number_format($taskcon->taskcon_cost_it_operating,2) }}
+                    {{ number_format($taskcon->taskcon_cost_it_operating,2) }} บาท
                     @elseif($taskcon->taskcon_budget_it_investment > 0)
-                    {{ number_format($taskcon->taskcon_cost_it_investment,2) }}
+                    {{ number_format($taskcon->taskcon_cost_it_investment,2) }} บาท
                     @elseif ($taskcon->taskcon_budget_gov_utility > 0)
-                    {{ number_format($taskcon->taskcon_cost_gov_utility,2) }}
+                    {{ number_format($taskcon->taskcon_cost_gov_utility,2) }} บาท
                     @endif
 
 
@@ -60,7 +60,7 @@
               </div>
               <div class="row">
                 <div class="col-3">{{ __('จำนวนเงิน PP') }}</div>
-                <div class="col-9">{{ number_format($taskcon->taskcon_pay,2)}}</div>
+                <div class="col-9">{{ number_format($taskcon->taskcon_pay,2)}} บาท</div>
               </div>
              {{--  <div class="row">
                 <div class="col-3">{{ __('บันทึก PP') }}</div>

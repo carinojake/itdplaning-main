@@ -2,6 +2,10 @@
 
 @isset($contract)
     <h5>มีสัญญา</h5>
+
+{{--     <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
+        class="btn-sm btn btn-primary text-white"><i class="cil-folder-open ">ข้อมูล </i></a>
+ --}}
     <div class="container">
         <div class="row">
             <div class="col-sm">
@@ -73,7 +77,7 @@
                         {{ \Carbon\Carbon::parse($contract->contract_end_date)->diffInMonths(
                             \Carbon\Carbon::parse($contract->contract_start_date),
                         ) - \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse()) }}
-                        เดือน; </div>
+                        เดือน </div>
                 </div>
 
 
@@ -90,7 +94,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PR') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_pr_budget,2) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_pr_budget,2) }} บาท</div>
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('เลขที่ PA') }}</div>
@@ -98,18 +102,18 @@
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงิน PA') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_pa_budget,2) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_pa_budget,2) }} บาท</div>
                 </div>
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</div>
                     <div class="col-6">
-                        {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget,2) }}
+                        {{ number_format($contract->contract_pr_budget - $contract->contract_pa_budget,2) }} บาท
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6 fw-semibold">{{ __('จำนวนเงินคงต่อปี PA') }}</div>
-                    <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget,2) }}</div>
+                    <div class="col-6">{{ number_format($contract->contract_peryear_pa_budget,2) }} บาท</div>
                 </div>
 
                                 <!--<div class="row">
@@ -143,7 +147,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="text-center">No Table Data</td>
+                            <td colspan="12" class="text-center">No Table Data</td>
                         </tr>
                     @endif
                 </tbody>
@@ -176,7 +180,7 @@
                             <td>{{ Helper::Date4(date('Y-m-d H:i:s', strtotime($result->taskcon_pay_date))) }}
                             </td>
                             <td>{{ $result->taskcon_pp }}</td>
-                            <td>{{ number_format($result->taskcon_pay,2) }}</td>
+                            <td>{{ number_format($result->taskcon_pay,2) }} บาท</td>
 
                                <td class="text-end">
 

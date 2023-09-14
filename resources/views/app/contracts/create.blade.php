@@ -116,7 +116,7 @@
 
                                                 <div class="col-md-3">
                                                     <label for="contract_type"
-                                                        class="form-label">{{ __('ประเภท') }}</label>
+                                                        class="form-label">{{ __('ประเภท') }}  <span class="text-danger">*</span></label>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="" disabled selected>
@@ -132,6 +132,7 @@
                                                 <div class="col-md-3">
                                                     <label for="contract_type"
                                                         class="form-label">{{ __('ประเภท') }}</label>
+                                                        <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="" disabled selected>
@@ -1275,7 +1276,7 @@
                             var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
-                            $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
+                            $("#contract_mm_budget1, #contract_pr_budget1").on("input", function() {
                                // var max = 0;
                                 var fieldId = $(this).attr('id');
                                 var budgetType = $("#project_select").val();
@@ -1679,27 +1680,47 @@
 
 
 
+
             <script>
                 $(document).ready(function() {
-                    $('#rounds').change(function() {
-                        var rounds = $(this).val();
-                        $('#tasksContainer').empty(); // clear the container
-                        for (var i = 0; i < rounds; i++) {
-                            $('#tasksContainer').append(`
-                        <div class="row mt-3">
-                            <div class="col-md-12">
+$('#rounds').change(function() {
+var rounds = $(this).val();
+$('#tasksContainer').empty(); // clear the container
+for (var i = 0; i < rounds; i++) {
+var content = `
+<div class="row mt-3">
+<div class="col-md-12">
+<br> <!-- Line break for spacing -->
+<div class="col-md-3">
+<label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+<input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
+</div>
 
-                                    <label>ชื่องวด ` + (i + 1) +
-                                ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                                `][task_name]" value="งวด ` + (i + 1) + `"required>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                        }
-                    });
-                });
-            </script>
+<br> <!-- Line break for spacing -->
+<div class="col-md-3">
+<label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+<input type="text" name="tasks[` + i + `][taskbudget]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+</div>
+<br> <!-- Line break for spacing -->
+<div class="col-md-3">
+
+</div>
+</div>
+</div>
+`;
+$('#tasksContainer').append(content);
+}
+//   <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
+//<input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+
+
+
+
+// ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
+$(":input").inputmask();
+});
+});
+</script>
 
 
             <script>

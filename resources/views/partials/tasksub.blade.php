@@ -68,19 +68,19 @@
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('งบกลาง ICT') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_operating), 2) }}
+                    {{ number_format(floatval($task->task_budget_it_operating), 2) }} บาท
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('งบดำเนินงาน') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_investment), 2) }}
+                    {{ number_format(floatval($task->task_budget_it_investment), 2) }} บาท
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('ค่าสาธารณูปโภค') }}</div>
-                    {{ number_format(floatval($task->task_budget_gov_utility), 2) }}
+                    {{ number_format(floatval($task->task_budget_gov_utility), 2) }} บาท
                 @endif
             </div>
         </div>
@@ -88,20 +88,21 @@
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                    {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }} บาท
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }}
+                    {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }} บาท
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
                     <div class="col-6">
-                        {{ number_format(floatval($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }}
+                        {{ number_format(floatval($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }} บาท
+
                     </div>
                 @endif
             </div>
@@ -109,8 +110,8 @@
 
 
             <div class="row mt-3">
-                <div class="col-12">
-                    <h5>{{ __('รายละเอียดงาน/โครงการ') }}</h5>
+                <div class="col-12 fw-semibold">
+                    <div>{{ __('รายละเอียดงาน/โครงการ') }}</div>
                 </div>
                 {{ $task->task_description }}
             </div>
@@ -140,10 +141,10 @@
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                     </td>
 
-                    <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
+                    <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}  บาท </td>
                     <td></td>
                     <td>
-                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}
+                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }} บาท
                        {{--  @if ($subtask->contract->count() > 0)
                             @foreach ($subtask->contract as $contract)
                                 <button type="button" class="badge btn btn-success text-white"
@@ -174,9 +175,23 @@
                             @endforeach
                         @endif --}}
                     </td>
-                    <td>  {{ number_format($subtask->task_pay,2) }}
+                    <td>  {{ number_format($subtask->task_pay,2) }} บาท
                     </td>
                     <td>
+
+                        @if($subtask->contract != null) <!-- Check if not null -->
+                                    @foreach ($subtask->contract as $contract)
+                                        <div>
+                                            <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-primary text-white"><i class="cil-description"></i></a>
+                                            <a href="{{ route('contract.edit', ['contract' => $contract->hashid]) }}" class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
+                                        </div>
+                                    @endforeach
+                                    @elseif($subtask->task_pay > 1)
+
+
+
+                                @endif
+
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"

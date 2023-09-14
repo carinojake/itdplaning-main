@@ -137,7 +137,7 @@
                                                         class="form-label">{{ __('ประเภท') }}</label>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
-                                                        <option value="" disabled selected>
+                                                        <option value="*" disabled selected>
                                                             {{ __('เลือกประเภท...') }}
                                                         </option>
                                                         @foreach (\Helper::contractType() as $key => $type)
@@ -150,6 +150,7 @@
                                                 <div class="col-md-3">
                                                     <label for="contract_type"
                                                         class="form-label">{{ __('ประเภท') }}</label>
+                                                        <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="" disabled selected>
@@ -374,6 +375,7 @@
                                                                             {{ __('เลขที่สัญญา ซ้ำ') }}
                                                                         </div>
                                                                     </div>
+                                                                    <input type="number" class="form-control" id="contract_reguiar_id" name="contract_reguiar_id" value="">
 
                                                                     <div class="col-md-9 ">
                                                                         <label for="contract_name" id="contract_name_label"
@@ -1193,7 +1195,12 @@
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
-
+            <script>
+                var contractNumber = "contract_number";
+                var parts = contractNumber.split("/");
+                var contractReguiarId = parts[0];
+                document.getElementById("contract_reguiar_id").value = contractReguiarId;
+            </script>
 
             <script>
                 var costFields = ['contract_pa_budget', 'task_cost_it_investment', 'task_cost_gov_utility'];
