@@ -2656,10 +2656,12 @@ dd($cteQuery); */
         $contract_tasks = Contract::whereIn('contract_id', $contractIds)->get();
 
 
-    // dd ($contract_tasks);
+   //  dd ($contract_tasks);
        // $contractId = $projectcontract->contract_id;
 
         //dd($contractId);
+
+
 
         ($project->main_task);
 
@@ -3644,7 +3646,7 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
 
        // dd($task);
 
-       // dd($task->subtask);
+       //dd($task->subtask);
 
      //  dd($contract);
 

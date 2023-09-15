@@ -90,6 +90,8 @@
                                     <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
                                         สญ.ที่ {{ $contract->contract_number }}
                                     </a>
+                                     <p> {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>' !!}
+
                                 @endforeach
                             </td>
 
@@ -137,9 +139,12 @@
 
                                     @endif --}}
                                     @foreach ($subtask->contract as $contract)
-                                    <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success  btn-sm"><i class="cil-description"></i></a></a>
-                                @endforeach
-                                    <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+                        <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success btn-sm"><i class="cil-description"></i></a>
+                    @endforeach
+
+                    @if ($subtask->contract->count() < 1)
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+                        @endif
                                     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
                                     <form class="delete-form" action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" method="POST" style="display:inline">
                                         @method('DELETE')
@@ -159,8 +164,19 @@
                             <td colspan="12">
                                 @foreach ($subtask->subtaskparent as $subtask_sub)
                                     <div>- {{ $subtask_sub->task_name }}</div>
+                                    @foreach ($subtask_sub->contract as $contract)
+                                    <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
+                                     <span class="badge btn btn-success text-white">{{ $contract->contract_number }}</span></a>
+                                     <?php
+                                     echo isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>';
+                                     ?>
                                 @endforeach
+
+                                @endforeach
+
+
                             </td>
+
                         </tr>
                     @endforeach
                 @endif

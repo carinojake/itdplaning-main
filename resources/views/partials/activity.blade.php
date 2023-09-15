@@ -71,7 +71,9 @@
                                                     สญ.ที่ {{  ($contract->contract_number)  }}
 
                                             </button>
-
+                                            <?php
+                                            echo isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>';
+                                            ?>
                                             <!-- Modal -->
                                             <div class="modal fade"
                                                 id="exampleModal{{ $contract->hashid }}"
@@ -84,7 +86,9 @@
                                                             <h5 class="modal-title"
                                                                 id="exampleModalLabel">
                                                                 สัญญา
-                                                                {{ $contract->contract_number }}
+                                                                {{ $contract->contract_number }} <?php
+                                                                echo isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>';
+                                                                ?>
                                                             </h5>
                                                             <button type="button"
                                                                 class="btn-close"
@@ -107,7 +111,7 @@
                                                                             <div
                                                                                 class="col-9">
                                                                                 <?php
-                                                                                echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
+                                                                                echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:green;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:red;">อยู่ในระหว่างดำเนินการ</span>';
                                                                                 ?>
                                                                             </div>
                                                                         </div>
@@ -401,10 +405,23 @@ echo isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $dura
                             <div>
 
                            - {{ $subtask_sub->task_name }}
+
+                               @foreach ($subtask_sub->contract as $contract)
+                                   <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
+                                    <span class="badge btn btn-success text-white">{{ $contract->contract_number }}</span></a>
+                                    <?php
+                                    echo isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>';
+                                    ?>
+                               @endforeach
+
+
+
                             </div>
+
                         @endforeach
 
-                                    @endforeach
+
+                        @endforeach
 
 
 

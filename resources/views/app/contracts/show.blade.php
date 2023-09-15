@@ -27,7 +27,7 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-danger">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-success">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>' !!}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 

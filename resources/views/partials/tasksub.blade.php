@@ -124,6 +124,7 @@
         <tr>
             <th width="50">ลำดับ</th>
             <th>กิจกรรม</th>
+            <th>สญ.</th>
             <th>วันที่</th>
             <th>งบ</th>
             <th></th>
@@ -136,6 +137,15 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $subtask->task_name }}{!! $subtask->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
+                    <td>
+                        @foreach ($subtask->contract as $contract)
+                            <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
+                                สญ.ที่ {{ $contract->contract_number }}
+                            </a>
+                             <p> {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>' !!}
+
+                        @endforeach
+                    </td>
                     <td>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
@@ -179,21 +189,16 @@
                     </td>
                     <td>
 
-                        @if($subtask->contract != null) <!-- Check if not null -->
-                                    @foreach ($subtask->contract as $contract)
-                                        <div>
-                                            <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-primary text-white"><i class="cil-description"></i></a>
-                                            <a href="{{ route('contract.edit', ['contract' => $contract->hashid]) }}" class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
-                                        </div>
-                                    @endforeach
-                                    @elseif($subtask->task_pay > 1)
 
 
+                        @foreach ($subtask->contract as $contract)
+                        <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success btn-sm"><i class="cil-description"></i></a>
+                    @endforeach
 
-                                @endif
+                    @if ($subtask->contract->count() < 1)
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+                        @endif
 
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                            class="btn btn-primary btn-sm" ><i class="cil-folder-open"></i></a>
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                         <form class="delete-form"
