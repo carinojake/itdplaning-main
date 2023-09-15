@@ -3413,7 +3413,7 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
 
    //dd($combinedQuery);
   // dd($task->subtask);
-      ($cteQuery->get());
+      //dd($cteQuery->get());
 
      ($combinedQuery);
       //$cteQuery = $cteQuery->first();

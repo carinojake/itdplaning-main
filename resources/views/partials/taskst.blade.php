@@ -111,6 +111,9 @@
                                 @if($relatedData->totalLeastconPay >1)
 
                                 {{ number_format($relatedData->totalLeastconPay, 2) }} บาท
+                                @elseif($relatedData->totalLeastPay >1)
+                                {{ number_format($relatedData->totalLeastPay,2) }} บาท
+
 
                                 @elseif($subtask->task_pay > 1)
                                     {{ number_format($subtask->task_pay, 2) }} บาท

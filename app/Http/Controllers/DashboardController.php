@@ -1251,7 +1251,7 @@ as d')
             ($osa = $json[0]->osa);
             ($osa = (float)$osa);
 
-
+           // dd($osa);
 
 
 
