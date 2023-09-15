@@ -27,7 +27,7 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
-                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
@@ -318,7 +318,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
                             <p class="card-text">
-                                {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-danger">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-success">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
                             </p>
 
                             <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
@@ -698,27 +698,27 @@
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
                             if (task.task_total_pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.task_total_pay) + '</span>';
                             } else if (task.task_type == 1 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
                             } else if (task.task_type == 2 && task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
                             } else if (task.total_pay > 0) {
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_pay) + '</span>';
                             } else if (task.pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';

@@ -49,7 +49,7 @@ class ContractController extends Controller
                     $diffInDays = $endDate->diffInDays($startDate);
                     $diffInDaysend = $endDate->diffInDays($startDate) - \Carbon\Carbon::parse($row->contract_start_date)->diffInDays(\Carbon\Carbon::parse());;
 
-                    $flag_status = $row->contract_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
+                    $flag_status = $row->contract_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '<span>' . (isset($diffInMonthsend) && $diffInMonthsend < 3
                     ? '<span class="badge bg-danger style="color:red;">เหลือเวลา ' . $diffInMonthsend . '  เดือน / เหลือ ' . $diffInDaysend . ' วัน</span>'
                     : '<span class="badge bg-success  style="color:rgb(5, 255, 5);">เหลือเวลา ' . $diffInMonthsend . ' เดือน</span>')
                     . ' ' . ' </span>';;

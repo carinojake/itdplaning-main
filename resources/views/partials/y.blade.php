@@ -12,9 +12,7 @@
                 <div class="row">
                     <div class="col-3 fw-semibold">{{ __('สถานะสัญญา') }}</div>
                     <div class="col-9">
-                        <?php
-                        echo isset($contract) && $contract->contract_status == 2 ? '<span style="color:red;">ดำเนินการแล้วเสร็จ</span>' : '<span style="color:green;">อยู่ในระหว่างดำเนินการ</span>';
-                        ?>
+                        {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-info">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
                     </div>
                 </div>
 

@@ -231,26 +231,26 @@
                             //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
 
                             if (task.task_total_pay > 0) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_pay_paycon) + '</span>';
 
                             } else
                             if (task.task_type == 1) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
                             } else if (task.task_type == 2) {
-                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.pay) + '</span>';
 
                             } else if (task.total_pay_paycon > 0) {
 
-                                return '<span style="color:#6010f6;">' + new Intl.NumberFormat('th-TH', {
+                                return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.total_pay_paycon) + '</span>';

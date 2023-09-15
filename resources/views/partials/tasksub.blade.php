@@ -124,7 +124,7 @@
         <tr>
             <th width="50">ลำดับ</th>
             <th>กิจกรรม</th>
-            <th>สญ.</th>
+            <th>สถานะ</th>
             <th>วันที่</th>
             <th>งบ</th>
             <th></th>
@@ -136,13 +136,23 @@
             @foreach ($task->subtask as $index => $subtask)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $subtask->task_name }}{!! $subtask->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}</td>
                     <td>
+
+
+                        {{ $subtask->task_name }}
+                    <p>
                         @foreach ($subtask->contract as $contract)
-                            <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
-                                สญ.ที่ {{ $contract->contract_number }}
-                            </a>
-                             <p> {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-danger">อยู่ในระหว่างดำเนินการ</span>' !!}
+                        <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
+                            สญ.ที่ {{ $contract->contract_number }}
+                        </a>
+
+                    @endforeach
+
+                    </td>
+                    <td>
+                        {!! $subtask->task_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+                        @foreach ($subtask->contract as $contract)
+                           {!! isset($contract) && $contract->contract_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning  text-dark">อยู่ในระหว่างดำเนินการ</span>' !!}
 
                         @endforeach
                     </td>
@@ -212,7 +222,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td colspan="5">
+                    <td colspan="12">
                         @foreach ($subtask->subtaskparent as $subtask_sub)
                             <div>- {{ $subtask_sub->task_name }}</div>
                         @endforeach
