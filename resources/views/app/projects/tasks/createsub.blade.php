@@ -174,7 +174,7 @@
                                         <div class="col-md-3 mt-3">
 
                                             <label for="task_mm_budget"
-                                                class="form-label">{{ __('mm_budget') }}</label>
+                                                class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                 class="form-control numeral-mask"
@@ -484,15 +484,6 @@
         </script>
 
 
-
-
-
-
-
-
-
-
-
         <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
@@ -536,7 +527,7 @@
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
                                     if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกินwwww " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                      /*  $(this).val(max.toFixed(2)); */
            $(this).val(0);
                     }

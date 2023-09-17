@@ -89,8 +89,16 @@
                             @endif
                             " data-bs-trigger="hover focus">
                                 <div class="fs-4 fw-semibold text-success">
+                                    @if ( $budget['project_type'] == 1)
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                       {{--              @elseif( $budget['project_type'] == 2 && $tasks['task_refund_pa_status'] == '3')
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end_p2_mm']), 2) }} --}}
+                                    @elseif( $budget['project_type'] == 2)
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end_p2']), 2) }}
 
+
+
+                                    @endif
                                 </div>
                                 <small class="text-xl">
                                     งบประมาณคงเหลือที่ไช้ได้
@@ -116,6 +124,7 @@
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
+
                                         {{ number_format($project['budget_it_operating'],2) }}
                                     </div>
                                     <div>
@@ -292,8 +301,11 @@
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
-                                       {{-- {{ number_format(floatval($op_refund_budget_pr), 2) }} --}}
-                                       {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                        @if ( $budget['project_type'] == 1)
+                                        {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                        @elseif( $budget['project_type'] == 2)
+                                        {{ number_format(floatval( $budget['budget_total_task_budget_end_p2']), 2) }}
+                                        @endif
                                     </div>
                                     <div>
                                         <small class="text-xl">

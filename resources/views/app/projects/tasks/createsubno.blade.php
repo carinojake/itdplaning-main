@@ -115,50 +115,23 @@
                                                         <h4>งบประมาณที่ได้รับจัดสรร</h4>
                                                         <div class="row">
                                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                                                <div class="col-md-4">
-                                                                    <label for="budget_it_operating"
-                                                                        class="form-label">{{ __('งบกลาง ICT ') }}</label>
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
-                                                                        step="0.01"
-                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_it_operating"
-                                                                        name="budget_it_operating" min="0"
-                                                                        disabled readonly>
-                                                                </div>
-                                                            @endif
-
-                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
-                                                                <div class="col-4">
-                                                                    <label for="budget_it_investment"
-                                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
-                                                                        step="0.01"
-                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_it_investment"
-                                                                        name="budget_it_investment" min="0"
-                                                                        disabled readonly>
-                                                                </div>
-                                                            @endif
-
-                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                                                <div class="col-md-4">
-                                                                    <label for="budget_gov_utility"
-                                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท"
-                                                                        step="0.01"
-                                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_gov_utility"
-                                                                        name="budget_gov_utility" min="0"
-                                                                        disabled readonly>
-                                                                </div>
+                                                            <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
+                                                                <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
                                                             @endif
                                                         </div>
+                                                        <div class="row">
+                                                            @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                            <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
+                                                                <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="row">
+                                                            @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                            <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                                <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                     </div>
 
 
@@ -280,7 +253,7 @@
                                                     </div>
                                                     <div class="callout callout-warning">
                                                         <div class="row ">
-                                                            <div class="col-md-4 mt-3">
+                                                          {{--   <div class="col-md-4 mt-3">
                                                                 <label for="project_select"
                                                                     class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                                 <span class="text-danger">*</span>
@@ -301,7 +274,7 @@
                                                                             ค่าสาธารณูปโภค</option>
                                                                     @endif
                                                                 </select>
-                                                            </div>
+                                                            </div> --}}
 
                                                             {{--    <div class="project_select">
                                                                     {{ __('ประเภท งบประมาณ') }}
@@ -674,7 +647,7 @@
         <x-slot:javascript>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <!-- Add the necessary CSS and JS files for Select2 -->
-
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
             <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -749,9 +722,7 @@
                     $(document).ready(function() {
                         $('#project_select').change(function() {
                             // ซ่อนทุกฟิลด์ก่อน
-                            $('#ICT').hide();
-                            $('#inv').hide();
-                            $('#utility').hide();
+
                             $('#task_pay_d').hide();
 
 

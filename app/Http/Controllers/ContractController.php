@@ -522,15 +522,12 @@ class ContractController extends Controller
         $tasksJson = json_encode($tasksData);
 
         return view('app.contracts.create', compact
-
         ('origin', 'project', 'task'
         , 'pro', 'ta', 'fiscal_year', 'tasks',
          'tasksJson',
          'request',
          'tasksDetails',
          'projectDetails',
-
-
          'sum_task_budget_it_operating',
             'sum_task_budget_it_investment',
             'sum_task_budget_gov_utility',
@@ -1671,15 +1668,22 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
      */
     public function taskconUpdate(Request $request, $contract, $taskcon)
     {
-        $id_contract = Hashids::decode($contract)[0];
-        $id_taskcon    = Hashids::decode($taskcon)[0];
-        $contract    = Contract::find($id_contract);
-        $taskcon       = taskcon::find($id_taskcon);
 
-        ($task_sub_contract=$contract->taskcont);
+        $id_contract = Hashids::decode($contract)[0];
+        $id_taskcon  = Hashids::decode($taskcon)[0];
+
+        $contract = Contract::find($id_contract);
+        $taskcon  = taskcon::find($id_taskcon);
+
+        if (!$contract || !$taskcon) {
+            // Handle the case where either $contract or $taskcon is null
+            return redirect()->back()->with('error', 'Contract or Taskcon not found.');
+        }
+
+        $task_sub_contract = $contract->taskcont;
         $tb = $task_sub_contract->first();
-        $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
-         $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+        // ... (The rest of your code)
 
 
 
@@ -1745,38 +1749,6 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
         }
 
-
-
-
-    /*     if ($start_date_obj === false || $end_date_obj === false   ) {
-            // Handle date conversion error
-            // You can either return an error message or use a default date
-
-        } else {
-            $start_date_obj->modify('-543 years');
-            $end_date_obj->modify('-543 years');
-            $pay_date_obj->modify('-543 years');
-            $start_date = date_format($start_date_obj, 'Y-m-d');
-            $end_date = date_format($end_date_obj, 'Y-m-d');
-            $pay_date = date_format($pay_date_obj, 'Y-m-d');
-        } */
-
-
-       // $pay_date_str = $request->input('taskcon_pay_date');
-       // $pay_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('taskcon_pay_date'))->format('Y-m-d');
-       // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
-
-       /*  if ($pay_date_obj !== false) {
-            $pay_date_obj->modify('-543 years');
-            $pay_date = $pay_date_obj->format('Y-m-d');
-        } else {
-            $pay_date = null; // or any default value
-        } */
-
-
-
-
-
         // convert input to decimal or set it to null if empty
         $taskcon_budget_it_operating = str_replace(',', '', $request->input('taskcon_budget_it_operating'));
         $taskcon_budget_gov_utility = str_replace(',', '', $request->input('taskcon_budget_gov_utility'));
@@ -1826,12 +1798,6 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $taskcon->taskcon_name        = $request->input('taskcon_name');
         $taskcon->taskcon_status      = $request->input('taskcon_status');
 
-        /*         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
-        $taskcon->taskcon_start_date  = $start_date ;
-        $taskcon->taskcon_end_date    = $end_date ;
-        $taskcon->taskcon_pay_date     =  $pay_date ; */
-
-
 
         $taskcon->taskcon_description = trim($request->input('taskcon_description'));
         $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
@@ -1868,54 +1834,6 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
 
 
-       // dd($taskcon);
-
-
-
-
-
-
-
-
-        ($task_sub_contract=$contract->taskcont);
-        $tb = $task_sub_contract->first();
-        $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
-         $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
-
-        //dd($task_sub_contract, $task_parent_sub,$task_parent_st);
-         if ($task_parent_sub !== null) {
-
-            if ($task_parent_sub->task_parent_sub_cost > 1) {
-               // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
-               // dd($task_parent_sub);
-               // $task_parent_sub->save();
-            } elseif ($task_parent_sub->task_parent_sub_pay !== null) {
-                //$task_parent_sub->task_parent_sub_pay += $taskcon_pay;
-               // $task_parent_sub->save();
-            } else {
-
-               // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
-                //$task_parent_sub->save();
-
-                $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
-
-                ($task_parent_st);
-
-
-            }
-        }
-
-        if ($task_parent_st !== null) {
-        if ($task_parent_st->task_parent_sub_cost >1) {
-
-            $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $taskcon_pay;
-            //dd($task_parent_st);
-
-            $task_parent_st->save();
-        }
-
-    }
-
 
 
         if ($taskcon->save()) {
@@ -1934,6 +1852,57 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
             }
 
 
+
+            if ($tb) {
+                $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
+                if ($task_parent_sub) {
+                    $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+                    // Continue your logic
+                    ($task_sub_contract=$contract->taskcont);
+                    $tb = $task_sub_contract->first();
+                    $task_parent_sub = Task::where('task_id', $tb->task_parent)->first();
+                     $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+                    //dd($task_sub_contract, $task_parent_sub,$task_parent_st);
+                     if ($task_parent_sub !== null) {
+
+                        if ($task_parent_sub->task_parent_sub_cost > 1) {
+                           // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+                           // dd($task_parent_sub);
+                           // $task_parent_sub->save();
+                        } elseif ($task_parent_sub->task_parent_sub_pay !== null) {
+                            //$task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+                           // $task_parent_sub->save();
+                        } else {
+
+                           // $task_parent_sub->task_parent_sub_pay += $taskcon_pay;
+                            //$task_parent_sub->save();
+
+                            $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+                            ($task_parent_st);
+
+
+                        }
+                    }
+
+                    if ($task_parent_st !== null) {
+                    if ($task_parent_st->task_parent_sub_cost >1) {
+
+                        $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $taskcon_pay;
+                        //dd($task_parent_st);
+
+                        $task_parent_st->save();
+                    }
+
+                }
+
+                } else {
+                    // Handle the case where $task_parent_sub is null
+                }
+            } else {
+                // Handle the case where $tb is null
+            }
 
 
 

@@ -3,11 +3,20 @@
                       <div class="container">
                             @foreach ($taskcons as $taskcon)
                             <x-slot:toolbar>
+                                @if ($project['project_type'] == 2)
+                                <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                    @method('POST') {{-- Use POST method to submit the form --}}
+                                    @csrf
+                                    <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
+                                </form>
+                                @endif
+                                @if ($project['project_type'] == 1)
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST') {{-- Use POST method to submit the form --}}
                                 @csrf
                                 <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
                             </form>
+                            @endif
                             <a onclick="history.back()"
                                 class="btn btn-secondary">กลับ</a>
 {{--

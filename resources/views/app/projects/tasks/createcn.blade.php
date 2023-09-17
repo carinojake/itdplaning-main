@@ -14,10 +14,10 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('เพิ่มกิจกรรม ') }}">
+                        <x-card title="{{ __('เพิ่ม สัญญา ') }}">
 
-                            <form method="POST" action="{{ route('project.task.create', $project) }}"
-                                class="row g-3 needs-validation" novalidate>
+                            <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3 needs-validation" novalidate>
+
 
                                 @csrf
 
@@ -106,24 +106,15 @@
                                     </div>
 
 
-                                    <div class="row mt-3">
-                                        <label
-                                        class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
-                                </div>
-
+{{--
                                         <div class="row">
                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                 <div class="col-md-4">
                                                     <label for="budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
-                                                    <input type="text"
-                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
-                                                        step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                        class="form-control numeral-mask"
-                                                        id="budget_it_operating"
-                                                        name="budget_it_operating" min="0"
-                                                        disabled readonly>
+                                                        <div class="col-3">
+                                                      {{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท
+
                                                 </div>
                                             @endif
 
@@ -131,14 +122,9 @@
                                                 <div class="col-4">
                                                     <label for="budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                    <input type="text"
-                                                        placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
-                                                        step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                        class="form-control numeral-mask"
-                                                        id="budget_it_investment"
-                                                        name="budget_it_investment" min="0"
-                                                        disabled readonly>
+                                                        <div class="col-3">
+                                                       {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท
+
                                                 </div>
                                             @endif
 
@@ -155,31 +141,56 @@
                                                         name="budget_gov_utility" min="0"
                                                         disabled readonly>
                                                 </div>
-                                            @endif
+                                            @endif --}}
+
+                                            <div class="row mt-3">
+                                                <label
+                                                class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
                                         </div>
-                                    </div>
+                                            <div class="row">
+                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
+                                                    <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+
+                                                    @endif
+                                            </div>
+                                            <div class="row">
+                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
+                                                    <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                                @endif
+                                            </div>
+                                            <div class="row">
+                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                    <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                                @endif
+                                            </div>
+                                        </div>
 
 
-                             {{--        <div class="d-none  col-md-4">
-                                        <label for="task_type"
-                                            class="form-label">{{ __('งาน/โครงการ') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio"
-                                                name="task_type" id="task_type1" value="1">
-                                            <label class="form-check-label" for="task_type1">
-                                                มี PA
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio"
-                                                name="task_type" id="task_type2" value="2"
-                                                checked>
-                                            <label class="form-check-label" for="task_type2">
-                                                ไม่มี PA
-                                            </label>
-                                        </div>
-                                    </div> --}}
+
+
+                                                {{--        <div class="d-none  col-md-4">
+                                                            <label for="task_type"
+                                                                class="form-label">{{ __('งาน/โครงการ') }}</label> <span
+                                                                class="text-danger">*</span>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="task_type" id="task_type1" value="1">
+                                                                <label class="form-check-label" for="task_type1">
+                                                                    มี PA
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="task_type" id="task_type2" value="2"
+                                                                    checked>
+                                                                <label class="form-check-label" for="task_type2">
+                                                                    ไม่มี PA
+                                                                </label>
+                                                            </div>
+                                                        </div> --}}
                                 </div>
 
 
@@ -201,7 +212,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div {{-- class="d-none" --}}>
+                                <div  class="d-none" >
                                     @if (session('contract_id'))
                                         ID: {{ session('contract_id') }}
                                     @endif
@@ -245,182 +256,9 @@
 
 
 
-                              <div>
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <label for="task_contract"
-                                                class="form-label">{{ __('สัญญา') }}</label> <span
-                                                class="text-danger">*</span>
-                                            <select name="task_contract" id="task_contract" class="form-control">
-                                                <option value="">ไม่มี</option>
-                                                @foreach ($contracts as $contract)
-                                                    <option value="{{ $contract->contract_id }}"
-                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-
-                                            <div class="invalid-feedback">
-                                                {{ __('สัญญา') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if (session('contract_id') == 0)
-                                    <div class="col-md-3 mt-4">
-                                        {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                            {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
-                                            class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา</a> --}}
-
-                                        <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
-                                            class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา</a>
-                                    </div>
-                                    @endif
-                                </div>
-
-
-
-{{--
-                                <div class="row mt-3">
-
-
-                                    <div class="col-md-12">
-                                        <label for="task_mm" class="form-label">{{ __('MM') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="task_mm" name="task_mm"
-                                        value= {{ session('contract_mm') }}   >
-                                    </div>
-
-                                    <div class="col-md-12 mt-3">
-                                        <label for="task_name" class="form-label">{{ __('ชื่อสัญญา') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="task_name" name="task_name"
-                                        value= {{ session('contract_name') }} >
-                                    </div>
-
-                                </div> --}}
-
-
-
-
-
-
-
-                               {{--  <div class="row mt-3">
-                                    <div class=" col-md-4">
-                                        <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
-
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status1" value="1" checked>
-                                            <label class="form-check-label" for="task_status1">
-                                                ระหว่างดำเนินการ
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status2" value="2">
-                                            <label class="form-check-label" for="task_status2">
-                                                ดำเนินการแล้วเสร็จ
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                <div class="d-none col-md-3">
-                    <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
-                    <span class="text-danger">*</span>
-
-                        <select name="task_parent" id="task_parent" class="form-control">
-
-                            <option value="">ไม่มี</option>
-                            @foreach ($tasks as $task)
-                              <option value="{{ $task->task_id }}">{{ $task->task_name }}</option>
-                            @endforeach
-                          </select>
-                </select>
-                      </select>
-                    <div class="invalid-feedback">
-                        {{ __('กิจกรรมย่อย') }}
-                    </div>
-                </div>
-                                    </div>
-
-                                @if (session('contract_id'))
-                                    ID: {{ session('contract_id') }}
-                                @endif
-                                @if (session('contract_number'))
-                                    Number: {{ session('contract_number') }}
-                                @endif
-                                @if (session('contract_name'))
-                                    Name: {{ session('contract_name') }}
-                                @endif
-
-
-                                <div id="contractSelection">
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <div class="form-group">
-                                            <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label>
-
-                                            <select name="task_contract" id="task_contract" class="form-control">
-                                                <option value="">ไม่มี</option>
-                                                @foreach ($contracts as $contract)
-                                                    <option value="{{ $contract->contract_id }}"
-                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                            <div class="invalid-feedback">
-                                                {{ __('สัญญา') }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 mt-4">
-
-                                        <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
-                                            class="btn btn-success text-white"
-                                            target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
-                                    </div>
-                                </div> --}}
-
-
-                                </div>
-                             {{--    <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <label for="task_start_date"
-                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <input class="form-control" id="task_start_date" name="task_start_date"
-                                        value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
-                                            required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                        <span class="text-danger">*</span>
-                                        <input class="form-control" id="task_end_date" name="task_end_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 mt-3">
-                                    <label for="task_description"
-                                        class="form-label">{{ __('รายละเอียดกิจกรรม') }}</label>
-                                    <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
-                                    <div class="invalid-feedback">
-                                        {{ __('รายละเอียดกิจกรรม') }}
-                                    </div>
-                                </div> --}}
-
                                 <div id="mm_form">
 
-                                    <div class="d-none col-md-4">
+                              {{--       <div class="d-none col-md-4">
                                         <label for="task_status"
                                             class="form-label">{{ __('สถานะกิจกรรม') }}</label>
 
@@ -439,8 +277,9 @@
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="callout callout-primary row mt-3">
+
                                         <div class="row">
                                             <div class="col-md-4 mt-3">
                                                 <label for="task_mm"
@@ -465,8 +304,71 @@
                                                     {{ __('ชื่อสัญญา ซ้ำ') }}
                                                 </div>
                                             </div>
-                                        </div>
 
+                                            <div class="col-md-3 mt-3">
+
+                                                <label for="task_mm_budget"
+                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                    class="form-control numeral-mask"
+                                                    id="task_mm_budget" name="task_mm_budget"
+                                                    min="0"  value={{ session('contract_mm_budget') }} >
+
+                                                <div class="invalid-feedback">
+                                                    {{ __('mm') }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-9 mt-3">
+                                                <div class="form-group">
+                                                    <label for="task_contract"
+                                                        class="form-label">{{ __('สัญญา') }}</label> <span
+                                                        class="text-danger">*</span>
+                                                    <select name="task_contract" id="task_contract" class="form-control">
+                                                        <option value="">ไม่มี</option>
+                                                        @foreach ($contracts as $contract)
+                                                            <option value="{{ $contract->contract_id }}"
+                                                                {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                                [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+
+                                                    <div class="invalid-feedback">
+                                                        {{ __('สัญญา') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if (session('contract_id') == 0)
+                                            <div class="col-md-3 mt-4">
+                                                {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
+                                    {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                                    class="btn btn-success text-white"
+                                                    target="contractCreate">เพิ่มสัญญา</a> --}}
+
+                                                <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
+                                                    class="btn btn-success text-white"
+                                                    target="contractCreate">เพิ่มสัญญา</a>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <label for="task_name"
+                                                class="form-label">{{ __('ชื่อรายการ') }}</label>
+                                               {{--  <span class="text-danger">*</span> --}}
+                                            <input type="text" class="form-control" id="task_name" name="task_name"
+                                            value= {{ session('contract_name') }}>
+                                            <div class="invalid-feedback">
+                                                {{ __('ชื่อรายการ') }}
+                                            </div>
+
+                                        </div>
                                         <div class="row mt-3">
                                             <div class="col-md-6">
                                                 <label for="task_start_date"
@@ -483,19 +385,9 @@
                                                     name="task_end_date" name="task_start_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 mt-3">
+                               {{--          <div class="col-md-4 mt-3">
                                             <label for="task_mm_budget"
                                                 class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
-
-                                 {{--            <input type="text" placeholder="0.00" step="0.01"
-                                                class="form-control"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                class="form-control numeral-mask"
-                                                id="task_mm_budget"
-                                                name="task_mm_budget"
-                                                min="0"  value={{ session('contract_mm_budget') }}> --}}
-
-
                                                 <input type="text" placeholder="0.00"
                                                 step="0.01"
                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -505,7 +397,7 @@
                                                 min="0"
                                                 value={{ session('contract_mm_budget') }}>
 
-                                        </div>
+                                        </div> --}}
                                     </div>
 
 
@@ -513,7 +405,7 @@
 
                                     <div class="callout callout-warning">
                                         <div class="row ">
-                                            <div class="col-md-4 mt-3">
+                                           {{--  <div class="col-md-4 mt-3">
                                                 <label for="project_select"
                                                     class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                 <span class="text-danger">*</span>
@@ -527,13 +419,38 @@
 
                                                 </select>
 
-                                            </div>
+                                            </div> --}}
 
                                             {{--    <div class="project_select">
                                                     {{ __('ประเภท งบประมาณ') }}
                                                 </div> --}}
-                                        </div>
+                                                <div class="row mt-3">
+                                                    <label
+                                                    class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
+                                            </div>
+                                                <div class="row">
+                                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                    <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
+                                                        <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+                                                    @endif
+                                                </div>
+                                                <div class="row">
+                                                    @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                    <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
+                                                        <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                                    @endif
+                                                </div>
+                                                <div class="row">
+                                                    @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                    <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                                        <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
                                         <!-- Contract Type -->
+
+
 
                                         @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                             <div id="ICT" {{-- style="display:none;" --}}>
@@ -558,7 +475,7 @@
 
                                                     <div class="col-md-4">
                                                         <label for="task_cost_it_operating"
-                                                            class="form-label">{{ __('รอการเบิก งบกลาง ICT ( ยอด pa / ไม่ pa )') }}</label>
+                                                            class="form-label">{{ __('รอการเบิก งบกลาง ICT ') }}</label>
                                                         <input type="text" placeholder="0.00"
                                                             step="0.01"
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -601,7 +518,7 @@
 
                                                     <div class="col-md-4">
                                                         <label for="task_cost_it_investment"
-                                                            class="form-label">{{ __('รอการเบิก งบดำเนินงาน ( ยอด pa /ไม่ pa )') }}</label>
+                                                            class="form-label">{{ __('รอการเบิก งบดำเนินงาน ') }}</label>
                                                         <input type="text" placeholder="0.00"
                                                             step="0.01"
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -643,7 +560,7 @@
 
                                                     <div class="col-md-4">
                                                         <label for="task_cost_gov_utility"
-                                                            class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค (ยอด pa / ไม่ pa )') }}</label>
+                                                            class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค ') }}</label>
                                                         <input type="text" placeholder="0.00"
                                                             step="0.01"
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
@@ -796,7 +713,37 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+        <script>
+            var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+            var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
 
+            function calculateRefund() {
+                var totalRefund = 0;
+
+                costFields.forEach(function(costField, index) {
+                    var pa_value = $("#" + costField).val();
+                    var pr_value = $("#" + budgetFields[index]).val();
+
+                    if (pa_value && pr_value) {
+                        var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                        var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                        if (pa_budget != 0) {
+                            var refund = pr_budget - pa_budget;
+                            totalRefund += refund;
+                        }
+                    }
+                });
+
+                $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
+            }
+
+            $(document).ready(function() {
+                costFields.forEach(function(costField, index) {
+                    $("#" + costField).on("input", calculateRefund);
+                });
+            });
+        </script>
         <script>
             $(document).ready(function() {
                 // Initialize Select2 on the select element

@@ -1,8 +1,11 @@
 
 
 @if ($task['task_parent'] == null)
+
     <h2>{{ $task->task_name }}</h2>
     <div class="container">
+        @if ($project['project_type'] == 1)
+
         <div class="row mt-5">
             <div class="col-sm">
                 <div class="row">
@@ -54,7 +57,6 @@
                 </div>
             </div>
 
-
                 <div class="row mt-3">
                     <div class="col-12 fw-semibold">
                         <div>{{ __('รายละเอียดงาน/โครงการ') }}</div>
@@ -62,6 +64,7 @@
                     {{ $task->task_description }}
                 </div>
         </div>
+        @endif
 
   @if ($task->subtask->count() > 0)
         <table class="table mt-3">

@@ -205,7 +205,7 @@ class DashboardController extends Controller
            // ->toJson(JSON_NUMERIC_CHECK)
         );
 
-       // dd($task_pay_xy,$taskcon_pay_sum_1);
+       //dd($task_pay_xy,$taskcon_pay_sum_1);
         // Convert the chart data to an array
 
         $mergedCollection = $task_pay_xy->map(function($item) use ($taskcon_pay_sum_1) {
@@ -237,7 +237,7 @@ class DashboardController extends Controller
             return $item;
         });
 
-        //dd($mergedCollection);
+       // dd($mergedCollection);
 
 
         $jsonMergedCollection = $mergedCollection->toJson(JSON_NUMERIC_CHECK);

@@ -20,17 +20,22 @@
 
                     <td>
                         <div>
-                            <span style="color: green;">{{ isset($task->taskcon_mm) ? $task->taskcon_mm . ' - ' : '' }}</span> {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
-                        </div>
+                            @if ($task->contract->count() > 0)
 
-                        @if ($task->contract->count() > 0)
-                            <div class="mt-2">
-                                <h6>สัญญา</h6>
-                                @foreach ($task->contract as $contract)
-                                    <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"><span class="badge bg-warning">{{ $contract->contract_number }}</span></a>
-                                @endforeach
-                            </div>
-                        @endif
+
+                            @foreach ($task->contract as $contract)
+                                <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"><span  class="badge btn btn-success text-white ">{{ $contract->contract_number }}</span></a>
+                            @endforeach
+
+                    @endif      <span style="color: green;">{{ isset($task->taskcon_mm) ? $task->taskcon_mm . ' - ' : '' }}</span> {{ $task->task_name }} {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+                    <?php
+                    echo isset($task) && $task->task_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-dark">อยู่ในระหว่างดำเนินการ</span>';
+                    ?>
+
+
+                </div>
+
+
 
                         @if ($task->subtask->count() > 0)
                             <div class="mt-2">
@@ -53,20 +58,12 @@
                                  </button>
                                  @endforeach
                                  @endif
-
                                  {{ $subtask->task_name }}
                                  <?php
                                  echo isset($subtask) && $subtask->task_status == 2 ? '<span class="badge bg-success text-dark ">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-dark">อยู่ในระหว่างดำเนินการ</span>';
                                 ?>
-
                                             @if ($subtask->contract->count() > 0)
-
-
-
                                                 @foreach ($subtask->contract as $contract)
-
-
-
 
                                                        <!-- Button trigger modal -->
 
