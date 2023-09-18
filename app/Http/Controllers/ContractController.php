@@ -1356,6 +1356,8 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
         $contract->contract_juristic_id = $request->input('contract_juristic_id') ?? null;
         $contract->contract_order_no    = $request->input('contract_order_no') ?? null;
         $contract->contract_type        = $request->input('contract_type') ?? null;
+        $contract->contract_project_type        = $request->input('contract_project_type') ?? null;
+
         $contract->contract_acquisition = $request->input('contract_acquisition') ?? null;
         $contract->contract_sign_date   = $sign_date ?? null;
         $contract->contract_projectplan        = $request->input('contract_projectplan');

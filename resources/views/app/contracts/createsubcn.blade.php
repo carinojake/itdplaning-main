@@ -375,8 +375,8 @@
                                                                             {{ __('เลขที่สัญญา ซ้ำ') }}
                                                                         </div>
                                                                     </div>
-                                                                    <input type="number" class="form-control" id="contract_reguiar_id" name="contract_reguiar_id" value="">
-
+{{--                                                                     <input type="number" class="form-control" id="contract_reguiar_id" name="contract_reguiar_id" value="">
+ --}}
                                                                     <div class="col-md-9 ">
                                                                         <label for="contract_name" id="contract_name_label"
                                                                         class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>

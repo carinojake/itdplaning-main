@@ -3743,7 +3743,7 @@ $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
 
        $single_contract = $contract_tasks->first();
 
-       //dd($single_contract,$project);
+      //dd($single_contract,$project);
 
         return view('app.projects.tasks.show', compact('projectcontract','contractIds','single_contract','contract_tasks','combinedQuery','cteQuery','task_sub_refund_pa_budget','files_contract','files','task_sub_sums','taskcons',
         'project', 'task', 'results', 'contract', 'latestContract',
@@ -6441,26 +6441,46 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
     public function taskstatuscontract_project_type_2($project, $task)
     {
         $id   = Hashids::decode($task)[0];
+        $idproject   = Hashids::decode($project)[0];
+
         $task = Task::find($id);
+        $idproject = project::find($idproject);
+
+
+
         if ($task) {
-            $task->task_status = '2';
+            $task->task_refund_pa_status = '2';
             $task->save();
         }
         return redirect()->route('project.view', $project);
 
     }
-
     public function taskRefundcontract_project_type_2($project, $task)
     {
-        $id   = Hashids::decode($task)[0];
-        $task = Task::find($id);
-        if ($task) {
-            $task->task_refund_pa_status = '3';
-            $task->save();
-        }
-        return redirect()->route('project.view', $project);
+        $taskId = Hashids::decode($task)[0];
+        $task = Task::find($taskId);
 
+
+
+
+        if (!$task || !$project) {
+            return redirect()->route('error_route');  // Replace 'error_route' with your actual error route
+        }
+
+        $task->task_refund_pa_status = '3';
+
+        if ($task->contract) {
+            foreach ($task->contract as $contract) {
+                $contract->contract_refund_pa_status = '2';
+                $contract->save();
+            }
+        }
+
+        $task->save();
+
+        return redirect()->route('project.view', $project);
     }
+
 
     public function taskRefundbudget(Request $request,$project, $task)
     {

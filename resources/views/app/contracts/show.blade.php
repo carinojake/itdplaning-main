@@ -42,6 +42,21 @@
 
                                             </div>
                                             <div class="fs-4 fw-semibold">
+                                                {{ __('คงเหลือ') }}  {!! isset($contract) && $contract->contract_refund_pa_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            </div><small
+                                                class="text-medium-emphasis text-uppercase fw-semibold"></small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-3 col-lg-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-medium-emphasis text-end mb-4">
+
+                                            </div>
+                                            <div class="fs-4 fw-semibold">
 
                                                 เตือน เหลือเวลา
                                                 {!! isset($contract) && $contract->contract_status == 2 ?
@@ -137,14 +152,14 @@
                                                 class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
                                             <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
-                                                @if($contract->contract_project_type == 2)
+                                                @if($contract->contract_project_type == "j")
                                                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                                     @method('POST') {{-- Use POST method to submit the form --}}
                                                     @csrf
                                                     <button class="btn btn-info text-dark btn-taskRefund"><i class="cil-money"></i></button>
                                                 </form>
-                                                @elseif($contract->contract_project_type == 1)
-                                                <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                                @elseif($contract->contract_project_type == "p")
+                                                <form class="taskRefund-form" action="{{ route('project.task.taskstatuscontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                                     @method('POST') {{-- Use POST method to submit the form --}}
                                                     @csrf
                                                     <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
