@@ -137,7 +137,21 @@
                                                 class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
                                             <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
-                                            {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
+                                                @if($contract->contract_project_type == 2)
+                                                <form class="taskRefund-form" action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                                    @method('POST') {{-- Use POST method to submit the form --}}
+                                                    @csrf
+                                                    <button class="btn btn-info text-dark btn-taskRefund"><i class="cil-money"></i></button>
+                                                </form>
+                                                @elseif($contract->contract_project_type == 1)
+                                                <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                                    @method('POST') {{-- Use POST method to submit the form --}}
+                                                    @csrf
+                                                    <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
+                                                </form>
+
+                                                @endif
+                                                    {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-warning"><i class="cil-cog"></i></a>
                                             <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 method="POST" style="display:inline">
@@ -371,41 +385,34 @@
                         <th>2.1 เลขที่ MM</th>
                         <th>2.2 เลขที่ PR</th>
                         <th>2.3 เลขที่ PA</th>
-                        <th>2.4 เลขที่ ER/PO</th>
-                        <th>2.5 เลขที่ CN</th>
+                        <th>2.4 เลขที่ CN</th>
+                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
                     </tr>
                     <tr>
                         <td>{{ $contract->contract_mm }}</td>
                         <td>{{ $contract->contract_pr }}</td>
                         <td>{{ $contract->contract_pa }}</td>
-                        @if($contract->contract_er_budget > 1)
-                        <td>{{ ($contract->contract_er) }}</td>
-@elseif($contract->contract_po_budget > 1)
-                      <td>{{ ($contract->contract_po) }}</td>
-@endif
+
+
+                        <td>{{ ($contract->contract_cn) }}</td>
 <td></td>
-<td>{{ ($contract->contract_cn) }}</td>
                     </tr>
                     <tr>
                         <th>2.1 จำนวนเงิน MM</th>
                         <th>2.2 จำนวนเงิน PR</th>
                         <th>2.3 จำนวนเงิน PA</th>
-                        <th>2.4 จำนวนเงิน ER/PO</th>
-                        <th>2.5 จำนวนเงิน CN</th>
+                        <th>2.4 จำนวนเงิน CN</th>
+                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
                     </tr>
                     <tr>
                         <td>{{ $contract->contract_mm_bodget }}</td>
                         <td>{{ number_format($contract->contract_pr_budget,2) }}</td>
                         <td>{{ number_format($contract->contract_pa_budget,2) }}</td>
 
-                        @if($contract->contract_er_budget > 1)
-                        <td>{{ number_format($contract->contract_er_budget,2) }}</td>
-                        @elseif($contract->contract_po_budget > 1)
-                        <td>{{ number_format($contract->contract_po_budget,2) }}</td>
-                        @endif
-                        <td></td>
 
                         <td>{{  number_format($contract->contract_cn_budget,2)}}</td>
+
+                        <td>{{  number_format($contract->contract_refund_pa_budget,2)}}</td>
 
                     </tr>
                 </table>

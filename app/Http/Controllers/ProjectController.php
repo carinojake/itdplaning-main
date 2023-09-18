@@ -810,7 +810,7 @@ class ProjectController extends Controller
                 ELSE 0
                 END as ttb
                 from tasks
-                where tasks.deleted_at IS NULL AND tasks.task_parent_sub IS NULL
+                where tasks.deleted_at IS NULL AND tasks.task_parent IS NULL
                 group by tasks.project_id
             ) as a'),
             'a.project_id',
@@ -949,7 +949,9 @@ class ProjectController extends Controller
 
 
         ->where('projects.project_id', $id)
-        ->first());
+        ->first()
+        //->toSql()
+    );
 
 
             // ->toArray()
@@ -1075,7 +1077,7 @@ class ProjectController extends Controller
 
 
 
-        // dd($budget);
+    // dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -6436,7 +6438,29 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
     }
 
+    public function taskstatuscontract_project_type_2($project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+        $task = Task::find($id);
+        if ($task) {
+            $task->task_status = '2';
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
 
+    }
+
+    public function taskRefundcontract_project_type_2($project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+        $task = Task::find($id);
+        if ($task) {
+            $task->task_refund_pa_status = '3';
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
+
+    }
 
     public function taskRefundbudget(Request $request,$project, $task)
     {

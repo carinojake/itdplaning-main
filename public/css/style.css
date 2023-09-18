@@ -14721,5 +14721,11 @@ html:not([dir=rtl]) .wrapper {
     --cui-popover-body-padding-x: 1rem;
     --cui-popover-body-padding-y: .5rem;
 }
+.status-container {
+    margin-bottom: 5px;
+}
 
+.badge {
+    margin-right: 5px;
+}
 /*# sourceMappingURL=style.css.map */

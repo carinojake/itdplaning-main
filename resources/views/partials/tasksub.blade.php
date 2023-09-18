@@ -138,23 +138,27 @@
                     <td>{{ $index + 1 }}</td>
                     <td>
 
-
-                        {{ $subtask->task_name }}
-                    <p>
                         @foreach ($subtask->contract as $contract)
                         <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
                             สญ.ที่ {{ $contract->contract_number }}
                         </a>
 
                     @endforeach
+                        {{ $subtask->task_name }}
+
+
 
                     </td>
                     <td>
-                        {!! $subtask->task_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '' !!}
-                        @foreach ($subtask->contract as $contract)
-                           {!! isset($contract) && $contract->contract_status == 2 ? '<span class="badge bg-success text-dark">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning  text-dark">อยู่ในระหว่างดำเนินการ</span>' !!}
 
-                        @endforeach
+                        <span class="badge {{ $subtask->task_status == 2 ? 'bg-success' : 'bg-warning' }}">
+                            {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : 'อยู่ในระหว่างดำเนินการ' }}
+                        </span>
+                        @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
+                            <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
+                        @else
+                            <span class="badge bg-info">ไม่คืนเงิน pa</span>
+                        @endif
                     </td>
                     <td>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>

@@ -113,6 +113,12 @@
             @if ($contract)
                 <x-slot:toolbar>
 
+                    <form class="taskRefund-form" action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                        @method('POST') {{-- Use POST method to submit the form --}}
+                        @csrf
+                        <button class="btn btn-info text-dark btn-taskRefund"><i class="cil-money"></i></button>
+                    </form>
+
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}
                     @csrf
@@ -181,10 +187,10 @@
     </x-slot:content>
     <x-slot:css>
 
-
     </x-slot:css>
     <x-slot:javascript>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
         <script>

@@ -1683,7 +1683,7 @@
                         $('#contract_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#contract_end_date").datepicker("setStartDate", startDate);
-            $("#contract_sign_date").datepicker("setStartDate", startDate);
+          //  $("#contract_sign_date").datepicker("setStartDate", startDate);
         });
 
         $('#contract_end_date').on('changeDate', function() {

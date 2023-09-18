@@ -362,7 +362,7 @@ class ContractController extends Controller
 
 
        // dd($gantt);
-     //  dd  ($taskcons);
+       ($taskcons);
         ($gantt = json_encode($gantt));
 
         ($files_contract = File::where('contract_id', ($id))
