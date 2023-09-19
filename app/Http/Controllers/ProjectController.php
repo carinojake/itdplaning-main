@@ -786,7 +786,8 @@ class ProjectController extends Controller
             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
             'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3',
-            'pab.p_total_task_mm_budget','pab.p_total_task_refund_pa_budget_3','pab3.pp_total_task_refund_pa_budget_3','pabb3.ppb_total_task_refund_pa_budget_3'
+            'pab.p_total_task_mm_budget','pab.p_total_task_refund_pa_budget_3',
+            'pab3.pp_total_task_refund_pa_budget_3','pabb3.ppb_total_task_refund_pa_budget_3'
         )
         ->leftJoin(
             DB::raw('(select tasks.project_id,
@@ -810,7 +811,7 @@ class ProjectController extends Controller
                 ELSE 0
                 END as ttb
                 from tasks
-                where tasks.deleted_at IS NULL AND tasks.task_parent IS NULL
+                where tasks.deleted_at IS NULL AND tasks.task_parent_sub IS NULL
                 group by tasks.project_id
             ) as a'),
             'a.project_id',
@@ -845,6 +846,7 @@ class ProjectController extends Controller
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as p_cost_pa_1 ,
                 sum( COALESCE(tasks.task_mm_budget,0))  as p_total_task_mm_budget,
                 sum( COALESCE(tasks.task_pay,0)) as p_total_pay,
+
                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as pp_total_task_refund_pa_budget_3
 
                 from tasks
@@ -933,8 +935,7 @@ class ProjectController extends Controller
                 ON tasks.task_id = contract_has_tasks.task_id
                 LEFT JOIN contracts
                 ON contract_has_tasks.contract_id = contracts.contract_id
-                LEFT JOIN taskcons
-                ON contracts.contract_id = taskcons.contract_id
+
 
                 where  tasks.task_refund_pa_status = 3 AND tasks.deleted_at IS NULL
 
@@ -956,7 +957,7 @@ class ProjectController extends Controller
 
             // ->toArray()
 
- // dd($project);
+ //dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -1067,9 +1068,10 @@ class ProjectController extends Controller
 
         $budget['budget_total_task_budget_end']= $__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3);
 
-       $budget['budget_total_task_budget_end_p2']= ($__budget)-($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
+        $budget['budget_total_task_budget_end_p2']= ($__budget)-($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
 
-       $budget['budget_total_task_budget_end_p2_mm']= ($__budget-$__mm)-($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
+
+       $budget['budget_total_task_budget_end_p2_mm']= ($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
 
 
         $budget['budget_total_mm_pr'] = ($__budget) - ($__mm-$__prmm);
@@ -1785,7 +1787,7 @@ dd($cteQuery); */
                 'cost_disbursement'     => $project['cost_disbursement'],
                 'pay'                   => $task['task_pay']+$task['total_taskcon_pay_pa_1']+$task['total_taskcon_pay']+$task['total_pay_1']+$task['total_pay_2'],
                 'budget_mm'             => $task['task_mm_budget'],
-                'task_refund_pa_budget'             => $task['task_refund_pa_budget'],
+                'task_refund_pa_budget'             => $__refund_pa_budget,
                 'total_task_refund_pa_budget'             => $task['total_task_refund_pa_budget_1']+$task['total_task_refund_pa_budget_2'],
                 'total_task_refund_pa_budget_1'             => $task['total_task_refund_pa_budget_1'],
                 'total_task_refund_pa_budget_2'             => $task['total_task_refund_pa_budget_2'],
@@ -2722,8 +2724,7 @@ dd($cteQuery); */
 
         $result = ($budget['xx'] > $budget['x']) ? $budget['xx'] - $budget['cost'] : $budget['x'];
 
-
-      //  dd($gantt,$budget,$result);
+ //dd($gantt,$budget,$result);
 
          // dd($gantt);
         $gantt = json_encode($gantt);
@@ -6447,11 +6448,15 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
         $idproject = project::find($idproject);
 
 
+        $task->task_refund_pa_status = '2';
 
-        if ($task) {
-            $task->task_refund_pa_status = '2';
-            $task->save();
+        if ($task->contract) {
+            foreach ($task->contract as $contract) {
+                $contract->contract_refund_pa_status = '2';
+                $contract->save();
+            }
         }
+        $task->save();
         return redirect()->route('project.view', $project);
 
     }

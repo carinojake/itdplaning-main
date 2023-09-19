@@ -684,6 +684,8 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
 
                              else if (task.budget_total_task_mm_sum > 0) {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
+
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'

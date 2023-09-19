@@ -129,6 +129,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::post('/project/{project}/task/{task}/taskRefundbudget_sub_st', [ProjectController::class, 'taskRefundbudget_sub_st'])->name('project.task.taskRefundbudget_sub_st');
 
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_2', [ProjectController::class, 'taskRefundcontract_project_type_2'])->name('project.task.taskRefundcontract_project_type_2');
+    Route::post('/project/{project}/task/{task}/taskstatuscontract_project_type_2', [ProjectController::class, 'taskstatuscontract_project_type_2'])->name('project.task.taskstatuscontract_project_type_2');
 
 
     Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');

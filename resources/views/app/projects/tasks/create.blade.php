@@ -158,7 +158,7 @@
                                                 </div>
 
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
+                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating,2) }}
                                                 บาท
 
 
@@ -177,7 +177,7 @@
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
+                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment,2) }}
                                                 บาท
                                             </div>
                                             <div class="col-md-4">
@@ -191,7 +191,7 @@
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
                                                 ไม่เกิน
-                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) }}                                                บาท
+                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility,2) }} บาท
                                             </div>
                                         </div>
                                     </div>
