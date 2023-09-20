@@ -93,7 +93,7 @@
                                 <td>
                                     @foreach ($subtask->contract as $contract)
                                     <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
-                                        class="btn btn-success text-white badge">
+                                        class="btn bg-primary text-white badge">
                                         สญ.ที่ {{ $contract->contract_number }}
                                     </a>
                                 @endforeach
@@ -115,9 +115,9 @@
 
                                 <td>
                                     <span
-                                        class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
+                                        class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
                                     <span
-                                        class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
+                                        class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                                 </td>
 
                                 <td>{{ number_format($subtask->task_budget_it_operating + $subtask->task_budget_it_investment + $subtask->task_budget_gov_utility, 2) }}

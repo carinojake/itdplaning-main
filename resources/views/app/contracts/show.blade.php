@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot:content>
         <div class="container-fluid">
-           {{--  {{ Breadcrumbs::render('contract.show', $contract) }} --}}
+            {{--  {{ Breadcrumbs::render('contract.show', $contract) }} --}}
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -26,8 +26,10 @@
                                             <div class="text-medium-emphasis text-end mb-4">
 
                                             </div>
-                                            <div class="fs-4 fw-semibold">
-                                                {{ __('สถานะสัญญา') }}  {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            <div class="fs-5 fw-semibold">
+                                                {{ __('สถานะสัญญา') }} {!! isset($contract) && $contract->contract_status == 2
+                                                    ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>'
+                                                    : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
@@ -41,8 +43,10 @@
                                             <div class="text-medium-emphasis text-end mb-4">
 
                                             </div>
-                                            <div class="fs-4 fw-semibold">
-                                                {{ __('คงเหลือ') }}  {!! isset($contract) && $contract->contract_refund_pa_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            <div class="fs-5 fw-semibold">
+                                                {{ __('คงเหลืองบประมาณ PA') }} {!! isset($contract) && $contract->contract_refund_pa_status == 2
+                                                    ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>'
+                                                    : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
                                             </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
@@ -56,77 +60,93 @@
                                             <div class="text-medium-emphasis text-end mb-4">
 
                                             </div>
-                                            <div class="fs-4 fw-semibold">
+                                            <div class="fs-5 fw-semibold">
 
                                                 เตือน เหลือเวลา
-                                                {!! isset($contract) && $contract->contract_status == 2 ?
-                                                    '-'
-                                                    :  (isset($duration_p) && $duration_p < 3 ? '<span style="color:red;">' . $duration_p . '</span>' : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>')
-                                                !!} เดือน
-                                           </div><small
+                                                {!! isset($contract) && $contract->contract_status == 2
+                                                    ? '-'
+                                                    : (isset($duration_p) && $duration_p < 3
+                                                        ? '<span style="color:red;">' . $duration_p . '</span>'
+                                                        : '<span style="color:rgb(5, 255, 5);">' . $duration_p . '</span>') !!} เดือน
+                                            </div><small
                                                 class="text-medium-emphasis text-uppercase fw-semibold"></small>
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class = "row">
-                                <div class=" col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
+                                <div class="row">
+                                    <div class=" col-sm-6 col-md-3 col-lg-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-medium-emphasis text-end ">
 
+                                                </div>
+                                                <div class="fs-4 fw-semibold">
+                                                    {{ number_format($contractgannt['contract_pa_budget'], 2) }}
+                                                </div><small
+                                                    class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
+                                                <div class="progress progress-thin mt-3 mb-0">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
                                             </div>
-                                            <div class="fs-4 fw-semibold">
-                                                {{ number_format($contractgannt['contract_pa_budget'],2 ) }}
-                                            </div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">จำนวนเงิน</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                    style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-medium-emphasis text-end ">
+
+                                                </div>
+                                                <div class="fs-4 fw-semibold">
+
+                                                    {{ number_format($contractgannt['contract_pa_budget'] - $contractgannt['total_pay'], 2) }}
+
+                                                </div><small
+                                                    class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย
+                                                    {{ $contractgannt['contract_pa_budget'] != 0 ? round((($contractgannt['contract_pa_budget'] - $contractgannt['total_pay']) / $contractgannt['contract_pa_budget']) * 100, 2) : 0 }}%
+
+
+                                                </small>
+                                                <div class="progress progress-thin mt-3 mb-0">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: {{ $contractgannt['contract_pa_budget'] != 0 ? (($contractgannt['contract_pa_budget'] - $contractgannt['total_pay']) / $contractgannt['contract_pa_budget']) * 100 : 0 }}%"
+                                                        aria-valuenow="{{ $contractgannt['contract_pa_budget'] != 0 ? (($contractgannt['contract_pa_budget'] - $contractgannt['total_pay']) / $contractgannt['contract_pa_budget']) * 100 : 0 }}"
+                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-medium-emphasis text-end ">
+                                                </div>
+                                                <div class="fs-4 fw-semibold">
+                                                    {{ number_format($contractgannt['total_pay'], 2) }}
+
+
+                                                </div><small
+                                                    class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย
+                                                    {{ $contractgannt['contract_pa_budget'] != 0 ? round(($contractgannt['total_pay'] / $contractgannt['contract_pa_budget']) * 100, 2) : 0 }}%
+
+                                                </small>
+                                                <!-- Amount Paid -->
+
+                                                <div class="progress progress-thin mt-3 mb-0">
+
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                        style="width: {{ $contractgannt['contract_pa_budget'] != 0 ? ($contractgannt['total_pay'] / $contractgannt['contract_pa_budget']) * 100 : 0 }}%"
+                                                        aria-valuenow="{{ $contractgannt['contract_pa_budget'] != 0 ? ($contractgannt['total_pay'] / $contractgannt['contract_pa_budget']) * 100 : 0 }}"
+                                                        aria-valuemin="0"
+                                            aria-valuemax="100">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
-
-                                            </div>
-                                            <div class="fs-4 fw-semibold">
-
-                                                {{ number_format($contractgannt['contract_pa_budget']-$contractgannt['total_pay'],2) }}
-
-                                            </div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">รอการเบิกจ่าย</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-medium-emphasis text-end mb-4">
-                                            </div>
-                                            <div class="fs-4 fw-semibold">
-                                                {{ number_format($contractgannt['total_pay'],2) }}
-
-
-                                            </div><small
-                                                class="text-medium-emphasis text-uppercase fw-semibold">การเบิกจ่าย</small>
-                                            <div class="progress progress-thin mt-3 mb-0">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 25%"
-                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             </div>
 
 
@@ -140,33 +160,42 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($contract->taskcont as $index => $task)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            {{ $task['task_name'] }}<br>
-                                            <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
-                                            <span class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
-                                                class="text-white btn btn-success"><i class="cil-folder-open "></i> Project</a>
-                                            <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                                class="text-white btn btn-primary"><i class="cil-folder-open "></i> Task</a>
-                                                @if($contract->contract_project_type == "j")
-                                                <form class="taskRefund-form" action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-                                                    @method('POST') {{-- Use POST method to submit the form --}}
-                                                    @csrf
-                                                    <button class="btn btn-info text-dark btn-taskRefund"><i class="cil-money"></i></button>
-                                                </form>
-                                                @elseif($contract->contract_project_type == "p")
-                                                <form class="taskRefund-form" action="{{ route('project.task.taskstatuscontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-                                                    @method('POST') {{-- Use POST method to submit the form --}}
-                                                    @csrf
-                                                    <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money"></i></button>
-                                                </form>
-
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>
+                                                {{ $task['task_name'] }}<br>
+                                                <span
+                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
+                                                <span
+                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
+                                                    class="text-white btn btn-success"><i class="cil-folder-open "></i>
+                                                    Project</a>
+                                                <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                    class="text-white btn btn-primary"><i class="cil-folder-open "></i>
+                                                    Task</a>
+                                                @if ($contract->contract_project_type == 'j')
+                                                    <form class="taskRefund-form"
+                                                        action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                        method="POST" style="display:inline">
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
+                                                        @csrf
+                                                        <button class="btn btn-info text-dark btn-taskRefund"><i
+                                                                class="cil-money"></i></button>
+                                                    </form>
+                                                @elseif($contract->contract_project_type == 'p')
+                                                    <form class="taskRefund-form"
+                                                        action="{{ route('project.task.taskRefundcontract_project_type_sub_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                        method="POST" style="display:inline">
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
+                                                        @csrf
+                                                        <button class="btn btn-warning text-white btn-taskRefund-sub"><i
+                                                                class="cil-money"></i></button>
+                                                    </form>
                                                 @endif
-                                                    {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
+                                                {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-warning"><i class="cil-cog"></i></a>
                                             <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 method="POST" style="display:inline">
@@ -174,14 +203,14 @@
                                                 @csrf
                                                 <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
                                             </form> --}}
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
 
 
-                        {{-- <div class="callout callout-info">
+                            {{-- <div class="callout callout-info">
                                 <div class="row  ">
                                     <div class="col-sm ">
                                         <div class="row">
@@ -194,7 +223,7 @@
                                         <div class="row mt-3">
                                             <div class="col-3 fw-semibold"><h5>{{ __('1.งบ') }}</h5></div>
                                             <div class="col-9">
-                                                @if($contract->contract_budget_type != null)
+                                                @if ($contract->contract_budget_type != null)
                                                 <h5>{{ \Helper::project_select($contract->contract_budget_type) }}</h5>
                                             @else
                                                 <h5>-</h5>
@@ -341,130 +370,147 @@
             </div> --}}
 
 
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
-                            <p class="card-text">
-                                {!! isset($contract) && $contract->contract_status == 2 ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>' : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
-                            </p>
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {!! isset($contract) && $contract->contract_status == 2
+                                                    ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>'
+                                                    : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            </p>
 
-                            <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
-                            <p class="card-text">{{ $contract->contract_number }}</p>
+                                            <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_number }}</p>
 
-                            <h5 class="card-title">{{ __('เลขที่ คู่ค้า') }}</h5>
-                            <p class="card-text">{{ $contract->contract_juristic_id }}</p>
+                                            <h5 class="card-title">{{ __('เลขที่ คู่ค้า') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_juristic_id }}</p>
 
-                            <h5 class="card-title">{{ __('เลขที่สั่งซื้อ') }}</h5>
-                            <p class="card-text">{{ $contract->contract_order_no }}</p>
+                                            <h5 class="card-title">{{ __('เลขที่สั่งซื้อ') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_order_no }}</p>
 
-                            <h5 class="card-title">{{ __('ประเภท') }}</h5>
-                            <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}</p>
-                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
-                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
-                            <!-- Continue with the rest of your details -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-
-
-                            <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
-                            <p class="card-text">{{ \Helper::project_select($contract->contract_budget_type) }}</p>
-
-
-                            <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} - {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
-                            <p class="card-text">{{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }} - {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</p>
-
-                            <h5 class="card-title">{{ __('วันที่สิ้นสุดสัญญา') }}</h5>
-                            <p class="card-text">{{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}</p>
-
-                            <h5 class="card-title">{{ __('จำนวนเดือน') }}</h5>
-                            <p class="card-text">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }} เดือน</p>
-
-                            <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
-                            <p class="card-text">{{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }} วัน</p>
+                                            <h5 class="card-title">{{ __('ประเภท') }}</h5>
+                                            <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}
+                                            </p>
+                                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
+                                            <!-- Continue with the rest of your details -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
 
 
-                            <!-- Continue with the rest of your details -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                            <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
+                                            <p class="card-text">
+                                                {{ \Helper::project_select($contract->contract_budget_type) }}</p>
 
 
-            <div class="card mb-3">
-                <table class="table h5">
-                    <tr>
-                        <th>2.1 เลขที่ MM</th>
-                        <th>2.2 เลขที่ PR</th>
-                        <th>2.3 เลขที่ PA</th>
-                        <th>2.4 เลขที่ CN</th>
-                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
-                    </tr>
-                    <tr>
-                        <td>{{ $contract->contract_mm }}</td>
-                        <td>{{ $contract->contract_pr }}</td>
-                        <td>{{ $contract->contract_pa }}</td>
+                                            <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} -
+                                                {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
+                                                -
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                            </p>
+
+                                            <h5 class="card-title">{{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                            </p>
+
+                                            <h5 class="card-title">{{ __('จำนวนเดือน') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                เดือน</p>
+
+                                            <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                วัน</p>
 
 
-                        <td>{{ ($contract->contract_cn) }}</td>
-<td></td>
-                    </tr>
-                    <tr>
-                        <th>2.1 จำนวนเงิน MM</th>
-                        <th>2.2 จำนวนเงิน PR</th>
-                        <th>2.3 จำนวนเงิน PA</th>
-                        <th>2.4 จำนวนเงิน CN</th>
-                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
-                    </tr>
-                    <tr>
-                        <td>{{ $contract->contract_mm_bodget }}</td>
-                        <td>{{ number_format($contract->contract_pr_budget,2) }}</td>
-                        <td>{{ number_format($contract->contract_pa_budget,2) }}</td>
+                                            <!-- Continue with the rest of your details -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
-                        <td>{{  number_format($contract->contract_cn_budget,2)}}</td>
-
-                        <td>{{  number_format($contract->contract_refund_pa_budget,2)}}</td>
-
-                    </tr>
-                </table>
-            </div>
-
-
-
-
-
-            @if(count($files_contract) > 0)
-            <table class="table table-bordered table-striped  mt-3">
-                <thead>
-
-                    <th>เอกสารแนบ</th>
-
-                    <th>File</th>
-
-                </thead>
-                <tbody>
-                    @if(count($files_contract) > 0)
-                        @foreach($files_contract as $file)
-                            <tr>
-                                <td>{{ $file->name }}</td>
-
-                                <td><a href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/'  . $file->name) }}">{{ $file->name }}</a></td>
+                            <div class="card mb-3">
+                                <table class="table h5">
+                                    <tr>
+                                        <th>2.1 เลขที่ MM</th>
+                                        <th>2.2 เลขที่ PR</th>
+                                        <th>2.3 เลขที่ PA</th>
+                                        <th>2.4 เลขที่ CN</th>
+                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $contract->contract_mm }}</td>
+                                        <td>{{ $contract->contract_pr }}</td>
+                                        <td>{{ $contract->contract_pa }}</td>
 
 
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="5" class="text-center">No Table Data</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-            @endif
+                                        <td>{{ $contract->contract_cn }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>2.1 จำนวนเงิน MM</th>
+                                        <th>2.2 จำนวนเงิน PR</th>
+                                        <th>2.3 จำนวนเงิน PA</th>
+                                        <th>2.4 จำนวนเงิน CN</th>
+                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $contract->contract_mm_bodget }}</td>
+                                        <td>{{ number_format($contract->contract_pr_budget, 2) }}</td>
+                                        <td>{{ number_format($contract->contract_pa_budget, 2) }}</td>
+
+
+                                        <td>{{ number_format($contract->contract_cn_budget, 2) }}</td>
+
+                                        <td>{{ number_format($contract->contract_refund_pa_budget, 2) }}</td>
+
+                                    </tr>
+                                </table>
+                            </div>
+
+
+
+
+
+                            @if (count($files_contract) > 0)
+                                <table class="table table-bordered table-striped  mt-3">
+                                    <thead>
+
+                                        <th>เอกสารแนบ</th>
+
+                                        <th>File</th>
+
+                                    </thead>
+                                    <tbody>
+                                        @if (count($files_contract) > 0)
+                                            @foreach ($files_contract as $file)
+                                                <tr>
+                                                    <td>{{ $file->name }}</td>
+
+                                                    <td><a
+                                                            href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/' . $file->name) }}">{{ $file->name }}</a>
+                                                    </td>
+
+
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5" class="text-center">No Table Data</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            @endif
 
 
 
@@ -522,30 +568,28 @@
                                                     class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
                                             </td>
                                             <td>
-                                                @if($taskcon->taskcon_budget_it_operating > 0)
-                                                {{ number_format($taskcon->taskcon_budget_it_operating,2) }}
-
+                                                @if ($taskcon->taskcon_budget_it_operating > 0)
+                                                    {{ number_format($taskcon->taskcon_budget_it_operating, 2) }}
                                                 @elseif($taskcon->taskcon_budget_it_investment > 0)
-                                                {{ number_format($taskcon->taskcon_budget_it_investment,2) }}
-
+                                                    {{ number_format($taskcon->taskcon_budget_it_investment, 2) }}
                                                 @elseif ($taskcon->taskcon_budget_gov_utility > 0)
-                                                {{ number_format($taskcon->taskcon_budget_gov_utility,2) }}
+                                                    {{ number_format($taskcon->taskcon_budget_gov_utility, 2) }}
                                                 @endif
 
                                             </td>
 
-                                             <td>
-                                                @if($taskcon->taskcon_budget_it_operating > 0)
-                                                {{ number_format($taskcon->taskcon_cost_it_operating,2) }}
+                                            <td>
+                                                @if ($taskcon->taskcon_budget_it_operating > 0)
+                                                    {{ number_format($taskcon->taskcon_cost_it_operating, 2) }}
                                                 @elseif($taskcon->taskcon_budget_it_investment > 0)
-                                                {{ number_format($taskcon->taskcon_cost_it_investment,2) }}
+                                                    {{ number_format($taskcon->taskcon_cost_it_investment, 2) }}
                                                 @elseif ($taskcon->taskcon_budget_gov_utility > 0)
-                                                {{ number_format($taskcon->taskcon_cost_gov_utility,2) }}
+                                                    {{ number_format($taskcon->taskcon_cost_gov_utility, 2) }}
                                                 @endif
 
                                             </td>
                                             <td>
-                                                {{ number_format($taskcon->taskcon_pay,2) }}
+                                                {{ number_format($taskcon->taskcon_pay, 2) }}
 
                                             </td>
                                             <td>
@@ -559,7 +603,8 @@
                                                     class="btn-sm btn btn-primary text-white"><i
                                                         class="cil-folder-open ">ข้อมูล </i></a>
                                                 <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
-                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog"> เบิกจ่าย</i>
+                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog">
+                                                        เบิกจ่าย</i>
                                                 </a>
                                                 <form
                                                     action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
@@ -665,23 +710,17 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.contract_pa_budget);
-                            }  else if (task.type == 'task' ) {
+                            } else if (task.type == 'task') {
                                 return new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget);
-                            }
-
-
-
-
-
-                            else {
+                            } else {
                                 return '';
                             }
                         }
                     },
-                 {
+                    {
                         name: "-",
                         width: 100,
                         label: "รอการเบิกจ่าย",
@@ -693,16 +732,13 @@
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.total_cost - task.total_pay) + '</span>';}
-
-                                else if (task.cost - task.pay > 0) {
+                                }).format(task.total_cost - task.total_pay) + '</span>';
+                            } else if (task.cost - task.pay > 0) {
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.cost - task.pay) + '</span>';}
-
-
-                                else {
+                                }).format(task.cost - task.pay) + '</span>';
+                            } else {
                                 return '-';
                             }
 

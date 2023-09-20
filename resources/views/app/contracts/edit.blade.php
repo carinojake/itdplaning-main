@@ -259,21 +259,21 @@
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     {{-- <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
                   </div> --}}
-              {{--     <div class="col-md-12">
+                <div class="col-md-12">
                     <label for="contract_refund_pa_status" class="form-label">{{ __('contract_refund_pa_status') }}</label> <span class="text-danger"></span>
                     <div class="form-check form-check-inline ms-5">
                       <input class="form-check-input" type="radio" name="contract_refund_pa_status" id="contract_refund_pa_status" value="1" checked>
                       <label class="form-check-label" for="1">
-                        คืน
+                        ไม่ได้คืน
                       </label>
                     </div>
                     <div class="form-check form-check-inline">
                       <input class="form-check-input" type="radio" name="contract_refund_pa_status" id="contract_refund_pa_status" value="2">
                       <label class="form-check-label" for="contract_refund_pa_status2">
-                        ไม่ได้คืน
+                      คืน
                       </label>
                     </div>
-                </div> --}}
+                </div>
 
                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>

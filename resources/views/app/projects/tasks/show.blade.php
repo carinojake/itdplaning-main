@@ -21,6 +21,9 @@
                 <button class="btn btn-Light text-dark btn-taskRefund"><i class="cil-money"></i></button>
             </form>
 
+
+
+
                 <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                     class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                 </a>
@@ -61,7 +64,11 @@
                     @csrf
                     <button class="btn btn-dark text-dark btn-taskRefund"><i class="cil-money"></i></button>
                 </form> --}}
-
+                <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                    @method('POST') {{-- Use POST method to submit the form --}}
+                    @csrf
+                    <button class="btn btn-dark text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
+                </form>
 
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}

@@ -324,7 +324,7 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
-                                                    ไม่เกิน   {{ number_format($tasksDetails->task_budget_it_operating- $task_sub_sums['operating']['task_mm_budget']-$task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] ) }}  บาท
+                                                    ไม่เกิน   {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท  บาท
 
 
                                                 @endif
