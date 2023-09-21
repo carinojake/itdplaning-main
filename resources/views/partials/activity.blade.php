@@ -23,7 +23,7 @@
                             @if ($task->contract->count() > 0)
                                 @foreach ($task->contract as $contract)
                                     <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"><span
-                                            class="badge btn btn-success text-white ">{{ $contract->contract_number }}</span></a>
+                                            class="badge btn btn-primary text-white ">{{ $contract->contract_number }}</span></a>
                                 @endforeach
                             @endif <span
                                 style="color: green;">{{ isset($task->taskcon_mm) ? $task->taskcon_mm . ' - ' : '' }}</span>
@@ -414,13 +414,14 @@
                                 class="btn btn-primary text-white"><i class="cil-description"></i></a></a>
                         @endforeach
 
-
+                        @if ($task->contract->count() < 1)
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
-                        <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+
+                            <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-warning text-white"><i class="cil-cog"></i></a>
 
-
+                            @endif
 
                         @if ($task->task_parent == 0 && $task->subtask->count() == 0)
                             <form class="delete-form"

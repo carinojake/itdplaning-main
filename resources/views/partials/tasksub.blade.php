@@ -144,7 +144,7 @@
                     <td>
 
                         @foreach ($subtask->contract as $contract)
-                        <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success text-white badge">
+                        <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-primary text-white badge">
                             สญ.ที่ {{ $contract->contract_number }}
                         </a>
 

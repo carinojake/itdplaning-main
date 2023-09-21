@@ -1046,7 +1046,9 @@ class ProjectController extends Controller
          $budget['budget_gov_utility'] = $__budget_gov_utility  ;
 
 
-        $budget['total'] = $__budget;
+
+
+         $budget['total'] = $__budget;
         ($budget['budget_total_mm'] = $__mm);
         $budget['budget_total_taskcon_pay_con'] = $project['total_pay']+$__paycon;
         $budget['total_task_budget']= $__total_task_budget;
@@ -1066,8 +1068,8 @@ class ProjectController extends Controller
 
         $budget['budget_total_task_budget_it']=  $budget['budget_it_investment'] ;
        $budget['budget_total_task_budget_gov']=  $budget['budget_gov_utility'];
-
         $budget['budget_total_task_budget_end']= $__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3);
+
 
         $budget['budget_total_task_budget_end_p2']= ($__budget)-($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
 
@@ -1841,7 +1843,7 @@ dd($cteQuery); */
 
 
 
-   //dd($gantt);
+  // dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
@@ -6780,16 +6782,14 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
             $task->task_refund_pa_status = '3';
 
             $task->task_refund_pa_budget =
-            ($tasksum->task_budget_it_operating
-            +$tasksum->task_budget_it_investment
-            + $tasksum->task_budget_gov_utility)
+            (($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment+ $tasksum->task_budget_gov_utility)
             -
-            $task_sub_sums['operating']['task_mm_budget']
-            + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']
-
+            ($task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['investment']['task_mm_budget'] + ($task_sub_sums['utility']['task_mm_budget'])))
+            +
+            ($task_sub_sums['operating']['task_refund_pa_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] + ($task_sub_sums['utility']['task_refund_pa_budget']))
             ;
 
-        //dd($task);
+       // dd($task);
 
             $task->save();
         }
@@ -7099,7 +7099,7 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
                 //$task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
                 //dd($task_parent_sub);
                 if ($task_parent_sub) {
-
+                    $task->task_task_parent_sub_refund_budget == 4;
                     $task->task_refund_pa_budget =
                     ($tasksum->task_budget_it_operating
                     +$tasksum->task_budget_it_investment
@@ -7112,22 +7112,21 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
                 //dd($task_parent_sub);
                 $task_parent_sub->save();
             }
-        if ($task) {
+            if ($task) {
 
-            $task->task_status = '1';
-            $task->task_refund_pa_status = '1';
+                $task->task_status = '2';
+                $task->task_refund_pa_status = '3';
 
-            $task->task_refund_pa_budget =
-            ($tasksum->task_budget_it_operating
-            +$tasksum->task_budget_it_investment
-            + $tasksum->task_budget_gov_utility)
-            -
-            $task_sub_sums['operating']['task_mm_budget']
-            + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']
+                $task->task_refund_pa_budget =
+                (($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment+ $tasksum->task_budget_gov_utility)
+                -
+                ($task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['investment']['task_mm_budget'] + ($task_sub_sums['utility']['task_mm_budget'])))
+                +
+                ($task_sub_sums['operating']['task_refund_pa_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] + ($task_sub_sums['utility']['task_refund_pa_budget']))
+                ;
 
-            ;
 
-        //dd($task);
+        dd($task);
 
             $task->save();
         }
@@ -7356,7 +7355,7 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
             ->get()
             ->toArray());
-      // dd($tasks);
+       //dd($tasks);
 
 
 
@@ -7434,20 +7433,21 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
 
 
 
+             if ($task) {
 
-        if ($task) {
-            $task->task_status = '2';
-            $task->task_refund_pa_status = '2';
+                $task->task_status = '2';
+                $task->task_refund_pa_status = '3';
 
-            $task->task_refund_pa_budget =
-            ($tasksum->task_budget_it_operating
-            +$tasksum->task_budget_it_investment
-            + $tasksum->task_budget_gov_utility)
-            -
-            $task_sub_sums['operating']['task_mm_budget']
-            + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']
+                $task->task_refund_pa_budget =
+                (($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment+ $tasksum->task_budget_gov_utility)
+                -
+                ($task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['investment']['task_mm_budget'] + ($task_sub_sums['utility']['task_mm_budget'])))
+                +
+                ($task_sub_sums['operating']['task_refund_pa_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] + ($task_sub_sums['utility']['task_refund_pa_budget']))
+                ;
 
-          ($task);
+
+          //dd($task);
           $task->save();
         }
 
@@ -7756,17 +7756,19 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
              //dd($task_sub_refund_pa_budget)
 
 
+             if ($task) {
 
-        if ($task) {
-            $task->task_status = '2';
-            $task->task_refund_pa_status = '2';
-            $task->task_refund_pa_budget =
-            ($tasksum->task_budget_it_operating
-            +$tasksum->task_budget_it_investment
-            + $tasksum->task_budget_gov_utility)
-            -
-            $task_sub_sums['operating']['task_mm_budget']
-            + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget'];
+                $task->task_status = '2';
+                $task->task_refund_pa_status = '3';
+
+                $task->task_refund_pa_budget =
+                (($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment+ $tasksum->task_budget_gov_utility)
+                -
+                ($task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['investment']['task_mm_budget'] + ($task_sub_sums['utility']['task_mm_budget'])))
+                +
+                ($task_sub_sums['operating']['task_refund_pa_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] + ($task_sub_sums['utility']['task_refund_pa_budget']))
+                ;
+
            // $task->task_refund_pa_budget =
 
          // ($task->task_parent_sub_budget-$task->task_parent_sub_cost);

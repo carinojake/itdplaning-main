@@ -192,7 +192,7 @@
                                                 <a
                                                     href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
                                                     <span
-                                                        class="badge btn btn-success text-white">{{ $contract->contract_number }}</span></a>
+                                                        class="badge btn btn-primary text-white">สญ. ที่ {{ $contract->contract_number }}</span></a>
                                             @endforeach
 
                                             - {{ $subtask_sub->task_name }}
