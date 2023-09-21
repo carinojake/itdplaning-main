@@ -570,6 +570,14 @@ return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                         resize: true,
                         template: function(task) {
 
+
+                         if (task.p == 1 && task.budget_total_task_budget_end < 0) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(0) + '</span>';
+                            }
                             if (task.p == 1) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {

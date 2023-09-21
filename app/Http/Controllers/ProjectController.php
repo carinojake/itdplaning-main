@@ -1068,7 +1068,8 @@ class ProjectController extends Controller
 
         $budget['budget_total_task_budget_it']=  $budget['budget_it_investment'] ;
        $budget['budget_total_task_budget_gov']=  $budget['budget_gov_utility'];
-        $budget['budget_total_task_budget_end']= $__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3);
+        $budget['budget_total_task_budget_end']= ($__budget-($__total_task_budget-$__mm-$__total_task_refund_pa_budget_3));
+
 
 
         $budget['budget_total_task_budget_end_p2']= ($__budget)-($__total_task_budget-($__pptotal_task_refund_pa_budget_3+$__ppbtotal_task_refund_pa_budget_3));
@@ -1082,7 +1083,7 @@ class ProjectController extends Controller
 
 
 
-    // dd($budget);
+   //  dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -1348,7 +1349,7 @@ class ProjectController extends Controller
 
 //dd($combinedQuery);
 
-   //dd($cteQuery->get());
+  // dd($cteQuery->get());
 
 
 
@@ -1902,7 +1903,7 @@ dd($cteQuery); */
                     ->toArray();
 
 
-                 // dd($contractgannt);
+                  //dd($contractgannt);
 
 
         /*     $contractgannt = json_decode(json_encode($contractgannt), true);
@@ -2048,7 +2049,7 @@ dd($cteQuery); */
         //  $budget['balance'] = $gantt[0]['balance'];
 
 
-        //dd($gantt,$budget);
+       // dd($gantt,$budget);
 
 
         $labels = [
@@ -2490,7 +2491,7 @@ dd($cteQuery); */
         ($ut_budget_sum_no = (float)$ut_budget_sum_no);
 
 
-        //dd($ut_budget_sum_no);
+       // dd($ut_budget_sum_no);
 
         ($ut_pa_sum = DB::table('tasks')
             ->selectRaw('SUM(COALESCE(task_cost_gov_utility,0)) As utpcs')
@@ -2581,8 +2582,9 @@ dd($cteQuery); */
         ($ut_refund = $ut_refund_pa + $ut_refund_pa_no);
         $ut_refund_mm_pr = $project['budget_gov_utility'] - ($utsc_mm - $ut_refund);
 
+       // $ut_refund_mm_pr_sum = $project['budget_gov_utility'] - ($utsc_mm - $ut_refund);
 
-        // dd($utsc_mm,$ut_refund,$ut_refund_mm_pr,$ut_refund_pa_no,$utpcs,$utsc,$utsc_mm_pa,$utsc_mm_pa_no);
+         //dd($utsc_mm,$ut_refund,$ut_refund_mm_pr,$ut_refund_pa_no,$utpcs,$utsc,$utsc_mm_pa,$utsc_mm_pa_no);
 
 
 
@@ -2623,7 +2625,7 @@ dd($cteQuery); */
 
 
 
-        // dd($utpcs,$utsc_pay_pa,$utsc_pay);
+         //dd($utpcs,$utsc_pay_pa,$utsc_pay);
 
 
 
@@ -2686,9 +2688,9 @@ dd($cteQuery); */
             ->get();
 
 
-        //  dd($project->main_task_activity);
+          //dd($project->main_task_activity);
 
-        // dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
+         //dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
 
         //dd($project);
        // dd($gantt,$budget);
@@ -2730,13 +2732,14 @@ dd($cteQuery); */
    //  dd ($contract_tasks);
        // $contractId = $projectcontract->contract_id;
 
-        //dd($contractId);
+        //dd($project);
 
 
 
-        ($project->main_task);
+        //dd($project->main_task);
 
         return view('app.projects.view', compact(
+            'cteQuery',
             'contract_tasks',
             'is_refund_mm_pr',
             'is_budget',
@@ -7126,7 +7129,7 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
                 ;
 
 
-        dd($task);
+        //dd($task);
 
             $task->save();
         }

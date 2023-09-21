@@ -152,7 +152,7 @@
                                         {{ number_format($ospa + $osa, 2) }}
                                     </div>
                                     <div >
-                                        <small class="text-xl ">วงเงินที่ใช้จริง<p>(รวมแบบมี PA และไม่มี PA)</small>
+                                        <small class="text-xl ">วงเงินที่ใช้จริง<p>(รวมแบบมี PA และแบบไม่มี PA)</small>
                                     </div>
                                 </button>
                             </div>
@@ -181,7 +181,7 @@
                                             {{ number_format($osa , 2) }}
                                         </div>
                                         <div>
-                                            <small class="text-xl"> วงเงินที่ใช้จริง <p>ไม่แบบ
+                                            <small class="text-xl"> วงเงินที่ใช้จริง <p>แบบไม่มี
                                                 PA</small>
                                         </div>
 
@@ -236,7 +236,7 @@
                                             <!--การเบิกจ่าย PA -->
                                             {{ number_format($osa - $otpsa2, 2) }}
                                         </div>
-                                        <small class="text-xl">รอการเบิกจ่าย <p>แบบมีไม่ PA
+                                        <small class="text-xl">รอการเบิกจ่าย <p>แบบไม่มี PA
                                         </small>
 
                                     </button>
@@ -389,7 +389,7 @@
                                         {{ number_format($ispa + $isa, 2) }}
                                     </div>
                                     <div>
-                                        <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และไม่มี PA)</small>
+                                        <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และแบบไม่มี PA)</small>
                                     </div>
                                 </button>
                             </div>
@@ -418,7 +418,7 @@
                                             {{ number_format($isa , 2) }}
                                         </div>
                                         <div>
-                                            <small class="text-xl">วงเงินที่ใช้จริง <p>ไม่แบบ
+                                            <small class="text-xl">วงเงินที่ใช้จริง <p>แบบไม่มี
                                                 PA</small>
                                         </div>
 
@@ -479,7 +479,7 @@
                                         </div>
                                         <div>
                                             <small class="text-xl ">รอการเบิกจ่าย<p>
-                                                แบบมีไม่ PA
+                                                แบบไม่มี PA
                                             </small>
                                         </div>
 
@@ -631,7 +631,7 @@
                                             {{ number_format($utpcs + $utsc, 2) }}
                                         </div>
                                         <div>
-                                            <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และไม่มี PA)</small>
+                                            <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และแบบไม่มี PA)</small>
                                         </div>
                                     </button>
                                 </div>
@@ -660,7 +660,7 @@
                                                 {{ number_format($utsc , 2) }}
                                             </div>
                                             <div>
-                                                <small class="text-xl"> วงเงินที่ใช้จริง <p>ไม่แบบ
+                                                <small class="text-xl"> วงเงินที่ใช้จริง <p>แบบไม่มี
                                                     PA</small>
                                             </div>
 
@@ -715,7 +715,7 @@
                                                 {{ number_format($utsc - $utsc_pay, 2) }}
                                             </div>
                                             <div>
-                                                <small class="text-xl">  รอการเบิกจ่าย <p>ไม่แบบ
+                                                <small class="text-xl">  รอการเบิกจ่าย <p>แบบไม่มี
                                                     PA</small>
                                             </div>
 
@@ -860,9 +860,15 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                           {{--  {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
+                                            {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
-                                           {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}                                               </div>
+
+                                 {{--           @if($project['budget_it_investment'] > 1)
+                                            {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))+$ut_refund_mm_pr), 2) }}
+                                            @elseif($project['budget_gov_utility'] > 0) --}}
+                                           {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                      {{--   @endif --}}
+                                        </div>
                                         <div>
                                             <small class="text-xl">
                                                 งบประมาณคงเหลือที่ไช้ได้<p>
