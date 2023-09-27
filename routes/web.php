@@ -127,6 +127,13 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::post('/project/{project}/task/{task}/taskRefundbudget', [ProjectController::class, 'taskRefundbudget'])->name('project.task.taskRefundbudget');
     Route::post('/project/{project}/task/{task}/taskRefundbudget_sub', [ProjectController::class, 'taskRefundbudget_sub'])->name('project.task.taskRefundbudget_sub');
     Route::post('/project/{project}/task/{task}/taskRefundbudget_sub_st', [ProjectController::class, 'taskRefundbudget_sub_st'])->name('project.task.taskRefundbudget_sub_st');
+    Route::post('/project/{project}/task/{task}/taskRefundbudget_str_root', [ProjectController::class, 'taskRefundbudget_str_root'])->name('project.task.taskRefundbudget_str_root');
+    Route::post('/project/{project}/task/{task}/taskRefund_task_parent_null', [ProjectController::class, 'taskRefund_task_parent_null'])->name('project.task.taskRefund_task_parent_null');
+
+
+
+
+
 
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_sub_2', [ProjectController::class, 'taskRefundcontract_project_type_sub_2'])->name('project.task.taskRefundcontract_project_type_sub_2');
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_sub_2', [ProjectController::class, 'taskRefundcontract_project_type_sub_2'])->name('project.task.taskRefundcontract_project_type_sub_2');

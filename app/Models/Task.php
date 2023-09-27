@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * @property int    $task_id
  * @property int    $project_id
@@ -119,4 +120,9 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Models\Taskcon', 'task_has_taskcons', 'taskcon_id', 'task_id');
     }
+
+
+
+
+
 }

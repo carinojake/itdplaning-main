@@ -15,14 +15,18 @@
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub_st', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-Light text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
+        <button class="btn btn-Light text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_sub_st</i></button>
     </form>
     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-dark text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
+        <button class="btn btn-info text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_str</i></button>
     </form>
-
+    <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+        @method('POST') {{-- Use POST method to submit the form --}}
+        @csrf
+        <button class="btn btn-dark text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_sub</i></button>
+    </form>
 
 
 

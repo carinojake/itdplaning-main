@@ -91,8 +91,10 @@
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-                       {{--              @elseif( $budget['project_type'] == 2 && $tasks['task_refund_pa_status'] == '3')
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end_p2_mm']), 2) }} --}}
+
+                                    @elseif( $budget['project_type'] == 2 && $tasks['task_refund_pa_status'] == '3')
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end_p2_mm']), 2) }}
+
                                     @elseif( $budget['project_type'] == 2)
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end_p2']), 2) }}
 
@@ -547,7 +549,14 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
                                     {{--    {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}                                    </div>
+                                 {{--    @if($project['budget_gov_utility'] > 1)
+                                    {{ number_format(floatval(($project['budget_it_investment']-(($project['budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))+$is_refund_mm_pr), 2) }}
+                                    @elseif($project['budget_it_investment'] > 0) --}}
+                                   {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                         {{--      @endif --}}
+                                    </div>
+
+
                                     <div>
                                         <small class="text-xl">
                                             งบประมาณคงเหลือที่ไช้ได้<p>
@@ -862,12 +871,12 @@
                                         <div class="fs-4 fw-semibold btn btn-success">
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
-
-                                 {{--           @if($project['budget_it_investment'] > 1)
+{{--
+                                          @if($project['budget_it_investment'] > 1)
                                             {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))+$ut_refund_mm_pr), 2) }}
                                             @elseif($project['budget_gov_utility'] > 0) --}}
                                            {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-                                      {{--   @endif --}}
+                                   {{--    @endif --}}
                                         </div>
                                         <div>
                                             <small class="text-xl">

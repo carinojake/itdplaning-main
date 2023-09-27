@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "asantibanez/laravel-blade-sortable": "dev-master",
+        "barryvdh/laravel-debugbar": "^3.9",
         "barryvdh/laravel-dompdf": "^2.0",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
