@@ -1293,7 +1293,13 @@ class ProjectController extends Controller
              't.project_id AS root_project_id',
              //'t.task_refund_pa_status AS root_task_refund_pa_status',
              't.task_mm_budget as Leasttask_mm_budget',
-
+             DB::raw('
+             CASE
+                 WHEN t.task_budget_gov_utility > 1 THEN "utility"
+                 WHEN t.task_budget_it_operating > 1 THEN "operating"
+                 WHEN t.task_budget_it_investment > 1 THEN "investment"
+                 ELSE NULL
+             END AS budget_type_oiu'),
              DB::raw('COALESCE(t.task_budget_gov_utility, 0)
               + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
 
@@ -1351,6 +1357,7 @@ class ProjectController extends Controller
              ->whereIn('t.task_id', $id_tasks)
 
              ->whereNull('t.deleted_at')
+
              ->unionAll(function ($uni) {
                  $uni->select(
                      'tasks.task_id',
@@ -1359,7 +1366,7 @@ class ProjectController extends Controller
                     // 'tasks.task_refund_pa_status' ,
                      'cte.root',
                      'cte.root_project_id',
-
+                     DB::raw('NULL AS budget_type_oiu'),
 
                      DB::raw('tasks.task_mm_budget + cte.Leasttask_mm_budget as Leasttask_mm_budget'),
 
@@ -1416,6 +1423,7 @@ class ProjectController extends Controller
                      ->from('tasks')
                      ->whereNull('tasks.deleted_at')
                     ->whereNotNull('tasks.task_refund_pa_status')
+                    ->whereNull('cte.budget_type_oiu')
                      ->join('cte', 'tasks.task_parent', '=', 'cte.task_id');
              });
      });
@@ -1423,11 +1431,13 @@ class ProjectController extends Controller
 
  $combinedQuery = $cteQuery
      ->from('cte')
-     ->groupBy('cte.root', 'cte.root_project_id') // Add these columns to the GROUP BY clause ,'cte.root_task_refund_pa_status'
+     ->groupBy('cte.root', 'cte.root_project_id', 'cte.budget_type_oiu') // เพิ่ม 'cte.budget_type_oiu' ที่นี่
+     // Add these columns to the GROUP BY clause ,'cte.root_task_refund_pa_status'
      ->select(
          'cte.root',
          'cte.root_project_id',
 
+         'cte.budget_type_oiu AS budget_type_oiu',
 
          DB::raw('sum(cte.Leasttask_mm_budget) AS totalLeasttask_mm_budget'),
 
@@ -1470,9 +1480,78 @@ class ProjectController extends Controller
 
 
 
-//  dd($cteQuery->get());
+  //dd($cteQuery->get());
+
+
+  $totalLeasttask_mm_budget_sum = $combinedQuery->sum('totalLeasttask_mm_budget');
+  $totalLeastBudget_sum = $combinedQuery->sum('totalLeastBudget_sum');
+    $totalLeastCost = $combinedQuery->sum('totalLeastCost');
+
+    $rootsums = $combinedQuery->reduce(function ($carry, $item) {
+        $carry['totalLeasttask_mm_budget'] += $item->totalLeasttask_mm_budget;
+        $carry['totalLeastBudget_sum'] += $item->totalLeastBudget_sum;
+        $carry['totalLeastCost'] += $item->totalLeastCost;
+        $carry['totalLeastPay'] += $item->totalLeastPay;
+        $carry['totalLeasttask_refund_pa_budget'] += $item->totalLeasttask_refund_pa_budget;
+
+
+
+        // ... ฟิลด์อื่น ๆ ...
+        return $carry;
+    }, ['totalLeasttask_mm_budget' => 0, 'totalLeastBudget_sum' => 0, 'totalLeastCost' => 0 ,'totalLeastPay'=> 0, 'totalLeasttask_refund_pa_budget' => 0]);
+
+    //dd($rootsums); // จะแสดงผลรวมของฟิลด์ที่กำหนด
+
+    $cteQueryResults = $cteQuery->get();
+    //dd($cteQuery->get());
 
 ;
+
+
+
+// กรองข้อมูลใน Collection ที่มี "budget_type_oiu" เท่ากับ "investment"
+$investmentItems = $combinedQuery->filter(function ($item) {
+    return $item->budget_type_oiu === 'investment';
+});
+
+//dd($investmentItems);
+
+$rootsums_investment = $investmentItems->reduce(function ($carry, $item) {
+    $carry['totalLeasttask_mm_budget_investment'] += $item->totalLeasttask_mm_budget;
+    $carry['totalLeastBudget_sum_investment'] += $item->totalLeastBudget_sum;
+    $carry['totalLeastCost_investment'] += $item->totalLeastCost;
+    $carry['totalLeastPay_investment'] += $item->totalLeastPay;
+    $carry['totalLeasttask_refund_pa_budget_investment'] += $item->totalLeasttask_refund_pa_budget;
+    // ... ฟิลด์อื่น ๆ ...
+    return $carry;
+}, [
+    'totalLeasttask_mm_budget_investment' => 0,
+    'totalLeastBudget_sum_investment' => 0,
+    'totalLeastCost_investment' => 0,
+    'totalLeastPay_investment' => 0,
+    'totalLeasttask_refund_pa_budget_investment' => 0
+]);
+
+//dd($rootsums_investment);
+// รวมข้อมูลที่ต้องการ
+//$totalLeastBudgetSum_in = $investmentItems->sum('totalLeastBudget_sum');
+//$totalLeastCost_in = $investmentItems->sum('totalLeastCost');
+
+
+
+// และอื่น ๆ ตามที่คุณต้องการ
+
+
+
+
+
+
+
+
+
+
+
+
 /* $cteQueryResult = $cteQuery->get(); // หรือ ->get() ถ้าคุณต้องการทุกรายการ
 if($cteQueryResult) {
     $budget['cteQuery_root'] = $cteQueryResult->root;
@@ -1496,14 +1575,17 @@ foreach($cteQueryResults as $result) {
 }
 
 
-$budget['cteQuery_roots'] = $roots;
-$budget['cteQuery_root_project_id'] = $root_project_id;
-$budget['cteQuery_root_totalLeasttask_mm_budget'] = $root_totalLeasttask_mm_budget;
+$budget['root_totalLeasttask_mm_budget'] = $rootsums['totalLeasttask_mm_budget'];
+$budget['root_totalLeastBudget_sum'] = $rootsums['totalLeastBudget_sum'];
+$budget['root_totalLeastCost'] = $rootsums['totalLeastCost'];
+$budget['root_totalLeastPay'] = $rootsums['totalLeastPay'];
+$budget['root_totalLeasttask_refund_pa_budget'] = $rootsums['totalLeasttask_refund_pa_budget'];
+//$budget['cteQuery_root_totalLeasttask_mm_budget'] = $root_totalLeasttask_mm_budget;
 //$budget['cteQuery_root_task_refund_pa_status'] = $root_task_refund_pa_status;
 
 //dd($cteQuery->get());
 
-dd($budget);
+//dd($budget);
 
 
 
