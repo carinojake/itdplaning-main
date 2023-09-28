@@ -1279,7 +1279,7 @@ class ProjectController extends Controller
 
 
 
-
+//dd($id);
 
 
 
@@ -1289,26 +1289,50 @@ class ProjectController extends Controller
              't.task_id',
              't.project_id',
              't.task_parent',
+             't.task_name',
+             't.task_mm_budget',
+             't.task_status',
+             't.task_refund_pa_status',
              't.task_id AS root',
              't.project_id AS root_project_id',
+             't.task_parent AS root_task_parent',
+             't.task_name AS root_task_name',
+             't.task_mm_budget AS root_task_mm_budget',
+             't.task_status AS root_task_status',
+              't.task_refund_pa_status AS root_task_refund_pa_status',
+
+
              //'t.task_refund_pa_status AS root_task_refund_pa_status',
-             't.task_mm_budget as Leasttask_mm_budget',
-             DB::raw('
-             CASE
-                 WHEN t.task_budget_gov_utility > 1 THEN "utility"
-                 WHEN t.task_budget_it_operating > 1 THEN "operating"
-                 WHEN t.task_budget_it_investment > 1 THEN "investment"
-                 ELSE NULL
-             END AS budget_type_oiu'),
+            //'t.task_mm_budget as Leasttask_mm_budget',
+            DB::raw('
+            CASE
+                WHEN t.task_budget_gov_utility > 1 THEN "utility"
+                WHEN t.task_budget_it_operating > 1 THEN "operating"
+                WHEN t.task_budget_it_investment > 1 THEN "investment"
+                ELSE NULL
+            END AS budget_type_oiu'),
+
+            DB::raw('COALESCE(t.task_mm_budget, 0) AS Leasttask_mm_budget'),
+
              DB::raw('COALESCE(t.task_budget_gov_utility, 0)
               + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
 
               DB::raw('COALESCE(t.task_cost_gov_utility, 0) +
              COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
 
-             't.task_pay as LeastPay',
 
-             't.task_refund_pa_budget as Leasttask_refund_pa_budget',
+             DB::raw('COALESCE(t.task_pay,0) as LeastPay',),
+             DB::raw('
+                        CASE
+                        WHEN t.task_refund_pa_status = 2 THEN t.task_refund_pa_budget
+                        ELSE 0 END AS Leasttask_refund_pa_budget
+                    '),
+
+                    DB::raw('
+                    CASE
+                    WHEN t.task_status = 2 and t.task_refund_pa_status = 3 THEN t.task_refund_pa_budget
+                    ELSE 0 END AS root_Leasttask_refund_pa_budget
+                '),
 
              DB::raw(
                 '(COALESCE(t.task_budget_gov_utility, 0)
@@ -1354,7 +1378,15 @@ class ProjectController extends Controller
              as Leasttask_taskcon_pay')
              )
              ->from('tasks as t')
-             ->whereIn('t.task_id', $id_tasks)
+            ->whereIn('t.task_id', $id_tasks)
+
+          /*    ->whereIn('t.task_id', function ($query) use ($id) {
+                $query->select('tasks.task_id')
+                    ->from('projects')
+                    ->join('tasks', 'projects.project_id', '=', 'tasks.project_id')
+                    ->where('projects.project_id', $id)
+                    ->whereNull('tasks.deleted_at');
+            }) */
 
              ->whereNull('t.deleted_at')
 
@@ -1363,13 +1395,21 @@ class ProjectController extends Controller
                      'tasks.task_id',
                      'tasks.project_id',
                      'tasks.task_parent',
+                     'tasks.task_name',
+                     'tasks.task_mm_budget',
+                    'tasks.task_status',
+                     'tasks.task_refund_pa_status',
                     // 'tasks.task_refund_pa_status' ,
                      'cte.root',
                      'cte.root_project_id',
-                     DB::raw('NULL AS budget_type_oiu'),
+                     'cte.root_task_parent',
+                     'cte.root_task_name',
+                     'cte.root_task_mm_budget',
+                     'cte.root_task_status',
+                     'cte.root_task_refund_pa_status',
 
-                     DB::raw('tasks.task_mm_budget + cte.Leasttask_mm_budget as Leasttask_mm_budget'),
-
+                     DB::raw('budget_type_oiu AS budget_type_oiu'),
+                     DB::raw('tasks.task_mm_budget + cte.Leasttask_mm_budget AS Leasttask_mm_budget'),
                      DB::raw('tasks.task_budget_it_operating + tasks.task_budget_it_investment + tasks.task_budget_gov_utility + cte.LeastBudget AS LeastBudget'),
                      DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + cte.LeastCost AS LeastCost'),
 
@@ -1378,10 +1418,24 @@ class ProjectController extends Controller
                         + COALESCE(tasks.task_budget_it_operating, 0) + COALESCE(tasks.task_budget_it_investment, 0))-(COALESCE(tasks.task_cost_gov_utility, 0) +
                      COALESCE(tasks.task_cost_it_operating, 0) + COALESCE(tasks.task_cost_it_investment, 0))+cte.Least_Budget_Cost_sum AS Least_Budget_Cost_sum'),
 
-
-
                      DB::raw('tasks.task_pay + cte.LeastPay AS LeastPay'),
-                     DB::raw('tasks.task_refund_pa_budget+cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget'),
+
+                     DB::raw('
+    CASE
+    WHEN tasks.task_refund_pa_status = 2 THEN tasks.task_refund_pa_budget + cte.Leasttask_refund_pa_budget
+
+    ELSE cte.Leasttask_refund_pa_budget END AS Leasttask_refund_pa_budget
+'),
+
+DB::raw('
+CASE
+WHEN tasks.task_status = 2 and tasks.task_refund_pa_status = 3 THEN tasks.task_refund_pa_budget + cte.Leasttask_refund_pa_budget
+
+ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
+'),
+
+
+
                      DB::raw('(
                         SELECT MAX(temp.total_cost_1)
                         FROM (
@@ -1422,8 +1476,9 @@ class ProjectController extends Controller
                  )
                      ->from('tasks')
                      ->whereNull('tasks.deleted_at')
-                    ->whereNotNull('tasks.task_refund_pa_status')
-                    ->whereNull('cte.budget_type_oiu')
+                   // ->whereNotNull('tasks.task_refund_pa_status')
+                    ->whereNotNull('tasks.task_parent')
+                    //->whereNull('cte.budget_type_oiu')
                      ->join('cte', 'tasks.task_parent', '=', 'cte.task_id');
              });
      });
@@ -1431,13 +1486,20 @@ class ProjectController extends Controller
 
  $combinedQuery = $cteQuery
      ->from('cte')
-     ->groupBy('cte.root', 'cte.root_project_id', 'cte.budget_type_oiu') // เพิ่ม 'cte.budget_type_oiu' ที่นี่
+     ->groupBy('cte.root', 'cte.root_project_id',
+      'cte.budget_type_oiu','cte.root_task_parent','cte.root_task_name'
+      ,'cte.root_task_mm_budget','cte.root_task_status','cte.root_task_refund_pa_status') // เพิ่ม 'cte.budget_type_oiu' ที่นี่
      // Add these columns to the GROUP BY clause ,'cte.root_task_refund_pa_status'
      ->select(
          'cte.root',
          'cte.root_project_id',
-
+         'cte.root_task_parent',
+         'cte.root_task_name',
          'cte.budget_type_oiu AS budget_type_oiu',
+         'cte.root_task_mm_budget',
+         'cte.root_task_status',
+         'cte.root_task_refund_pa_status',
+
 
          DB::raw('sum(cte.Leasttask_mm_budget) AS totalLeasttask_mm_budget'),
 
@@ -1460,9 +1522,13 @@ class ProjectController extends Controller
          DB::raw('sum(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget1'),
          DB::raw('min(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget2'),
 
+         DB::raw('SUM(cte.root_Leasttask_refund_pa_budget) AS total_root_Leasttask_refund_pa_budget'),
+
+
          DB::raw('SUM(cte.LeastCost) AS totalLeastCost_1'),
          DB::raw('SUM(cte.ab_1) AS total_Leasttask_cost_1'), // Updated this line
          DB::raw('SUM(cte.ab_2) AS total_Leasttask_cost_2'), // Updated this line
+
 
      )
      //->groupBy('cte.root_project_id')
@@ -1480,27 +1546,28 @@ class ProjectController extends Controller
 
 
 
-  //dd($cteQuery->get());
+ dd($cteQuery->get());
 
 
-  $totalLeasttask_mm_budget_sum = $combinedQuery->sum('totalLeasttask_mm_budget');
+/*   $totalLeasttask_mm_budget_sum = $combinedQuery->sum('totalLeasttask_mm_budget');
   $totalLeastBudget_sum = $combinedQuery->sum('totalLeastBudget_sum');
-    $totalLeastCost = $combinedQuery->sum('totalLeastCost');
+    $totalLeastCost = $combinedQuery->sum('totalLeastCost'); */
 
     $rootsums = $combinedQuery->reduce(function ($carry, $item) {
         $carry['totalLeasttask_mm_budget'] += $item->totalLeasttask_mm_budget;
-        $carry['totalLeastBudget_sum'] += $item->totalLeastBudget_sum;
+        $carry['totalLeastBudget'] += $item->totalLeastBudget;
         $carry['totalLeastCost'] += $item->totalLeastCost;
         $carry['totalLeastPay'] += $item->totalLeastPay;
-        $carry['totalLeasttask_refund_pa_budget'] += $item->totalLeasttask_refund_pa_budget;
+        $carry['totalLeasttask_refund_pa_budget'] += $item->totalLeasttask_refund_pa_budget1;
+        $carry['total_root_Leasttask_refund_pa_budget'] += $item->total_root_Leasttask_refund_pa_budget;
 
 
 
         // ... ฟิลด์อื่น ๆ ...
         return $carry;
-    }, ['totalLeasttask_mm_budget' => 0, 'totalLeastBudget_sum' => 0, 'totalLeastCost' => 0 ,'totalLeastPay'=> 0, 'totalLeasttask_refund_pa_budget' => 0]);
+    }, ['totalLeasttask_mm_budget' => 0, 'totalLeastBudget_sum' => 0, 'totalLeastCost' => 0 ,'totalLeastPay'=> 0, 'totalLeasttask_refund_pa_budget' => 0,'total_root_Leasttask_refund_pa_budget'=> 0]);
 
-    //dd($rootsums); // จะแสดงผลรวมของฟิลด์ที่กำหนด
+    dd($rootsums); // จะแสดงผลรวมของฟิลด์ที่กำหนด
 
     $cteQueryResults = $cteQuery->get();
     //dd($cteQuery->get());
@@ -1573,19 +1640,23 @@ foreach($cteQueryResults as $result) {
 
 
 }
-
+$budget['budget_total_task_budget_end'] =  $budget['budget_total_task_budget_end'];
 
 $budget['root_totalLeasttask_mm_budget'] = $rootsums['totalLeasttask_mm_budget'];
 $budget['root_totalLeastBudget_sum'] = $rootsums['totalLeastBudget_sum'];
 $budget['root_totalLeastCost'] = $rootsums['totalLeastCost'];
 $budget['root_totalLeastPay'] = $rootsums['totalLeastPay'];
 $budget['root_totalLeasttask_refund_pa_budget'] = $rootsums['totalLeasttask_refund_pa_budget'];
+$budget['root_total_root_Leasttask_refund_pa_budget'] = $rootsums['total_root_Leasttask_refund_pa_budget'];
 //$budget['cteQuery_root_totalLeasttask_mm_budget'] = $root_totalLeasttask_mm_budget;
 //$budget['cteQuery_root_task_refund_pa_status'] = $root_task_refund_pa_status;
-
+$budget['up_total_budget_total_mm'] = ($rootsums['totalLeastBudget_sum']-$rootsums['totalLeasttask_mm_budget'])+$budget['root_total_root_Leasttask_refund_pa_budget'] ;
 //dd($cteQuery->get());
 
-//dd($budget);
+
+
+
+//dd($budget,$rootsums);
 
 
 
@@ -2264,10 +2335,6 @@ dd($cteQuery); */
             ($__project_parent_cost[] = 'parent');
         }
 
-
-
-
-
   // dd($gantt);
 
 
@@ -2461,6 +2528,8 @@ dd($cteQuery); */
         ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
         ($gantt[0]['budget_total_mm_pr2_2'] =  (($budget['total']-$gantt[0]['budget_total_mm_p'])+$gantt[0]['refund_pa_budget']));
         ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
+
+       // ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
         ($gantt[0]['budget_total_task_budget_end_p2'] = $budget['budget_total_task_budget_end_p2']);
 
         // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
@@ -8203,11 +8272,24 @@ $taskcon->taskcon_pp        = $request->input('taskcon_pp');
              //dd($task_sub_refund_pa_budget);
 
 //taskRefundbudget_sub
+                $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+                //$task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+                //dd($task_parent_sub);
+                if ($task_parent_sub) {
+                   // $task_parent_sub->task_task_parent_sub_refund_budget == 2;
+                    $task_parent_sub->task_refund_pa_budget =
+                    $task_parent_sub->task_refund_pa_budget+
+                    $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']
+                    +$task_sub_refund_pa_budget['investment']['task_refund_pa_budget']+$task_sub_refund_pa_budget['utility']['task_refund_pa_budget']
+                    ;
+                // dd($task_parent_sub);
+                 $task_parent_sub->save();
+                }
 
              if ($task) {
 
-                $task->task_status = '2';
-                $task->task_refund_pa_status = '3';
+                $task->task_status = '1';
+                $task->task_refund_pa_status = '2';
 
                 $task->task_refund_pa_budget =
                 (($tasksum->task_budget_it_operating +$tasksum->task_budget_it_investment+ $tasksum->task_budget_gov_utility)

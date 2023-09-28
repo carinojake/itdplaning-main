@@ -92,6 +92,8 @@
                                     @if ( $budget['project_type'] == 1)
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
 
+                                    {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+
                                     @elseif( $budget['project_type'] == 2 && $tasks['task_refund_pa_status'] == '3')
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end_p2_mm']), 2) }}
 
