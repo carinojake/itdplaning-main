@@ -1292,6 +1292,7 @@ class ProjectController extends Controller
              't.task_name',
              't.task_mm_budget',
              't.task_status',
+            't.task_refund_pa_budget',
              't.task_refund_pa_status',
              't.task_id AS root',
              't.project_id AS root_project_id',
@@ -1299,6 +1300,7 @@ class ProjectController extends Controller
              't.task_name AS root_task_name',
              't.task_mm_budget AS root_task_mm_budget',
              't.task_status AS root_task_status',
+             't.task_refund_pa_budget as root_task_refund_pa_budget',
               't.task_refund_pa_status AS root_task_refund_pa_status',
 
 
@@ -1378,15 +1380,15 @@ class ProjectController extends Controller
              as Leasttask_taskcon_pay')
              )
              ->from('tasks as t')
-            ->whereIn('t.task_id', $id_tasks)
+            //->whereIn('t.task_id', $id_tasks)
 
-          /*    ->whereIn('t.task_id', function ($query) use ($id) {
+             ->whereIn('t.task_id', function ($query) use ($id) {
                 $query->select('tasks.task_id')
                     ->from('projects')
                     ->join('tasks', 'projects.project_id', '=', 'tasks.project_id')
                     ->where('projects.project_id', $id)
                     ->whereNull('tasks.deleted_at');
-            }) */
+            })
 
              ->whereNull('t.deleted_at')
 
@@ -1398,6 +1400,7 @@ class ProjectController extends Controller
                      'tasks.task_name',
                      'tasks.task_mm_budget',
                     'tasks.task_status',
+                    'tasks.task_refund_pa_budget',
                      'tasks.task_refund_pa_status',
                     // 'tasks.task_refund_pa_status' ,
                      'cte.root',
@@ -1406,6 +1409,7 @@ class ProjectController extends Controller
                      'cte.root_task_name',
                      'cte.root_task_mm_budget',
                      'cte.root_task_status',
+                     'cte.root_task_refund_pa_budget',
                      'cte.root_task_refund_pa_status',
 
                      DB::raw('budget_type_oiu AS budget_type_oiu'),
@@ -1488,7 +1492,8 @@ ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
      ->from('cte')
      ->groupBy('cte.root', 'cte.root_project_id',
       'cte.budget_type_oiu','cte.root_task_parent','cte.root_task_name'
-      ,'cte.root_task_mm_budget','cte.root_task_status','cte.root_task_refund_pa_status') // เพิ่ม 'cte.budget_type_oiu' ที่นี่
+      ,'cte.root_task_mm_budget','cte.root_task_status','cte.root_task_refund_pa_budget','cte.root_task_refund_pa_status',
+     ) // เพิ่ม 'cte.budget_type_oiu' ที่นี่
      // Add these columns to the GROUP BY clause ,'cte.root_task_refund_pa_status'
      ->select(
          'cte.root',
@@ -1498,6 +1503,7 @@ ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
          'cte.budget_type_oiu AS budget_type_oiu',
          'cte.root_task_mm_budget',
          'cte.root_task_status',
+         'cte.root_task_refund_pa_budget',
          'cte.root_task_refund_pa_status',
 
 
@@ -1546,7 +1552,7 @@ ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
 
 
 
- dd($cteQuery->get());
+ //dd($cteQuery->get());
 
 
 /*   $totalLeasttask_mm_budget_sum = $combinedQuery->sum('totalLeasttask_mm_budget');
@@ -1554,12 +1560,12 @@ ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
     $totalLeastCost = $combinedQuery->sum('totalLeastCost'); */
 
     $rootsums = $combinedQuery->reduce(function ($carry, $item) {
-        $carry['totalLeasttask_mm_budget'] += $item->totalLeasttask_mm_budget;
-        $carry['totalLeastBudget'] += $item->totalLeastBudget;
+        $carry['totalLeasttask_mm_budget'] += $item->root_task_mm_budget;
+        $carry['totalLeastBudget_sum'] += $item->totalLeastBudget_sum;
         $carry['totalLeastCost'] += $item->totalLeastCost;
         $carry['totalLeastPay'] += $item->totalLeastPay;
         $carry['totalLeasttask_refund_pa_budget'] += $item->totalLeasttask_refund_pa_budget1;
-        $carry['total_root_Leasttask_refund_pa_budget'] += $item->total_root_Leasttask_refund_pa_budget;
+        $carry['total_root_Leasttask_refund_pa_budget'] += $item->root_task_refund_pa_budget;
 
 
 
@@ -1567,10 +1573,10 @@ ELSE cte.Leasttask_refund_pa_budget END AS root_Leasttask_refund_pa_budget
         return $carry;
     }, ['totalLeasttask_mm_budget' => 0, 'totalLeastBudget_sum' => 0, 'totalLeastCost' => 0 ,'totalLeastPay'=> 0, 'totalLeasttask_refund_pa_budget' => 0,'total_root_Leasttask_refund_pa_budget'=> 0]);
 
-    dd($rootsums); // จะแสดงผลรวมของฟิลด์ที่กำหนด
+    //dd($rootsums); // จะแสดงผลรวมของฟิลด์ที่กำหนด
 
     $cteQueryResults = $cteQuery->get();
-    //dd($cteQuery->get());
+  //  dd($cteQuery->get(),$rootsums);
 
 ;
 
@@ -2167,7 +2173,7 @@ dd($cteQuery); */
             ->get()
             ->toArray());
 
-           //dd($tasks);
+          //dd($tasks);
 
 
            $tasks = json_decode(json_encode($tasks), true);
@@ -2335,7 +2341,7 @@ dd($cteQuery); */
             ($__project_parent_cost[] = 'parent');
         }
 
-  // dd($gantt);
+   //dd($gantt);
 
 
                     $contractgannt = DB::table('tasks')
