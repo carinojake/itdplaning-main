@@ -40,10 +40,12 @@
                             @if($task->task_refund_pa_status == 2)
                                 {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
                             @else
-                                {{ number_format(floatval($task->task_budget_it_operating), 2) }}
-                                {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
-                                {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
-                                {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
+                            {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+                            <p> งบ  {{ number_format(floatval($task->task_budget_it_operating), 2) }}
+                              <p>
+                               งบ+mm+r {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                               <p> mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
+                                <p>r{{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
                             @endif
                             บาท
                         @endif
