@@ -623,7 +623,12 @@
 
 
                                 </div>
+                                <div class="d-none col-md-3">
 
+                                </label>
+                                {{ Form::select('task_parent_sub', \Helper::contractType(), '99', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                            </div>
                               {{--   <div class="row">
                                     <h4>งบประมาณ</h4>
                                     <div class="row">

@@ -205,8 +205,10 @@
                                                     <div class="col-md-4">
                                                         <label for="task_budget_it_operating0"
                                                             class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                        <span>        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_sums['operating']['task_refund_pa_budget']), 2) }} บาท
+                                                        <span>        {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }} บาท
                                                         </span>
+                                                    {{--     <div class="col-3">          {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท</div> --}}
+
                                                     </div>
                                                 @endif
 
@@ -214,7 +216,7 @@
                                                     <div class="col-4">
                                                         <label for="task_budget_it_investment0"
                                                             class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                        <span>                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget']), 2) }} บาท
+                                                        <span>                {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }} บาท
                                                         </span>
                                                     </div>
                                                 @endif
@@ -223,7 +225,7 @@
                                                     <div class="col-md-4">
                                                         <label for="task_budget_gov_utility0"
                                                             class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                        <span>{{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_sums['utility']['task_refund_pa_budget']), 2) }} บาท</span>
+                                                        <span>{{ number_format((($tasksDetails->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }} บาท</span>
                                                     </div>
                                                 @endif
                                             </div>
@@ -352,14 +354,24 @@
                                                                             <span class="text-danger"></span>
 
                                                                             <input type="text" placeholder="0.00"
-                                                                                step="0.01" class="form-control"
-                                                                                id="contract_mm_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                                class="form-control numeral-mask"
-                                                                                name="contract_mm_budget"
-                                                                                min="0"
-                                                                                value="{{ $tasksDetails->task_mm_budget }}"
-                                                                                >
+                                                                            step="0.01" class="form-control"
+                                                                            id="contract_mm_budget"
+                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                            class="form-control numeral-mask"
+                                                                            name="contract_mm_budget"
+                                                                            min="0"
+                                                                            value="@php
+                                                                                $value = 0;
+                                                                                if ($tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] > 0) {
+                                                                                    $value = $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'];
+                                                                                } elseif ($tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] > 0) {
+                                                                                    $value = $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'];
+                                                                                } elseif ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0) {
+                                                                                    $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
+                                                                                }
+                                                                                echo $value;
+                                                                            @endphp">
+
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mt-3">
@@ -414,20 +426,29 @@
                                                                                 <label for="contract_pr_budget"
                                                                                     class="form-label">{{ __('จำนวนเงิน (บาท) PR') }}</label>
                                                                                 <span class="text-danger"></span>
-
                                                                                 <input
-                                                                                type="taxt"
-                                                                                    placeholder="0.00"
-                                                                                    step="0.01"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                                    class="form-control numeral-mask"
-                                                                                    id="contract_pr_budget"
-                                                                                    name="contract_pr_budget"
-                                                                                    min="0"
-                                                                                    value="{{ $tasksDetails->task_mm_budget }}"
-                                                                                    onchange="calculateRefund()"
+                                                                                type="text"
+                                                                                placeholder="0.00"
+                                                                                step="0.01"
+                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                class="form-control numeral-mask"
+                                                                                id="contract_pr_budget"
+                                                                                name="contract_pr_budget"
+                                                                                min="0"
+                                                                                value="@php
+                                                                                    $value = 0;
+                                                                                    if ($tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] > 0) {
+                                                                                        $value = $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'];
+                                                                                    } elseif ($tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] > 0) {
+                                                                                        $value = $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'];
+                                                                                    } elseif ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0) {
+                                                                                        $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
+                                                                                    }
+                                                                                    echo $value;
+                                                                                @endphp"
+                                                                                onchange="calculateRefund()"
+                                                                            >
 
-                                                                                    >
                                                                             </div>
                                                                         </div>
                                                                     </div>

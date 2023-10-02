@@ -648,9 +648,32 @@ class ContractController extends Controller
     // ตัวอย่างเช่น นำไป redirect ไปยังหน้าแสดงข้อผิดพลาดหรือคืนค่า response ข้อผิดพลาด
     // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
 }
+$task_sub_refund = $task->subtask->where('task_refund_pa_status', 2);
+
+$task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
+    if ($subtask->task_budget_it_operating > 1) {
+        $carry['operating']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+    }
+
+    if ($subtask->task_budget_it_investment > 1) {
+        $carry['investment']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+    }
+
+    if ($subtask->task_budget_gov_utility > 1) {
+
+        $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+
+        // Add other fields as necessary...
+    }
+
+    return $carry;
+}, ['operating' => ['task_refund_pa_budget' => 0],
+    'investment' => [ 'task_refund_pa_budget' => 0],
+    'utility' => ['task_refund_pa_budget' => 0]]);
 
 
-
+  // dd($task_sub_refund_pa_budget);
            // dd($task_sub_sums);
 
 
@@ -716,7 +739,7 @@ class ContractController extends Controller
          'tasksDetails',
          'projectDetails',
         'task_sub_sums',
-
+'task_sub_refund_pa_budget',
          'sum_task_budget_it_operating',
             'sum_task_budget_it_investment',
             'sum_task_budget_gov_utility',

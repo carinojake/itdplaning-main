@@ -36,10 +36,19 @@
                     <div class="row">
                         @if ($task->task_budget_it_operating > 0)
                             <div class="col-6 fw-semibold">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-                            {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+
+                            @if($task->task_refund_pa_status == 2)
+                                {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+                            @else
+                                {{ number_format(floatval($task->task_budget_it_operating), 2) }}
+                                {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                                {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
+                                {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
+                            @endif
                             บาท
                         @endif
                     </div>
+                </div>
                     <div class="row">
                         @if ($task->task_budget_it_investment > 0)
                             <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>

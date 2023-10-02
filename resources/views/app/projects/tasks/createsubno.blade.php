@@ -624,6 +624,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="d-none col-md-3">
+
+                                </label>
+                                {{ Form::select('task_parent_sub', \Helper::contractType(), '99', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                            </div>
                                         <!--จบ ข้อมูลสัญญา 2-->
                                     </div>
                                 </div>
@@ -786,7 +792,7 @@
 
 <script>
     $(function() {
-        $("#task_start_date, #task_end_date").datepicker({
+        $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
