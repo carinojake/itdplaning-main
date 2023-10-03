@@ -555,12 +555,14 @@
                                  {{--    @if($project['budget_gov_utility'] > 1)
                                     {{ number_format(floatval(($project['budget_it_investment']-(($project['budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))+$is_refund_mm_pr), 2) }}
                                     @elseif($project['budget_it_investment'] > 0) --}}
-                                  {{--  {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+
+                              {{--       {{ number_format(floatval(($project['budget_it_investment']-(($project['budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))+$is_refund_mm_pr), 2) }}
+                                   {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
                          {{--      @endif --}}
-                         {{-- {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
+                                         {{ number_format(floatval($is_refund_mm_pr), 2) }}
                      {{--     {{ number_format(floatval($budget['budget_it_investment']), 2) }} --}}
 
-                         {{ number_format(floatval($rootsums_investment['totalLeastBudget_sum_investment']-$rootsums_investment['totalLeasttask_mm_budget_investment']), 2) }}
+                      {{--    {{ number_format(floatval($rootsums_investment['totalLeastBudget_sum_investment']-$rootsums_investment['totalLeasttask_mm_budget_investment']), 2) }} --}}
 
                                     </div>
 
@@ -883,8 +885,12 @@
                                           @if($project['budget_it_investment'] > 1)
                                             {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))+$ut_refund_mm_pr), 2) }}
                                             @elseif($project['budget_gov_utility'] > 0) --}}
-                                           {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+                                            {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))), 2) }}
+                                        {{--  {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
                                    {{--    @endif --}}
+                                   {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
+
+
                                    {{ number_format(floatval($ut_refund_mm_pr), 2) }}
                                         </div>
                                         <div>

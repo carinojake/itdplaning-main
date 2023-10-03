@@ -1274,6 +1274,72 @@ class ProjectController extends Controller
         $ids_project = Project::select('project_id')->where('project_id', $id)->get()->pluck('project_id');;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $firstQuery = DB::table('tasks')
+        ->join('projects', 'projects.project_id', '=', 'tasks.project_id')
+        ->select(
+
+            'tasks.task_id',
+            'tasks.task_parent',
+            'tasks.task_parent_sub',
+            'tasks.task_refund_pa_status',
+            'tasks.task_parent_sub_refund_pa_status',
+            DB::raw('CASE WHEN tasks.task_refund_pa_status = 2 THEN 0 ELSE 1 END AS modified_status'),
+            DB::raw('SUM(tasks.task_refund_pa_budget) AS sum_task_refund_pa_budget'),
+    )
+    ->whereIn('tasks.task_id', $id_tasks)
+    ->whereNull('tasks.deleted_at')
+    ->groupBy(DB::raw(' tasks.task_id, tasks.task_parent,tasks.task_parent_sub, tasks.task_refund_pa_status,task_parent_sub_refund_pa_status '))
+    //->having(DB::raw('tasks.task_parent'), '!=', null)
+
+
+    ;
+
+    // Second part of the UNION
+    $secondQuery = DB::table('tasks')
+        ->join('projects', 'projects.project_id', '=', 'tasks.project_id')
+        ->select(
+
+            DB::raw('NULL AS task_id'),
+            DB::raw('NULL AS task_parent'),
+            DB::raw('NULL AS task_parent_sub'),
+            DB::raw('NULL AS task_refund_pa_status'),
+            DB::raw('NULL AS task_refund_pa_status'),
+            DB::raw(' NULL AS task_parent_sub_refund_pa_status'),
+            DB::raw('SUM(tasks.task_refund_pa_budget) AS sum_task_refund_pa_budget')
+        )
+        ->whereIn('tasks.task_id', $id_tasks)
+        ->whereNull('tasks.deleted_at')
+        ->groupBy('tasks.task_parent','tasks.task_parent_sub', 'tasks.task_refund_pa_status','task_parent_sub_refund_pa_status')
+        ;
+
+    // Combine the two queries using UNION and order the results
+    $unioncte = $firstQuery->union($secondQuery)
+
+        ->orderBy('task_parent')
+        ->orderBy('task_id')
+        ->get();
+
+    // Return or use the results
+    //dd($unioncte);
+
+
+
+
+
  //dd($id_tasks,$ids_project);
 
 
@@ -1991,6 +2057,10 @@ $projectcombinedQuery = $projectcte_investment_Query
 
 dd($cteQuery); */
 
+
+
+
+
     ($tasks = DB::table('tasks')
             ->select(
                 'tasks.*',
@@ -2245,8 +2315,16 @@ dd($cteQuery); */
             ->toArray());
 
           //dd($tasks);
+         /*  $tasksaaa = collect($tasks);
+          $task_sub_refund = array_filter($tasks, function($task) {
+            return $task['task_refund_pa_status'] == 2;
+        });
+        foreach ($tasks as $task) {
+            $subtask_refund_01 = $task->subtask->where('task_refund_pa_status', 1);
+            // ทำบางอย่างกับ $subtask_refund_01
+        }
 
-
+          dd($task_sub_refund); */
            $tasks = json_decode(json_encode($tasks), true);
            $cteQueryArray = json_decode(json_encode($cteQuery), true);
         //dd($tasks);
@@ -2615,6 +2693,15 @@ dd($cteQuery); */
         // ($budget['mm']    = $gantt[0]['total_task_mm_budget']);
         //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
         //$budget['budget_total_taskcon_pay_con'] = $__paycon;
+       // dd($id);
+                    // First part of the UNION
+
+
+
+
+
+
+
         ($gantt[0]['budget_total_mm_pr2'] =  (($budget['total']-$gantt[0]['budget_total_mm'])+$gantt[0]['refund_pa_budget']));
         ($gantt[0]['budget_total_mm_pr2_2'] =  (($budget['total']-$gantt[0]['budget_total_mm_p'])+$gantt[0]['refund_pa_budget']));
         ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
