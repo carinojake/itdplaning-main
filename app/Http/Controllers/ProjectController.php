@@ -2313,21 +2313,24 @@ dd($cteQuery); */
             ->where('project_id', ($id))
             ->get()
             ->toArray());
-
-          //dd($tasks);
-         /*  $tasksaaa = collect($tasks);
-          $task_sub_refund = array_filter($tasks, function($task) {
-            return $task['task_refund_pa_status'] == 2;
-        });
-        foreach ($tasks as $task) {
-            $subtask_refund_01 = $task->subtask->where('task_refund_pa_status', 1);
-            // ทำบางอย่างกับ $subtask_refund_01
-        }
-
-          dd($task_sub_refund); */
            $tasks = json_decode(json_encode($tasks), true);
            $cteQueryArray = json_decode(json_encode($cteQuery), true);
-        //dd($tasks);
+
+           $task_sub_refund_total_count = count($tasks);
+
+$task_sub_refund_01 = array_filter($tasks, function($task) {
+    return $task['task_refund_pa_status'] == 1;
+});
+$task_sub_refund_01_count = count($task_sub_refund_01);
+
+$task_sub_refund = array_filter($tasks, function($task) {
+    return $task['task_refund_pa_status'] == 2;
+});
+$task_sub_refund_count = count($task_sub_refund);
+
+dd($task_sub_refund_total_count);
+
+           dd($tasks);
          //  dd(['tasks' => $tasksArray, 'cteQuery' => $cteQueryArray]);
 
         foreach ($tasks as $task) {
@@ -2695,8 +2698,6 @@ dd($cteQuery); */
         //$budget['budget_total_taskcon_pay_con'] = $__paycon;
        // dd($id);
                     // First part of the UNION
-
-
 
 
 
