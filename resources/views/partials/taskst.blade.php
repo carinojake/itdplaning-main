@@ -1,4 +1,4 @@
-@if ($task['task_parent'] == null)
+@if ($task['task_parent'] == null && $task['task_parent_sub'] == null)
 
     <h2>{{ $task->task_name }}</h2>
     <div class="container">
@@ -39,18 +39,35 @@
 
                             @if($task->task_refund_pa_status == 2)
                                 {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
-                            @else
-                            {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+
+                                @elseif($task_sub_refund_total_count == $task_sub_refund_count)
+                             {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+
+                                @elseif($task_sub_refund_total_count > $task_sub_refund_01_count)
+
+                                {{ number_format(floatval($task->task_budget_it_operating -  ($cteQuery_task_sub_sums['operating']['totalLeastCost']+$task_sub_refund_pa_budget_01['operating']['task_refund_pa_budget'])), 2) }}
+
+
+                                {{ number_format(floatval($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+
+                            {{ number_format(floatval($task->task_budget_it_operating - ($cteQuery_task_sub_sums['operating']['totalLeastCost']+($task->task_budget_it_operating -  $cteQuery_task_sub_sums['operating']['totalLeastCost']))), 2) }}
+
+
+
+                            <p>{{ number_format(floatval($cteQuery_task_sub_sums['operating']['totalLeastCost']), 2) }}
+
                             <p> งบ  {{ number_format(floatval($task->task_budget_it_operating), 2) }}
                               <p>
                                งบ+mm+r {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
                                <p> mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
-                                <p>r{{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
-                            @endif
+                                <p>r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
+                                    <p>r01 {{ number_format(floatval($task_sub_refund_pa_budget_01['operating']['task_refund_pa_budget']), 2) }},
+                                    @endif
+
                             บาท
                         @endif
                     </div>
-                </div>
+
                     <div class="row">
                         @if ($task->task_budget_it_investment > 0)
                             <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>

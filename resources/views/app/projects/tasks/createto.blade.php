@@ -324,7 +324,9 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
-                                                    ไม่เกิน   {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท  บาท
+                                              {{--       ไม่เกิน   {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท --}}
+                                                    <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท</div>
+
 
 
                                                 @endif
@@ -343,7 +345,8 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบดำเนินงาน') }}
                                                     </div>
-                                                    ไม่เกิน  {{ number_format($tasksDetails->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} บาท
+                                                   {{-- {{ number_format($tasksDetails->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} --}}
+                                                    <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget ['investment']['task_refund_pa_budget']), 2) }} บาท</div>
 
                                                 @endif
                                             </div>
@@ -359,7 +362,8 @@
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
                                                     </div>
-                                                    ไม่เกิน  {{ number_format($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
+{{--                                                     ไม่เกิน  {{ number_format($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
+ --}}                                                    <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_refund_pa_budget ['utility']['task_refund_pa_budget']), 2) }} บาท</div>
 
                                                 @endif
                                             </div>

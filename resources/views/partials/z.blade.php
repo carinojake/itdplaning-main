@@ -23,13 +23,21 @@
                                 </form>
 
 
-                                @elseif ($project['project_type'] == 1)
+                            @elseif ($task['task_parent_sub'] == 99)
+                            <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str_root_99', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                @method('POST')
+                                @csrf
+                                <button class="btn btn-info text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
+                            </form>
+
+                            @elseif ($project['project_type'] == 1)
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
                                 <button class="btn btn-warning text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
                             </form>
                             @endif
+
                             <a onclick="history.back()"
                                 class="btn btn-secondary">กลับ</a>
 {{--

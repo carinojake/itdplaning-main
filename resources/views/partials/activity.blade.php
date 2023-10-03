@@ -34,7 +34,10 @@
                             ?>
                             @if ((isset($task) && $task->task_refund_pa_status == 2) && $task->task_refund_pa_status == 3)
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
-                            @else
+                            @elseif ((isset($task) &&  $task->task_refund_pa_status == 3 && $task->task_status == 2))
+                                <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
+
+                                @else
                                 <span class="badge bg-info">ไม่คืนเงิน pa</span>
                             @endif
 

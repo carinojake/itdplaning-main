@@ -703,7 +703,7 @@
                             //no
                             else if (task.budget_total_task_mm_sum > 0) {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
+                                var tmp_class =task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' : 'green';
 
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -711,9 +711,13 @@
                                 }).format((task.budget - (task.budget_total_task_mm_sum)) + task.total_task_refund_budget_status) + '</span>';
                             }
                             //up
+
+
+
+
                             else if (task.cost > 0) {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
-
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
