@@ -307,7 +307,12 @@
                                     <div class="fs-4 fw-semibold btn btn-success">
                                         @if ( $budget['project_type'] == 1)
                                         {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
-                                        {{ number_format(floatval($op_refund_mm_pr), 2) }}
+                                        <p> 1. {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+                                    <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
+
+
+
                                         @elseif( $budget['project_type'] == 2)
                                         {{ number_format(floatval( $budget['budget_total_task_budget_end_p2']), 2) }}
                                         @endif
