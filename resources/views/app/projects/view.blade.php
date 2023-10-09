@@ -485,14 +485,14 @@
                                 }).format(task.total_pay+task.root_total_pay) + '</span>';
                             }
 
-                       /*      else if (task.totalLeastPay_Least > 0) {
+                           else if (task.totalLeastPay_Least > 0) {
 
 
                                 return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.totalLeastPay_Least) + '</span>';
-                            }  */
+                            }
 
 /*
                             else if (task.task_parent_sub_cost > 0) {
@@ -502,7 +502,7 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.task_parent_sub_pay) + '</span>';
-                            }  */
+                            } */
 
                             else {
                                 return '';

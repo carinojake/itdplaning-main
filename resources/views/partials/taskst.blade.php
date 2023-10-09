@@ -63,7 +63,6 @@
                                 <p>r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
                                     <p>r01 {{ number_format(floatval($task_sub_refund_pa_budget_01['operating']['task_refund_pa_budget']), 2) }},
  --}}
-
                                         @endif
 
                             บาท

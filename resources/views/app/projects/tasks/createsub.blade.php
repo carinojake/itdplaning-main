@@ -432,7 +432,12 @@
                                     </div>
 
 
+                               {{--      <div class="d-none col-md-3">
 
+                                    </label>
+                                    {{ Form::select('task_parent_sub', \Helper::contractType(), '1', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                                </div> --}}
 
 
 
