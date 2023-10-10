@@ -403,23 +403,25 @@
                                 }).format(task.total_task_cost - task.pay) + '</span>';
                             }
 
-                         /*    else if (task.totalLeastPay_Least > 0) {
+                            else if (task.totalLeastPay_Least > 0) {
 
 
                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format((task.totalLeastCost - task.totalLeastPay_Least)) + '</span>';
-                            } */
+                                }).format((task.task_parent_sub_cost - task.task_parent_sub_pay)) + '</span>';
+                            }
 
-                            // else if (task.task_parent_sub_cost > 0) {
+                         /*     else if (task.task_parent_sub_cost > 0) {
 
 
-                            //     return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                            //         style: 'currency',
-                            //         currency: 'THB'
-                            //     }).format(task.task_parent_sub_cost - task.task_parent_sub_pay) + '</span>';
-                            // }
+                                 return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
+                                     style: 'currency',
+                                     currency: 'THB'
+                                 }).format(task.task_parent_sub_cost - task.task_parent_sub_pay) + '</span>';
+                            }
+ */
+
                             /*        else if (task.total_pay > 0) {
                                         return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                             style: 'currency',
@@ -485,7 +487,7 @@
                                 }).format(task.total_pay+task.root_total_pay) + '</span>';
                             }
 
-                           else if (task.totalLeastPay_Least > 0) {
+                           else if (task.totalLeastPay_Least > 0 && task.task_total_pay > 0) {
 
 
                                 return '<span class="text-warning"">' + new Intl.NumberFormat('th-TH', {
@@ -669,6 +671,16 @@
                             }
 
  */
+                          /*       else if (task.task_root_task_refund_pa_status == 2) {
+
+                                var tmp_class = task.task_root_task_refund_pa_status == 2 ? 'blue' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
+                                } */
+
+
                             else if (task.task_refund_pa_status == 2) {
 
                                 var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
@@ -691,7 +703,7 @@
                             }
 
 
-                            else if (task.budget_total_task_mm_sum > 0 && task.task_refund_pa_status == "3" &&
+                          /*   else if (task.budget_total_task_mm_sum > 0 && task.task_refund_pa_status == "3" &&
                                 task.task_parent_sub_refund_pa_status == "4" && task.type == "task") {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
@@ -713,10 +725,10 @@
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format((task.budget - (task.total_Leasttask_cost_2)) ) + '</span>';
-                            }
+                            } */
 
                             //no
-                            else if (task.budget_total_task_mm_sum > 0) {
+                             else if (task.budget_total_task_mm_sum > 0) {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 var tmp_class =task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' : 'green';
 
