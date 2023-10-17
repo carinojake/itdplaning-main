@@ -546,7 +546,7 @@
 
                             }
 
-                            if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2 && task.task_refund_pa_status == 3) {
+                            else if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2 && task.task_refund_pa_status == 3) {
                                 var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'blue';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -556,7 +556,24 @@
 
                             }
 
-                            if (task.task_root_task_refund_pa_status == 1 && task.task_root_task_task_parent_sub_value == 2) {
+
+
+                          /*   else if (task.task_root_task_refund_pa_status == 1 && task.task_root_task_task_parent_sub_value == 2) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.tbalance-task.totalLeastCost) + '</span>';
+                            } */
+
+                            else if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2) {
+                                var tmp_class = task.balance < 0 ? 'red' : 'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
+                            }
+                         /*    else if (task.task_root_task_refund_pa_status == 1 && task.task_root_task_task_parent_sub_value == 2) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -564,17 +581,7 @@
                                 }).format(task.tbalance-task.totalLeastCost) + '</span>';
 
 
-                            }
-
-                            if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2) {
-                                var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
-
-
-                            }
+                            } */
 /*
                             if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';

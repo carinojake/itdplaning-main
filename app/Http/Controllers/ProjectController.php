@@ -830,6 +830,7 @@ class ProjectController extends Controller
                         , task_pay AS sumSubtask_pay
                         , total_taskcon_pay_pa_1 as sumSubtaskcon_pay
                         , task_refund_pa_budget AS sumSubtask_refund_pa_budget
+                        , task_refund_pa_status AS sumSubtask_refund_pa_statusy
                     FROM nodes AS t
                     UNION ALL
                     SELECT t.*, t0.root
@@ -856,6 +857,7 @@ class ProjectController extends Controller
                         , t.task_pay AS sumSubtask_pay
                         , t.total_taskcon_pay_pa_1 as sumSubtaskcon_pay
                         , t.task_refund_pa_budget AS sumSubtask_refund_pa_budget
+                        , t.task_refund_pa_status AS sumSubtask_refund_pa_statusy
                     FROM cte AS t0
                     JOIN nodes AS t
                     ON t.idtask_parent = t0.task_id
@@ -868,7 +870,12 @@ class ProjectController extends Controller
                                 )
                                 SELECT
                                 ROW_NUMBER() OVER (ORDER BY task_parent_sub, root) AS seq_num,
-                                root
+                                sumSubtask_refund_pa_statusy,
+ count(sumSubtask_refund_pa_statusy)-1 AS total_refund_status_count
+, sum(sumSubtask_refund_pa_statusy) AS total_refund_status_sum
+, max(sumSubtask_refund_pa_statusy) AS total_refund_status_max
+, min(sumSubtask_refund_pa_statusy) AS total_refund_status_min
+                               , root
                                 ,t1.task_name
                                         , MIN(idtask_parent0) AS idParentCategory
                                         ,(sumSubtotal_mm_budget) as sumSubtotal_mm_budget
@@ -921,8 +928,59 @@ class ProjectController extends Controller
                     $result_query_gov_utility = $subQuery_gov_utility->get();
 
 
+                    $subQuery_it_operating_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+                    ->select(DB::raw('*'))
+                    ->where('sumSubtotaltask_budget_it_operating0', '>', 0.00)
+                    ->where('idParentCategory', '=', 0)
+                    ;
 
-           //dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
+
+
+                    $subQuery_it_investment_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+                    ->select(DB::raw('*'))
+                    ->where('sumSubtotaltask_budget_it_investment0', '>', 0.00)
+                    ->where('idParentCategory', '=', 0)
+                    ;
+
+
+                    $subQuery_gov_utility_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+                    ->select(DB::raw('*'))
+                    ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00)
+                    ->where('idParentCategory', '=', 0)
+                    //->get()
+                    ;
+                    $result_query_it_operating_idParentCategory = $subQuery_it_operating_idParentCategory->first();
+                    $result_query_it_investment_idParentCategory = $subQuery_it_investment_idParentCategory->first();
+                    $result_query_gov_utility_idParentCategory = $subQuery_gov_utility_idParentCategory->first();
+
+// Initialize an empty array to hold the organized data
+ $organizedData = [];
+
+// Store the results of the first set of queries in the organized data array
+/* $organizedData['it_operating'] = $result_query_it_operating->toArray();
+$organizedData['it_investment'] = $result_query_it_investment->toArray();
+$organizedData['gov_utility'] = $result_query_gov_utility->toArray();
+
+// Store the results of the second set of queries in the organized data array
+$organizedData['it_operating_idParentCategory'] = $result_query_it_operating_idParentCategory->toArray();
+$organizedData['it_investment_idParentCategory'] = $result_query_it_investment_idParentCategory->toArray();
+$organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idParentCategory->toArray();
+  */
+// Now, $organizedData is a 2D array where the first dimension is the query category,
+// and the second dimension is the list of results for that category
+
+// If you want to debug the organized data array:
+ //dd($organizedData);
+
+
+            /*   dd($result_query_op_in_un,
+           $result_query_it_operating,
+           $result_query_it_investment,
+           $result_query_gov_utility,
+           $result_query_it_operating_idParentCategory,
+              $result_query_it_investment_idParentCategory,
+                $result_query_gov_utility_idParentCategory
+        ); */
 
                   //  dd($result_query_operating);
 
@@ -1092,6 +1150,9 @@ $mainQuery = DB::query()
             'at.task_refund_pa_status',
             'a.total_task_budget',
             'a.total_task_refund_pa_budget',
+            'a.total_cost_gov_utility',
+            'a.total_cost_it_operating',
+            'a.total_cost_it_investment',
             'a.total_cost',
             'a.tta',
             'a.ttb',
@@ -1167,7 +1228,9 @@ $mainQuery = DB::query()
             sum(COALESCE(tasks.task_budget_gov_utility,0))
             +sum(COALESCE(tasks.task_budget_it_operating,0))
             +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_budget ,
-
+            sum(COALESCE(tasks.task_cost_gov_utility,0)) as total_cost_gov_utility,
+            sum(COALESCE(tasks.task_cost_it_operating,0)) as total_cost_it_operating,
+            sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost_it_investment,
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as total_cost ,
@@ -1278,6 +1341,9 @@ $mainQuery = DB::query()
             )
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_cost_gov_utility,0)) as p_cost_no_pa_1_gov_utility,
+                sum(COALESCE(tasks.task_cost_it_operating,0)) as p_cost_no_pa_1_operating,
+                sum(COALESCE(tasks.task_cost_it_investment,0)) as p_cost_no_pa_1_investment,
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as p_cost_pa_1 ,
@@ -1297,6 +1363,9 @@ $mainQuery = DB::query()
             )
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
+                sum(COALESCE(tasks.task_budget_gov_utility,0)) as cost_no_pa_1_gov_utility,
+                sum(COALESCE(tasks.task_budget_it_operating,0)) as cost_no_pa_1_operating,
+                sum(COALESCE(tasks.task_budget_it_investment,0)) as cost_no_pa_1_investment,
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_pa_1 ,
@@ -1312,6 +1381,10 @@ $mainQuery = DB::query()
             )
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
+
+                sum(COALESCE(tasks.task_budget_gov_utility,0)) as cost_no_pa_2_gov_utility,
+                sum(COALESCE(tasks.task_budget_it_operating,0)) as cost_no_pa_2_operating,
+                sum(COALESCE(tasks.task_budget_it_investment,0)) as cost_no_pa_2_investment ,
                 sum(COALESCE(tasks.task_cost_gov_utility,0))
                 +sum(COALESCE(tasks.task_cost_it_operating,0))
                 +sum(COALESCE(tasks.task_cost_it_investment,0)) as cost_no_pa_2 ,
@@ -1376,7 +1449,7 @@ $mainQuery = DB::query()
 
         // ->toArray()
 
-        //dd($project);
+        dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -1487,6 +1560,9 @@ $mainQuery = DB::query()
         $budget['budget_gov_utility'] = $__budget_gov_utility;
 
 
+
+
+
         $budget['root_total_task_budget'] = $__root_total_task_budget;
         $budget['root_total_pay'] = $__root_total_pay;
         $budget['root_task_mm_budget'] = $__root_task_mm_budget;
@@ -1510,7 +1586,9 @@ $mainQuery = DB::query()
         $budget['total_task_budget'] = $__total_task_budget;
         ($budget['budget_total_mm'] = $__mm);
         $budget['budget_total_refund_pa_budget_end'] = $__total_task_refund_pa_budget_3;
-
+        $budget['budget_total_task_budget_end_operating'] = ($__budget_it_operating- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end'] = ($__budget - (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
         $budget['budget_total_task_budget_end'] =   $budget['budget_total_task_budget_end'] - $budget['root_task_mm_budget'];
@@ -1526,7 +1604,7 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_mm_refund'] = ($__total_task_budget - $__mm) + $__total_task_refund_pa_budget_3;
 
-        //dd($budget);
+        dd($budget);
 
         //  $tasks =  Project::find($id);
 
@@ -1643,11 +1721,13 @@ $mainQuery = DB::query()
          , 'task_pay AS task_pay0'
          , 'total_taskcon_pay_pa_1 AS taskcons_pay0'
          , 'task_refund_pa_status AS task_refund_pa_statusy0'
+         //, 'task_refund_pa_budget AS task_refund_pa_budget0'
          , 'task_budget_it_operating AS sumSubtotal'
          , 'task_cost_it_operating AS sumSubtask_cost_it_operating'
          , 'task_pay AS sumSubtask_pay'
          , 'total_taskcon_pay_pa_1 as sumSubtaskcon_pay'
          , 'task_refund_pa_budget AS sumSubtask_refund_pa_budget'
+         , 'task_refund_pa_status AS sumSubtask_refund_pa_statusy'
         )
         ->unionAll(
             DB::table(DB::raw('cte AS t0'))
@@ -1670,6 +1750,7 @@ $mainQuery = DB::query()
                     , 't.task_pay AS sumSubtask_pay'
                     , 't.total_taskcon_pay_pa_1 as sumSubtaskcon_pay'
                     , 't.task_refund_pa_budget AS sumSubtask_refund_pa_budget'
+                    , 't.task_refund_pa_status AS sumSubtask_refund_pa_statusy'
                       // ... (other columns)
                 )
         );
@@ -2877,6 +2958,12 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                   'cteop_in_un.total_paycons as total_paycons_cte',
                   'cteop_in_un.total_pay_paycons as total_pay_paycons_cte',
                   'cteop_in_un.total_refund as total_refund_cte',
+                  'cteop_in_un.sumSubtask_refund_pa_statusy as sumSubtask_refund_pa_status',
+                  'cteop_in_un.total_refund_status_count as total_refund_status_count',
+                'cteop_in_un.total_refund_status_sum as total_refund_status_sum',
+                'cteop_in_un.total_refund_status_max as total_refund_status_max',
+                'cteop_in_un.total_refund_status_min as total_refund_status_min',
+
 
 
             )
@@ -3129,6 +3216,7 @@ dd($task_sub_refund_total_count);
 
            dd($tasks); */
 
+           //dd($tasks);
 
         //  dd(['tasks' => $tasksArray, 'cteQuery' => $cteQueryArray]);
 
@@ -3180,6 +3268,8 @@ dd($task_sub_refund_total_count);
             ((float) $_total_paycons_cte = (float) $task['total_paycons_cte']);
             ((float) $_total_pay_paycons_cte= (float) $task['total_pay_paycons_cte']);
             ((float) $_total_refund_cte = (float) $task['total_refund_cte']);
+
+            ((float) $_total_refund_status_sum = (float) $task['total_refund_status_sum']);
 
 
 
@@ -3333,6 +3423,12 @@ dd($task_sub_refund_total_count);
                 'total_paycons_cte' => $_total_paycons_cte,
                 'total_pay_paycons_cte' => $_total_pay_paycons_cte,
                 'total_refund_cte' => $_total_refund_cte,
+                'sumSubtask_refund_pa_status' => $task['sumSubtask_refund_pa_status'],
+                'total_refund_status_count' => $task['total_refund_status_count'],
+                'total_refund_status_sum' => $_total_refund_status_sum,
+                'total_refund_status_max' => $task['total_refund_status_max'],
+                'total_refund_status_min' => $task['total_refund_status_min'],
+
                 // 'owner' => $project['project_owner'],
             ]);
 
@@ -3529,7 +3625,7 @@ dd($task_sub_refund_total_count);
 
 
 
-        //  dd($gantt,$tasks);
+        // dd($gantt,$tasks);
         //  dd($gantt);
         // ($budget['mm']    = $gantt[0]['total_task_mm_budget']);
         //  $budget['balance_pr'] = $gantt[0]['balance_pr'];
@@ -4249,6 +4345,11 @@ dd($task_sub_refund_total_count);
         //dd($project->main_task);
 
         return view('app.projects.view', compact(
+            'result_query_it_operating_idParentCategory',
+            'result_query_it_investment_idParentCategory',
+            'result_query_gov_utility_idParentCategory',
+            'organizedData',
+            'query_op_in_un',
             'cteQuery',
             'contract_tasks',
             'is_refund_mm_pr',
