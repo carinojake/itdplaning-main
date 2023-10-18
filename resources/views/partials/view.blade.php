@@ -569,8 +569,8 @@
 
                          {{ number_format(floatval($is_refund_mm_pr), 2) }}
 
-                          {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
-
+{{--                           {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
+ --}}
 {{--                       {{ number_format(floatval($rootsums_investment['totalLeastBudget_sum_investment']-$rootsums_investment['totalLeasttask_mm_budget_investment']), 2) }}
  --}}
                                     </div>
@@ -899,8 +899,8 @@
                                    {{--    @endif --}}
                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
 
-                                   {{ number_format(floatval($project['budget_gov_utility']-$result_query_gov_utility_idParentCategory->sumSubtotaltask_budget_gov_utility0), 2) }}
-
+{{--                                    {{ number_format(floatval($project['budget_gov_utility']-$result_query_gov_utility_idParentCategory->sumSubtotaltask_budget_gov_utility0), 2) }}
+ --}}
 
 
                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
