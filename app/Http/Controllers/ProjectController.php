@@ -871,14 +871,19 @@ class ProjectController extends Controller
                                 SELECT
                                 ROW_NUMBER() OVER (ORDER BY task_parent_sub, root) AS seq_num,
                                 sumSubtask_refund_pa_statusy,
- count(sumSubtask_refund_pa_statusy)-1 AS total_refund_status_count
+ count(sumSubtask_refund_pa_statusy) AS total_refund_status_count
 , sum(sumSubtask_refund_pa_statusy) AS total_refund_status_sum
 , max(sumSubtask_refund_pa_statusy) AS total_refund_status_max
 , min(sumSubtask_refund_pa_statusy) AS total_refund_status_min
+,sum(sumSubtask_refund_pa_statusy)/count(sumSubtask_refund_pa_statusy) as total_refund_starut_b
                                , root
                                 ,t1.task_name
                                         , MIN(idtask_parent0) AS idParentCategory
-                                        ,(sumSubtotal_mm_budget) as sumSubtotal_mm_budget
+                                        , (sumSubtotal_mm_budget) as sumSubtotal_mm_budget
+                                        , count(sumSubtotal_mm_budget) as sumSubtotal_mm_budget_count
+                                        , sum(sumSubtotal_mm_budget) as sumSubtotal_mm_budget_sum
+                                        , max(sumSubtotal_mm_budget) as sumSubtotal_mm_budget_max
+                                        , min(sumSubtotal_mm_budget) as sumSubtotal_mm_budget_min
                                         , MIN(task_budget_it_operating0) AS sumSubtotaltask_budget_it_operating0
                                         , MIN(task_budget_it_investment0) AS sumSubtotaltask_budget_it_investment0
                                         , MIN(task_budget_gov_utility0) AS sumSubtotaltask_budget_gov_utility0
@@ -922,6 +927,7 @@ class ProjectController extends Controller
                     $subQuery_gov_utility = DB::table(DB::raw("($query_op_in_un) as sub"))
                     ->select(DB::raw('*'))
                     ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00);
+
                     $result_query_it_operating = [];
                     $result_query_it_investment = [];
                     $result_query_gov_utility = [];
@@ -978,7 +984,7 @@ $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idPar
  //dd($organizedData);
 
 
-            /*   dd($result_query_op_in_un,
+         /*       dd($result_query_op_in_un,
            $result_query_it_operating,
            $result_query_it_investment,
            $result_query_gov_utility,
@@ -2023,7 +2029,7 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_mm_refund'] = ($__total_task_budget - $__mm) + $__total_task_refund_pa_budget_3;
 
-        dd($budget);
+        //dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -2214,6 +2220,7 @@ $mainQuery = DB::query()
                 't.task_parent_sub as root_task_task_parent_sub',
                 't.task_status as root_task_status',
                 't.task_refund_pa_status as root_task_refund_pa_status',
+                DB::raw('SUM(t.task_mm_budget) as total_sum_task_mm_budget'),
                 DB::raw('SUM(t.task_budget_it_operating) as total_sum_task_budget_it_operating'),
                 DB::raw('SUM(t.task_budget_it_investment) as total_sum_task_budget_it_investment'),
                 DB::raw('SUM(t.task_budget_gov_utility) as total_sum_task_budget_gov_utility'),
@@ -2247,6 +2254,7 @@ $mainQuery = DB::query()
                 'tasks.task_parent_sub as root_task_task_parent_sub',
                 'tasks.task_status as root_task_status',
                 'tasks.task_refund_pa_status as root_task_refund_pa_status',
+                DB::raw('SUM(tasks.task_mm_budget) as total_sum_task_mm_budget'),
                 DB::raw('SUM(tasks.task_budget_it_operating) as total_sum_task_budget_it_operating'),
                 DB::raw('SUM(tasks.task_budget_it_investment) as total_sum_task_budget_it_investment'),
                 DB::raw('SUM(tasks.task_budget_gov_utility) as total_sum_task_budget_gov_utility'),
@@ -2383,7 +2391,7 @@ $mainQuery = DB::query()
             ->get()
             ;
         // แสดงผลdd
-      // dd($ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get());
+     // dd($ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get());
         //dd($ctesumsurplus);
 //count ctesumsurplus
      // Get the count
@@ -3364,6 +3372,7 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                   'ctesSqlnull.total_sum_cost',
                   'ctesSqlnull.total_sum_task_refund_pa_budget',
                   'cteop_in_un.root as root_op',
+
                   'cteop_in_un.sumSubtotaltask_budget_it_operating0 as sumSubtotaltask_budget_it_operating',
                   'cteop_in_un.sumSubtotaltask_budget_it_investment0 as sumSubtotaltask_budget_it_investment',
                   'cteop_in_un.sumSubtotaltask_budget_gov_utility0 as sumSubtotaltask_budget_gov_utility',
@@ -3382,6 +3391,7 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'cteop_in_un.total_refund_status_sum as total_refund_status_sum',
                 'cteop_in_un.total_refund_status_max as total_refund_status_max',
                 'cteop_in_un.total_refund_status_min as total_refund_status_min',
+                'cteop_in_un.total_refund_starut_b as total_refund_starut_b',
 
 
 
@@ -3791,7 +3801,7 @@ dd($task_sub_refund_total_count);
 
 
 
-
+                'totalLeastBudget'              =>  $__totalLeastBudget,
                 'totalLeastCost'              =>  $__totalLeastCost,
                 'totalLeastPay_Least'              =>  $__totalLeastPay_Least,
 
@@ -3847,6 +3857,7 @@ dd($task_sub_refund_total_count);
                 'total_refund_status_sum' => $_total_refund_status_sum,
                 'total_refund_status_max' => $task['total_refund_status_max'],
                 'total_refund_status_min' => $task['total_refund_status_min'],
+                'total_refund_starut_b' => $task['total_refund_starut_b'],
 
                 // 'owner' => $project['project_owner'],
             ]);
@@ -3948,7 +3959,7 @@ dd($task_sub_refund_total_count);
         } */
         // dd($gantt);
 
- //dd($gantt,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
+ //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
 
