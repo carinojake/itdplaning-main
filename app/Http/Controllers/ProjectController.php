@@ -816,6 +816,7 @@ class ProjectController extends Controller
                             GROUP BY tasks.task_id
                         ) AS ad ON ad.task_id = tasks.task_id
                         WHERE tasks.project_id = $id AND tasks.deleted_at IS NULL
+                        GROUP BY tasks.task_id
                         UNION
 
                         SELECT 0, null, null, null,0,0, 0,0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0
@@ -829,16 +830,24 @@ class ProjectController extends Controller
 				 , root_task_task_parent_sub_value_plus as root_task_task_parent_sub_value_plus0
 				 , task_mm_budget As task_mm_budget0
          , task_budget_it_operating AS task_budget_it_operating0
+         , task_budget_it_investment AS task_budget_it_investment0
+         ,task_budget_gov_utility as task_budget_gov_utility0
          , task_cost_it_operating AS task_cost_it_operating0
+            , task_cost_it_investment AS task_cost_it_investment0
+            , task_cost_gov_utility AS task_cost_gov_utility0
          , task_pay AS task_pay0
          , total_taskcon_pay_pa_1 AS taskcons_pay0
          , task_refund_pa_status AS task_refund_pa_statusy0
 					,root_task_refund_pa_status_value as root_task_refund_pa_status_value0
 
 					,root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
-				 , task_mm_budget As sumSubtotal_mm
-         , task_budget_it_operating AS sumSubtotal
+				 , task_mm_budget As sumSubtotal_mm_budget
+         , task_budget_it_operating AS sumSubtotal_it_operating
+         , task_budget_it_investment AS sumSubtotal_it_investment
+            ,task_budget_gov_utility as sumSubtotal_gov_utility
          , task_cost_it_operating AS sumSubtask_cost_it_operating
+            , task_cost_it_investment AS sumSubtask_cost_it_investment
+            , task_cost_gov_utility AS sumSubtask_cost_gov_utility
          , task_pay AS sumSubtask_pay
          , total_taskcon_pay_pa_1 as sumSubtaskcon_pay
          , task_refund_pa_budget AS sumSubtask_refund_pa_budget
@@ -855,16 +864,24 @@ class ProjectController extends Controller
 				 , t0.root_task_task_parent_sub_value_plus0
         ,t0.task_mm_budget0
         , t0.task_budget_it_operating0
+        , t0.task_budget_it_investment0
+        ,t0.task_budget_gov_utility0
         , t0.task_cost_it_operating0
+        , t0.task_cost_it_investment0
+        , t0.task_cost_gov_utility0
         , t0.task_pay0
         , t0.taskcons_pay0
         , t0.task_refund_pa_statusy0
 				,t0.root_task_refund_pa_status_value0
 
 				,t.root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
-				 , t.task_mm_budget AS sumSubtotal_mm
-         , t.task_budget_it_operating AS sumSubtotal
+				 , t.task_mm_budget AS sumSubtotal_mm_budget
+         , t.task_budget_it_operating AS sumSubtotal_it_operating
+            , t.task_budget_it_investment AS sumSubtotal_it_investment
+                ,t.task_budget_gov_utility as sumSubtotal_gov_utility
          , t.task_cost_it_operating AS sumSubtask_cost_it_operating
+            , t.task_cost_it_investment AS sumSubtask_cost_it_investment
+            , t.task_cost_gov_utility AS sumSubtask_cost_gov_utility
          , t.task_pay AS sumSubtask_pay
          , t.total_taskcon_pay_pa_1 as sumSubtaskcon_pay
          , t.task_refund_pa_budget AS sumSubtask_refund_pa_budget
@@ -1053,7 +1070,7 @@ $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idPar
                 $result_query_gov_utility_idParentCategory
         );
  */
-                    dd($result_query_op_in_un);
+                    //dd($result_query_op_in_un);
 
 
 
@@ -3431,7 +3448,9 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                   'ctesSqlnull.total_sum_budget',
                   'ctesSqlnull.total_sum_cost',
                   'ctesSqlnull.total_sum_task_refund_pa_budget',
-                  'cteop_in_un.root as root_op',
+                  'cteop_in_un.root as root_op_in_un',
+                    'cteop_in_un.sumSubroot_task_task_parent_sub_value_plus',
+
 
                   'cteop_in_un.sumSubtotaltask_budget_it_operating0 as sumSubtotaltask_budget_it_operating',
                   'cteop_in_un.sumSubtotaltask_budget_it_investment0 as sumSubtotaltask_budget_it_investment',
@@ -3462,6 +3481,7 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'cteop_in_un.sumSubtotal_mm_budget_sum as sumSubtotal_mm_budget_sum',
                 'cteop_in_un.sumSubtotal_mm_budget_max as sumSubtotal_mm_budget_max',
                 'cteop_in_un.sumSubtotal_mm_budget_min as sumSubtotal_mm_budget_min',
+
 
 
 
@@ -3947,11 +3967,12 @@ dd($task_sub_refund_total_count);
                 'total_refund_starut_b_root' => $_total_refund_starut_b_root,
                 'netSubtotal' => $_netSubtotal,
                 'root_task_task_parent_sub_value_plus_totoal' => $_root_task_task_parent_sub_value_plus_totoal,
-               'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
+               //'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
                'sumSubtotal_mm_budget' => $task['sumSubtotal_mm_budget'],
                 'sumSubtotal_mm_budget_sum' => $task['sumSubtotal_mm_budget_sum'],
                 'sumSubtotal_mm_budget_max' => $task['sumSubtotal_mm_budget_max'],
                 'sumSubtotal_mm_budget_min' => $task['sumSubtotal_mm_budget_min'],
+                'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
 
 
                 // 'owner' => $project['project_owner'],
@@ -3963,7 +3984,7 @@ dd($task_sub_refund_total_count);
             ($__project_parent_cost[] = 'parent');
         }
 
- //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
+ dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
 
