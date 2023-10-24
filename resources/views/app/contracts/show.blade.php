@@ -646,6 +646,74 @@
     </x-slot:css>
     <x-slot:javascript>
         <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=7.1.13"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            $(document).ready(function() {
+                // Add click event listener for the delete button กิจกรรม
+                $('.btn-taskRefund-sub').click(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this).closest('form');
+
+                    Swal.fire({
+                        title: 'คืนเงิน กิจกรรม คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, คือเงิน'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+
+
+                  // Add click event listener for the delete button
+                  $('.btn-taskRefund').click(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this).closest('form');
+
+                    Swal.fire({
+                        title: 'คืนเงิน งานประจำ คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, คือเงิน'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+                // Add click event listener for the delete_1 button
+                $('.btn-delete').click(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this).closest('form');
+
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'ใช่, ลบข้อมูล'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        </script>
+
         <script>
             gantt.plugins({
                 marker: true,

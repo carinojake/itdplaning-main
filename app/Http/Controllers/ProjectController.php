@@ -769,7 +769,15 @@ class ProjectController extends Controller
                             tasks.task_id,
                             COALESCE(tasks.task_parent, 0) AS idtask_parent,
                             tasks.task_name,
+                            tasks.task_parent,
                             tasks.task_parent_sub,
+                                                        CASE
+                        WHEN sum(COALESCE( tasks.task_parent_sub)) = 99 THEN 0
+                        WHEN sum(COALESCE( tasks.task_parent_sub)) = 2 THEN 2
+                        WHEN 	sum(COALESCE(tasks.task_parent, 0)+COALESCE(tasks.task_parent_sub,0)) > 2 THEN 3
+                        WHEN 	sum(COALESCE(tasks.task_parent)+COALESCE(tasks.task_parent_sub)) IS NULL THEN 1
+                        ELSE 0
+                    END AS root_task_task_parent_sub_value_plus,
                             tasks.task_mm_budget,
                             tasks.task_budget_it_operating,
                            tasks.task_budget_it_investment,
@@ -780,6 +788,13 @@ class ProjectController extends Controller
                                     tasks.task_pay,
                             tasks.task_refund_pa_status,
                             tasks.task_refund_pa_budget,
+                            CASE
+                            WHEN  tasks.task_refund_pa_status = 1 THEN  0
+                            WHEN  tasks.task_refund_pa_status = 2 THEN tasks.task_refund_pa_budget
+                            WHEN  tasks.task_refund_pa_status = 3 THEN 3
+                            WHEN  tasks.task_refund_pa_status IS NULL THEN 0
+                            ELSE 0
+                        END AS root_task_refund_pa_status_value,
                             ad.total_pay,
                             ad.total_taskcon_cost_pa_1,
                         ad.total_taskcon_pay_pa_1
@@ -802,65 +817,63 @@ class ProjectController extends Controller
                         ) AS ad ON ad.task_id = tasks.task_id
                         WHERE tasks.project_id = $id AND tasks.deleted_at IS NULL
                         UNION
-                        SELECT 0,null,null,null,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+                        SELECT 0, null, null, null,0,0, 0,0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0
                                 ),
                                 cte AS (
-                                    SELECT t.*,
-                                    t.task_id AS root
-                        , idtask_parent AS idtask_parent0
-                        , task_name as task_name0
-                        , task_parent_sub AS task_parent_sub0
-                        , task_mm_budget AS task_mm_budget0
-                        , task_budget_it_operating AS task_budget_it_operating0
-                        , task_budget_it_investment AS task_budget_it_investment0
-                        , task_budget_gov_utility AS task_budget_gov_utility0
-                        , task_cost_it_operating AS task_cost_it_operating0
-                        , task_cost_it_investment AS task_cost_it_investment0
-                        , task_cost_gov_utility AS task_cost_gov_utility0
-                        , task_pay AS task_pay0
-                        , total_taskcon_pay_pa_1 AS taskcons_pay0
-                        , task_refund_pa_status AS task_refund_pa_statusy0
-                        , task_mm_budget AS sumSubtotal_mm_budget
-                        , task_budget_it_operating AS sumSubtotal_it_operating
-                        , task_budget_it_investment AS sumSubtotal_it_investment
-                        , task_budget_gov_utility AS sumSubtotal_gov_utility
-                        , task_cost_it_operating AS sumSubtask_cost_it_operating
-                        , task_cost_it_investment AS sumSubtask_cost_it_investment
-                        , task_cost_gov_utility AS sumSubtask_cost_gov_utility
-                        , task_pay AS sumSubtask_pay
-                        , total_taskcon_pay_pa_1 as sumSubtaskcon_pay
-                        , task_refund_pa_budget AS sumSubtask_refund_pa_budget
-                        , task_refund_pa_status AS sumSubtask_refund_pa_statusy
-                    FROM nodes AS t
-                    UNION ALL
-                    SELECT t.*, t0.root
-                        , t0.idtask_parent0
-                        , t0.task_name0
-                        , t0.task_parent_sub0
-                        , t0.task_mm_budget0
-                        , t0.task_budget_it_operating0
-                        , t0.task_budget_it_investment0
-                        , t0.task_budget_gov_utility0
-                        , t0.task_cost_it_operating0
-                        , t0.task_cost_it_investment0
-                        , t0.task_cost_gov_utility0
-                        , t0.task_pay0
-                        , t0.taskcons_pay0
-                        , t0.task_refund_pa_statusy0
-                        ,t.task_mm_budget AS sumSubtotal_mm_budget
-                        , t.task_budget_it_operating AS sumSubtotal_it_operating
-                        ,t.task_budget_it_investment AS sumSubtotal_it_investment
-                        ,t.task_budget_gov_utility AS sumSubtotal_gov_utility
-                        , t.task_cost_it_operating AS sumSubtask_cost_it_operating
-                        ,t.task_cost_it_investment AS sumSubtask_cost_it_investment
-                        ,t.task_cost_gov_utility AS sumSubtask_cost_gov_utility
-                        , t.task_pay AS sumSubtask_pay
-                        , t.total_taskcon_pay_pa_1 as sumSubtaskcon_pay
-                        , t.task_refund_pa_budget AS sumSubtask_refund_pa_budget
-                        , t.task_refund_pa_status AS sumSubtask_refund_pa_statusy
-                    FROM cte AS t0
-                    JOIN nodes AS t
-                    ON t.idtask_parent = t0.task_id
+                                    SELECT t.*, t.task_id AS root
+         , idtask_parent AS idtask_parent0
+         , task_name as task_name0
+				 , task_parent as task_parent0
+         , task_parent_sub AS task_parent_sub0
+				 , root_task_task_parent_sub_value_plus as root_task_task_parent_sub_value_plus0
+				 , task_mm_budget As task_mm_budget0
+         , task_budget_it_operating AS task_budget_it_operating0
+         , task_cost_it_operating AS task_cost_it_operating0
+         , task_pay AS task_pay0
+         , total_taskcon_pay_pa_1 AS taskcons_pay0
+         , task_refund_pa_status AS task_refund_pa_statusy0
+					,root_task_refund_pa_status_value as root_task_refund_pa_status_value0
+
+					,root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
+				 , task_mm_budget As sumSubtotal_mm
+         , task_budget_it_operating AS sumSubtotal
+         , task_cost_it_operating AS sumSubtask_cost_it_operating
+         , task_pay AS sumSubtask_pay
+         , total_taskcon_pay_pa_1 as sumSubtaskcon_pay
+         , task_refund_pa_budget AS sumSubtask_refund_pa_budget
+				 , task_refund_pa_status AS sumSubtask_refund_pa_statusy
+				 ,root_task_refund_pa_status_value as sumSubroot_task_refund_pa_status_value
+
+    FROM nodes AS t
+    UNION ALL
+    SELECT t.*, t0.root
+        , t0.idtask_parent0
+        , t0.task_name0
+        	, t0.task_parent0
+         , t0.task_parent_sub0
+				 , t0.root_task_task_parent_sub_value_plus0
+        ,t0.task_mm_budget0
+        , t0.task_budget_it_operating0
+        , t0.task_cost_it_operating0
+        , t0.task_pay0
+        , t0.taskcons_pay0
+        , t0.task_refund_pa_statusy0
+				,t0.root_task_refund_pa_status_value0
+
+				,t.root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
+				 , t.task_mm_budget AS sumSubtotal_mm
+         , t.task_budget_it_operating AS sumSubtotal
+         , t.task_cost_it_operating AS sumSubtask_cost_it_operating
+         , t.task_pay AS sumSubtask_pay
+         , t.total_taskcon_pay_pa_1 as sumSubtaskcon_pay
+         , t.task_refund_pa_budget AS sumSubtask_refund_pa_budget
+				 , t.task_refund_pa_status AS sumSubtask_refund_pa_statusy
+				 ,t.root_task_refund_pa_status_value as sumSubroot_task_refund_pa_status_value
+
+    FROM cte AS t0
+    JOIN nodes AS t
+      ON t.idtask_parent = t0.task_id
                                 ),
                                 aggregated_budget AS (
                                     SELECT root as root_agg,idtask_parent0 AS idParentCategory, sum(task_budget_it_operating) AS aggregated_total_budget_o
@@ -868,16 +881,65 @@ class ProjectController extends Controller
 
                                     GROUP BY root
                                 )
-                                SELECT
-                                ROW_NUMBER() OVER (ORDER BY task_parent_sub, root) AS seq_num,
-                                sumSubtask_refund_pa_statusy,
- count(sumSubtask_refund_pa_statusy) AS total_refund_status_count
-, sum(sumSubtask_refund_pa_statusy) AS total_refund_status_sum
-, max(sumSubtask_refund_pa_statusy) AS total_refund_status_max
-, min(sumSubtask_refund_pa_statusy) AS total_refund_status_min
-,sum(sumSubtask_refund_pa_statusy)/count(sumSubtask_refund_pa_statusy) as total_refund_starut_b
-                               , root
-                                ,t1.task_name
+                                ,
+
+
+
+
+Minop AS (
+SELECT
+    root AS rootminop,
+    idtask_parent0 AS idParentCategory,
+    SUM(CASE WHEN sumSubtask_refund_pa_statusy > 1 and idtask_parent0 > 0 THEN sumSubtask_refund_pa_budget ELSE 0 END) as total_refund_st_tw_sum
+FROM cte
+GROUP BY root, idtask_parent0
+ORDER BY root, idtask_parent0
+),
+
+max_root_sum as (
+    SELECT
+        cte.root AS rootmax_root,
+        cte.idtask_parent0 AS idParentCategory_root,
+        cte.sumSubtask_refund_pa_statusy as sumSubtask_refund_pa_statusy_max_root_sum,
+        SUM(cte.sumSubtask_refund_pa_budget) AS total_refund_st_max_root_sum
+    FROM cte
+    GROUP BY cte.root, cte.idtask_parent0, cte.sumSubtask_refund_pa_statusy
+)
+
+
+
+             SELECT
+             ROW_NUMBER() OVER (ORDER BY task_parent_sub, root) AS seq_num,
+             sumSubroot_task_task_parent_sub_value_plus,
+             task_name as root_task_name,
+
+             (sum(sumSubtask_refund_pa_statusy)-1)/(count(sumSubtask_refund_pa_statusy)-1) as total_refund_starut_b_root,
+             (sumSubtotal_it_operating - SUM(sumSubtask_cost_it_operating)) AS netSubtotal,
+             CASE
+
+             WHEN (sum(sumSubtask_refund_pa_statusy)-1)/(count(sumSubtask_refund_pa_statusy)-1)  > 2 THEN (sumSubtotal_it_operating - SUM(sumSubtask_cost_it_operating))
+           WHEN sumSubtask_refund_pa_statusy = 1 THEN 0
+           WHEN sumSubtask_refund_pa_statusy = 2 THEN (sumSubtotal_it_operating - SUM(sumSubtask_cost_it_operating))
+           WHEN sumSubtask_refund_pa_statusy = 3 THEN 3
+
+           WHEN sumSubtask_refund_pa_statusy IS NULL THEN 0
+           ELSE 0
+       END AS root_task_task_parent_sub_value_plus_totoal,
+       CASE
+           WHEN sumSubtask_refund_pa_statusy = 2 THEN (sumSubtotal_it_operating - SUM(sumSubtask_cost_it_operating))
+       END AS netSubtotal_2,
+       sumSubroot_task_refund_pa_status_value
+                                ,sumSubtask_refund_pa_statusy
+                                ,SUM(sumSubtask_refund_pa_budget) AS total_refund_st
+                        ,sumSubtask_refund_pa_budget
+                        ,SUM(CASE WHEN sumSubtask_refund_pa_statusy > 1 THEN sumSubtask_refund_pa_budget ELSE 0 END) as total_refund_st_sum
+                        ,count(sumSubtask_refund_pa_statusy) AS total_refund_status_count
+                        , sum(sumSubtask_refund_pa_statusy) AS total_refund_status_sum
+                        , max(sumSubtask_refund_pa_statusy) AS total_refund_status_max
+                        , min(sumSubtask_refund_pa_statusy) AS total_refund_status_min
+                        ,sum(sumSubtask_refund_pa_statusy)/count(sumSubtask_refund_pa_statusy) as total_refund_starut_b
+                     , root
+                    ,t1.task_name
                                         , MIN(idtask_parent0) AS idParentCategory
                                         , (sumSubtotal_mm_budget) as sumSubtotal_mm_budget
                                         , count(sumSubtotal_mm_budget) as sumSubtotal_mm_budget_count
@@ -982,18 +1044,16 @@ $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idPar
 
 // If you want to debug the organized data array:
  //dd($organizedData);
-
-
-         /*       dd($result_query_op_in_un,
+           /*      dd($result_query_op_in_un,
            $result_query_it_operating,
            $result_query_it_investment,
            $result_query_gov_utility,
            $result_query_it_operating_idParentCategory,
               $result_query_it_investment_idParentCategory,
                 $result_query_gov_utility_idParentCategory
-        ); */
-
-                  //  dd($result_query_operating);
+        );
+ */
+                    dd($result_query_op_in_un);
 
 
 
@@ -3392,6 +3452,17 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'cteop_in_un.total_refund_status_max as total_refund_status_max',
                 'cteop_in_un.total_refund_status_min as total_refund_status_min',
                 'cteop_in_un.total_refund_starut_b as total_refund_starut_b',
+                'cteop_in_un.total_refund_st_sum as total_refund_st_sum',
+                'cteop_in_un.netSubtotal as netSubtotal',
+                'cteop_in_un.root_task_task_parent_sub_value_plus_totoal as root_task_task_parent_sub_value_plus_totoal',
+                'cteop_in_un.total_refund_starut_b_root as total_refund_starut_b_root',
+                'cteop_in_un.sumSubroot_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus',
+                'cteop_in_un.sumSubtotal_mm_budget as sumSubtotal_mm_budget',
+                'cteop_in_un.sumSubtotal_mm_budget_count as sumSubtotal_mm_budget_count',
+                'cteop_in_un.sumSubtotal_mm_budget_sum as sumSubtotal_mm_budget_sum',
+                'cteop_in_un.sumSubtotal_mm_budget_max as sumSubtotal_mm_budget_max',
+                'cteop_in_un.sumSubtotal_mm_budget_min as sumSubtotal_mm_budget_min',
+
 
 
 
@@ -3624,7 +3695,7 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
             ->toArray());
 
 // dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
-            //dd($tasks,$ctesumsurplusSqlnull->get());
+           // dd($tasks,$ctesumsurplusSqlnull->get());
            // dd($tasks,$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa,$result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
             $tasks = json_decode(json_encode($tasks), true);
         $cteQueryArray = json_decode(json_encode($cteQuery), true);
@@ -3697,8 +3768,22 @@ dd($task_sub_refund_total_count);
             ((float) $_total_paycons_cte = (float) $task['total_paycons_cte']);
             ((float) $_total_pay_paycons_cte= (float) $task['total_pay_paycons_cte']);
             ((float) $_total_refund_cte = (float) $task['total_refund_cte']);
+            ((float) $_sumSubtask_refund_pa_status = (float) $task['sumSubtask_refund_pa_status']);
+            ((float) $_total_refund_status_count = (float) $task['total_refund_status_count']);
+            ((float) $_total_refund_status_max = (float) $task['total_refund_status_max']);
+            ((float) $_total_refund_status_min = (float) $task['total_refund_status_min']);
+            ((float) $_total_refund_starut_b = (float) $task['total_refund_starut_b']);
+            ((float) $_total_refund_st_sum = (float) $task['total_refund_st_sum']);
 
             ((float) $_total_refund_status_sum = (float) $task['total_refund_status_sum']);
+
+            ((float) $_total_refund_starut_b_root = (float) $task['total_refund_starut_b_root']);
+            ((float) $_netSubtotal = (float) $task['netSubtotal']);
+            ((float) $_root_task_task_parent_sub_value_plus_totoal = (float) $task['root_task_task_parent_sub_value_plus_totoal']);
+           // ((float) $_sumSubroot_task_task_parent_sub_value = (float) $task['sumSubroot_task_task_parent_sub_value']);
+
+
+
 
 
 
@@ -3858,6 +3943,16 @@ dd($task_sub_refund_total_count);
                 'total_refund_status_max' => $task['total_refund_status_max'],
                 'total_refund_status_min' => $task['total_refund_status_min'],
                 'total_refund_starut_b' => $task['total_refund_starut_b'],
+                'total_refund_st_sum' => $_total_refund_st_sum,
+                'total_refund_starut_b_root' => $_total_refund_starut_b_root,
+                'netSubtotal' => $_netSubtotal,
+                'root_task_task_parent_sub_value_plus_totoal' => $_root_task_task_parent_sub_value_plus_totoal,
+               'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
+               'sumSubtotal_mm_budget' => $task['sumSubtotal_mm_budget'],
+                'sumSubtotal_mm_budget_sum' => $task['sumSubtotal_mm_budget_sum'],
+                'sumSubtotal_mm_budget_max' => $task['sumSubtotal_mm_budget_max'],
+                'sumSubtotal_mm_budget_min' => $task['sumSubtotal_mm_budget_min'],
+
 
                 // 'owner' => $project['project_owner'],
             ]);
@@ -3868,6 +3963,7 @@ dd($task_sub_refund_total_count);
             ($__project_parent_cost[] = 'parent');
         }
 
+ //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
 
@@ -5758,7 +5854,7 @@ dd($task_sub_refund_total_count);
         $task_sub_refund_count = $task->subtask->where('task_refund_pa_status', 2)->count();
 
 
-        //dd( $task_sub_refund_total, $task_sub_refund_01,$task_sub_refund,$task_sub_refund_total_count, $task_sub_refund_count,$task_sub_refund_01_count);
+       // dd( $task_sub_refund_total, $task_sub_refund_01,$task_sub_refund,$task_sub_refund_total_count, $task_sub_refund_count,$task_sub_refund_01_count);
         $task_sub_refund_pa_budget_01 = $task_sub_refund_01->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 0.01) {
                 $carry['operating']['task_refund_pa_budget'] += round($subtask->task_refund_pa_budget, 2);
@@ -5782,7 +5878,7 @@ dd($task_sub_refund_total_count);
             'utility' => ['task_refund_pa_budget' => 0]
         ]);
 
-        //dd($task_sub_refund_pa_budget_01);
+       // dd($task_sub_refund_pa_budget_01);
 
         $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 0.01) {
@@ -5808,7 +5904,7 @@ dd($task_sub_refund_total_count);
         ]);
 
         //dd($task_sub_sums,$cteQuery_task_sub_sums);
-        // dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
+    //dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
 
 
 
@@ -5829,7 +5925,7 @@ dd($task_sub_refund_total_count);
 
             ->get());
 
-        // dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
+        //dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
 
 
         ($latestContract = Contract::latest()->first());
@@ -6925,10 +7021,10 @@ dd($task_sub_refund_total_count);
 
         $task->task_refund_pa_budget = $task_refund_pa_budget ?? null;
 
-        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+        $task->task_refund_pa_status = 1 ;
 
 
-        $task->task_parent_sub_refund_pa_status = $request->input('task_refund_pa_status') ?? null;
+        $task->task_parent_sub_refund_pa_status = 1 ?? null;
         $task->task_parent_sub_budget = $task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment ?? null;
         $task->task_parent_sub_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
         $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
@@ -7278,6 +7374,7 @@ dd($task_sub_refund_total_count);
 
         $task->task_po_budget = $task_po_budget;
         $task->task_er_budget = $task_er_budget;
+        $task->task_refund_pa_status = 1 ;
         ($task);
         // Save the Project
         if (!$task->save()) {
@@ -7697,7 +7794,7 @@ dd($task_sub_refund_total_count);
         // $task->task_cost_disbursement =  $taskcon_bd_budget + $taskcon_ba_budget;
 
         $task->task_type = $request->input('task_type');
-
+        $task->task_refund_pa_status = 1 ;
         //  dd($task);
         // Save the Project
 
