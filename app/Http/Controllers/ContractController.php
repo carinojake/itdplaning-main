@@ -915,10 +915,13 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         $contract->contract_refund_pa_budget =  $contract_refund_pa_budget;
         $contract->contract_pay = $contract_pay;
 
+       // $contract->contract_project_type        = $request->input('contract_project_type') ?? null;
+
+
         //    $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
-        $contract->contract_refund_pa_status =  $request->input('contract_refund_pa_status');
+        $contract->contract_refund_pa_status =  1;
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
 
 

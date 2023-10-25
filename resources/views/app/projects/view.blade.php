@@ -223,19 +223,30 @@
                         resize: true,
                         template(task) {
                             var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'black';
+                            var tmp_class3 = task.task_refund_pa_status == 3 ? 'blue' : 'black'
                             var tmp_class2 = task.task_status == 2 ? 'blue' : 'black';
-                            if (gantt.getState().selected_task == task.id) {
 
-                                return '<span style="color:' + tmp_class + ';">' + "<b>" + task.text + "</b>" +
+                            if (task.task_refund_pa_status == 3) {
+
+                                return '<span style="color:' + tmp_class3 + ';">' + "<b>" + task.text + "</b>" +
                                     '</span>';
-                            } else {
+                            }
+                        else if (gantt.getState().selected_task == task.id) {
+
+                        return '<span style="color:' + tmp_class + ';">' + "<b>" + task.text + "</b>" +
+                            '</span>';
+                        }
+
+
+
+                            else {
                                 return '<span style="color:' + tmp_class + ';">' + "<b>" + task.text + "</b>" +
                                     '</span>';
                             };
                         }
                     },
                     //{name:"start_date", label:"Start time", align: "center" },
-                    // {name:"owner", width: 200, label:"Owner", template:function(task){
+                    //  else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 3  {name:"owner", width: 200, label:"Owner", template:function(task){
                     //   return task.owner}
                     // }
                 ]
@@ -592,7 +603,85 @@
                                 }).format(task.budget - task.cost) + '</span>';
                             }
 
-                            else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 3  && task.total_refund_starut_b > 2 ) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3  ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.total_sum_budget_op_in_gov-task.total_cost_op_in_gov) + '</span>';
+                            }
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 3 ) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3  ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format((task.budget - (task.budget_total_task_mm_sum)) + task
+                                    .total_task_refund_budget_status) + '</span>';
+                            }
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 1  && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 2 ) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format((task.budget - task.budget_total_task_mm_sum + task.total_task_refund_budget_status)) + '</span>';
+                            }
+
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.total_refund_starut_b < 2 ) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format((task.budget - task.budget_total_task_mm_sum + task.task_total_sum_task_refund_pa_budget)) + '</span>';
+                            }
+
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 1) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(11) + '</span>';
+                            }
+
+
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 2 && task.task_refund_pa_status == 2) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 2 && task.task_status == 2 ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format(task.budget-task.total_task_cost) + '</span>';
+                            }
+                            else if (task.sumSubroot_task_task_parent_sub_value_plus == 2 && task.task_refund_pa_status == 1) {
+                                var tmp_class = task.balance < 0 ? 'green' : 'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green';
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format((task.budget - task.budget_total_task_mm_sum + task
+                                    .task_total_sum_task_refund_pa_budget)) + '</span>';
+                            }
+
+
+
+
+                       /*    else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
                                 var tmp_class = task.balance < 0 ? 'blue' : 'blue';
                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
                                     'green';
@@ -602,8 +691,9 @@
                                     currency: 'THB'
                                 }).format((task.budget - task.budget_total_task_mm_sum + task
                                     .task_total_sum_task_refund_pa_budget)) + '</span>';
-                            }
-                            else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b > 0) {
+                            } */
+
+                            else if (sumSubroot_task_task_parent_sub_value_plus = 2 && task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b > 0) {
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
                                     'green';
@@ -615,14 +705,28 @@
                                     .total_task_refund_budget_status) + '</span>';
                             }
 
-                            else if (task.total_refund_starut_b == 1 && task.cost == 0) {
+
+
+                            else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
+                                var tmp_class = task.balance < 0 ? 'blue' : 'blue';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
+                                    'green';
+
+                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                    style: 'currency',
+                                    currency: 'THB'
+                                }).format((task.budget - task.budget_total_task_mm_sum + task
+                                    .task_total_sum_task_refund_pa_budget)) + '</span>';
+                            }
+
+                          /*   else if (task.total_refund_starut_b == 1 && task.cost == 0) {
 
                                 var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget - task.cost) + '</span>';
-                            }
+                            } */
 
 
 
