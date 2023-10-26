@@ -206,7 +206,7 @@
 
 
 
-                                                <div id="mm_form">
+                                                <div id="mm_form" >
 
 
                                                     <div class="callout callout-primary row mt-3">
@@ -217,7 +217,7 @@
                                                                 <span class="text-danger">*</span>
 
                                                                 <input type="text" class="form-control"
-                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{$task->taskcon_mm  }}" >
+                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{$task->taskcon_mm  }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                                                 </div>
@@ -229,7 +229,7 @@
 
 
                                                                 <input type="text" class="form-control"
-                                                                    id="task_name" name="task_name"   value="{{ $task->task_name }}" >
+                                                                    id="task_name" name="task_name"   value="{{ $task->task_name }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('ชื่อสัญญา ซ้ำ') }}
                                                                 </div>
@@ -241,7 +241,7 @@
                                                                     class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_start_date"
-                                                                    name="task_start_date" name="task_start_date"    value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}>
+                                                                    name="task_start_date" name="task_start_date"    value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }} {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label for="task_end_date"
@@ -249,7 +249,7 @@
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_end_date"
                                                                     name="task_end_date" name="task_start_date"
-                                                                     value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }} >
+                                                                     value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }} {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 mt-3">
@@ -261,12 +261,12 @@
                                                                 class="form-control" id="task_mm_budget"
                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                 class="form-control numeral-mask"
-                                                                name="task_mm_budget" min="0"  value="{{ $task->task_mm_budget }}">
+                                                                name="task_mm_budget" min="0"  value="{{ $task->task_mm_budget }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                         </div>
                                                     </div>
                                                         <div class="callout callout-warning">
                                                             <div class="row ">
-                                                                <div class="col-md-4 mt-3">
+                                                              {{--   <div class="col-md-4 mt-3">
                                                                     <label for="project_select"
                                                                         class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                                     <span class="text-danger">*</span>
@@ -275,7 +275,7 @@
                                                                         <option selected disabled value="">
                                                                             เลือกประเภท...</option>
                                                                         @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                                                            <option value="task_budget_it_operating">งบกลาง
+                                                                            <option value="task_budget_it_operating"  >งบกลาง
                                                                                 ICT</option>
                                                                         @endif
                                                                         @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
@@ -287,7 +287,7 @@
                                                                                 ค่าสาธารณูปโภค</option>
                                                                         @endif
                                                                     </select>
-                                                                </div>
+                                                                </div> --}}
 
                                                                 {{--    <div class="project_select">
                                                                         {{ __('ประเภท งบประมาณ') }}
@@ -308,7 +308,7 @@
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
                                                                             min="0" value="{{ $task->task_budget_it_operating }}"  onchange="calculateRefund()"
-                                                                           >
+                                                                            {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ระบุงบกลาง ICT') }}
@@ -321,7 +321,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                                         name="task_cost_it_operating" min="0" value="{{ $task->task_cost_it_operating }}"   onchange="calculateRefund()" >
+                                                                         name="task_cost_it_operating" min="0" value="{{ $task->task_cost_it_operating }}"   onchange="calculateRefund()" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }} >
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบกลาง ICT') }}
@@ -344,7 +344,7 @@
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
                                                                             min="0" value="{{ $task->task_budget_it_investment }} "  onchange="calculateRefund()"
-                                                                           >
+                                                                            {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('งบดำเนินงาน') }}
@@ -357,7 +357,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_investment"
-                                                                         name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}"  onchange="calculateRefund()"  >
+                                                                         name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}"  onchange="calculateRefund()"{{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบดำเนินงาน') }}
@@ -381,7 +381,7 @@
                                                                             id="task_budget_gov_utility"
                                                                             name="task_budget_gov_utility"
                                                                             min="0"
-                                                                            value="{{ $task->task_budget_gov_utility }}" onchange="calculateRefund()">
+                                                                            value="{{ $task->task_budget_gov_utility }}" onchange="calculateRefund()"  {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ค่าสาธารณูปโภค') }}
@@ -394,7 +394,7 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_gov_utility"
-                                                                         name="task_cost_gov_utility" min="0" value="{{ $task->task_cost_gov_utility }}" onchange="calculateRefund()"  >
+                                                                         name="task_cost_gov_utility" min="0" value="{{ $task->task_cost_gov_utility }}" onchange="calculateRefund()"   {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('ค่าสาธารณูปโภค') }}
@@ -425,7 +425,7 @@
                                                                 </div>
                                                             </div>
                                                     </div>
-                                                    <div class="callout callout-light">
+                                                    <div class="callout callout-light"  {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                             <div id="ba_form" {{-- style="display:none;" --}}>
                                                                 <div class="d-none row mt-3">
                                                                     <div class="col-md-4">
@@ -540,7 +540,7 @@
 
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp" name="taskcon_pp"
-                                                                                value="{{ $task->taskcon_pp }}" >
+                                                                                value="{{ $taskcon->taskcon_pp }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกงบใบสำคัญ_PP') }}
                                                                             </div>
@@ -551,7 +551,7 @@
                                                                           {{--   <span class="text-danger">*</span> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp_name" name="taskcon_pp_name"
-                                                                                value="{{ $task->taskcon_pp_name }}"   >
+                                                                                value="{{ $taskcon->taskcon_pp_name }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}  >
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกรายการใช้จ่าย') }}
                                                                             </div>
@@ -565,7 +565,7 @@
                                                                          {{--    <span class="text-danger">*</span> --}}
                                                                             <input  class="form-control"
                                                                                 id="task_pay_date"
-                                                                                name="task_pay_date"  value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_pay_date )) }}>
+                                                                                name="task_pay_date"  value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_pay_date )) }}    {{ $task->task_status == 2 ? 'readonly' : '' }}>
 
 
                                                                         </div>
@@ -581,7 +581,7 @@
                                                                                 id="task_pay"
                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                 class="form-control numeral-mask"
-                                                                                name="task_pay" min="0"  value="{{ $task->task_pay }}"
+                                                                                name="task_pay" min="0"  value="{{ $task->task_pay }}" {{ $task->task_status == 2 ? 'readonly' : '' }}
                                                                                 >
                                                                         </div>
                                                                     </div>
@@ -590,7 +590,7 @@
                                                                         <span class="text-danger">*</span>
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="radio" name="task_status"
-                                                                                id="task_status1" value="1" @checked($task->task_status == 1)>
+                                                                                id="task_status1" value="1" @checked($task->task_status == 1) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
                                                                             <label class="form-check-label" for="task_status1"
                                                                                 @checked($task->task_status == 1)>
                                                                                 ระหว่างดำเนินการ
@@ -598,9 +598,9 @@
                                                                         </div>
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="radio" name="task_status"
-                                                                                id="task_status2" value="2" @checked($task->task_status == 2)>
+                                                                                id="task_status2" value="2" @checked($task->task_status == 2) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
                                                                             <label class="form-check-label" for="task_status2"
-                                                                                @checked($task->task_status == 2)>
+                                                                                @checked($task->task_status == 2)  >
                                                                                 ดำเนินการแล้วเสร็จ
                                                                             </label>
                                                                         </div>
@@ -610,14 +610,14 @@
                                                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>
 
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
-                                                                            <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1) >
+                                                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
+                                                                            <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1)   >
                                                                               ไม่ได้คืน
                                                                             </label>
                                                                           </div>
                                                                         <div class="form-check form-check-inline ms-5">
-                                                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
-                                                                          <label class="form-check-label" for="task_refund_pa_status2"  @checked($task->task_refund_pa_status == 2)>
+                                                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="3" @checked($task->task_refund_pa_status == 3) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
+                                                                          <label class="form-check-label" for="task_refund_pa_status2"  @checked($task->task_refund_pa_status == 3) >
                                                                             คืน
                                                                           </label>
                                                                         </div>

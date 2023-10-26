@@ -8345,16 +8345,16 @@ dd($task_sub_refund_total_count);
             'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0]
         ]);
         //วใ dd($task_sub_sums);
-
+        $taskcon = Taskcon::where('task_id', $task->task_id)->first();
         $tasksDetails = $task;
-        //dd($tasks);
+       // dd($tasks ,$taskcon);
 
 
 
         return view('app.projects.tasks.editsubno', compact(
             'task_sub_sums',
             'tasksDetails',
-
+            'taskcon',
             'sum_task_refund_budget_it_operating',
             'sum_task_refund_budget_it_investment',
             'sum_task_refund_budget_gov_utility',

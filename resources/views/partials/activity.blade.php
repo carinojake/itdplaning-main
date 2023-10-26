@@ -420,9 +420,13 @@
                         @if ($task->contract->count() < 1)
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
-
+                            @if ($task->task_parent_sub < 99)
                             <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-warning text-white"><i class="cil-cog"></i></a>
+                            @elseif ($task->task_parent_sub == 99)
+                            <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                                class="btn btn-info text-white"><i class="cil-cog"></i></a>
+                            @endif
 
                             @endif
 
