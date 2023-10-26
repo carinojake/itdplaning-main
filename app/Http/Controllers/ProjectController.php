@@ -771,6 +771,8 @@ class ProjectController extends Controller
                             tasks.task_name,
                             tasks.task_parent,
                             tasks.task_parent_sub,
+
+
                                                         CASE
                         WHEN sum(COALESCE( tasks.task_parent_sub)) = 99 THEN 0
                         WHEN sum(COALESCE( tasks.task_parent_sub)) = 2 THEN 2
@@ -2094,9 +2096,9 @@ $mainQuery = DB::query()
         //$budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
 
-        $budget['budget_total_task_budget_end'] = ( ($__budget-(($__total_task_budget - $__mm) - $__total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end'] = ( ($__budget-($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
-       // $budget['budget_total_task_budget_end'] =   $budget['budget_total_task_budget_end'] - $budget['root_task_mm_budget'];
+        $budget['budget_total_task_budget_end'] =   $budget['budget_total_task_budget_end'] - $budget['root_task_mm_budget'];
 
         $budget['budget_total_task_budget_end_p2'] = ($__budget) - ($__total_task_budget - ($__pptotal_task_refund_pa_budget_3 + $__ppbtotal_task_refund_pa_budget_3));
 
@@ -4195,8 +4197,21 @@ dd($task_sub_refund_total_count);
         ($gantt[0]['budget_total_mm_pr2_2'] =  (($budget['total'] - $gantt[0]['budget_total_mm_p']) + $gantt[0]['refund_pa_budget']));
         //($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
 
-        // ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
+         ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
         ($gantt[0]['budget_total_task_budget_end_p2'] = $budget['budget_total_task_budget_end_p2']);
+
+        $gantt[0]['budget_root']= $gantt[0]['budget'];
+        $gantt[0]['root_total_task_budget_cost_2']= $gantt[0]['root_total_task_budget_cost'];
+        $gantt[0]['refund_pa_budget_2'] = $gantt[0]['refund_pa_budget'];
+        $gantt[0]['budget_total_task_budget_end_root_1'] =(($gantt[0]['budget_root']-$gantt[0]['root_total_task_budget_cost_2']));
+        ($gantt[0]['budget_total_task_budget_end_root'] =(($gantt[0]['budget']-$gantt[0]['root_total_task_budget_cost'])+ $gantt[0]['refund_pa_budget'])) ;
+
+        $gantt[0]['budget_total_task_budget_end_root_1'] = number_format($gantt[0]['budget_total_task_budget_end_root_1'], 2);
+
+        $gantt[0]['budget_total_task_budget_end_3'] = number_format($gantt[0]['budget_total_task_budget_end'],2);
+
+
+       // $gantt[0]['budget_total_task_budget_end_3'] = ($gantt[0]['budget_total_task_budget_end']);
 
         // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
         // $budget['root_total_pay']
@@ -4207,11 +4222,11 @@ dd($task_sub_refund_total_count);
         //$budget['budget_total_mm_pr2'] = $gantt[0]['budget_total_mm_pr2'];
         $budget['balance'] = $gantt[0]['balance'];
         //  $budget['balance'] = $gantt[0]['balance'];
+/*          echo "<pre>";
+        var_dump($gantt);
+        dd($gantt, $budget); */
 
-
-        // dd($gantt, $budget);
-
-        dd($gantt,$budget,$rootsums,$cteQuery->get());
+        //dd($gantt,$budget,$rootsums,$cteQuery->get());
         $labels = [
             'project' => 'โครงการ/งานประจำ',
 
