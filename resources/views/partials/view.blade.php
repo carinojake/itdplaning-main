@@ -315,7 +315,7 @@
 
 
                                         @elseif( $budget['project_type'] == 2)
-                                        {{ number_format(floatval( $budget['budget_total_task_budget_end_p2']), 2) }}
+                                        {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
                                         @endif
                                     </div>
                                     <div>

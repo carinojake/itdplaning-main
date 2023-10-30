@@ -17,6 +17,10 @@ use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Date\Date;
+use App\Rules\BudgetGreaterThanCost;
+use App\Rules\BudgetGreaterThanCostInvestment;
+use App\Rules\BudgetGreaterThanCostUtility;
+use App\Rules\ValidateTaskPay;
 
 
 class ProjectController extends Controller
@@ -6990,33 +6994,53 @@ dd($task_sub_refund_total_count);
         ($sum_task_budget_it_investment = $tasks->sum('task_budget_it_investment'));
         ($sum_task_budget_gov_utility = $tasks->sum('task_budget_gov_utility'));
 
+
+        $costs = [
+            'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
+            'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
+            'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
+        ];
+
         $messages = [
-            //  'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-            'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-            'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข กลาง ICT',
-            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก min',
-            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน  งบกลาง ICT max',
 
-            'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-            'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข งบดำเนินงาน',
-            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก min',
-            'task_budget_it_investment.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน งบดำเนินงาน max',
+                                'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
+                                'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
+                                //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
+                                'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
+                                'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+                                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+
+                                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+
+                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+        ];
 
 
-            'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-            'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข ค่าสาธารณูปโภค',
-            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
-            'task_budget_gov_utility.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ค่าสาธารณูปโภค max',
+
+        $rules = [
+            'taskcon_mm_name' => 'required',
+            'task_start_date' => 'required|date_format:d/m/Y',
+            'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+            //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+           // 'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+            'task_refund_pa_budget' => 'between:0,9999999999',
 
         ];
-        $request->validate([
-            // 'task_name' => 'required',
-            //    'task_start_date' => 'required|date_format:d/m/Y',
-            //'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            //  'task_budget_it_operating' => 'nullable|min:0|max:' . ($request->input('budget_it_operating') - $sum_task_budget_it_operating),
-            // 'task_budget_it_investment' => 'nullable|min:0|max:' . ($request->input('budget_it_investment') - $sum_task_budget_it_investment),
-            // 'task_budget_gov_utility' => 'nullable|min:0|max:' . ($request->input('budget_gov_utility') - $sum_task_budget_gov_utility),
-        ], $messages);
+
+        $request->validate($rules, $messages);
+
+
+
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
@@ -7060,7 +7084,7 @@ dd($task_sub_refund_total_count);
 
         $task->task_pay = $task_pay ?? null;
 
-        $task->task_mm_budget = $task_mm_budget;
+        $task->task_mm_budget = $task_mm_budget ?? null;
 
         $task->task_refund_pa_budget = $task_refund_pa_budget ?? null;
 
@@ -7213,36 +7237,48 @@ dd($task_sub_refund_total_count);
     { // Create a new Project object
 
 
-        $messages = [
-            'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-
-            // 'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-
-            'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-
-            // 'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-
-            'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
-
-            // 'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-
-            'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
-
-
-            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+        $costs = [
+            'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
+            'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
+            'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
         ];
 
-        $request->validate([
-            //    'task_name' => 'required',
-            //   'task_start_date' => 'required|date_format:d/m/Y',
+        $messages = [
+
+                                'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
+                                'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
+                                //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
+                                'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
+                                'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+                                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+
+                                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+
+                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+        ];
+
+
+
+        $rules = [
+            'taskcon_mm_name' => 'required',
+            'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            //'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->input('budget_it_operating') ),
-            //'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->input('budget_it_investment') ),
-            //'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->input('budget_gov_utility') ),
-        ], $messages);
+            'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+            'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+
+        ];
+
+        $request->validate($rules, $messages);
 
 
 
@@ -8226,6 +8262,7 @@ dd($task_sub_refund_total_count);
             }
         }
         $tasksDetails = $task;
+        $taskcon = Taskcon::where('task_id', $task->task_id)->first();
 
 
 
@@ -8234,6 +8271,7 @@ dd($task_sub_refund_total_count);
         //dd($tasksDetails);
 
         return view('app.projects.tasks.editsub', compact(
+            'taskcon',
             'task_parent_sub',
             'task_sub_refund_pa_budget',
             'tasksDetails',
@@ -8398,31 +8436,45 @@ dd($task_sub_refund_total_count);
         $task_budget_gov_utility = $tasks_without_parent->sum('task_budget_gov_utility');
 
 
-        //  dd($tasks_without_parent);
+         // dd($tasks_without_parent);
 
+
+         $costs = [
+            'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
+            'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
+            'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
+        ];
 
         $messages = [
             'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-            /*'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-                                'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
                                 'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
                                 'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-                                'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
                                 'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+
                                 'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-                                'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
                                 'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
-                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ', */
+
+                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
         ];
 
-        $request->validate([
-            //    'task_name' => 'required',
+
+
+        $rules = [
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            //'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->input('budget_it_operating') - $sum_task_budget_it_operating),
-            //'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->input('budget_it_investment') - $sum_task_budget_it_investment),
-            //'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->input('budget_gov_utility') - $sum_task_budget_gov_utility),
-        ], $messages);
+            'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+            'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+
+        ];
+
+        $request->validate($rules, $messages);
 
         //   $task_pay_date = $request->input('task_pay_date');
 
@@ -8725,7 +8777,7 @@ dd($task_sub_refund_total_count);
             }
 
 
-            //  dd($task);
+            // dd($task);
             return redirect()->route('project.view', $project->hashid);
         }
 
@@ -8740,7 +8792,20 @@ dd($task_sub_refund_total_count);
 
         return redirect()->route('project.view', $project->hashid);
     }
+ /*   $request->validate([
+            'task_start_date' => 'required|date_format:d/m/Y',
+            'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+            if($request->input('task_budget_it_operating') > 0){
+                'task_budget_it_operating' => 'required|numeric|min:0|max:' . ($request->old('task_budget_it_operating', 0)),
+            }
+            if($request->input('task_budget_it_investment') > 0){
+                'task_budget_it_investment' => 'required|numeric|min:0|max:' . ($request->old('task_budget_it_investment', 0)),
+            }
+            if($request->input('task_budget_gov_utility') > 0){
+                'task_budget_gov_utility' => 'required|numeric|min:0|max:' . ($request->old('task_budget_gov_utility', 0)),
+            }
 
+        ], $messages); */
 
 
 

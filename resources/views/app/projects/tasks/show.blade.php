@@ -14,7 +14,7 @@
 
 
 
-
+        @if($task->task_status == 1)
             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                 @method('POST') {{-- Use POST method to submit the form --}}
                 @csrf
@@ -51,6 +51,7 @@
                     <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
                 @endif
+             @endif
                 <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
                     class="btn btn-secondary">กลับ</a>
             </x-slot:toolbar>
@@ -64,6 +65,7 @@
                     @csrf
                     <button class="btn btn-dark text-dark btn-taskRefund"><i class="cil-money"></i></button>
                 </form> --}}
+                @if($task->task_status == 1)
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}
                     @csrf
@@ -110,6 +112,7 @@
 
                         <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
+                    @endif
                     @endif
                     <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
                         class="btn btn-secondary">กลับ</a>

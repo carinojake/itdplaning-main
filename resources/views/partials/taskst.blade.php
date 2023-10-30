@@ -1,6 +1,8 @@
 @if ($task['task_parent'] == null && $task['task_parent_sub'] == null)
 
-    <h2>{{ $task->task_name }}</h2>
+    <h2>{{ $task->task_name }}   <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
+        {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
+    </span></h2>
     <div class="container">
 
         @if ($contract == null)
@@ -135,9 +137,9 @@
                                     </a>
                                 @endforeach
                                     {{ $subtask->task_name }}
-                                    @if($task->task_status == 2)
+                                  {{--   @if($task->task_status == 2)
                                         <span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
                                 <td>
                                     <span class="badge {{ $subtask->task_status == 2 ? 'bg-success' : 'bg-warning' }}">

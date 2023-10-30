@@ -782,11 +782,16 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
 
         $messages = [
             'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            'contract_name' => 'ชื่อสัญญา required.',
+            'contract_mm_budget' => 'วงเงิน (บาท) MM required.',
+            'contract_number' => 'เลขที่สัญญา required.',
         ];
         $request->validate([
                'contract_name'                   => 'required',
-            //   'contract_pr_budget' => 'numeric|nullable',
-            // 'contract_pa_budget' => 'numeric|nullable',
+               'contract_number' => 'required|string',
+               'contract_pr_budget' => 'nullable',
+             'contract_pa_budget' => 'nullable',
+             'contract_mm_budget' => 'required',
             // 'contract_number'                 => 'required',
             //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
             //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
@@ -869,7 +874,7 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_mm_name        = $request->input('contract_mm_name');
 
-        $contract->contract_number      = $request->input('contract_number');
+        $contract->contract_number      = $request->input('contract_number') ?? null;
         $contract->contract_description = trim($request->input('contract_description'));
         $contract->contract_fiscal_year = $request->input('contract_fiscal_year');
         $contract->contract_start_date  = $start_date ?? date('Y-m-d 00:00:00');

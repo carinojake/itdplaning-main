@@ -217,7 +217,7 @@
                                                                 <span class="text-danger">*</span>
 
                                                                 <input type="text" class="form-control"
-                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{$task->taskcon_mm  }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
+                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{$taskcon->taskcon_mm  }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                                                 </div>
@@ -265,17 +265,18 @@
                                                         </div>
                                                     </div>
                                                         <div class="callout callout-warning">
+                                                            @if($task->task_refund_pa_status == 1)
                                                             <div class="row ">
-                                                              {{--   <div class="col-md-4 mt-3">
+                                                                <div class="col-md-4 mt-3">
                                                                     <label for="project_select"
                                                                         class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                                     <span class="text-danger">*</span>
                                                                     <select class="form-control" name="project_select"
                                                                         id="project_select" required>
-                                                                        <option selected disabled value="">
-                                                                            เลือกประเภท...</option>
+
                                                                         @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                                                            <option value="task_budget_it_operating"  >งบกลาง
+
+                                                                        <option value="task_budget_it_operating"  >งบกลาง
                                                                                 ICT</option>
                                                                         @endif
                                                                         @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
@@ -287,12 +288,13 @@
                                                                                 ค่าสาธารณูปโภค</option>
                                                                         @endif
                                                                     </select>
-                                                                </div> --}}
+                                                                </div>
 
-                                                                {{--    <div class="project_select">
+                                                                {{--   <div class="project_select">
                                                                         {{ __('ประเภท งบประมาณ') }}
                                                                     </div> --}}
                                                             </div>
+                                                            @endif
                                                             <!-- Contract Type -->
 
                                                             @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
@@ -585,12 +587,13 @@
                                                                                 >
                                                                         </div>
                                                                     </div>
+                                                                    @if($task->task_status == 1)
                                                                     <div class="col-md-3 mt-3">
                                                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                                                         <span class="text-danger">*</span>
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="radio" name="task_status"
-                                                                                id="task_status1" value="1" @checked($task->task_status == 1) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
+                                                                                id="task_status1" value="1" @checked($task->task_status == 1) {{-- {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }} --}}>
                                                                             <label class="form-check-label" for="task_status1"
                                                                                 @checked($task->task_status == 1)>
                                                                                 ระหว่างดำเนินการ
@@ -598,31 +601,48 @@
                                                                         </div>
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="radio" name="task_status"
-                                                                                id="task_status2" value="2" @checked($task->task_status == 2) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
+                                                                                id="task_status2" value="2" @checked($task->task_status == 2){{--  {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }} --}}>
                                                                             <label class="form-check-label" for="task_status2"
                                                                                 @checked($task->task_status == 2)  >
                                                                                 ดำเนินการแล้วเสร็จ
                                                                             </label>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="col-md-12 mt-3">
+                                                                    @elseif($task->task_status == 2)
+                                                                    <div class=" d-none form-check">
+                                                                        <input class="form-check-input" type="radio" name="task_status"
+                                                                            id="task_status2" value="2" @checked($task->task_status == 2){{--  {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }} --}}>
+                                                                        <label class="form-check-label" for="task_status2"
+                                                                            @checked($task->task_status == 2)  >
+                                                                            ดำเนินการแล้วเสร็จ
+                                                                        </label>
+                                                                    </div>
+                                                                    @endif
+                                                                    @if($task->task_refund_pa_status == 1)
+                                                                    <div class="col-md-12 mt-3" >
                                                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>
 
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
+                                                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }} --}}>
                                                                             <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1)   >
                                                                               ไม่ได้คืน
                                                                             </label>
                                                                           </div>
                                                                         <div class="form-check form-check-inline ms-5">
-                                                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="3" @checked($task->task_refund_pa_status == 3) {{ $task->task_refund_pa_status == 3 ? 'disabled' : '' }}>
-                                                                          <label class="form-check-label" for="task_refund_pa_status2"  @checked($task->task_refund_pa_status == 3) >
+                                                                          <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="3" @checked($task->task_refund_pa_status == 3) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                                                          <label class="form-check-label" for="task_refund_pa_status3"  @checked($task->task_refund_pa_status == 3) >
                                                                             คืน
                                                                           </label>
                                                                         </div>
                                                                 </div>
-
+                                                                @elseif($task->task_refund_pa_status == 3)
+                                                                <div class=" d-none form-check form-check-inline ms-5">
+                                                                    <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="3" @checked($task->task_refund_pa_status == 3) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                                                    <label class="form-check-label" for="task_refund_pa_status3"  @checked($task->task_refund_pa_status == 3) >
+                                                                      คืน
+                                                                    </label>
+                                                                  </div>
+                                                                @endif
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -630,12 +650,15 @@
 
                                                 </div>
                                                 <!--จบ ข้อมูลสัญญา 2-->
+{{--
+                                                @role('admin')
+                                              xxxxxxxxxxxxxxxxxxxx  <!-- ส่วนของ UI สำหรับผู้ดูแลระบบ -->
+                                            @endrole
 
-
-
-
-
-
+                                            @role('user')
+                                            กกกกกกกกกกกกกกกกกกก<!-- ส่วนของ UI สำหรับผู้ดูแลระบบ -->
+                                          @endrole
+ --}}
 
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
@@ -892,9 +915,29 @@
     });
     </script>
 
+{{-- <script>
+    $(document).ready(function() {
+        $("#task_pay").on("input", function() {
+            var max;
+            var fieldId = $(this).attr('id');
 
+            if (fieldId === "task_pay") {
+               // max = parseFloat($("#task_cost_it_investment").val().replace(/,/g , ""));
+                max = parseFloat($("#task_cost_it_operating").val().replace(/,/g , ""));
+                //max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g , ""));
+            }
 
-                <script>
+            var current = parseFloat($(this).val().replace(/,/g , ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+             /*  $(this).val(max.toFixed(2)); */
+             $(this).val(0);
+            }
+        });
+    });
+    </script> --}}
+
+            <script>
         $(document).ready(function() {
     $("#task_pay").on("input", function() {
         var max;

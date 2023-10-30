@@ -54,7 +54,7 @@
 
 
                                 <form method="POST" action="{{ route('contract.store') }}"
-                                    class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
+                                    class="row g-3 needs-validation" enctype="multipart/form-data">
                                     @csrf
 
                                     <input type="hidden" name="origin" value="{{ $origin }}">
@@ -75,7 +75,7 @@
                                                 <span class="text-danger">*</span>
                                                 <select name="contract_fiscal_year"
                                                     class="form-select @error('contract_fiscal_year') is-invalid @enderror">
-                                                    @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 3; $i++)
+                                                    @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 8; $i++)
                                                         <option value="{{ $i }}"
                                                             {{ $fiscal_year == $i ? 'selected' : '' }}>
                                                             {{ $i }}
@@ -327,11 +327,12 @@
 
                                                                             <label for="contract_mm"
                                                                                 class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
-                                                                            <span class="text-danger"></span>
+                                                                            <span class="text-danger">*</span>
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_mm" name="contract_mm"    value="{{ $tasksDetails->task_mm }}">
+                                                                                id="contract_mm" name="contract_mm"
+                                                                                  required autofocus>
                                                                             <div class="invalid-feedback">
-                                                                                {{ __(' ') }}
+                                                                                {{ __('') }}
                                                                             </div>
                                                                         </div>
 
@@ -343,7 +344,8 @@
 
                                                                         <input type="text" class="form-control"
                                                                             id="contract_mm_name"
-                                                                            name="contract_mm_name"     value="{{ $tasksDetails->task_mm_name }}" required autofocus>
+                                                                            name="contract_mm_name"
+                                                                            value="{{ $tasksDetails->task_mm_name }}" required autofocus>
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ชื่อสัญญา ซ้ำ') }}
                                                                         </div>
@@ -377,16 +379,19 @@
                                                                     <div class="row mt-3">
                                                                     <div class="col-md-3">
                                                                         <label for="contract_number"
-                                                                            class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
+                                                                            class="form-label">{{ __('เลขที่สัญญา  ') }} </label>
                                                                         <span class="text-danger">*</span>
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="text"
+                                                                         class="form-control"
                                                                             id="contract_number"
-                                                                            name="contract_number" required autofocus>
+                                                                            name="contract_number" required >
 
                                                                         <div class="invalid-feedback">
-                                                                            {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                                            {{ __('เลขที่สัญญา required ') }}
                                                                         </div>
                                                                     </div>
+
+
 {{--                                                                     <input type="number" class="form-control" id="contract_reguiar_id" name="contract_reguiar_id" value="">
  --}}
                                                                     <div class="col-md-9 ">
@@ -416,7 +421,7 @@
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_PR"
-                                                                                    name="contract_pr">
+                                                                                    name="contract_pr" required>
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
@@ -469,10 +474,13 @@
                                                                                 class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
                                                                             <span class="text-danger"></span>
 
-                                                                            <input type="text" class="form-control"
-                                                                                id="contract_PA" name="contract_pa">
+                                                                            <input type="text"
+                                                                             class="form-control"
+                                                                                id="contract_PA"
+                                                                                name="contract_pa"
+                                                                                required>
                                                                             <div class="invalid-feedback">
-                                                                                {{ __(' ') }}
+                                                                                {{ __('tttt ') }}
                                                                             </div>
                                                                         </div>
 
@@ -480,7 +488,6 @@
                                                                             <label for="contract_pa_budget"
                                                                                 class="form-label">{{ __('จำนวนเงิน (บาท) PA') }}</label>
                                                                             <span class="text-danger"></span>
-
                                                                             <input
                                                                             type="taxt"
                                                                             placeholder="0.00"
@@ -1215,7 +1222,11 @@
            {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
-
+            <script>
+                $(document).ready(function() {
+                    $(":input").inputmask();
+                });
+            </script>
             <script>
                 var contractNumber = "contract_number";
                 var parts = contractNumber.split("/");

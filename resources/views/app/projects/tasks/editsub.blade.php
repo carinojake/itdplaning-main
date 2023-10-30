@@ -15,7 +15,7 @@
                 <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ') }}{{ $task->task_name }}">
-
+                            <div id="budget_form" >
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="row g-3">
@@ -38,6 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
+                                         @if($task->task_status == 1)
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
@@ -56,6 +57,16 @@
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
+                                        @elseif($task->task_status == 2)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="task_status"
+                                                id="task_status2" value="2" @checked($task->task_status == 2)>
+                                            <label class="form-check-label" for="task_status2"
+                                                @checked($task->task_status == 2)>
+                                                ดำเนินการแล้วเสร็จ
+                                            </label>
+                                        </div>
+                                         @endif
                                     </div>
 
                                     <div class="col-md-3 d-none">
@@ -183,12 +194,12 @@
                                         <div class="col-md-6">
                                             <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                             <input class="form-control" id="task_start_date" name="task_start_date"
-                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}">
+                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}"  {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                             <input class="form-control" id="task_end_date" name="task_end_date"
-                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}">
+                                                value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}"  {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                         </div>
                                     </div>
 
@@ -203,7 +214,7 @@
                                             class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
                                             class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
-                                            value="{{ $task->task_name }}" required autofocus>
+                                            value="{{ $task->task_name }}" required autofocus  {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                         <div class="invalid-feedback">
                                             {{ __('ชื่อรายการที่ใช้จ่าย') }}
                                         </div>
@@ -229,7 +240,7 @@
 
                                         </div>
 
-
+                                        <div id="budget_pay_form" >
 
                                         <div class="row mt-3">
                                             <div class="col-6 mt-3">
@@ -390,9 +401,44 @@
                                         </div>
                                         @endif
                                     </div>
+                                </div>
+
                                     @if ($task->task_type == 2)
+                                    <div id="pay_form" >
+                                    <div >
+                                    <h4>เบิกจ่าย</h4>
                                     <div class="row mt-3">
-                                        <h4>เบิกจ่าย</h4>
+
+                                        <div class="col-md-4">
+                                            <label for="taskcon_pp"
+                                                class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
+                                            {{-- <span class="text-danger">*</span> --}}
+
+                                            <input type="text" class="form-control"
+                                                id="taskcon_pp" name="taskcon_pp"
+                                                value="{{ $taskcon->taskcon_pp }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                            <div class="invalid-feedback">
+                                                {{ __(' กรอกงบใบสำคัญ_PP') }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="taskcon_pp_name"
+                                                class="form-label">{{ __('รายการใช้จ่าย ') }}</label>
+                                          {{--   <span class="text-danger">*</span> --}}
+                                            <input type="text" class="form-control"
+                                                id="taskcon_pp_name" name="taskcon_pp_name"
+                                                value="{{ $taskcon->taskcon_pp_name }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}  >
+                                            <div class="invalid-feedback">
+                                                {{ __(' กรอกรายการใช้จ่าย') }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mt-3">
+
+
+
                                         <div class="col-md-6">
                                             <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
                                             <input class="form-control" id="task_pay_date" name="task_pay_date"
@@ -413,6 +459,7 @@
                                 @endif
 
                                     <div class="col-md-12 mt-3">
+                                        @if($task->task_refund_pa_status == 1)
                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>
 
                                         <div class="form-check form-check-inline">
@@ -427,9 +474,23 @@
                                             คืน
                                           </label>
                                         </div>
+                                        @elseif($task->task_refund_pa_status == 2)
+                                        <div class=" d-nome form-check form-check-inline ms-5">
+                                            <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                            <label class="form-check-label" for="task_refund_pa_status3"  @checked($task->task_refund_pa_status == 2) >
+                                              คืน
+                                            </label>
+                                          </div>
+                                        @endif
 
                                     </div>
 
+
+
+
+
+
+                                </div>
                                     @if ($task->task_parent_sub == 2)
 
                                     <div id="task_parent_sub_budget"  {{-- style="display:none;" --}}>
@@ -498,6 +559,7 @@
 
                                     @endif
                                 </div>
+        </div>
 
                                 <div class="col-md-3 mt-3 d-none">
                                     <label for="task_mm_budget_1"
@@ -550,6 +612,29 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                var taskRefundPaStatus = {!! json_encode($task->task_refund_pa_status) !!};  // รับค่าจาก Laravel ไปยัง JavaScript
+                if (taskRefundPaStatus == 2) {
+                    var formInputs = document.querySelectorAll('#budget_form input, #mm_form textarea, #mm_form select');  // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+                    formInputs.forEach(function(input) {
+                        input.setAttribute('readonly', true);  // ตั้งค่าแอตทริบิวต์ readonly
+                    });
+                }
+            });
+        </script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var task_Status = {!! json_encode($task->task_status) !!};  // รับค่าจาก Laravel ไปยัง JavaScript
+        if (task_Status == 2) {
+            var formInputs = document.querySelectorAll('#pay_form input, #mm_form textarea, #mm_form select,#budget_form input');  // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+            formInputs.forEach(function(input) {
+                input.setAttribute('readonly', true);  // ตั้งค่าแอตทริบิวต์ readonly
+            });
+        }
+    });
+</script>
 
 
  <script type="text/javascript">
@@ -727,33 +812,34 @@
 
 
                 <script>
-                $(document).ready(function() {
-                $("#task_pay").on("input", function() {
-                var max;
-                var fieldId = $(this).attr('id');
-                // Disable the fields
-                /*             $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility, #task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").prop('disabled', true);
-                */
-                if (fieldId === "task_cost_it_investment") {
-                    max = parseFloat($("#task_cost_it_operating").val().replace(/,/g, ""));
-                } else if (fieldId === "task_cost_it_operating") {
-                    max = parseFloat($("#task_cost_it_investment").val().replace(/,/g, ""));
-                } else if (fieldId === "task_cost_gov_utility") {
-                    max = parseFloat($("#task_cost_gov_utility").val().replace(/,/g, ""));
-                }
+    $(document).ready(function() {
+        $("#task_pay").on("input", function() {
+            var max = 0;  // Initialize max to 0
+            var fieldId = $(this).attr('id');
+            var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
 
-                var current = parseFloat($(this).val().replace(/,/g, ""));
-                if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
-                        " บาท");
-                    /*  $(this).val(max.toFixed(2)); */
-           $(this).val(0);
-                }
+            // Check if the fieldId is "task_pay"
+            if (fieldId === "task_pay") {
+                // Iterate through the costFields array
+                costFields.forEach(function(field) {
+                    // Get the value of each field, remove commas, convert to float, and add to max
+                    var fieldValue = $("#" + field).val();
+                    if (fieldValue) {  // Check if fieldValue is defined
+                        max += parseFloat(fieldValue.replace(/,/g, ""));
+                    }
                 });
+            }
 
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                    " บาท");
+                $(this).val(0);
+            }
+        });
+    });
+</script>
 
-                });
-                </script>
 
 
 <script>

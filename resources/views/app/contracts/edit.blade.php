@@ -15,7 +15,7 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="{{ __('แก้ไขสัญญา') }}">
-              <form method="POST" action="{{ route('contract.update', $contract->hashid) }}" class="row g-3">
+              <form method="POST" action="{{ route('contract.update', $contract->hashid) }}" class="row g-3" >
                 @csrf
                 {{ method_field('PUT') }}
                 <div class="col-md-12">
@@ -168,9 +168,11 @@
                   </div>
 
                   <div class="col-md-6">
-                    <label for="contract_pr" class="form-label">{{ __('เลขที่ PR') }}</label> <span class="text-danger">*</span>
+                    <label for="contract_pr" class="form-label">{{ __('เลขที่ PR') }}</label>
+                    <span class="text-danger"></span>
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="text" class="form-control" id="contract_pr" name="contract_pr" value="{{ $contract->contract_pr }}"required>
+                    <input type="text" class="form-control"
+                     id="contract_pr" name="contract_pr" value="{{ $contract->contract_pr }}" required>
                     <div class="invalid-feedback">
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
@@ -179,7 +181,7 @@
                   <div class="col-md-6">
                     <label for="contract_pa" class="form-label">{{ __('เลขที่ PA') }}</label> <span class="text-danger">*</span>
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                    <input type="text" class="form-control" id="contract_pa" name="contract_pa" value="{{ $contract->contract_pa }}"required>
+                    <input type="text" class="form-control" id="contract_pa" name="contract_pa" value="{{ $contract->contract_pa }}" required>
                     <div class="invalid-feedback">
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
