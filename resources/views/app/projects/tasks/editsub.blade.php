@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                         @if($task->task_status == 1)
+                                        {{--  @if($task->task_status == 1) --}}
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
@@ -57,7 +57,7 @@
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
-                                        @elseif($task->task_status == 2)
+                                        {{-- @elseif($task->task_status == 2) --}}
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="task_status"
                                                 id="task_status2" value="2" @checked($task->task_status == 2)>
@@ -66,7 +66,7 @@
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
-                                         @endif
+                                    {{--      @endif --}}
                                     </div>
 
                                     <div class="col-md-3 d-none">
@@ -271,7 +271,7 @@
                                                 @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_investment"
-                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                        class="form-label">{{ __('งบดำเนินงาน11') }}</label>
                                          {{--            <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_budget_it_investment"
                                                         name="task_budget_it_investment" min="0"
@@ -308,7 +308,7 @@
                                                 @endif
                                             </div>
 
-                                            @if ($task->task_parent_sub < 2)
+                                            @if ($task->task_parent_sub < 5)
                                             <div class="col-6 mt-3">
                                                 <strong><h4>ค่าใช้จ่าย</h4></strong>
 
@@ -357,7 +357,7 @@
                                                 @if ($task->task_budget_gov_utility > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_cost_gov_utility"
-                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                        class="form-label">{{ __('งบค่าสาธารณูปโภค') }}</label>
                                                    {{--  <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_cost_gov_utility"
                                                         name="task_cost_gov_utility" min="0"
@@ -486,7 +486,12 @@
                                     </div>
 
 
-
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
+                                        <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1) >
+                                          ไม่ได้คืน
+                                        </label>
+                                      </div>
 
 
 

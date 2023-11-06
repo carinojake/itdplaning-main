@@ -268,7 +268,7 @@
 
 
 
-                        label: '<div class="text-primary">คงเหลือ</div>',
+                        label: '<div class="text-primary">ยอดเงินคงเหลือ</div>',
 
                         tree: true,
 

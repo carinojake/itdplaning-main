@@ -1,6 +1,6 @@
-@if ($task['task_parent'] == null && $task['task_parent_sub'] == null)
+@if ($task['task_parent'] == null)
 
-    <h2>{{ $task->task_name }}   <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
+    <h2>{{ $task->task_name }}   [{{   $task_rs_get['rs'] }}]  <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
         {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
     </span></h2>
     <div class="container">
@@ -9,6 +9,7 @@
             <div class="row mt-5">
                 <div class="col-sm">
                     <div class="row">
+
                         <div class="col-6 fw-semibold">{{ __('ปีงบประมาณ') }}</div>
                         {{ $project->project_fiscal_year }}
                     </div>
@@ -56,15 +57,27 @@
 
                             <p> งบ  {{ number_format(floatval($task->task_budget_it_operating), 2) }}
                               <p> --}}
-                               งบ+mm+r {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
-                  {{--              <p> mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
+                                  1. {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                          {{--     <p>  2.งบ {{ number_format(floatval($task->task_budget_it_operating ), 2) }}
+                                <p>3. mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget'] ), 2) }}
+                                    <p>  4. r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+
+                                        {{$task_sub_refund_total_count}},
+                                        {{$task_sub_refund_01_count}},
+ --}}
+                              {{--              <p> mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget']), 2) }}
                                 <p>r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }},
                                     <p>r01 {{ number_format(floatval($task_sub_refund_pa_budget_01['operating']['task_refund_pa_budget']), 2) }},
  --}}
  @elseif($task_sub_refund_total_count > $task_sub_refund_01_count)
  งบ+mm+r {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+{{--  <p>  2.งบ {{ number_format(floatval($task->task_budget_it_operating ), 2) }}
+    <p>3. mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget'] ), 2) }}
+        <p>  4. r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
 
-
+ {{$task_sub_refund_total_count}},
+ {{$task_sub_refund_01_count}},
+ --}}
                                         @endif
 
                             บาท

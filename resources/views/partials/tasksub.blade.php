@@ -8,12 +8,14 @@
         @csrf
         <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money">taskRefund</i></button>
     </form> --}}
+    @if($task->task_status == 1)
+    @if($task_sub_refund_total_count == $task_sub_refund_count )
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund_prarent_3', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
         <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money">taskRefund_prarent_3</i></button>
     </form>
-
+    @endif
     {{-- <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST')
         @csrf
@@ -69,11 +71,12 @@
     <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย</a>
 @endif
+@endif
 <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
     class="btn btn-secondary">กลับ</a>
 </x-slot:toolbar>
 
-<h2>{{ $task->task_name }}</h2>
+<h2>{{ $task->task_name }}   [{{   $task_rs_get['rs'] }}] </h2>
 <div class="container">
     <div class="row mt-5">
         <div class="col-sm">

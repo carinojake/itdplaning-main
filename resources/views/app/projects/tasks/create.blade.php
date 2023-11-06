@@ -150,7 +150,9 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_it_operating"
-                                                    name="task_budget_it_operating">
+                                                    name="task_budget_it_operating"
+                                                    @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif>
+
 
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
@@ -172,7 +174,10 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_it_investment"
-                                                    name="task_budget_it_investment">
+                                                    name="task_budget_it_investment"
+
+                                                    @if(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) == 0) readonly @endif>
+
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
@@ -186,7 +191,9 @@
                                                 <input type="text" placeholder="0.00" step="0.01"
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control numeral-mask" id="task_budget_gov_utility"
-                                                    name="task_budget_gov_utility">
+                                                    name="task_budget_gov_utility"
+                                                    @if(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) == 0) readonly @endif>
+
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
@@ -202,6 +209,12 @@
                                     </div>
                                 </div>
 
+                                <div class="d-none col-md-3">
+
+                                </label>
+                                {{ Form::select('task_parent_sub', \Helper::contractType(), '1', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
+
+                            </div>
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>

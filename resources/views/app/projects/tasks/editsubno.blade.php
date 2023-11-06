@@ -644,6 +644,12 @@
                                                                   </div>
                                                                 @endif
                                                                 </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
+                                                                    <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1) >
+                                                                      ไม่ได้คืน
+                                                                    </label>
+                                                                  </div>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -23,15 +23,23 @@
                             </form>
 
                             @elseif ($project['project_type'] == 1)
+                            @if (  $task_rs_get['rs']== 2)
+
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
                                 <button class="btn btn-warning text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
                             </form>
+                            @elseif (  $task_rs_get['rs']== 3)
+                            <form class="taskRefund-form" action="{{ route('project.task.taskRefund_two', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                                @method('POST')
+                                @csrf
+                                <button class="btn btn-info text-white btn-taskRefund-sub">2.1<i class="cil-money"></i></button>
+                            </form>
                             @endif
-
+                            @endif
                             <a onclick="history.back()"
-                                class="btn btn-secondary">กลับ</a>
+                                class="btn btn-secondary">กลับ11111111111</a>
 {{--
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
@@ -44,6 +52,7 @@
                                 <div>{{ $taskcon->taskcon_id }}</div> --}}
                                 <div class="row">
                                     <div class="col-sm">
+                                        [{{   $task_rs_get['rs'] }}]
 
 
                                         <div class="fs-4 fw-semibold btn">

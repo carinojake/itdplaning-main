@@ -21,6 +21,7 @@ use App\Rules\BudgetGreaterThanCost;
 use App\Rules\BudgetGreaterThanCostInvestment;
 use App\Rules\BudgetGreaterThanCostUtility;
 use App\Rules\ValidateTaskPay;
+use App\Http\Controllers\Exception;
 
 
 class ProjectController extends Controller
@@ -757,7 +758,7 @@ class ProjectController extends Controller
     }
 
 
-    public function view(Request $request, $project,$task = null)
+    public function view(Request $request, $project, $task = null)
     {
         DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
         DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
@@ -767,7 +768,7 @@ class ProjectController extends Controller
             ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
 
 
-                                $query_op_in_un = "
+        $query_op_in_un = "
                                 WITH RECURSIVE nodes AS (
                                     SELECT
                             tasks.task_id,
@@ -998,62 +999,60 @@ max_root_sum as (
                                     GROUP BY t1.root
                                 ORDER BY idParentCategory
                             ";
-                    $result_query_op_in_un = DB::select(DB::raw($query_op_in_un));
+        $result_query_op_in_un = DB::select(DB::raw($query_op_in_un));
 
-                    $subQuery_it_operating = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_it_operating0', '>', 0.00);
-
-
-
-                    $subQuery_it_investment = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_it_investment0', '>', 0.00);
-                    $subQuery_gov_utility = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00);
-
-                    $result_query_it_operating = [];
-                    $result_query_it_investment = [];
-                    $result_query_gov_utility = [];
-                    $result_query_it_operating = $subQuery_it_operating->get();
-                    $result_query_it_investment = $subQuery_it_investment->get();
-                    $result_query_gov_utility = $subQuery_gov_utility->get();
-
-
-                    $subQuery_it_operating_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_it_operating0', '>', 0.00)
-                    ->where('idParentCategory', '=', 0)
-                    ;
+        $subQuery_it_operating = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_it_operating0', '>', 0.00);
 
 
 
-                    $subQuery_it_investment_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_it_investment0', '>', 0.00)
-                    ->where('idParentCategory', '=', 0)
-                    ;
+        $subQuery_it_investment = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_it_investment0', '>', 0.00);
+        $subQuery_gov_utility = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00);
+
+        $result_query_it_operating = [];
+        $result_query_it_investment = [];
+        $result_query_gov_utility = [];
+        $result_query_it_operating = $subQuery_it_operating->get();
+        $result_query_it_investment = $subQuery_it_investment->get();
+        $result_query_gov_utility = $subQuery_gov_utility->get();
 
 
-                    $subQuery_gov_utility_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
-                    ->select(DB::raw('*'))
-                    ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00)
-                    ->where('idParentCategory', '=', 0)
-                    //->get()
-                    ;
-                    $result_query_it_operating_idParentCategory = [];
-                    $result_query_it_investment_idParentCategory = [];
-                    $result_query_gov_utility_idParentCategory = [];
-                    $result_query_it_operating_idParentCategory = $subQuery_it_operating_idParentCategory->first();
-                    $result_query_it_investment_idParentCategory = $subQuery_it_investment_idParentCategory->first();
-                    $result_query_gov_utility_idParentCategory = $subQuery_gov_utility_idParentCategory->first();
+        $subQuery_it_operating_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_it_operating0', '>', 0.00)
+            ->where('idParentCategory', '=', 0);
 
-// Initialize an empty array to hold the organized data
- $organizedData = [];
 
-// Store the results of the first set of queries in the organized data array
-/* $organizedData['it_operating'] = $result_query_it_operating->toArray();
+
+        $subQuery_it_investment_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_it_investment0', '>', 0.00)
+            ->where('idParentCategory', '=', 0);
+
+
+        $subQuery_gov_utility_idParentCategory = DB::table(DB::raw("($query_op_in_un) as sub"))
+            ->select(DB::raw('*'))
+            ->where('sumSubtotaltask_budget_gov_utility0', '>', 0.00)
+            ->where('idParentCategory', '=', 0)
+            //->get()
+        ;
+        $result_query_it_operating_idParentCategory = [];
+        $result_query_it_investment_idParentCategory = [];
+        $result_query_gov_utility_idParentCategory = [];
+        $result_query_it_operating_idParentCategory = $subQuery_it_operating_idParentCategory->first();
+        $result_query_it_investment_idParentCategory = $subQuery_it_investment_idParentCategory->first();
+        $result_query_gov_utility_idParentCategory = $subQuery_gov_utility_idParentCategory->first();
+
+        // Initialize an empty array to hold the organized data
+        $organizedData = [];
+
+        // Store the results of the first set of queries in the organized data array
+        /* $organizedData['it_operating'] = $result_query_it_operating->toArray();
 $organizedData['it_investment'] = $result_query_it_investment->toArray();
 $organizedData['gov_utility'] = $result_query_gov_utility->toArray();
 
@@ -1062,12 +1061,12 @@ $organizedData['it_operating_idParentCategory'] = $result_query_it_operating_idP
 $organizedData['it_investment_idParentCategory'] = $result_query_it_investment_idParentCategory->toArray();
 $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idParentCategory->toArray();
   */
-// Now, $organizedData is a 2D array where the first dimension is the query category,
-// and the second dimension is the list of results for that category
+        // Now, $organizedData is a 2D array where the first dimension is the query category,
+        // and the second dimension is the list of results for that category
 
-// If you want to debug the organized data array:
- //dd($organizedData);
-           /*      dd($result_query_op_in_un,
+        // If you want to debug the organized data array:
+        //dd($organizedData);
+        /*      dd($result_query_op_in_un,
            $result_query_it_operating,
            $result_query_it_investment,
            $result_query_gov_utility,
@@ -1076,7 +1075,7 @@ $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idPar
                 $result_query_gov_utility_idParentCategory
         );
  */
-                    //dd($result_query_op_in_un);
+        //dd($result_query_op_in_un);
 
 
 
@@ -1090,7 +1089,7 @@ $organizedData['gov_utility_idParentCategory'] = $result_query_gov_utility_idPar
 
 
 
-       /*      $taskQuery = Task::query();
+        /*      $taskQuery = Task::query();
             $taskQuery->join('projects', 'projects.project_id', '=', 'tasks.project_id');
             $adSubquery = DB::table('tasks')
             ->select([
@@ -1545,7 +1544,7 @@ $mainQuery = DB::query()
                 'projects.project_id'
             )
 
-        ->leftJoin(
+            ->leftJoin(
                 DB::raw('(select tasks.project_id,
                 sum(COALESCE(tasks.task_budget_it_operating,0)) as op_totol_task_budget_it_operating,
             sum(COALESCE(tasks.task_cost_gov_utility,0)) as ut_cost_gov_utility,
@@ -1895,47 +1894,47 @@ $mainQuery = DB::query()
         (float) $__budget_it_investment = (float) $project['budget_it_investment'];
         (float) $__budget_gov_utility    = (float) $project['budget_gov_utility'];
 
-        (float) $__totol_task_budget_gov_utility= (float) $project['totol_task_budget_gov_utility'];
-        (float) $__totol_task_budget_it_operating= (float) $project['totol_task_budget_it_operating'];
-        (float) $__totol_task_budget_it_investment= (float) $project['totol_task_budget_it_investment'];
+        (float) $__totol_task_budget_gov_utility = (float) $project['totol_task_budget_gov_utility'];
+        (float) $__totol_task_budget_it_operating = (float) $project['totol_task_budget_it_operating'];
+        (float) $__totol_task_budget_it_investment = (float) $project['totol_task_budget_it_investment'];
 
 
-        (float) $__op_totol_task_budget_it_operating= (float) $project['op_totol_task_budget_it_operating'];
-        (float) $__in_totol_task_budget_it_investment= (float) $project['in_totol_task_budget_it_investment'];
-        (float) $__ut_totol_task_budget_gov_utility= (float) $project['ut_totol_task_budget_gov_utility'];
+        (float) $__op_totol_task_budget_it_operating = (float) $project['op_totol_task_budget_it_operating'];
+        (float) $__in_totol_task_budget_it_investment = (float) $project['in_totol_task_budget_it_investment'];
+        (float) $__ut_totol_task_budget_gov_utility = (float) $project['ut_totol_task_budget_gov_utility'];
 
 
 
-        (float) $__total_cost_gov_utility= (float) $project['total_cost_gov_utility'];
-        (float) $__total_cost_it_operating= (float) $project['total_cost_it_operating'];
-        (float) $__total_cost_it_investment= (float) $project['total_cost_it_investment'];
+        (float) $__total_cost_gov_utility = (float) $project['total_cost_gov_utility'];
+        (float) $__total_cost_it_operating = (float) $project['total_cost_it_operating'];
+        (float) $__total_cost_it_investment = (float) $project['total_cost_it_investment'];
 
-        (float) $__op_total_task_mm_budget= (float) $project['op_total_task_mm_budget'];
-        (float) $__in_total_task_mm_budget= (float) $project['in_total_task_mm_budget'];
-        (float) $__ut_total_task_mm_budget= (float) $project['ut_total_task_mm_budget'];
+        (float) $__op_total_task_mm_budget = (float) $project['op_total_task_mm_budget'];
+        (float) $__in_total_task_mm_budget = (float) $project['in_total_task_mm_budget'];
+        (float) $__ut_total_task_mm_budget = (float) $project['ut_total_task_mm_budget'];
 
-        (float) $__op_total_taskcon_pay_con= (float) $project['op_total_taskcon_pay_con'];
-        (float) $__in_total_taskcon_pay_con= (float) $project['in_total_taskcon_pay_con'];
-        (float) $__ut_total_taskcon_pay_con= (float) $project['ut_total_taskcon_pay_con'];
+        (float) $__op_total_taskcon_pay_con = (float) $project['op_total_taskcon_pay_con'];
+        (float) $__in_total_taskcon_pay_con = (float) $project['in_total_taskcon_pay_con'];
+        (float) $__ut_total_taskcon_pay_con = (float) $project['ut_total_taskcon_pay_con'];
 
         (float) $__op_total_task_refund_pa_budget = (float) $project['op_total_task_refund_pa_budget'];
         (float) $__in_total_task_refund_pa_budget = (float) $project['in_total_task_refund_pa_budget'];
         (float) $__ut_total_task_refund_pa_budget = (float) $project['ut_total_task_refund_pa_budget'];
 
-        (float) $__op_total_task_refund_pa_budget_3= (float) $project['op_total_task_refund_pa_budget_3'];
-        (float) $__in_total_task_refund_pa_budget_3= (float) $project['in_total_task_refund_pa_budget_3'];
-        (float) $__ut_total_task_refund_pa_budget_3= (float) $project['ut_total_task_refund_pa_budget_3'];
+        (float) $__op_total_task_refund_pa_budget_3 = (float) $project['op_total_task_refund_pa_budget_3'];
+        (float) $__in_total_task_refund_pa_budget_3 = (float) $project['in_total_task_refund_pa_budget_3'];
+        (float) $__ut_total_task_refund_pa_budget_3 = (float) $project['ut_total_task_refund_pa_budget_3'];
 
-        (float) $__op_root_task_mm_budget= (float) $project['op_root_task_mm_budget'];
-        (float) $__in_root_task_mm_budget= (float) $project['in_root_task_mm_budget'];
-        (float) $__ut_root_task_mm_budget= (float) $project['ut_root_task_mm_budget'];
+        (float) $__op_root_task_mm_budget = (float) $project['op_root_task_mm_budget'];
+        (float) $__in_root_task_mm_budget = (float) $project['in_root_task_mm_budget'];
+        (float) $__ut_root_task_mm_budget = (float) $project['ut_root_task_mm_budget'];
 
         (float) $__op_root_total_task_refund_pa_budget_99 = (float) $project['op_root_total_task_refund_pa_budget_99'];
-        (float) $__op_root_conditional_sum_task_refund_pa_budget= (float) $project['op_root_conditional_sum_task_refund_pa_budget'];
+        (float) $__op_root_conditional_sum_task_refund_pa_budget = (float) $project['op_root_conditional_sum_task_refund_pa_budget'];
         (float) $__in_root_total_task_refund_pa_budget_99 = (float) $project['in_root_total_task_refund_pa_budget_99'];
-        (float) $__in_root_conditional_sum_task_refund_pa_budget= (float) $project['in_root_conditional_sum_task_refund_pa_budget'];
+        (float) $__in_root_conditional_sum_task_refund_pa_budget = (float) $project['in_root_conditional_sum_task_refund_pa_budget'];
         (float) $__ut_root_total_task_refund_pa_budget_99 = (float) $project['ut_root_total_task_refund_pa_budget_99'];
-        (float) $__ut_root_conditional_sum_task_refund_pa_budget= (float) $project['ut_root_conditional_sum_task_refund_pa_budget'];
+        (float) $__ut_root_conditional_sum_task_refund_pa_budget = (float) $project['ut_root_conditional_sum_task_refund_pa_budget'];
 
 
 
@@ -2026,7 +2025,7 @@ $mainQuery = DB::query()
 
         $budget['project_type'] = $project['project_type'];
 
-       $budget['budget_it_operating'] = $__budget_it_operating;
+        $budget['budget_it_operating'] = $__budget_it_operating;
         $budget['budget_it_investment'] = $__budget_it_investment;
         $budget['budget_gov_utility'] = $__budget_gov_utility;
 
@@ -2048,7 +2047,7 @@ $mainQuery = DB::query()
         $budget['in_root_task_mm_budget'] = $__in_root_task_mm_budget;
         $budget['in_root_total_task_refund_pa_budget_99'] = $__in_root_total_task_refund_pa_budget_99;
         $budget['in_root_conditional_sum_task_refund_pa_budget'] = $__in_root_conditional_sum_task_refund_pa_budget;
-        $budget['in_budget_it_investment_and_mm'] = ($__budget_it_investment-$__in_root_task_mm_budget);
+        $budget['in_budget_it_investment_and_mm'] = ($__budget_it_investment - $__in_root_task_mm_budget);
 
 
         $budget['ut_totol_task_budget_gov_utility'] = $__ut_totol_task_budget_gov_utility;
@@ -2067,7 +2066,7 @@ $mainQuery = DB::query()
 
 
         $budget['total'] = $__budget;
-        ($budget['budget_total_mm'] = $__mm);
+        ($budget['budget_total_mm88888888'] = $__mm);
 
 
         $budget['budget_total_taskcon_pay_con'] = $__pay + $__paycon;
@@ -2080,8 +2079,16 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_and_mm'] = ($__total_task_budget - $__mm);
         $budget['budget_total_task_budget_and_mm_op'] = ($__budget_it_operating - $__op_total_task_mm_budget);
+        $budget['budget_total_task_budget_and_mm_op1'] = ($__budget_it_operating);
+        $budget['budget_total_task_budget_and_mm_op2'] = ($__op_total_task_mm_budget);
+
         $budget['budget_total_task_budget_and_mm_in'] = ($__budget_it_investment - $__in_total_task_mm_budget);
+        $budget['budget_total_task_budget_and_mm_in1'] = ($__budget_it_investment);
+        $budget['budget_total_task_budget_and_mm_in2'] = ($__in_total_task_mm_budget);
         $budget['budget_total_task_budget_and_mm_ut'] = ($__budget_gov_utility - $__ut_total_task_mm_budget);
+        $budget['budget_total_task_budget_and_mm_ut1'] = ($__budget_gov_utility);
+        $budget['budget_total_task_budget_and_mm_ut2'] = ($__ut_total_task_mm_budget);
+
 
 
         $budget['total'] = $__budget;
@@ -2091,16 +2098,20 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_end_operating'] = ($__budget_it_operating - (($__op_totol_task_budget_it_operating - $__op_total_task_mm_budget - $__op_total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment - (($__in_totol_task_budget_it_investment - $__in_total_task_mm_budget - $__in_total_task_refund_pa_budget_3)));
-        $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility- (($__ut_totol_task_budget_gov_utility - $__ut_total_task_mm_budget - $__ut_total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility - (($__ut_totol_task_budget_gov_utility - $__ut_total_task_mm_budget - $__ut_total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
+        $budget['budget_total_task_budget_end_utility1'] = ((($__ut_totol_task_budget_gov_utility)));
+        $budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
+        $budget['budget_total_task_budget_end_utility3'] =  $__ut_total_task_refund_pa_budget_3;
 
-        $budget['budget_total_task_budget_end_operating'] =  $budget['budget_total_task_budget_end_operating'] - $budget['op_root_task_mm_budget'];
-        $budget['budget_total_task_budget_end_investment']=  $budget['budget_total_task_budget_end_investment'] - $budget['in_root_task_mm_budget'];
-        $budget['budget_total_task_budget_end_utility']=  $budget['budget_total_task_budget_end_utility'] - $budget['ut_root_task_mm_budget'];
-       // $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
+        //$budget['budget_total_task_budget_end_operating'] =  $budget['budget_total_task_budget_end_operating'] - $budget['op_root_task_mm_budget'];
+        //$budget['budget_total_task_budget_end_investment'] =  $budget['budget_total_task_budget_end_investment'] - $budget['in_root_task_mm_budget'];
+      //  $budget['budget_total_task_budget_end_utility'] =  $budget['budget_total_task_budget_end_utility'] - $budget['ut_root_task_mm_budget'];
+        // $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
         //$budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
 
-        $budget['budget_total_task_budget_end'] = ( ($__budget-($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end'] = (($__budget - ($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
         $budget['budget_total_task_budget_end'] =   $budget['budget_total_task_budget_end'] - $budget['root_task_mm_budget'];
 
@@ -2190,85 +2201,92 @@ $mainQuery = DB::query()
         // สร้าง Base Case
 
         $taskcons_recursive = DB::table('tasks')
-        ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
-        ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
-        ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
-        ->select('tasks.task_id',
-            DB::raw('SUM(COALESCE(tasks.task_pay,0)) as total_pay'),
-            DB::raw('SUM(COALESCE(taskcons.taskcon_cost_gov_utility,0)) + SUM(COALESCE(taskcons.taskcon_cost_it_operating,0)) + SUM(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_taskcon_cost_pa_1'),
-            DB::raw('SUM(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1'))
-        ->where('tasks.task_type', 1)
-        ->whereNull('tasks.deleted_at')
-        ->groupBy('tasks.task_id');
+            ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+            ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+            ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            ->select(
+                'tasks.task_id',
+                DB::raw('SUM(COALESCE(tasks.task_pay,0)) as total_pay'),
+                DB::raw('SUM(COALESCE(taskcons.taskcon_cost_gov_utility,0)) + SUM(COALESCE(taskcons.taskcon_cost_it_operating,0)) + SUM(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_taskcon_cost_pa_1'),
+                DB::raw('SUM(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1')
+            )
+            ->where('tasks.task_type', 1)
+            ->whereNull('tasks.deleted_at')
+            ->groupBy('tasks.task_id');
         //dd($taskcons_recursive->get());
         $nodes = DB::table('tasks')
-        ->join('projects', 'projects.project_id', '=', 'tasks.project_id')
-        ->leftJoinSub($taskcons_recursive, 'ad', function ($join) {
-            $join->on('ad.task_id', '=', 'tasks.task_id');
-        })
-        ->select('tasks.task_id',
-            DB::raw('COALESCE(tasks.task_parent, 0) AS idtask_parent'),
-            'tasks.task_name',
-            'tasks.task_parent_sub',
-            'tasks.task_budget_it_operating',
-            'tasks.task_cost_it_operating',
-            'tasks.task_pay',
-            'tasks.task_refund_pa_status',
-            'tasks.task_refund_pa_budget',
-            'ad.total_pay',
-            'ad.total_taskcon_cost_pa_1',
-            'ad.total_taskcon_pay_pa_1')
-        ->where('projects.project_id', 73)
-        ->whereNull('tasks.deleted_at')
-        ->union(DB::table(DB::raw("(SELECT 0 as task_id, null as idtask_parent, null as task_name, null as task_parent_sub, 0 as task_budget_it_operating, 0 as task_cost_it_operating, 0 as task_pay, 0 as task_refund_pa_status, 0 as task_refund_pa_budget, 0 as total_pay, 0 as total_taskcon_cost_pa_1, 0 as total_taskcon_pay_pa_1) as temp_table")));
+            ->join('projects', 'projects.project_id', '=', 'tasks.project_id')
+            ->leftJoinSub($taskcons_recursive, 'ad', function ($join) {
+                $join->on('ad.task_id', '=', 'tasks.task_id');
+            })
+            ->select(
+                'tasks.task_id',
+                DB::raw('COALESCE(tasks.task_parent, 0) AS idtask_parent'),
+                'tasks.task_name',
+                'tasks.task_parent_sub',
+                'tasks.task_budget_it_operating',
+                'tasks.task_cost_it_operating',
+                'tasks.task_pay',
+                'tasks.task_refund_pa_status',
+                'tasks.task_refund_pa_budget',
+                'ad.total_pay',
+                'ad.total_taskcon_cost_pa_1',
+                'ad.total_taskcon_pay_pa_1'
+            )
+            ->where('projects.project_id', 73)
+            ->whereNull('tasks.deleted_at')
+            ->union(DB::table(DB::raw("(SELECT 0 as task_id, null as idtask_parent, null as task_name, null as task_parent_sub, 0 as task_budget_it_operating, 0 as task_cost_it_operating, 0 as task_pay, 0 as task_refund_pa_status, 0 as task_refund_pa_budget, 0 as total_pay, 0 as total_taskcon_cost_pa_1, 0 as total_taskcon_pay_pa_1) as temp_table")));
 
         $cte = DB::table(DB::raw('nodes AS t'))
-        ->select('t.*','t.task_id AS root'
-         , 'idtask_parent AS idtask_parent0'
-         , 'task_name as task_name0'
-         , 'task_parent_sub AS task_parent_sub0'
-         , 'task_budget_it_operating AS task_budget_it_operating0'
-         , 'task_cost_it_operating AS task_cost_it_operating0'
-         , 'task_pay AS task_pay0'
-         , 'total_taskcon_pay_pa_1 AS taskcons_pay0'
-         , 'task_refund_pa_status AS task_refund_pa_statusy0'
-         //, 'task_refund_pa_budget AS task_refund_pa_budget0'
-         , 'task_budget_it_operating AS sumSubtotal'
-         , 'task_cost_it_operating AS sumSubtask_cost_it_operating'
-         , 'task_pay AS sumSubtask_pay'
-         , 'total_taskcon_pay_pa_1 as sumSubtaskcon_pay'
-         , 'task_refund_pa_budget AS sumSubtask_refund_pa_budget'
-         , 'task_refund_pa_status AS sumSubtask_refund_pa_statusy'
-        )
-        ->unionAll(
-            DB::table(DB::raw('cte AS t0'))
-                ->join(DB::raw('nodes AS t'), function($join) {
-                    $join->on('t.idtask_parent', '=', 't0.task_id');
-                })
-                ->select(
-                    't.*',
-                    't0.root',
-                     't0.idtask_parent0'
-                    , 't0.task_name0'
-                    , 't0.task_parent_sub0'
-                    , 't0.task_budget_it_operating0'
-                    , 't0.task_cost_it_operating0'
-                    , 't0.task_pay0'
-                    , 't0.taskcons_pay0'
-                    , 'task_refund_pa_statusy0'
-                    , 't.task_budget_it_operating AS sumSubtotal'
-                    , 't.task_cost_it_operating AS sumSubtask_cost_it_operating'
-                    , 't.task_pay AS sumSubtask_pay'
-                    , 't.total_taskcon_pay_pa_1 as sumSubtaskcon_pay'
-                    , 't.task_refund_pa_budget AS sumSubtask_refund_pa_budget'
-                    , 't.task_refund_pa_status AS sumSubtask_refund_pa_statusy'
-                      // ... (other columns)
-                )
-        );
+            ->select(
+                't.*',
+                't.task_id AS root',
+                'idtask_parent AS idtask_parent0',
+                'task_name as task_name0',
+                'task_parent_sub AS task_parent_sub0',
+                'task_budget_it_operating AS task_budget_it_operating0',
+                'task_cost_it_operating AS task_cost_it_operating0',
+                'task_pay AS task_pay0',
+                'total_taskcon_pay_pa_1 AS taskcons_pay0',
+                'task_refund_pa_status AS task_refund_pa_statusy0'
+                //, 'task_refund_pa_budget AS task_refund_pa_budget0'
+                ,
+                'task_budget_it_operating AS sumSubtotal',
+                'task_cost_it_operating AS sumSubtask_cost_it_operating',
+                'task_pay AS sumSubtask_pay',
+                'total_taskcon_pay_pa_1 as sumSubtaskcon_pay',
+                'task_refund_pa_budget AS sumSubtask_refund_pa_budget',
+                'task_refund_pa_status AS sumSubtask_refund_pa_statusy'
+            )
+            ->unionAll(
+                DB::table(DB::raw('cte AS t0'))
+                    ->join(DB::raw('nodes AS t'), function ($join) {
+                        $join->on('t.idtask_parent', '=', 't0.task_id');
+                    })
+                    ->select(
+                        't.*',
+                        't0.root',
+                        't0.idtask_parent0',
+                        't0.task_name0',
+                        't0.task_parent_sub0',
+                        't0.task_budget_it_operating0',
+                        't0.task_cost_it_operating0',
+                        't0.task_pay0',
+                        't0.taskcons_pay0',
+                        'task_refund_pa_statusy0',
+                        't.task_budget_it_operating AS sumSubtotal',
+                        't.task_cost_it_operating AS sumSubtask_cost_it_operating',
+                        't.task_pay AS sumSubtask_pay',
+                        't.total_taskcon_pay_pa_1 as sumSubtaskcon_pay',
+                        't.task_refund_pa_budget AS sumSubtask_refund_pa_budget',
+                        't.task_refund_pa_status AS sumSubtask_refund_pa_statusy'
+                        // ... (other columns)
+                    )
+            );
 
-       // dd($cte->get());
+        // dd($cte->get());
 
-     /*    $aggregatedBudget = DB::table(DB::raw('cte'))
+        /*    $aggregatedBudget = DB::table(DB::raw('cte'))
         ->select(
             'root AS root_agg',
             'idtask_parent0 AS idParentCategory',
@@ -2276,7 +2294,7 @@ $mainQuery = DB::query()
         )
         ->groupBy('root'); */
 
-       /*  $results = DB::table(DB::raw('cte AS t1'))
+        /*  $results = DB::table(DB::raw('cte AS t1'))
         ->joinSub($aggregatedBudget, 'ab', function($join) {
             $join->on('t1.root', '=', 'ab.root_agg');
         })
@@ -2351,7 +2369,7 @@ $mainQuery = DB::query()
                 DB::raw('SUM(tasks.task_refund_pa_budget) as total_sum_task_refund_pa_budget')
             ])
             ->where('projects.project_id', $ids_project)
-           // ->whereIn('tasks.task_id', $id_tasks)
+            // ->whereIn('tasks.task_id', $id_tasks)
 
             ->whereNull('tasks.deleted_at')
             ->groupBy([
@@ -2363,7 +2381,7 @@ $mainQuery = DB::query()
 
         // รวม Base Case และ Recursive Case ด้วย UNION
         $cte = $baseQuery->unionAll($recursiveQuery);
-       // dd($cte);
+        // dd($cte);
         // ดึงข้อมูลจาก CTE
         $ctesumsurplusQuery  = DB::table('tasks')
             ->joinSub($cte, 'ctesumsurplus', function ($join) {
@@ -2389,10 +2407,10 @@ $mainQuery = DB::query()
                 'tasks.task_parent_sub as ctetask_parent_sub',
                 'ctesumsurplus.*',
                 DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating + ctesumsurplus.total_sum_task_budget_it_investment + ctesumsurplus.total_sum_task_budget_gov_utility) as total_sum_budget'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_cost_it_operating + ctesumsurplus.total_sum_task_cost_it_investment + ctesumsurplus.total_sum_task_cost_gov_utility) as total_sum_cost'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating - ctesumsurplus.total_sum_task_cost_it_operating) as diff_budget_cost_operating'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_investment - ctesumsurplus.total_sum_task_cost_it_investment) as diff_budget_cost_investment'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_gov_utility - ctesumsurplus.total_sum_task_cost_gov_utility) as diff_budget_cost_gov_utility')
+                DB::raw('SUM(ctesumsurplus.total_sum_task_cost_it_operating + ctesumsurplus.total_sum_task_cost_it_investment + ctesumsurplus.total_sum_task_cost_gov_utility) as total_sum_cost'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating - ctesumsurplus.total_sum_task_cost_it_operating) as diff_budget_cost_operating'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_investment - ctesumsurplus.total_sum_task_cost_it_investment) as diff_budget_cost_investment'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_gov_utility - ctesumsurplus.total_sum_task_cost_gov_utility) as diff_budget_cost_gov_utility')
 
             ])
             ->groupBy([
@@ -2409,7 +2427,7 @@ $mainQuery = DB::query()
                 'ctesumsurplus.total_sum_task_cost_it_operating',
                 'ctesumsurplus.total_sum_task_cost_it_investment',
                 'ctesumsurplus.total_sum_task_cost_gov_utility',
-               'ctesumsurplus.total_sum_task_pay',
+                'ctesumsurplus.total_sum_task_pay',
                 'ctesumsurplus.total_sum_task_refund_pa_budget',
                 'tasks.task_id',
                 'tasks.task_parent',
@@ -2418,11 +2436,11 @@ $mainQuery = DB::query()
             ->orderBy('ctesumsurplus.root_task_parent')
             ->orderBy('ctesumsurplus.root_task_id')
             //->get()
-            ;
+        ;
 
 
 
-            $ctetasksumsurplusQuery  = DB::table('tasks')
+        $ctetasksumsurplusQuery  = DB::table('tasks')
             ->joinSub($cte, 'ctesumsurplus', function ($join) {
                 $join->on('tasks.task_id', '=', 'ctesumsurplus.root_task_id');
             })
@@ -2441,15 +2459,15 @@ $mainQuery = DB::query()
             WHEN sum(COALESCE(tasks.task_parent+task_parent_sub)) IS NULL THEN 1
             ELSE 0
         END AS root_task_task_parent_sub_value'),
-        'tasks.task_id as ctetask_id',
-        'tasks.task_parent as ctetask_parent',
-        'tasks.task_parent_sub as ctetask_parent_sub',
+                'tasks.task_id as ctetask_id',
+                'tasks.task_parent as ctetask_parent',
+                'tasks.task_parent_sub as ctetask_parent_sub',
                 'ctesumsurplus.*',
                 DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating + ctesumsurplus.total_sum_task_budget_it_investment + ctesumsurplus.total_sum_task_budget_gov_utility) as total_sum_budget'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_cost_it_operating + ctesumsurplus.total_sum_task_cost_it_investment + ctesumsurplus.total_sum_task_cost_gov_utility) as total_sum_cost'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating - ctesumsurplus.total_sum_task_cost_it_operating) as diff_budget_cost_operating'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_investment - ctesumsurplus.total_sum_task_cost_it_investment) as diff_budget_cost_investment'),
-        DB::raw('SUM(ctesumsurplus.total_sum_task_budget_gov_utility - ctesumsurplus.total_sum_task_cost_gov_utility) as diff_budget_cost_gov_utility')
+                DB::raw('SUM(ctesumsurplus.total_sum_task_cost_it_operating + ctesumsurplus.total_sum_task_cost_it_investment + ctesumsurplus.total_sum_task_cost_gov_utility) as total_sum_cost'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_operating - ctesumsurplus.total_sum_task_cost_it_operating) as diff_budget_cost_operating'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_it_investment - ctesumsurplus.total_sum_task_cost_it_investment) as diff_budget_cost_investment'),
+                DB::raw('SUM(ctesumsurplus.total_sum_task_budget_gov_utility - ctesumsurplus.total_sum_task_cost_gov_utility) as diff_budget_cost_gov_utility')
 
             ])
             ->groupBy([
@@ -2474,130 +2492,130 @@ $mainQuery = DB::query()
             ])
             ->orderBy('ctesumsurplus.root_task_parent')
             ->orderBy('ctesumsurplus.root_task_id')
-            ->get()
-            ;
+            ->get();
         // แสดงผลdd
-     // dd($ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get());
+        // dd($ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get());
         //dd($ctesumsurplus);
-//count ctesumsurplus
-     // Get the count
+        //count ctesumsurplus
+        // Get the count
         // Use the CTE to get the count
         // Execute query เพื่อรับผลลัพธ์
-// Execute query เพื่อรับผลลัพธ์
+        // Execute query เพื่อรับผลลัพธ์
 
 
-  //dd($ctesumsurplus = $ctesumsurplusQuery->get());
+        //dd($ctesumsurplus = $ctesumsurplusQuery->get());
 
-//dd($ctesumsurplus);
-// ใช้ CTE เพื่อรับจำนวน
-$ctesumsurplusSqlnull = $ctesumsurplusQuery->whereNull('ctesumsurplus.root_task_id');
-//dd($ctesumsurplusSqlnull->get());
-
-
-//$ctesumsurplusSql = $ctesumsurplusQuery->toSql();
-           // dd($ctesumsurplusSql);
+        //dd($ctesumsurplus);
+        // ใช้ CTE เพื่อรับจำนวน
+        $ctesumsurplusSqlnull = $ctesumsurplusQuery->whereNull('ctesumsurplus.root_task_id');
+        //dd($ctesumsurplusSqlnull->get());
 
 
-
-    $cte_refund_1_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 1) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-    $cte_refund_1_QueryCountcount = count($cte_refund_1_QueryCount);
-    $cte_refund_2_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 2) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-    $cte_refund_3_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 3) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-
-    $cte_refund_1task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 1 ) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-    $cte_refund_2task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 2) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-    $cte_refund_3task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-    ->select('cte.ctetask_id','cte.root_task_refund_pa_status')
-    ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
-    ->where('cte.root_task_refund_pa_status', '=', 3) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
-    ->get()
-    ->toArray();
-
-//dd( $cte_refund_1_QueryCountcount, $cte_refund_1task_id_QueryCount, $cte_refund_2task_id_QueryCount, $cte_refund_3task_id_QueryCount,$cte_refund_1_QueryCount,$cte_refund_2_QueryCount,$cte_refund_3_QueryCount);
+        //$ctesumsurplusSql = $ctesumsurplusQuery->toSql();
+        // dd($ctesumsurplusSql);
 
 
-$queries = [
-    'cte_refund' => [
-        1 => "cte.root_task_refund_pa_status = 1",
-        2 => "cte.root_task_refund_pa_status = 2",
-        3 => "cte.root_task_refund_pa_status = 3"
-    ],
-/*     'cte_refund_task_id' => [
+
+        $cte_refund_1_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 1) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+        $cte_refund_1_QueryCountcount = count($cte_refund_1_QueryCount);
+        $cte_refund_2_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 2) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+        $cte_refund_3_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 3) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+
+        $cte_refund_1task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 1) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+        $cte_refund_2task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 2) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+        $cte_refund_3task_id_QueryCount = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+            ->select('cte.ctetask_id', 'cte.root_task_refund_pa_status')
+            ->mergeBindings($ctesumsurplusQuery) // ผสาน bindings จาก query ต้นฉบับ
+            ->where('cte.root_task_refund_pa_status', '=', 3) // หมายเหตุ: เราใช้ 'cte' เป็น alias ที่นี่
+            ->get()
+            ->toArray();
+
+        //dd( $cte_refund_1_QueryCountcount, $cte_refund_1task_id_QueryCount, $cte_refund_2task_id_QueryCount, $cte_refund_3task_id_QueryCount,$cte_refund_1_QueryCount,$cte_refund_2_QueryCount,$cte_refund_3_QueryCount);
+
+
+        $queries = [
+            'cte_refund' => [
+                1 => "cte.root_task_refund_pa_status = 1",
+                2 => "cte.root_task_refund_pa_status = 2",
+                3 => "cte.root_task_refund_pa_status = 3"
+            ],
+            /*     'cte_refund_task_id' => [
         1 => "cte.root_task_refund_pa_status = 1",
         2 => "cte.root_task_refund_pa_status = 2",
         3 => "cte.root_task_refund_pa_status = 3"
     ] */
-];
+        ];
 
-$results_task_refund_pa = [];
+        $results_task_refund_pa = [];
 
-foreach ($queries as $key => $conditions) {
-    foreach ($conditions as $index => $condition) {
-        $results_task_refund_pa[$key][$index] = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
-            ->mergeBindings($ctesumsurplusQuery)
-            ->whereRaw($condition)
-            ->get()
-            ->toArray()
-            //->count()
-            ;
-    }
-}
-
-
-
-
-
-
-
-
-
-function recursiveCount($array) {
-    $count = 0;
-    foreach ($array as $value) {
-        if (is_array($value)) {
-            $count += recursiveCount($value);  // Recursive call for nested arrays
+        foreach ($queries as $key => $conditions) {
+            foreach ($conditions as $index => $condition) {
+                $results_task_refund_pa[$key][$index] = DB::table(DB::raw("({$ctesumsurplusQuery->toSql()}) as cte"))
+                    ->mergeBindings($ctesumsurplusQuery)
+                    ->whereRaw($condition)
+                    ->get()
+                    ->toArray()
+                    //->count()
+                ;
+            }
         }
-    }
-    return $count + count($array);  // Count the current level + nested counts
-}
 
-$totalCount = recursiveCount($results_task_refund_pa);
 
-//dd($results_task_refund_pa, $totalCount);
 
-// Now, $results is a 2D array containing the counts.
-// For example, to get the count of cte_refund with index 1:
-// echo $results['cte_refund'][1];
-// If $results_task_refund_pa is a Collection:
-//dd($results_task_refund_pa,(count($results_task_refund_pa)));
 
-// If $results_task_refund_pa is a regular array:
-//dd($results_task_refund_pa);
+
+
+
+
+
+        function recursiveCount($array)
+        {
+            $count = 0;
+            foreach ($array as $value) {
+                if (is_array($value)) {
+                    $count += recursiveCount($value);  // Recursive call for nested arrays
+                }
+            }
+            return $count + count($array);  // Count the current level + nested counts
+        }
+
+        $totalCount = recursiveCount($results_task_refund_pa);
+
+        //dd($results_task_refund_pa, $totalCount);
+
+        // Now, $results is a 2D array containing the counts.
+        // For example, to get the count of cte_refund with index 1:
+        // echo $results['cte_refund'][1];
+        // If $results_task_refund_pa is a Collection:
+        //dd($results_task_refund_pa,(count($results_task_refund_pa)));
+
+        // If $results_task_refund_pa is a regular array:
+        //dd($results_task_refund_pa);
 
         //dd($ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
@@ -3111,7 +3129,7 @@ if($cteQueryResult) {
 
 
         }
-       // $budget['budget_total_task_budget_end'] =  $budget['budget_total_task_budget_end'];
+        // $budget['budget_total_task_budget_end'] =  $budget['budget_total_task_budget_end'];
 
         $budget['root_totalLeasttask_mm_budget'] = $rootsums['totalLeasttask_mm_budget'];
         //$budget['root_totalLeastBudget_sum'] = $rootsums['totalLeastBudget_sum'];
@@ -3388,22 +3406,89 @@ dd($cteQuery); */
 
 
 
-$bindings = $ctesumsurplusQuery->getBindings();
-//dd($bindings);
 
-$bindingsCte = $cteQuery->getBindings();
-//dd($bindingsCte);
-//dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
 
-($result_query_op_in_un);
-$result_query_op_in_un_sql = $result_query_op_in_un;
-//dd($result_query_operating_sql);
+
+
+
+
+
+
+
+
+        $bindings = $ctesumsurplusQuery->getBindings();
+        //dd($bindings);
+
+        $bindingsCte = $cteQuery->getBindings();
+        //dd($bindingsCte);
+        //dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
+
+        ($result_query_op_in_un);
+        $result_query_op_in_un_sql = $result_query_op_in_un;
+        //dd($result_query_operating_sql);
+
+        //dd($id_tasks);
+        $root_task_st_query  = DB::table('tasks')
+            ->selectRaw("
+        task_id AS taskroot_id,
+        task_budget_it_operating,
+        (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_id) AS mm,
+        (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE task_parent = taskroot_id) AS root_refund,
+        (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN (SELECT taskroot_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null))
+            AND task_type = 1
+            AND deleted_at IS null) AS pe,
+        (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null))
+            AND task_type = 2
+            AND deleted_at IS null) AS non_pe,
+        (SELECT SUM(task_cost_it_operating) - SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null))
+            AND deleted_at IS null) AS wait_pay,
+        (SELECT SUM(task_pay) FROM tasks WHERE task_parent =taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null)
+            AND deleted_at IS null) AS task_pay,
+        (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent =taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null))
+            AND deleted_at IS null) AS new_balance,
+        (SELECT SUM(task_parent_sub_refund_budget) FROM tasks WHERE (task_parent =taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null))
+            AND deleted_at IS null) AS new_balance_re,
+        (SELECT SUM(task_budget_it_operating) - SUM(task_mm_budget) + SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent =taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null))
+            AND deleted_at IS null) AS new_balance_2,
+        (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent =taskroot_id
+            OR task_parent IN (SELECT task_id FROM tasks WHERE task_parent =taskroot_id AND deleted_at IS null))
+            AND task_refund_pa_status = 1
+            AND deleted_at IS null) AS balance_status
+    ")
+            ->where('project_id', $id)
+            ->whereNull('deleted_at')
+            ->whereNull('task_parent')
+            ->orderBy('task_id');
+
+        // Get the SQL string
+        $sqlString = $root_task_st_query->toSql();
+
+        // Get the bindings from the query builder, not the results collection
+        $bindings = $root_task_st_query->getBindings();
+
+        // Execute the query and get the results
+        $results = $root_task_st_query->get();
+
+        $taskrootIds = $results->pluck('taskroot_id')->all();
+
+        //dd($taskrootIds);
+
+        // Now you can dump the SQL, bindings, and results
+        //dd($sqlString, $bindings, $results);
 
         ($tasks = DB::table('tasks')
             ->select(
                 'tasks.*',
 
                 //'acte.total_task_task_budget_cte',
+                'asum.total_task_mm_budget_task_max',
                 'asum.total_task_mm_budget_task_sum',
                 'asum.costs_disbursement_sum',
                 'asum.total_task_task_budget',
@@ -3446,36 +3531,36 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'cte.total_Leasttask_cost_sub_end',
                 'cte.total_Leasttask_sum_cost_sub_end',
                 'cte.totalleactdifference',
-               // 'cteplus.total_sum_task_refund_pa_budget',*/
-              //  'cteplustask.total_sum_task_refund_pa_budget',
-                   'ctesSqlnull.seq_num',
-                  //  'ctesSqlnull.ctetask_id'
-                  'ctesSqlnull.root_category',
-                  'ctesSqlnull.root_task_task_parent_sub_value',
-                  'ctesSqlnull.ctetask_id',
-                  'ctesSqlnull.root_task_refund_pa_status',
-                  'ctesSqlnull.total_sum_budget',
-                  'ctesSqlnull.total_sum_cost',
-                  'ctesSqlnull.total_sum_task_refund_pa_budget',
-                  'cteop_in_un.root as root_op_in_un',
-                    'cteop_in_un.sumSubroot_task_task_parent_sub_value_plus',
+                // 'cteplus.total_sum_task_refund_pa_budget',*/
+                //  'cteplustask.total_sum_task_refund_pa_budget',
+                'ctesSqlnull.seq_num',
+                //  'ctesSqlnull.ctetask_id'
+                'ctesSqlnull.root_category',
+                'ctesSqlnull.root_task_task_parent_sub_value',
+                'ctesSqlnull.ctetask_id',
+                'ctesSqlnull.root_task_refund_pa_status',
+                'ctesSqlnull.total_sum_budget',
+                'ctesSqlnull.total_sum_cost',
+                'ctesSqlnull.total_sum_task_refund_pa_budget',
+                'cteop_in_un.root as root_op_in_un',
+                'cteop_in_un.sumSubroot_task_task_parent_sub_value_plus',
 
 
-                  'cteop_in_un.sumSubtotaltask_budget_it_operating0 as sumSubtotaltask_budget_it_operating',
-                  'cteop_in_un.sumSubtotaltask_budget_it_investment0 as sumSubtotaltask_budget_it_investment',
-                  'cteop_in_un.sumSubtotaltask_budget_gov_utility0 as sumSubtotaltask_budget_gov_utility',
-                  'cteop_in_un.sumSubtotaltask_cost_it_operating0 as sumSubtotaltask_cost_it_operating',
-                  'cteop_in_un.sumSubtotaltask_cost_it_investment0 as sumSubtotaltask_cost_it_investment',
-                  'cteop_in_un.sumSubtotaltask_cost_gov_utility0 as sumSubtotaltask_cost_gov_utility',
-                  'cteop_in_un.total_cost_operating as total_cost_op',
-                  'cteop_in_un.total_cost_investment as total_cost_in',
-                 'cteop_in_un.total_cost_gov_utility as total_cost_gov',
-                  'cteop_in_un.total_pay as total_pay_cte',
-                  'cteop_in_un.total_paycons as total_paycons_cte',
-                  'cteop_in_un.total_pay_paycons as total_pay_paycons_cte',
-                  'cteop_in_un.total_refund as total_refund_cte',
-                  'cteop_in_un.sumSubtask_refund_pa_statusy as sumSubtask_refund_pa_status',
-                  'cteop_in_un.total_refund_status_count as total_refund_status_count',
+                'cteop_in_un.sumSubtotaltask_budget_it_operating0 as sumSubtotaltask_budget_it_operating',
+                'cteop_in_un.sumSubtotaltask_budget_it_investment0 as sumSubtotaltask_budget_it_investment',
+                'cteop_in_un.sumSubtotaltask_budget_gov_utility0 as sumSubtotaltask_budget_gov_utility',
+                'cteop_in_un.sumSubtotaltask_cost_it_operating0 as sumSubtotaltask_cost_it_operating',
+                'cteop_in_un.sumSubtotaltask_cost_it_investment0 as sumSubtotaltask_cost_it_investment',
+                'cteop_in_un.sumSubtotaltask_cost_gov_utility0 as sumSubtotaltask_cost_gov_utility',
+                'cteop_in_un.total_cost_operating as total_cost_op',
+                'cteop_in_un.total_cost_investment as total_cost_in',
+                'cteop_in_un.total_cost_gov_utility as total_cost_gov',
+                'cteop_in_un.total_pay as total_pay_cte',
+                'cteop_in_un.total_paycons as total_paycons_cte',
+                'cteop_in_un.total_pay_paycons as total_pay_paycons_cte',
+                'cteop_in_un.total_refund as total_refund_cte',
+                'cteop_in_un.sumSubtask_refund_pa_statusy as sumSubtask_refund_pa_status',
+                'cteop_in_un.total_refund_status_count as total_refund_status_count',
                 'cteop_in_un.total_refund_status_sum as total_refund_status_sum',
                 'cteop_in_un.total_refund_status_max as total_refund_status_max',
                 'cteop_in_un.total_refund_status_min as total_refund_status_min',
@@ -3490,6 +3575,55 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'cteop_in_un.sumSubtotal_mm_budget_sum as sumSubtotal_mm_budget_sum',
                 'cteop_in_un.sumSubtotal_mm_budget_max as sumSubtotal_mm_budget_max',
                 'cteop_in_un.sumSubtotal_mm_budget_min as sumSubtotal_mm_budget_min',
+                'root_st.rs as root_st_rs',
+                'root_st.taskroot_id as root_st_taskroot_id',
+                'root_st.task_budget_it_operating as root_st_task_budget_it_operating',
+                'root_st.task_budget_it_investment as root_st_task_budget_it_investment',
+                'root_st.task_budget_gov_utility as root_st_task_budget_gov_utility',
+                'root_st.root_st_bedget as root_st_root_st_bedget',
+                'root_st.root_st_cost as root_st_root_st_cost',
+                'root_st.root_st_pe as root_st_root_st_pe',
+                'root_st.root_st_non_pe as root_st_root_st_non_pe',
+                //'root_st.root_st_wait_pay as root_st_root_st_wait_pay',
+                //'root_st.root_st_task_pay as root_st_root_st_task_pay',
+                'root_st.root_refund as root_st_root_refund',
+
+
+                'root_st.mm as root_st_mm',
+                'root_st.root_refund as root_st_root_refund',
+                'root_st.pe as root_st_pe',
+                'root_st.non_pe as root_st_non_pe',
+                'root_st.wait_pay as root_st_wait_pay',
+                'root_st.task_pay as root_st_task_pay',
+                'root_st.new_balance as root_st_new_balance',
+                'root_st.new_balance_re as root_st_new_balance_re',
+                'root_st.new_balance_2 as root_st_new_balance_2',
+                'root_st.balance_status as root_st_balance_status',
+                'root_two.rs as root_two_rs',
+                'root_two.taskroot_id as root_two_taskroot_id',
+                'root_two.task_budget_it_operating as root_two_task_budget_it_operating',
+                'root_two.task_budget_it_investment as root_two_task_budget_it_investment',
+                'root_two.task_budget_gov_utility as root_two_task_budget_gov_utility',
+                'root_two.root_two_bedget as root_two_root_two_bedget',
+                'root_two.root_two_cost as root_two_root_two_cost',
+                'root_two.root_two_pe as root_two_root_two_pe',
+                'root_two.root_two_non_pe as root_two_root_two_non_pe',
+                'root_two.root_two_wait_pay as root_two_root_two_wait_pay',
+                'root_two.root_two_refund as root_two_root_two_task_pay',
+                'root_two.root_two_refund as root_two_root_refund',
+                'root_two.mm as root_two_mm',
+                //'root_two.root_refund as root_two_root_refund',
+                'root_two.pe as root_two_pe',
+                'root_two.non_pe as root_two_non_pe',
+                'root_two.wait_pay as root_two_wait_pay',
+                'root_two.task_pay as root_two_task_pay',
+                'root_two.new_balance as root_two_new_balance',
+                'root_two.new_balance_re as root_two_new_balance_re',
+                'root_two.new_balance_2 as root_two_new_balance_2',
+                'root_two.balance_status as root_two_balance_status',
+
+
+
 
 
 
@@ -3502,7 +3636,7 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
             ->leftJoin(
                 DB::raw('(select tasks.task_parent,
                 sum( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_sum,
-
+                max( COALESCE(tasks.task_mm_budget,0))  as total_task_mm_budget_task_max,
                 sum(COALESCE(tasks.task_budget_gov_utility,0))
                 +sum(COALESCE(tasks.task_budget_it_operating,0))
                 +sum(COALESCE(tasks.task_budget_it_investment,0)) as total_task_task_budget ,
@@ -3689,44 +3823,238 @@ $result_query_op_in_un_sql = $result_query_op_in_un;
                 'tasks.task_id'
             )
 
-         /*    ->leftJoin(DB::raw("({$ctesumsurplusSqlnull} ) as ctesSqlnull"), function($join) {
+            ->leftJoin(
+                DB::raw('(
+                    SELECT
+                    1 AS RS,
+		task_id AS taskroot_id,
+		task_budget_it_operating,
+        task_budget_it_investment,
+        task_budget_gov_utility,
+        task_cost_it_operating,
+        task_cost_it_investment,
+        task_cost_gov_utility,
+        (task_budget_it_operating+task_budget_it_investment+task_budget_gov_utility)
+		AS root_st_bedget ,
+
+
+		(SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+			AND task_type is not null
+				AND deleted_at IS null) AS root_st_cost,
+
+					(SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 1
+				AND deleted_at IS null) AS root_st_pe,
+
+
+		(SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 2
+				AND deleted_at IS null) AS root_st_non_pe,
+
+				(SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS root_wait_pay 	,
+
+
+	(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_refund_pa_status = 2
+				AND deleted_at IS null)
+AS root_refund ,
+
+
+
+
+
+
+        (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_id  AND deleted_at IS null )
+		AS mm ,
+
+
+		(SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 1
+				AND deleted_at IS null) AS pe,
+		(SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 2
+				AND deleted_at IS null) AS non_pe,
+		(SELECT SUM(task_cost_it_operating)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS wait_pay ,
+		(SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
+		OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS task_pay,
+
+                (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS new_balance,
+
+
+                (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_budget_type = 1
+				AND deleted_at IS null) AS new_balance_re,
+
+
+
+						(SELECT 	sum(task_budget_it_operating)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS new_balance_2,
+		 (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_refund_pa_status = 1
+				AND deleted_at IS null) AS balance_status
+
+FROM tasks WHERE  tasks.deleted_at IS null AND task_parent IS NULL ORDER BY task_id ASC
+                ) as root_st'),
+                'root_st.taskroot_id',
+                '=',
+                'tasks.task_id'
+            )
+
+            ->leftJoin(
+                DB::raw('(
+                    SELECT
+                    2 AS RS,
+                    task_id AS taskroot_id,
+                    task_parent,
+                    task_budget_it_operating,
+                    task_budget_it_investment,
+                    task_budget_gov_utility,
+                    task_cost_it_operating,
+                    task_cost_it_investment,
+                    task_cost_gov_utility,
+
+                    (task_budget_it_operating+task_budget_it_investment+task_budget_gov_utility)
+                    AS root_two_bedget ,
+
+		(SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type is not null
+				AND deleted_at IS null)  AS root_two_cost,
+
+						(SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 1
+				AND deleted_at IS null) AS root_two_pe,
+
+
+		(SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_type = 2
+				AND deleted_at IS null) AS root_two_non_pe,
+
+	 (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND deleted_at IS null) AS root_two_wait_pay,
+
+
+	(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+				AND task_refund_pa_status = 1
+				AND deleted_at IS null)
+AS root_two_refund ,
+
+
+
+
+
+
+                    (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_id  AND deleted_at IS null )
+                    AS mm ,
+
+
+                    (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND task_type = 1
+                            AND deleted_at IS null) AS pe,
+                    (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND task_type = 2
+                            AND deleted_at IS null) AS non_pe,
+                    (SELECT SUM(task_cost_it_operating)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND deleted_at IS null) AS wait_pay ,
+                    (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
+                    OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
+                            AND deleted_at IS null) AS task_pay,
+
+                            (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND deleted_at IS null) AS new_balance,
+
+
+                            (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND task_budget_type = 2
+                            AND deleted_at IS null) AS new_balance_re,
+
+
+
+                                    (SELECT 	sum(task_budget_it_operating)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND deleted_at IS null) AS new_balance_2,
+                     (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+                            AND task_refund_pa_status = 1
+                            AND deleted_at IS null) AS balance_status
+
+            FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
+                ) as root_two'),
+                'root_two.taskroot_id',
+                '=',
+                'tasks.task_id'
+            )
+
+            /*    ->leftJoin(DB::raw("({$ctesumsurplusSqlnull} ) as ctesSqlnull"), function($join) {
                 $join->on('ctesSqlnull.ctetask_id', '=', 'tasks.task_id');
             }) */
 
-          /*   ->joinSub($result_query_operating_sql, 'result_query_operating', function ($join) {
+            /*   ->joinSub($result_query_operating_sql, 'result_query_operating', function ($join) {
                 $join->on('result_query_operating.root', '=', 'tasks.task_id');
             }) */
+            // ->leftJoin(DB::raw("({$root_task_st_query->toSql()}) as root_st"), 'root_st.taskroot_id', '=', 'tasks.task_id')
+
+            //      ->leftJoin(DB::raw("({$root_task_st_query->toSql()}) as root_st"), 'root_st.taskroot_id', '=', 'tasks.task_id')
+            // ->mergeBindings($root_task_st_query)
+
+
             ->leftJoin(DB::raw("($query_op_in_un) as cteop_in_un"), 'cteop_in_un.root', '=', 'tasks.task_id')
-           // ->leftJoin(DB::raw("($results_task_refund_pa) as results_task_refund_pa"), 'results_task_refund_pa.root', '=', 'tasks.task_id')
+            // ->leftJoin(DB::raw("($results_task_refund_pa) as results_task_refund_pa"), 'results_task_refund_pa.root', '=', 'tasks.task_id')
 
             ->leftJoin(DB::raw("({$cteQuery->toSql()} )  as cte"), 'cte.root', '=', 'tasks.task_id')
             ->mergeBindings($cteQuery)
 
-            ->leftJoin(DB::raw("({$ctesumsurplusSqlnull->toSql()}) as ctesSqlnull"), function($join) {
+            ->leftJoin(DB::raw("({$ctesumsurplusSqlnull->toSql()}) as ctesSqlnull"), function ($join) {
                 $join->on('ctesSqlnull.ctetask_id', '=', 'tasks.task_id');
             })
             ->mergeBindings($ctesumsurplusSqlnull)
             //    ->leftJoin(DB::raw("({$ctesumsurplusQuery->toSql()} )  as cteplus"), 'cteplus.task_id', '=', 'tasks.task_id')
-        //->leftJoin(DB::raw("({$ctetasksumsurplusQuery->toSql()} )  as cteplustask"), 'cteplustask.root_task_id', '=', 'tasks.task_id')
+            //->leftJoin(DB::raw("({$ctetasksumsurplusQuery->toSql()} )  as cteplustask"), 'cteplustask.root_task_id', '=', 'tasks.task_id')
 
 
-       // ->mergeBindings($ctetasksumsurplusQuery)
-        //     ->mergeBindings($ctesumsurplusQuery)
+            // ->mergeBindings($ctetasksumsurplusQuery)
+            //     ->mergeBindings($ctesumsurplusQuery)
             //->mergeBindings($ctesumsurplusSql) // ผสาน bindings จาก query หลัก
             // Merge the bindings from the main query
 
             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
             ->where('tasks.project_id', $id)
-
+            ->groupBy('tasks.task_id')
             ->orderBy('task_parent')
             ->orderBy('task_id')
             ->get()
             ->toArray());
+        // dd($tasks->tosql());
 
-// dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
-           // dd($tasks,$ctesumsurplusSqlnull->get());
-           // dd($tasks,$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa,$result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
-            $tasks = json_decode(json_encode($tasks), true);
+        // dd($result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
+        //dd($tasks,$ctesumsurplusSqlnull->get());
+        // dd( $root_task_st_query ->get(),$tasks,$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa,$result_query_op_in_un,$result_query_it_operating,$result_query_it_investment,$result_query_gov_utility);
+        $tasks = json_decode(json_encode($tasks), true);
         $cteQueryArray = json_decode(json_encode($cteQuery), true);
 
         /*  $task_sub_refund_total_count = count($tasks);
@@ -3745,9 +4073,10 @@ dd($task_sub_refund_total_count);
 
            dd($tasks); */
 
-           //dd($tasks);
+        // dd($tasks);
 
         //  dd(['tasks' => $tasksArray, 'cteQuery' => $cteQueryArray]);
+
 
         foreach ($tasks as $task) {
             (float) $__budget_gov = (float) $task['task_budget_gov_operating'] + (float) $task['task_budget_gov_utility'] + (float) $task['task_budget_gov_investment'];
@@ -3783,7 +4112,7 @@ dd($task_sub_refund_total_count);
             ((float) $__total_Leasttask_sum_cost_sub_end = (float) $task['total_Leasttask_sum_cost_sub_end']);
             ((float) $__total_sum_task_refund_pa_budget = (float) $task['total_sum_task_refund_pa_budget']);
 
-//cteใหม่16/10/66
+            //cteใหม่16/10/66
             ((float) $__sumSubtotaltask_budget_it_operating = (float) $task['sumSubtotaltask_budget_it_operating']);
             ((float) $__sumSubtotaltask_budget_it_investment = (float) $task['sumSubtotaltask_budget_it_investment']);
             ((float) $__sumSubtotaltask_budget_gov_utility = (float) $task['sumSubtotaltask_budget_gov_utility']);
@@ -3793,9 +4122,9 @@ dd($task_sub_refund_total_count);
             ((float) $_total_cost_op = (float) $task['total_cost_op']);
             ((float) $_total_cost_in = (float) $task['total_cost_in']);
             ((float) $_total_cost_gov = (float) $task['total_cost_gov']);
-            ((float) $_total_pay_cte= (float) $task['total_pay_cte']);
+            ((float) $_total_pay_cte = (float) $task['total_pay_cte']);
             ((float) $_total_paycons_cte = (float) $task['total_paycons_cte']);
-            ((float) $_total_pay_paycons_cte= (float) $task['total_pay_paycons_cte']);
+            ((float) $_total_pay_paycons_cte = (float) $task['total_pay_paycons_cte']);
             ((float) $_total_refund_cte = (float) $task['total_refund_cte']);
             ((float) $_sumSubtask_refund_pa_status = (float) $task['sumSubtask_refund_pa_status']);
             ((float) $_total_refund_status_count = (float) $task['total_refund_status_count']);
@@ -3809,19 +4138,12 @@ dd($task_sub_refund_total_count);
             ((float) $_total_refund_starut_b_root = (float) $task['total_refund_starut_b_root']);
             ((float) $_netSubtotal = (float) $task['netSubtotal']);
             ((float) $_root_task_task_parent_sub_value_plus_totoal = (float) $task['root_task_task_parent_sub_value_plus_totoal']);
-           // ((float) $_sumSubroot_task_task_parent_sub_value = (float) $task['sumSubroot_task_task_parent_sub_value']);
-
-
-
-
-
-
-
-
-         // ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
-
-
-             (float) $__totalLeastPay_Least =  $__totalLeastPay + $__totalLeastconPay;
+            // ((float) $_sumSubroot_task_task_parent_sub_value = (float) $task['sumSubroot_task_task_parent_sub_value']);
+            ((float) $_total_task_mm_budget_task_sum = (float) $task['total_task_mm_budget_task_sum']);
+            ((float) $_total_task_mm_budget_task_max = (float) $task['total_task_mm_budget_task_max']);
+            ((float) $_task_total_sum_budget = (float) $task['total_sum_budget']);
+            // ((float) $__total_taskcon_payzo = (float) $task['total_taskcon_payzo']);
+            (float) $__totalLeastPay_Least =  $__totalLeastPay + $__totalLeastconPay;
             (float) $__budget     = $__budget_gov + $__budget_it;
 
             (float) $__cost = array_sum([
@@ -3848,6 +4170,38 @@ dd($task_sub_refund_total_count);
 
             //dd($__balance_mmpr_sum);
 
+            //02112566
+            $__root_budget_it = (float) $task['root_st_task_budget_it_operating'];
+            //$__root_st_mm = (float) $task['root_st_mm'];
+            //$__root_refund_pa_budget = (float) $task['root_st_root_refund'];
+            $__root_st_root_st_cost = (float) $task['root_st_root_st_cost'];
+            $__root_budget_mm = (float) $task['root_st_mm'];
+            $__refund_pa_budget = (float) $task['root_st_root_refund'];
+            $__root_st_pe = (float) $task['root_st_pe'];
+            $__root_st_non_pe = (float) $task['root_st_non_pe'];
+            $__root_st_wait_pay = (float) $task['root_st_wait_pay'];
+            $__root_st_task_pay = (float) $task['root_st_task_pay'];
+            $__root_st_new_balance = (float) $task['root_st_new_balance'];
+            $__root_st_new_balance_re = (float) $task['root_st_new_balance_re'];
+            $__root_st_new_balance_2 = (float) $task['root_st_new_balance_2'];
+            $__root_st_balance_status = (float) $task['root_st_balance_status'];
+
+            $__root_two_budget_it = (float) $task['root_two_task_budget_it_operating'];
+            $__root_two_root_st_cost = (float) $task['root_two_root_two_cost'];
+            $__root_two_mm = (float) $task['root_two_mm'];
+            $__root_two_refund_pa_budget = (float) $task['root_two_root_refund'];
+            $__root_two_budget_mm = (float) $task['root_two_mm'];
+            $__root_two_refund_pa_budget = (float) $task['root_two_root_refund'];
+            $__root_two_pe = (float) $task['root_two_pe'];
+            $__root_two_non_pe = (float) $task['root_two_non_pe'];
+            $__root_two_wait_pay = (float) $task['root_two_wait_pay'];
+            $__root_two_task_pay = (float) $task['root_two_task_pay'];
+            $__root_two_new_balance = (float) $task['root_two_new_balance'];
+            $__root_two_new_balance_re = (float) $task['root_two_new_balance_re'];
+            $__root_two_new_balance_2 = (float) $task['root_two_new_balance_2'];
+            $__root_two_balance_status = (float) $task['root_two_balance_status'];
+
+
             (float) $__balance = $__budget - $__cost;
             ($gantt[] = [
                 'id'                    => 'T' . $task['task_id'] . $task['project_id'],
@@ -3865,8 +4219,6 @@ dd($task_sub_refund_total_count);
                 'budget_gov'            => $__budget_gov,
                 'budget_it_operating'   => $task['task_budget_it_operating'],
                 'budget_it_investment'  => $task['task_budget_it_investment'],
-
-
                 'budget_it'             => $__budget_it,
                 'budget'                => $__budget,
                 'balance'               => $__balance,
@@ -3875,8 +4227,6 @@ dd($task_sub_refund_total_count);
                 'cost'                  => $__cost,
                 'total_task_cost'                  => $__cost + $task['cost_pa_1'] + $task['cost_no_pa_2'],
                 'total_taskcon_cost_pa_1'  => $task['total_taskcon_cost_pa_1'],
-
-
                 'cost_pa_1'             => $task['cost_pa_1'],
                 'cost_no_pa_2'             => $task['cost_no_pa_2'],
                 'cost_disbursement'     => $project['cost_disbursement'],
@@ -3886,35 +4236,26 @@ dd($task_sub_refund_total_count);
                 'total_task_refund_pa_budget'             => $task['total_task_refund_pa_budget_1'] + $task['total_task_refund_pa_budget_2'],
                 'total_task_refund_pa_budget_1'             => $task['total_task_refund_pa_budget_1'],
                 'total_task_refund_pa_budget_2'             => $task['total_task_refund_pa_budget_2'],
-
                 'total_task_refund_budget_status'      => $task['total_task_refund_pa_budget_status'] + $task['total_task_refund_no_pa_budget_status'],
-
                 'task_refund_pa_budget_status'      => $task['total_task_refund_pa_budget_status'],
                 'task_refund_no_pa_budget_status'      => $task['total_task_refund_no_pa_budget_status'],
-
-
                 'balanc_mmpr_sum'             => $__balance_mmpr_sum,
                 'budget_total_task_mm'             => $task['total_task_mm_budget_task'],
-                'budget_total_task_mm_sum'             => $task['total_task_mm_budget_task_sum'],
+                'budget_total_task_mm_sum'             => $_total_task_mm_budget_task_sum,
+                'budget_total_task_mm_max'             => $_total_task_mm_budget_task_max,
                 'budget_task_mm_1'             => $task['total_task_mm_budget_1'],
                 'budget_task_mm_2'             => $task['total_task_mm_budget_2'],
-
                 'cost_disbursement_task'     => $__costs,
                 'task_total_pay'             => $task['total_pay'] + $task['total_taskcon_pay'] + $task['total_pay_1'] + $task['total_pay_2'],
-
                 'task_total_pay_1'             => $task['total_pay_1'],
                 'task_total_pay_2'             => $task['total_pay_2'],
                 'total_taskcon_pay'         =>  $task['total_taskcon_pay'],
-
                 'total_taskcon_pay_pa_1'    =>  $task['total_taskcon_pay_pa_1'],
                 'task_type'             => $task['task_type'],
                 'task_status'             => $task['task_status'],
                 'task_refund_pa_status'             => $task['task_refund_pa_status'],
                 'task_parent_sub_refund_pa_status'  => $task['task_parent_sub_refund_pa_status'],
                 'task_parent_sub'             => $task['task_parent_sub'],
-
-
-
                 'totalLeastBudget'              =>  $__totalLeastBudget,
                 'totalLeastCost'              =>  $__totalLeastCost,
                 'totalLeastPay_Least'              =>  $__totalLeastPay_Least,
@@ -3928,14 +4269,8 @@ dd($task_sub_refund_total_count);
                 'total_Leasttask_sum_cost_sub_end'  => $__total_Leasttask_sum_cost_sub_end,
 
                 'total_Leasttask_cost_sub_end_1'         => $task['total_task_refund_pa_budget_status'] + $task['total_task_refund_no_pa_budget_status'],
-
-
-
-
                 //'total_taskcon_payzo'  => $__total_taskcon_payzo,
                 //'total_task_taskcon_payzo '                     => $__total_task_taskcon_payzo ,
-
-
                 'type'                  => 'task',
                 'task_parent_sub_refund'             =>    $task['total_task_refund_sub_budget_parent'],
                 'task_parent_sub_budget'                =>   $__task_parent_sub_budget,
@@ -3944,16 +4279,15 @@ dd($task_sub_refund_total_count);
                 'task_parent_sub_pay'                    =>      $task['task_parent_sub_pay'] + $task['total_taskcon_pay'],
                 //'total_cost_it_operatingzo'             =>  $__total_cost_it_operatingzo,
                 'task_seq_num'                           => $task['seq_num'],
-
-              'task_root_category' => $task['root_category'],
-              'task_root_task_task_parent_sub_value' => $task['root_task_task_parent_sub_value'],
-               'task_ctetask_id'=> $task['ctetask_id'],
-               'task_root_task_refund_pa_status'=> $task['root_task_refund_pa_status'],
-               'task_total_sum_budget'=> $task['total_sum_budget'],
-               'task_total_sum_cost'=> $task['total_sum_cost'],
-               'task_total_sum_task_refund_pa_budget'=> $__total_sum_task_refund_pa_budget,
-               //new
-               'sumSubtotaltask_budget_it_operating' => $__sumSubtotaltask_budget_it_operating,
+                'task_root_category' => $task['root_category'],
+                'task_root_task_task_parent_sub_value' => $task['root_task_task_parent_sub_value'],
+                'task_ctetask_id' => $task['ctetask_id'],
+                'task_root_task_refund_pa_status' => $task['root_task_refund_pa_status'],
+                'task_total_sum_budget' => $_task_total_sum_budget,
+                'task_total_sum_cost' => $task['total_sum_cost'],
+                'task_total_sum_task_refund_pa_budget' => $__total_sum_task_refund_pa_budget,
+                //new
+                'sumSubtotaltask_budget_it_operating' => $__sumSubtotaltask_budget_it_operating,
                 'sumSubtotaltask_budget_it_investment' => $__sumSubtotaltask_budget_it_investment,
                 'sumSubtotaltask_budget_gov_utility' => $__sumSubtotaltask_budget_gov_utility,
                 'total_sum_budget_op_in_gov' => $__sumSubtotaltask_budget_it_operating + $__sumSubtotaltask_budget_it_investment + $__sumSubtotaltask_budget_gov_utility,
@@ -3980,12 +4314,46 @@ dd($task_sub_refund_total_count);
                 'total_refund_starut_b_root' => $_total_refund_starut_b_root,
                 'netSubtotal' => $_netSubtotal,
                 'root_task_task_parent_sub_value_plus_totoal' => $_root_task_task_parent_sub_value_plus_totoal,
-               //'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
-               'sumSubtotal_mm_budget' => $task['sumSubtotal_mm_budget'],
+                //'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
+                'sumSubtotal_mm_budget' => $task['sumSubtotal_mm_budget'],
                 'sumSubtotal_mm_budget_sum' => $task['sumSubtotal_mm_budget_sum'],
                 'sumSubtotal_mm_budget_max' => $task['sumSubtotal_mm_budget_max'],
                 'sumSubtotal_mm_budget_min' => $task['sumSubtotal_mm_budget_min'],
                 'sumSubroot_task_task_parent_sub_value_plus' => $task['sumSubroot_task_task_parent_sub_value_plus'],
+                //02112566
+                'root_rs_id' => $task['root_st_rs'],
+                'root_budget_it' => $__root_budget_it,
+                'root_st_root_st_cost' => $__root_st_root_st_cost,
+
+                // 'root_mm' => $__root_mm,
+                //'root_refund_pa_budget' => $__root_refund_pa_budget,
+                'root_budget_mm' => $__root_budget_mm,
+                'root_refund_pa_budget' => $__refund_pa_budget,
+                'root_st_pe' => $__root_st_pe,
+                'root_st_non_pe' => $__root_st_non_pe,
+                'root_st_wait_pay' => $__root_st_wait_pay,
+                'root_st_task_pay' => $__root_st_task_pay,
+                'root_st_new_balance' => $__root_st_new_balance,
+                'root_st_new_balance_re' => $__root_st_new_balance_re,
+                'root_st_new_balance_2' => $__root_st_new_balance_2,
+                'root_st_balance_status' => $__root_st_balance_status,
+                'root_two_rs_id' => $task['root_two_rs'], // 'root_two_rs_id' => $task['root_two_rs'],
+                'root_two_budget_it' => $__root_two_budget_it,
+                'root_two_root_st_cost' => $__root_two_root_st_cost,
+                'root_two_mm' => $__root_two_mm,
+                'root_two_refund_pa_budget' => $__root_two_refund_pa_budget,
+                'root_two_budget_mm' => $__root_two_budget_mm,
+                'root_two_refund_pa_budget' => $__root_two_refund_pa_budget,
+                'root_two_pe' => $__root_two_pe,
+                'root_two_non_pe' => $__root_two_non_pe,
+                'root_two_wait_pay' => $__root_two_wait_pay,
+                'root_two_task_pay' => $__root_two_task_pay,
+                'root_two_new_balance' => $__root_two_new_balance,
+                'root_two_new_balance_re' => $__root_two_new_balance_re,
+                'root_two_new_balance_2' => $__root_two_new_balance_2,
+                'root_two_balance_status' => $__root_two_balance_status,
+
+
 
 
                 // 'owner' => $project['project_owner'],
@@ -3996,10 +4364,29 @@ dd($task_sub_refund_total_count);
             ($__project_parent[] = $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id']);
             ($__project_parent_cost[] = 'parent');
         }
+        //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
- //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
+        //dd($root_task_st);
+        //2112566
+
+        /* foreach ($root_task_st as $root_task) {
+    // Cast the properties to float as needed
+    $__budget_it = (float) $root_task->task_budget_it_operating;
+    $__budget_mm = (float) $root_task->mm;
+    $__refund_pa_budget = (float) $root_task->root_refund;
+
+    // Append to the $gantt array
+    $gantt[] = [
+
+        'root_text'                 => $root_task->task_name,
+        'root_budget_gov_operating' => $__budget_it,
+        'root_mm'                   => $__budget_mm,
+        'root_refund_pa_budget'     => $__refund_pa_budget,
+    ];
+} */
+        //dd($root_task_st,$gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
         $contractgannt = DB::table('tasks')
 
@@ -4089,21 +4476,21 @@ dd($task_sub_refund_total_count);
         } */
         // dd($gantt);
 
- //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
+        //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
 
-     $ctesumsurplus = $ctesumsurplusQuery->get();
-     ($ctesumsurplus);
+        $ctesumsurplus = $ctesumsurplusQuery->get();
+        ($ctesumsurplus);
 
 
-   //  dd($ctesumsurplus_data);
+        //  dd($ctesumsurplus_data);
 
 
 
-     //dd($ctesumsurplus_data);
+        //dd($ctesumsurplus_data);
 
-     $data = DB::table('tasks')
+        $data = DB::table('tasks')
             ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
@@ -4201,21 +4588,21 @@ dd($task_sub_refund_total_count);
         ($gantt[0]['budget_total_mm_pr2_2'] =  (($budget['total'] - $gantt[0]['budget_total_mm_p']) + $gantt[0]['refund_pa_budget']));
         //($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
 
-         ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
+        ($gantt[0]['budget_total_task_budget_end'] = $budget['budget_total_task_budget_end']);
         ($gantt[0]['budget_total_task_budget_end_p2'] = $budget['budget_total_task_budget_end_p2']);
 
-        $gantt[0]['budget_root']= $gantt[0]['budget'];
-        $gantt[0]['root_total_task_budget_cost_2']= $gantt[0]['root_total_task_budget_cost'];
+        $gantt[0]['budget_root'] = $gantt[0]['budget'];
+        $gantt[0]['root_total_task_budget_cost_2'] = $gantt[0]['root_total_task_budget_cost'];
         $gantt[0]['refund_pa_budget_2'] = $gantt[0]['refund_pa_budget'];
-        $gantt[0]['budget_total_task_budget_end_root_1'] =(($gantt[0]['budget_root']-$gantt[0]['root_total_task_budget_cost_2']));
-        ($gantt[0]['budget_total_task_budget_end_root'] =(($gantt[0]['budget']-$gantt[0]['root_total_task_budget_cost'])+ $gantt[0]['refund_pa_budget'])) ;
+        $gantt[0]['budget_total_task_budget_end_root_1'] = (($gantt[0]['budget_root'] - $gantt[0]['root_total_task_budget_cost_2']));
+        ($gantt[0]['budget_total_task_budget_end_root'] = (($gantt[0]['budget'] - $gantt[0]['root_total_task_budget_cost']) + $gantt[0]['refund_pa_budget']));
 
         $gantt[0]['budget_total_task_budget_end_root_1'] = number_format($gantt[0]['budget_total_task_budget_end_root_1'], 2);
 
-        $gantt[0]['budget_total_task_budget_end_3'] = number_format($gantt[0]['budget_total_task_budget_end'],2);
+        $gantt[0]['budget_total_task_budget_end_3'] = number_format($gantt[0]['budget_total_task_budget_end'], 2);
 
 
-       // $gantt[0]['budget_total_task_budget_end_3'] = ($gantt[0]['budget_total_task_budget_end']);
+        // $gantt[0]['budget_total_task_budget_end_3'] = ($gantt[0]['budget_total_task_budget_end']);
 
         // $budget['budget_total_taskcon_pay_con'] = $gantt[0]['budget_total_taskcon_pay_con'];
         // $budget['root_total_pay']
@@ -4226,11 +4613,11 @@ dd($task_sub_refund_total_count);
         //$budget['budget_total_mm_pr2'] = $gantt[0]['budget_total_mm_pr2'];
         $budget['balance'] = $gantt[0]['balance'];
         //  $budget['balance'] = $gantt[0]['balance'];
-/*          echo "<pre>";
+        /*          echo "<pre>";
         var_dump($gantt);
         dd($gantt, $budget); */
 
-        //dd($gantt,$budget,$rootsums,$cteQuery->get());
+        // dd($gantt,$budget,$rootsums,$cteQuery->get());
         $labels = [
             'project' => 'โครงการ/งานประจำ',
 
@@ -4356,7 +4743,7 @@ dd($task_sub_refund_total_count);
 
 
 
-        // dd($operating_mm_sum);
+        //dd($operating_mm_pa_no);
 
         //4
 
@@ -4389,6 +4776,8 @@ dd($task_sub_refund_total_count);
         //5
 
         $op_mm = $operating_mm_pa + $operating_mm_pa_no;
+
+        // dd( $op_mm );
         ($op_refund = $operating_refund_pa + $operating_refund_pa_no);
         $op_refund_mm_pr = $project['budget_it_operating'] - ($op_mm - $op_refund);
 
@@ -4577,7 +4966,7 @@ dd($task_sub_refund_total_count);
         ($investment_refund_pa_no = (float)$investment_refund_pa_no);
         //5
         $is_mm = $investment_mm_pa + $investment_mm_pa_no;
-
+        // dd($is_mm);
         ($is_refund = $investment_refund_pa + $investment_refund_pa_no);
         $is_refund_mm_pr = $project['budget_it_investment'] - ($is_mm - $is_refund);
 
@@ -4927,6 +5316,14 @@ dd($task_sub_refund_total_count);
             'contract_tasks',
             'is_refund_mm_pr',
             'is_budget',
+            'investment_mm_pa',
+            'investment_mm_pa_no',
+            'is_mm',
+
+            'operating_mm_pa',
+            'operating_mm_pa_no',
+            'op_mm',
+
 
             'op_refund_budget_pr',
             'op_refund_mm_pr',
@@ -4940,6 +5337,7 @@ dd($task_sub_refund_total_count);
             'ut_refund_pa_no',
             'result',
             'utsc_mm_pa',
+            'utsc_mm_pa_no',
             'utsc_mm',
             'ut_budget_sum',
             'ut_budget_sum_no',
@@ -5503,32 +5901,218 @@ dd($task_sub_refund_total_count);
     //////////////////////////////////////////////////////////////////////
     public function taskShow(Request $request, $project, $task)
     {
-
+      DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         ($project = Project::find(Hashids::decode($project)[0]));
         ($task = Task::find(Hashids::decode($task)[0]));
+//05112566
+$query_task_op_in_un = "
+WITH RECURSIVE nodes AS (
+    SELECT
+        tasks.task_id,
+        COALESCE(tasks.task_parent, 0) AS idtask_parent,
+        tasks.task_name,
+				tasks.task_parent,
+        tasks.task_parent_sub,
+				sum(COALESCE(tasks.task_parent, 0)+COALESCE(tasks.task_parent_sub,0)),
+		sum(COALESCE(tasks.task_parent)+COALESCE(tasks.task_parent_sub)),
+									CASE
+	WHEN sum(COALESCE( tasks.task_parent_sub)) = 99 THEN 0
+	WHEN sum(COALESCE( tasks.task_parent_sub)) = 2 THEN 2
+    WHEN 	sum(COALESCE(tasks.task_parent, 0)+COALESCE(tasks.task_parent_sub,0)) > 2 THEN 3
+    WHEN 	sum(COALESCE(tasks.task_parent)+COALESCE(tasks.task_parent_sub)) IS NULL THEN 1
+    ELSE 0
+END AS root_task_task_parent_sub_value_plus,
+				tasks.task_mm_budget,
+        tasks.task_budget_it_operating,
+        tasks.task_cost_it_operating,
+				tasks.task_pay,
+        tasks.task_refund_pa_status,
+        tasks.task_refund_pa_budget,
+				tasks.task_parent_sub_refund_budget,
+				    CASE
+        WHEN  tasks.task_refund_pa_status = 1 THEN  0
+        WHEN  tasks.task_refund_pa_status = 2 THEN tasks.task_refund_pa_budget
+        WHEN  tasks.task_refund_pa_status = 3 THEN 3
+        WHEN  tasks.task_refund_pa_status IS NULL THEN 0
+        ELSE 0
+    END AS root_task_refund_pa_status_value,
+	CASE
+    WHEN  tasks.task_refund_pa_status = 1 THEN  0
+    WHEN  tasks.task_parent IS NOT NULL and  tasks.task_refund_pa_status = 1  then 0
+    WHEN  tasks.task_refund_pa_status = 2 THEN tasks.task_parent_sub_refund_budget
+    WHEN  tasks.task_refund_pa_status = 3 THEN tasks.task_parent_sub_refund_budget
+    WHEN  tasks.task_refund_pa_status IS NULL THEN 0
+    ELSE 0
+END AS root_task_parent_sub_refund_budget,
 
 
+				ad.total_pay,
+        ad.total_taskcon_cost_pa_1,
+      ad.total_taskcon_pay_pa_1
+    FROM tasks
+    INNER JOIN projects ON projects.project_id = tasks.project_id
+    LEFT JOIN (
+        SELECT
+            tasks.task_id,
+            SUM(COALESCE(tasks.task_pay,0)) as total_pay,
+            SUM(COALESCE(taskcons.taskcon_cost_gov_utility,0))
+            + SUM(COALESCE(taskcons.taskcon_cost_it_operating,0))
+            + SUM(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_taskcon_cost_pa_1,
+            SUM(COALESCE(taskcons.taskcon_pay,0)) as total_taskcon_pay_pa_1
+        FROM tasks
+        INNER JOIN contract_has_tasks ON tasks.task_id = contract_has_tasks.task_id
+        INNER JOIN contracts ON contract_has_tasks.contract_id = contracts.contract_id
+        INNER JOIN taskcons ON contracts.contract_id = taskcons.contract_id
+        WHERE tasks.task_type=1 AND tasks.deleted_at IS NULL
+        GROUP BY tasks.task_id
+    ) AS ad ON ad.task_id = tasks.task_id
+    WHERE tasks.project_id = 80 AND tasks.deleted_at IS NULL
+		GROUP BY tasks.task_id
+    UNION
+    SELECT 0, null, null, null,0,0, 0,0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0
+),
+cte AS (
+    SELECT t.*, t.task_id AS root
+         , idtask_parent AS idtask_parent0
+         , task_name as task_name0
+				 , task_parent as task_parent0
+         , task_parent_sub AS task_parent_sub0
+				 , root_task_task_parent_sub_value_plus as root_task_task_parent_sub_value_plus0
+				 , task_mm_budget As task_mm_budget0
+         , task_budget_it_operating AS task_budget_it_operating0
+         , task_cost_it_operating AS task_cost_it_operating0
+         , task_pay AS task_pay0
+         , total_taskcon_pay_pa_1 AS taskcons_pay0
+         , task_refund_pa_status AS task_refund_pa_statusy0
+
+
+					,root_task_refund_pa_status_value as root_task_refund_pa_status_value0
+
+					,root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
+
+				 , task_mm_budget As sumSubtotal_mm
+         , task_budget_it_operating AS sumSubtotal
+         , task_cost_it_operating AS sumSubtask_cost_it_operating
+         , task_pay AS sumSubtask_pay
+         , total_taskcon_pay_pa_1 as sumSubtaskcon_pay
+         , task_refund_pa_budget AS sumSubtask_refund_pa_budget
+				 , task_refund_pa_status AS sumSubtask_refund_pa_statusy
+				 , task_parent_sub_refund_budget as sumSubtask_parent_sub_refund_budget
+				 ,root_task_refund_pa_status_value as sumSubroot_task_refund_pa_status_value
+				 ,root_task_parent_sub_refund_budget as  sumSubroot_root_task_parent_sub_refund_budget
+
+    FROM nodes AS t
+    UNION ALL
+    SELECT t.*, t0.root
+        , t0.idtask_parent0
+        , t0.task_name0
+        	, t0.task_parent0
+         , t0.task_parent_sub0
+				 , t0.root_task_task_parent_sub_value_plus0
+        ,t0.task_mm_budget0
+        , t0.task_budget_it_operating0
+        , t0.task_cost_it_operating0
+        , t0.task_pay0
+        , t0.taskcons_pay0
+        , t0.task_refund_pa_statusy0
+				,t0.root_task_refund_pa_status_value0
+
+				,t.root_task_task_parent_sub_value_plus as sumSubroot_task_task_parent_sub_value_plus
+				 , t.task_mm_budget AS sumSubtotal_mm
+         , t.task_budget_it_operating AS sumSubtotal
+         , t.task_cost_it_operating AS sumSubtask_cost_it_operating
+         , t.task_pay AS sumSubtask_pay
+         , t.total_taskcon_pay_pa_1 as sumSubtaskcon_pay
+         , t.task_refund_pa_budget AS sumSubtask_refund_pa_budget
+				 , t.task_refund_pa_status AS sumSubtask_refund_pa_statusy
+				 , t.task_parent_sub_refund_budget as sumSubtask_parent_sub_refund_budget
+				 ,t.root_task_refund_pa_status_value as sumSubroot_task_refund_pa_status_value
+				 ,t.root_task_parent_sub_refund_budget as  sumSubroot_root_task_parent_sub_refund_budget
+
+    FROM cte AS t0
+    JOIN nodes AS t
+      ON t.idtask_parent = t0.task_id
+),
+cte2 AS (
+    SELECT task_id AS root,
+           task_id,
+					 task_name,
+           COALESCE(task_parent, 0) AS idtask_parent,
+           task_parent_sub,
+           1 AS RS,
+           CONCAT('0-', task_id) AS levei,
+           task_refund_pa_status,
+           task_refund_pa_budget
+    FROM tasks
+    INNER JOIN projects ON projects.project_id = tasks.project_id
+    WHERE task_parent IS NULL AND projects.project_id = 80 AND tasks.deleted_at IS NULL
+    UNION ALL
+    SELECT c.root,
+           t.task_id,
+					  t.task_name,
+
+           COALESCE(t.task_parent, 0) AS idtask_parent,
+           t.task_parent_sub,
+           c.RS + 1 AS RS,
+           CONCAT(c.levei, '-', t.task_id) AS levei,
+           t.task_refund_pa_status,
+           t.task_refund_pa_budget
+    FROM tasks AS t
+    JOIN cte2 AS c ON t.task_parent = c.task_id
+)
+(SELECT
+  ROW_NUMBER() OVER (ORDER BY cte.task_parent_sub, root) AS seq_num,
+    cte.task_id,
+	c.levei,
+	c.task_name,
+	c.rs
+
+
+
+FROM cte
+JOIN
+    cte2 c ON c.task_id = cte.task_id
+GROUP BY cte.root);
+
+";
+$result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
+   // dd($result_query_task_op_in_un);
 
         /*
         $contract    = Contract::find($contract_id);
         $taskcon       = taskcon::find($taskcon_id);
         ($id_contract = Hashids::decode($contract)[0]);
         $id_taskcon    = Hashids::decode($taskcon)[0]; */
-        //dd($task);
+       // dd($task);
+
         ($tasks = $task->subtask);
         //  dd($task);
         // dd($project,$task);
         ($tasks_sub = $task->subtask);
 
 
-
+        $id_root_tasks = Task::select('task_id')->where('task_id', $task->task_id)
+      ->whereNull('tasks.deleted_at')->get()->pluck('task_id');
         //($id = Hashids::decode($project));
         $id_tasks = Task::select('task_id')->where('task_id', $task->task_id)
             ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
         $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
             ->whereNull('tasks.deleted_at')->get()->pluck('task_id');
-        // dd($id_tasks,$id_tasks_sub);
-        $cteQuery = DB::table('tasks')
+        // dd($id_root_tasks,$id_tasks,$id_tasks_sub);
+
+         $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
+         $collection = collect($result_query_task_op_in_un);
+         $task_ra = $collection->where('task_id', $task->task_id)->first();
+         $task_rs_get =  collect($task_ra);
+
+
+
+         $task_ra_two = $collection->where('task_parent', $task->task_id)
+         ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->first();
+         //dd($collection,$result_query_task_op_in_un,$task_ra,$task_ra_two);
+
+       $cteQuery = DB::table('tasks')
             ->withRecursiveExpression('cte', function ($rec) use ($id_tasks, $project, $id_tasks_sub) {
                 $rec->select(
                     't.task_id',
@@ -5691,35 +6275,10 @@ dd($task_sub_refund_total_count);
             return $carry;
         }, ['operating' => ['totalLeastBudget' => 0, 'totalLeastCost' => 0, 'totalLeasttask_refund_pa_budget' => 0, 'totalLeastCost_1' => 0]]);
 
+       // dd($cteQueryResults);
+       // dd($cteQuery_task_sub_sums);
 
-        //dd($cteQuery_task_sub_sums);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // dd($cteQuery);
+     //dd($cteQuery);
 
         ($sum_task_budget_it_operating = $task->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_it_operating'));
         $sum_task_budget_it_investment = $task->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_it_investment');
@@ -5816,7 +6375,7 @@ dd($task_sub_refund_total_count);
 
 
         $task_sub = $task->subtask->where('tasks.deleted_at', NULL);
-
+       // dd($task_sub);
         $sum_tasksub_budget_it_operating = $task_sub->sum('task_budget_it_operating');
         ($sum_tasksub_cost_budget_it_operating = $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_cost_it_operating'));
         $sum_tasksub_refund_budget_it_operating = $task_sub->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
@@ -5901,7 +6460,7 @@ dd($task_sub_refund_total_count);
         $task_sub_refund_count = $task->subtask->where('task_refund_pa_status', 2)->count();
 
 
-       // dd( $task_sub_refund_total, $task_sub_refund_01,$task_sub_refund,$task_sub_refund_total_count, $task_sub_refund_count,$task_sub_refund_01_count);
+        // dd( $task_sub_refund_total, $task_sub_refund_01,$task_sub_refund,$task_sub_refund_total_count, $task_sub_refund_count,$task_sub_refund_01_count);
         $task_sub_refund_pa_budget_01 = $task_sub_refund_01->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 0.01) {
                 $carry['operating']['task_refund_pa_budget'] += round($subtask->task_refund_pa_budget, 2);
@@ -5925,7 +6484,7 @@ dd($task_sub_refund_total_count);
             'utility' => ['task_refund_pa_budget' => 0]
         ]);
 
-       // dd($task_sub_refund_pa_budget_01);
+        // dd($task_sub_refund_pa_budget_01);
 
         $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 0.01) {
@@ -5950,8 +6509,8 @@ dd($task_sub_refund_total_count);
             'utility' => ['task_refund_pa_budget' => 0]
         ]);
 
-        //dd($task_sub_sums,$cteQuery_task_sub_sums);
-    //dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
+       // dd($task_sub_sums,$cteQuery_task_sub_sums);
+       //  dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
 
 
 
@@ -5981,11 +6540,11 @@ dd($task_sub_refund_total_count);
 
         //dd($task->subtask);
 
-        //  dd($contract);
+          //dd($contract);
 
 
 
-        //dd($task->subtask->task_refund_pa_status);;
+        // dd($task->subtask->task_refund_pa_status);;
 
         // dd($latestContract,$results,$taskcons,$contract,$project,$task);
 
@@ -6000,7 +6559,360 @@ dd($task_sub_refund_total_count);
 
         //dd($single_contract,$project);
 
+        //04112566
+
+        // สร้าง subquery
+        $rootTwoCostSubquery = Task::selectRaw('SUM(task_cost_it_operating) + SUM(task_cost_it_investment) + SUM(task_cost_gov_utility)')
+            ->whereColumn('task_parent', 'tasks.task_id') // ต้องใช้ alias ของตารางหลักถ้ามีการ join
+            ->whereNotNull('task_type')
+            ->whereNull('deleted_at')
+            ->toSql(); // แปลงเป็น SQL string
+
+
+            $root_two_pe = Task::selectRaw('SUM(task_cost_it_operating) + SUM(task_cost_it_investment) + SUM(task_cost_gov_utility)')
+            ->where('task_type','=', 1)
+            ->whereColumn('task_parent', 'tasks.task_id') // ต้องใช้ alias ของตารางหลักถ้ามีการ join
+
+            ->whereNull('deleted_at')
+            ->toSql(); // แปลงเป็น SQL string
+
+
+            $root_two_non_pe = Task::selectRaw('SUM(task_cost_it_operating) + SUM(task_cost_it_investment) + SUM(task_cost_gov_utility)')
+
+            ->whereColumn('task_parent', 'tasks.task_id') // ต้องใช้ alias ของตารางหลักถ้ามีการ join
+            ->where('task_type','=', '2')
+            ->whereNull('deleted_at')
+            ->toSql(); // แปลงเป็น SQL string
+
+           // dd($root_two_non_pe);
+           $idRootTask = $id_root_tasks; // ตัวแปรที่เก็บ ID ของงานหลัก
+        // สร้าง query หลัก
+      /*   $rootTaskFinancials   = DB::table('tasks')
+        ->select('root_st.*', 'root_two.*')
+        ->leftJoin(
+            DB::raw('(
+                SELECT
+                1 AS RS_1,
+    task_id AS taskroot_id,
+    task_parent AS taskroot_parent,
+    task_budget_it_operating as taskroot_budget_it_operating,
+    task_budget_it_investment as taskroot_budget_it_investment,
+    task_budget_gov_utility as taskroot_budget_gov_utility,
+    task_cost_it_operating as taskroot_cost_it_operating,
+    task_cost_it_investment as taskroot_cost_it_investment,
+    task_cost_gov_utility   as taskroot_cost_gov_utility,
+
+    (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+    AND task_type is not null
+    AND deleted_at IS null)   AS root_st_bedget ,
+
+
+    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+        AND task_type is not null
+            AND deleted_at IS null) AS root_st_cost,
+
+                (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS root_st_pe,
+
+
+    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS root_st_non_pe,
+
+            (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS root_wait_pay 	,
+
+
+(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_refund_pa_status = 2
+            AND deleted_at IS null)
+AS root_refund ,
+
+    (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_id  AND deleted_at IS null )
+    AS mm ,
+
+
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS pe,
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS non_pe,
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS wait_pay ,
+    (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS task_pay,
+
+            (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS new_balance,
+
+
+            (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_budget_type = 1
+            AND deleted_at IS null) AS new_balance_re,
+
+
+
+     (SELECT 	sum(task_budget_it_operating)+sum(task_budget_it_investment)+sum(task_budget_gov_utility)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS new_balance_2,
+     (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_refund_pa_status = 1
+            AND deleted_at IS null) AS balance_status
+
+FROM tasks WHERE  tasks.deleted_at IS null AND task_parent IS NULL ORDER BY task_id ASC
+            ) as root_st'),
+            'root_st.taskroot_id',
+            '=',
+            'tasks.task_id'
+        )
+
+        ->leftJoin(
+            DB::raw('(
+                SELECT
+                2 AS RS_2,
+                task_id AS taskroot_two_id,
+                task_parent AS taskroot_two_parent,
+                task_budget_it_operating as taskroot_two_budget_it_operating,
+                task_budget_it_investment as taskroot_two_budget_it_investment,
+                task_budget_gov_utility as taskroot_two_budget_gov_utility,
+                task_cost_it_operating  as taskroot_two_cost_it_operating,
+                task_cost_it_investment as taskroot_two_cost_it_investment,
+                task_cost_gov_utility as taskroot_two_cost_gov_utility,
+
+                (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type is not null
+                AND deleted_at IS null)  AS root_two_budget,
+
+    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type is not null
+            AND deleted_at IS null)  AS root_two_cost,
+
+                    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS root_two_pe,
+
+
+    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS root_two_non_pe,
+
+ (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND deleted_at IS null) AS root_two_wait_pay,
+
+
+(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_refund_pa_status = 1
+            AND deleted_at IS null)
+AS root_two_refund ,
+
+
+
+
+
+
+                (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_two_parent  AND deleted_at IS null )
+                AS mm ,
+
+
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_type = 1
+                        AND deleted_at IS null) AS pe,
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_type = 2
+                        AND deleted_at IS null) AS non_pe,
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS wait_pay ,
+                (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS task_pay,
+
+                        (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS new_balance,
+
+
+                        (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_budget_type = 2
+                        AND deleted_at IS null) AS new_balance_re,
+
+
+
+                                (SELECT 	(SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS new_balance_2,
+                 (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_refund_pa_status = 1
+                        AND deleted_at IS null) AS balance_status
+
+        FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
+            ) as root_two'),
+            'root_two.taskroot_two_parent',
+            '=',
+            'tasks.task_id'
+        )
+
+            ->where('task_id',  $idRootTask)
+            ->whereNull('deleted_at')
+
+            ->groupBy('tasks.task_id')
+          //  ->orderBy('task_parent')
+            ->orderBy('task_id')
+            ->get()
+            ->toArray()
+
+            ;
+*/
+            $subtasks = $task->subtask()->whereNull('deleted_at')->get();
+
+            // Assuming you want to get the ID of the first subtask
+            $idRootTasktwo = optional($subtasks->first())->task_id;
+
+            $id_tasks_two_id_parent =  ($id_tasks->first());
+
+
+            $rootTaskFinancialsQuery   = DB::table('tasks')
+            ->select('root_two.*')
+            ->leftJoin(
+                DB::raw('(
+                    SELECT
+                    2 AS RS_2,
+                    task_id AS taskroot_two_id,
+                    task_parent AS taskroot_two_parent,
+                    task_budget_it_operating as taskroot_two_budget_it_operating,
+                    task_budget_it_investment as taskroot_two_budget_it_investment,
+                    task_budget_gov_utility as taskroot_two_budget_gov_utility,
+                    task_cost_it_operating  as taskroot_two_cost_it_operating,
+                    task_cost_it_investment as taskroot_two_cost_it_investment,
+                    task_cost_gov_utility as taskroot_two_cost_gov_utility,
+
+
+                    (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                    AND task_type is not null
+                    AND deleted_at IS null)  AS root_two_budget,
+
+        (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type is not null
+                AND deleted_at IS null)  AS root_two_cost,
+
+                        (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type = 1
+                AND deleted_at IS null) AS root_two_pe,
+
+
+        (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type = 2
+                AND deleted_at IS null) AS root_two_non_pe,
+
+     (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND deleted_at IS null) AS root_two_wait_pay,
+
+
+    (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_refund_pa_status = 1
+                AND deleted_at IS null)
+    AS root_two_refund ,
+
+                    (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_two_parent  AND deleted_at IS null )
+                    AS mm ,
+
+
+                    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND task_type = 1
+                            AND deleted_at IS null) AS pe,
+                    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND task_type = 2
+                            AND deleted_at IS null) AS non_pe,
+                    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND deleted_at IS null) AS wait_pay ,
+
+                            (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_two_parent
+                    OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND deleted_at IS null) AS task_pay,
+
+                            (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND deleted_at IS null) AS new_balance,
+
+
+                            (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND task_budget_type = 2
+                            AND deleted_at IS null) AS new_balance_re,
+
+
+
+                                    (SELECT 	(SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND deleted_at IS null) AS new_balance_2,
+                     (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_two_parent
+                            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                            AND task_refund_pa_status = 1
+                            AND deleted_at IS null) AS balance_status
+
+            FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
+                ) as root_two'),
+                'root_two.taskroot_two_id',
+                '=',
+                'tasks.task_id'
+            )
+
+                ->where('task_parent',$id_tasks_two_id_parent )
+                ->whereNull('tasks.deleted_at')
+
+                ->groupBy('taskroot_two_id')
+              //  ->orderBy('task_parent')
+                ->orderBy('task_id')
+                ;
+                $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
+//05112566
+
+
+                // Debugging the output
+               // dd($task_rs_get, $id_tasks,$id_tasks_two_id_parent,$subtasks ,$idRootTasktwo,$rootTaskFinancialstwo,$task_ra,$rootTaskFinancialsQuery);
+
+        // ดึงข้อมูล
+       // $root_task_two = $root_task_two->get();
+
+      //dd($rootTaskFinancials,$rootTaskFinancialstwo); // แสดงผลข้อมูลที่ได้
+
         return view('app.projects.tasks.show', compact(
+            'task_rs_get',
+            'cteQueryResults',
             'projectcontract',
             'contractIds',
             'single_contract',
@@ -7003,24 +7915,24 @@ dd($task_sub_refund_total_count);
 
         $messages = [
 
-                                'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
-                                'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
-                                //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
-                                'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
-                                'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-                                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+            'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
+            'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
+            //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
+            'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
+            'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+            //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+            'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+            //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
 
-                                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+            'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+            //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
 
-                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
-                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
         ];
 
 
@@ -7030,9 +7942,9 @@ dd($task_sub_refund_total_count);
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
-           // 'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            // 'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
             'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
-            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+            'task_pay' => ['min:0', new ValidateTaskPay($costs)],
             'task_refund_pa_budget' => 'between:0,9999999999',
 
         ];
@@ -7060,7 +7972,7 @@ dd($task_sub_refund_total_count);
         $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
         $task->task_pay_date = $pay_date ?? date('Y-m-d 00:00:00');
-        $task->task_status = $request->input('task_status');
+        $task->task_status = 1;
 
         $task->project_id = $id;
         // $task->task_name = $request->input('taskcon_mm_name');
@@ -7088,7 +8000,7 @@ dd($task_sub_refund_total_count);
 
         $task->task_refund_pa_budget = $task_refund_pa_budget ?? null;
 
-        $task->task_refund_pa_status = 1 ;
+        $task->task_refund_pa_status = 1;
 
 
         $task->task_parent_sub_refund_pa_status = 1 ?? null;
@@ -7158,7 +8070,7 @@ dd($task_sub_refund_total_count);
                 $totol_task_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
 
                 $task_parent_sub->task_parent_sub_cost = $task_parent_sub->task_parent_sub_cost + $totol_task_cost;
-                $task_parent_sub->task_parent_sub_refund_budget = $task_parent_sub->task_parent_sub_refund_budget + $task_refund_pa_budget ?? null;
+                //  $task_parent_sub->task_parent_sub_refund_budget = $task_parent_sub->task_parent_sub_refund_budget + $task_refund_pa_budget ?? null;
                 $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
                 $task_parent_sub->save();
 
@@ -7169,7 +8081,7 @@ dd($task_sub_refund_total_count);
                 if ($task_parent_st !== null) {
                     $task_parent_st->task_parent_sub_cost = $task_parent_st->task_parent_sub_cost + $totol_task_cost;
                     $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $task_pay;
-                    $task_parent_st->task_parent_sub_refund_budget = $task_refund_pa_budget;
+                    //    $task_parent_st->task_parent_sub_refund_budget = $task_refund_pa_budget;
                     $task_parent_st->save();
                 }
             }
@@ -7245,24 +8157,24 @@ dd($task_sub_refund_total_count);
 
         $messages = [
 
-                                'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
-                                'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
-                                //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
-                                'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
-                                'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-                                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+            'taskcon_mm_name.required' => 'กรุณาระบุชื่องาน',
+            'task_start_date.required' => 'กรุณาระบุวันที่เริ่มต้น',
+            //'task_start_date.date_format' => 'กรุณากรอกวันที่ให้ถูกต้อง',
+            'task_end_date.required' => 'กรุณาระบุวันที่สิ้นสุด',
+            'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+            'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+            //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+            'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+            //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
 
-                                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+            'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+            //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
 
-                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
-                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
         ];
 
 
@@ -7274,7 +8186,7 @@ dd($task_sub_refund_total_count);
             'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
             'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
             'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
-            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+            'task_pay' => ['min:0', new ValidateTaskPay($costs)],
 
         ];
 
@@ -7418,7 +8330,7 @@ dd($task_sub_refund_total_count);
         $task->project_id = $id;
         $task->task_name = $request->input('taskcon_mm_name');
         $task->task_description = trim($request->input('task_description'));
-        $task->task_status = $request->input('task_status');
+        $task->task_status = 1;
 
         $task->task_parent = $request->input('task_parent') ?? null;
         $task->task_parent_sub = $request->input('task_parent_sub') ?? null;
@@ -7436,6 +8348,7 @@ dd($task_sub_refund_total_count);
         $task->task_cost_gov_utility = $task_cost_gov_utility ?? null;
 
         $task->task_refund_pa_budget = $task_refund_pa_budget ?? null;
+        $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
         $task->task_mm_budget                 =  $task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment ?? null;
         $task->task_mm_name        = $request->input('taskcon_mm_name');
         $task->task_mm        = $request->input('taskcon_mm');
@@ -7445,15 +8358,17 @@ dd($task_sub_refund_total_count);
         // $task->taskcon_pp        = $request->input('taskcon_pp');
         $task->task_type = $request->input('task_type');
         //
+       // $task->task_parent_sub = $request->input('task_parent_sub') ?? null;
 
 
         $task->task_po_name = $request->input('task_po_name');
         $task->task_er_name = $request->input('task_er_name');
 
 
-        $task->task_po_budget = $task_po_budget;
-        $task->task_er_budget = $task_er_budget;
-        $task->task_refund_pa_status = 1 ;
+        $task->task_po_budget = $task_po_budget ?? null;
+        $task->task_er_budget = $task_er_budget ?? null;
+        $task->task_refund_pa_status = 1;
+
         ($task);
         // Save the Project
         if (!$task->save()) {
@@ -7595,7 +8510,7 @@ dd($task_sub_refund_total_count);
 
         //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
 
-         //dd($task,$taskcon);
+        //dd($task,$taskcon);
 
 
         $origin = $request->input('origin');
@@ -7656,18 +8571,6 @@ dd($task_sub_refund_total_count);
       */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
 
         if ($task_parent_sub !== null) {
@@ -7678,7 +8581,7 @@ dd($task_sub_refund_total_count);
             $task_parent_sub->task_parent_sub_cost = $task_parent_sub['task_parent_sub_cost'] + $totol_task_cost;
 
 
-            $task_parent_sub->task_parent_sub_refund_budget = $task_parent_sub['task_parent_sub_refund_budget'] + $task_refund_pa_budget ?? null;
+            // $task_parent_sub->task_parent_sub_refund_budget = $task_parent_sub['task_parent_sub_refund_budget'] + $task_refund_pa_budget ?? null;
 
             $task_parent_sub->task_parent_sub_pay = $task_parent_sub['task_parent_sub_pay'] + $task_pay;
 
@@ -7690,7 +8593,7 @@ dd($task_sub_refund_total_count);
             if ($task_parent_st !== null) {
                 $task_parent_st->task_parent_sub_cost = $task_parent_st['task_parent_sub_cost'] + $totol_task_cost;
                 $task_parent_st->task_parent_sub_pay = $task_parent_st['task_parent_sub_pay'] + $task_pay;
-                $task_parent_st->task_parent_sub_refund_budget = $task_refund_pa_budget;
+                //   $task_parent_st->task_parent_sub_refund_budget = $task_refund_pa_budget;
                 $task_parent_st->save();
             }
         }
@@ -7848,7 +8751,7 @@ dd($task_sub_refund_total_count);
         $task->project_id = $id;
         $task->task_name = $request->input('task_name');
         $task->task_description = trim($request->input('task_description'));
-        $task->task_status = $request->input('task_status');
+        $task->task_status = 1;
         $task->task_parent = $request->input('task_parent') ?? null;
         $task->task_start_date  = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date    = $end_date ?? date('Y-m-d 00:00:00');
@@ -7865,15 +8768,16 @@ dd($task_sub_refund_total_count);
         $task->task_er_name = $request->input('task_er_name');
 
 
-        $task->task_po_budget = $task_po_budget;
-        $task->task_er_budget = $task_er_budget;
+        $task->task_po_budget = $task_po_budget ?? null;
+        $task->task_er_budget = $task_er_budget ?? null;
 
         $task->task_refund_pa_budget = $task_refund_pa_budget;
+        $task->task_parent_sub_refund_budget = $task_refund_pa_budget;
         $task->task_pay = $task_pay;
         // $task->task_cost_disbursement =  $taskcon_bd_budget + $taskcon_ba_budget;
 
         $task->task_type = $request->input('task_type');
-        $task->task_refund_pa_status = 1 ;
+       // $task->task_refund_pa_status = 1;
         //  dd($task);
         // Save the Project
 
@@ -8385,7 +9289,7 @@ dd($task_sub_refund_total_count);
         //วใ dd($task_sub_sums);
         $taskcon = Taskcon::where('task_id', $task->task_id)->first();
         $tasksDetails = $task;
-       // dd($tasks ,$taskcon);
+        // dd($tasks ,$taskcon);
 
 
 
@@ -8436,10 +9340,10 @@ dd($task_sub_refund_total_count);
         $task_budget_gov_utility = $tasks_without_parent->sum('task_budget_gov_utility');
 
 
-         // dd($tasks_without_parent);
+        // dd($tasks_without_parent);
 
 
-         $costs = [
+        $costs = [
             'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
             'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
             'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
@@ -8447,19 +9351,19 @@ dd($task_sub_refund_total_count);
 
         $messages = [
             'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-                                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-                                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-                                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-                                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+            'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+            //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+            'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+            //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
 
-                                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-                                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-                                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+            'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+            //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
 
-                                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
-                                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
         ];
 
 
@@ -8467,10 +9371,10 @@ dd($task_sub_refund_total_count);
         $rules = [
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
-            'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
-            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
-            'task_pay' => [ 'min:0', new ValidateTaskPay($costs)],
+            //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+            //'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            //'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+            'task_pay' => ['min:0', new ValidateTaskPay($costs)],
 
         ];
 
@@ -8560,9 +9464,11 @@ dd($task_sub_refund_total_count);
         $task->task_cost_gov_utility =  $task_cost_gov_utility;
         $task->task_cost_it_investment = $task_cost_it_investment;
         $task->task_refund_pa_budget = $task_refund_pa_budget;
+        $task->task_parent_sub_refund_budget = $task_refund_pa_budget;
         $task->task_mm_budget = $task_mm_budget;
         $task->task_pay = $task_pay;
         $task->task_type = $request->input('task_type');
+        //  $task->task_budget_type = 1;
         // Update other task attributes as needed
         //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
         // $task->taskcon_pp        = $request->input('taskcon_pp');
@@ -8792,7 +9698,7 @@ dd($task_sub_refund_total_count);
 
         return redirect()->route('project.view', $project->hashid);
     }
- /*   $request->validate([
+    /*   $request->validate([
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             if($request->input('task_budget_it_operating') > 0){
@@ -8844,7 +9750,21 @@ dd($task_sub_refund_total_count);
         $task = Task::find($id);
         if ($task) {
             $task->task_refund_pa_status = '2';
-            $task->task_status = '2';
+            //  $task->task_status = '2';
+            $task->task_budget_type = '1';
+            $task->save();
+        }
+        return redirect()->route('project.view', $project);
+    }
+
+    public function taskRefund_two($project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+        $task = Task::find($id);
+        if ($task) {
+            $task->task_refund_pa_status = '2';
+            // $task->task_status = '2';
+            $task->task_budget_type = '2';
 
             $task->save();
         }
@@ -9212,7 +10132,7 @@ dd($task_sub_refund_total_count);
 
             $task->task_status = '2';
             $task->task_refund_pa_status = '2';
-
+            $task->task_budget_type = '1';
             $task->task_refund_pa_budget =
                 (($tasksum->task_budget_it_operating + $tasksum->task_budget_it_investment + $tasksum->task_budget_gov_utility)
                     -

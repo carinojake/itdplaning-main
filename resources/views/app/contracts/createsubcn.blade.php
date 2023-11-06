@@ -367,7 +367,7 @@
                                                                                 if ($tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] > 0) {
                                                                                     $value = $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'];
                                                                                 } elseif ($tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] > 0) {
-                                                                                    $value = $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'];
+                                                                                    $value =($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'];
                                                                                 } elseif ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0) {
                                                                                     $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
                                                                                 }
@@ -445,7 +445,7 @@
                                                                                     if ($tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] > 0) {
                                                                                         $value = $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'];
                                                                                     } elseif ($tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] > 0) {
-                                                                                        $value = $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'];
+                                                                                        $value = ($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'];
                                                                                     } elseif ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0) {
                                                                                         $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
                                                                                     }
@@ -782,6 +782,26 @@
                                                                     style="display:none;">
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-12">
+                                                                            <table border="1">
+                                                                                <tr>
+                                                                                    <th>sl</th>
+                                                                                    <th>TA</th>
+                                                                                    <th>DA</th>
+                                                                                    <th>HA</th>
+                                                                                    <th>Total</th>
+                                                                                    <th>delTotal</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>1</td>
+                                                                                    <td><input class="expenses"></td>
+                                                                                    <td><input class="expenses"></td>
+                                                                                    <td><input class="expenses"></td><td>
+                                                                                    <input id="expenses_sum"></td><td>
+                                                                                    <input id="expenses_delsum"></td>
+                                                                                </tr>
+
+
+                                                                              </table>
                                                                             <label id="rounds_label" for="rounds"
                                                                                 class="form-label">{{ __('งวดที่') }}</label>
                                                                             <span class="text-danger">*</span>
@@ -1350,11 +1370,11 @@
         var task_budget_it_investment = {{ $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] }};
         var task_budget_gov_utility = {{ $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] }};
 
-        $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
+        $("#contract_mm_budget").on("input", function() {
             var max = 0;
             var fieldId = $(this).attr('id');
 
-            if (fieldId === "contract_mm_budget" || fieldId === "contract_pr_budget" ) {
+            if (fieldId === "contract_mm_budget" ) {
                 if (task_budget_it_operating > 0) {
                     max = parseFloat(task_budget_it_operating);
                 } else if (task_budget_it_investment > 0) {
@@ -1382,13 +1402,33 @@
 
 <script>
     $(document).ready(function() {
-        $("#contract_pa_budget").on("input", function() {
+        $("#contract_pr_budget").on("input", function() {
             var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
             var current = parseFloat($(this).val().replace(/,/g, ""));
             if (current > contract_mm_budget) {
                 Swal.fire({
                     title: "เกิดข้อผิดพลาด",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    text: "วงเงิน (บาท) MM จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    icon: "error",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "ตกลง"
+                });
+               /*  $(this).val(contract_mm_budget.toFixed(2)); */
+                $(this).val(0);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#contract_pa_budget").on("input", function() {
+            var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > contract_pr_budget) {
+                Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    text: "วงเงิน (บาท) pa จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pr_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
@@ -1556,46 +1596,81 @@
                 });
             </script> --}}
 
-                            <script>
-                                $(document).ready(function() {
-                $('#rounds').change(function() {
-                var rounds = $(this).val();
-                $('#tasksContainer').empty(); // clear the container
-                for (var i = 0; i < rounds; i++) {
-                var content = `
-                <div class="row mt-3">
-                <div class="col-md-12">
-                <br> <!-- Line break for spacing -->
-                <div class="col-md-3">
-                <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
-                </div>
-
-                <br> <!-- Line break for spacing -->
-                <div class="col-md-3">
-                <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                <input type="text" name="tasks[` + i + `][taskbudget]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
-                </div>
-                <br> <!-- Line break for spacing -->
-                <div class="col-md-3">
-
-                </div>
-                </div>
-                </div>
-                `;
-                $('#tasksContainer').append(content);
-                }
-//   <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
-//<input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
 
 
 
 
-                // ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
-                $(":input").inputmask();
-                });
+            <script>
+                $(document).ready(function() {
+                    // When the number of rounds changes, update the tasks container
+                    $('#rounds').change(function() {
+                        var rounds = $(this).val();
+                        $('#tasksContainer').empty(); // clear the container
+                        for (var i = 0; i < rounds; i++) {
+                            var content = `
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <br> <!-- Line break for spacing -->
+                                    <div class="col-md-3">
+                                        <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                                        <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
+                                    </div>
+                                    <br> <!-- Line break for spacing -->
+                                    <div class="col-md-3">
+                                        <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                                        <input type="text" name="tasks[` + i + `][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
+                                    </div>
+                                    <br> <!-- Line break for spacing -->
+                                    <div class="col-md-3">
+                                        <!-- Additional content can go here -->
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            $('#tasksContainer').append(content);
+                        }
+                        // Apply inputmask to the newly added input elements
+                        $(":input").inputmask();
+                    });
+
+                    // When an expense input changes, update the total and check against the budget
+                    $(document).on('input', '.expenses', function() {
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var sum = 0;
+                        var remainingBudget = contract_pa_budget;
+                        $('.expenses').each(function() {
+                            var value = parseFloat($(this).val().replace(/,/g, ""));
+                            if (!isNaN(value)) {
+                                sum += value;
+                            }
+                            remainingBudget = contract_pa_budget - sum;
+                            if (remainingBudget < 0) {
+                                Swal.fire({
+                                    title: "เกิดข้อผิดพลาด",
+                                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                    icon: "error",
+                                    confirmButtonColor: "#3085d6",
+                                    confirmButtonText: "ตกลง"
+                                });
+                                $(this).val(0); // Reset the input value to 0
+                                sum -= value; // Subtract the reset value from the sum
+                                remainingBudget = contract_pa_budget - sum;
+                            }
+                        });
+
+                        // Update the total expenses display
+                        $('#expenses_sum').val(sum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    });
                 });
                 </script>
+
+
+
+
+
+
+
 
 
             <script>

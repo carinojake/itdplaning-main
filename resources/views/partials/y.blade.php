@@ -1,7 +1,7 @@
 
 
 @isset($contract)
-    <h5>มีสัญญา</h5>
+    <h5>มีสัญญา</h5>[{{   $task_rs_get['rs'] }}]
 
 {{--     <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
         class="btn-sm btn btn-primary text-white"><i class="cil-folder-open ">ข้อมูล </i></a>

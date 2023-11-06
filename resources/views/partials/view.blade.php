@@ -77,17 +77,19 @@
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-2"
-                             data-bs-title="งบประมาณคงเหลือที่ไช้ได้" data-bs-content="
-                            @if ($project['budget_it_operating'] > 0)
-                                งบกลาง ICT :   {{ number_format(floatval($op_refund_mm_pr), 2) }} บาท <br>
-                            @endif
-                            @if ($project['budget_it_investment'] > 0)
-                                งบดำเนินงาน : {{ number_format(floatval($is_refund_mm_pr), 2) }}บาท <br>
-                            @endif
-                            @if ($project['budget_gov_utility'] > 0)
-                                งบสาธารณูปโภค :  {{ number_format(floatval($ut_refund_mm_pr), 2) }} บาท <br>
-                            @endif
-                            " data-bs-trigger="hover focus">
+                             data-bs-title="งบประมาณ คงเหลือที่ไช้ได้" data-bs-content="
+                             @if ($project['budget_it_operating'] > 0)
+                             งบกลาง ICT :  {{ number_format($project['budget_it_operating'] - ($otpsa1 + $otpsa2), 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_it_investment'] > 0)
+                             งบดำเนินงาน :{{ number_format($project['budget_it_investment'] - ($ispa + $itpsa1), 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_gov_utility'] > 0)
+                             งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }} บาท <br>
+                         @endif
+                         งบประมาณคงเหลือที่ไช้ได้รวมทั้ง : <p>   {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }} บาท <br>
+                         " data-bs-trigger="hover focus">
+
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
                                     {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
@@ -105,14 +107,59 @@
                                     @endif
                                 </div>
                                 <small class="text-xl">
-                                    งบประมาณคงเหลือที่ไช้ได้
+                                    งบประมาณที่ได้รับการจัดสรรคงเหลือที่ไช้ได้
                                 </small>
                             </button>
                         </div>
                     </div>
                 </div>
 
+                <div class="col-md-auto">
+                    <!--คงเหลือ-->
+                    <div class="card  ">
+                        <div class="card-body">
 
+
+                            <button id="popover_content_wrapper"
+                            class="btn" data-bs-toggle="popover"
+                             data-bs-placement="bottom"
+                             data-bs-custom-class="custom-popover-2"
+                             data-bs-title="งบประมาณ คงเหลือที่ไช้ได้" data-bs-content="
+                             @if ($project['budget_it_operating'] > 0)
+                             งบกลาง ICT :  {{ number_format($project['budget_it_operating'] - ($otpsa1 + $otpsa2), 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_it_investment'] > 0)
+                             งบดำเนินงาน :{{ number_format($project['budget_it_investment'] - ($ispa + $itpsa1), 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_gov_utility'] > 0)
+                             งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }} บาท <br>
+                         @endif
+                         งบประมาณคงเหลือที่ไช้ได้รวมทั้ง : <p>   {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }} บาท <br>
+                         " data-bs-trigger="hover focus">
+
+                                <div class="fs-4 fw-semibold text-success">
+                                    @if ( $budget['project_type'] == 1)
+                                    {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }}
+
+                                    {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+
+                                    @elseif( $budget['project_type'] == 2 )
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+                                    @elseif( $budget['project_type'] == 2)
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+
+
+                                    @endif
+                                </div>
+                                <small class="text-xl">
+                                    งบประมาณที่ได้เหลือที่
+                                </small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- end1 งาน -->
@@ -208,7 +255,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-danger">
                                         <!--รอการเบิกจ่ายทั้งหมด-->
-                                        {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa),2) }}
+                                        {{ number_format($op_mm-($otpsa1 + $otpsa2),2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">รอการเบิกจ่ายทั้งหมด<p>
@@ -224,7 +271,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-danger">
                                             <!--การเบิกจ่าย PA -->
-                                            {{ number_format($ospa - $otpsa1, 2) }}
+                                            {{ number_format($operating_mm_pa-$otpsa1, 2) }}
                                         </div>
                                         <small class="text-xl">รอการเบิกจ่าย <p>แบบมี PA
                                         </small>
@@ -238,7 +285,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-danger">
                                             <!--การเบิกจ่าย PA -->
-                                            {{ number_format($osa - $otpsa2, 2) }}
+                                            {{ number_format($operating_mm_pa_no-$otpsa2, 2) }}
                                         </div>
                                         <small class="text-xl">รอการเบิกจ่าย <p>แบบไม่มี PA
                                         </small>
@@ -333,6 +380,40 @@
                     </div>
 
                     <div class="col-md-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                    href="#multiCollapseExample1" role="button" aria-expanded="false"
+                                    aria-controls="multiCollapseExample1">
+                                    <div class="fs-4 ">
+                                        @if ( $budget['project_type'] == 1)
+                                        {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+                                     {{--    <p> 1. {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+                                    <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
+ --}}
+                                        <p> op {{ number_format(floatval($project['budget_it_operating']-($otpsa1 + $otpsa2)), 2) }}
+
+
+                                        @elseif( $budget['project_type'] == 2)
+                                        {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <small class="text-xl">
+                                            งบประมาณนี้ไม่ได้ไม่ใช้<p>
+                                                &nbsp;
+                                        </small>
+                                    </div>
+                                </button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-auto">
                         <div class="card ">
                             <div class="form-check form-switch">
                                 <input class="form-check-input "
@@ -397,7 +478,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-info">
                                         <!--รอการเบิกจ่ายทั้งหมด-->
-                                        {{ number_format($ispa + $isa, 2) }}
+                                        {{ number_format($is_mm, 2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และแบบไม่มี PA)</small>
@@ -412,7 +493,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-info">
                                             <!--การเบิกจ่าย PA -->
-                                            {{ number_format($ispa, 2) }}
+                                            {{ number_format($investment_mm_pa, 2) }}
                                         </div>
                                         <small class="text-xl">วงเงินที่ใช้จริง <p>รวมแบบมี
                                             PA </small>
@@ -426,7 +507,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-info">
                                             <!--การเบิกจ่าย ไม่แบบ PA -->
-                                            {{ number_format($isa , 2) }}
+                                            {{ number_format($investment_mm_pa_no , 2) }}
                                         </div>
                                         <div>
                                             <small class="text-xl">วงเงินที่ใช้จริง <p>แบบไม่มี
@@ -594,6 +675,48 @@
 
                     <div class="col-md-auto">
                         <div class="card">
+                            <div class="card-body">
+                                <button class="col-md-12 btn " data-bs-toggle="collapse"
+                                    href="#multiCollapseExample1" role="button" aria-expanded="false"
+                                    aria-controls="multiCollapseExample1">
+                                    <div class="fs-4">
+{{--                                         {{ number_format(floatval($is_refund_mm_pr), 2) }}
+ --}}{{--                                       is  {{ number_format(floatval(($project['budget_it_investment']-(($budget['in_totol_task_budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))), 2) }}
+ --}}                                 {{--    @if($project['budget_gov_utility'] > 1)
+                                    {{ number_format(floatval(($project['budget_it_investment']-(($project['budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))+$is_refund_mm_pr), 2) }}
+                                    @elseif($project['budget_it_investment'] > 0) --}}
+
+                              {{--       {{ number_format(floatval(($project['budget_it_investment']-(($project['budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))+$is_refund_mm_pr), 2) }}
+                                   {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+                         {{--      @endif --}}
+                        {{--  {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+
+                  {{--        {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
+
+                        in {{ number_format(floatval( $project['budget_it_investment']-($itpsa1 + $itpsa2)), 2) }}
+
+
+{{--                           {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
+ --}}
+{{--                       {{ number_format(floatval($rootsums_investment['totalLeastBudget_sum_investment']-$rootsums_investment['totalLeasttask_mm_budget_investment']), 2) }}
+ --}}
+                                    </div>
+
+
+                                    <div>
+                                        <small class="text-xl">
+                                            งบประมาณคงเหลือที่ไช้ได้<p>
+                                                &nbsp;
+                                        </small>
+                                    </div>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-auto">
+                        <div class="card">
                             <div class="form-check form-switch">
                                 <input class="form-check-input"
                                        type="checkbox"
@@ -660,7 +783,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-info">
                                             <!--รอการเบิกจ่ายทั้งหมด-->
-                                            {{ number_format($utpcs + $utsc, 2) }}
+                                            {{ number_format($utsc_mm, 2) }}
                                         </div>
                                         <div>
                                             <small class="text-xl">วงเงินที่ใช้จริง <p>(รวมแบบมี PA และแบบไม่มี PA)</small>
@@ -675,7 +798,7 @@
                                             aria-controls="multiCollapseExample1">
                                             <div class="fs-4 fw-semibold text-info">
                                                 <!--การเบิกจ่าย PA -->
-                                                {{ number_format($utpcs, 2) }}
+                                                {{ number_format($utsc_mm_pa, 2) }}
                                             </div>
                                             <small class="text-xl">วงเงินที่ใช้จริง <p>รวมแบบมี
                                                 PA</small>
@@ -689,7 +812,7 @@
                                             aria-controls="multiCollapseExample1">
                                             <div class="fs-4 fw-semibold text-info">
                                                 <!--การเบิกจ่าย ไม่แบบ PA -->
-                                                {{ number_format($utsc , 2) }}
+                                                {{ number_format($utsc_mm_pa_no , 2) }}
                                             </div>
                                             <div>
                                                 <small class="text-xl"> วงเงินที่ใช้จริง <p>แบบไม่มี
