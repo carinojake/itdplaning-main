@@ -126,28 +126,22 @@
                              data-bs-custom-class="custom-popover-2"
                              data-bs-title="งบประมาณ คงเหลือที่ไช้ได้" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
-                             งบกลาง ICT :  {{ number_format($project['budget_it_operating'] - ($otpsa1 + $otpsa2), 2) }} บาท <br>
+                             งบกลาง ICT :  {{ number_format( $budget['budget_total_cost_op'], 2) }} บาท <br>
                          @endif
                          @if ($project['budget_it_investment'] > 0)
-                             งบดำเนินงาน :{{ number_format($project['budget_it_investment'] - ($ispa + $itpsa1), 2) }} บาท <br>
+                             งบดำเนินงาน :{{ number_format( $budget['budget_total_cost_in'], 2) }} บาท <br>
                          @endif
                          @if ($project['budget_gov_utility'] > 0)
-                             งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }} บาท <br>
+                             งบสาธารณูปโภค : {{ number_format( $budget['budget_total_cost_ut'], 2) }} บาท <br>
                          @endif
-                         งบประมาณคงเหลือที่ไช้ได้รวมทั้ง : <p>   {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }} บาท <br>
                          " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
-                                    {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }}
+                                    {{ number_format(floatval( $budget['budget_total_cost']), 2) }}
 
                                     {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
 
-                                    @elseif( $budget['project_type'] == 2 )
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-
-                                    @elseif( $budget['project_type'] == 2)
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
 
 
 
@@ -392,7 +386,7 @@
 
                                     <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
  --}}
-                                        <p> op {{ number_format(floatval($project['budget_it_operating']-($otpsa1 + $otpsa2)), 2) }}
+                                        <p> op {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
@@ -693,7 +687,7 @@
 
                   {{--        {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
 
-                        in {{ number_format(floatval( $project['budget_it_investment']-($itpsa1 + $itpsa2)), 2) }}
+                        in {{ number_format(floatval( $budget['budget_total_cost_in']), 2) }}
 
 
 {{--                           {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
@@ -1015,7 +1009,46 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                            <p> ut {{ number_format(floatval( $budget['budget_total_task_budget_end_utility']), 2) }}
+                                            <p> ut {{ number_format(floatval($budget['budget_total_task_budget_end_utility']), 2) }}
+
+                                            {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
+
+{{--
+                                          @if($project['budget_it_investment'] > 1)
+                                            {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))+$ut_refund_mm_pr), 2) }}
+                                            @elseif($project['budget_gov_utility'] > 0) --}}
+{{--                                             {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))), 2) }}
+ --}}                                        {{--  {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+                                   {{--    @endif --}}
+{{--                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
+ --}}
+{{--                                    {{ number_format(floatval($project['budget_gov_utility']-$result_query_gov_utility_idParentCategory->sumSubtotaltask_budget_gov_utility0), 2) }}
+ --}}
+
+
+{{--                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
+ --}}
+                                        </div>
+                                        <div>
+                                            <small class="text-xl">
+                                                งบประมาณคงเหลือที่ไช้ได้<p>
+                                                    &nbsp;
+                                            </small>
+                                        </div>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <button class="btn "class="col-md-12 btn " data-bs-toggle="collapse"
+                                        href="#multiCollapseExample1" role="button" aria-expanded="false"
+                                        aria-controls="multiCollapseExample1">
+                                        <div class="fs-4 ">
+                                            <p> ut {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
 
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 

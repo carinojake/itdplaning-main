@@ -182,7 +182,9 @@
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="task_budget_it_operating"
                                                     name="task_budget_it_operating" min="0"
-                                                    value="{{ $task->task_budget_it_operating }}">
+                                                    value="{{ $task->task_budget_it_operating }}"
+                                                    @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif>
+
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
@@ -197,7 +199,11 @@
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="task_budget_it_investment"
                                                     name="task_budget_it_investment" min="0"
-                                                    value="{{ $task->task_budget_it_investment }}">
+                                                    value="{{ $task->task_budget_it_investment }}"
+
+
+
+                                                    @if(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) == 0) readonly @endif>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
@@ -213,7 +219,8 @@
                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                     class="form-control" id="task_budget_gov_utility"
                                                     name="task_budget_gov_utility" min="0"
-                                                    value="{{ $task->task_budget_gov_utility }}">
+                                                    value="{{ $task->task_budget_gov_utility }}"
+                                                    @if(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) == 0) readonly @endif>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>

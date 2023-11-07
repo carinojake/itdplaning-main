@@ -164,7 +164,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
-                                                                    @if ($ospa > 1)
+                                                                    @if ($budgets > 1)
                                                                     {{ number_format((($ospa +$osa)), 2) }}
                                                                     @endif
                                                                 </div>
@@ -181,7 +181,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
-                                                                    @if ($ispa > 1)
+                                                                    @if ($budgets > 1)
                                                                     {{ number_format((($ispa ) + ($isa)), 2) }}
                                                                     @endif
                                                                 </div>
@@ -199,7 +199,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
                                                                 <div class="fs-4 fw-semibold text-primary" >
-                                                                    @if ($utpcs > 1)
+                                                                    @if ($budgets > 1)
                                                                     {{ number_format($utpcs + $utsc, 2) }}
                                                                     @endif
                                                                 </div>
@@ -246,7 +246,7 @@
                 <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด-->
-                    @if ($ospa > 1)
+                    @if ($budgets > 1)
                     {{ number_format($ospa - $otpsa1 - ($otpsa2 - $osa), 2) }}
                     @endif
                 </div>
@@ -285,7 +285,7 @@
                 <div class="fs-4 fw-semibold text-danger"
                     >
                     <!--รวมเบิกจ่ายทั้งหมด 03082566-->
-                    @if ($utpcs > 1)
+                    @if ($budgets > 1)
                     {{ number_format(($utpcs - $utsc_pay_pa) + ($utsc-$utsc_pay),2)}}
                     @endif
                 </div>
@@ -336,7 +336,7 @@
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        @if ($otpsa1 > 1)
+                                                        @if ($budgets > 1)
                                                         {{ number_format($otpsa1 + $otpsa2, 2) }}
                                                         @endif
                                                     </div>
@@ -355,7 +355,7 @@
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        @if ($itpsa1 > 1 || $itpsa2 > 1 )
+                                                        @if ($budgets > 1)
                                                         {{ number_format($itpsa1 + $itpsa2, 2) }}
                                                         @endif
                                                     </div>
@@ -375,7 +375,8 @@
                                                     <div class="fs-4 fw-semibold text-warning"
                                                         >
                                                         <!--รวมเบิกจ่ายทั้งหมด-->
-                                                        @if ($utsc_pay_pa > 1 || $utsc_pay > 1)
+                                                       {{--  @if ($utsc_pay_pa > 1 || $utsc_pay > 1) --}}
+                                                       @if ($budgets > 1)
                                                         {{ number_format(($utsc_pay_pa +  $utsc_pay), 2) }}
                                                         @endif
                                                     </div>
@@ -447,7 +448,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($ispa > 1)
+                                                    @if ($budgets > 1)
                                                     {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
                                                     @endif
                                                     </div>

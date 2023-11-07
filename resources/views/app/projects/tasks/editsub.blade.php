@@ -244,7 +244,7 @@
 
                                         <div class="row mt-3">
                                             <div class="col-6 mt-3">
-                                                <strong><h4>วงเงินที่ขออนุมัติ</h4></strong>
+                                                <strong><h4>วงเงินที่ขออนุมัติ  PR </h4></strong>
                                                 @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_operating"
@@ -308,9 +308,9 @@
                                                 @endif
                                             </div>
 
-                                            @if ($task->task_parent_sub < 5)
+                                            @if ($task->task_parent_sub < 2)
                                             <div class="col-6 mt-3">
-                                                <strong><h4>ค่าใช้จ่าย</h4></strong>
+                                                <strong><h4>ค่าใช้จ่าย  (PA/ไม่มี PA)</h4></strong>
 
                                                 @if ($task->task_budget_it_operating > 0)
                                                 <div class="col-md-12">
@@ -403,7 +403,7 @@
                                     </div>
                                 </div>
 
-                                    @if ($task->task_type == 2)
+                                @if ($task->task_parent_sub < 2)
                                     <div id="pay_form" >
                                     <div >
                                     <h4>เบิกจ่าย</h4>
@@ -493,6 +493,13 @@
                                         </label>
                                       </div>
 
+                                      @if(auth()->user()->isAdmin())
+                                      {{-- Content for admin --}}
+                                      1
+                                  @else
+                                      {{-- Content for regular user --}}
+                                      2
+                                  @endif
 
 
                                 </div>
@@ -591,6 +598,8 @@
 
 
                                 </div>
+
+
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                            <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>
@@ -600,6 +609,7 @@
                 </div>
             </div>
         </div>
+
     </x-slot:content>
     <x-slot:css>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>

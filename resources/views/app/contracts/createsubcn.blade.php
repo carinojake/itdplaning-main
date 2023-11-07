@@ -1428,7 +1428,7 @@
             if (current > contract_pr_budget) {
                 Swal.fire({
                     title: "เกิดข้อผิดพลาด",
-                    text: "วงเงิน (บาท) pa จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pr_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    text: "วงเงิน (บาท) PR จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pr_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
@@ -1448,7 +1448,7 @@
             if (current > contract_pa_budget) {
                 Swal.fire({
                     title: "เกิดข้อผิดพลาด",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    text: "วงเงิน (บาท) PA จำนวนเงินที่ใส่ต้องไม่เกิน" + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
@@ -1468,7 +1468,7 @@
             if (current > contract_pa_budget) {
                 Swal.fire({
                     title: "เกิดข้อผิดพลาด",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    text: "วงเงิน (บาท) PA จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
@@ -1601,68 +1601,79 @@
 
 
             <script>
-                $(document).ready(function() {
-                    // When the number of rounds changes, update the tasks container
-                    $('#rounds').change(function() {
-                        var rounds = $(this).val();
-                        $('#tasksContainer').empty(); // clear the container
-                        for (var i = 0; i < rounds; i++) {
-                            var content = `
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <br> <!-- Line break for spacing -->
-                                    <div class="col-md-3">
-                                        <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                                        <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
-                                    </div>
-                                    <br> <!-- Line break for spacing -->
-                                    <div class="col-md-3">
-                                        <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                                        <input type="text" name="tasks[` + i + `][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
-                                    </div>
-                                    <br> <!-- Line break for spacing -->
-                                    <div class="col-md-3">
-                                        <!-- Additional content can go here -->
-                                    </div>
-                                </div>
-                            </div>
-                            `;
-                            $('#tasksContainer').append(content);
-                        }
-                        // Apply inputmask to the newly added input elements
-                        $(":input").inputmask();
-                    });
+            $(document).ready(function() {
+    $('#rounds').change(function() {
+        var rounds = $(this).val();
+        $('#tasksContainer').empty(); // clear the container
+        for (var i = 0; i < rounds; i++) {
+            var content = `
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <br> <!-- Line break for spacing -->
+                    <div class="col-md-3">
+                        <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                        <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
+                    </div>
+                    <br> <!-- Line break for spacing -->
+                    <div class="col-md-3">
+                        <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                        <input type="text" name="tasks[` + i + `][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
+                    </div>
+                    <br> <!-- Line break for spacing -->
+                    <div class="col-md-3">
+                        <!-- Additional content can go here -->
+                    </div>
+                </div>
+            </div>
+            `;
+            $('#tasksContainer').append(content);
+        }
+        // Apply inputmask to the newly added input elements
+        $(":input").inputmask();
+    });
 
-                    // When an expense input changes, update the total and check against the budget
-                    $(document).on('input', '.expenses', function() {
-                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-                        var sum = 0;
-                        var remainingBudget = contract_pa_budget;
-                        $('.expenses').each(function() {
-                            var value = parseFloat($(this).val().replace(/,/g, ""));
-                            if (!isNaN(value)) {
-                                sum += value;
-                            }
-                            remainingBudget = contract_pa_budget - sum;
-                            if (remainingBudget < 0) {
-                                Swal.fire({
-                                    title: "เกิดข้อผิดพลาด",
-                                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                                    icon: "error",
-                                    confirmButtonColor: "#3085d6",
-                                    confirmButtonText: "ตกลง"
-                                });
-                                $(this).val(0); // Reset the input value to 0
-                                sum -= value; // Subtract the reset value from the sum
-                                remainingBudget = contract_pa_budget - sum;
-                            }
-                        });
+    // When an expense input changes, update the total and check against the budget
+    $(document).on('input', '.expenses', function() {
+        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+        var sum = 0;
+        var inputs = $('.expenses').map(function() {
+            return parseFloat($(this).val().replace(/,/g, "")) || 0;
+        }).get();
 
-                        // Update the total expenses display
-                        $('#expenses_sum').val(sum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-                        $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-                    });
+        sum = inputs.reduce(function(a, b) { return a + b; }, 0);
+
+        // Calculate the remaining budget after each installment
+        var remainingBudget = contract_pa_budget;
+        for (var i = 0; i < inputs.length; i++) {
+            remainingBudget -= inputs[i];
+            if (remainingBudget < 0) {
+                // If the remaining budget after any installment is negative, show an error
+                Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum - inputs[i])).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท"
+                     +  "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท)",
+
+
+                    icon: "error",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "ตกลง"
+                }).then((result) => {
+                    if (result.value) {
+                        $('.expenses').eq(i).val(''); // Reset the value of the input that caused the error
+                        $('.expenses').eq(i).trigger('input'); // Trigger input event to recalculate
+                    }
                 });
+                break; // Exit the loop as we have found an error
+            }
+        }
+
+        if (remainingBudget >= 0) {
+            $('#expenses_sum').val(sum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+            $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        }
+    });
+});
+
                 </script>
 
 

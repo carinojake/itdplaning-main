@@ -1964,6 +1964,7 @@ $mainQuery = DB::query()
         ((float) $__root_task_mm_cost       = (float) $project['root_task_mm_cost']);
         ((float) $__root_conditional_sum_task_refund_pa_budget     = (float) $project['root_conditional_sum_task_refund_pa_budget']);
         //29/9/2566 เพิ่ม mm
+        ((float) $__task_root_total_cost      = (float)($project['total_cost_it_operating']+$project['total_cost_it_investment']+$project['total_cost_gov_utility']));
 
 
         $gantt[] = [
@@ -1990,6 +1991,10 @@ $mainQuery = DB::query()
             'total_cost_it_operating' => $__total_cost_it_operating,
             'total_cost_it_investment' => $__total_cost_it_investment,
             'total_cost_gov_utility' => $__total_cost_gov_utility,
+            'task_root_total_cost'  => $__task_root_total_cost,
+
+
+
             // 'cost_disbursement'     => $project['cost_disbursement'],
             'pay'                   => $__pay,
             'total_pay'              => $__pay + $__paycon,
@@ -2028,6 +2033,7 @@ $mainQuery = DB::query()
         $budget['budget_it_operating'] = $__budget_it_operating;
         $budget['budget_it_investment'] = $__budget_it_investment;
         $budget['budget_gov_utility'] = $__budget_gov_utility;
+        $budget['total_cost'] = $__cost;
 
 
         $budget['op_totol_task_budget_it_operating'] = $__op_totol_task_budget_it_operating;
@@ -2066,7 +2072,7 @@ $mainQuery = DB::query()
 
 
         $budget['total'] = $__budget;
-        ($budget['budget_total_mm88888888'] = $__mm);
+        ($budget['budget_total_mm'] = $__mm);
 
 
         $budget['budget_total_taskcon_pay_con'] = $__pay + $__paycon;
@@ -2099,10 +2105,10 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_operating'] = ($__budget_it_operating - (($__op_totol_task_budget_it_operating - $__op_total_task_mm_budget - $__op_total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment - (($__in_totol_task_budget_it_investment - $__in_total_task_mm_budget - $__in_total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility - (($__ut_totol_task_budget_gov_utility - $__ut_total_task_mm_budget - $__ut_total_task_refund_pa_budget_3)));
-        $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
-        $budget['budget_total_task_budget_end_utility1'] = ((($__ut_totol_task_budget_gov_utility)));
-        $budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
-        $budget['budget_total_task_budget_end_utility3'] =  $__ut_total_task_refund_pa_budget_3;
+      //  $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
+       // $budget['budget_total_task_budget_end_utility1'] = ((($__ut_totol_task_budget_gov_utility)));
+        //$budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
+        //$budget['budget_total_task_budget_end_utility3'] =  $__ut_total_task_refund_pa_budget_3;
 
         //$budget['budget_total_task_budget_end_operating'] =  $budget['budget_total_task_budget_end_operating'] - $budget['op_root_task_mm_budget'];
         //$budget['budget_total_task_budget_end_investment'] =  $budget['budget_total_task_budget_end_investment'] - $budget['in_root_task_mm_budget'];
@@ -2120,13 +2126,16 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_end_p2_mm'] = ($__total_task_budget - ($__pptotal_task_refund_pa_budget_3 + $__ppbtotal_task_refund_pa_budget_3));
 
-
+        $budget['budget_total_cost'] = ($__budget) - ($__cost);
+        $budget['budget_total_cost_op'] = ($__budget_it_operating) - ($__total_cost_it_operating);
+        $budget['budget_total_cost_in'] = ($__budget_it_investment) - ($__total_cost_it_investment);
+        $budget['budget_total_cost_ut'] = ($__budget_gov_utility) - ($__total_cost_gov_utility);
         $budget['budget_total_mm_pr'] = ($__budget) - ($__mm - $__prmm);
         $budget['budget_total_pay_con'] = ($__budget) - ($__pay + $__paycon);
 
         $budget['budget_total_task_budget_mm_refund'] = ($__total_task_budget - $__mm) + $__total_task_refund_pa_budget_3;
 
-        //dd($budget, $result_query_op_in_un);
+      // dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -4617,7 +4626,7 @@ dd($task_sub_refund_total_count);
         var_dump($gantt);
         dd($gantt, $budget); */
 
-        // dd($gantt,$budget,$rootsums,$cteQuery->get());
+       //  dd($gantt,$budget,$rootsums,$cteQuery->get());
         $labels = [
             'project' => 'โครงการ/งานประจำ',
 
@@ -5905,6 +5914,9 @@ dd($task_sub_refund_total_count);
         DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         ($project = Project::find(Hashids::decode($project)[0]));
         ($task = Task::find(Hashids::decode($task)[0]));
+
+
+
 //05112566
 $query_task_op_in_un = "
 WITH RECURSIVE nodes AS (
@@ -5967,7 +5979,7 @@ END AS root_task_parent_sub_refund_budget,
         WHERE tasks.task_type=1 AND tasks.deleted_at IS NULL
         GROUP BY tasks.task_id
     ) AS ad ON ad.task_id = tasks.task_id
-    WHERE tasks.project_id = 80 AND tasks.deleted_at IS NULL
+    WHERE tasks.project_id = $project->project_id AND tasks.deleted_at IS NULL
 		GROUP BY tasks.task_id
     UNION
     SELECT 0, null, null, null,0,0, 0,0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0
@@ -6046,7 +6058,7 @@ cte2 AS (
            task_refund_pa_budget
     FROM tasks
     INNER JOIN projects ON projects.project_id = tasks.project_id
-    WHERE task_parent IS NULL AND projects.project_id = 80 AND tasks.deleted_at IS NULL
+    WHERE task_parent IS NULL AND projects.project_id = $project->project_id AND tasks.deleted_at IS NULL
     UNION ALL
     SELECT c.root,
            t.task_id,
@@ -9794,6 +9806,7 @@ AS root_two_refund ,
 
 
         $task->task_refund_pa_status = '2';
+        $task->task_budget_type = '1';
 
         if ($task->contract) {
             foreach ($task->contract as $contract) {
@@ -9817,6 +9830,7 @@ AS root_two_refund ,
         }
 
         $task->task_refund_pa_status = '3';
+        $task->task_budget_type = '1';
 
         if ($task->contract) {
             foreach ($task->contract as $contract) {
