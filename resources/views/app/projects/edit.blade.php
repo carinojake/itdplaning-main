@@ -21,7 +21,8 @@
 
 
                             <form method="POST" action="{{ route('project.update', $project->hashid) }}"
-                                class="row g-3"  >
+                                class="row g-3"  class="row needs-validation"
+                                novalidate >
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -120,13 +121,17 @@
 
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <label for="project_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                <input class="form-control" id="project_start_date" name="project_start_date"
+                                <label for="project_start_date"
+                                class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
+                                class="text-danger">*</span>
+                                <input type="text" class="form-control" id="project_start_date" name="project_start_date"
                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', $project->project_start_date)) }}">
                             </div>
                             <div class="col-md-6">
-                                <label for="project_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                <input class="form-control" id="project_end_date" name="project_end_date"
+                                <label for="project_end_date"
+                                                class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span
+                                                class="text-danger">*</span>
+                                <input type="text" class="form-control" id="project_end_date" name="project_end_date"
                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', $project->project_end_date)) }}">
                             </div>
                         </div>
@@ -286,6 +291,32 @@
         });
     });
 </script>
+
+
+
+
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function() {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+        </script>
 
 
 

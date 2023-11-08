@@ -17,7 +17,8 @@
                         <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $task->task_name }}">
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="row g-3">
+                                class="row needs-validation"
+                                novalidate>
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -27,7 +28,7 @@
                                     <input type="text" class="form-control" id="task_name" name="task_name"
                                         value="{{ $task->task_name }}" required autofocus>
                                     <div class="invalid-feedback">
-                                        {{ __('ชื่อกิจกรรมซ้ำ') }}
+                                        {{ __('ชื่อกิจกรรม') }}
                                     </div>
                                 </div>
 
@@ -141,15 +142,23 @@
                                     <div class="col-md-6">
                                         <label for="task_start_date"
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                        <input class="form-control" id="task_start_date" name="task_start_date"
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}">
-                                    </div>
+                                        <input type="text" class="form-control" id="task_start_date" name="task_start_date"
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}" required>
+
+
+                                        </div>
+
+
+
                                     <div class="col-md-6">
                                         <label for="task_end_date"
-                                            class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                        type="text" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                         <input class="form-control" id="task_end_date" name="task_end_date"
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}">
-                                    </div>
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}" required>
+
+
+
+                                        </div>
                                 </div>
 
 
@@ -183,14 +192,15 @@
                                                     class="form-control" id="task_budget_it_operating"
                                                     name="task_budget_it_operating" min="0"
                                                     value="{{ $task->task_budget_it_operating }}"
-                                                    @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif>
+                                                    @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif required>
 
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
-                                            {{--     ไม่เกิน
-                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating) }}
-                                                บาท --}}
+                                              ไม่เกิน
+                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
+                                                บาท  และ ไม่เกิน
+                                                {{ number_format($root_sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating) }}
                                             </div>
                                             <div class="col-4">
                                                 <label for="task_budget_it_investment"
@@ -258,12 +268,6 @@
 
 
 
-
-
-
-
-
-
                                {{--  <div class="row mt-3">
 
                                     <div class="row mt-3">
@@ -315,6 +319,37 @@
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+
+
+
+        <script>
+            $(document).ready(function() {
+     $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
+         var max = 0;
+         var fieldId = $(this).attr('id');
+
+         if (fieldId === "task_budget_it_investment") {
+             max = parseFloat({{$request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment}});
+         } else if (fieldId === "task_budget_it_operating") {
+             max = parseFloat({{$request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating}});
+         } else if (fieldId === "task_budget_gov_utility") {
+             max = parseFloat({{$request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility}});
+         }
+
+         var current = parseFloat($(this).val().replace(/,/g , ""));
+         if (current > max) {
+
+
+             Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+
+             $(this).val(0);
+
+             /* $(this).val(max.toFixed(2)); */
+         }
+     });
+     });
+         </script>
 
         <script>
             const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
@@ -415,5 +450,7 @@
         });
     });
 </script>
+
+
     </x-slot:javascript>
 </x-app-layout>

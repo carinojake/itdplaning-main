@@ -18,7 +18,8 @@
                         <x-card>
 
 
-                            <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3">
+                            <form method="POST" action="{{ route('project.task.store', $project) }}" class="row needs-validation"
+                            novalidate >
                                 @csrf
                                 <h2> เพิ่ม กิจกรรม </h2>
 
@@ -199,24 +200,43 @@
 
 
                                 <div class="col-md-12 mt-3">
-                                    <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อรายการกิจกรรม') }}</label>
+                                    <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อรายการกิจกรรม') }} <span
+                                        class="text-danger">*</span></label>
 
                                     <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name" required
                                         autofocus>
                                     <div class="invalid-feedback">
                                         {{ __('ชื่อรายการ กิจกรรม') }}
                                     </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_start_date"
-                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                        <input class="form-control" id="task_start_date" name="task_start_date">
+                                            class="form-label">{{ __('วันที่เริ่มต้น') }} <span
+                                            class="text-danger">*</span></label>
+                                        <input type="text"  class="form-control" id="task_start_date" name="task_start_date" required>
+                                        <div class="invalid-feedback">
+                                            {{ __('วันที่เริ่มต้น') }}
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }} <span
+                                            class="text-danger">*</span></label>
 
-                                        <input class="form-control" id="task_end_date" name="task_end_date">
+                                        <input type="text"  class="form-control" id="task_end_date" name="task_end_date" required>
+
+                                    <div class="invalid-feedback">
+                                        {{ __('วันที่สิ้นสุด') }}
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
                                     </div>
                                 </div>
 
@@ -278,7 +298,8 @@
  --}}
 
                                 <div class="row">
-                                    <h4>งบประมาณ </h4>
+                                    <h4>งบประมาณ <span
+                                        class="text-danger">*</span> </h4>
 
 
 
@@ -319,11 +340,15 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_operating" name="task_budget_it_operating"
-                                                        min="0">
+                                                        min="0" required>
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบกลาง ICT') }}
                                                     </div>
+                                                    <div class="valid-feedback">
+                                                        Looks good!
+                                                    </div>
+
                                               {{--       ไม่เกิน   {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท --}}
                                                     <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_it_operating-$task_sub_sums['operating']['task_mm_budget'])+$task_sub_refund_pa_budget ['operating']['task_refund_pa_budget']), 2) }} บาท</div>
 
@@ -340,10 +365,13 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_investment"
-                                                        name="task_budget_it_investment" min="0">
+                                                        name="task_budget_it_investment" min="0"  required>
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุงบดำเนินงาน') }}
+                                                    </div>
+                                                    <div class="valid-feedback">
+                                                        Looks good!
                                                     </div>
                                                    {{-- {{ number_format($tasksDetails->task_budget_it_investment- $task_sub_sums['investment']['task_mm_budget']-$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] ) }} --}}
                                                     <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_refund_pa_budget ['investment']['task_refund_pa_budget']), 2) }} บาท</div>
@@ -357,10 +385,13 @@
                                                     <input type="text" placeholder="0.00" step="0.01"
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
-                                                        name="task_budget_gov_utility" min="0">
+                                                        name="task_budget_gov_utility" min="0"  required>
 
                                                     <div class="invalid-feedback">
                                                         {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                    </div>
+                                                    <div class="valid-feedback">
+                                                        Looks good!
                                                     </div>
 {{--                                                     ไม่เกิน  {{ number_format($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget']-$task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] ) }} บาท
  --}}                                                    <div class="col-3">  ไม่เกิน    {{ number_format(floatval(($task->task_budget_gov_utility-$task_sub_sums['utility']['task_mm_budget'])+$task_sub_refund_pa_budget ['utility']['task_refund_pa_budget']), 2) }} บาท</div>
@@ -501,7 +532,6 @@
 
 
 
-    </script>
 
     <script>
        $(document).ready(function() {
@@ -662,6 +692,28 @@ $(this).val(0);
             });
         </script>
 
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 
     </x-slot:javascript>
 </x-app-layout>

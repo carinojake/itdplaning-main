@@ -71,7 +71,13 @@
                     @csrf
                     <button class="btn btn-dark text-dark btn-taskRefund-sub"><i class="cil-money"></i></button>
                 </form> --}}
+
+
+                @if(auth()->user()->isAdmin())
+                {{-- Content for admin --}}
+                1
                 @if($task_sub_refund_total_count == $task_sub_refund_count)
+
                 <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                     @method('POST') {{-- Use POST method to submit the form --}}
                     @csrf
@@ -84,7 +90,25 @@
                     @csrf
                     <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money">2</i></button>
                 </form>
+
                 @endif
+            @else
+                {{-- Content for regular user --}}
+
+                @if($task_sub_refund_total_count == $task_sub_refund_count)
+
+
+
+                <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
+                    @method('POST') {{-- Use POST method to submit the form --}}
+                    @csrf
+                    <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money"></i></button>
+                </form>
+
+                @endif
+            @endif
+
+
                     <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
                     </a>

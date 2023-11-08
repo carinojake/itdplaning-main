@@ -37,15 +37,16 @@
                                             {{ __('กิจกรรม') }}
                                         </div>
                                     </div>
+
                                     <div class="col-md-3">
                                         {{--  @if($task->task_status == 1) --}}
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
                                         <span class="text-danger">*</span>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status1" value="1" @checked($task->task_status == 1)>
+                                                id="task_status1" value="1" @checked($task_parent_sub->task_status == 1)>
                                             <label class="form-check-label" for="task_status1"
-                                                @checked($task->task_status == 1)>
+                                                @checked($task_parent_sub->task_status == 1)>
                                                 ระหว่างดำเนินการ
                                             </label>
                                         </div>
@@ -53,21 +54,24 @@
                                             <input class="form-check-input" type="radio" name="task_status"
                                                 id="task_status2" value="2" @checked($task->task_status == 2)>
                                             <label class="form-check-label" for="task_status2"
-                                                @checked($task->task_status == 2)>
+                                                @checked($task_parent_sub->task_status == 2)>
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
                                         {{-- @elseif($task->task_status == 2) --}}
+                                        @if(auth()->user()->isAdmin())
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="task_status"
-                                                id="task_status2" value="2" @checked($task->task_status == 2)>
+                                                id="task_status2" value="2" @checked($task_parent_sub->task_status == 2)>
                                             <label class="form-check-label" for="task_status2"
-                                                @checked($task->task_status == 2)>
+                                                @checked($task_parent_sub->task_status == 2)>
                                                 ดำเนินการแล้วเสร็จ
                                             </label>
                                         </div>
+                                        @endif
                                     {{--      @endif --}}
                                     </div>
+
 
                                     <div class="col-md-3 d-none">
                                         <label for="task_type" class="form-label">{{ __('งาน/โครงการ') }}</label> <span
@@ -132,7 +136,41 @@
                                         </div >
                                     <div class="row">
 
+                                     {{--   <div class="col-sm">
+                                            <div class="row">
+                                                @if ($task_parent_sub->task_budget_it_operating > 0)
+                                                    <div class="col-6 fw-semibold">{{ __('คงเหลือ งบกลาง ICT') }}</div>
 
+                                                    @if($task_parent_sub->task_refund_pa_status == 2)
+
+                                                                @endif
+
+                                                    บาท
+                                                @endif
+                                            </div>
+
+                                            <div class="row">
+                                                @if ($task->task_budget_it_investment > 0)
+                                                    <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
+
+
+
+
+
+
+
+
+                                                    @endif
+                                            </div>
+                                            <div class="row">
+                                                @if ($task->task_budget_gov_utility > 0)
+                                                    <div class="col-6 fw-semibold">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
+                                                    <div class="col-6">
+
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div> --}}
                                         @if ($task->task_type == 1)
                                         <div class="col-md-9">
                                             <div class="form-group">
@@ -413,7 +451,7 @@
                                             <label for="taskcon_pp"
                                                 class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
                                             {{-- <span class="text-danger">*</span> --}}
-
+                                            @if($taskcon)
                                             <input type="text" class="form-control"
                                                 id="taskcon_pp" name="taskcon_pp"
                                                 value="{{ $taskcon->taskcon_pp }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
@@ -433,6 +471,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
 
                                     <div class="row mt-3">
@@ -457,7 +496,7 @@
                                         </div>
                                     </div>
                                 @endif
-
+                                @if(auth()->user()->isAdmin())
                                     <div class="col-md-12 mt-3">
                                         @if($task->task_refund_pa_status == 1)
                                         <label for="task_refund_pa_status" class="form-label">{{ __('งบประมาณ ') }}</label> <span class="text-danger"></span>
@@ -492,13 +531,14 @@
                                           ไม่ได้คืน
                                         </label>
                                       </div>
+                                      @endif
 
-                                      @if(auth()->user()->isAdmin())
+
                                       {{-- Content for admin --}}
                                       1
                                   @else
                                       {{-- Content for regular user --}}
-                                      2
+
                                   @endif
 
 

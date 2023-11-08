@@ -6599,7 +6599,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
            // dd($root_two_non_pe);
            $idRootTask = $id_root_tasks; // ตัวแปรที่เก็บ ID ของงานหลัก
         // สร้าง query หลัก
-      /*   $rootTaskFinancials   = DB::table('tasks')
+        $rootTaskFinancials   = DB::table('tasks')
         ->select('root_st.*', 'root_two.*')
         ->leftJoin(
             DB::raw('(
@@ -6614,9 +6614,9 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
     task_cost_it_investment as taskroot_cost_it_investment,
     task_cost_gov_utility   as taskroot_cost_gov_utility,
 
-    (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+    (SELECT SUM(task_budget_it_operating)+SUM(task_budget_it_investment)+SUM(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
     OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
-    AND task_type is not null
+
     AND deleted_at IS null)   AS root_st_bedget ,
 
 
@@ -6799,7 +6799,7 @@ AS root_two_refund ,
             ->toArray()
 
             ;
-*/
+
             $subtasks = $task->subtask()->whereNull('deleted_at')->get();
 
             // Assuming you want to get the ID of the first subtask
@@ -6911,6 +6911,7 @@ AS root_two_refund ,
                 ->orderBy('task_id')
                 ;
                 $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
+               // dd($rootTaskFinancials);
 //05112566
 
 
@@ -8987,6 +8988,9 @@ AS root_two_refund ,
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+
+
+
 
         return view('app.projects.tasks.edit', compact(
             'request',

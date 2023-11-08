@@ -1,6 +1,6 @@
 @if ($task['task_parent'] == null)
 
-    <h2>{{ $task->task_name }}   [{{   $task_rs_get['rs'] }}]  <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
+    <h2>{{ $task->task_name }}  @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
         {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
     </span></h2>
     <div class="container">
