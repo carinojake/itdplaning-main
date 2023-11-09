@@ -1664,18 +1664,19 @@ $value = 0;
                     <div class="col-md-3">
                         <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
                         <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
-
                     </div>
                     <br> <!-- Line break for spacing -->
 
-
                     <div class="col-md-3">
-                        <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        <input type="text" name="tasks[` + i + `][taskbudget]"
-                        class="form-control numeral-mask"
+
+
+                         <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                         <input type="text" name="tasks[` + i + `][taskbudget]"
+                         class="form-control custom-input numeral-mask expenses"
                          data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
+
                         <div class="invalid-feedback">
-                                                      ระบุงบกลาง ICT
+                                                      ระบุเงินงวด
                                                     </div>
                                                     <div class="valid-feedback">
                                                         Looks good!

@@ -18,7 +18,8 @@
                             <div id="budget_form" >
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="row g-3">
+                                class="row needs-validation"
+                                novalidate>>
                                 @csrf
                                 {{ method_field('PUT') }}
 

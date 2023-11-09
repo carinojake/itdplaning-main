@@ -15,83 +15,127 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="{{ __('แก้ไขสัญญา') }}">
-              <form method="POST" action="{{ route('contract.update', $contract->hashid) }}" class="row g-3" >
+              <form method="POST" action="{{ route('contract.update', $contract->hashid) }}"
+                class="row needs-validation"
+                novalidate >
                 @csrf
                 {{ method_field('PUT') }}
-                <div class="col-md-12">
-                  <label for="contract_project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
-                  <div class="form-check form-check-inline ms-5">
-                    <input class="form-check-input" type="radio" name="contract_project_type" id="contract_project_type1" value="p" @checked($contract->contract_project_type == "p")>
-                    <label class="form-check-label" for="contract_project_type1" @checked($contract->contract_project_type == "p")>
-                      งานประจำ
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="contract_project_type" id="contract_project_type2" value="j" @checked($contract->contract_project_type == "j")>
-                    <label class="form-check-label" for="contract_project_type2"  @checked($contract->contract_project_type == "j")>
-                      โครงการ
-                    </label>
-                  </div>
-                  <div class="invalid-feedback">
-                    {{ __('ประเภทงาน/โครงการ') }}
-                  </div>
-                </div>
 
-                <div class="col-md-12">
-                  <label for="contract_status" class="form-label">{{ __('สถานะสัญญา') }}</label> <span class="text-danger">*</span>
-                  <div class="form-check form-check-inline ms-5">
-                    <input class="form-check-input" type="radio" name="contract_status" id="contract_status1" value="1"   @checked($contract->contract_status == 1)>
-                    <label class="form-check-label" for="contract_status1"   @checked($contract->contract_status == 1)>
-                      อยู่ในระหว่างดำเนินการ
-                    </label>
+                <div class="container mt-3">
+                    <div class="row">
+                      <!-- ปีงบประมาณ -->
+                      <div class="col-md-4 mb-3">
+                        <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
+                        <input type="text" class="form-control" id="contract_fiscal_year" name="contract_fiscal_year" value="{{ $contract->contract_fiscal_year }}" required>
+                        <div class="invalid-feedback">
+                          {{ __('ปีงบประมาณ') }}
+                        </div>
+                      </div>
+
+                      <!-- สถานะสัญญา -->
+                      <div class="col-md-4 mb-3">
+                        <label for="contract_status" class="form-label">{{ __('สถานะสัญญา') }}</label> <span class="text-danger">*</span>
+                        <div >
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="contract_status" id="contract_status1" value="1" @checked($contract->contract_status == 1)>
+                            <label class="form-check-label" for="contract_status1">
+                              อยู่ในระหว่างดำเนินการ
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="contract_status" id="contract_status2" value="2" @checked($contract->contract_status == 2)>
+                            <label class="form-check-label" for="contract_status2">
+                              ดำเนินการแล้วเสร็จ
+                            </label>
+                          </div>
+                        </div>
+                        <div class="invalid-feedback">
+                          {{ __('สถานะสัญญา') }}
+                        </div>
+                      </div>
+
+                      <!-- ประเภทงาน/โครงการ -->
+                      <div class="col-md-4 mb-3">
+                        <label for="contract_project_type" class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span class="text-danger">*</span>
+                        <div >
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="contract_project_type" id="contract_project_type1" value="p" @checked($contract->contract_project_type == "p")>
+                            <label class="form-check-label" for="contract_project_type1">
+                              งานประจำ
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="contract_project_type" id="contract_project_type2" value="j" @checked($contract->contract_project_type == "j")>
+                            <label class="form-check-label" for="contract_project_type2">
+                              โครงการ
+                            </label>
+                          </div>
+                        </div>
+                        <div class="invalid-feedback">
+                          {{ __('ประเภทงาน/โครงการ') }}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="contract_status" id="contract_status2" value="2"   @checked($contract->contract_status == 2)>
-                    <label class="form-check-label" for="contract_status2"   @checked($contract->contract_status == 2)>
-                      ดำเนินการแล้วเสร็จ
-                    </label>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา') }}</label> <span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="contract_number" name="contract_number" value="{{ $contract->contract_number }}" required>
+                    <div class="invalid-feedback">
+                      {{ __('เลขที่สัญญา ซ้ำ') }}
+                    </div>
                   </div>
-                  <div class="invalid-feedback">
-                    {{ __('สถานะสัญญา') }}
-                  </div>
-                </div>
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <label for="contract_name" class="form-label">{{ __('ชื่อสัญญา') }}</label> <span class="text-danger">*</span>
                     <input type="text" class="form-control" id="contract_name" name="contract_name" value="{{ $contract->contract_name }}" required autofocus>
                     <div class="invalid-feedback">
                       {{ __('ชื่อสัญญา ซ้ำ') }}
                     </div>
                   </div>
-                <div class="col-md-12">
-                  <label for="contract_number" class="form-label">{{ __('เลขที่สัญญา') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="contract_number" name="contract_number" value="{{ $contract->contract_number }}" required>
-                  <div class="invalid-feedback">
-                    {{ __('เลขที่สัญญา ซ้ำ') }}
-                  </div>
-                </div>
-            {{--     <div class="col-md-3">
-                    <label for="reguiar_contract_id" class="form-label">{{ __('ลำดับ.') }}</label>
+
+            </div>
+         {{--    <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="contract_pr" class="form-label">{{ __('เลขที่ PR') }}</label>
                     <span class="text-danger"></span>
-                    <input type="text" class="form-control" id="reguiar_contract_id" name="reguiar_contract_id"
-                        value="{{ $contract->reguiar_contract_id }}">
+
+                    <input type="text" class="form-control"
+                     id="contract_pr" name="contract_pr" value="{{ $contract->contract_pr }}" required>
                     <div class="invalid-feedback">
-                        {{ __('ลำดับ ') }}
+                      {{ __('เลขที่ PR ซ้ำ') }}
                     </div>
-                </div> --}}
-                <div class="col-md-12">
-                  <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
-                  <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" value="{{ $contract->contract_juristic_id }}" maxlength="13" >
-                  <div class="invalid-feedback">
-                    {{ __('คู่ค้าซ้ำ') }}
                   </div>
-                </div>
-                <div class="col-md-12">
-                  <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ') }}</label>
-                  <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" value="{{ $contract->contract_order_no }}" maxlength="50" >
-                  <div class="invalid-feedback">
-                    {{ __('เลขที่ใบสั่งซื้อ') }}
+
+                  <div class="col-md-3">
+                    <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
+                    <input type="text" placeholder="0.00"
+                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask" id="contract_pr_budget"
+                    name="contract_pr_budget" min="0"
+                    value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
                   </div>
-                </div>
+
+                  <div class="col-md-3">
+                    <label for="contract_pa" class="form-label">{{ __('เลขที่ PA') }}</label> <span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="contract_pa" name="contract_pa" value="{{ $contract->contract_pa }}" required>
+                    <div class="invalid-feedback">
+                      {{ __('เลขที่สัญญา ซ้ำ') }}
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
+                    <input type="text" placeholder="0.00"
+                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    class="form-control numeral-mask"
+                     id="contract_pa_budget" name="contract_pa_budget"
+                     min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
+                  </div>
+
+            </div> --}}
+
+
+
                 <div class="col-md-12">
                   <label for="contract_description" class="form-label">{{ __('รายละเอียดสัญญา') }}</label>
                   <textarea class="form-control" name="contract_description" id="contract_description" rows="10">{{ $contract->contract_description }}</textarea>
@@ -99,13 +143,7 @@
                     {{ __('รายละเอียดงาน/โครงการ') }}
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <label for="contract_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label> <span class="text-danger">*</span>
-                  <input type="text" class="form-control" id="contract_fiscal_year" name="contract_fiscal_year" value="{{ $contract->contract_fiscal_year }}" required>
-                  <div class="invalid-feedback">
-                    {{ __('ชื่องาน/โครงการ ซ้ำ') }}
-                  </div>
-                </div>
+
                 <div class="col-md-6">
                   <label for="contract_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
                   {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
@@ -138,7 +176,20 @@
                     value="{{ \Helper::date4(date('Y-m-d H:i:s', $contract->contract_sign_date)) }}">
 
                 </div>
-
+                <div class="col-md-3">
+                    <label for="contract_juristic_id" class="form-label">{{ __('เลขทะเบียนคู่ค้า') }}</label>
+                    <input type="text" class="form-control" id="contract_juristic_id" name="contract_juristic_id" value="{{ $contract->contract_juristic_id }}" maxlength="13" >
+                    <div class="invalid-feedback">
+                      {{ __('คู่ค้าซ้ำ') }}
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="contract_order_no" class="form-label">{{ __('เลขที่ใบสั่งซื้อ') }}</label>
+                    <input type="text" class="form-control" id="contract_order_no" name="contract_order_no" value="{{ $contract->contract_order_no }}" maxlength="50" >
+                    <div class="invalid-feedback">
+                      {{ __('เลขที่ใบสั่งซื้อ') }}
+                    </div>
+                  </div>
                 <div class="col-md-12">
                   <label for="contract_type" class="form-label">{{ __('ประเภทสัญญา') }}</label> <span class="text-danger">*</span>
                   {{ Form::select('contract_type', \Helper::contractType(), $contract->contract_type, ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...']) }}
@@ -153,11 +204,6 @@
                     {{ __('สัญญา') }}
                   </div>
                 </div>
-
-
-
-
-
                 <div class="col-md-12">
                     <label for="contract_projectplan" class="form-label">{{ __('บันทึกข้อความ') }}</label>
                     <input type="text" class="form-control" id="contract_projectplan" name="contract_projectplan" maxlength="50" value="{{ $contract->contract_projectplan }}" >
@@ -186,15 +232,6 @@
                       {{ __('เลขที่สัญญา ซ้ำ') }}
                     </div>
                   </div>
-
-
-
-
-
-
-
-
-
 
 
                   <div class="col-md-6">
@@ -261,6 +298,7 @@
                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                     {{-- <input type="text" class="form-control" id="contract_owner" name="contract_owner" maxlength="50" value="{{ $contract->contract_owner }}">
                   </div> --}}
+                  @if(auth()->user()->isAdmin())
                 <div class="col-md-12">
                     <label for="contract_refund_pa_status" class="form-label">{{ __('contract_refund_pa_status') }}</label> <span class="text-danger"></span>
                     <div class="form-check form-check-inline ms-5">
@@ -276,7 +314,7 @@
                       </label>
                     </div>
                 </div>
-
+                @endif
                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
               </form>
@@ -291,6 +329,10 @@
 
   </x-slot:css>
   <x-slot:javascript>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
    {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
@@ -298,13 +340,46 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
     <script>
         $(document).ready(function() {
             $(":input").inputmask();
         });
     </script>
 
+<script type="text/javascript">
+    $(document).ready(function() {
 
+        $(".btn-success").click(function() {
+            var html = $(".clone").html();
+            $(".increment").after(html);
+        });
+
+        $("body").on("click", ".btn-danger", function() {
+            $(this).parents(".control-group").remove();
+        });
+
+    });
+</script>
 
 
 <script>
@@ -360,6 +435,10 @@
             });
     });
 </script>
+
+
+
+
   </x-slot:javascript>
 </x-app-layout>
 

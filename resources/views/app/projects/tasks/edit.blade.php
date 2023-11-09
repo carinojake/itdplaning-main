@@ -197,11 +197,15 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
+
+                                                ห้ามต่ำกว่า
+                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_op + $sum_task_refund_budget_it_operating) }}
+
+                                                    -
+
                                               ไม่เกิน
                                                 {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
-                                                บาท  และ ไม่เกิน
-                                                {{ number_format($root_sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating) }}
-                                            </div>
+                                                บาท                                              </div>
                                             <div class="col-4">
                                                 <label for="task_budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
@@ -212,14 +216,18 @@
                                                     value="{{ $task->task_budget_it_investment }}"
 
 
-
                                                     @if(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) == 0) readonly @endif>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
-                                              {{--   ไม่เกิน
-                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment) }}
-                                                บาท --}}
+                                                ห้ามต่ำกว่า
+                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_in + $sum_task_refund_budget_it_investment) }}
+
+                                                    -
+
+                                              ไม่เกิน
+                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
+                                                บาท
                                             </div>
 
                                             <div class="col-md-4">
@@ -234,9 +242,14 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
-                                            {{--     ไม่เกิน
-                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility) }}
-                                                บาท --}}
+                                                ห้ามต่ำกว่า
+                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_ut + $sum_task_refund_budget_gov_utility) }}
+
+                                                    -
+
+                                               ไม่เกิน
+                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility ) }}
+                                                บาท
                                             </div>
                                         </div>
 

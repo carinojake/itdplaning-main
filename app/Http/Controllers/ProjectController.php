@@ -3589,7 +3589,7 @@ dd($cteQuery); */
                 'root_st.task_budget_it_operating as root_st_task_budget_it_operating',
                 'root_st.task_budget_it_investment as root_st_task_budget_it_investment',
                 'root_st.task_budget_gov_utility as root_st_task_budget_gov_utility',
-                'root_st.root_st_bedget as root_st_root_st_bedget',
+                'root_st.root_st_budget as root_st_root_st_budget',
                 'root_st.root_st_cost as root_st_root_st_cost',
                 'root_st.root_st_pe as root_st_root_st_pe',
                 'root_st.root_st_non_pe as root_st_root_st_non_pe',
@@ -3844,7 +3844,7 @@ dd($cteQuery); */
         task_cost_it_investment,
         task_cost_gov_utility,
         (task_budget_it_operating+task_budget_it_investment+task_budget_gov_utility)
-		AS root_st_bedget ,
+		AS root_st_budget ,
 
 
 		(SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
@@ -6617,7 +6617,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
     (SELECT SUM(task_budget_it_operating)+SUM(task_budget_it_investment)+SUM(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
     OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 
-    AND deleted_at IS null)   AS root_st_bedget ,
+    AND deleted_at IS null)   AS root_st_budget ,
 
 
     (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
@@ -6911,7 +6911,7 @@ AS root_two_refund ,
                 ->orderBy('task_id')
                 ;
                 $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
-               // dd($rootTaskFinancials);
+             //  dd($rootTaskFinancials);
 //05112566
 
 
@@ -8959,7 +8959,8 @@ AS root_two_refund ,
      * @return \Illuminate\Http\Response
      */
     public function taskEdit(Request $request, $project, $task)
-    {
+    {  DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $id_project = Hashids::decode($project)[0];
         $id_task    = Hashids::decode($task)[0];
         ($project    = Project::find($id_project));
@@ -8988,12 +8989,347 @@ AS root_two_refund ,
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+//09112566
+$id_root_tasks = Task::select('task_id')->where('task_id', $task->task_id)
+->whereNull('tasks.deleted_at')->get()->pluck('task_id');
+$idRootTask = $id_root_tasks; // ตัวแปรที่เก็บ ID ของงานหลัก
+        // สร้าง query หลัก
+        $rootTaskFinancials   = DB::table('tasks')
+        ->select('root_st.*', 'root_two.*')
+        ->leftJoin(
+            DB::raw('(
+                SELECT
+                1 AS RS_1,
+    task_id AS taskroot_id,
+    task_parent AS taskroot_parent,
+    task_budget_it_operating as taskroot_budget_it_operating,
+    task_budget_it_investment as taskroot_budget_it_investment,
+    task_budget_gov_utility as taskroot_budget_gov_utility,
+    task_cost_it_operating as taskroot_cost_it_operating,
+    task_cost_it_investment as taskroot_cost_it_investment,
+    task_cost_gov_utility   as taskroot_cost_gov_utility,
+
+    (SELECT SUM(task_budget_it_operating)+SUM(task_budget_it_investment)+SUM(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+    AND deleted_at IS null)   AS root_st_budget ,
+    (SELECT SUM(task_budget_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+    AND deleted_at IS null)   AS root_st_budget_op ,
+    (SELECT SUM(task_budget_it_investment) FROM tasks WHERE (task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+    AND deleted_at IS null)   AS root_st_budget_in ,
+    (SELECT SUM(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+    AND deleted_at IS null)   AS root_st_budget_ut ,
 
 
+    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+        AND task_type is not null
+            AND deleted_at IS null) AS root_st_cost,
+
+                (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS root_st_pe,
+
+
+    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS root_st_non_pe,
+
+            (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS root_wait_pay 	,
+
+
+(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_refund_pa_status = 2
+            AND deleted_at IS null)
+AS root_refund ,
+
+    (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_id  AND deleted_at IS null )
+    AS mm ,
+
+
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS pe,
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS non_pe,
+    (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS wait_pay ,
+    (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS task_pay,
+
+            (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS new_balance,
+
+
+            (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_budget_type = 1
+            AND deleted_at IS null) AS new_balance_re,
+
+
+
+     (SELECT 	sum(task_budget_it_operating)+sum(task_budget_it_investment)+sum(task_budget_gov_utility)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND deleted_at IS null) AS new_balance_2,
+     (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
+            AND task_refund_pa_status = 1
+            AND deleted_at IS null) AS balance_status
+
+FROM tasks WHERE  tasks.deleted_at IS null AND task_parent IS NULL ORDER BY task_id ASC
+            ) as root_st'),
+            'root_st.taskroot_id',
+            '=',
+            'tasks.task_id'
+        )
+
+        ->leftJoin(
+            DB::raw('(
+                SELECT
+                2 AS RS_2,
+                task_id AS taskroot_two_id,
+                task_parent AS taskroot_two_parent,
+                task_budget_it_operating as taskroot_two_budget_it_operating,
+                task_budget_it_investment as taskroot_two_budget_it_investment,
+                task_budget_gov_utility as taskroot_two_budget_gov_utility,
+                task_cost_it_operating  as taskroot_two_cost_it_operating,
+                task_cost_it_investment as taskroot_two_cost_it_investment,
+                task_cost_gov_utility as taskroot_two_cost_gov_utility,
+
+                (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type is not null
+                AND deleted_at IS null)  AS root_two_budget,
+
+    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type is not null
+            AND deleted_at IS null)  AS root_two_cost,
+
+                    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type = 1
+            AND deleted_at IS null) AS root_two_pe,
+
+
+    (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_type = 2
+            AND deleted_at IS null) AS root_two_non_pe,
+
+ (SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND deleted_at IS null) AS root_two_wait_pay,
+
+
+(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+            AND task_refund_pa_status = 1
+            AND deleted_at IS null)
+AS root_two_refund ,
+
+
+
+
+
+
+                (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_two_parent  AND deleted_at IS null )
+                AS mm ,
+
+
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_type = 1
+                        AND deleted_at IS null) AS pe,
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_type = 2
+                        AND deleted_at IS null) AS non_pe,
+                (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS wait_pay ,
+                (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS task_pay,
+
+                        (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS new_balance,
+
+
+                        (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_budget_type = 2
+                        AND deleted_at IS null) AS new_balance_re,
+
+
+
+                                (SELECT 	(SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND deleted_at IS null) AS new_balance_2,
+                 (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_two_parent
+                        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                        AND task_refund_pa_status = 1
+                        AND deleted_at IS null) AS balance_status
+
+        FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
+            ) as root_two'),
+            'root_two.taskroot_two_parent',
+            '=',
+            'tasks.task_id'
+        )
+
+            ->where('task_id',  $idRootTask)
+            ->whereNull('deleted_at')
+
+            ->groupBy('tasks.task_id')
+          //  ->orderBy('task_parent')
+            ->orderBy('task_id')
+            ->get()
+            ->toArray()
+
+            ;
+
+$id_tasks = Task::select('task_id')->where('task_id', $task->task_id)
+->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
+$subtasks = $task->subtask()->whereNull('deleted_at')->get();
+
+// Assuming you want to get the ID of the first subtask
+$idRootTasktwo = optional($subtasks->first())->task_id;
+
+$id_tasks_two_id_parent =  ($id_tasks->first());
+
+
+$rootTaskFinancialsQuery   = DB::table('tasks')
+->select('root_two.*')
+->leftJoin(
+    DB::raw('(
+        SELECT
+        2 AS RS_2,
+        task_id AS taskroot_two_id,
+        task_parent AS taskroot_two_parent,
+        task_budget_it_operating as taskroot_two_budget_it_operating,
+        task_budget_it_investment as taskroot_two_budget_it_investment,
+        task_budget_gov_utility as taskroot_two_budget_gov_utility,
+        task_cost_it_operating  as taskroot_two_cost_it_operating,
+        task_cost_it_investment as taskroot_two_cost_it_investment,
+        task_cost_gov_utility as taskroot_two_cost_gov_utility,
+
+
+        (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+        OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+        AND task_type is not null
+        AND deleted_at IS null)  AS root_two_budget,
+
+
+(SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    AND task_type is not null
+    AND deleted_at IS null)  AS root_two_cost,
+
+            (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    AND task_type = 1
+    AND deleted_at IS null) AS root_two_pe,
+
+
+(SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    AND task_type = 2
+    AND deleted_at IS null) AS root_two_non_pe,
+
+(SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) -SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    AND deleted_at IS null) AS root_two_wait_pay,
+
+
+(SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+    OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    AND task_refund_pa_status = 1
+    AND deleted_at IS null)
+AS root_two_refund ,
+
+        (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = taskroot_two_parent  AND deleted_at IS null )
+        AS mm ,
+
+
+        (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type = 1
+                AND deleted_at IS null) AS pe,
+        (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_type = 2
+                AND deleted_at IS null) AS non_pe,
+        (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND deleted_at IS null) AS wait_pay ,
+
+                (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_two_parent
+        OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND deleted_at IS null) AS task_pay,
+
+                (SELECT (SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND deleted_at IS null) AS new_balance,
+
+
+                (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_budget_type = 2
+                AND deleted_at IS null) AS new_balance_re,
+
+
+
+                        (SELECT 	(SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND deleted_at IS null) AS new_balance_2,
+         (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                AND task_refund_pa_status = 1
+                AND deleted_at IS null) AS balance_status
+
+FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
+    ) as root_two'),
+    'root_two.taskroot_two_id',
+    '=',
+    'tasks.task_id'
+)
+
+    ->where('task_parent',$id_tasks_two_id_parent )
+    ->whereNull('tasks.deleted_at')
+
+    ->groupBy('taskroot_two_id')
+  //  ->orderBy('task_parent')
+    ->orderBy('task_id')
+    ;
+    $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
+  // dd($rootTaskFinancials);
+
+
+
+
+
+
+//dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
 
 
         return view('app.projects.tasks.edit', compact(
             'request',
+            'rootTaskFinancials',
             'contracts',
             'project',
             'task',
