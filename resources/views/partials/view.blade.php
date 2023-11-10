@@ -139,6 +139,8 @@
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
                                     {{ number_format(floatval( $budget['budget_total_cost']), 2) }}
+                                    @elseif( $budget['project_type'] == 2 )
+                                    {{ number_format(floatval( $budget['budget_total_cost']), 2) }}
 
                                     {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
 
@@ -249,7 +251,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-danger">
                                         <!--รอการเบิกจ่ายทั้งหมด-->
-                                        {{ number_format($op_mm-($otpsa1 + $otpsa2),2) }}
+                                        {{ number_format( ($ospa + $osa)-($otpsa1 + $otpsa2),2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">รอการเบิกจ่ายทั้งหมด<p>
@@ -265,7 +267,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-danger">
                                             <!--การเบิกจ่าย PA -->
-                                            {{ number_format($operating_mm_pa-$otpsa1, 2) }}
+                                            {{ number_format($ospa - $otpsa1, 2) }}
                                         </div>
                                         <small class="text-xl">รอการเบิกจ่าย <p>แบบมี PA
                                         </small>
@@ -279,7 +281,7 @@
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold text-danger">
                                             <!--การเบิกจ่าย PA -->
-                                            {{ number_format($operating_mm_pa_no-$otpsa2, 2) }}
+                                            {{ number_format( $osa-$otpsa2, 2) }}
                                         </div>
                                         <small class="text-xl">รอการเบิกจ่าย <p>แบบไม่มี PA
                                         </small>

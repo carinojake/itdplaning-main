@@ -19,7 +19,7 @@
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="row needs-validation"
-                                novalidate>>
+                                novalidate>
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -532,15 +532,43 @@
                                           ไม่ได้คืน
                                         </label>
                                       </div>
+
+
+
+
                                       @endif
 
 
                                       {{-- Content for admin --}}
                                       1
+
+
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="1" @checked($task->task_budget_type == 1)>
+                                        <label class="form-check-label" for="task_budget_type1" @checked($task->task_budget_type == 1) >
+                                          คืน1task_budget_type1
+                                        </label>
+                                      </div>
+
+
+
+                                      <div class=" d-nome form-check form-check-inline ms-5">
+                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="2" @checked($task->task_refund_pa_status == 2) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                        <label class="form-check-label" for="task_budget_type2"  @checked($task->task_refund_pa_status == 2) >
+                                          คืนtask_budget_type2
+                                        </label>
+                                      </div>
+
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="" @checked(is_null($task->task_refund_pa_status))>
+                                        <label class="form-check-label" for="task_refund_pa_status0" @checked(is_null($task->task_refund_pa_status))>
+                                          ไม่ได้คืน task_budget_type
+                                        </label>
+                                    </div>
+
                                   @else
                                       {{-- Content for regular user --}}
-
-                                  @endif
+                              @endif
 
 
                                 </div>
@@ -661,7 +689,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
@@ -962,7 +990,25 @@
 
 
 </script>
-
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict'
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 
     </x-slot:javascript>
 </x-app-layout>

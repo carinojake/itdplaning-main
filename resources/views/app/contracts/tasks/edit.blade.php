@@ -20,7 +20,8 @@
                         <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $taskcon->taskcon_name }}">
                             <form method="POST"
                                 action="{{ route('contract.task.update', ['contract' => $contract->Hashid, 'taskcon' => $taskcon->hashid]) }}"
-                                class="row g-3">
+                                class="row needs-validation"
+                                novalidate>
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -169,7 +170,9 @@
                                                     @if($taskcon->taskcon_budget_it_operating >1)
                                                     <div class="col-md-12 mt-3">
                                                         <label for="taskcon_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                        <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_operating" name="taskcon_budget_it_operating" min="0" value="{{ $taskcon->taskcon_budget_it_operating }}">
+                                                        <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_operating" name="taskcon_budget_it_operating" min="0" value="{{ $taskcon->taskcon_budget_it_operating }}"
+
+                                                        required>
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุงบกลาง ICT') }}
                                                         </div>
@@ -178,7 +181,7 @@
                                                     @if($taskcon->taskcon_budget_it_investment >1)
                                                     <div class="col-md-12">
                                                         <label for="taskcon_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                        <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
+                                                        <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุงบดำเนินงาน') }}
                                                         </div>
@@ -187,7 +190,7 @@
                                                     @if($taskcon->taskcon_budget_gov_utility >1)
                                                     <div class="col-md-12">
                                                         <label for="taskcon_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                        <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
+                                                        <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุค่าสาธารณูปโภค') }}
                                                         </div>
@@ -200,7 +203,7 @@
                                                     @if($taskcon->taskcon_cost_it_operating >1)
                                                         <div class="col-md-12 mt-3">
                                                             <label for="taskcon_cost_it_operating" class="form-label">{{ __('ค่าใช้จ่ายงบกลาง ICT') }}</label>
-                                                            <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
+                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
                                                             <div class="invalid-feedback">
                                                                 {{ __('ค่าใช้จ่ายงบกลาง ICT') }}
                                                             </div>
@@ -209,7 +212,7 @@
                                                         @if($taskcon->taskcon_cost_it_investment >1)
                                                         <div class="col-md-12">
                                                             <label for="taskcon_cost_it_investment" class="form-label">{{ __('ค่าใช้จ่ายงบดำเนินงาน') }}</label>
-                                                            <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
+                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
                                                             <div class="invalid-feedback">
                                                                 {{ __('ค่าใช้จ่ายงบดำเนินงาน') }}
                                                             </div>
@@ -218,7 +221,7 @@
                                                         @if($taskcon->taskcon_cost_gov_utility >1)
                                                         <div class="col-md-12">
                                                             <label for="taskcon_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                            <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
+                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
                                                             <div class="invalid-feedback">
                                                                 {{ __('ระบุค่าสาธารณูปโภค') }}
                                                             </div>
@@ -256,7 +259,7 @@
 
 
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pay" class="form-label">{{ __('PP เบิก') }}</label>
+                                            <label for="taskcon_pp" class="form-label">{{ __('PP เบิก') }}</label>
                                             <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
 
                                             <div class="invalid-feedback">
@@ -264,8 +267,10 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-                                            <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
+                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย2222') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
+                                             id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
                                             <div class="invalid-feedback">
                                                 {{ __('เบิกจ่าย') }}
                                             </div>
@@ -288,15 +293,73 @@
     </x-slot:content>
     <x-slot:css>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
-
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     </x-slot:css>
     <x-slot:javascript>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
    {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#taskcon_pay").on("input", function() {
+                var max = 0;  // Initialize max to 0
+                var fieldId = $(this).attr('id');
+                var costFields = ['taskcon_cost_it_operating', 'taskcon_cost_it_investment', 'taskcon_cost_gov_utility'];
+
+                // Check if the fieldId is "task_pay"
+                if (fieldId === "taskcon_pay") {
+                    // Iterate through the costFields array
+                    costFields.forEach(function(field) {
+                        // Get the value of each field, remove commas, convert to float, and add to max
+                        var fieldValue = $("#" + field).val();
+                        if (fieldValue) {  // Check if fieldValue is defined
+                            max += parseFloat(fieldValue.replace(/,/g, ""));
+                        }
+                    });
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g, ""));
+                if (current > max) {
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                        " บาท");
+                    $(this).val(0);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+
+
 
 <script>
     $(function() {
@@ -313,7 +376,6 @@
                 dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
-
             language:"th-th",
 
 

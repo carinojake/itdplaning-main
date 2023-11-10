@@ -501,7 +501,7 @@ $value = 0;
                                                                                 id="contract_PA" name="contract_pa"
                                                                                 required>
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('tttt ') }}
+                                                                                {{ __('ใบขออนุมัติซื้อ/จ้าง (PA) ') }}
                                                                             </div>
                                                                         </div>
 
@@ -793,11 +793,12 @@ $value = 0;
                                                         </div>
                                                     </div>
  --}}
-
                                                                 <div id="rounds_form" class="callout callout-light"
                                                                     style="display:none;">
                                                                     <div class="row mt-3">
+
                                                                         <div class="col-md-12">
+                                                                            @if(auth()->user()->isAdmin())
                                                                             <table border="1">
                                                                                 <tr>
                                                                                     <th>sl</th>
@@ -822,6 +823,7 @@ $value = 0;
 
 
                                                                             </table>
+                                                                            @endif
                                                                             <label id="rounds_label" for="rounds"
                                                                                 class="form-label">{{ __('งวดที่') }}</label>
                                                                             <span class="text-danger">*</span>
@@ -1274,7 +1276,27 @@ $value = 0;
             {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+
             <script>
+                $(document).ready(function() {
+                    // Initially hide the fields
+                    //$("#contract_pa_budget").parent().hide();
+
+
+                    // Show the fields when a value is entered in task_cost_it_operating
+                    $("#contract_pa_budget").on("input", function() {
+                        if ($(this).val() != '') {
+                            $("#rounds_form").show();
+                        } else {
+                            $("#rounds_form").hide();
+                        }
+                    });
+                });
+            </script>
+
+
+          <script>
                 $(document).ready(function() {
                     $(":input").inputmask();
                 });
@@ -1786,7 +1808,7 @@ $value = 0;
                             $('#cn_form').show();
                             $('#oe_form').hide();
                             $('#pp_form').hide();
-                            $('#rounds_form').show();
+
                         } else if (contract_type == 2) {
                             contract_name_label.text('ชื่อ สั่งจ้าง ER');
                             rounds_label.text('จำนวนงวด');
@@ -1798,7 +1820,7 @@ $value = 0;
                             $('#cn_form').show();
                             $('#oe_form').hide();
                             $('#pp_form').hide();
-                            $('#rounds_form').show();
+
                         } else if (contract_type == 3) {
                             contract_name_label.text('ชื่อ สัญญา CN');
                             rounds_label.text('จำนวนงวด');
@@ -1810,7 +1832,7 @@ $value = 0;
                             $('#cn_form').show();
                             $('#oe_form').hide();
                             $('#pp_form').hide();
-                            $('#rounds_form').show();
+
                         } else if (contract_type == 4) {
                             contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
                             rounds_label.text('ค่าใช้จ่ายสำนักงาน');
@@ -1824,7 +1846,7 @@ $value = 0;
                             $('#pp_form').show();
                             $('#ba_form').show();
                             $('#bd_form').show();
-                            $('#rounds_form').show();
+
                         } else {
                             contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
                             $('#mm_form').show();
@@ -1837,7 +1859,7 @@ $value = 0;
                             $('#pp_form').show();
                             $('#ba_form').show();
                             $('#bd_form').show();
-                            $('#rounds_form').show();
+
                         }
                     });
                 });

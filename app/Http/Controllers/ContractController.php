@@ -101,6 +101,8 @@ class ContractController extends Controller
         $latestContract = Contract::latest()->first();
         ($contract = Contract::find($id));
 
+
+
         $contract_start_date = \Carbon\Carbon::createFromTimestamp($contract->contract_start_date);
         $contract_end_date = \Carbon\Carbon::createFromTimestamp($contract->contract_end_date);
 
@@ -339,7 +341,8 @@ class ContractController extends Controller
                 'pay'                   => $task['taskcon_pay'],
                 //   'cost_disbursement'     => $task['cost_disbursement'],
                 'task_total_pay'             => $task['total_pay'],
-                'taskcon_type'             => $task['taskcon_type']
+                'taskcon_type'             => $task['taskcon_type'],
+
 
                 // 'owner' => $project['project_owner'],
             ];
@@ -362,6 +365,8 @@ class ContractController extends Controller
 
 
        // dd($gantt);
+       //$sum = array($task);
+      //dd($sum);
        ($taskcons);
         ($gantt = json_encode($gantt));
 
@@ -370,6 +375,8 @@ class ContractController extends Controller
          ->get());
 
 
+
+//dd($request,$contractgannt, $files_contract, $contract, $gantt, $duration_p, $latestContract, $taskcons);
 
 
         return view('app.contracts.show', compact('contractgannt','files_contract','contract',

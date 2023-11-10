@@ -226,7 +226,7 @@
                                     <div class="col-md-12 mt-3">
                                         <label for="task_name"
                                             class="form-label">{{ __('ชื่อรายการ') }}</label>
-                                           {{--  <span class="text-danger">*</span> --}}
+                                            <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
                                         value= "{{ session('contract_name') }}" required>
                                         <div class="invalid-feedback">
