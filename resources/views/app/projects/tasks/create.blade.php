@@ -262,20 +262,16 @@
         });
 
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
-        var project_start_date = {{$projectDetails->project_start_date}};
-        var project_end_date = {{$projectDetails->project_end_date}};
-        project_fiscal_year = project_fiscal_year -543;
-        console.log(project_fiscal_year);
+        var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
+        var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
 
+        project_fiscal_year = project_fiscal_year - 543;
 
         var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
         var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-        var fiscalproject_start_date =  Date(project_start_date);
-        var fiscalproject_end_date =  Date(project_end_date);
-
-        console.log(fiscalproject_start_date);
-        console.log(fiscalproject_end_date);
+        console.log(project_start_date_str);
+        console.log(project_end_date_str);
         console.log(fiscalYearStartDate);
         console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
@@ -284,7 +280,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
 
 

@@ -633,8 +633,8 @@
                                         <!--จบ ข้อมูลสัญญา 2-->
                                     </div>
                                 </div>
-
-
+                                {{ $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment }}
+                                {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }}
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
                                 </x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
@@ -749,7 +749,7 @@
                         $('#project_select').change();
                     });
                 </script>
-                <script>
+               {{--  <script>
                     $(document).ready(function() {
                         // Initially hide the fields
                       //  $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
@@ -793,7 +793,7 @@
                             }
                         });
                     });
-                </script>
+                </script> --}}
     <script>
         $(document).ready(function() {
     // Function to check and update the task cost fields
@@ -842,23 +842,26 @@
 
         });
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
-        project_fiscal_year = project_fiscal_year -543;
-        console.log(project_fiscal_year);
+        var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
+        var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+
+        project_fiscal_year = project_fiscal_year - 543;
 
         var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
         var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
 
+        console.log(project_start_date_str);
+        console.log(project_end_date_str);
         console.log(fiscalYearStartDate);
         console.log(fiscalYearEndDate);
-
-
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
   //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-   // $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
@@ -928,38 +931,31 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
                 })()
             </script>
 
-            <script>
-                $(document).ready(function() {
-                    $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
-                        function() {
-                            var max = 0;
-                            var fieldId = $(this).attr('id');
 
-                            if (fieldId === "task_budget_it_investment") {
-                                max = parseFloat(
-                                    {{ $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment }}
-                                    );
-                            } else if (fieldId === "task_budget_it_operating") {
-                                max = parseFloat(
-                                    {{ $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }}
-                                    );
-                            } else if (fieldId === "task_budget_gov_utility") {
-                                max = parseFloat(
-                                    {{ $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility }}
-                                    );
-                            }
+<script>
+    $(document).ready(function() {
+        $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
+            function() {
+                var max = 0;
+                var fieldId = $(this).attr('id');
 
-                            var current = parseFloat($(this).val().replace(/,/g, ""));
-                            if (current > max) {
-    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-   /*  $(this).val(max.toFixed(2)); */
-   $(this).val(0);
+                if (fieldId === "task_budget_it_investment") {
+                    max = parseFloat(
+                        {{ $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment }}
+                        );
+                }
+
+                var current = parseFloat($(this).val().replace(/,/g, ""));
+                if (current > max) {
+Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+$(this).val(max.toFixed(2));
 }
 
 
-                        });
-                });
-            </script>
+            });
+    });
+</script>
+
             <script>
                 $(document).ready(function() {
                     $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {

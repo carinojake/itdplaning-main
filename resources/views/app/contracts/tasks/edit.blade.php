@@ -267,7 +267,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย2222') }}</label>
+                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                              data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
                                              id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
