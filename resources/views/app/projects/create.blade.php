@@ -24,14 +24,16 @@
                                         <label for="project_fiscal_year"
                                             class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
                                             class="text-danger">*</span>
-                                        <select name="project_fiscal_year"
+                                            <input type="text" class="form-control" id="project_fiscal_year"
+                                            name="project_fiscal_year" required>
+                                        {{-- <select name="project_fiscal_year"
                                             class="form-select @error('project_fiscal_year') is-invalid @enderror">
                                             @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 10; $i++)
                                                 <option value="{{ $i }}"
                                                     {{ $fiscal_year == $i ? 'selected' : '' }}>{{ $i }}
                                                 </option>
                                             @endfor
-                                        </select>
+                                        </select> --}}
                                         @error('project_fiscal_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -227,44 +229,57 @@
         </script>
 
 
+ <script>
+    $(document).ready(function() {
+        $("#project_fiscal_year").datepicker({
+        format: "yyyy", // กำหนดรูปแบบวันที่เป็นเฉพาะปี
+        viewMode: "years", // กำหนดให้แสดงเฉพาะปี
+        minViewMode: "years", // กำหนดให้เลือกเฉพาะปี
+        language: "th-th"
+    });
+    });
+</script>
 <script>
     $(function() {
-
-
-
-
        // var d = new Date();
        // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-
         $("#project_start_date, #project_end_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
 
             language:"th-th",
-          /*   defaultDate: toDay,
 
-            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-            ],
-            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                'ต.ค.', 'พ.ย.', 'ธ.ค.'
-            ] */
         });
+        $('#project_fiscal_year').on('change', function() {
+    var fiscalYearDate = $(this).datepicker('getDate');
+    var fiscalYear = fiscalYearDate.getFullYear();
+    var fiscalYearStartDate = new Date(fiscalYear - 1, 9, 1); // 1st October of the previous year
+    var fiscalYearEndDate = new Date(fiscalYear, 8, 30); // 30th September of the fiscal year
+    console.log(fiscalYearStartDate);
+    console.log(fiscalYearEndDate);
+    // Set the start and end dates for the project_start_date datepicker
+    $("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
-        $('#project_start_date').on('changeDate', function() {
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#project_end_date").datepicker("setEndDate", fiscalYearEndDate);
+});
+$('#project_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
+
             $("#project_end_date").datepicker("setStartDate", startDate);
         });
 
         $('#project_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
             $("#project_start_date").datepicker("setEndDate", endDate);
-        });
+        })
     });
 </script>
+
+
 
 
 

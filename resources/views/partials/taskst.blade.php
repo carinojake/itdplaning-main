@@ -57,7 +57,7 @@
 
                             <p> งบ  {{ number_format(floatval($task->task_budget_it_operating), 2) }}
                               <p> --}}
-                                  1. {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+                                @if(auth()->user()->isAdmin())1.@endif {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
                           {{--     <p>  2.งบ {{ number_format(floatval($task->task_budget_it_operating ), 2) }}
                                 <p>3. mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget'] ), 2) }}
                                     <p>  4. r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
@@ -70,7 +70,7 @@
                                     <p>r01 {{ number_format(floatval($task_sub_refund_pa_budget_01['operating']['task_refund_pa_budget']), 2) }},
  --}}
  @elseif($task_sub_refund_total_count > $task_sub_refund_01_count)
- งบ+mm+r {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
+ @if(auth()->user()->isAdmin())งบ+mm+r @endif {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
 {{--  <p>  2.งบ {{ number_format(floatval($task->task_budget_it_operating ), 2) }}
     <p>3. mm {{ number_format(floatval($task_sub_sums['operating']['task_mm_budget'] ), 2) }}
         <p>  4. r {{ number_format(floatval($task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
@@ -91,7 +91,7 @@
 
 
 
-                        in {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }}
+                     {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }}
                             บาท
 
 
@@ -136,8 +136,7 @@
                 </thead>
                 <tbody>
                     @if ($task->subtask->count() > 0)
-                        @foreach ($task->subtask as $index => $subtask)
-                            @php
+                    @foreach ($task->subtask as $index => $subtask)                            @php
                                 $relatedData = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
                             @endphp
                             <tr>
@@ -148,8 +147,9 @@
                                         class="btn bg-primary text-white badge">
                                         สญ.ที่ {{ $contract->contract_number }}
                                     </a>
-                                @endforeach
+                                    @endforeach
                                     {{ $subtask->task_name }}
+
                                   {{--   @if($task->task_status == 2)
                                         <span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>
                                     @endif --}}
@@ -214,12 +214,16 @@
                                     @endforeach
 
                                     @if ($subtask->contract->count() < 1)
+
                                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                             class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
                                     @endif
                                     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                         class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
-                                    <form class="delete-form"
+                                      {{--   {{$subtask->subtask->count()}} --}}
+                                        @if ($subtask->subtask->count() < 1)
+                                        @if ($relatedData->totalLeastCost < 0.01)
+                                        <form class="delete-form"
                                         action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                         method="POST" style="display:inline">
                                         @method('DELETE')
@@ -227,8 +231,8 @@
                                         <button class="btn btn-danger text-white btn-delete"><i
                                                 class="cil-trash"></i></button>
                                     </form>
-
-
+                                    @endif
+                                    @endif
 
 
 

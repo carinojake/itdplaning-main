@@ -39,7 +39,7 @@
                             class="col-md-12 btn " data-bs-toggle="popover"
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover"
-                             data-bs-title="งบประมาณที่ได้รับการจัดสรร" data-bs-content="
+                             data-bs-title="งบประมาณ" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
                                 งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท <br>
                             @endif
@@ -64,11 +64,8 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <div class="col-md-auto">
-                    <!--คงเหลือ-->
+                    <!-- งบประมาณคงเหลือที่ไช้ได้-->
                     <div class="card  ">
                         <div class="card-body">
 
@@ -77,54 +74,7 @@
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-2"
-                             data-bs-title="งบประมาณ คงเหลือที่ไช้ได้" data-bs-content="
-                             @if ($project['budget_it_operating'] > 0)
-                             งบกลาง ICT :  {{ number_format($project['budget_it_operating'] - ($otpsa1 + $otpsa2), 2) }} บาท <br>
-                         @endif
-                         @if ($project['budget_it_investment'] > 0)
-                             งบดำเนินงาน :{{ number_format($project['budget_it_investment'] - ($ispa + $itpsa1), 2) }} บาท <br>
-                         @endif
-                         @if ($project['budget_gov_utility'] > 0)
-                             งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility'] - ($utsc_pay_pa + $utsc_pay), 2) }} บาท <br>
-                         @endif
-                         งบประมาณคงเหลือที่ไช้ได้รวมทั้ง : <p>   {{ number_format(floatval( $budget['budget_total_pay_con']), 2) }} บาท <br>
-                         " data-bs-trigger="hover focus">
-
-                                <div class="fs-4 fw-semibold text-success">
-                                    @if ( $budget['project_type'] == 1)
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-
-                                    {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
-
-                                    @elseif( $budget['project_type'] == 2 )
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-
-                                    @elseif( $budget['project_type'] == 2)
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
-
-
-
-                                    @endif
-                                </div>
-                                <small class="text-xl">
-                                    งบประมาณที่ได้รับการจัดสรรคงเหลือที่ไช้ได้
-                                </small>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-auto">
-                    <!--คงเหลือ-->
-                    <div class="card  ">
-                        <div class="card-body">
-
-
-                            <button id="popover_content_wrapper"
-                            class="btn" data-bs-toggle="popover"
-                             data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-2"
-                             data-bs-title="งบประมาณ คงเหลือที่ไช้ได้" data-bs-content="
+                             data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              งบกลาง ICT :  {{ number_format( $budget['budget_total_cost_op'], 2) }} บาท <br>
                          @endif
@@ -150,12 +100,105 @@
                                     @endif
                                 </div>
                                 <small class="text-xl">
-                                    งบประมาณที่ได้เหลือที่
+
+                                    งบประมาณที่ได้รับการจัดสรรคงเหลือ
                                 </small>
                             </button>
                         </div>
                     </div>
                 </div>
+
+
+
+                <div class="col-md-auto">
+                    <!--คงเหลือ-->
+                    <div class="card  ">
+                        <div class="card-body">
+
+
+                            <button id="popover_content_wrapper"
+                            class="btn " data-bs-toggle="popover"
+                             data-bs-placement="bottom"
+                             data-bs-custom-class="custom-popover-3"
+                             data-bs-title="งบประมาณ" data-bs-content="
+                             @if ($project['budget_it_operating'] > 0)
+                             งบกลาง ICT :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_it_investment'] > 0)
+                             งบดำเนินงาน :{{ number_format( $itpsa1 + $itpsa2, 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_gov_utility'] > 0)
+                             งบสาธารณูปโภค : {{ number_format( $utsc_pay_pa + $utsc_pay, 2) }} บาท <br>
+                         @endif
+                         " data-bs-trigger="hover focus">
+
+                                <div class="fs-4 fw-semibold text-warning">
+                                    @if ( $budget['project_type'] == 1)
+                                    {{ number_format(floatval( $otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa + $utsc_pay), 2) }}
+                                    @elseif( $budget['project_type'] == 2 )
+                                    {{ number_format(floatval( $otpsa1 + $otpsa2+$itpsa1 + $itpsa2+$utsc_pay_pa + $utsc_pay), 2) }}
+
+                                    {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
+
+
+
+
+                                    @endif
+                                </div>
+                                <small class="text-xl">
+                                    งบประมาณที่เบิกจ่ายแล้ว
+                                </small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <!--คงเหลือ-->
+                    <div class="card  ">
+                        <div class="card-body">
+
+
+                            <button id="popover_content_wrapper"
+                            class="btn" data-bs-toggle="popover"
+                             data-bs-placement="bottom"
+                             data-bs-custom-class="custom-popover-2"
+                             data-bs-title="'งบประมาณ" data-bs-content="
+                             @if ($project['budget_it_operating'] > 0)
+                             งบกลาง ICT :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_it_investment'] > 0)
+                             งบดำเนินงาน :{{ number_format($budget['budget_total_task_budget_end_investment'] , 2) }} บาท <br>
+                         @endif
+                         @if ($project['budget_gov_utility'] > 0)
+                             งบสาธารณูปโภค : {{ number_format($budget['budget_total_task_budget_end_utility'] , 2) }} บาท <br>
+                         @endif
+                         " data-bs-trigger="hover focus">
+
+                                <div class="fs-4 fw-semibold text-info">
+                                    @if ( $budget['project_type'] == 1)
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+
+                                    @elseif( $budget['project_type'] == 2 )
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+                                    @elseif( $budget['project_type'] == 2)
+                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+
+
+
+                                    @endif
+                                </div>
+                                <small class="text-xl">
+                                    งบประมาณคงเหลือที่ไช้ได้
+
+                                </small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
         <!-- end1 งาน -->
@@ -354,7 +397,7 @@
 
                                     <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
  --}}
-                                        <p> op {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
+                                        <p>  {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
@@ -388,7 +431,7 @@
 
                                     <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
  --}}
-                                        <p> op {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+                                        <p>  {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
@@ -647,7 +690,7 @@
 
                   {{--        {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
 
-                        in {{ number_format(floatval( $budget['budget_total_task_budget_end_investment']), 2) }}
+                        {{ number_format(floatval( $budget['budget_total_task_budget_end_investment']), 2) }}
 
 
 {{--                           {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
@@ -689,7 +732,7 @@
 
                   {{--        {{ number_format(floatval($is_refund_mm_pr), 2) }} --}}
 
-                        in {{ number_format(floatval( $budget['budget_total_cost_in']), 2) }}
+                        {{ number_format(floatval( $budget['budget_total_cost_in']), 2) }}
 
 
 {{--                           {{ number_format(floatval($budget['budget_it_investment']-$result_query_it_investment_idParentCategory->sumSubtotaltask_budget_it_investment0), 2) }}
@@ -1011,7 +1054,7 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                            <p> ut {{ number_format(floatval($budget['budget_total_task_budget_end_utility']), 2) }}
+                                            <p>  {{ number_format(floatval($budget['budget_total_task_budget_end_utility']), 2) }}
 
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
@@ -1050,7 +1093,7 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 ">
-                                            <p> ut {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
+                                            <p> {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
 
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 

@@ -261,15 +261,42 @@
 
         });
 
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        var project_start_date = {{$projectDetails->project_start_date}};
+        var project_end_date = {{$projectDetails->project_end_date}};
+        project_fiscal_year = project_fiscal_year -543;
+        console.log(project_fiscal_year);
+
+
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        var fiscalproject_start_date =  Date(project_start_date);
+        var fiscalproject_end_date =  Date(project_end_date);
+
+        console.log(fiscalproject_start_date);
+        console.log(fiscalproject_end_date);
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
+
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
         });
 
-        $('#task_end_date').on('changeDate', function() {
+     /*    $('#task_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
             $("#task_start_date").datepicker("setEndDate", endDate);
-        });
+        }); */
     });
 </script>
 
@@ -302,14 +329,33 @@
     $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
         var max = 0;
         var fieldId = $(this).attr('id');
+  var budgetItOperating = $("#task_budget_it_operating").val();
+        var budgetItInvestment = $("#task_budget_it_investment").val();
+        var budgetGovUtility = $("#task_budget_gov_utility").val();
 
         if (fieldId === "task_budget_it_investment") {
             max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
-        } else if (fieldId === "task_budget_gov_utility") {
-            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
-        } else if (fieldId === "task_budget_it_operating") {
-            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
+            if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+                $("#task_budget_it_investment").val('');
+            }
+
         }
+
+
+        else if (fieldId === "task_budget_gov_utility") {
+            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
+            if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+                $("#task_budget_gov_utility").val('');
+            }
+
+        }
+
+        else if (fieldId === "task_budget_it_operating") {
+            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
+                if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
+                    $("#task_budget_it_operating").val('');
+                }
+            }
 
         var current = parseFloat($(this).val().replace(/,/g , ""));
         if (current > max) {

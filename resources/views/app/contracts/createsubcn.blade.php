@@ -7,6 +7,7 @@
                 <div class="d-none">
                     @if ($pro)
                         {{ $pro->project_name }}
+                        {{ $pro->project_fiscal_year }}
                     @endif
 
                     @if ($ta)
@@ -69,7 +70,7 @@
                                         <div class="row g-3 align-items-center">
 
                                             <!-- Fiscal Year -->
-                                            <div class="col-md-3">
+                                        {{--     <div class="col-md-3">
                                                 <label for="contract_fiscal_year"
                                                     class="form-label">{{ __('ปีงบประมาณ') }}</label>
                                                 <span class="text-danger">*</span>
@@ -85,7 +86,22 @@
                                                 @error('contract_fiscal_year')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
+                                            </div> --}}
+
+                                            <div class="col-md-3">
+                                                <label for="contract_fiscal_year"
+                                                    class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                                                <span class="text-danger"></span>
+                                                <input type="text" class="form-control" id="contract_fiscal_year"
+                                                name="contract_fiscal_year"    value="{{  $pro->project_fiscal_year }}"  readonly >
+                                                @error('contract_fiscal_year')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
                                             </div>
+
+
+
+
                                             <div class="d-none  col-md-4">
                                                 <label for="contract_type_pa"
                                                     class="form-label">{{ __('งาน/โครงการ') }}</label> <span
@@ -135,6 +151,7 @@
                                                 <div class="col-md-3">
                                                     <label for="contract_type"
                                                         class="form-label">{{ __('ประเภท') }}</label>
+                                                        <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="*" disabled selected>
@@ -1427,13 +1444,33 @@ $value = 0;
                     $("#contract_mm_budget").on("input", function() {
                         var max = 0;
                         var fieldId = $(this).attr('id');
+                        var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                        var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+                        var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
 
                         if (fieldId === "contract_mm_budget") {
                             if (task_budget_it_operating > 0) {
+                                console.log("test");
+                                if (contract_mm_budget < contract_pr_budget) {
+    $("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pa_budget").val('0'); // Set the value of the input field
+}
                                 max = parseFloat(task_budget_it_operating);
                             } else if (task_budget_it_investment > 0) {
+                                console.log(contract_mm_budget+"<"+contract_pr_budget);
+                                if (contract_mm_budget < contract_pr_budget) {
+    $("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pa_budget").val('0'); // Set the value of the input field
+}
                                 max = parseFloat(task_budget_it_investment);
                             } else if (task_budget_gov_utility > 0) {
+                                if (contract_mm_budget < contract_pr_budget) {
+    $("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pa_budget").val('0');
+                                 } // Set the
                                 max = parseFloat(task_budget_gov_utility);
                             }
                         }
@@ -1460,8 +1497,22 @@ $value = 0;
             <script>
                 $(document).ready(function() {
                     $("#contract_pr_budget").on("input", function() {
+                      //  var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                        var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+                        var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
+
+
+
                         var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (contract_pr_budget < contract_pa_budget) {
+    //$("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pa_budget").val('0'); // Set the value of the input field
+}
+
                         if (current > contract_mm_budget) {
                             Swal.fire({
                                 title: "เกิดข้อผิดพลาด",
@@ -1485,8 +1536,16 @@ $value = 0;
                 $(document).ready(function() {
                     $("#contract_pa_budget").on("input", function() {
                         var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+
                         var current = parseFloat($(this).val().replace(/,/g, ""));
-                        if (current > contract_pr_budget) {
+
+
+                        if (contract_pr_budget < contract_pa_budget) {
+    //$("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pa_budget").val('0'); // Set the value of the input field
+}
+                        if (current > contract_pr_budget || contract_pr_budget === "") {
                             Swal.fire({
                                 title: "เกิดข้อผิดพลาด",
                                 text: "วงเงิน (บาท) PR จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pr_budget
@@ -1878,7 +1937,7 @@ $value = 0;
                     //   var d = new Date();
                     // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                    $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date")
+                    $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date,#insurance_start_date, #insurance_end_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
@@ -1897,19 +1956,39 @@ $value = 0;
 
                         });
 
+var contract_fiscal_year = {{$pro->project_fiscal_year}};
+contract_fiscal_year =  contract_fiscal_year -543;
+        console.log( contract_fiscal_year);
+
+        var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
 
 
+// Set the start and end dates for the project_start_date datepicker
+$("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   $("#contract_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $(" contract_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
                     $('#contract_start_date').on('changeDate', function() {
                         var startDate = $(this).datepicker('getDate');
                         $("#contract_end_date").datepicker("setStartDate", startDate);
+                        $("#insurance_end_date").datepicker("setStartDate", startDate);
                         //  $("#contract_sign_date").datepicker("setStartDate", startDate);
                     });
 
                     $('#contract_end_date').on('changeDate', function() {
                         var endDate = $(this).datepicker('getDate');
                         $("#contract_start_date").datepicker("setEndDate", endDate);
+                        $("#insurance_start_date").datepicker("setEndDate", endDate);
+
+
                     });
                 });
             </script>
@@ -1963,9 +2042,12 @@ $value = 0;
                         language: "th-th",
 
                     });
+
+
                 });
 
                 function calculateDuration() {
+
                     var startDate = $('#insurance_start_date').datepicker('getDate');
                     var endDate = $('#insurance_end_date').datepicker('getDate');
                     if (startDate && endDate) {

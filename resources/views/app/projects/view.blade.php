@@ -490,7 +490,7 @@
                                 }).format(task.task_total_pay) + '</span>';
                             } */
 
-                            if (task.root_rs_id == 1) {
+                            if (task.root_st_task_pay == 1 ) {
                                 if (task.root_st_task_pay === 0) {
                                     return '-';
                                 } else {
@@ -498,17 +498,17 @@
                                 return '<span class="text-warning">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.root_st_task_pay) + '</span>';
+                                }).format(task.total_pay_paycons_cte) + '</span>';
                             }
                         }
 
-                        else if (task.root_st_task_pay == 2) {
+                        else if (task.root_st_task_pay == 2 && task.total_pay_paycons_cte > 0) {
 
 
                                 return '<span class="text-warning">'  + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
-                                }).format(task.root_two_task_pay) + '</span>';
+                                }).format(task.total_pay_paycons_cte) + '</span>';
                             }
 
                             else if (task.task_type == 1 && task.pay > 0 && task.p == 1 || task.p == 2 || task

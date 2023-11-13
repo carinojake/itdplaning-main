@@ -2105,7 +2105,9 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_operating'] = ($__budget_it_operating - (($__op_totol_task_budget_it_operating - $__op_total_task_mm_budget - $__op_total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment - (($__in_totol_task_budget_it_investment - $__in_total_task_mm_budget - $__in_total_task_refund_pa_budget_3)));
         $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility - (($__ut_totol_task_budget_gov_utility - $__ut_total_task_mm_budget - $__ut_total_task_refund_pa_budget_3)));
-      //  $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
+
+
+        //  $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
        // $budget['budget_total_task_budget_end_utility1'] = ((($__ut_totol_task_budget_gov_utility)));
         //$budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
         //$budget['budget_total_task_budget_end_utility3'] =  $__ut_total_task_refund_pa_budget_3;
@@ -2135,7 +2137,13 @@ $mainQuery = DB::query()
 
         $budget['budget_total_task_budget_mm_refund'] = ($__total_task_budget - $__mm) + $__total_task_refund_pa_budget_3;
 
-      // dd($budget, $result_query_op_in_un);
+        $budget['budget_total_task_budget_end_toto'] =   $__budget - $budget['budget_total_task_budget_end'] ;
+
+        $budget['budget_total_task_budget_end_operating_toto'] =  ($__budget_it_operating-$budget['budget_total_task_budget_end_operating']);
+        $budget['budget_total_task_budget_end_investment_toto'] =  ($__budget_it_investment-$budget['budget_total_task_budget_end_investment']);
+        $budget['budget_total_task_budget_end_utility_toto'] =  ($__budget_gov_utility-$budget['budget_total_task_budget_end_utility']);
+
+     //dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -4626,7 +4634,7 @@ dd($task_sub_refund_total_count);
         var_dump($gantt);
         dd($gantt, $budget); */
 
-       //  dd($gantt,$budget,$rootsums,$cteQuery->get());
+         //dd($gantt,$budget,$rootsums,$cteQuery->get());
         $labels = [
             'project' => 'โครงการ/งานประจำ',
 
@@ -6125,7 +6133,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
 
          $task_ra_two = $collection->where('task_parent', $task->task_id)
          ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->first();
-         //dd($collection,$result_query_task_op_in_un,$task_ra,$task_ra_two);
+       //dd($collection,$result_query_task_op_in_un,$task_ra,$task_ra_two);
 
        $cteQuery = DB::table('tasks')
             ->withRecursiveExpression('cte', function ($rec) use ($id_tasks, $project, $id_tasks_sub) {
@@ -6385,7 +6393,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
 
         //  dd($results,$results2,$results_sum);
 
-        // dd($task->subtask);
+      // dd($task->subtask);
 
 
 
@@ -6460,7 +6468,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
         ]);
 
 
-        //dd($task_sub_sums,$cteQuery_task_sub_sums);
+  //      dd($task_sub_sums,$cteQuery_task_sub_sums);
 
 
         ($task_sub_refund = $task->subtask->where('task_refund_pa_status', 2));
@@ -6525,7 +6533,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
         ]);
 
        // dd($task_sub_sums,$cteQuery_task_sub_sums);
-       //  dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
+  //   dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
 
 
 
@@ -6561,9 +6569,9 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
 
         // dd($task->subtask->task_refund_pa_status);;
 
-        // dd($latestContract,$results,$taskcons,$contract,$project,$task);
+    // dd($latestContract,$results,$taskcons,$contract,$project,$task);
 
-        ($projectcontract = $project->contract);
+     ($projectcontract = $project->contract);
 
         $contractIds = $projectcontract->pluck('contract_id');
         ($contractIds);
@@ -6600,7 +6608,9 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
             ->toSql(); // แปลงเป็น SQL string
 
            // dd($root_two_non_pe);
+         // dd($root_two_non_pe,$root_two_pe,$rootTwoCostSubquery);
            $idRootTask = $id_root_tasks; // ตัวแปรที่เก็บ ID ของงานหลัก
+
         // สร้าง query หลัก
         $rootTaskFinancials   = DB::table('tasks')
         ->select('root_st.*', 'root_two.*')
@@ -6709,15 +6719,17 @@ FROM tasks WHERE  tasks.deleted_at IS null AND task_parent IS NULL ORDER BY task
                 task_cost_it_investment as taskroot_two_cost_it_investment,
                 task_cost_gov_utility as taskroot_two_cost_gov_utility,
 
-                (SELECT SUM(task_budget_it_operating)+(task_budget_it_investment)+(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
-                OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+                (SELECT SUM(task_budget_it_operating)+sum(task_budget_it_investment)+sum(task_budget_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+                OR task_parent IN
+                ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND tasks.deleted_at IS null)))
                 AND task_type is not null
-                AND deleted_at IS null)  AS root_two_budget,
+                AND tasks.deleted_at IS null)  AS root_two_budget,
 
-    (SELECT SUM(task_cost_it_operating)+(task_cost_it_investment)+(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
-            OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
+    (SELECT SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_two_parent
+            OR task_parent IN
+             ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND tasks.deleted_at IS null)))
             AND task_type is not null
-            AND deleted_at IS null)  AS root_two_cost,
+            AND tasks.deleted_at IS null)  AS root_two_cost,
 
                     (SELECT  SUM(task_cost_it_operating)+sum(task_cost_it_investment)+sum(task_cost_gov_utility)  FROM tasks WHERE (task_parent = taskroot_two_parent
             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_two_parent AND deleted_at IS null)))
@@ -6916,17 +6928,18 @@ AS root_two_refund ,
                 $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
              //  dd($rootTaskFinancials);
 //05112566
-
-
+$relatedData = collect($cteQuery->get());
+//dd($relatedData);
                 // Debugging the output
-               // dd($task_rs_get, $id_tasks,$id_tasks_two_id_parent,$subtasks ,$idRootTasktwo,$rootTaskFinancialstwo,$task_ra,$rootTaskFinancialsQuery);
+        // dd($task_rs_get, $id_tasks,$id_tasks_two_id_parent,$subtasks ,$idRootTasktwo,$rootTaskFinancialstwo,$task_ra,$rootTaskFinancialsQuery);
 
         // ดึงข้อมูล
        // $root_task_two = $root_task_two->get();
 
-      //dd($rootTaskFinancials,$rootTaskFinancialstwo); // แสดงผลข้อมูลที่ได้
+   // dd($rootTaskFinancials,$rootTaskFinancialstwo,$task->subtask); // แสดงผลข้อมูลที่ได้
 
         return view('app.projects.tasks.show', compact(
+            'collection',
             'task_rs_get',
             'cteQueryResults',
             'projectcontract',
@@ -6952,7 +6965,10 @@ AS root_two_refund ,
             'task_sub_refund_total_count',
             'task_sub_refund_count',
             'task_sub_refund_01_count',
-            'task_sub_refund_pa_budget_01'
+            'task_sub_refund_pa_budget_01',
+            'rootTaskFinancials',
+            'rootTaskFinancialstwo',
+            'result_query_task_op_in_un',
         ));
     }
 
@@ -6969,6 +6985,8 @@ AS root_two_refund ,
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
         ($request = Project::find($id));
+        $fiscal_years = Project::where('project_id', $id)->whereNotNull('project_fiscal_year')->pluck('project_fiscal_year')->unique()->sort()->values();
+
 
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
@@ -6988,13 +7006,38 @@ AS root_two_refund ,
         } else {
             $task = null;
         }
+        $projectDetails = Project::find($id);
+        $projectData = DB::table('projects')
+        //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('projects.*')
+        ->where('project_id', $id)
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+    //  dd($projectData);
+    $projectData = $projectData->map(function ($p) {
+        return [
+            'id' => $p->project_id,
+            'project_fiscal_year' => $p->project_fiscal_year,
+            'project_id' => $p->project_id,
+            'project_name' => $p->project_name,
+            // 'task_parent_id' => $task->task_parent,
+            //'text' => $task->task_name,
+            'budget_it_operating' => $p->budget_it_operating,
+            'budget_it_investment' => $p->budget_it_investment,
+            'budget_gov_utility' => $p->budget_gov_utility,
+        ];
+    });
+
+    // dd($projectData);
+
+    $projectsJson = json_encode($projectData);
 
 
-
-
-        //dd ($taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
+       // dd ( $fiscal_years,$taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.create', compact(
+
             'request',
+            'fiscal_years',
             'taskcons',
             'contracts',
             'project',
@@ -7005,7 +7048,10 @@ AS root_two_refund ,
             'sum_task_budget_gov_utility',
             'sum_task_refund_budget_it_operating',
             'sum_task_refund_budget_it_investment',
-            'sum_task_refund_budget_gov_utility'
+            'sum_task_refund_budget_gov_utility',
+            'projectData',
+            'projectDetails'
+
         ));
     }
 
@@ -7175,7 +7221,7 @@ AS root_two_refund ,
     public function taskCreateTo(Request $request, $project, $task = null)
     {
         $id = Hashids::decode($project)[0];
-
+        $projectDetails = Project::find($id);
         ($tasks = Task::where('project_id', $id)->get());
         $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
         ($request = Project::find($id));
@@ -7299,7 +7345,8 @@ AS root_two_refund ,
             'task',
             'task_budget_it_operating',
             'task_budget_it_investment',
-            'task_budget_gov_utility'
+            'task_budget_gov_utility',
+            'projectDetails'
         ));
     }
 
@@ -7310,6 +7357,7 @@ AS root_two_refund ,
     {
         $id = Hashids::decode($project)[0];
         //$project = Project::find($projectId);
+        $projectDetails = Project::find($id);
         $tasks = Task::where('project_id', $id)->get();
         ($contracts = contract::orderBy('contract_fiscal_year', 'desc')->get());
 
@@ -7461,7 +7509,8 @@ AS root_two_refund ,
             'sum_task_refund_budget_gov_utility',
             'sum_task_cost_it_operating',
             'sum_task_cost_it_investment',
-            'sum_task_cost_gov_utility'
+            'sum_task_cost_gov_utility',
+            'projectDetails'
 
 
 
@@ -9325,8 +9374,6 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
 
 
-
-
 //dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
 
 
@@ -9523,13 +9570,18 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         $tasksDetails = $task;
         $taskcon = Taskcon::where('task_id', $task->task_id)->first();
 
+        $files = File::where('task_id', $task->task_id)->get();
 
+
+        // Continue with your logic if files are found
+        ($files->toArray()); // This will dump the array representation of the files collection
 
         // dd($tasksDetails,$task_sub_sums,$task_parent_sub,$task_parent_st);
 
         //dd($tasksDetails);
 
         return view('app.projects.tasks.editsub', compact(
+            'files',
             'taskcon',
             'task_parent_sub',
             'task_sub_refund_pa_budget',
@@ -10017,7 +10069,36 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
             }
 
 
+            $files = new File;
+            $idproject = $id_project;
+            $idtask = $task->task_id;
+            $idup = $idproject . '/' . $idtask;
 
+            $contractDir = public_path('storage/uploads/contracts/' . $idup);
+            if (!file_exists($contractDir)) {
+                mkdir($contractDir, 0755, true);
+            }
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filesize = $file->getSize();
+                    $file->storeAs('public/', $filename);
+                    $file->move($contractDir, $filename);
+
+                    $fileModel = new File;
+                    $fileModel->name = $filename;
+                    //$fileModel->project_id = $idproject;
+                    $fileModel->task_id = $idtask;
+                    $fileModel->size = $filesize;
+                    $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+                    if (!$fileModel->save()) {
+                        // If the file failed to save, redirect back with an error message
+                        return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                    }
+                }
+            }
 
 
 
@@ -10098,6 +10179,36 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         }
         return redirect()->route('project.view', $project);
     }
+
+
+
+        // Continue with your logic if files are found
+
+
+        public function filesdel($project, $task)
+{
+    $id = Hashids::decode($task)[0];
+    $task = Task::find($id);
+
+   //dd($id,$task);
+    $files = File::where('task_id', $task->task_id)->first();
+   // dd($files);
+
+
+    if ($files) {
+
+            $files->delete(); // Delete each file individually
+
+    }
+    dd($files);
+    // Continue with your logic if files are found
+    // ...
+
+    return redirect()->route('project.view', $project);
+}
+
+
+
 
     public function taskRefund($project, $task)
     {

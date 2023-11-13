@@ -19,27 +19,36 @@
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str_root_99', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-info text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
+                                <button class="btn btn-info text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
                             </form>
 
                             @elseif ($project['project_type'] == 1)
-                            @if (  $task_rs_get['rs']== 2)
 
+
+                            @if ($task_rs_get['rs'] == 2 )
+                            @if ( ($task->task_budget_type < 1 ))
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-warning text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
+                                <button class="btn btn-warning text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
                             </form>
-                            @elseif (  $task_rs_get['rs']== 3)
+                            @endif
+                            @endif
+                            @if ($task_rs_get['rs'] == 3 )
+                            @if ( ($task->task_budget_type < 2 ))
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund_two', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-info text-white btn-taskRefund-sub">2.1<i class="cil-money"></i></button>
+                                <button class="btn btn-info text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())2.1 @endif <i class="cil-money"></i></button>
                             </form>
                             @endif
                             @endif
+
+
+
+                            @endif
                             <a onclick="history.back()"
-                                class="btn btn-secondary">กลับ11111111111</a>
+                                class="btn btn-secondary">กลับ</a>
 {{--
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
@@ -52,7 +61,7 @@
                                 <div>{{ $taskcon->taskcon_id }}</div> --}}
                                 <div class="row">
                                     <div class="col-sm">
-                                        [{{   $task_rs_get['rs'] }}]
+                                        @if(auth()->user()->isAdmin())  [{{   $task_rs_get['rs'] }}] @endif
 
 
                                         <div class="fs-4 fw-semibold btn">
@@ -206,19 +215,30 @@
                             <div id="pp_form" class="callout callout-warning"{{--  style="display:none;" --}}>
 
                                 <div class="row">
-                                    <div class="col-3">{{ __('งบใบสำคัญ_PP') }}</div>
+                                    <div class="col-3" >  <label for="taskcon_pp"
+                                        class="form-label">{{ __('งบใบสำคัญ_PP') }} </label></div>
                                     <div class="col-9">{{ $taskcon->taskcon_pp }}</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3">{{ __('รายการใช้จ่าย ') }}</div>
+                                    <div class="col-3">
+                                        <label for="taskcon_pp_name"
+                                        class="form-label"> {{ __('รายการใช้จ่าย ') }}
+                                        </label>
+                                    </div>
                                     <div class="col-9">{{ $taskcon->taskcon_pp_name }}</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3">{{ __('เวลา PP') }}</div>
+                                    <div class="col-3">
+                                        <label for="taskcon_pp_date"
+                                        class="form-label">{{ __('วันที่ PP') }}</label>
+                                        </div>
                                     <div class="col-9">{{\Helper::date4(date('Y-m-d H:i:s', $task->task_pay_date)) }}</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3">{{ __('จำนวนเงิน (บาท) PP') }}</div>
+                                    <div class="col-3">
+                                        <label for="taskcon_pp_pay"
+                                        class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
+                                      </div>
                                     <div class="col-9">{{ number_format($task->task_pay,2) }} บาท</div>
                                 </div>
 

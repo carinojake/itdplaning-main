@@ -12,6 +12,7 @@ use App\Http\Controllers\SortableController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\ConflictController;
 /*
 | Core Route
  */
@@ -146,6 +147,13 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
 
     Route::post('/project/{project}/task/{task}/taskRefundbudget_str', [ProjectController::class, 'taskRefundbudget_str'])->name('project.task.taskRefundbudget_str');
+
+    Route::get('/project/{project}/task/{task}/filesdel', [ProjectController::class, 'filesdel'])->name('project.task.filesdel');
+
+    Route::post('/project/{project}/task/{task}/filesdel', [ProjectController::class, 'filesdel'])->name('project.task.filesdel');
+
+
+
 
 
     Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');
@@ -292,7 +300,12 @@ Route::get('/fileupload', [UploadController::class, 'index'])->name('fileupload.
 /* Route::get('/fileupload/upload',[UploadController::class,'upload'])->name('fileupload.upload');; */
 Route::post('/fileupload/store',[UploadController::class,'store'])->name('upload.file');
 
+// web.php
+Route::delete('/fileupload/delete/{id}',[UploadController::class,'delete'])->name('fileupload.delete');
+
 
 /* Route::get('/fileupload/upload','UploadController@index');
 Route::post('/fileupload/store','UploadController@store')->name('upload.file'); */
+
+Route::resource('conflict', ConflictController::class);
 });

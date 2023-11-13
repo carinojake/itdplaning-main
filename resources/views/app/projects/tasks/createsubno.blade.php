@@ -752,27 +752,34 @@
                 <script>
                     $(document).ready(function() {
                         // Initially hide the fields
-                        $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+                      //  $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
                         $("#task_pay_d").hide();
 
                         // Show the fields when a value is entered in task_budget_it_operating
                         $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
                             var fieldId = $(this).attr('id');
+                            var task_budget_it_operating = $("#task_budget_it_operating").val().length != 0;
+                          //  alert(fieldId);
+
 
                             if ($(this).val() != '') {
-                                if (fieldId === "task_budget_it_operating") {
-                                    $("#task_cost_it_operating").parent().show();
+                                if ($("#task_budget_it_operating").val() === "0" || $("#task_budget_it_operating").val() === '') {
+                                   // $("#task_cost_it_operating").parent().show();
+                                   $("#task_cost_it_operating").val(0);
                                     $("#task_pay_d").hide();
-                                } else if (fieldId === "task_budget_it_investment") {
-                                    $("#task_cost_it_investment").parent().show();
+
+                                   // alert(task_budget_it_operating);
+                                }
+                                else if (fieldId === "task_budget_it_investment") {
+                                 //   $("#task_cost_it_investment").parent().show();
                                     $("#task_pay_d").hide();
                                 } else if (fieldId === "task_budget_gov_utility") {
-                                    $("#task_cost_gov_utility").parent().show();
+                                  //  $("#task_cost_gov_utility").parent().show();
                                     $("#task_pay_d").hide();
                                 }
                                 $("#task_pay_d").hide();
                             } else {
-                                $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
+                              //  $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
                                 $("#task_pay_d").hide();
                             }
                         });
@@ -787,7 +794,42 @@
                         });
                     });
                 </script>
+    <script>
+        $(document).ready(function() {
+    // Function to check and update the task cost fields
+    function updateTaskCostFields() {
+        var budgetItOperating = $("#task_budget_it_operating").val();
+        var budgetItInvestment = $("#task_budget_it_investment").val();
+        var budgetGovUtility = $("#task_budget_gov_utility").val();
 
+        // Check for task_budget_it_operating
+        if (budgetItOperating === "0" || budgetItOperating === '') {
+            $("#task_cost_it_operating").val('');
+        }
+
+        // Check for task_budget_it_investment
+        if (budgetItInvestment === "0" || budgetItInvestment === '') {
+            $("#task_cost_it_investment").val('');
+        }
+
+        // Check for task_budget_gov_utility
+        if (budgetGovUtility === "0" || budgetGovUtility === '') {
+            $("#task_cost_gov_utility").val('');
+        }
+    }
+
+    // Attach event handlers to the budget fields
+    $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+        updateTaskCostFields();
+
+        // Your existing code for showing/hiding fields
+        // ...
+    });
+
+    // Call the function on page load to handle the initial state
+    updateTaskCostFields();
+});
+</script>
 
 
 <script>
@@ -799,7 +841,24 @@
             language:"th-th",
 
         });
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        project_fiscal_year = project_fiscal_year -543;
+        console.log(project_fiscal_year);
 
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+
+
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+   // $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);

@@ -880,6 +880,28 @@
             language:"th-th",
 
         });
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        project_fiscal_year = project_fiscal_year -543;
+        console.log(project_fiscal_year);
+
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+
+
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
+
+
 
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');

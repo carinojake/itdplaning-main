@@ -6,6 +6,7 @@
 
                 @if ($pro)
                     {{ $pro->project_name }}
+                    {{ $pro->project_fiscal_year }}
                 @else
                 @endif
 
@@ -1276,7 +1277,7 @@
                             var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
-                            $("#contract_mm_budget1, #contract_pr_budget1").on("input", function() {
+                            $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
                                // var max = 0;
                                 var fieldId = $(this).attr('id');
                                 var budgetType = $("#project_select").val();
@@ -1391,7 +1392,7 @@
             if (current > contract_mm_budget) {
                 Swal.fire({
                     title: "จำนวนเงินเกินกรอบ",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
                     icon: "error",
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"

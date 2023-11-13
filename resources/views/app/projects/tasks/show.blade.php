@@ -249,7 +249,7 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'ใช่, คือเงิน'
+                        confirmButtonText: 'ใช่, คืนเงิน'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             form.submit();
@@ -271,7 +271,7 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'ใช่, คือเงิน'
+                        confirmButtonText: 'ใช่, คืนเงิน'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             form.submit();

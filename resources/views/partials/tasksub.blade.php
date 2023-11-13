@@ -13,7 +13,7 @@
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund_prarent_3', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
         @method('POST') {{-- Use POST method to submit the form --}}
         @csrf
-        <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money">taskRefund_prarent_3</i></button>
+        <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money"></i></button>
     </form>
     @endif
     {{-- <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
@@ -76,7 +76,7 @@
     class="btn btn-secondary">กลับ</a>
 </x-slot:toolbar>
 
-<h2>{{ $task->task_name }}   [{{   $task_rs_get['rs'] }}] </h2>
+<h2>{{ $task->task_name }}   @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif</h2>
 <div class="container">
     <div class="row mt-5">
         <div class="col-sm">
@@ -156,6 +156,9 @@
         </tr>
         @if ($task->subtask->count() > 0)
             @foreach ($task->subtask as $index => $subtask)
+            @php
+            $relatedData = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
+        @endphp
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>
@@ -234,16 +237,21 @@
                     @if ($subtask->contract->count() < 1)
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
                         @endif
-
+                        @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1)
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
-                        <form class="delete-form"
+                            @if ($subtask->subtask->count() < 1)
+                            @if ($relatedData->totalLeastCost < 0.01)
+                            <form class="delete-form"
                             action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             method="POST" style="display:inline">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
                         </form>
+                            @endif
+                        @endif
+                        @endif
                     </td>
                 </tr>
                 <tr>

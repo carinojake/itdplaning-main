@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            //
-            $table->integer('task_parent_sub')->nullable();//
+        Schema::create('conflict', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('fiscal_year')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,9 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            //
-            $table->dropColumn('task_parent_sub');
-        });
+        Schema::dropIfExists('conflict');
     }
 };

@@ -18,7 +18,7 @@
                             <div id="budget_form" >
                             <form method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="row needs-validation"
+                                class="row needs-validation" enctype="multipart/form-data"
                                 novalidate>
                                 @csrf
                                 {{ method_field('PUT') }}
@@ -443,6 +443,7 @@
                                 </div>
 
                                 @if ($task->task_parent_sub < 2)
+                                @if($taskcon)
                                     <div id="pay_form" >
                                     <div >
                                     <h4>เบิกจ่าย</h4>
@@ -452,7 +453,7 @@
                                             <label for="taskcon_pp"
                                                 class="form-label">{{ __('งบใบสำคัญ_PP ') }}</label>
                                             {{-- <span class="text-danger">*</span> --}}
-                                            @if($taskcon)
+                                           {{--  @if($taskcon) --}}
                                             <input type="text" class="form-control"
                                                 id="taskcon_pp" name="taskcon_pp"
                                                 value="{{ $taskcon->taskcon_pp }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
@@ -497,6 +498,84 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                <div class=" col-md-12 mt-3">
+                                    <label for="file"
+                                        class="form-label">{{ __('เอกสารแนบ') }}</label>
+                                <div class="input-group control-group increment " >
+                                    <input type="file" name="file[]" class="form-control" multiple >
+                                    <div class="input-group-btn">
+                                      <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                    </div>
+                                  </div>
+                                  <div class="clone d-none">
+                                    <div class="control-group input-group" style="margin-top:10px">
+                                      <input type="file" name="file[]" class="form-control" multiple>
+                                      <div class="input-group-btn">
+                                        <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                @if(count($files) > 0)
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                       {{--  <th>Photo</th> --}}
+                                        <th>File Name</th>
+                                      {{--   <th>File project_id</th>
+                                        <th>File task_id</th>
+                                        <th>File contract_id</th> --}}
+                                        <th>File Size</th>
+                                        <th>Date Uploaded</th>
+                                        <th>File Location</th>
+                                        <th>ลบ</th>
+                                    </thead>
+                                    <tbody>
+                                        @if(count($files) > 0)
+                                            @foreach($files as $file)
+                                                <tr>
+                                                   {{--  <td><img src='storage/{{$file->name}}' name="{{$file->name}}" style="width:90px;height:90px;"></td> --}}
+                                                    <td>{{ $file->name }}</td>
+                                           {{--          <td>{{ $file->project_id }}</td>
+                                                    <td>{{ $file->task_id }}</td>
+                                                    <td>{{ $file->contract_id }}</td> --}}
+
+
+                                                    <td>
+                                                        @if($file->size < 1000)
+                                                            {{ number_format($file->size,2) }} bytes
+                                                        @elseif($file->size >= 1000000)
+                                                            {{ number_format($file->size/1000000,2) }} mb
+                                                        @else
+                                                            {{ number_format($file->size/1000,2) }} kb
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ date('M d, Y h:i A', strtotime($file->created_at)) }}</td>
+
+
+                                                    <td><a href="{{ asset('storage/uploads/contracts/' . $file->project_id . '/' . $file->task_id . '/' . $file->name) }}">{{ $file->name }}</a></td>
+
+                                                    <td>
+                                                        <a href="{{ route('project.task.filesdel', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-danger">
+                                                            <i class="glyphicon glyphicon-remove"></i> Remove
+                                                        </a>
+                                                    </td>
+
+
+                                                    {{--  <td><a href="{{ $file->location }}">{{ $file->location }}</a></td> --}}
+
+
+
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="12" class="text-center">No Table Data</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                                @endif
                                 @if(auth()->user()->isAdmin())
                                     <div class="col-md-12 mt-3">
                                         @if($task->task_refund_pa_status == 1)
@@ -533,38 +612,38 @@
                                         </label>
                                       </div>
 
+    {{-- Content for admin --}}
+    1
 
+
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="1" @checked($task->task_budget_type == 1)>
+      <label class="form-check-label" for="task_budget_type1" @checked($task->task_budget_type == 1) >
+        คืน1task_budget_type1
+      </label>
+    </div>
+
+
+
+    <div class=" d-nome form-check form-check-inline ms-5">
+      <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="2" @checked($task->task_refund_pa_status == 2) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+      <label class="form-check-label" for="task_budget_type2"  @checked($task->task_refund_pa_status == 2) >
+        คืนtask_budget_type2
+      </label>
+    </div>
+
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="" @checked(is_null($task->task_refund_pa_status))>
+      <label class="form-check-label" for="task_refund_pa_status0" @checked(is_null($task->task_refund_pa_status))>
+        ไม่ได้คืน task_budget_type
+      </label>
+  </div>
 
 
                                       @endif
 
 
-                                      {{-- Content for admin --}}
-                                      1
 
-
-                                      <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="1" @checked($task->task_budget_type == 1)>
-                                        <label class="form-check-label" for="task_budget_type1" @checked($task->task_budget_type == 1) >
-                                          คืน1task_budget_type1
-                                        </label>
-                                      </div>
-
-
-
-                                      <div class=" d-nome form-check form-check-inline ms-5">
-                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="2" @checked($task->task_refund_pa_status == 2) {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
-                                        <label class="form-check-label" for="task_budget_type2"  @checked($task->task_refund_pa_status == 2) >
-                                          คืนtask_budget_type2
-                                        </label>
-                                      </div>
-
-                                      <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="task_budget_type" id="task_budget_type" value="" @checked(is_null($task->task_refund_pa_status))>
-                                        <label class="form-check-label" for="task_refund_pa_status0" @checked(is_null($task->task_refund_pa_status))>
-                                          ไม่ได้คืน task_budget_type
-                                        </label>
-                                    </div>
 
                                   @else
                                       {{-- Content for regular user --}}
@@ -849,7 +928,6 @@
                                 function() {
                                     var max = 0;
                                     var fieldId = $(this).attr('id');
-
                                     if (fieldId === "task_budget_it_investment") {
         max = parseFloat({{  $tasksDetails->task_budget_it_investment+($task_parent_sub->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget'])+$task_sub_sums['investment']['task_refund_pa_budget'] }});
     } else if (fieldId === "task_budget_it_operating") {
@@ -873,7 +951,7 @@
                    <script>
                         $(document).ready(function() {
                             $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
-                                var max ;
+                                var max = 0.00;
                                 var fieldId = $(this).attr('id');
 
                                 if (fieldId === "task_cost_it_investment") {
@@ -962,6 +1040,7 @@
 
     function calculateRefund() {
         var totalRefund = 0;
+        var totalRefund_2 = 0;
 
         costFields.forEach(function(costField, index) {
             var pa_value = $("#" + costField).val();
@@ -979,6 +1058,7 @@
         });
 
         $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
+        $("#task_pay").val(totalRefund_2.toFixed(2));
     }
 
     $(document).ready(function() {

@@ -524,7 +524,7 @@ class ContractController extends Controller
         $tasksDetails = $task;
 
 
-       // dd($ta,$tasksData,$projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
+       // dd($pro,$ta,$tasksData,$projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
 
         $tasksJson = json_encode($tasksData);
 
@@ -735,7 +735,7 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
        // dd($tasksDetails = $task);
 
 
-       // dd($ta,$tasksData,$projectDetails, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility);
+      // dd($ta,$tasksData,$projectDetails, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility);
 
         $tasksJson = json_encode($tasksData);
 
