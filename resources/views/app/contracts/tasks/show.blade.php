@@ -7,7 +7,10 @@
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <x-card title="{{ $taskcon->taskcon_name }}">
               <x-slot:toolbar>
-
+                <a href="{{ route('contract.task.editview', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
+                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog">
+                      </i>
+                </a>
               </x-slot:toolbar>
 
 <div class="container">

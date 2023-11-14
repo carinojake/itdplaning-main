@@ -224,6 +224,8 @@
                                     </div>
 
                                     <div class="col-md-12 mt-3">
+                                    {{ session('contract_name') }}
+
                                         <label for="task_name"
                                             class="form-label">{{ __('ชื่อรายการ') }}</label>
                                             <span class="text-danger">*</span>
@@ -239,6 +241,7 @@
 
                                     <div class="row mt-3">
                                         <div class="col-md-6">
+                                            {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
                                             <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                             <span class="text-danger">*</span>
                                             <input class="form-control" id="task_start_date" name="task_start_date"
@@ -247,6 +250,7 @@
                                         </div>
 
                                         <div class="col-md-6">
+                                            {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
                                             <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                             <span class="text-danger">*</span>
                                             <input class="form-control" id="task_end_date" name="task_end_date"
@@ -400,7 +404,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div id="refund" {{-- style="display:none;" --}}>
+                                            <div id="refund" readonly {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
                                                         <label for="task_refund_pa_budget"
@@ -412,7 +416,9 @@
                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                             class="form-control numeral-mask"
                                                             id="task_refund_pa_budget"
-                                                            name="task_refund_pa_budget" min="0"   value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget,2 }} readonly>
+                                                            name="task_refund_pa_budget" min="0"
+                                                             value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget,2 }}
+                                                             readonly>
 
                                                         {{--  <div class="invalid-feedback">
                                                                 {{ __('ค่าสาธารณูปโภค') }}

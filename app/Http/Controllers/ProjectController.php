@@ -2143,7 +2143,7 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_investment_toto'] =  ($__budget_it_investment-$budget['budget_total_task_budget_end_investment']);
         $budget['budget_total_task_budget_end_utility_toto'] =  ($__budget_gov_utility-$budget['budget_total_task_budget_end_utility']);
 
-     //dd($budget, $result_query_op_in_un);
+    // dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -6539,7 +6539,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
 
 
 
-      /*   ($files = File::join('tasks', 'files.task_id', '=', 'tasks.task_id')
+        ($files = File::join('tasks', 'files.task_id', '=', 'tasks.task_id')
             ->where('tasks.task_id', $task->task_id)
             ->get());
 
@@ -6552,7 +6552,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
             ->where('tasks.task_id', $task->task_id)
 
 
-            ->get()); */
+            ->get());
 
         //dd($task_sub_sums,$sum_tasksub_budget_it_operating,$sum_tasksub_cost_budget_it_operating,$sum_tasksub_refund_budget_it_operating,$sum_tasksub_mm_budget);
 
@@ -6949,8 +6949,8 @@ $relatedData = collect($cteQuery->get());
             'combinedQuery',
             'cteQuery',
             'task_sub_refund_pa_budget',
-            //'files_contract',
-           // 'files',
+            'files_contract',
+            'files',
             'task_sub_sums',
             'taskcons',
             'project',

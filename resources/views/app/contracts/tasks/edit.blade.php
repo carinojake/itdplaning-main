@@ -17,7 +17,7 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $taskcon->taskcon_name }}">
+                        <x-card title="{{ __('แก้ไขกิจกรรม11111') }} {{ $taskcon->taskcon_name }}">
                             <form method="POST"
                                 action="{{ route('contract.task.update', ['contract' => $contract->Hashid, 'taskcon' => $taskcon->hashid]) }}"
                                 class="row needs-validation"
@@ -37,12 +37,12 @@
 
                                     <div class="col-md-12 mt-3 ">
                                         <label for="taskcon_name">ชื่อ กิจกรรม</label>
-                                        <input type="text" class="form-control" id="taskcon_name" name="taskcon_name"
+                                        <input readonly type="text" class="form-control" id="taskcon_name" name="taskcon_name"
                                             value="{{ $taskcon->taskcon_name }}">
                                     </div>
                                     <div class="form-group mt-3">
                                         <label for="taskcon_description">กิจกรรม</label>
-                                        <textarea class="form-control" id="taskcon_description" name="taskcon_description">{{ $taskcon->taskcon_description }}</textarea>
+                                        <textarea readonly class="form-control" id="taskcon_description" name="taskcon_description">{{ $taskcon->taskcon_description }}</textarea>
                                     </div>
                                 </div>
 
@@ -77,7 +77,7 @@
                                     <div class="col-md-6">
                                         <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
 
-                                        <input class="form-control" id="taskcon_start_date" name="taskcon_start_date"
+                                        <input readonly class="form-control" id="taskcon_start_date" name="taskcon_start_date"
                                         value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}">
                                 </div>
 
@@ -85,79 +85,10 @@
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                      {{--    <span class="text-danger"></span> --}}
-                                     <input class="form-control" id="taskcon_end_date" name="taskcon_end_date"
+                                     <input readonly class="form-control" id="taskcon_end_date" name="taskcon_end_date"
                                      value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}">
                              </div>
                                 </div>
-
-                            {{--     <div class="row mt-3">
-                                    <h4>งบประมาณ</h4>
-
-                                    <div class="row mt-3">
-                                        <div class="col-6">
-                                            <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
-                                            @if ($contract->contract_budget_type==='1')
-                                            <div class="col-md-12 mt-3">
-                                                <label for="taskcon_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
-                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_operating" name="taskcon_budget_it_operating" min="0" value="{{ $taskcon->taskcon_budget_it_operating }}">
-                                                <div class="invalid-feedback">
-                                                    {{ __('ระบุงบกลาง ICT') }}
-                                                </div>
-                                            </div>
-                                            @endif
-                                            @if ($contract->contract_budget_type==='2')
-
-
-                                            <div class="col-md-12">
-                                                <label for="taskcon_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
-                                                <div class="invalid-feedback">
-                                                    {{ __('ระบุงบดำเนินงาน') }}
-                                                </div>
-                                            </div>
-
-                                            @endif
-                                            @if ($contract->contract_budget_type==='3')
-                                            <div class="col-md-12">
-                                                <label for="taskcon_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
-                                                <div class="invalid-feedback">
-                                                    {{ __('ระบุค่าสาธารณูปโภค') }}
-                                                </div>
-                                            </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="col-6">
-                                            <strong>ค่าใช้จ่าย  (งวด/ต่อครั้ง)</strong>
-                                            @if ($contract->contract_budget_type==='1')
-                                                <div class="col-md-12 mt-3">
-                                                    <label for="taskcon_cost_it_operating" class="form-label">{{ __('ค่าใช้จ่ายงบกลาง ICT') }}</label>
-                                                    <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
-                                                    <div class="invalid-feedback">
-                                                        {{ __('ค่าใช้จ่ายงบกลาง ICT') }}
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            @if ($contract->contract_budget_type==='2')
-                                                <div class="col-md-12">
-                                                    <label for="taskcon_cost_it_investment" class="form-label">{{ __('ค่าใช้จ่ายงบดำเนินงาน') }}</label>
-                                                    <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
-                                                    <div class="invalid-feedback">
-                                                        {{ __('ค่าใช้จ่ายงบดำเนินงาน') }}
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            @if ($contract->contract_budget_type==='3')
-                                                <div class="col-md-12">
-                                                    <label for="taskcon_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                    <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
-                                                    <div class="invalid-feedback">
-                                                        {{ __('ระบุค่าสาธารณูปโภค') }}
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div> --}}
 
 
 
@@ -172,7 +103,7 @@
                                                         <label for="taskcon_budget_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                         <input type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_operating" name="taskcon_budget_it_operating" min="0" value="{{ $taskcon->taskcon_budget_it_operating }}"
 
-                                                        required>
+                                                        readonly>
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุงบกลาง ICT') }}
                                                         </div>
@@ -181,7 +112,7 @@
                                                     @if($taskcon->taskcon_budget_it_investment >1)
                                                     <div class="col-md-12">
                                                         <label for="taskcon_budget_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                        <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
+                                                        <input readonly type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_it_investment" name="taskcon_budget_it_investment" min="0" value="{{ $taskcon->taskcon_budget_it_investment }}">
                                                         <div class="invalid-feedback">
                                                             {{ __('ระบุงบดำเนินงาน') }}
                                                         </div>
@@ -190,9 +121,9 @@
                                                     @if($taskcon->taskcon_budget_gov_utility >1)
                                                     <div class="col-md-12">
                                                         <label for="taskcon_budget_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                        <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
+                                                        <input readonly type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_budget_gov_utility" name="taskcon_budget_gov_utility" min="0" value="{{ $taskcon->taskcon_budget_gov_utility }}">
                                                         <div class="invalid-feedback">
-                                                            {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                            {{ __('ระบุงบค่าสาธารณูปโภค') }}
                                                         </div>
                                                     </div>
                                                     @endif
@@ -203,7 +134,7 @@
                                                     @if($taskcon->taskcon_cost_it_operating >1)
                                                         <div class="col-md-12 mt-3">
                                                             <label for="taskcon_cost_it_operating" class="form-label">{{ __('ค่าใช้จ่ายงบกลาง ICT') }}</label>
-                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
+                                                            <input readonly type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_operating" name="taskcon_cost_it_operating" min="0" value="{{ $taskcon->taskcon_cost_it_operating }}">
                                                             <div class="invalid-feedback">
                                                                 {{ __('ค่าใช้จ่ายงบกลาง ICT') }}
                                                             </div>
@@ -212,7 +143,7 @@
                                                         @if($taskcon->taskcon_cost_it_investment >1)
                                                         <div class="col-md-12">
                                                             <label for="taskcon_cost_it_investment" class="form-label">{{ __('ค่าใช้จ่ายงบดำเนินงาน') }}</label>
-                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
+                                                            <input readonly type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_it_investment" name="taskcon_cost_it_investment" min="0" value="{{ $taskcon->taskcon_cost_it_investment }}">
                                                             <div class="invalid-feedback">
                                                                 {{ __('ค่าใช้จ่ายงบดำเนินงาน') }}
                                                             </div>
@@ -221,9 +152,9 @@
                                                         @if($taskcon->taskcon_cost_gov_utility >1)
                                                         <div class="col-md-12">
                                                             <label for="taskcon_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                            <input required type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
+                                                            <input readonly type="text" placeholder="0.00" step="0.01" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask" id="taskcon_cost_gov_utility" name="taskcon_cost_gov_utility" min="0" value="{{ $taskcon->taskcon_cost_gov_utility }}">
                                                             <div class="invalid-feedback">
-                                                                {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                                {{ __('ระบุงบค่าสาธารณูปโภค') }}
                                                             </div>
                                                             @endif</div>
 
@@ -259,30 +190,32 @@
 
 
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pp" class="form-label">{{ __('PP เบิก') }}</label>
+                                            <label for="taskcon_pp" class="form-label">{{ __('PP ใบเบิก') }}</label>
                                             <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
 
                                             <div class="invalid-feedback">
-                                                {{ __('เบิกจ่าย') }}
+                                                {{ __('ใบเบิกจ่าย') }}
                                             </div>
                                         </div>
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
+                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย (บาท)') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                              data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
                                              id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
                                             <div class="invalid-feedback">
-                                                {{ __('เบิกจ่าย') }}
+                                                {{ __('เบิกจ่าย (บาท)') }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                        </div>
 
 
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
+                    <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
+
+                </form>
 
 
                     </x-card>

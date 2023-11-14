@@ -200,6 +200,7 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
     Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
 
+    Route::get('/contract/{contract}/task/{taskcon}/editview', [ContractController::class, 'taskconEditview'])->name('contract.task.editview');
 
     Route::resource('expenses', ExpensesController::class);
     //Route::post('/expensrs', [ExpensrController::class, 'store'])->name('expensrs.store');

@@ -1739,20 +1739,14 @@ $value = 0;
                         $('#tasksContainer').empty(); // clear the container
                         for (var i = 0; i < rounds; i++) {
                             var content = `
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <br> <!-- Line break for spacing -->
+                            <div class="row">
                     <div class="col-md-3">
-                        <label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        <input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
+                        <label class="form-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                        <input class="form-control" type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `">
                     </div>
-                    <br> <!-- Line break for spacing -->
-
                     <div class="col-md-3">
-
-
-                         <label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                         <input type="text" name="tasks[` + i + `][taskbudget]"
+                        <label class="form-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
+                        <input type="text" name="tasks[` + i + `][taskbudget]"
                          class="form-control custom-input numeral-mask expenses"
                          data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
 
@@ -1762,20 +1756,37 @@ $value = 0;
                                                     <div class="valid-feedback">
                                                         Looks good!
                                                     </div>
-
-                        </div>
-                    <br> <!-- Line break for spacing -->
+                                                </div>
                     <div class="col-md-3">
-                        <!-- Additional content can go here -->
+                        <label class="form-label">วันที่เริ่มต้น งวด</label>
+                        <input type="text"
+                        class="form-control datepickerop"
+                        id="start_date_` + i + `" name="tasks[` + i + `][start_date]">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">วันที่สิ้นสุด งวด</label>
+                        <input type="text" class="form-control datepickerop"
+                         id="end_date_` + i + `" name="tasks[` + i + `][end_date]">
                     </div>
                 </div>
-            </div>
             `;
                             $('#tasksContainer').append(content);
                         }
+                        $('.datepickerop').datepicker({ /* Your datepicker options here */
+
+                            dateFormat: "dd/mm/yy",
+                        changeMonth: true,
+                        changeYear: true,
+                        language: "th-th",
+
+                        });
                         // Apply inputmask to the newly added input elements
                         $(":input").inputmask();
                     });
+
+
+
+
 
                     // When an expense input changes, update the total and check against the budget
                     $(document).on('input', '.expenses', function() {

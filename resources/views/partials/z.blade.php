@@ -243,6 +243,7 @@
                                 </div>
 
                             </div>
+
                             @if(count($files) > 0)
                             <table class="table table-bordered table-striped">
                                 <thead>

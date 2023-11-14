@@ -116,8 +116,8 @@
                                             @if ($origin)
 
                                                 <div class="col-md-3">
-                                                    <label for="contract_type"
-                                                        class="form-label">{{ __('ประเภท') }}  <span class="text-danger">*</span></label>
+                                                    <label for="contract_type" class="form-label">{{ __('ประเภท') }}
+                                                        <span class="text-danger">*</span></label>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="" disabled selected>
@@ -133,7 +133,7 @@
                                                 <div class="col-md-3">
                                                     <label for="contract_type"
                                                         class="form-label">{{ __('ประเภท') }}</label>
-                                                        <span class="text-danger">*</span>
+                                                    <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
                                                         class="form-control">
                                                         <option value="" disabled selected>
@@ -182,7 +182,7 @@
                             </div> --}}
 
                                         <!--  1  -->
-                                      {{--   <div class="row fw-semibold mt-3">
+                                        {{--   <div class="row fw-semibold mt-3">
 
                                             <div class="row">
                                                 @if ($sum_task_budget_it_operating > 0)
@@ -203,56 +203,53 @@
                                                 @endif
                                             </div>
                                         </div> --}}
-                                        @if($projectDetails != null)
-                                        <div class="row mt-3">
-                                            <h4>งบประมาณที่ได้รับจัดสรร</h4>
-                                            <div class="row">
-                                                @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                                    <div class="col-md-4">
-                                                        <label for="budget_it_operating"
-                                                            class="form-label">{{ __('งบกลาง ICT ') }}</label>
-                                                        <input type="text"
-                                                            placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
-                                                            step="0.01"
-                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                            class="form-control numeral-mask"
-                                                            id="budget_it_operating"
-                                                            name="budget_it_operating" min="0"
-                                                            disabled readonly>
-                                                    </div>
-                                                @endif
+                                        @if ($projectDetails != null)
+                                            <div class="row mt-3">
+                                                <h4>งบประมาณที่ได้รับจัดสรร</h4>
+                                                <div class="row">
+                                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                                        <div class="col-md-4">
+                                                            <label for="budget_it_operating"
+                                                                class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                                            <input type="text"
+                                                                placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
+                                                                step="0.01"
+                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                class="form-control numeral-mask"
+                                                                id="budget_it_operating" name="budget_it_operating"
+                                                                min="0" disabled readonly>
+                                                        </div>
+                                                    @endif
 
-                                                @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
-                                                    <div class="col-4">
-                                                        <label for="budget_it_investment"
-                                                            class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                        <input type="text"
-                                                            placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
-                                                            step="0.01"
-                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                            class="form-control numeral-mask"
-                                                            id="budget_it_investment"
-                                                            name="budget_it_investment" min="0"
-                                                            disabled readonly>
-                                                    </div>
-                                                @endif
+                                                    @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                                        <div class="col-4">
+                                                            <label for="budget_it_investment"
+                                                                class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                            <input type="text"
+                                                                placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
+                                                                step="0.01"
+                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                class="form-control numeral-mask"
+                                                                id="budget_it_investment" name="budget_it_investment"
+                                                                min="0" disabled readonly>
+                                                        </div>
+                                                    @endif
 
-                                                @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                                    <div class="col-md-4">
-                                                        <label for="budget_gov_utility"
-                                                            class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                        <input type="text"
-                                                            placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท"
-                                                            step="0.01"
-                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                            class="form-control numeral-mask"
-                                                            id="budget_gov_utility"
-                                                            name="budget_gov_utility" min="0"
-                                                            disabled readonly>
-                                                    </div>
-                                                @endif
+                                                    @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                                        <div class="col-md-4">
+                                                            <label for="budget_gov_utility"
+                                                                class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                            <input type="text"
+                                                                placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท"
+                                                                step="0.01"
+                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                class="form-control numeral-mask"
+                                                                id="budget_gov_utility" name="budget_gov_utility"
+                                                                min="0" disabled readonly>
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
                                         @endif
 
                                         <div class="callout callout-info">
@@ -279,19 +276,21 @@
                                                                             <label for="project_select"
                                                                                 class="form-label">{{ __('ประเภท งบประมาณ') }}</label>
                                                                             <span class="text-danger">*</span>
-                                                                            <select class="form-control" name="project_select"
+                                                                            <select class="form-control"
+                                                                                name="project_select"
                                                                                 id="project_select" required>
-                                                                                <option selected disabled value="">
+                                                                                <option selected disabled
+                                                                                    value="">
                                                                                     เลือกประเภท...</option>
 
-                                                                                    <option value="1">งบกลาง
-                                                                                        ICT</option>
+                                                                                <option value="1">งบกลาง
+                                                                                    ICT</option>
 
-                                                                                    <option value="2">
-                                                                                        งบดำเนินงาน</option>
+                                                                                <option value="2">
+                                                                                    งบดำเนินงาน</option>
 
-                                                                                    <option value="3">
-                                                                                        ค่าสาธารณูปโภค</option>
+                                                                                <option value="3">
+                                                                                    ค่าสาธารณูปโภค</option>
 
                                                                             </select>
                                                                         </div>
@@ -308,33 +307,38 @@
                                                                                 <label for="contract_mm"
                                                                                     class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
                                                                                 <span class="text-danger"></span>
-                                                                                <input type="text" class="form-control"
-                                                                                    id="contract_mm" name="contract_mm">
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="contract_mm"
+                                                                                    name="contract_mm">
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
                                                                             </div>
 
 
-                                                                        <div class="col-md-6 ">
-                                                                            <label for="contract_mm_name"
-                                                                                class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
+                                                                            <div class="col-md-6 ">
+                                                                                <label for="contract_mm_name"
+                                                                                    class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
 
-                                                                            <input type="text" class="form-control"
-                                                                                id="contract_mm_name"
-                                                                                name="contract_mm_name" required autofocus>
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="contract_mm_name"
+                                                                                    name="contract_mm_name" required
+                                                                                    autofocus>
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
                                                                             <div class="col-md-3 ">
                                                                                 <label for="contract_mm_budget"
                                                                                     class="form-label">{{ __('วงเงิน (บาท) MM') }}</label>
                                                                                 <span class="text-danger"></span>
 
-                                                                                <input type="text" placeholder="0.00"
-                                                                                    step="0.01" class="form-control"
+                                                                                <input type="text"
+                                                                                    placeholder="0.00" step="0.01"
+                                                                                    class="form-control"
                                                                                     id="contract_mm_budget"
                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                     class="form-control numeral-mask"
@@ -344,33 +348,36 @@
                                                                         </div>
 
 
-                                                                    <div class="col-md-3 mt-3">
-                                                                        <label for="contract_number"
-                                                                            class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
-                                                                        <span class="text-danger">*</span>
-                                                                        <input type="text" class="form-control"
-                                                                            id="contract_number"
-                                                                            name="contract_number" required autofocus>
+                                                                        <div class="col-md-3 mt-3">
+                                                                            <label for="contract_number"
+                                                                                class="form-label">{{ __('เลขที่สัญญา  ') }}</label>
+                                                                            <span class="text-danger">*</span>
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_number"
+                                                                                name="contract_number" required
+                                                                                autofocus>
 
-                                                                        <div class="invalid-feedback">
-                                                                            {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                                            <div class="invalid-feedback">
+                                                                                {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                                            </div>
                                                                         </div>
+
+                                                                        <div class="col-md-9 mt-3 ">
+                                                                            <label for="contract_name"
+                                                                                id="contract_name_label"
+                                                                                class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
+
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_name"
+                                                                                name="contract_name" required
+                                                                                autofocus>
+                                                                            <div class="invalid-feedback">
+                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                            </div>
+                                                                        </div>
+
+
                                                                     </div>
-
-                                                                    <div class="col-md-9 mt-3 ">
-                                                                        <label for="contract_name" id="contract_name_label"
-                                                                        class="form-label">{{ __('ชื่อ PO/ER/CN/ ค่าใช้จ่ายสำนักงาน') }}</label>
-
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_name" name="contract_name" required
-                                                                        autofocus>
-                                                                    <div class="invalid-feedback">
-                                                                        {{ __('ชื่อสัญญา ซ้ำ') }}
-                                                                    </div>
-                                                                    </div>
-
-
-                                                                </div>
 
 
 
@@ -402,7 +409,8 @@
                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_pr_budget"
-                                                                                    min="0"  onchange="calculateRefund()">
+                                                                                    min="0"
+                                                                                    onchange="calculateRefund()">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -417,7 +425,7 @@
                                                             <div id="pa_form" style="display:none;">
                                                                 <div class="callout callout-warning">
 
-                                                                  <div class="row mt-3">
+                                                                    <div class="row mt-3">
                                                                         <div class="col-md-4">
                                                                             <label for="contract_pa"
                                                                                 class="form-label">{{ __('ใบขออนุมัติซื้อ/จ้าง (PA)') }}</label>
@@ -445,8 +453,7 @@
                                                                                 onchange="calculateRefund()">
                                                                         </div>
                                                                     </div>
-                                                                 <div id="contract_refund_pa_budget_2"
-                                                                       >
+                                                                    <div id="contract_refund_pa_budget_2">
                                                                         <div class=" row mt-3">
                                                                             <div class="col-md-4">
                                                                                 <label for="contract_refund_pa_budget"
@@ -459,7 +466,7 @@
                                                                                     class="form-control numeral-mask"
                                                                                     id="contract_refund_pa_budget"
                                                                                     name="contract_refund_pa_budget"
-                                                                                    min="0"  readonly>
+                                                                                    min="0" readonly>
 
                                                                             </div>
 
@@ -787,7 +794,7 @@
 
                                                                 <div class="col-md-3">
                                                                     <label for="contract_start_date"
-                                                                        class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                                                        class="form-label">{{ __('วันที่เริ่มต้น สัญญา') }}</label>
                                                                     {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                                                     <input type="text" class="form-control"
                                                                         id="contract_start_date"
@@ -799,7 +806,7 @@
 
                                                                 <div class="col-md-3">
                                                                     <label for="contract_end_date"
-                                                                        class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                                                        class="form-label">{{ __('วันที่สิ้นสุด สัญญา') }}</label>
                                                                     <input type="text" class="form-control"
                                                                         id="contract_end_date"
                                                                         name="contract_end_date">
@@ -878,7 +885,7 @@
                                                             data-coreui-toggle="collapse"
                                                             data-coreui-target="#collapseThree" aria-expanded="false"
                                                             aria-controls="collapseThree">
-                                                            ข้อมูลสัญญา 3
+                                                            เอกสารแนบ
                                                         </button>
                                                     </h2>
                                                     <div id="collapseThree" class="accordion-collapse collapse"
@@ -887,7 +894,7 @@
                                                         <div class="accordion-body">
 
                                                             <!--ข้อมูลสัญญา 3 -->
-                                                     {{--        <div class="col-md-12">
+                                                            {{--        <div class="col-md-12">
                                                                 <label for="contract_file" class="form-label">{{ __('อัปโหลดไฟล์') }}</label>
                                                                 <input type="file" class="form-control" id="contract_file" name="contract_file">
                                                                 <div class="invalid-feedback">
@@ -897,22 +904,30 @@
                                                             <div class=" col-md-12 mt-3">
                                                                 <label for="file"
                                                                     class="form-label">{{ __('เอกสารแนบ') }}</label>
-                                                            <div class="input-group control-group increment " >
-                                                                <input type="file" name="file[]" class="form-control" multiple >
-                                                                <div class="input-group-btn">
-                                                                  <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                                                <div class="input-group control-group increment ">
+                                                                    <input type="file" name="file[]"
+                                                                        class="form-control" multiple>
+                                                                    <div class="input-group-btn">
+                                                                        <button class="btn btn-success"
+                                                                            type="button"><i
+                                                                                class="glyphicon glyphicon-plus"></i>Add</button>
+                                                                    </div>
                                                                 </div>
-                                                              </div>
-                                                              <div class="clone d-none">
-                                                                <div class="control-group input-group" style="margin-top:10px">
-                                                                  <input type="file" name="file[]" class="form-control" multiple>
-                                                                  <div class="input-group-btn">
-                                                                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
-                                                                  </div>
+                                                                <div class="clone d-none">
+                                                                    <div class="control-group input-group"
+                                                                        style="margin-top:10px">
+                                                                        <input type="file" name="file[]"
+                                                                            class="form-control" multiple>
+                                                                        <div class="input-group-btn">
+                                                                            <button class="btn btn-danger"
+                                                                                type="button"><i
+                                                                                    class="glyphicon glyphicon-remove"></i>
+                                                                                Remove</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                              </div>
                                                             </div>
-                                                           {{--  <div class="col-md-12 mt-3">
+                                                            {{--  <div class="col-md-12 mt-3">
                                                                 <label for="contract_mm_name"
                                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
@@ -948,13 +963,13 @@
 
 
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- -->
+                                            <!-- -->
 
-                                        <!--   <div class="col-md-4">
+                                            <!--   <div class="col-md-4">
                         <label for="contract_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
                             class="text-danger">*</span>
                         {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
@@ -1120,11 +1135,10 @@
 
 
 
-
-                                        <x-button class="btn-success" type="submit">
-                                            {{ __('coreuiforms.save') }}
-                                        </x-button>
-                                        {{--
+                                            <x-button class="btn-success" type="submit">
+                                                {{ __('coreuiforms.save') }}
+                                            </x-button>
+                                            {{--
                 @if ($origin && $task)
                     <x-button
                         link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
@@ -1138,9 +1152,10 @@
                 {{ __('coreuiforms.return') }}
             </x-button>
             @endif --}}
-                                        <x-button link="{{ route('contract.index') }}" class="btn-light text-black">
-                                            {{ __('coreuiforms.return') }}
-                                        </x-button>
+                                            <x-button link="{{ route('contract.index') }}"
+                                                class="btn-light text-black">
+                                                {{ __('coreuiforms.return') }}
+                                            </x-button>
 
 
                                 </form>
@@ -1152,7 +1167,9 @@
             </div>
         </x-slot:content>
         <x-slot:css>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+            <link
+                href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+                rel="stylesheet" />
 
         </x-slot:css>
         <x-slot:javascript>
@@ -1162,9 +1179,10 @@
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-       {{--   <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js">
+            </script>
+            {{--   <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
@@ -1202,21 +1220,18 @@
             </script>
 
             <script type="text/javascript">
-
-
                 $(document).ready(function() {
 
-                  $(".btn-success").click(function(){
-                      var html = $(".clone").html();
-                      $(".increment").after(html);
-                  });
+                    $(".btn-success").click(function() {
+                        var html = $(".clone").html();
+                        $(".increment").after(html);
+                    });
 
-                  $("body").on("click",".btn-danger",function(){
-                      $(this).parents(".control-group").remove();
-                  });
+                    $("body").on("click", ".btn-danger", function() {
+                        $(this).parents(".control-group").remove();
+                    });
 
                 });
-
             </script>
 
             <script>
@@ -1237,98 +1252,102 @@
 
 
 
-<script>
-    $(document).ready(function() {
-        $('#project_select').change(function() {
-            // ซ่อนทุกฟิลด์ก่อน
-            $('#ICT').hide();
-            $('#inv').hide();
-            $('#utility').hide();
-            $('#task_pay_d').hide();
+            <script>
+                $(document).ready(function() {
+                    $('#project_select').change(function() {
+                        // ซ่อนทุกฟิลด์ก่อน
+                        $('#ICT').hide();
+                        $('#inv').hide();
+                        $('#utility').hide();
+                        $('#task_pay_d').hide();
 
 
-            // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
-            if ($(this).val() == '1') {
-                $('#ICT').show();
-              //  $('#task_pay_d').show();
-            } else if ($(this).val() == '2') {
-                $('#inv').show();
-               // $('#task_pay_d').show();
-            } else if ($(this).val() == '3') {
-                $('#utility').show();
-              //  $('#task_pay_d').show();
-            }
-        });
+                        // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                        if ($(this).val() == '1') {
+                            $('#ICT').show();
+                            //  $('#task_pay_d').show();
+                        } else if ($(this).val() == '2') {
+                            $('#inv').show();
+                            // $('#task_pay_d').show();
+                        } else if ($(this).val() == '3') {
+                            $('#utility').show();
+                            //  $('#task_pay_d').show();
+                        }
+                    });
 
-        // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
-        $('#project_select').change();
-    });
-</script>
-
-
-
-                    <script>
-                        $(document).ready(function() {
-
-                            var project_budget_it_operating = {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
-
-                            var project_budget_it_investment = {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
-
-                            var project_budget_gov_utility = {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
-
-
-                            $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
-                               // var max = 0;
-                                var fieldId = $(this).attr('id');
-                                var budgetType = $("#project_select").val();
+                    // ทำการเรียกเมธอด change เมื่อโหลดหน้าเพื่อซ่อนฟิลด์ที่ไม่เกี่ยวข้อง
+                    $('#project_select').change();
+                });
+            </script>
 
 
 
+            <script>
+                $(document).ready(function() {
 
-                                 if ( $projectDetails = null) {
+                    var project_budget_it_operating =
+                        {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
 
-                                                }
-                        else if (budgetType === "1") {
-                                    max = parseFloat(project_budget_it_operating);
-                    } else if (budgetType === "2") {
-                        max = parseFloat(project_budget_it_investment);
-                    } else if (budgetType === "3") {
-                        max = parseFloat(project_budget_gov_utility);
-                    }
+                    var project_budget_it_investment =
+                        {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
+
+                    var project_budget_gov_utility =
+                        {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
-                                var current = parseFloat($(this).val().replace(/,/g, ""));
-                                if (current > max) {
-                                    Swal.fire({
-                                        title: "เกิดข้อผิดพลาด",
-                                        text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                                        icon: "error",
-                                        confirmButtonColor: "#3085d6",
-                                        confirmButtonText: "ตกลง"
-                                    });
-                                    $(this).val(0);
-                                }
+                    $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
+                        // var max = 0;
+                        var fieldId = $(this).attr('id');
+                        var budgetType = $("#project_select").val();
+
+
+
+
+                        if ($projectDetails = null) {
+
+                        } else if (budgetType === "1") {
+                            max = parseFloat(project_budget_it_operating);
+                        } else if (budgetType === "2") {
+                            max = parseFloat(project_budget_it_investment);
+                        } else if (budgetType === "3") {
+                            max = parseFloat(project_budget_gov_utility);
+                        }
+
+
+                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (current > max) {
+                            Swal.fire({
+                                title: "เกิดข้อผิดพลาด",
+                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) + " บาท",
+                                icon: "error",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "ตกลง"
                             });
+                            $(this).val(0);
+                        }
+                    });
 
-                        /*  $("#contract_pa_budget").on("input", function() {
-                                var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
-                                if (current > contract_mm_budget) {
-                                    Swal.fire({
-                                        title: "เกิดข้อผิดพลาด",
-                                        text: "จำนวนเงิน PA ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                                        icon: "error",
-                                        confirmButtonColor: "#3085d6",
-                                        confirmButtonText: "ตกลง"
-                                    });
-                                    $(this).val(contract_mm_budget.toFixed(2));
-                                }
-                            }); */
-                        });
+                    /*  $("#contract_pa_budget").on("input", function() {
+                            var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                            if (current > contract_mm_budget) {
+                                Swal.fire({
+                                    title: "เกิดข้อผิดพลาด",
+                                    text: "จำนวนเงิน PA ต้องไม่เกิน " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
+                                    icon: "error",
+                                    confirmButtonColor: "#3085d6",
+                                    confirmButtonText: "ตกลง"
+                                });
+                                $(this).val(contract_mm_budget.toFixed(2));
+                            }
+                        }); */
+                });
+            </script>
 
-                        </script>
 
-
-{{--
+            {{--
 <script>
    $(document).ready(function() {
  /*    var task_budget_it_operating = {{ $sum_task_budget_it_operating }};
@@ -1384,65 +1403,77 @@
 });
 
 </script> --}}
-<script>
-    $(document).ready(function() {
-        $("#contract_pa_budget").on("input", function() {
-            var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
-            var current = parseFloat($(this).val().replace(/,/g, ""));
-            if (current > contract_mm_budget) {
-                Swal.fire({
-                    title: "จำนวนเงินเกินกรอบ",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                    icon: "error",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "ตกลง"
+            <script>
+                $(document).ready(function() {
+                    $("#contract_pa_budget").on("input", function() {
+                        var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (current > contract_mm_budget) {
+                            Swal.fire({
+                                title: "จำนวนเงินเกินกรอบ",
+                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString(
+                                    'en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }) + " บาท",
+                                icon: "error",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "ตกลง"
+                            });
+                            /*   $(this).val(contract_mm_budget.toFixed(2)); */
+                            $(this).val(0);
+                        }
+                    });
                 });
-              /*   $(this).val(contract_mm_budget.toFixed(2)); */
-                $(this).val(0);
-            }
-        });
-    });
-</script>
+            </script>
 
-<script>
-    $(document).ready(function() {
-        $("#contract_er_budget,#contract_po_budget").on("input", function() {
-            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-            var current = parseFloat($(this).val().replace(/,/g, ""));
-            if (current > contract_pa_budget) {
-                Swal.fire({
-                    title: "จำนวนเงินเกินกรอบ",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                    /* icon: "error", */
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "ตกลง"
+            <script>
+                $(document).ready(function() {
+                    $("#contract_er_budget,#contract_po_budget").on("input", function() {
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (current > contract_pa_budget) {
+                            Swal.fire({
+                                title: "จำนวนเงินเกินกรอบ",
+                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString(
+                                    'en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }) + " บาท",
+                                /* icon: "error", */
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "ตกลง"
+                            });
+                            /*    $(this).val(contract_pa_budget.toFixed(2)); */
+                            $(this).val(0);
+                        }
+                    });
                 });
-             /*    $(this).val(contract_pa_budget.toFixed(2)); */
-                $(this).val(0);
-            }
-        });
-    });
-</script>
+            </script>
 
-<script>
-    $(document).ready(function() {
-        $("#contract_cn_budget").on("input", function() {
-            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-            var current = parseFloat($(this).val().replace(/,/g, ""));
-            if (current > contract_pa_budget) {
-                Swal.fire({
-                    title: "จำนวนเงินเกินกรอบ",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท",
-                    icon: "error",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "ตกลง"
+            <script>
+                $(document).ready(function() {
+                    $("#contract_cn_budget").on("input", function() {
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var current = parseFloat($(this).val().replace(/,/g, ""));
+                        if (current > contract_pa_budget) {
+                            Swal.fire({
+                                title: "จำนวนเงินเกินกรอบ",
+                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString(
+                                    'en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }) + " บาท",
+                                icon: "error",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "ตกลง"
+                            });
+                            /*  $(this).val(contract_pa_budget.toFixed(2)); */
+                            $(this).val(0);
+                        }
+                    });
                 });
-               /*  $(this).val(contract_pa_budget.toFixed(2)); */
-                $(this).val(0);
-            }
-        });
-    });
-</script>
+            </script>
 
 
 
@@ -1623,7 +1654,7 @@
 
 
 
-       {{--      <script>
+            {{--      <script>
                 $(document).ready(function() {
                     // เมื่อมีการเลือกค่าในฟอร์ม task_parent
                     $('#contract_type_budget').on('change', function() {
@@ -1684,44 +1715,65 @@
 
             <script>
                 $(document).ready(function() {
-$('#rounds').change(function() {
-var rounds = $(this).val();
-$('#tasksContainer').empty(); // clear the container
-for (var i = 0; i < rounds; i++) {
-var content = `
-<div class="row mt-3">
-<div class="col-md-12">
-<br> <!-- Line break for spacing -->
-<div class="col-md-3">
-<label class="custom-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-<input type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `" class="custom-input">
-</div>
+                    $('#rounds').change(function() {
+                        var rounds = $(this).val();
+                        $('#tasksContainer').empty(); // clear the container
+                        for (var i = 0; i < rounds; i++) {
+                            var content = `
 
-<br> <!-- Line break for spacing -->
-<div class="col-md-3">
-<label class="custom-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-<input type="text" name="tasks[` + i + `][taskbudget]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
-</div>
-<br> <!-- Line break for spacing -->
-<div class="col-md-3">
-
-</div>
-</div>
-</div>
-`;
-$('#tasksContainer').append(content);
-}
-//   <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
-//<input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+                                            <div class="row">
 
 
+                <div class="col-md-3">
+                    <label  class="form-label">ชื่องวด ` + (i + 1) + ` &nbsp:
+                        &nbsp</label>
+                    <input class="form-control"type="text"
+                        name="tasks[` + i + `][task_name]"
+                        value="งวด ` + (i + 1) + `">
+                </div>
 
 
-// ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
-$(":input").inputmask();
-});
-});
-</script>
+                <div class="col-md-3">
+                    <label  class="form-label">เงินงวด ` + (i + 1) + ` &nbsp:
+                        &nbsp</label>
+                    <input type="text" name="tasks[` + i + `][taskbudget]"
+                        value="` + (i + 1) + `"
+                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                        class="form-control custom-input numeral-mask">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="contract_start_date"
+                           class="form-label">{{ __('วันที่เริ่มต้น งวด') }}</label>
+         input type="text" class="form-control"
+                           id="contract_start_date"
+                              name="contract_start_date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="contract_start_date"
+                    class="form-label">{{ __('วันที่เริ่มต้น งวด') }}</label>
+                <input type="text" class="form-control"
+                    id="contract_start_date"
+                        name="contract_start_date">
+                </div>
+
+
+                </div>
+                    `;
+                            $('#tasksContainer').append(content);
+                        }
+                        //   <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
+                        //<input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+
+
+
+
+                        // ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
+                        $(":input").inputmask();
+                    });
+                });
+            </script>
 
 
             <script>
@@ -1837,24 +1889,24 @@ $(":input").inputmask();
                         return;
                     }
 
-                 //   var d = new Date();
-                   // #contract_sign_date, var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+                    //   var d = new Date();
+                    // #contract_sign_date, var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
                     $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date")
                         .datepicker({
                             dateFormat: 'dd/mm/yy',
                             changeMonth: true,
                             changeYear: true,
-                            language:"th-th",
-                       /*     defaultDate: toDay,
-                            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                            ],
-                            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                                'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                            ], */
+                            language: "th-th",
+                            /*     defaultDate: toDay,
+                                 dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                                 dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+                                 monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                                     'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                                 ],
+                                 monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                                     'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                                 ], */
 
 
                         });
@@ -1863,26 +1915,21 @@ $(":input").inputmask();
 
 
 
-                        $('#contract_start_date').on('changeDate', function() {
-            var startDate = $(this).datepicker('getDate');
-            $("#contract_end_date").datepicker("setStartDate", startDate);
-            $("#contract_sign_date").datepicker("setStartDate", startDate);
-        });
+                    $('#contract_start_date').on('changeDate', function() {
+                        var startDate = $(this).datepicker('getDate');
+                        $("#contract_end_date").datepicker("setStartDate", startDate);
+                        $("#contract_sign_date").datepicker("setStartDate", startDate);
+                    });
 
-        $('#contract_end_date').on('changeDate', function() {
-            var endDate = $(this).datepicker('getDate');
-            $("#contract_start_date").datepicker("setEndDate", endDate);
-        });
-    });
-
-
-
+                    $('#contract_end_date').on('changeDate', function() {
+                        var endDate = $(this).datepicker('getDate');
+                        $("#contract_start_date").datepicker("setEndDate", endDate);
+                    });
+                });
+            </script>
 
 
-           </script>
-
-
-{{-- <script>
+            {{-- <script>
     $(document).ready(function() {
        $("#contract_start_date").datepicker({});
         $("#contract_end_date").datepicker({ });
@@ -1908,63 +1955,62 @@ $(":input").inputmask();
     </script> --}}
 
 
-    <script>
-     /*    function calculateDuration() {
-            var startDate = $('#insurance_start_date').datepicker('getDate');
-            var endDate = $('#insurance_end_date').datepicker('getDate');
-            if (startDate && endDate) {
-                var diff = Math.abs(endDate - startDate);
-                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-                $('#insurance_duration_months').text(months + " เดือน");
-                $('#insurance_duration_days').text(days + " วัน");
-            }
-        } */
+            <script>
+                /*    function calculateDuration() {
+                                                var startDate = $('#insurance_start_date').datepicker('getDate');
+                                                var endDate = $('#insurance_end_date').datepicker('getDate');
+                                                if (startDate && endDate) {
+                                                    var diff = Math.abs(endDate - startDate);
+                                                    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                                                    var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                                                    $('#insurance_duration_months').text(months + " เดือน");
+                                                    $('#insurance_duration_days').text(days + " วัน");
+                                                }
+                                            } */
 
-        $(document).ready(function() {
-            $('#insurance_start_date, #insurance_end_date').datepicker({
+                $(document).ready(function() {
+                    $('#insurance_start_date, #insurance_end_date').datepicker({
 
-                dateFormat: "dd/mm/yy",
-                changeMonth: true,
-                            changeYear: true,
-                            language:"th-th",
+                        dateFormat: "dd/mm/yy",
+                        changeMonth: true,
+                        changeYear: true,
+                        language: "th-th",
 
-            });
-        });
+                    });
+                });
 
-        function calculateDuration() {
-            var startDate = $('#insurance_start_date').datepicker('getDate');
-            var endDate = $('#insurance_end_date').datepicker('getDate');
-            if (startDate && endDate) {
-                var diff = Math.abs(endDate - startDate);
-                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-                $('#insurance_duration_months').text(months + " เดือน");
-                $('#insurance_duration_days').text(days + " วัน");
-            }
-        }
-                        function grandTotal(){
+                function calculateDuration() {
+                    var startDate = $('#insurance_start_date').datepicker('getDate');
+                    var endDate = $('#insurance_end_date').datepicker('getDate');
+                    if (startDate && endDate) {
+                        var diff = Math.abs(endDate - startDate);
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                        $('#insurance_duration_months').text(months + " เดือน");
+                        $('#insurance_duration_days').text(days + " วัน");
+                    }
+                }
+
+                function grandTotal() {
                     calculateDuration();
                     var days = $("#insurance_start_date").val();
                     var rooms = $("#insurance_end_date").val();
 
-                    if( days != "" && parseInt(days) >0 ){
-                        if( rooms != "" ){
+                    if (days != "" && parseInt(days) > 0) {
+                        if (rooms != "") {
                             var total = parseInt(days) * parseInt(rooms) * roomPrice;
-                            $("#grandtotal").val(total.toFixed(2)).css("color","black");
-                        }else{
-                            $("#grandtotal").val("").css("color","black");
+                            $("#grandtotal").val(total.toFixed(2)).css("color", "black");
+                        } else {
+                            $("#grandtotal").val("").css("color", "black");
                         }
                     }
                 }
 
-                $("#insurance_start_date, #insurance_end_date").on("change",function(){
+                $("#insurance_start_date, #insurance_end_date").on("change", function() {
                     grandTotal();
                     $(".datepicker").hide();
                 });
-
-
-    </script>
+            </script>
             <script>
                 $(document).ready(function() {
                     $(":input").inputmask();

@@ -38,7 +38,7 @@
                             <button id="popover_content_wrapper"
                             class="col-md-12 btn " data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover"
+                             data-bs-custom-class="custom-popover-primary"
                              data-bs-title="งบประมาณ" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
                                 งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท <br>
@@ -73,7 +73,7 @@
                             <button id="popover_content_wrapper"
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-2"
+                             data-bs-custom-class="custom-popover-success"
                              data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              งบกลาง ICT :  {{ number_format( $budget['budget_total_cost_op'], 2) }} บาท <br>
@@ -119,7 +119,7 @@
                             <button id="popover_content_wrapper"
                             class="btn " data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-3"
+                             data-bs-custom-class="custom-popover-warning"
                              data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              งบกลาง ICT :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท <br>
@@ -161,8 +161,8 @@
                             <button id="popover_content_wrapper"
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-2"
-                             data-bs-title="'งบประมาณ" data-bs-content="
+                             data-bs-custom-class="custom-popover-info"
+                             data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              งบกลาง ICT :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
                          @endif

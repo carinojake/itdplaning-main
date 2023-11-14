@@ -193,5 +193,14 @@
         });
 
 
+        //   8 contract.task.edit
+     /*    Breadcrumbs::for('contract.task.editview', function (BreadcrumbTrail $trail, $contract, $taskcon) {
+            $trail->push('contract', route('contract.index'));
+            $trail->push($contract->contract_name, route('contract.show', ['contract' => $contract->hashid]));
+            $trail->push('กิจกรรม',  route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $contract->hashid]));
+            $trail->push($taskcon->taskcon_name);
+            $trail->push('แก้ไข');
+        });
+ */
 
 

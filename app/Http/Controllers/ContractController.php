@@ -934,8 +934,9 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         //  $contract->contract_pa_budget        = $request->input('contract_pa_budget');
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  1;
+        $contract->contract_status =  1;
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
-
+        $contract->contract_project_type        = $request->input('contract_project_type') ?? null;
 
 
         $origin = $request->input('origin');
@@ -1052,7 +1053,7 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
 
 
 
-
+      // dd($contract);
 
         if ($contract->save()) {
 
@@ -1156,44 +1157,55 @@ if($request->hasFile('file')) {
                     ]);
                 }
             } */
-// Insert contract
-if ($request->input('task_parent')) {
-    $contract_has_task = new ContractHasTask;
-    $contract_has_task->contract_id = $contract->contract_id;
-    $contract_has_task->task_id = $request->input('task_parent');
-    $contract_has_task->save();
-}
+                    // Insert contract
+                    if ($request->input('task_parent')) {
+                        $contract_has_task = new ContractHasTask;
+                        $contract_has_task->contract_id = $contract->contract_id;
+                        $contract_has_task->task_id = $request->input('task_parent');
+                        $contract_has_task->save();
+                    }
 
-if (is_array($request->tasks) || is_object($request->tasks)) {
-    foreach ($request->tasks as $task) {
-        $taskName = $task['task_name'] ?? 'Default Task Name';
+                    if (is_array($request->tasks) || is_object($request->tasks)) {
+                        foreach ($request->tasks as $task) {
+                            $taskName = $task['task_name'] ?? 'Default Task Name';
+                            $taskbudget = str_replace(',', '', $task['taskbudget'] ?? null);
+                            $taskcost = str_replace(',', '', $task['taskbudget'] ?? null);
 
-        $taskbudget = str_replace(',', '', $task['taskbudget'] ?? null);
-        $taskcost = str_replace(',', '', $task['taskbudget'] ?? null);
+                            // Convert start and end dates for each task
+                            $start_date_obj = date_create_from_format('d/m/Y', $task['start_date']);
+                            $end_date_obj = date_create_from_format('d/m/Y', $task['end_date']);
 
-        $defaultBudget = 'Default budget';
-        $defaultCost = 'Default cost';
+                            if ($start_date_obj === false || $end_date_obj === false) {
+                                // Handle date conversion error
+                                // You can either return an error message or use a default date
+                            } else {
+                                $start_date_obj->modify('-543 years');
+                                $end_date_obj->modify('-543 years');
 
-        Taskcon::create([
-            'contract_id' => $contract->contract_id,
-            'taskcon_name' => $taskName,
-            'taskcon_budget_it_operating' => $contract->contract_budget_type == 1 ? $taskbudget : null,
-            'taskcon_budget_it_investment' => $contract->contract_budget_type == 2 ? $taskbudget : null,
-            'taskcon_budget_gov_utility' => $contract->contract_budget_type == 3 ? $taskbudget : null,
-            'taskcon_cost_it_operating' => $contract->contract_budget_type == 1 ? $taskcost : null,
-            'taskcon_cost_it_investment' => $contract->contract_budget_type == 2 ? $taskcost : null,
-            'taskcon_cost_gov_utility' => $contract->contract_budget_type == 3 ? $taskcost : null,
-            'taskcon_start_date' => $contract->contract_start_date,
-            'taskcon_end_date' => $contract->contract_end_date,
-            'taskcon_pay_date' => $contract->contract_end_date,
-            'updated_at' => now(),
-            'created_at' => now(),
-        ]);
-    }
-}
+                                $start_date = date_format($start_date_obj, 'Y-m-d');
+                                $end_date = date_format($end_date_obj, 'Y-m-d');
+                            }
 
+                            Taskcon::create([
+                                'contract_id' => $contract->contract_id,
+                                'taskcon_name' => $taskName,
+                                'taskcon_budget_it_operating' => $contract->contract_budget_type == 1 ? $taskbudget : null,
+                                'taskcon_budget_it_investment' => $contract->contract_budget_type == 2 ? $taskbudget : null,
+                                'taskcon_budget_gov_utility' => $contract->contract_budget_type == 3 ? $taskbudget : null,
+                                'taskcon_cost_it_operating' => $contract->contract_budget_type == 1 ? $taskcost : null,
+                                'taskcon_cost_it_investment' => $contract->contract_budget_type == 2 ? $taskcost : null,
+                                'taskcon_cost_gov_utility' => $contract->contract_budget_type == 3 ? $taskcost : null,
+                                'taskcon_start_date' => $start_date ?? date('Y-m-d 00:00:00'),
+                                'taskcon_end_date' => $end_date ?? date('Y-m-d 00:00:00'),
+                                'updated_at' => now(),
+                                'created_at' => now(),
+                            ]);
+                        }
+                      //  dd($request->tasks);
+                    }
 
-        }
+                }
+
 
 
 
@@ -1699,6 +1711,43 @@ if (is_array($request->tasks) || is_object($request->tasks)) {
 
         return view('app.contracts.tasks.edit', compact('contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
+
+
+    public function taskconEditview(Request $request, $contract, $taskcon)
+    {
+        $id_contract = Hashids::decode($contract)[0];
+        $id_taskcon    = Hashids::decode($taskcon)[0];
+        $contract    = Contract::find($id_contract);
+        $taskcon       = Taskcon::find($id_taskcon);
+        $taskcons      = Taskcon::where('contract_id', $id_contract)
+            ->whereNot('taskcon_id', $id_taskcon)
+
+            ->get();
+        $tasks = task::get();
+        $contractcons = Contract::get();
+
+
+
+      // dd ($taskcons, $contract);
+
+        //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
+        // $id_contract = Hashids::decode($contract)[0];
+        //$taskcon       = taskcon::find($id_taskcon);
+        //$contract    = Contract::find($id_contract);
+        //$taskcons = Taskcon::where('taskcon_id', $id_taskcon)
+        //->where('contract_id', $id_contract)
+        // ->get();
+
+        // $taskcons      = Taskcon::where('contract_id', $id_contract)
+        //   ->where('taskcon_id', $id_taskcon)
+        // ->get();
+        // $taskcon = Taskcon::first()->toArray();
+        // $task= Task::get();  'contract', 'taskcon','taskcons','task'
+
+
+        return view('app.contracts.tasks.editview', compact('contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
+    }
+
 
     /**
      * Remove the specified resource from storage.
