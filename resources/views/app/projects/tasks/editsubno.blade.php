@@ -217,7 +217,7 @@
                                                                 <span class="text-danger">*</span>
 
                                                                 <input type="text" class="form-control"
-                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{$taskcon->taskcon_mm  }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
+                                                                    id="taskcon_mm" name="taskcon_mm"   value="{{ $taskcon->taskcon_mm ?? '' }}" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                                                 </div>
@@ -234,7 +234,63 @@
                                                                     {{ __('ชื่อสัญญา ซ้ำ') }}
                                                                 </div>
                                                             </div>
+
+
+
+
+
+
+                                                            @if ($task->task_type == 1)
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+                                                                    <label for="task_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
+                                                                    @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
+                                                                    <input type="text" class="form-control" id="contract_number"
+                                                                    value=" {{ $contract_s->contract_number }}" disabled readonly>
+
+
+                                                                    @else
+                                                                        <select name="task_contract" id="task_contract" class="form-control">
+                                                                            <option value="">ไม่มี</option>
+                                                                            @foreach ($contracts as $contract)
+                                                                                <option value="{{ $contract->contract_id }}"
+                                                                                    {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        <div class="invalid-feedback">
+                                                                            {{ __('สัญญา') }}
+                                                                        </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 mt-4">
+                                                                <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => $project, 'project' => $project,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                                                                    class="btn btn-success text-white"
+                                                                    target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
+                                                            </div>
+                                                            @endif
+
+                                                        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                                         </div>
+
                                                         <div class="row mt-3">
                                                             <div class="col-md-6">
                                                                 <label for="task_start_date"
@@ -542,7 +598,7 @@
 
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp" name="taskcon_pp"
-                                                                                value="{{ $taskcon->taskcon_pp }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                                                                value="{{ $taskcon->taskcon_pp ?? ''  }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกงบใบสำคัญ_PP') }}
                                                                             </div>
@@ -553,7 +609,7 @@
                                                                           {{--   <span class="text-danger">*</span> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="taskcon_pp_name" name="taskcon_pp_name"
-                                                                                value="{{ $taskcon->taskcon_pp_name }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}  >
+                                                                                value="{{ $taskcon->taskcon_pp_name ?? '' }}"    {{ $task->task_status == 2 ? 'readonly' : '' }}  >
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' กรอกรายการใช้จ่าย') }}
                                                                             </div>

@@ -253,7 +253,7 @@
                                             class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
                                             class="text-danger">*</span>
                                         <input type="text" class="form-control" id="task_name" name="task_name"
-                                            value="{{ $task->task_name }}" required autofocus  {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                            value="{{ $task->task_name  }}" required autofocus  {{ $task->task_status == 2 ? 'readonly' : '' }}>
                                         <div class="invalid-feedback">
                                             {{ __('ชื่อรายการที่ใช้จ่าย') }}
                                         </div>
@@ -310,7 +310,7 @@
                                                 @if ($task->task_budget_it_investment > 0)
                                                 <div class="col-md-12">
                                                     <label for="task_budget_it_investment"
-                                                        class="form-label">{{ __('งบดำเนินงาน11') }}</label>
+                                                        class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                          {{--            <input type="text" placeholder="0.00" step="0.01"
                                                         class="form-control" id="task_budget_it_investment"
                                                         name="task_budget_it_investment" min="0"
@@ -979,7 +979,7 @@
             var max = 0;  // Initialize max to 0
             var fieldId = $(this).attr('id');
             var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
-
+            var Pay = $("#task_pay").val();
             // Check if the fieldId is "task_pay"
             if (fieldId === "task_pay") {
                 // Iterate through the costFields array
@@ -987,6 +987,9 @@
                     // Get the value of each field, remove commas, convert to float, and add to max
                     var fieldValue = $("#" + field).val();
                     if (fieldValue) {  // Check if fieldValue is defined
+                        if (pay === "0" || pay === '' || parseFloat(pay) < -0) {
+                            $("#task_pay").val('');;
+                        }
                         max += parseFloat(fieldValue.replace(/,/g, ""));
                     }
                 });

@@ -688,6 +688,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                         {{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }}
+                                {{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }}
+                                {{ $request->budget_it_operating - $sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating }}
+
                                 </div> --}}
 
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
@@ -844,12 +848,34 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
     $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
         var max = 0;
         var fieldId = $(this).attr('id');
+        var budgetItOperating = $("#task_budget_it_operating").val();
+        var budgetItInvestment = $("#task_budget_it_investment").val();
+        var budgetGovUtility = $("#task_budget_gov_utility").val();
+        var costItOperating = $("#task_cost_it_operating").val();
+        var costItInvestment = $("#task_cost_it_investment").val();
+        var costGovUtility = $("#task_cost_gov_utility").val();
+
 
         if (fieldId === "task_budget_it_investment") {
+
             max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
-        } else if (fieldId === "task_budget_gov_utility") {
+            if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+                $("#task_budget_it_investment").val('');
+            }
+
+        }
+
+
+        else if (fieldId === "task_budget_gov_utility") {
             max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
+            if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+                $("#task_budget_gov_utility").val('');
+            }
         } else if (fieldId === "task_budget_it_operating") {
+            if (budgetItOperating === "0" || budgetItOperating === '' ||  parseFloat(budgetItOperating) < -0) {
+                    $("#task_budget_it_operating").val('');
+                }
+
             max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
         }
 
@@ -869,12 +895,27 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
         $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
             var max ;
             var fieldId = $(this).attr('id');
+            var budgetItOperating = $("#task_budget_it_operating").val();
+        var budgetItInvestment = $("#task_budget_it_investment").val();
+        var budgetGovUtility = $("#task_budget_gov_utility").val();
+        var costItOperating = $("#task_cost_it_operating").val();
+        var costItInvestment = $("#task_cost_it_investment").val();
+        var costGovUtility = $("#task_cost_gov_utility").val();
 
             if (fieldId === "task_cost_it_investment") {
+                if(costItInvestment === "0" || costItInvestment === '' || parseFloat(costItInvestment) < -0){
+                    $("#task_cost_it_investment").val('');
+                }
                 max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""))|| 0;
             } else if (fieldId === "task_cost_it_operating") {
+                if(costItOperating === "0" || costItOperating === '' || parseFloat(costItOperating) < -0){
+                    $("#task_cost_it_operating").val('');
+                }
                 max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""))|| 0;
             } else if (fieldId === "task_cost_gov_utility") {
+                if(costGovUtility === "0" || costGovUtility === '' || parseFloat(costGovUtility) < -0){
+                    $("#task_cost_gov_utility").val('');
+                }
                 max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""))|| 0;
             }
 
@@ -927,7 +968,7 @@ function updateTaskCostFields() {
     // Check for task_budget_it_operating
     console.log(budgetItOperating);
     console.log(costItOperating);
-    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating ) {
+    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating  ) {
         $("#task_cost_it_operating").val('');
     }
 
@@ -956,7 +997,41 @@ updateTaskCostFields();
 </script>
 
 
+<script>
+    $(document).ready(function() {
+        $("#task_mm_budget").on("input", function() {
+            var max = 0;  // Initialize max to 0
+            var fieldId = $(this).attr('id');
+            var taskmmbudget = $("#task_mm_budget").val();
+            // If using blade syntax to inject PHP variables into JavaScript, ensure this part is correct.
+            var budgetFields = [
+                {{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }},
+                {{ $request->budget_it_operating - $sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating }},
+                {{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }}
 
+            ];
+
+            // Check if the fieldId is "task_mm_budget"
+            if (fieldId === "task_mm_budget") {
+                if (taskmmbudget === "0" || taskmmbudget === '' || parseFloat(taskmmbudget) < -0 ) {
+        $("#task_mm_budget").val('');
+    }
+                // Iterate through the budgetFields array
+                budgetFields.forEach(function(fieldValue) {
+                    if (fieldValue) {  // Check if fieldValue is defined
+                        max += fieldValue;  // Assuming fieldValue is a number, if not, use parseFloat(fieldValue) or similar
+                    }
+                });
+            }
+
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน <P> งบประมาณ" + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                $(this).val(0);
+            }
+        });
+    });
+</script>
 
 
 

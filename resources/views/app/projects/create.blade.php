@@ -239,6 +239,19 @@
     });
     });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
     $(function() {
        // var d = new Date();
@@ -279,7 +292,37 @@ $('#project_start_date').on('changeDate', function() {
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+$("#budget_it_investment, #budget_gov_utility, #budget_it_operating").on("input", function() {
 
+ var fieldId = $(this).attr('id');
+var budgetItOperating = $("#budget_it_operating").val();
+ var budgetItInvestment = $("#budget_it_investment").val();
+ var budgetGovUtility = $("#budget_gov_utility").val();
+
+     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+         $("#budget_it_investment").val('');
+     }
+
+
+
+     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+         $("#budget_gov_utility").val('');
+     }
+
+
+
+
+         if (budgetItOperating === "0" || budgetItOperating === ''|| parseFloat(budgetItOperating) < -0 ) {
+             $("#budget_it_operating").val('');
+         }
+
+
+
+});
+});
+ </script>
 
 
 

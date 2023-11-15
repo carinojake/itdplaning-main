@@ -2112,9 +2112,9 @@ $mainQuery = DB::query()
         //$budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
         //$budget['budget_total_task_budget_end_utility3'] =  $__ut_total_task_refund_pa_budget_3;
 
-        //$budget['budget_total_task_budget_end_operating'] =  $budget['budget_total_task_budget_end_operating'] - $budget['op_root_task_mm_budget'];
-        //$budget['budget_total_task_budget_end_investment'] =  $budget['budget_total_task_budget_end_investment'] - $budget['in_root_task_mm_budget'];
-      //  $budget['budget_total_task_budget_end_utility'] =  $budget['budget_total_task_budget_end_utility'] - $budget['ut_root_task_mm_budget'];
+        $budget['budget_total_task_budget_end_operating'] =  $budget['budget_total_task_budget_end_operating'] - $budget['op_root_task_mm_budget']- $budget['op_root_total_task_refund_pa_budget_99'];
+        $budget['budget_total_task_budget_end_investment'] =  $budget['budget_total_task_budget_end_investment'] - $budget['in_root_task_mm_budget']- $budget['in_root_total_task_refund_pa_budget_99'];
+        $budget['budget_total_task_budget_end_utility'] =  $budget['budget_total_task_budget_end_utility'] - $budget['ut_root_task_mm_budget']- $budget['ut_root_total_task_refund_pa_budget_99'];
         // $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
         //$budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility- (($__total_task_budget - $__mm - $__total_task_refund_pa_budget_3)));
 
@@ -9576,7 +9576,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         // Continue with your logic if files are found
         ($files->toArray()); // This will dump the array representation of the files collection
 
-        // dd($tasksDetails,$task_sub_sums,$task_parent_sub,$task_parent_st);
+       // dd($tasksDetails,$task_sub_sums,$task_parent_sub);
 
         //dd($tasksDetails);
 
@@ -9659,6 +9659,8 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
 
         ($task_sub = $task->subtask);
+
+
         $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
             if ($subtask->task_budget_it_operating > 1) {
                 $carry['operating']['task_budget'] += $subtask->task_budget_it_operating;

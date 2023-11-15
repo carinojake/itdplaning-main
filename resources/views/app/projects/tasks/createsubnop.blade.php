@@ -696,7 +696,7 @@
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         // Initially hide the fields
         $("#task_cost_it_operating, #task_cost_it_investment, #task_cost_gov_utility").parent().hide();
@@ -733,9 +733,48 @@
             }
         });
     });
+</script> --}}
+<script>
+    $(document).ready(function() {
+// Function to check and update the task cost fields
+function updateTaskCostFields() {
+    var budgetItOperating = $("#task_budget_it_operating").val();
+    var budgetItInvestment = $("#task_budget_it_investment").val();
+    var budgetGovUtility = $("#task_budget_gov_utility").val();
+    var costItOperating = $("#task_cost_it_operating").val();
+    var costItInvestment = $("#task_cost_it_investment").val();
+    var costGovUtility = $("#task_cost_gov_utility").val();
+
+    // Check for task_budget_it_operating
+    console.log(budgetItOperating);
+    console.log(costItOperating);
+    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0) {
+        $("#task_cost_it_operating").val('');
+    }
+
+    // Check for task_budget_it_investment
+    if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment > costItInvestment || parseFloat(budgetItInvestment) < -0) {
+        $("#task_cost_it_investment").val('');
+    }
+
+    // Check for task_budget_gov_utility
+    if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility > costGovUtility || parseFloat(budgetGovUtility) < -0) {
+        $("#task_cost_gov_utility").val('');
+    }
+}
+
+// Attach event handlers to the budget fields
+$("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+    updateTaskCostFields();
+
+    // Your existing code for showing/hiding fields
+    // ...
+});
+
+// Call the function on page load to handle the initial state
+updateTaskCostFields();
+});
 </script>
-
-
 
 
                     <script>

@@ -15,11 +15,78 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('เพิ่มกิจกรรม') }}">
+                            <div class="callout callout-primary row mt-3">
+
+                                <div class="col-md-3">
+                                    <label for="project_fiscal_year"
+                                        class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                                   {{ $projectDetails->project_fiscal_year }}
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="task_start_date2"
+                                        class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+
+                          {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="task_end_date2"
+                                        class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+
+                               {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <label for="reguiar_id"
+                                        class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
+                                {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
+
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <div class="col-md-12">
+                                        <label for="project_description"
+                                            class="form-label">{{ __('รายละเอียดโครงการ') }}</label>
+                                     {{ $projectDetails->project_description }}
+                                    </div>
+                                </div>
+
+
+                                <div class="row mt-3">
+                                    <label
+                                    class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
+                            </div>
+                                <div class="row">
+                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
+                                    <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
+                                        <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+
+                                        @endif
+                                </div>
+                                <div class="row">
+                                    @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
+                                    <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
+                                        <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                    @endif
+                                </div>
+                                <div class="row">
+                                    @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
+                                    <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                        <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                    @endif
+                                </div>
+
+
+
+
+
+                            </div>
 
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row g-3 needs-validation" novalidate>
 
                                 @csrf
+
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
@@ -264,6 +331,8 @@
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+        //var task_end_date_str = $("#task_end_date").val();
+
 
         project_fiscal_year = project_fiscal_year - 543;
 
@@ -280,11 +349,53 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+   //var task_end_date_str = $("#task_end_date").val();
+   // var task_end_date = (task_end_date_str);
+   // var project_end_date =(project_end_date_str);
+     // console.log(task_end_date_str);
+       // console.log(task_end_date);
+        //console.log(project_end_date);
+
+
+  // Add click event listener for the delete button
+  $('#task_end_date').click(function(e) {
+    e.preventDefault();
+    var task_end_date_str = $("#task_end_date").val();
+    var task_end_date = convertToDate(task_end_date_str);
+    var project_end_date = convertToDate(project_end_date_str);
+      console.log(task_end_date_str);
+        console.log(task_end_date);
+        console.log(project_end_date);
+
+    if (task_end_date > project_end_date) {
+        Swal.fire({
+            title: 'วันที่ เกิน ?',
+            text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ทำตามวันที่เกิน!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+
+                    'success'
+                )
+            }
+        });
+    }
+});
+
+$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
 
-        $('#task_start_date').on('changeDate', function() {
+
+
+
+
+    $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
         });
@@ -294,6 +405,12 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
             $("#task_start_date").datepicker("setEndDate", endDate);
         }); */
     });
+
+    function convertToDate(dateStr) {
+        var parts = dateStr.split("/");
+        var date = new Date(parts[2], parts[1] - 1, parts[0]);
+        return date;
+    }
 </script>
 
 
@@ -331,6 +448,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
         if (fieldId === "task_budget_it_investment") {
             max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
+
             if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
@@ -348,7 +466,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
         else if (fieldId === "task_budget_it_operating") {
             max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
-                if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
+                if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
                     $("#task_budget_it_operating").val('');
                 }
             }
@@ -363,6 +481,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
             /* $(this).val(max.toFixed(2)); */
         }
+
     });
 });
         </script>
