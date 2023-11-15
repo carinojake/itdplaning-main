@@ -3891,37 +3891,39 @@ AS root_refund ,
 		AS mm ,
 
 
-		(SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+		(SELECT SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND task_type = 1
 				AND deleted_at IS null) AS pe,
-		(SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+		(SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND task_type = 2
 				AND deleted_at IS null) AS non_pe,
-		(SELECT SUM(task_cost_it_operating)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+		(SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND deleted_at IS null) AS wait_pay ,
 		(SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
 		OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
 				AND deleted_at IS null) AS task_pay,
 
-                (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility)FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND deleted_at IS null) AS new_balance,
 
 
-                (SELECT SUM(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+                (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND task_budget_type = 1
 				AND deleted_at IS null) AS new_balance_re,
 
 
 
-						(SELECT 	sum(task_budget_it_operating)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+						(SELECT 	(sum(task_budget_it_operating)+sum(task_budget_it_investment)+sum(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND deleted_at IS null) AS new_balance_2,
-		 (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
+
+
+                (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
 				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
 				AND task_refund_pa_status = 1
 				AND deleted_at IS null) AS balance_status
@@ -3985,22 +3987,22 @@ AS root_two_refund ,
                     AS mm ,
 
 
-                    (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                    (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
                             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
                             AND task_type = 1
                             AND deleted_at IS null) AS pe,
-                    (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                    (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
                             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
                             AND task_type = 2
                             AND deleted_at IS null) AS non_pe,
-                    (SELECT SUM(task_cost_it_operating)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
+                    (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility)-SUM(task_pay) FROM tasks WHERE (task_parent = taskroot_id
                             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
                             AND deleted_at IS null) AS wait_pay ,
                     (SELECT SUM(task_pay) FROM tasks WHERE task_parent = taskroot_id
                     OR task_parent IN ((SELECT task_id FROM tasks WHERE (task_parent = taskroot_id AND deleted_at IS null)))
                             AND deleted_at IS null) AS task_pay,
 
-                            (SELECT SUM(task_cost_it_operating) FROM tasks WHERE (task_parent = taskroot_id
+                            (SELECT  SUM(task_cost_it_operating)+SUM(task_cost_it_investment)+sum(task_cost_gov_utility) FROM tasks WHERE (task_parent = taskroot_id
                             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
                             AND deleted_at IS null) AS new_balance,
 
@@ -4012,7 +4014,7 @@ AS root_two_refund ,
 
 
 
-                                    (SELECT 	sum(task_budget_it_operating)-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
+                                    (SELECT 	(sum(task_budget_it_operating)+sum(task_budget_it_investment)+sum(task_budget_gov_utility))-SUM(task_mm_budget)+sum(task_refund_pa_budget) FROM tasks WHERE (task_parent = taskroot_id
                             OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = taskroot_id AND deleted_at IS null)))
                             AND deleted_at IS null) AS new_balance_2,
                      (SELECT DISTINCT(task_refund_pa_status) FROM tasks WHERE (task_parent = taskroot_id
@@ -6541,6 +6543,7 @@ $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
 
         ($files = File::join('tasks', 'files.task_id', '=', 'tasks.task_id')
             ->where('tasks.task_id', $task->task_id)
+
             ->get());
 
         ($files_contract = File::join('contracts', 'files.contract_id', '=', 'contracts.contract_id')
@@ -8008,7 +8011,7 @@ $relatedData = collect($cteQuery->get());
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
             // 'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
-            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+           // 'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
             'task_pay' => ['min:0', new ValidateTaskPay($costs)],
             'task_refund_pa_budget' => 'between:0,9999999999',
 
@@ -8248,9 +8251,9 @@ $relatedData = collect($cteQuery->get());
             'taskcon_mm_name' => 'required',
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
-            'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
-            'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+            //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+            //'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+            //'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
             'task_pay' => ['min:0', new ValidateTaskPay($costs)],
 
         ];
