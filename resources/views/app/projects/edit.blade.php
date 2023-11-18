@@ -255,41 +255,97 @@
 
 <script>
     $(function() {
-
-
-
-
-       // var d = new Date();
-       // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-
-        $("#project_start_date, #project_end_date").datepicker({
+        $("#task_start_date, #task_end_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
-
             language:"th-th",
-          /*   defaultDate: toDay,
 
-            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-            ],
-            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                'ต.ค.', 'พ.ย.', 'ธ.ค.'
-            ] */
         });
 
-        $('#project_start_date').on('changeDate', function() {
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
+        var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+        //var task_end_date_str = $("#task_end_date").val();
+
+
+        project_fiscal_year = project_fiscal_year - 543;
+
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(project_start_date_str);
+        console.log(project_end_date_str);
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+   //var task_end_date_str = $("#task_end_date").val();
+   // var task_end_date = (task_end_date_str);
+   // var project_end_date =(project_end_date_str);
+     // console.log(task_end_date_str);
+       // console.log(task_end_date);
+        //console.log(project_end_date);
+
+
+  // Add click event listener for the delete button
+  $('#task_end_date').click(function(e) {
+    e.preventDefault();
+    var task_end_date_str = $("#task_end_date").val();
+    var task_end_date = convertToDate(task_end_date_str);
+    var project_end_date = convertToDate(project_end_date_str);
+      console.log(task_end_date_str);
+        console.log(task_end_date);
+        console.log(project_end_date);
+
+    if (task_end_date > project_end_date) {
+        Swal.fire({
+            title: 'วันที่ เกิน ?',
+            text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ทำตามวันที่เกิน!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+
+                    'success'
+                )
+            }
+        });
+    }
+});
+
+$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
+
+
+
+
+
+    $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
-            $("#project_end_date").datepicker("setStartDate", startDate);
+            $("#task_end_date").datepicker("setStartDate", startDate);
         });
 
-        $('#project_end_date').on('changeDate', function() {
+     /*    $('#task_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
-            $("#project_start_date").datepicker("setEndDate", endDate);
-        });
+            $("#task_start_date").datepicker("setEndDate", endDate);
+        }); */
     });
+
+    function convertToDate(dateStr) {
+        var parts = dateStr.split("/");
+        var date = new Date(parts[2], parts[1] - 1, parts[0]);
+        return date;
+    }
 </script>
 
 
@@ -319,6 +375,77 @@
         </script>
 
 
+<script>
+    $(document).ready(function() {
+$("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
+ var max = 0;
+ var fieldId = $(this).attr('id');
+var budgetItOperating = $("#task_budget_it_operating").val();
+ var budgetItInvestment = $("#task_budget_it_investment").val();
+ var budgetGovUtility = $("#task_budget_gov_utility").val();
+
+ if (fieldId === "task_budget_it_investment") {
+     max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
+
+     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+         $("#task_budget_it_investment").val('');
+     }
+
+ }
+
+
+ else if (fieldId === "task_budget_gov_utility") {
+     max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
+     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+         $("#task_budget_gov_utility").val('');
+     }
+
+ }
+
+ else if (fieldId === "task_budget_it_operating") {
+     max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
+         if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
+             $("#task_budget_it_operating").val('');
+         }
+     }
+
+ var current = parseFloat($(this).val().replace(/,/g , ""));
+ if (current > max) {
+
+
+     Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+
+     $(this).val(0);
+
+     /* $(this).val(max.toFixed(2)); */
+ }
+
+});
+});
+ </script>
+
+
+<script>
+     $(document).ready(function() {
+         // Check initial state of the "มี PA" radio button
+
+
+         if ($('#task_type1').is(':checked')) {
+             $('#contractSelection').show();
+         } else {
+             $('#contractSelection').hide();
+         }
+
+         // Listen for changes on the radio buttons
+         $('input[type=radio][name=task_type]').change(function() {
+             if (this.value == '1') {
+                 $('#contractSelection').show();
+             } else {
+                 $('#contractSelection').hide();
+             }
+         });
+     });
+ </script>
 
 
 
