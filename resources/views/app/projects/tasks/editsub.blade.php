@@ -938,7 +938,7 @@
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
                                     if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกินwwww " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                      /*  $(this).val(max.toFixed(2)); */
            $(this).val(0);
                     }
@@ -979,7 +979,7 @@
             var max = 0;  // Initialize max to 0
             var fieldId = $(this).attr('id');
             var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
-            var Pay = $("#task_pay").val();
+            var pay = $("#task_pay").val();
             // Check if the fieldId is "task_pay"
             if (fieldId === "task_pay") {
                 // Iterate through the costFields array
@@ -988,7 +988,7 @@
                     var fieldValue = $("#" + field).val();
                     if (fieldValue) {  // Check if fieldValue is defined
                         if (pay === "0" || pay === '' || parseFloat(pay) < -0) {
-                            $("#task_pay").val('');;
+                            $("#task_pay").val('');
                         }
                         max += parseFloat(fieldValue.replace(/,/g, ""));
                     }

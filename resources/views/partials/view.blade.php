@@ -38,7 +38,7 @@
                             <button id="popover_content_wrapper"
                             class="col-md-12 btn " data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-primary"
+                             data-bs-custom-class="custom-popover"
                              data-bs-title="งบประมาณ" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
                                 งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท <br>
@@ -84,13 +84,19 @@
                          @if ($project['budget_gov_utility'] > 0)
                              งบสาธารณูปโภค : {{ number_format( $budget['budget_total_cost_ut'], 2) }} บาท <br>
                          @endif
+                         total_task_budget : {{ number_format( $budget['total_task_budget'], 2) }} บาท <br>
+
+                         งบประมาณ-งบtask : {{ number_format( $budget['total']-$budget['total_task_budget'], 2) }} บาท <br>
+                         งบประมาณเหลือ   {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} บาท <br>
+
+                         งบประมาณที่ใช้ได้    {{ number_format( ($budget['total']-$budget['total_task_budget'])+$budget['budget_total_refund_pa_budget_end'], 2) }} บาท <br>
                          " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
-                                    {{ number_format(floatval( $budget['budget_total_cost']), 2) }}
+                                    {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }}
                                     @elseif( $budget['project_type'] == 2 )
-                                    {{ number_format(floatval( $budget['budget_total_cost']), 2) }}
+                                    {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }}
 
                                     {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
 
@@ -153,7 +159,7 @@
                     </div>
                 </div>
                 <div class="col-md-auto">
-                    <!--คงเหลือ-->
+                    <!--คงเหลือ ม่วง-->
                     <div class="card  ">
                         <div class="card-body">
 
@@ -161,7 +167,8 @@
                             <button id="popover_content_wrapper"
                             class="btn" data-bs-toggle="popover"
                              data-bs-placement="bottom"
-                             data-bs-custom-class="custom-popover-info"
+                             data-bs-custom-class="custom-popover-blue"
+
                              data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              งบกลาง ICT :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
@@ -174,16 +181,16 @@
                          @endif
                          " data-bs-trigger="hover focus">
 
-                                <div class="fs-4 fw-semibold text-info">
+                                <div class="fs-4 fw-semibold text-blue">
                                     @if ( $budget['project_type'] == 1)
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                    {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }}
 
 
                                     @elseif( $budget['project_type'] == 2 )
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                    {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }}
 
                                     @elseif( $budget['project_type'] == 2)
-                                    {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
+                                    {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }}
 
 
 
