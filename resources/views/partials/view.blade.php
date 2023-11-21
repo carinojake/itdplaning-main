@@ -173,9 +173,9 @@
                              data-bs-title="งบประมาณ" data-bs-content="
                              @if ($project['budget_it_operating'] > 0)
                              @if($budget['budget_it_operating']<$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] )
-                             งบกลาง ICT 111:    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+ $budget['budget_total_refund_pa_budget_end'],2)}} บาท <br>
+                             งบกลาง ICT :    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+ $budget['budget_total_refund_pa_budget_end'],2)}} บาท <br>
                                 @elseif($budget['budget_it_operating']>$budget['op_totol_task_budget_it_operating'])
-                             งบกลาง ICT 222:  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
+                             งบกลาง ICT :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
                              @endif
                              @endif
                          @if ($project['budget_it_investment'] > 0)
@@ -194,7 +194,6 @@
 
 
                          @endif
-                             งบสาธารณูปโภค : {{ number_format($budget['budget_total_task_budget_end_utility'] , 2) }} บาท <br>
                          @endif
                       {{--    total : {{ number_format( $budget['total'], 2) }} บาท <br>
                          total_task_budget : {{ number_format( $budget['total_task_budget'], 2) }} บาท <br>
@@ -231,11 +230,11 @@
 
                                                     @if ( $budget['project_type'] == 1)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
-                                1  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
+                                  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
 
 
                                     @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
-                                  2  {{ number_format(floatval( $budget['total']+$budget['budget_total_refund_pa_budget_end'])-$budget['root_total_task_budget_null'], 2) }}
+                                    {{ number_format(floatval( $budget['total']+$budget['budget_total_refund_pa_budget_end'])-$budget['root_total_task_budget_null'], 2) }}
                                     @endif
 
 
@@ -257,8 +256,8 @@
                         </div>
                     </div>
                 </div>
-                <!--คงเหลือ ฟ้า-->
-   <div class="col-md-auto">
+                <!--คงเหลือ ฟ้า ทดสอบ-->
+ {{--   <div class="col-md-auto">
 
                     <div class="card  ">
                         <div class="card-body">
@@ -351,7 +350,7 @@
                         </div>
                     </div>
                 </div>
-
+ --}}
 
             </div>
         </div>
@@ -551,11 +550,11 @@
 
                                     <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
  --}}
-                                        <p>  {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
+                                        <p> {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
-                                        {{ number_format(floatval( $budget['budget_total_task_budget_end_operating']), 2) }}
+                                        {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
                                         @endif
                                     </div>
                                     <div>
@@ -572,7 +571,7 @@
 
                     </div>
 
-                    <div class="col-md-auto">
+                {{--     <div class="col-md-auto">
                         <div class="card">
                             <div class="card-body">
                                 <button class="col-md-12 btn " data-bs-toggle="collapse"
@@ -580,11 +579,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 ">
                                         @if ( $budget['project_type'] == 1)
-                                        {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
-                                     {{--    <p> 1. {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
 
-                                    <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
- --}}
                                         <p>  {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
 
 
@@ -604,7 +599,7 @@
 
                         </div>
 
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-auto">
                         <div class="card ">
@@ -1192,8 +1187,7 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                            <p>  {{ number_format(floatval($budget['budget_total_task_budget_end_utility']), 2) }}
-
+                                            {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
 {{--
@@ -1224,7 +1218,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-auto">
+                       {{--  <div class="col-md-auto">
                             <div class="card">
                                 <div class="card-body">
                                     <button class="btn "class="col-md-12 btn " data-bs-toggle="collapse"
@@ -1233,23 +1227,11 @@
                                         <div class="fs-4 ">
                                             <p> {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
 
-                                            {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
-
-{{--
-                                          @if($project['budget_it_investment'] > 1)
-                                            {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))+$ut_refund_mm_pr), 2) }}
-                                            @elseif($project['budget_gov_utility'] > 0) --}}
-{{--                                             {{ number_format(floatval(($project['budget_gov_utility']-(($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))), 2) }}
- --}}                                        {{--  {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
-                                   {{--    @endif --}}
-{{--                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
- --}}
-{{--                                    {{ number_format(floatval($project['budget_gov_utility']-$result_query_gov_utility_idParentCategory->sumSubtotaltask_budget_gov_utility0), 2) }}
- --}}
 
 
-{{--                                    {{ number_format(floatval(((($project['budget_gov_utility']-($utpcs + $utsc))+$utsc_pay_pa + $utsc_pay))-$ut_refund_mm_pr), 2) }}
- --}}
+                                                <p>  {{ number_format(floatval($budget['budget_total_task_budget_end_utility']), 2) }}
+
+
                                         </div>
                                         <div>
                                             <small class="text-xl">
@@ -1261,7 +1243,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-auto">
                             <div class="card">

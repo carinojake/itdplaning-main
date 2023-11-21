@@ -934,21 +934,28 @@ function updateTaskCostFields() {
     var costGovUtility = $("#task_cost_gov_utility").val();
     var taskpay = $("#task_pay").val();
     // Check for task_budget_it_operating
-    console.log(budgetItOperating);
-    console.log(costItOperating);
-    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0) {
+       // Convert string values to float for comparison
+       var numBudgetItOperating = parseFloat(budgetItOperating.replace(/,/g, ''));
+       var numBudgetItInvestment = parseFloat(budgetItInvestment.replace(/,/g, ''));
+    var numBudgetGovUtility = parseFloat(budgetGovUtility.replace(/,/g, ''));
+    var numCostItOperating = parseFloat(costItOperating.replace(/,/g, ''));
+    var numCostItInvestment = parseFloat(costItInvestment.replace(/,/g, ''));
+    var numCostGovUtility = parseFloat(costGovUtility.replace(/,/g, ''));
+    console.log(numBudgetItInvestment);
+    console.log(numCostItInvestment);
+    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating < costItOperating || parseFloat(budgetItOperating) < -0) {
         $("#task_cost_it_operating").val('');
         $("#task_pay").val('');
     }
 
     // Check for task_budget_it_investment
-    if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment > costItInvestment || parseFloat(budgetItInvestment) < -0) {
-        $("#task_cost_it_investment").val('');
+    if (budgetItInvestment === "0" || budgetItInvestment === '' || numBudgetItInvestment < numCostItInvestment || parseFloat(budgetItInvestment) < -0) {
+       $("#task_cost_it_investment").val('');
         $("#task_pay").val('');
     }
 
     // Check for task_budget_gov_utility
-    if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility > costGovUtility || parseFloat(budgetGovUtility) < -0) {
+    if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility < costGovUtility || parseFloat(budgetGovUtility) < -0) {
         $("#task_cost_gov_utility").val('');
         $("#task_pay").val('');
     }

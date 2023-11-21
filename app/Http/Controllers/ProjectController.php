@@ -2247,7 +2247,7 @@ $mainQuery = DB::query()
         $budget['root_total_task_budget'] = $__root_total_task_budget;
 
         $budget['root_total_task_budget_null'] = $budget['total_task_budget_null']+$budget['root_total_task_budget'];
-        dd($budget);
+        //dd($budget);
         $budget['root_total_pay'] = $__root_total_pay;
         $budget['root_task_mm_budget'] = $__root_task_mm_budget;
 
