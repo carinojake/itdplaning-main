@@ -744,22 +744,25 @@ function updateTaskCostFields() {
     var costItOperating = $("#task_cost_it_operating").val();
     var costItInvestment = $("#task_cost_it_investment").val();
     var costGovUtility = $("#task_cost_gov_utility").val();
-
+    var taskpay = $("#task_pay").val();
     // Check for task_budget_it_operating
     console.log(budgetItOperating);
     console.log(costItOperating);
     if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0) {
         $("#task_cost_it_operating").val('');
+        $("#task_pay").val('');
     }
 
     // Check for task_budget_it_investment
     if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment > costItInvestment || parseFloat(budgetItInvestment) < -0) {
         $("#task_cost_it_investment").val('');
+        $("#task_pay").val('');
     }
 
     // Check for task_budget_gov_utility
     if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility > costGovUtility || parseFloat(budgetGovUtility) < -0) {
         $("#task_cost_gov_utility").val('');
+        $("#task_pay").val('');
     }
 }
 
@@ -783,14 +786,30 @@ updateTaskCostFields();
                                 function() {
                                     var max = 0;
                                     var fieldId = $(this).attr('id');
+                                    var budgetItOperating = $("#task_budget_it_operating").val();
+    var budgetItInvestment = $("#task_budget_it_investment").val();
+    var budgetGovUtility = $("#task_budget_gov_utility").val();
 
                                     if (fieldId === "task_budget_it_investment") {
 
                                                     max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+                                                    if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+                $("#task_budget_it_investment").val('');
+            }
+
+
                                                 } else if (fieldId === "task_budget_it_operating") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+                                                    if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
+                $("#task_budget_it_operating").val('');
+            }
+
+
                                                 } else if (fieldId === "task_budget_gov_utility") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+                                                    if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+                $("#task_budget_gov_utility").val('');
+            }
                                                 }
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
@@ -809,15 +828,28 @@ updateTaskCostFields();
                             $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
                                 var max ;
                                 var fieldId = $(this).attr('id');
-
+                                var costItOperating = $("#task_cost_it_operating").val();
+    var costItInvestment = $("#task_cost_it_investment").val();
+    var costGovUtility = $("#task_cost_gov_utility").val();
                                 if (fieldId === "task_cost_it_investment") {
                                     max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+                                    if (costItInvestment === "0" || costItInvestment === '' || parseFloat(costItInvestment) < -0) {
+                $("#task_cost_it_investment").val('');
+            }
+
+
                                 } else if (fieldId === "task_cost_it_operating") {
                                     max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+                                    if (costItOperating === "0" || costItOperating === '' || parseFloat(costItOperating) < -0) {
+                $("#task_cost_it_operating").val('');
+                                    }
+
                                 } else if (fieldId === "task_cost_gov_utility") {
                                     max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+                            if (costGovUtility === "0" || costGovUtility === '' || parseFloat(costGovUtility) < -0) {
+                                $("#task_cost_gov_utility").val('')
                                 }
-
+                            }
                                 var current = parseFloat($(this).val().replace(/,/g, ""));
                                 if (current > max) {
                                     Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
@@ -828,6 +860,71 @@ updateTaskCostFields();
                         });
                     </script>
 
+<script>
+    $(document).ready(function() {
+        $("#task_er_budget").on("input", function() {
+            var max = 0;  // Initialize max to 0
+            var fieldId = $(this).attr('id');
+            var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+            var taskerbudget = $("#task_er_budget").val();
+            // Check if the fieldId is "task_pay"
+            if (fieldId === "task_er_budget") {
+                // Iterate through the costFields array
+                costFields.forEach(function(field) {
+                    // Get the value of each field, remove commas, convert to float, and add to max
+                    var fieldValue = $("#" + field).val();
+                    if (fieldValue) {  // Check if fieldValue is defined
+                        max += parseFloat(fieldValue.replace(/,/g, ""));
+
+                    }
+
+                    if (taskerbudget === "0" || taskerbudget === '' || parseFloat(taskerbudget) < -0) {
+                $("#task_er_budget").val('');}
+                });
+            }
+
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน PA " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                    " บาท");
+                $(this).val(0);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#task_po_budget").on("input", function() {
+            var max = 0;  // Initialize max to 0
+            var fieldId = $(this).attr('id');
+            var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+            var taskpobudget = $("#task_po_budget").val();
+            // Check if the fieldId is "task_pay"
+            if (fieldId === "task_po_budget") {
+                // Iterate through the costFields array
+                costFields.forEach(function(field) {
+                    // Get the value of each field, remove commas, convert to float, and add to max
+                    var fieldValue = $("#" + field).val();
+                    if (fieldValue) {  // Check if fieldValue is defined
+                        max += parseFloat(fieldValue.replace(/,/g, ""));
+
+                    }
+
+                    if (taskpobudget === "0" || taskpobudget === '' || parseFloat(taskpobudget) < -0) {
+                $("#task_po_budget").val('');}
+                });
+            }
+
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน PA " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) +
+                    " บาท");
+                $(this).val(0);
+            }
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
@@ -835,7 +932,7 @@ updateTaskCostFields();
             var max = 0;  // Initialize max to 0
             var fieldId = $(this).attr('id');
             var costFields = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
-
+            var taskpay = $("#task_pay").val();
             // Check if the fieldId is "task_pay"
             if (fieldId === "task_pay") {
                 // Iterate through the costFields array
@@ -844,7 +941,11 @@ updateTaskCostFields();
                     var fieldValue = $("#" + field).val();
                     if (fieldValue) {  // Check if fieldValue is defined
                         max += parseFloat(fieldValue.replace(/,/g, ""));
+
                     }
+
+                    if (taskpay === "0" || taskpay === '' || parseFloat(taskpay) < -0) {
+                $("#task_pay").val('');}
                 });
             }
 

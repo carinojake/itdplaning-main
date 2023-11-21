@@ -4,7 +4,7 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
-                <div class="d-none">
+                <div >
                     @if ($pro)
                         {{ $pro->project_name }}
                         {{ $pro->project_fiscal_year }}
@@ -17,7 +17,9 @@
                         {{ $ta->task_budget_it_operating }}
                         {{ $ta->task_budget_it_investment }}
                         {{ $ta->task_budget_gov_utility }}
-                    @elseif ($tasksDetails)
+
+
+                        @elseif ($tasksDetails)
                         222
                         {{ $tasksDetails->project_id }}
 
@@ -990,7 +992,7 @@ $value = 0;
                                                             data-coreui-toggle="collapse"
                                                             data-coreui-target="#collapseThree" aria-expanded="false"
                                                             aria-controls="collapseThree">
-                                                            ข้อมูลสัญญา 3
+                                                            ข้อมูลสัญญา เอกสารแนบ
                                                         </button>
                                                     </h2>
                                                     <div id="collapseThree" class="accordion-collapse collapse"

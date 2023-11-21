@@ -8,7 +8,6 @@
                         <x-card title="">
                             {{ Breadcrumbs::render('project') }}
 
-
                             <x-slot:toolbar>
                                 <a href="{{ route('project.create') }}" class="btn btn-success text-white"
                                     >เพิ่ม งาน/โครงการ</a>
@@ -18,12 +17,6 @@
 
                                     <a href="{{ route('project.createsubno') }}"
                                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย สำนักงาน</a> --}}
-
-
-
-
-
-
 
                             </x-slot:toolbar>
                             <table class="table table-responsive-sm table-striped" id="datatables">

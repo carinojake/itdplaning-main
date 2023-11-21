@@ -198,10 +198,7 @@
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
 
-                                                ห้ามต่ำกว่า
-                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_op + $sum_task_refund_budget_it_operating) }}
 
-                                                    -
 
                                               ไม่เกิน
                                                 {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
@@ -220,10 +217,7 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
-                                                ห้ามต่ำกว่า
-                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_in + $sum_task_refund_budget_it_investment) }}
 
-                                                    -
 
                                               ไม่เกิน
                                                 {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
@@ -242,10 +236,7 @@
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
-                                                ห้ามต่ำกว่า
-                                                {{ number_format($rootTaskFinancials[0]->root_st_budget_ut + $sum_task_refund_budget_gov_utility) }}
 
-                                                    -
 
                                                ไม่เกิน
                                                 {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility ) }}
@@ -334,21 +325,82 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
+        <script>
+            $(document).ready(function() {
+        // Function to check and update the task cost fields
+        function updateTaskCostFields() {
+            var budgetItOperating = $("#task_budget_it_operating").val();
+            var budgetItInvestment = $("#task_budget_it_investment").val();
+            var budgetGovUtility = $("#task_budget_gov_utility").val();
+            var costItOperating = $("#task_cost_it_operating").val();
+            var costItInvestment = $("#task_cost_it_investment").val();
+            var costGovUtility = $("#task_cost_gov_utility").val();
+            var taskpay = $("#task_pay").val();
+            // Check for task_budget_it_operating
+            console.log(budgetItOperating);
+            console.log(costItOperating);
+            if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0 ) {
+                $("#task_cost_it_operating").val('');
+                $("#task_pay").val('');
+            }
 
+            // Check for task_budget_it_investment
+            if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment > costItInvestment || parseFloat(budgetItInvestment) < -0) {
+                $("#task_cost_it_investment").val('');
+                $("#task_pay").val('');
+            }
+
+            // Check for task_budget_gov_utility
+            if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility > costGovUtility || parseFloat(budgetGovUtility) < -0) {
+                $("#task_cost_gov_utility").val('');
+                $("#task_pay").val('');
+            }
+        }
+
+        // Attach event handlers to the budget fields
+        $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
+            updateTaskCostFields();
+
+            // Your existing code for showing/hiding fields
+            // ...
+        });
+
+        // Call the function on page load to handle the initial state
+        updateTaskCostFields();
+        });
+        </script>
 
         <script>
             $(document).ready(function() {
      $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
          var max = 0;
          var fieldId = $(this).attr('id');
+         var budgetItOperating = $("#task_budget_it_operating").val();
+                    var budgetItInvestment = $("#task_budget_it_investment").val();
+                    var budgetGovUtility = $("#task_budget_gov_utility").val();
 
          if (fieldId === "task_budget_it_investment") {
              max = parseFloat({{$request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment}});
-         } else if (fieldId === "task_budget_it_operating") {
+             if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+                $("#task_budget_it_investment").val('');
+            }
+
+
+            } else if (fieldId === "task_budget_it_operating") {
              max = parseFloat({{$request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating}});
-         } else if (fieldId === "task_budget_gov_utility") {
+             if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
+                    $("#task_budget_it_operating").val('');
+                }
+
+
+
+            } else if (fieldId === "task_budget_gov_utility") {
              max = parseFloat({{$request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility}});
-         }
+             if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+                $("#task_budget_gov_utility").val('');
+            }
+
+            }
 
          var current = parseFloat($(this).val().replace(/,/g , ""));
          if (current > max) {

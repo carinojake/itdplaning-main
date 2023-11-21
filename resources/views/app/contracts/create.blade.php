@@ -168,7 +168,7 @@
                                             <label for="contract_type_budget"
                                                 class="form-label">{{ __('วงเงิน') }}</label>
                                             <input type="text" class="form-control" name="contract_type_budget"
-                                                id="contract-type-budget" value="-">
+                                                id="contract_type_budget" value="-">
                                         </div>
                                         @endif
                                         {{--
@@ -1298,18 +1298,24 @@
                     $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
                         // var max = 0;
                         var fieldId = $(this).attr('id');
-                        var budgetType = $("#project_select").val();
-
+                        var budgettype = $("#project_select").val();
+                        var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                        var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+                        var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
 
 
 
                         if ($projectDetails = null) {
-
-                        } else if (budgetType === "1") {
+                          //  $("#contract_pa_budget").val('11111111'); // Set the value of the input field
+                        } else if (budgettype === "1") {
                             max = parseFloat(project_budget_it_operating);
-                        } else if (budgetType === "2") {
+                        } else if (budgettype === "2") {
                             max = parseFloat(project_budget_it_investment);
-                        } else if (budgetType === "3") {
+                        } else if (budgettype === "3") {
                             max = parseFloat(project_budget_gov_utility);
                         }
 
@@ -1647,7 +1653,7 @@
                             }).format(budget);
                         }
 
-                        $('#contract-type-budget').val(budget);
+                        $('#contract_type_budget').val(budget);
                     });
                 });
             </script>
@@ -1742,24 +1748,20 @@
                         class="form-control custom-input numeral-mask">
                 </div>
 
-                <div class="col-md-3">
-                    <label for="contract_start_date"
-                           class="form-label">{{ __('วันที่เริ่มต้น งวด') }}</label>
-         input type="text" class="form-control"
-                           id="contract_start_date"
-                              name="contract_start_date">
-                </div>
 
                 <div class="col-md-3">
-                    <label for="contract_start_date"
-                    class="form-label">{{ __('วันที่เริ่มต้น งวด') }}</label>
-                <input type="text" class="form-control"
-                    id="contract_start_date"
-                        name="contract_start_date">
+                        <label class="form-label">วันที่เริ่มต้น งวด</label>
+                        <input type="text"
+                        class="form-control datepickerop"
+                        id="start_date_` + i + `" name="tasks[` + i + `][start_date]">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">วันที่สิ้นสุด งวด</label>
+                        <input type="text" class="form-control datepickerop"
+                         id="end_date_` + i + `" name="tasks[` + i + `][end_date]">
+                    </div>
                 </div>
 
-
-                </div>
                     `;
                             $('#tasksContainer').append(content);
                         }

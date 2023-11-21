@@ -255,15 +255,14 @@
 
 <script>
     $(function() {
-        $("#task_start_date, #task_end_date").datepicker({
+        $("#project_start_date, #project_end_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
             language:"th-th",
-
         });
 
-        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+      var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
         //var task_end_date_str = $("#task_end_date").val();
@@ -279,8 +278,8 @@
         console.log(fiscalYearStartDate);
         console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
-$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
-  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+$("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
@@ -293,10 +292,10 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
 
   // Add click event listener for the delete button
-  $('#task_end_date').click(function(e) {
+/*   $('#project_end_date').click(function(e) {
     e.preventDefault();
-    var task_end_date_str = $("#task_end_date").val();
-    var task_end_date = convertToDate(task_end_date_str);
+    var project_end_date_str = $("#project_end_date").val();
+    var project_end_date = convertToDate(project_end_date_str);
     var project_end_date = convertToDate(project_end_date_str);
       console.log(task_end_date_str);
         console.log(task_end_date);
@@ -320,19 +319,12 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
             }
         });
     }
-});
+}); */
 
-$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
-
-
-
-
-
-
-
-    $('#task_start_date').on('changeDate', function() {
+$("#project_end_date").datepicker("setEndDate", fiscalYearEndDate);
+    $('#project_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
-            $("#task_end_date").datepicker("setStartDate", startDate);
+            $("#project_end_date").datepicker("setStartDate", startDate);
         });
 
      /*    $('#task_end_date').on('changeDate', function() {
@@ -374,8 +366,54 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
             })()
         </script>
 
+ <script>
+    $(document).ready(function() {
+$("#budget_it_operating,#budget_it_investment,#budget_gov_utility").on("input", function() {
+ var max = 0;
+ var fieldId = $(this).attr('id');
+var budgetItOperating = $("#budget_it_operating").val();
+ var budgetItInvestment = $("#budget_it_investment").val();
+ var budgetGovUtility = $("#budget_gov_utility").val();
 
-<script>
+ if (fieldId === "budget_it_investment") {
+
+     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+         $("#budget_it_investment").val('');
+     }
+
+ }
+
+
+
+  if (fieldId === "budget_it_operating") {
+         if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
+             $("#budget_it_operating").val('');
+         }
+     }
+
+
+     if (fieldId === "budget_gov_utility") {
+     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+         $("#budget_gov_utility").val('');
+     }
+
+ }
+
+ var current = parseFloat($(this).val().replace(/,/g , ""));
+
+
+});
+});
+ </script>
+
+
+
+
+
+
+
+
+{{-- <script>
     $(document).ready(function() {
 $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
  var max = 0;
@@ -445,7 +483,7 @@ var budgetItOperating = $("#task_budget_it_operating").val();
              }
          });
      });
- </script>
+ </script> --}}
 
 
 

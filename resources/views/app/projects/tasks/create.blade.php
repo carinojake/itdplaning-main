@@ -458,6 +458,8 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
         else if (fieldId === "task_budget_gov_utility") {
             max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
+
+
             if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
             }
