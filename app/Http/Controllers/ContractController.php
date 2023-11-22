@@ -553,7 +553,7 @@ class ContractController extends Controller
 
         $task = $request->taskHashid;
         $encodedProjectId = Hashids::encode($request->project);
-
+        $encodedTaskId = Hashids::encode($request->task);
 
         //dd($encodedProjectId);
         $id = $project ? Hashids::decode($project) : null;
@@ -1222,6 +1222,7 @@ if($request->hasFile('file')) {
             $project = $request->input('project');
             $task = $request->input('task');
             $encodedProjectId = $request->input('encodedProjectId');
+            $encodedTaskId = $request->input('encodedTaskId');
             // บันทึกข้อมูลลงใน session
             session()->flash('contract_id', $contract->contract_id);
             session()->flash('contract_number', $contract->contract_number);
@@ -1243,8 +1244,19 @@ if($request->hasFile('file')) {
 
 
             if ($encodedProjectId) {
-                return redirect()->route('project.task.editsub', ['project' => $encodedProjectId, 'task' => $task]);
+                return redirect()->route('project.task.editsub', ['project' => $encodedProjectId, 'task' => $encodedTaskId]);
             }
+            elseif ($encodedProjectId) {
+                return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $encodedTaskId]);
+            }
+            elseif ($encodedTaskId) {
+                return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $encodedTaskId]);
+            }
+            elseif ($encodedTaskId) {
+                return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $task]);
+            }
+
+
             if ($task) {
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             } elseif ($project) {

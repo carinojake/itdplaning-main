@@ -4,7 +4,7 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
-                <div >
+                <div class="d-none">
                     @if ($pro)
                         {{ $pro->project_name }}
                         {{ $pro->project_fiscal_year }}
@@ -816,33 +816,89 @@ $value = 0;
                                                                     style="display:none;">
                                                                     <div class="row mt-3">
 
-                                                                        <div class="col-md-12">
-                                                                            @if(auth()->user()->isAdmin())
-                                                                            <table border="1">
+
+
+
+                                                                        <div id="cn_form" >
+                                                                            <div class="row mt-3">
+
+
+
+
+
+                                                                                        <div class="col-md-4">
+                                                                                            <label for="total_pa_budget"
+                                                                                                class="form-label">{{ __('เงิน') }}</label>
+                                                                                            <span class="text-danger"></span>
+
+                                                                                            <input type="text"
+                                                                                                placeholder="0.00" step="0.01"
+                                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                                class="form-control numeral-mask"
+                                                                                                id="total_pa_budget"
+                                                                                                name="total_pa_budget"
+                                                                                                min="0" readonly>
+
+                                                                                        </div>
+
+
+
+
+
+
+
+                                                                                <div class="col-md-4">
+                                                                                    <label for="expenses_delsum"
+                                                                                        class="form-label">{{ __('เงินเหลือทั้งหมด') }}</label>
+                                                                                    <span class="text-danger"></span>
+
+                                                                                    <input type="text"
+                                                                                        class="form-control"
+                                                                                        id="expenses_delsum"
+                                                                                        name="expenses_delsum" readonly>
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ __(' ') }}
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-4">
+                                                                                    <label for="expenses_sum"
+                                                                                        class="form-label">{{ __('ใช้ไป เงินทั้งหมด') }}</label>
+                                                                                    <span class="text-danger"></span>
+                                                                                    <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="expenses_sum"
+                                                                                    name="expenses_sum" readonly>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+
+
+
+
+                                                                        <div class="col-md-12 mt-3">
+
+                                                                         {{--    <table border="1">
                                                                                 <tr>
-                                                                                    <th>sl</th>
-                                                                                    <th>TA</th>
-                                                                                    <th>DA</th>
-                                                                                    <th>HA</th>
-                                                                                    <th>Total</th>
-                                                                                    <th>delTotal</th>
+                                                                                    <div>เงินทั้งหมด ได้ </div>
+                                                                                    <div>เงินรวมทั้งหมด(งวด)</div>
+
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td>1</td>
-                                                                                    <td><input class="expenses"></td>
-                                                                                    <td><input class="expenses"></td>
-                                                                                    <td><input class="expenses"></td>
-                                                                                    <td>
-                                                                                        <input id="expenses_sum">
-                                                                                    </td>
+
+
                                                                                     <td>
                                                                                         <input id="expenses_delsum">
                                                                                     </td>
+                                                                                    <td>
+                                                                                        <input id="expenses_sum">
+                                                                                    </td>
                                                                                 </tr>
 
 
-                                                                            </table>
-                                                                            @endif
+                                                                            </table> --}}
+
                                                                             <label id="rounds_label" for="rounds"
                                                                                 class="form-label">{{ __('งวดที่') }}</label>
                                                                             <span class="text-danger">*</span>
@@ -1344,12 +1400,15 @@ $value = 0;
 
                             if (pa_budget != 0) {
                                 var refund = pr_budget - pa_budget;
+
                                 totalRefund += refund;
                             }
                         }
                     });
 
                     $("#contract_refund_pa_budget").val(totalRefund.toFixed(2));
+
+
                 }
 
                 $(document).ready(function() {
@@ -1456,22 +1515,44 @@ $value = 0;
                         if (fieldId === "contract_mm_budget") {
                             if (task_budget_it_operating > 0) {
                                 console.log("test");
-                                if (contract_mm_budget < contract_pr_budget) {
-    $("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pa_budget").val('0'); // Set the value of the input field
+                                if (contract_mm_budget < contract_pr_budget || contract_mm_budget < -0 ) {
+    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+
 }
                                 max = parseFloat(task_budget_it_operating);
-                            } else if (task_budget_it_investment > 0) {
+                            }
+
+
+                            else if (task_budget_it_investment > 0) {
                                 console.log(contract_mm_budget+"<"+contract_pr_budget);
-                                if (contract_mm_budget < contract_pr_budget) {
-    $("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pa_budget").val('0'); // Set the value of the input field
+
+
+                                if (contract_mm_budget < contract_pr_budget || contract_mm_budget < -0) {
+                                    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
 }
                                 max = parseFloat(task_budget_it_investment);
-                            } else if (task_budget_gov_utility > 0) {
-                                if (contract_mm_budget < contract_pr_budget) {
-    $("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pa_budget").val('0');
+                            }
+
+
+
+                            else if (task_budget_gov_utility > 0) {
+                                if (contract_mm_budget < contract_pr_budget || contract_mm_budget < -0) {
+                                    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val('');
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
                                  } // Set the
                                 max = parseFloat(task_budget_gov_utility);
                             }
@@ -1510,10 +1591,15 @@ $value = 0;
 
                         var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
-                        if (contract_pr_budget < contract_pa_budget) {
+                        if (contract_pr_budget < contract_pa_budget  ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pa_budget").val('0'); // Set the value of the input field
-}
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+}   else if (contract_pr_budget < -0  ) {
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+
+
+
+};
 
                         if (current > contract_mm_budget) {
                             Swal.fire({
@@ -1543,10 +1629,14 @@ $value = 0;
                         var current = parseFloat($(this).val().replace(/,/g, ""));
 
 
-                        if (contract_pr_budget < contract_pa_budget) {
+                        if (contract_pa_budget > contract_pr_budget ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pa_budget").val('0'); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
 }
+                    else if (contract_pa_budget < -0  ) {
+
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+                    }
                         if (current > contract_pr_budget || contract_pr_budget === "") {
                             Swal.fire({
                                 title: "เกิดข้อผิดพลาด",
@@ -1568,9 +1658,22 @@ $value = 0;
 
             <script>
                 $(document).ready(function() {
-                    $("#contract_er_budget,#contract_po_budget").on("input", function() {
+                    $("#contract_er_budget,#contract_po_budget,#contract_cn_budget").on("input", function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+                        var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
+
+                        if (contract_er_budget < -0 || contract_po_budget < -0 || contract_cn_budget < -0) {
+    //$("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+}
+
+
+
                         if (current > contract_pa_budget) {
                             Swal.fire({
                                 title: "เกิดข้อผิดพลาด",
@@ -1739,49 +1842,83 @@ $value = 0;
                     $('#rounds').change(function() {
                         var rounds = $(this).val();
                         $('#tasksContainer').empty(); // clear the container
+                        var contract_fiscal_year = {{$pro->project_fiscal_year}};
+            contract_fiscal_year = contract_fiscal_year - 543;
+
+            var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+            var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
                         for (var i = 0; i < rounds; i++) {
                             var content = `
-                            <div class="row">
-                    <div class="col-md-3">
-                        <label class="form-label">ชื่องวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        <input class="form-control" type="text" name="tasks[` + i + `][task_name]" value="งวด ` + (i + 1) + `">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">เงินงวด ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        <input type="text" name="tasks[` + i + `][taskbudget]"
-                         class="form-control custom-input numeral-mask expenses"
-                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">ชื่องวด ${i + 1} &nbsp: &nbsp</label>
+                            <input class="form-control" type="text" name="tasks[${i}][task_name]" value="งวด ${i + 1}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
+                            <input type="text" name="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
+                            <div class="invalid-feedback">ระบุเงินงวด</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">วันที่เริ่มต้น ${i + 1} งวด</label>
+                            <input type="text" class="form-control datepickerop" id="start_date_${i}" name="tasks[${i}][start_date]">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">วันที่สิ้นสุด ${i + 1} งวด</label>
+                            <input type="text" class="form-control datepickeropend" id="end_date_${i}" name="tasks[${i}][end_date]">
+                        </div>
+                    </div>`;
 
-                        <div class="invalid-feedback">
-                                                      ระบุเงินงวด
-                                                    </div>
-                                                    <div class="valid-feedback">
-                                                        Looks good!
-                                                    </div>
-                                                </div>
-                    <div class="col-md-3">
-                        <label class="form-label">วันที่เริ่มต้น งวด</label>
-                        <input type="text"
-                        class="form-control datepickerop"
-                        id="start_date_` + i + `" name="tasks[` + i + `][start_date]">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">วันที่สิ้นสุด งวด</label>
-                        <input type="text" class="form-control datepickerop"
-                         id="end_date_` + i + `" name="tasks[` + i + `][end_date]">
-                    </div>
-                </div>
-            `;
-                            $('#tasksContainer').append(content);
-                        }
-                        $('.datepickerop').datepicker({ /* Your datepicker options here */
+                $('#tasksContainer').append(content);
 
-                            dateFormat: "dd/mm/yy",
-                        changeMonth: true,
-                        changeYear: true,
-                        language: "th-th",
+                // Initialize the datepickers for the newly added elements
+                $(`#start_date_${i}`).datepicker({
+                    dateFormat: 'dd/mm/yy',
+                            changeMonth: true,
+                            changeYear: true,
+                            language: "th-th",
+                    startDate: fiscalYearStartDate,
+                    endDate: fiscalYearEndDate,
+                    autoclose: true
+                }).on('changeDate', function(selected) {
+                // When a start date is selected, update the minDate of the next round's start date
+                var index = parseInt(this.id.replace('start_date_', '')) + 1;
+                var nextStartDatePicker = $('#start_date_' + index);
+                if(nextStartDatePicker.length) {
+                    var newMinDate = selected.date;
+                    newMinDate.setDate(newMinDate.getDate() + 1); // Set next start date to at least one day after selected
+                    nextStartDatePicker.datepicker('setStartDate', newMinDate);
+                }
+            });
 
-                        });
+
+
+                $(`#end_date_${i}`).datepicker({
+                    dateFormat: 'dd/mm/yy',
+                            changeMonth: true,
+                            changeYear: true,
+                            language: "th-th",
+                    startDate: fiscalYearStartDate,
+                    endDate: fiscalYearEndDate,
+                    autoclose: true
+                }).on('changeDate', function(selected) {
+                // When an end date is selected, update the maxDate of the current round's start date
+                var index = parseInt(this.id.replace('end_date_', ''));
+                var startDatePicker = $('#start_date_' + index);
+                if(startDatePicker.length) {
+                    var newMaxDate = selected.date;
+                    startDatePicker.datepicker('setEndDate', newMaxDate);
+                }
+            });
+            }
+
+
+
+
+
+
                         // Apply inputmask to the newly added input elements
                         $(":input").inputmask();
                     });
@@ -1794,11 +1931,13 @@ $value = 0;
                     $(document).on('input', '.expenses', function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
                         var sum = 0;
+                        var tasksContainer = $('#tasksContainer');
                         var inputs = $('.expenses').map(function() {
                             return parseFloat($(this).val().replace(/,/g, "")) || 0;
                         }).get();
 
                         sum = inputs.reduce(function(a, b) {
+
                             return a + b;
                         }, 0);
 
@@ -1986,7 +2125,7 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    $("#contract_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $(" contract_end_date").datepicker("setEndDate", fiscalYearEndDate);
+    $("#contract_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
                     $('#contract_start_date').on('changeDate', function() {
@@ -2055,6 +2194,25 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
                         language: "th-th",
 
                     });
+                    var contract_fiscal_year = {{$pro->project_fiscal_year}};
+contract_fiscal_year =  contract_fiscal_year -543;
+        console.log( contract_fiscal_year);
+
+        var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+
+// Set the start and end dates for the project_start_date datepicker
+$("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   $("#insurance_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#insurance_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
 
 
                 });
@@ -2131,7 +2289,28 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
                 })()
             </script>
 
+{{-- <script>
+    $(document).ready(function(){
+        var budgetFields = [
+            'contract_mm_budget', 'contract_pr_budget', 'contract_pa_budget',
+            'task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility',
+            'task_refund_pa_budget', 'contract_po_budget', 'contract_cn_budget',
+            'contract_bd_budget', 'contract_pay', 'contract_pp'
+        ];
 
+        budgetFields.forEach(function(budgetField, index) {
+            var budgetFieldValue = $("#" + budgetField).val();
+            console.log(budgetFields);
+            if (budgetFieldValue) {
+                budgetFieldValue = parseFloat(budgetFieldValue.replace(/,/g, "")) || 0;
+
+                if (budgetFieldValue < -0 || budgetFieldValue === 0) {
+                    $("#contract_mm_budget").val('111');
+                }
+            }
+        });
+    });
+    </script> --}}
         </x-slot:javascript>
     </x-app-layout>
 

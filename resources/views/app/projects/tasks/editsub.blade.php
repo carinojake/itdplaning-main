@@ -922,57 +922,7 @@
     });
 </script> --}}
 
-<script>
-    $(document).ready(function() {
-// Function to check and update the task cost fields
-function updateTaskCostFields() {
-    var budgetItOperating = $("#task_budget_it_operating").val();
-    var budgetItInvestment = $("#task_budget_it_investment").val();
-    var budgetGovUtility = $("#task_budget_gov_utility").val();
-    var costItOperating = $("#task_cost_it_operating").val();
-    var costItInvestment = $("#task_cost_it_investment").val();
-    var costGovUtility = $("#task_cost_gov_utility").val();
-    var taskpay = $("#task_pay").val();
-    // Check for task_budget_it_operating
-       // Convert string values to float for comparison
-       var numBudgetItOperating = parseFloat(budgetItOperating.replace(/,/g, ''));
-       var numBudgetItInvestment = parseFloat(budgetItInvestment.replace(/,/g, ''));
-    var numBudgetGovUtility = parseFloat(budgetGovUtility.replace(/,/g, ''));
-    var numCostItOperating = parseFloat(costItOperating.replace(/,/g, ''));
-    var numCostItInvestment = parseFloat(costItInvestment.replace(/,/g, ''));
-    var numCostGovUtility = parseFloat(costGovUtility.replace(/,/g, ''));
-    console.log(numBudgetItInvestment);
-    console.log(numCostItInvestment);
-    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating < costItOperating || parseFloat(budgetItOperating) < -0) {
-        $("#task_cost_it_operating").val('');
-        $("#task_pay").val('');
-    }
 
-    // Check for task_budget_it_investment
-    if (budgetItInvestment === "0" || budgetItInvestment === '' || numBudgetItInvestment < numCostItInvestment || parseFloat(budgetItInvestment) < -0) {
-       $("#task_cost_it_investment").val('');
-        $("#task_pay").val('');
-    }
-
-    // Check for task_budget_gov_utility
-    if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility < costGovUtility || parseFloat(budgetGovUtility) < -0) {
-        $("#task_cost_gov_utility").val('');
-        $("#task_pay").val('');
-    }
-}
-
-// Attach event handlers to the budget fields
-$("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utility").on("input", function() {
-    updateTaskCostFields();
-
-    // Your existing code for showing/hiding fields
-    // ...
-});
-
-// Call the function on page load to handle the initial state
-updateTaskCostFields();
-});
-</script>
 
 
 
@@ -1018,29 +968,41 @@ updateTaskCostFields();
                         });
                     </script>
 
-                   <script>
-                        $(document).ready(function() {
-                            $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
-                                var max = 0.00;
-                                var fieldId = $(this).attr('id');
+<script>
+    $(document).ready(function() {
+        $("#task_cost_it_operating,#task_cost_it_investment, #task_cost_gov_utility").on("input", function() {
+            var max;
+            var fieldId = $(this).attr('id');
+            var costItOperating = $("#task_cost_it_operating").val();
+                    var costItInvestment = $("#task_cost_it_investment").val();
+                    var costGovUtility = $("#task_cost_gov_utility").val();
+                    var taskpay = $("#task_pay").val();
+            if (fieldId === "task_cost_it_investment") {
+                max = parseFloat($("#task_budget_it_investment").val().replace(/,/g , ""));
+                if (costItInvestment === "0" || costItInvestment === '' || parseFloat(costItInvestment) < -0) {
+                $("#task_cost_it_investment").val('');
+            }
+            } else if (fieldId === "task_cost_it_operating") {
+                max = parseFloat($("#task_budget_it_operating").val().replace(/,/g , ""));
+                if (costItOperating === "0" || costItOperating === '' || parseFloat(costItOperating) < -0) {
+                $("#task_cost_it_operating").val('');
+            }
+            } else if (fieldId === "task_cost_gov_utility") {
+                max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g , ""));
+                if (costGovUtility === "0" || costGovUtility === '' || parseFloat(costGovUtility) < -0) {
+                $("#task_cost_gov_utility").val('');
+                }
+            }
 
-                                if (fieldId === "task_cost_it_investment") {
-                                    max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
-                                } else if (fieldId === "task_cost_it_operating") {
-                                    max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
-                                } else if (fieldId === "task_cost_gov_utility") {
-                                    max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
-                                }
-
-                                var current = parseFloat($(this).val().replace(/,/g, ""));
-                                if (current > max) {
-                                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " +max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
-                                    /*  $(this).val(max.toFixed(2)); */
-           $(this).val(0);
-                                }
-                            });
-                        });
-                    </script>
+            var current = parseFloat($(this).val().replace(/,/g , ""));
+            if (current > max) {
+                Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+             /*  $(this).val(max.toFixed(2)); */
+             $(this).val(0);
+            }
+        });
+    });
+    </script>
 
 
                 <script>
