@@ -171,19 +171,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3 mt-3">
 
-                                            <label for="task_mm_budget"
-                                                class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
-                                            <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                class="form-control numeral-mask"
-                                                id="task_mm_budget" name="task_mm_budget"
-                                                min="0"  value="{{ session('contract_mm_budget') }}"  required >
-                                            <div class="invalid-feedback">
-                                                {{ __('mm') }}
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-9 mt-3">
@@ -404,6 +392,20 @@
                                                     @endif
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-3 mt-3 ">
+
+                                                <label for="task_mm_budget"
+                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                    class="form-control numeral-mask"
+                                                    id="task_mm_budget" name="task_mm_budget"
+                                                    min="0"  value="{{ session('contract_mm_budget') }}"  readonly >
+                                                <div class="invalid-feedback">
+                                                    {{ __('mm') }}
+                                                </div>
+                                            </div>
                                             <div id="refund" readonly {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
@@ -537,21 +539,21 @@
             }
                                                 } else if (fieldId === "task_budget_it_operating") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
-                                                    if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
-                $("#task_budget_gov_utility").val('');
+                                                    if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
+                $("#task_budget_it_operating").val('');
             }
-
                                                 } else if (fieldId === "task_budget_gov_utility") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
-                                                    if (budgetItOperating === "0" || budgetItOperating === '' ||  parseFloat(budgetItOperating) < -0) {
-                    $("#task_budget_it_operating").val('');
-                }
-
+                                                    if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+                $("#task_budget_gov_utility").val('');
+                                                    }
                                                 }
+
+
 
                                     var current = parseFloat($(this).val().replace(/,/g, ""));
                                     if (current > max) {
-                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน  " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
+                    Swal.fire("จำนวนเงินที่ใส่ต้องไม่เกิน mm " + max.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " บาท");
                      /*  $(this).val(max.toFixed(2)); */
            $(this).val(0);
                     }
@@ -749,9 +751,12 @@
             language:"th-th",
 
         });
+
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+        //var task_end_date_str = $("#task_end_date").val();
+
 
         project_fiscal_year = project_fiscal_year - 543;
 
@@ -768,18 +773,68 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-  //  $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+   //var task_end_date_str = $("#task_end_date").val();
+   // var task_end_date = (task_end_date_str);
+   // var project_end_date =(project_end_date_str);
+     // console.log(task_end_date_str);
+       // console.log(task_end_date);
+        //console.log(project_end_date);
 
-        $('#task_start_date').on('changeDate', function() {
+
+  // Add click event listener for the delete button
+  $('#task_end_date').click(function(e) {
+    e.preventDefault();
+    var task_end_date_str = $("#task_end_date").val();
+    var task_end_date = convertToDate(task_end_date_str);
+    var project_end_date = convertToDate(project_end_date_str);
+      console.log(task_end_date_str);
+        console.log(task_end_date);
+        console.log(project_end_date);
+
+    if (task_end_date > project_end_date) {
+        Swal.fire({
+            title: 'วันที่ เกิน ?',
+            text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ทำตามวันที่เกิน!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+
+                    'success'
+                )
+            }
+        });
+    }
+});
+
+//$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
+
+
+
+
+
+    $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
         });
 
-    //    $('#task_end_date').on('changeDate', function() {
-     //       var endDate = $(this).datepicker('getDate');
-       //     $("#task_start_date").datepicker("setEndDate", endDate);
-       // });
+     /*    $('#task_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#task_start_date").datepicker("setEndDate", endDate);
+        }); */
     });
+
+    function convertToDate(dateStr) {
+        var parts = dateStr.split("/");
+        var date = new Date(parts[2], parts[1] - 1, parts[0]);
+        return date;
+    }
 </script>
 
 <script>

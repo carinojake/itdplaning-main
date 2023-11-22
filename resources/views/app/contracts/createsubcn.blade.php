@@ -1848,6 +1848,7 @@ $value = 0;
             var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
             var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
+
                         for (var i = 0; i < rounds; i++) {
                             var content = `
                     <div class="row">
@@ -1874,44 +1875,106 @@ $value = 0;
                 $('#tasksContainer').append(content);
 
                 // Initialize the datepickers for the newly added elements
-                $(`#start_date_${i}`).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                            changeMonth: true,
-                            changeYear: true,
-                            language: "th-th",
-                    startDate: fiscalYearStartDate,
-                    endDate: fiscalYearEndDate,
-                    autoclose: true
-                }).on('changeDate', function(selected) {
-                // When a start date is selected, update the minDate of the next round's start date
-                var index = parseInt(this.id.replace('start_date_', '')) + 1;
-                var nextStartDatePicker = $('#start_date_' + index);
-                if(nextStartDatePicker.length) {
-                    var newMinDate = selected.date;
-                    newMinDate.setDate(newMinDate.getDate() + 1); // Set next start date to at least one day after selected
-                    nextStartDatePicker.datepicker('setStartDate', newMinDate);
+
+                console.log("round===="+i);
+                /*if(i == 0){
+                    $(`#start_date_${i}`).datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        startDate: fiscalYearStartDate,
+                        endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                        // When a start date is selected, update the minDate of the next round's start date
+                        var index = parseInt(this.id.replace('start_date_', '')) + 1;
+                        var nextStartDatePicker = $('#start_date_' + index);
+                        if(nextStartDatePicker.length) {
+                            var newMinDate = selected.date;
+                            newMinDate.setDate(newMinDate.getDate() + 1); // Set next start date to at least one day after selected
+                            nextStartDatePicker.datepicker('setStartDate', newMinDate);
+                        }
+                    });
+                    $(`#end_date_${i}`).datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        startDate: fiscalYearStartDate,
+                        //endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                        // When an end date is selected, update the maxDate of the current round's start date
+                        var index = parseInt(this.id.replace('end_date_', ''));
+                        var startDatePicker = $('#start_date_' + index);
+                        if(startDatePicker.length) {
+                            var newMaxDate = selected.date;
+                            startDatePicker.datepicker('setEndDate', newMaxDate);
+                        }
+                    });
+                }*/
+
+
+
+
+
+                //var text_end_date = [];
+               // var text_start_date = [];
+
+                if(i == 0){
+                    /*text_end_date[i] = '#end_date_'+i;
+                    text_start_date[i] = '#start_date_'+i;*/
+
+                    $('#end_date_0').datepicker("setStartDate", fiscalYearStartDate);
+                    $('#start_date_0').datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        startDate: fiscalYearStartDate,
+                        endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                            $('#end_date_0').datepicker("setStartDate", $('#start_date_0').datepicker('getDate'));
+                        // When a start date is selected, update the minDate of the next round's start date
+                    });
+                    $('#end_date_0').datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        //endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                        // When an end date is selected, update the maxDate of the current round's start date
+                        $('#start_date_1').datepicker("setStartDate", $('#end_date_0').datepicker('getDate'));
+                    });
+                }else{
+
+
+                    $('#start_date_1').datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                            $('#end_date_1').datepicker("setStartDate", $('#start_date_1').datepicker('getDate'));
+                        // When a start date is selected, update the minDate of the next round's start date
+                    });
+                    $('#end_date_1').datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        //endDate: fiscalYearEndDate,
+                        autoclose: true
+                        }).on('changeDate', function(selected) {
+                        // When an end date is selected, update the maxDate of the current round's start date
+                    });
                 }
-            });
-
-
-
-                $(`#end_date_${i}`).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                            changeMonth: true,
-                            changeYear: true,
-                            language: "th-th",
-                    startDate: fiscalYearStartDate,
-                    endDate: fiscalYearEndDate,
-                    autoclose: true
-                }).on('changeDate', function(selected) {
-                // When an end date is selected, update the maxDate of the current round's start date
-                var index = parseInt(this.id.replace('end_date_', ''));
-                var startDatePicker = $('#start_date_' + index);
-                if(startDatePicker.length) {
-                    var newMaxDate = selected.date;
-                    startDatePicker.datepicker('setEndDate', newMaxDate);
-                }
-            });
             }
 
 
@@ -1974,6 +2037,9 @@ $value = 0;
                                 });
                                 break; // Exit the loop as we have found an error
                             }
+
+
+
                         }
 
                         if (remainingBudget >= 0) {
@@ -1983,7 +2049,9 @@ $value = 0;
                             }));
                             $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
+                                maximumFractionDigits: 2,
+
+
                             }));
                         }
                     });
@@ -1993,7 +2061,34 @@ $value = 0;
 
 
 
+{{-- else if (remainingBudget > 0) {
+    Swal.fire({
+        title: "เกิดข้อผิดพลาด",
+        html: "จำนวนเงินที่ใส่ต้องไม่เกิน fgffff" + (contract_pa_budget - (sum -
+                inputs[i])).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " บาท" +
+            "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
+            .toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " บาท)",
 
+
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "ตกลง"
+    }).then((result) => {
+        if (result.value) {
+            $('.expenses').eq(i).val(
+            ''); // Reset the value of the input that caused the error
+            $('.expenses').eq(i).trigger(
+            'input'); // Trigger input event to recalculate
+        }
+    });
+    break; // Exit the loop as we have
+} --}}
 
 
 
