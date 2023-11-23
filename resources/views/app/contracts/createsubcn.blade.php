@@ -4,7 +4,7 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
-                <div class="d-none">
+                <div >
                     @if ($pro)
                         {{ $pro->project_name }}
                         {{ $pro->project_fiscal_year }}
@@ -56,16 +56,20 @@
                                 </x-slot:toolbar>
 
 
-                                <form method="POST" action="{{ route('contract.store') }}" class="row needs-validation"
+                                <form   id="formId" method="POST" action="{{ route('contract.store') }}" class="row needs-validation"
                                     novalidate enctype="multipart/form-data">
                                     @csrf
 
-                                    <input type="hidden" name="origin" value="{{ $origin }}">
+                                    <input  name="origin" value="{{ $origin }}">
 
-                                    <input type="hidden" name="project" value="{{ $project }}">
-                                    <input type="hidden" name="encodedProjectId" value="{{ $encodedProjectId }}">
 
-                                    <input type="hidden" name="task" value="{{ $task->hashid }}">
+                                    <input  name="project" value="{{ $project }}">
+                                    <input name="encodedProjectId" value="{{ $encodedProjectId }}">
+
+                                    <input  name="task" value="{{ $task->hashid }}">
+
+
+
                                     <div class="row g-3 align-items-center callout callout-success ">
 
 
@@ -817,7 +821,40 @@ $value = 0;
                                                                     <div class="row mt-3">
 
 
+                                                                        <div class="row callout callout-warning  mt-3">
 
+                                                                            <div class="col-md-3">
+                                                                                <label for="contract_start_date"
+                                                                                    class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                                                                {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                                                                                <input type="text" class="form-control"
+                                                                                    id="contract_start_date"
+                                                                                    name="contract_start_date">
+                                                                                <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
+                                                                        data-coreui-format="dd/MM/yyyy"></div>-->
+                                                                            </div>
+
+
+                                                                            <div class="col-md-3">
+                                                                                <label for="contract_end_date"
+                                                                                    class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="contract_end_date"
+                                                                                    name="contract_end_date">
+                                                                                <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
+                                                                        data-coreui-format="dd/MM/yyyy">
+                                                                    </div>-->
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <label for="contract_sign_date"
+                                                                                    class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="contract_sign_date"
+                                                                                    name="contract_sign_date">
+                                                                                <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
+                                                                        data-coreui-format="dd/MM/yyyy"></div>-->
+                                                                            </div>
+                                                                        </div>
 
                                                                         <div id="cn_form" >
                                                                             <div class="row mt-3">
@@ -837,7 +874,10 @@ $value = 0;
                                                                                                 class="form-control numeral-mask"
                                                                                                 id="total_pa_budget"
                                                                                                 name="total_pa_budget"
-                                                                                                min="0" readonly>
+                                                                                                min="0"
+
+
+                                                                                                readonly>
 
                                                                                         </div>
 
@@ -849,16 +889,16 @@ $value = 0;
 
                                                                                 <div class="col-md-4">
                                                                                     <label for="expenses_delsum"
-                                                                                        class="form-label">{{ __('เงินเหลือทั้งหมด') }}</label>
+                                                                                        class="form-label">{{ __('เงินงวดทั้งหมด') }}</label>
                                                                                     <span class="text-danger"></span>
 
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         id="expenses_delsum"
                                                                                         name="expenses_delsum" readonly>
-                                                                                    <div class="invalid-feedback">
-                                                                                        {{ __(' ') }}
-                                                                                    </div>
+                                                                                        <div class="invalid-feedback">
+                                                                                            {{ __('เงินงวด ต้อง 0 ') }}
+                                                                                        </div>
                                                                                 </div>
 
                                                                                 <div class="col-md-4">
@@ -953,40 +993,7 @@ $value = 0;
 
 
 
-                                                            <div class="row callout callout-warning  mt-3">
 
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_start_date"
-                                                                        class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_start_date"
-                                                                        name="contract_start_date">
-                                                                    <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>-->
-                                                                </div>
-
-
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_end_date"
-                                                                        class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_end_date"
-                                                                        name="contract_end_date">
-                                                                    <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
-                                                            data-coreui-format="dd/MM/yyyy">
-                                                        </div>-->
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_sign_date"
-                                                                        class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_sign_date"
-                                                                        name="contract_sign_date">
-                                                                    <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>-->
-                                                                </div>
-                                                            </div>
 
                                                             <div class="row callout callout-danger mt-3">
                                                                 <div class="col-md-3">
@@ -1301,10 +1308,10 @@ $value = 0;
 
 
 
-
-                                            <x-button class="btn-success" type="submit">
+                                            <x-button  class="btn-success" type="submit">
                                                 {{ __('coreuiforms.save') }}
                                             </x-button>
+
                                             {{--
                 @if ($origin && $task)
                     <x-button
@@ -1351,6 +1358,40 @@ $value = 0;
             {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+
+            <script>
+                var budgetFields_pa = ['contract_pa_budget'];
+
+                function calculateRefund_pa() {
+                    var totalRefund_pa = 0;
+
+                    budgetFields_pa.forEach(function(costField, index) {
+                        var pr_value = $("#" + costField).val();
+
+                        if (pr_value) {
+                            var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                            if (pr_budget != 0) { // Corrected comparison operator from '=' to '!='
+                                var refund = pr_budget;
+                                totalRefund_pa += refund;
+                            }
+                        }
+                    });
+
+                    $("#total_pa_budget").val(totalRefund_pa.toFixed(2));
+                }
+
+                $(document).ready(function() {
+                    budgetFields_pa.forEach(function(costField) {
+                        $("#" + costField).on("input", calculateRefund_pa);
+                    });
+                });
+
+
+
+
+            </script>
 
 
             <script>
@@ -1996,7 +2037,17 @@ $value = 0;
                         var sum = 0;
                         var tasksContainer = $('#tasksContainer');
                         var inputs = $('.expenses').map(function() {
-                            return parseFloat($(this).val().replace(/,/g, "")) || 0;
+                           // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
+        var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
+        if (value < 0) {
+            $(this).val(''); // รีเซ็ตค่าถ้าติดลบ
+            value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
+        }
+        return value
+
+
+
+
                         }).get();
 
                         sum = inputs.reduce(function(a, b) {
@@ -2008,7 +2059,15 @@ $value = 0;
                         var remainingBudget = contract_pa_budget;
                         for (var i = 0; i < inputs.length; i++) {
                             remainingBudget -= inputs[i];
+
                             if (remainingBudget < 0) {
+   // วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
+   $('.expenses').each(function() {
+            if (parseFloat($(this).val()) < 0) {
+                $(this).val('');
+            }
+        });
+
                                 // If the remaining budget after any installment is negative, show an error
                                 Swal.fire({
                                     title: "เกิดข้อผิดพลาด",
@@ -2036,13 +2095,15 @@ $value = 0;
                                     }
                                 });
                                 break; // Exit the loop as we have found an error
+
                             }
 
 
 
                         }
 
-                        if (remainingBudget >= 0) {
+
+
                             $('#expenses_sum').val(sum.toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
@@ -2053,8 +2114,82 @@ $value = 0;
 
 
                             }));
-                        }
+
+  // Function to calculate the remaining budget
+  function calculateRemainingBudget() {
+        var sum = $('.expenses').map(function() {
+            return parseFloat($(this).val().replace(/,/g, "")) || 0;
+        }).get().reduce(function(a, b) {
+            return a + b;
+        }, 0);
+
+        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+        var remainingBudget = contract_pa_budget - sum;
+        return remainingBudget;
+    }
+
+    // Form submission handler
+    $('#formId').on('submit', function(e) { // Make sure this is the ID of your form
+        e.preventDefault();
+
+        var remainingBudget = calculateRemainingBudget();
+
+        if (remainingBudget !== 0) {
+            $('#expenses_delsum').addClass('is-invalid');
+           // $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
+        } else {
+            // If the remaining budget is zero, remove validation error
+            $('#expenses_delsum').removeClass('is-invalid');
+            $('.invalid-feedback').text(''); // Clear the feedback text
+                 // ส่งฟอร์ม
+                 this.submit();
+        }
+    });
+
+
                     });
+
+                     // ฟังก์ชันสำหรับคำนวณผลรวมของเงินงวดทั้งหมด
+    function calculateTotalInstallments() {
+        var total = 0;
+        $('.installment').each(function() {
+            var amount = parseFloat($(this).val().replace(/,/g, "")) || 0;
+            total += amount;
+        });
+        return total;
+    }
+
+    // ฟังก์ชันสำหรับตรวจสอบว่าผลรวมของเงินงวดเท่ากับเงินที่ใช้ไปทั้งหมดหรือไม่
+    function checkTotalAgainstBudget() {
+        var totalInstallments = calculateTotalInstallments();
+        var budgetUsed = parseFloat($('#budget-used').val().replace(/,/g, "")) || 0;
+        var remainingBudget = budgetUsed - totalInstallments;
+
+        $('#expenses_sum').val(totalInstallments.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+        if(remainingBudget !== 0) {
+            alert('เงินเหลือทั้งหมด ' + remainingBudget.toFixed(2) + ' บาท ต้องเหลือ 0 บาท');
+        }
+    }
+
+    // ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์เงินงวด
+    $(document).on('input', '.installment', function() {
+        checkTotalAgainstBudget();
+    });
+
+    // ตรวจสอบเมื่อมีการเปลี่ยนแปลงจำนวนงวด
+    $('#rounds').change(function() {
+        // ... โค้ดสำหรับการเปลี่ยนแปลงจำนวนงวด ...
+        // เรียกใช้ checkTotalAgainstBudget เมื่อเพิ่มฟิลด์เงินงวดใหม่
+        checkTotalAgainstBudget();
+    });
                 });
             </script>
 

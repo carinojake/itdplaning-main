@@ -105,7 +105,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div   >
+                                    <div  class="d-none  col-md-4" >
                                     @if (session('contract_id'))
                                         ID: {{ session('contract_id') }}
                                     @endif
@@ -203,7 +203,7 @@
                                                 class="form-label">{{ __('สัญญา') }}</label>
                                                 {{-- <span class="text-danger">*</span> --}}
                                             {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => 1, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา</a></span>
                                             </div>
@@ -414,13 +414,15 @@
                                                         <span class="text-danger"></span>
 
                                                         <input type="text" placeholder="0.00"
-                                                            step="0.01"
-                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                            class="form-control numeral-mask"
-                                                            id="task_refund_pa_budget"
-                                                            name="task_refund_pa_budget" min="0"
-                                                             value={{ session('contract_refund_pa_budget') }} value={{ $task->task_refund_pa_budget,2 }}
-                                                             readonly>
+       step="0.01"
+       data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+       class="form-control numeral-mask"
+       id="task_refund_pa_budget"
+       name="task_refund_pa_budget"
+       min="0"
+       value="{{ ( session('contract_refund_pa_budget', number_format($task->task_refund_pa_budget, 2, '.', ','))) }}"
+       readonly>
+
 
                                                         {{--  <div class="invalid-feedback">
                                                                 {{ __('ค่าสาธารณูปโภค') }}

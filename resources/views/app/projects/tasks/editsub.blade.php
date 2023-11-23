@@ -198,7 +198,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-3 mt-4">
-                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' =>  $project->hashid, 'project' =>  $project->hashid,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', [ 'origin' =>  2, 'project' =>  $project->hashid,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
                                                 class="btn btn-success text-white"
                                                 target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                         </div>

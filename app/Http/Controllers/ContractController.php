@@ -442,7 +442,7 @@ class ContractController extends Controller
 
         $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
 
-
+       // dd($projectDetails);
 
 
         $id_project = $id_task = $pro = $ta = null;
@@ -460,7 +460,7 @@ class ContractController extends Controller
             }
         }
 
-       // dd($ta);
+       //dd($pro,$ta);
 
        ($tasks     = Task::where('project_id', $id)->get());
        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
@@ -1243,23 +1243,14 @@ if($request->hasFile('file')) {
             session()->flash('contract_end_date', $contract->contract_end_date);
 
 
-            if ($encodedProjectId) {
-                return redirect()->route('project.task.editsub', ['project' => $encodedProjectId, 'task' => $encodedTaskId]);
-            }
-            elseif ($encodedProjectId) {
-                return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $encodedTaskId]);
-            }
-            elseif ($encodedTaskId) {
-                return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $encodedTaskId]);
-            }
-            elseif ($encodedTaskId) {
+            if ($origin == 2) {
+                // ถ้ามีทั้ง Project ID และ Task ID, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'editsub'
                 return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $task]);
-            }
-
-
-            if ($task) {
+            } elseif ($task) {
+                // ถ้ามีเฉพาะ Task, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'createsub'
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             } elseif ($project) {
+                // ถ้ามีเฉพาะ Project, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'createcn'
                 return redirect()->route('project.task.createcn', ['project' => $project]);
             }
             return redirect()->route('contract.index');

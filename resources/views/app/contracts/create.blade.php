@@ -4,10 +4,11 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
-                @if ($pro)
-                    {{ $pro->project_name }}
-                    {{ $pro->project_fiscal_year }}
-                @else
+                @if ($projectDetails)
+                    {{ $projectDetails->project_name }}
+                    {{ $projectDetails->project_fiscal_year }}
+
+                    @else
                 @endif
 
                 @if ($ta)
@@ -1182,10 +1183,45 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js">
             </script>
-            {{--   <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+            {{--  $projectDetails  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+
+
+
+            <script>
+                var budgetFields_pa = ['contract_pa_budget'];
+
+                function calculateRefund_pa() {
+                    var totalRefund_pa = 0;
+
+                    budgetFields_pa.forEach(function(costField, index) {
+                        var pr_value = $("#" + costField).val();
+
+                        if (pr_value) {
+                            var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                            if (pr_budget != 0) { // Corrected comparison operator from '=' to '!='
+                                var refund = pr_budget;
+                                totalRefund_pa += refund;
+                            }
+                        }
+                    });
+
+                    $("#total_pa_budget").val(totalRefund_pa.toFixed(2));
+                }
+
+                $(document).ready(function() {
+                    budgetFields_pa.forEach(function(costField) {
+                        $("#" + costField).on("input", calculateRefund_pa);
+                    });
+                });
+
+
+
+
+            </script>
 
             <script>
                 var costFields = ['contract_pa_budget', 'task_cost_it_investment', 'task_cost_gov_utility'];
@@ -1312,10 +1348,44 @@
                         if ($projectDetails = null) {
                           //  $("#contract_pa_budget").val('11111111'); // Set the value of the input field
                         } else if (budgettype === "1") {
+                            if ( contract_mm_budget < -0 ) {
+    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+
+}
+
+
+
                             max = parseFloat(project_budget_it_operating);
-                        } else if (budgettype === "2") {
+                        } else if (budgettype === "2" ) {
+                            if ( contract_mm_budget < -0 ) {
+    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+
+}
+
                             max = parseFloat(project_budget_it_investment);
-                        } else if (budgettype === "3") {
+                        }
+
+
+                        else if (budgettype === "3") {
+                            if ( contract_mm_budget < -0 ) {
+    $("#contract_mm_budget").val(''); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+
+}
                             max = parseFloat(project_budget_gov_utility);
                         }
 
@@ -1409,12 +1479,41 @@
 });
 
 </script> --}}
+<script>
+    $(document).ready(function() {
+        $("#contract_pr_budget").on("input", function() {
+            var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+            var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+
+            var current = parseFloat($(this).val().replace(/,/g, ""));
+
+            if (contract_pr_budget > contract_mm_budget) {
+                Swal.fire({
+                    title: "จำนวนเงินเกินกรอบ",
+                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString(
+                        'en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) + " บาท",
+                    icon: "error",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "ตกลง"
+                });
+                /*   $(this).val(contract_mm_budget.toFixed(2)); */
+                $(this).val(0);
+            }
+        });
+    });
+</script>
             <script>
                 $(document).ready(function() {
                     $("#contract_pa_budget").on("input", function() {
                         var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+
                         var current = parseFloat($(this).val().replace(/,/g, ""));
-                        if (current > contract_mm_budget) {
+
+                        if (contract_pa_budget > contract_mm_budget) {
                             Swal.fire({
                                 title: "จำนวนเงินเกินกรอบ",
                                 text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString(
