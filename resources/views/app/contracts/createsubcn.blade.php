@@ -1962,13 +1962,29 @@ $value = 0;
 
                 //var text_end_date = [];
                // var text_start_date = [];
-
+               var text_end_date = '#end_date_'+i;
+               var text_start_date = '#start_date_'+i;
+               console.log(text_start_date);
+               console.log(text_end_date);
                 if(i == 0){
                     /*text_end_date[i] = '#end_date_'+i;
                     text_start_date[i] = '#start_date_'+i;*/
 
-                    $('#end_date_0').datepicker("setStartDate", fiscalYearStartDate);
-                    $('#start_date_0').datepicker({
+                    $(text_end_date).datepicker({
+                        dateFormat: 'dd/mm/yy',
+                                changeMonth: true,
+                                changeYear: true,
+                                language: "th-th",
+                        //endDate: fiscalYearEndDate,
+                        autoclose: true
+                        })
+
+
+                    $(text_end_date).datepicker("setStartDate", fiscalYearStartDate);
+
+
+
+                    $(text_start_date).datepicker({
                         dateFormat: 'dd/mm/yy',
                                 changeMonth: true,
                                 changeYear: true,
@@ -1977,10 +1993,10 @@ $value = 0;
                         endDate: fiscalYearEndDate,
                         autoclose: true
                         }).on('changeDate', function(selected) {
-                            $('#end_date_0').datepicker("setStartDate", $('#start_date_0').datepicker('getDate'));
+                            $(text_end_date).datepicker("setStartDate", $(text_start_date).datepicker('getDate'));
                         // When a start date is selected, update the minDate of the next round's start date
                     });
-                    $('#end_date_0').datepicker({
+                    $(text_end_date).datepicker({
                         dateFormat: 'dd/mm/yy',
                                 changeMonth: true,
                                 changeYear: true,
@@ -1989,12 +2005,12 @@ $value = 0;
                         autoclose: true
                         }).on('changeDate', function(selected) {
                         // When an end date is selected, update the maxDate of the current round's start date
-                        $('#start_date_1').datepicker("setStartDate", $('#end_date_0').datepicker('getDate'));
+                        $(text_start_date).datepicker("setStartDate", $(text_end_date).datepicker('getDate'));
                     });
                 }else{
 
 
-                    $('#start_date_1').datepicker({
+                    $(text_start_date).datepicker({
                         dateFormat: 'dd/mm/yy',
                                 changeMonth: true,
                                 changeYear: true,
@@ -2002,10 +2018,10 @@ $value = 0;
                         endDate: fiscalYearEndDate,
                         autoclose: true
                         }).on('changeDate', function(selected) {
-                            $('#end_date_1').datepicker("setStartDate", $('#start_date_1').datepicker('getDate'));
+                            $(text_end_date).datepicker("setStartDate", $(text_start_date).datepicker('getDate'));
                         // When a start date is selected, update the minDate of the next round's start date
                     });
-                    $('#end_date_1').datepicker({
+                    $(text_end_date).datepicker({
                         dateFormat: 'dd/mm/yy',
                                 changeMonth: true,
                                 changeYear: true,

@@ -246,12 +246,18 @@
     <script>
         $(document).ready(function() {
             $("#taskcon_pay").on("input", function() {
+                var taskcon_pay = $("#taskcon_pay").val();
                 var max = 0;  // Initialize max to 0
                 var fieldId = $(this).attr('id');
                 var costFields = ['taskcon_cost_it_operating', 'taskcon_cost_it_investment', 'taskcon_cost_gov_utility'];
 
                 // Check if the fieldId is "task_pay"
                 if (fieldId === "taskcon_pay") {
+                    if (taskcon_pay < -0) {
+                        Swal.fire("จำนวนเงินที่ใส่ต้องไม่ติดลบ");
+                        $(this).val(0);
+                    }
+
                     // Iterate through the costFields array
                     costFields.forEach(function(field) {
                         // Get the value of each field, remove commas, convert to float, and add to max
@@ -304,6 +310,7 @@
         var d = new Date();
         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
+
         $("#taskcon_start_date,#taskcon_end_date, #taskcon_pay_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',
@@ -313,6 +320,20 @@
 
 
             });
+            $("#taskcon_start_date").datepicker({});
+        $("#taskcon_end_date").datepicker({ });
+        $('#taskcon_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#taskcon_end_date").datepicker("setStartDate", startDate);
+                        $("#taskcon_pay_date").datepicker("setStartDate", startDate);
+
+                    })
+
+                    $('#taskcon_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#taskcon_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
     });
 </script>
 
@@ -323,7 +344,7 @@
 
 
 
-
+{{--
 <script>
     $(document).ready(function() {
        $("#taskcon_start_date").datepicker({});
@@ -341,7 +362,7 @@
                     })
 
     });
-    </script>
+    </script> --}}
 
 
 
