@@ -3,7 +3,7 @@
         <div class="container-fluid">
 
             {{-- {{ Breadcrumbs::render('contract.create') }} --}}
-
+            <div class="d-none">
             @if ($pro)
                 {{ $pro->project_name }}
             @else
@@ -15,7 +15,7 @@
             @else
 
             @endif
-
+            </div>
 
             <div class="animated fadeIn">
                 @if ($errors->any())

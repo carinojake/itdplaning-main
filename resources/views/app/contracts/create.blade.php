@@ -3,7 +3,7 @@
             <div class="container-fluid">
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
-
+                <div >
                 @if ($projectDetails)
                     {{ $projectDetails->project_name }}
                     {{ $projectDetails->project_fiscal_year }}
@@ -15,7 +15,7 @@
                     {{ $ta->task_name }}
                 @else
                 @endif
-
+                </div>
 
 
                 <div class="animated fadeIn">
@@ -38,8 +38,12 @@
                                 </x-slot:toolbar>
 
 
-                                <form method="POST" action="{{ route('contract.store') }}"
-                                    class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
+
+
+
+
+                                <form   id="formId" method="POST" action="{{ route('contract.store') }}" class="row needs-validation"
+                                novalidate enctype="multipart/form-data">
                                     @csrf
 
                                     <input type="hidden" name="origin" value="{{ $origin }}">
@@ -56,16 +60,9 @@
                                             <div class="col-md-3">
                                                 <label for="contract_fiscal_year"
                                                     class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                                <span class="text-danger">*</span>
-                                                <select name="contract_fiscal_year"
-                                                    class="form-select @error('contract_fiscal_year') is-invalid @enderror">
-                                                    @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 3; $i++)
-                                                        <option value="{{ $i }}"
-                                                            {{ $fiscal_year == $i ? 'selected' : '' }}>
-                                                            {{ $i }}
-                                                        </option>
-                                                    @endfor
-                                                </select>
+                                                <span class="text-danger"></span>
+                                                <input type="text" class="form-control" id="contract_fiscal_year"
+                                                name="contract_fiscal_year"    value="{{  $projectDetails->project_fiscal_year }}"  readonly >
                                                 @error('contract_fiscal_year')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -715,26 +712,103 @@
                                                                     </div>
                                                                 </div>
 
-                                                                {{--           <div id="rounds_form" style="display:none;">
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-12">
-                                                                <label for="rounds"
-                                                                    class="form-label">{{ __('งวด/ค่าใช้จ่ายสำนักงาน') }}</label>
-                                                                <span class="text-danger">*</span>
-
-                                                                {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => 'js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
-
-                                                                <div id="tasksContainer"></div>
-                                                                <div class="invalid-feedback">
-                                                                    {{ __(' ') }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
- --}}
 
                                                                 <div id="rounds_form" class="callout callout-light"
                                                                     style="display:none;">
+                                                                    <div class="row callout callout-warning  mt-3">
+                                                                        <label for="contract_juristic_id"
+                                                                        class="form-label">{{ __('สัญญา') }}</label>
+
+                                                                        <div class="col-md-3">
+                                                                            <label for="contract_start_date"
+                                                                                class="form-label">{{ __('วันที่เริ่มต้น สัญญา') }}</label>
+                                                                            {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_start_date"
+                                                                                name="contract_start_date">
+                                                                            <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
+                                                                    data-coreui-format="dd/MM/yyyy"></div>-->
+                                                                        </div>
+
+
+                                                                        <div class="col-md-3">
+                                                                            <label for="contract_end_date"
+                                                                                class="form-label">{{ __('วันที่สิ้นสุด สัญญา') }}</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_end_date"
+                                                                                name="contract_end_date">
+                                                                            <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
+                                                                    data-coreui-format="dd/MM/yyyy">
+                                                                </div>-->
+                                                                        </div>
+                                                                        <div class="col-md-3">
+                                                                            <label for="contract_sign_date"
+                                                                                class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="contract_sign_date"
+                                                                                name="contract_sign_date">
+                                                                            <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
+                                                                    data-coreui-format="dd/MM/yyyy"></div>-->
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="cn_form" >
+                                                                        <div class="row mt-3">
+
+
+
+
+
+                                                                                    <div class="col-md-4">
+                                                                                        <label for="total_pa_budget"
+                                                                                            class="form-label">{{ __('เงินสัญญา') }}</label>
+                                                                                        <span class="text-danger"></span>
+
+                                                                                        <input type="text"
+                                                                                            placeholder="0.00" step="0.01"
+                                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                            class="form-control numeral-mask"
+                                                                                            id="total_pa_budget"
+                                                                                            name="total_pa_budget"
+                                                                                            min="0"
+
+
+                                                                                            readonly>
+
+                                                                                    </div>
+
+
+
+
+
+
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="expenses_delsum"
+                                                                                    class="form-label">{{ __('เงินงวดทั้งหมด') }}</label>
+                                                                                <span class="text-danger"></span>
+
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="expenses_delsum"
+                                                                                    name="expenses_delsum" readonly>
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ __('เงินงวดทั้งหมด รวมกัน ต้อง = 0 ') }}
+                                                                                    </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label for="expenses_sum"
+                                                                                    class="form-label">{{ __('ใช้ไป เงินงวดทั้งหมด') }}</label>
+                                                                                <span class="text-danger"></span>
+                                                                                <input type="text"
+                                                                                class="form-control"
+                                                                                id="expenses_sum"
+                                                                                name="expenses_sum" readonly>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-12">
                                                                             <label id="rounds_label" for="rounds"
@@ -791,40 +865,8 @@
 
 
 
-                                                            <div class="row callout callout-warning  mt-3">
-
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_start_date"
-                                                                        class="form-label">{{ __('วันที่เริ่มต้น สัญญา') }}</label>
-                                                                    {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_start_date"
-                                                                        name="contract_start_date">
-                                                                    <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>-->
-                                                                </div>
 
 
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_end_date"
-                                                                        class="form-label">{{ __('วันที่สิ้นสุด สัญญา') }}</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_end_date"
-                                                                        name="contract_end_date">
-                                                                    <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
-                                                            data-coreui-format="dd/MM/yyyy">
-                                                        </div>-->
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <label for="contract_sign_date"
-                                                                        class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="contract_sign_date"
-                                                                        name="contract_sign_date">
-                                                                    <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
-                                                            data-coreui-format="dd/MM/yyyy"></div>-->
-                                                                </div>
-                                                            </div>
 
                                                             <div class="row callout callout-danger mt-3">
                                                                 <div class="col-md-3">
@@ -1482,16 +1524,32 @@
 <script>
     $(document).ready(function() {
         $("#contract_pr_budget").on("input", function() {
-            var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
+          //  var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
             var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
+            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+            var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+            var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+            var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
 
+
+
+            var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
             var current = parseFloat($(this).val().replace(/,/g, ""));
+            if (contract_pr_budget < contract_pa_budget  ) {
+//$("#contract_pr_budget").val('0'); // Set the value of the input field
+$("#contract_pa_budget").val(''); // Set the value of the input field
+}   else if (contract_pr_budget < -0  ) {
+$("#contract_pr_budget").val(''); // Set the value of the input field
 
-            if (contract_pr_budget > contract_mm_budget) {
+
+
+};
+
+            if (current > contract_mm_budget) {
                 Swal.fire({
-                    title: "จำนวนเงินเกินกรอบ",
-                    text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString(
-                        'en-US', {
+                    title: "เกิดข้อผิดพลาด",
+                    text: "วงเงิน (บาท) MM จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_mm_budget
+                        .toLocaleString('en-US', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         }) + " บาท",
@@ -1499,7 +1557,7 @@
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "ตกลง"
                 });
-                /*   $(this).val(contract_mm_budget.toFixed(2)); */
+                /*  $(this).val(contract_mm_budget.toFixed(2)); */
                 $(this).val(0);
             }
         });
@@ -1510,14 +1568,23 @@
                     $("#contract_pa_budget").on("input", function() {
                         var contract_mm_budget = parseFloat($("#contract_mm_budget").val().replace(/,/g, ""));
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-
+                        var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
 
-                        if (contract_pa_budget > contract_mm_budget) {
+
+                        if (contract_pa_budget > contract_pr_budget ) {
+    //$("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_pr_budget").val(''); // Set the value of the input field
+}
+                    else if (contract_pa_budget < -0  ) {
+
+    $("#contract_pa_budget").val(''); // Set the value of the input field
+                    }
+                        if (current > contract_pr_budget || contract_pr_budget === "") {
                             Swal.fire({
-                                title: "จำนวนเงินเกินกรอบ",
-                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน mm " + contract_mm_budget.toLocaleString(
-                                    'en-US', {
+                                title: "เกิดข้อผิดพลาด",
+                                text: "วงเงิน (บาท) PR จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pr_budget
+                                    .toLocaleString('en-US', {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2
                                     }) + " บาท",
@@ -1525,7 +1592,7 @@
                                 confirmButtonColor: "#3085d6",
                                 confirmButtonText: "ตกลง"
                             });
-                            /*   $(this).val(contract_mm_budget.toFixed(2)); */
+                            /*  $(this).val(contract_mm_budget.toFixed(2)); */
                             $(this).val(0);
                         }
                     });
@@ -1533,23 +1600,36 @@
             </script>
 
             <script>
-                $(document).ready(function() {
-                    $("#contract_er_budget,#contract_po_budget").on("input", function() {
+          $(document).ready(function() {
+                    $("#contract_er_budget,#contract_po_budget,#contract_cn_budget").on("input", function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
+                        var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
+
+                        if (contract_er_budget < -0 || contract_po_budget < -0 || contract_cn_budget < -0) {
+    //$("#contract_pr_budget").val('0'); // Set the value of the input field
+    $("#contract_er_budget").val(''); // Set the value of the input field
+    $("#contract_po_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+}
+
+
+
                         if (current > contract_pa_budget) {
                             Swal.fire({
-                                title: "จำนวนเงินเกินกรอบ",
-                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString(
-                                    'en-US', {
+                                title: "เกิดข้อผิดพลาด",
+                                text: "วงเงิน (บาท) PA จำนวนเงินที่ใส่ต้องไม่เกิน" + contract_pa_budget
+                                    .toLocaleString('en-US', {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2
                                     }) + " บาท",
-                                /* icon: "error", */
+                                icon: "error",
                                 confirmButtonColor: "#3085d6",
                                 confirmButtonText: "ตกลง"
                             });
-                            /*    $(this).val(contract_pa_budget.toFixed(2)); */
+                            /*                 $(this).val(contract_pa_budget.toFixed(2)); */
                             $(this).val(0);
                         }
                     });
@@ -1557,15 +1637,15 @@
             </script>
 
             <script>
-                $(document).ready(function() {
+          $(document).ready(function() {
                     $("#contract_cn_budget").on("input", function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
                         if (current > contract_pa_budget) {
                             Swal.fire({
-                                title: "จำนวนเงินเกินกรอบ",
-                                text: "จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget.toLocaleString(
-                                    'en-US', {
+                                title: "เกิดข้อผิดพลาด",
+                                text: "วงเงิน (บาท) PA จำนวนเงินที่ใส่ต้องไม่เกิน " + contract_pa_budget
+                                    .toLocaleString('en-US', {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2
                                     }) + " บาท",
@@ -1579,101 +1659,6 @@
                     });
                 });
             </script>
-
-
-
-
-
-            {{--          <script>
-                    $(document).ready(function() {
-                        $("#contract_mm_budget, #contract_PR_butget").on("input", function() {
-                            var max;
-                            var fieldId = $(this).attr('id');
-
-                            if (fieldId === "contract_mm_budget") {
-                                max = parseFloat('{{ number_format($task_budget_it_investment) }}'.replace(/,/g,
-                                    ""));
-                            } else if (fieldId === "contract_mm_budget") {
-                                max = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(/,/g,
-                                    ""));
-                            }
-
-                            var current = parseFloat($(this).val().replace(/,/g, ""));
-                            if (current > max) {
-                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + max.toFixed(2) + " บาท");
-                                $(this).val(max.toFixed(2));
-                            }
-                        });
-
-
-
-                        $("#contract_PR").on("input", function() {
-                            var maxUtility = parseFloat('{{ number_format($task_budget_gov_utility) }}'.replace(
-                                /,/g, ""));
-                            var current = parseFloat($(this).val().replace(/,/g, ""));
-                            if (current > maxUtility) {
-                                alert("จำนวนเงินที่ใส่ต้องไม่เกิน " + maxUtility.toFixed(2) + " บาท (ค่าสาธารณูปโภค)");
-                                $(this).val(maxUtility.toFixed(2));
-                            }
-                        });
-                    });
-            </script> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            {{--   <script>
-            $(document).ready(function() {
-                // Initialize Select2 on the select element
-                $('.js-example-basic-single').select2();
-
-                $('.js-example-basic-single').on('change', function() {
-                    // Get the selected value
-                    const selectedValue = $(this).val();
-                    // Handle the selected value as needed
-                    console.log(selectedValue);
-                });
-            });
-        </script> --}}
-
-            {{-- <script>
-                $(document).ready(function() {
-                    var tasksData = {!! $tasksJson !!};
-
-                    $('#task_parent').select2({
-                        placeholder: 'เลือกกิจกรรม',
-                        allowClear: true,
-                        data: tasksData
-                    });
-
-                    $('#task_parent').on('select2:select', function(e) {
-                        var data = e.params.data;
-                        var budget = parseFloat(data.budget_it_investment) || parseFloat(data
-                            .budget_it_operating) || parseFloat(data.budget_gov_utility) || 0;
-
-                        if (typeof budget === 'number') {
-                            budget = new Intl.NumberFormat('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(budget);
-                        }
-
-                        $('#contract-type-budget').val(budget);
-                    });
-                });
-            </script>
- --}}
 
             <script>
                 $(document).ready(function() {
@@ -1757,127 +1742,276 @@
                 });
             </script>
 
-
-
-            {{--      <script>
-                $(document).ready(function() {
-                    // เมื่อมีการเลือกค่าในฟอร์ม task_parent
-                    $('#contract_type_budget').on('change', function() {
-                        // อ่านค่าของวงเงินที่เป็นตัวหลักจาก contract_type_budget
-                        var contractTypeBudget = parseFloat($('#contract-type-budget').val());
-
-                        // อ่านค่าของวงเงินในฟอร์มต่าง ๆ
-                        var mmBudget = parseFloat($('#contract_mm_budget').val());
-                        var prBudget = parseFloat($('#contract_pr_budget').val());
-                        var paBudget = parseFloat($('#contract_pa_budget').val());
-                        var poBudget = parseFloat($('#contract_po_budget').val());
-                        var erBudget = parseFloat($('#contract_er_budget').val());
-                        var cnBudget = parseFloat($('#contract_cn_budget').val());
-                        var baBudget = parseFloat($('#contract_ba_budget').val());
-                        var bdBudget = parseFloat($('#contract_bd_budget').val());
-
-                        // ตรวจสอบเงื่อนไขว่าวงเงินในฟอร์มต่าง ๆ ต้องไม่เกินวงเงินตัวหลัก
-                        if (mmBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงิน (บาท) MM เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (prBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบขอดำเนินการซื้อ/จ้าง (PR) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (paBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบขออนุมัติซื้อ/จ้าง (PA) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (poBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบสั่งซื้อ (PO) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (erBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบสั่งจ้าง (ER) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (cnBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในสัญญา (CN) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (baBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบยืมเงินรองจ่าย (BA) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                        if (bdBudget > contractTypeBudget) {
-                            $('#modal-message').text('วงเงินในใบยืมเงินหน่อยงาน (BD) เกินวงเงินที่กำหนด');
-                            $('#modal').modal('show');
-                        }
-                    });
-                });
-            </script> --}}
-
-
-
-
-
-
             <script>
                 $(document).ready(function() {
                     $('#rounds').change(function() {
                         var rounds = $(this).val();
                         $('#tasksContainer').empty(); // clear the container
+                        var contract_fiscal_year = {{$projectDetails->project_fiscal_year}};
+            contract_fiscal_year = contract_fiscal_year - 543;
+
+            var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+            var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+
                         for (var i = 0; i < rounds; i++) {
                             var content = `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">ชื่องวด ${i + 1} &nbsp: &nbsp</label>
+                            <input class="form-control" type="text" name="tasks[${i}][task_name]" value="งวด ${i + 1}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
+                            <input type="text" name="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
+                            <div class="invalid-feedback">ระบุเงินงวด</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">วันที่เริ่มต้น ${i + 1} งวด</label>
+                            <input type="text" class="form-control datepickerop" id="start_date_${i}" name="tasks[${i}][start_date]">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">วันที่สิ้นสุด ${i + 1} งวด</label>
+                            <input type="text" class="form-control datepickeropend" id="end_date_${i}" name="tasks[${i}][end_date]">
+                        </div>
+                    </div>`;
 
-                                            <div class="row">
+                $('#tasksContainer').append(content);
+                initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
+                // Initialize the datepickers for the newly added elements
 
+                console.log("round===="+i);
 
-                <div class="col-md-3">
-                    <label  class="form-label">ชื่องวด ` + (i + 1) + ` &nbsp:
-                        &nbsp</label>
-                    <input class="form-control"type="text"
-                        name="tasks[` + i + `][task_name]"
-                        value="งวด ` + (i + 1) + `">
-                </div>
-
-
-                <div class="col-md-3">
-                    <label  class="form-label">เงินงวด ` + (i + 1) + ` &nbsp:
-                        &nbsp</label>
-                    <input type="text" name="tasks[` + i + `][taskbudget]"
-                        value="` + (i + 1) + `"
-                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                        class="form-control custom-input numeral-mask">
-                </div>
-
-
-                <div class="col-md-3">
-                        <label class="form-label">วันที่เริ่มต้น งวด</label>
-                        <input type="text"
-                        class="form-control datepickerop"
-                        id="start_date_` + i + `" name="tasks[` + i + `][start_date]">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">วันที่สิ้นสุด งวด</label>
-                        <input type="text" class="form-control datepickerop"
-                         id="end_date_` + i + `" name="tasks[` + i + `][end_date]">
-                    </div>
-                </div>
-
-                    `;
-                            $('#tasksContainer').append(content);
-                        }
-                        //   <label class="custom-label">เงินเบิก ` + (i + 1) + ` &nbsp: &nbsp</label>
-                        //<input type="text" name="tasks[` + i + `][taskcost]" value="` + (i + 1) + `"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control custom-input numeral-mask">
+            }
 
 
 
 
-                        // ประยุกต์ใช้ inputmask กับ input elements ที่ถูกเพิ่มล่าสุด
+
+
+                        // Apply inputmask to the newly added input elements
                         $(":input").inputmask();
                     });
+
+                    function initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate) {
+            var text_start_date = '#start_date_' + i;
+            var text_end_date = '#end_date_' + i;
+            var next_start_date = '#start_date_' + (i + 1);
+    var prev_end_date = '#end_date_' + (i - 1);
+    var next_start_date = i + 1 < 10 ? '#start_date_' + (i + 1) : null; // ตรวจสอบว่ามีงวดถัดไปหรือไม่
+
+
+            // Initialize start date datepicker
+            $(text_start_date).datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+                startDate: fiscalYearStartDate,
+                endDate: fiscalYearEndDate,
+                autoclose: true
+            }).on('changeDate', function(selected) {
+           // Set the start date of the end date datepicker to the selected start date
+           var newStartDate = selected.date;
+        $(text_end_date).datepicker("setStartDate", newStartDate);
+
+        // If there is a next start date datepicker, set its start date to the day after the selected end date
+        if (next_start_date && $(next_start_date).length) {
+            var newEndDate = new Date(newStartDate);
+            newEndDate.setDate(newEndDate.getDate() + 1); // Set the minimum start date of the next period to one day after the end date of the current period
+            $(next_start_date).datepicker("setStartDate", newEndDate);
+        }
+
+
+
+
+
+            });
+
+            // Initialize end date datepicker
+            $(text_end_date).datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+                autoclose: true
+            }).on('changeDate', function(selected) {
+               // If there is a next start date datepicker, set its start date to the day after the selected end date
+        if (next_start_date && $(next_start_date).length) {
+            var newStartDate = new Date(selected.date);
+            newStartDate.setDate(newStartDate.getDate() + 1); // Plus one day
+            $(next_start_date).datepicker("setStartDate", newStartDate);
+        }
+            });
+        }
+
+
+
+
+                    // When an expense input changes, update the total and check against the budget
+                    $(document).on('input', '.expenses', function() {
+                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var sum = 0;
+                        var tasksContainer = $('#tasksContainer');
+                        var inputs = $('.expenses').map(function() {
+                           // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
+        var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
+        if (value < 0) {
+            $(this).val(''); // รีเซ็ตค่าถ้าติดลบ
+            value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
+        }
+        return value
+
+
+
+
+                        }).get();
+
+                        sum = inputs.reduce(function(a, b) {
+
+                            return a + b;
+                        }, 0);
+
+                        // Calculate the remaining budget after each installment
+                        var remainingBudget = contract_pa_budget;
+                        for (var i = 0; i < inputs.length; i++) {
+                            remainingBudget -= inputs[i];
+
+                            if (remainingBudget < 0) {
+   // วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
+   $('.expenses').each(function() {
+            if (parseFloat($(this).val()) < 0) {
+                $(this).val('');
+            }
+        });
+
+                                // If the remaining budget after any installment is negative, show an error
+                                Swal.fire({
+                                    title: "เกิดข้อผิดพลาด",
+                                    html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum -
+                                            inputs[i])).toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        }) + " บาท" +
+                                        "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
+                                        .toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        }) + " บาท)",
+
+
+                                    icon: "error",
+                                    confirmButtonColor: "#3085d6",
+                                    confirmButtonText: "ตกลง"
+                                }).then((result) => {
+                                    if (result.value) {
+                                        $('.expenses').eq(i).val(
+                                        ''); // Reset the value of the input that caused the error
+                                        $('.expenses').eq(i).trigger(
+                                        'input'); // Trigger input event to recalculate
+                                    }
+                                });
+                                break; // Exit the loop as we have found an error
+
+                            }
+
+
+
+                        }
+
+
+
+                            $('#expenses_sum').val(sum.toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }));
+                            $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+
+
+                            }));
+
+  // Function to calculate the remaining budget
+  function calculateRemainingBudget() {
+        var sum = $('.expenses').map(function() {
+            return parseFloat($(this).val().replace(/,/g, "")) || 0;
+        }).get().reduce(function(a, b) {
+            return a + b;
+        }, 0);
+
+        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+        var remainingBudget = contract_pa_budget - sum;
+        return remainingBudget;
+    }
+
+    // Form submission handler
+    $('#formId').on('submit', function(e) { // Make sure this is the ID of your form
+        e.preventDefault();
+
+        var remainingBudget = calculateRemainingBudget();
+
+        if (remainingBudget !== 0) {
+            $('#expenses_delsum').addClass('is-invalid');
+           // $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
+        } else {
+            // If the remaining budget is zero, remove validation error
+            $('#expenses_delsum').removeClass('is-invalid');
+            $('.invalid-feedback').text(''); // Clear the feedback text
+                 // ส่งฟอร์ม
+                 this.submit();
+        }
+    });
+
+
+                    });
+
+                     // ฟังก์ชันสำหรับคำนวณผลรวมของเงินงวดทั้งหมด
+    function calculateTotalInstallments() {
+        var total = 0;
+        $('.installment').each(function() {
+            var amount = parseFloat($(this).val().replace(/,/g, "")) || 0;
+            total += amount;
+        });
+        return total;
+    }
+
+    // ฟังก์ชันสำหรับตรวจสอบว่าผลรวมของเงินงวดเท่ากับเงินที่ใช้ไปทั้งหมดหรือไม่
+    function checkTotalAgainstBudget() {
+        var totalInstallments = calculateTotalInstallments();
+        var budgetUsed = parseFloat($('#budget-used').val().replace(/,/g, "")) || 0;
+        var remainingBudget = budgetUsed - totalInstallments;
+
+        $('#expenses_sum').val(totalInstallments.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+        if(remainingBudget !== 0) {
+            alert('เงินเหลือทั้งหมด ' + remainingBudget.toFixed(2) + ' บาท ต้องเหลือ 0 บาท');
+        }
+    }
+
+    // ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์เงินงวด
+    $(document).on('input', '.installment', function() {
+        checkTotalAgainstBudget();
+    });
+
+    // ตรวจสอบเมื่อมีการเปลี่ยนแปลงจำนวนงวด
+    $('#rounds').change(function() {
+        // ... โค้ดสำหรับการเปลี่ยนแปลงจำนวนงวด ...
+        // เรียกใช้ checkTotalAgainstBudget เมื่อเพิ่มฟิลด์เงินงวดใหม่
+        checkTotalAgainstBudget();
+    });
                 });
             </script>
 
-
-            <script>
+           <script>
                 $(document).ready(function() {
                     $('#contract_type').change(function() {
                         var contract_type = $(this).val();
@@ -1955,79 +2089,75 @@
                 });
             </script>
 
+<script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
 
-            <!--<script>
-                function formatDate(date) {
-                    var parts = date.split("/");
-                    return parts[1] + "/" + parts[0] + "/" + parts[2];
-                }
+        //   var d = new Date();
+        // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 
-                $(document).ready(function() {
-                    $("#insurance_start_date, #insurance_end_date").change(function() {
-                        var start = new Date(formatDate($("#insurance_start_date").val()));
-                        var end = new Date(formatDate($("#insurance_end_date").val()));
-
-                        // Calculate the difference in milliseconds
-                        var diff = Math.abs(end - start);
-
-                        // Calculate days
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                        // Calculate months
-                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-
-                        // Display result
-                        $("#insurance_duration_months").text(months + " เดือน");
-                        $("#insurance_duration_days").text(days + " วัน");
-                    });
-                });
-            </script> -->
-
-            <script>
-                $(function() {
-                    if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
-                        alert("jQuery or jQuery UI is not loaded");
-                        return;
-                    }
-
-                    //   var d = new Date();
-                    // #contract_sign_date, var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
-
-                    $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date")
-                        .datepicker({
-                            dateFormat: 'dd/mm/yy',
-                            changeMonth: true,
-                            changeYear: true,
-                            language: "th-th",
-                            /*     defaultDate: toDay,
-                                 dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-                                 dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
-                                 monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
-                                     'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-                                 ],
-                                 monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
-                                     'ต.ค.', 'พ.ย.', 'ธ.ค.'
-                                 ], */
+        $("#contract_sign_date,#contract_start_date, #contract_end_date,#contract_er_start_date,#contract_po_start_date,#insurance_start_date, #insurance_end_date")
+            .datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+                /*     defaultDate: toDay,
+                     dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+                     dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+                     monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม',
+                         'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                     ],
+                     monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.',
+                         'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                     ], */
 
 
-                        });
+            });
+
+var contract_fiscal_year = {{$projectDetails->project_fiscal_year}};
+contract_fiscal_year =  contract_fiscal_year -543;
+console.log( contract_fiscal_year);
+
+var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+console.log(fiscalYearStartDate);
+console.log(fiscalYearEndDate);
+
+
+// Set the start and end dates for the project_start_date datepicker
+$("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
+//  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+// Set the start and end dates for the project_end_date datepicker
+$("#contract_end_date").datepicker("setStartDate", fiscalYearStartDate);
+//$("#contract_end_date").datepicker("setEndDate", fiscalYearEndDate);
+//$("#contract_sign_date").datepicker("setStartDate", new Date(fiscalYearStartDate.getFullYear() - 1, fiscalYearStartDate.getMonth(), fiscalYearStartDate.getDate()));
 
 
 
+        $('#contract_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+            $("#contract_end_date").datepicker("setStartDate", startDate);
+            $("#insurance_end_date").datepicker("setStartDate", startDate);
+            $("#contract_sign_date").datepicker("setStartDate", new Date(startDate.getFullYear(), startDate.getMonth()-2, startDate.getDate()));
+            //  $("#contract_sign_date").datepicker("setStartDate", startDate);
+        });
+
+        $('#contract_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#contract_start_date").datepicker("setEndDate", endDate);
+            $("#insurance_start_date").datepicker("setEndDate", endDate);
 
 
-                    $('#contract_start_date').on('changeDate', function() {
-                        var startDate = $(this).datepicker('getDate');
-                        $("#contract_end_date").datepicker("setStartDate", startDate);
-                        $("#contract_sign_date").datepicker("setStartDate", startDate);
-                    });
+        });
+    });
+</script>
 
-                    $('#contract_end_date').on('changeDate', function() {
-                        var endDate = $(this).datepicker('getDate');
-                        $("#contract_start_date").datepicker("setEndDate", endDate);
-                    });
-                });
-            </script>
 
 
             {{-- <script>
@@ -2056,62 +2186,85 @@
     </script> --}}
 
 
-            <script>
-                /*    function calculateDuration() {
-                                                var startDate = $('#insurance_start_date').datepicker('getDate');
-                                                var endDate = $('#insurance_end_date').datepicker('getDate');
-                                                if (startDate && endDate) {
-                                                    var diff = Math.abs(endDate - startDate);
-                                                    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                                                    var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-                                                    $('#insurance_duration_months').text(months + " เดือน");
-                                                    $('#insurance_duration_days').text(days + " วัน");
-                                                }
-                                            } */
 
-                $(document).ready(function() {
-                    $('#insurance_start_date, #insurance_end_date').datepicker({
-
-                        dateFormat: "dd/mm/yy",
-                        changeMonth: true,
-                        changeYear: true,
-                        language: "th-th",
-
-                    });
-                });
-
-                function calculateDuration() {
-                    var startDate = $('#insurance_start_date').datepicker('getDate');
-                    var endDate = $('#insurance_end_date').datepicker('getDate');
-                    if (startDate && endDate) {
-                        var diff = Math.abs(endDate - startDate);
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                        var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
-                        $('#insurance_duration_months').text(months + " เดือน");
-                        $('#insurance_duration_days').text(days + " วัน");
-                    }
+    <script>
+        /*    function calculateDuration() {
+                var startDate = $('#insurance_start_date').datepicker('getDate');
+                var endDate = $('#insurance_end_date').datepicker('getDate');
+                if (startDate && endDate) {
+                    var diff = Math.abs(endDate - startDate);
+                    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                    $('#insurance_duration_months').text(months + " เดือน");
+                    $('#insurance_duration_days').text(days + " วัน");
                 }
+            } */
 
-                function grandTotal() {
-                    calculateDuration();
-                    var days = $("#insurance_start_date").val();
-                    var rooms = $("#insurance_end_date").val();
+        $(document).ready(function() {
+            $('#insurance_start_date, #insurance_end_date').datepicker({
 
-                    if (days != "" && parseInt(days) > 0) {
-                        if (rooms != "") {
-                            var total = parseInt(days) * parseInt(rooms) * roomPrice;
-                            $("#grandtotal").val(total.toFixed(2)).css("color", "black");
-                        } else {
-                            $("#grandtotal").val("").css("color", "black");
-                        }
-                    }
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+
+            });
+            var contract_fiscal_year = {{$projectDetails->project_fiscal_year}};
+contract_fiscal_year =  contract_fiscal_year -543;
+console.log( contract_fiscal_year);
+
+var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+console.log(fiscalYearStartDate);
+console.log(fiscalYearEndDate);
+
+// Set the start and end dates for the project_start_date datepicker
+$("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
+//  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+// Set the start and end dates for the project_end_date datepicker
+$("#insurance_end_date").datepicker("setStartDate", fiscalYearStartDate);
+$("#insurance_end_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
+
+
+        });
+
+        function calculateDuration() {
+
+            var startDate = $('#insurance_start_date').datepicker('getDate');
+            var endDate = $('#insurance_end_date').datepicker('getDate');
+            if (startDate && endDate) {
+                var diff = Math.abs(endDate - startDate);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.436875));
+                $('#insurance_duration_months').text(months + " เดือน");
+                $('#insurance_duration_days').text(days + " วัน");
+            }
+        }
+
+        function grandTotal() {
+            calculateDuration();
+            var days = $("#insurance_start_date").val();
+            var rooms = $("#insurance_end_date").val();
+
+            if (days != "" && parseInt(days) > 0) {
+                if (rooms != "") {
+                    var total = parseInt(days) * parseInt(rooms) * roomPrice;
+                    $("#grandtotal").val(total.toFixed(2)).css("color", "black");
+                } else {
+                    $("#grandtotal").val("").css("color", "black");
                 }
+            }
+        }
 
-                $("#insurance_start_date, #insurance_end_date").on("change", function() {
-                    grandTotal();
-                    $(".datepicker").hide();
-                });
-            </script>
+        $("#insurance_start_date, #insurance_end_date").on("change", function() {
+            grandTotal();
+            $(".datepicker").hide();
+        });
+    </script>
             <script>
                 $(document).ready(function() {
                     $(":input").inputmask();
@@ -2127,6 +2280,28 @@
 
 
 
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 
         </x-slot:javascript>
     </x-app-layout>

@@ -15,6 +15,7 @@
                     </div>
                 @endif
 
+
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('แก้ไขกิจกรรม11111') }} {{ $taskcon->taskcon_name }}">
@@ -309,8 +310,9 @@
 
         var d = new Date();
         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        var taskconstartdate = "{{ Helper::Date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}";
 
-
+        console.log(taskconstartdate);
         $("#taskcon_start_date,#taskcon_end_date, #taskcon_pay_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',
@@ -320,6 +322,7 @@
 
 
             });
+            $("#taskcon_pay_date").datepicker("setStartDate", taskconstartdate);
             $("#taskcon_start_date").datepicker({});
         $("#taskcon_end_date").datepicker({ });
         $('#taskcon_start_date').change(function() {

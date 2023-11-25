@@ -4,7 +4,7 @@
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
 
-                <div >
+                <div class="d-none">
                     @if ($pro)
                         {{ $pro->project_name }}
                         {{ $pro->project_fiscal_year }}
@@ -59,15 +59,15 @@
                                 <form   id="formId" method="POST" action="{{ route('contract.store') }}" class="row needs-validation"
                                     novalidate enctype="multipart/form-data">
                                     @csrf
-
+                                    <div class="d-none">
                                     <input  name="origin" value="{{ $origin }}">
 
 
                                     <input  name="project" value="{{ $project }}">
                                     <input name="encodedProjectId" value="{{ $encodedProjectId }}">
 
-                                    <input  name="task" value="{{ $task->hashid }}">
-
+                                    <input name="task" value="{{ isset($task) ? $task->hashid : '' }}">
+                                    </div>
 
 
                                     <div class="row g-3 align-items-center callout callout-success ">
@@ -99,7 +99,7 @@
                                                     class="form-label">{{ __('ปีงบประมาณ') }}</label>
                                                 <span class="text-danger"></span>
                                                 <input type="text" class="form-control" id="contract_fiscal_year"
-                                                name="contract_fiscal_year"    value="{{  $pro->project_fiscal_year }}"  readonly >
+                                                name="contract_fiscal_year"   value="{{  $pro->project_fiscal_year }}" readonly >
                                                 @error('contract_fiscal_year')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -1914,7 +1914,7 @@ $value = 0;
                     </div>`;
 
                 $('#tasksContainer').append(content);
-
+                initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
                 // Initialize the datepickers for the newly added elements
 
                 console.log("round===="+i);
@@ -1955,83 +1955,10 @@ $value = 0;
                         }
                     });
                 }*/
-
-
-
-
-
                 //var text_end_date = [];
                // var text_start_date = [];
-               var text_end_date = '#end_date_'+i;
-               var text_start_date = '#start_date_'+i;
-               console.log(text_start_date);
-               console.log(text_end_date);
-                if(i == 0){
-                    /*text_end_date[i] = '#end_date_'+i;
-                    text_start_date[i] = '#start_date_'+i;*/
-
-                    $(text_end_date).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        //endDate: fiscalYearEndDate,
-                        autoclose: true
-                        })
 
 
-                    $(text_end_date).datepicker("setStartDate", fiscalYearStartDate);
-
-
-
-                    $(text_start_date).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        startDate: fiscalYearStartDate,
-                        endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                            $(text_end_date).datepicker("setStartDate", $(text_start_date).datepicker('getDate'));
-                        // When a start date is selected, update the minDate of the next round's start date
-                    });
-                    $(text_end_date).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        //endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                        // When an end date is selected, update the maxDate of the current round's start date
-                        $(text_start_date).datepicker("setStartDate", $(text_end_date).datepicker('getDate'));
-                    });
-                }else{
-
-
-                    $(text_start_date).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                            $(text_end_date).datepicker("setStartDate", $(text_start_date).datepicker('getDate'));
-                        // When a start date is selected, update the minDate of the next round's start date
-                    });
-                    $(text_end_date).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        //endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                        // When an end date is selected, update the maxDate of the current round's start date
-                    });
-                }
             }
 
 
@@ -2043,6 +1970,53 @@ $value = 0;
                         $(":input").inputmask();
                     });
 
+                    function initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate) {
+            var text_start_date = '#start_date_' + i;
+            var text_end_date = '#end_date_' + i;
+            var next_start_date = '#start_date_' + (i + 1);
+    var prev_end_date = '#end_date_' + (i - 1);
+    var next_start_date = i + 1 < 10 ? '#start_date_' + (i + 1) : null; // ตรวจสอบว่ามีงวดถัดไปหรือไม่
+
+
+            // Initialize start date datepicker
+            $(text_start_date).datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+                startDate: fiscalYearStartDate,
+               // endDate: fiscalYearEndDate,
+                autoclose: true
+            }).on('changeDate', function(selected) {
+           // Set the start date of the end date datepicker to the selected start date
+           var newStartDate = selected.date;
+        $(text_end_date).datepicker("setStartDate", newStartDate);
+
+        // If there is a next start date datepicker, set its start date to the day after the selected end date
+        if (next_start_date && $(next_start_date).length) {
+            var newEndDate = new Date(newStartDate);
+            newEndDate.setDate(newEndDate.getDate() + 1); // Set the minimum start date of the next period to one day after the end date of the current period
+            $(next_start_date).datepicker("setStartDate", newEndDate);
+        }
+
+            });
+
+            // Initialize end date datepicker
+            $(text_end_date).datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                language: "th-th",
+                autoclose: true
+            }).on('changeDate', function(selected) {
+               // If there is a next start date datepicker, set its start date to the day after the selected end date
+        if (next_start_date && $(next_start_date).length) {
+            var newStartDate = new Date(selected.date);
+            newStartDate.setDate(newStartDate.getDate() + 1); // Plus one day
+            $(next_start_date).datepicker("setStartDate", newStartDate);
+        }
+            });
+        }
 
 
 
@@ -2208,6 +2182,7 @@ $value = 0;
     });
                 });
             </script>
+
 
 
 

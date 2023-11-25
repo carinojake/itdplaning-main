@@ -212,7 +212,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div  class="d-none" >
+                                <div   >
                                     @if (session('contract_id'))
                                         ID: {{ session('contract_id') }}
                                     @endif
@@ -590,7 +590,7 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_refund_pa_budget"
-                                                        name="task_refund_pa_budget" min="0" readonly value={{ session('contract_refund_pa_budget') }}>
+                                                        name="task_refund_pa_budget" min="0"  value={{ session('contract_refund_pa_budget') }} readonly>
 
                                                     {{--  <div class="invalid-feedback">
                                                             {{ __('ค่าสาธารณูปโภค') }}

@@ -406,7 +406,7 @@
                                                     {{ __('mm') }}
                                                 </div>
                                             </div>
-                                            <div id="refund" readonly {{-- style="display:none;" --}}>
+                                            <div id="refund"  {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
                                                         <label for="task_refund_pa_budget"
