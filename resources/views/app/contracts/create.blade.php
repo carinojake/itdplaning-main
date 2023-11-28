@@ -3,11 +3,14 @@
             <div class="container-fluid">
 
                 {{-- {{ Breadcrumbs::render('contract.create') }} --}}
-                <div >
+                <div class="d-none">
                 @if ($projectDetails)
                     {{ $projectDetails->project_name }}
                     {{ $projectDetails->project_fiscal_year }}
-
+                    {{ $projectDetails->project_type }}
+                    {{ $projectDetails->budget_it_operating }}
+                    {{ $projectDetails->budget_it_investment }}
+                    {{ $projectDetails->budget_gov_utility }}
                     @else
                 @endif
 
@@ -15,7 +18,10 @@
                     {{ $ta->task_name }}
                 @else
                 @endif
-                </div>
+
+                {{ $projecthashid }}
+
+            </div>
 
 
                 <div class="animated fadeIn">
@@ -48,14 +54,26 @@
 
                                     <input type="hidden" name="origin" value="{{ $origin }}">
 
-                                    <input type="hidden" name="project" value="{{ $origin }}">
+                                    <input type="hidden" name="project" value="{{ $project}}">
 
                                     <input type="hidden" name="task" value="{{ $task }}">
+
+                                    <input type="hidden" name="projecthashid" value="{{ $projecthashid }}">
                                     <div class="row g-3 align-items-center callout callout-success ">
 
 
                                         <div class="row g-3 align-items-center">
+                                            <div class="d-none">
+                                                @if($projectDetails->project_type == 1)
 
+                                                    <input type="text" class="form-control" id="contract_project_type" name="contract_project_type" value="p" readonly>
+
+
+                                                @elseif($projectDetails->project_type == 2)
+                                                    <input type="text" class="form-control" id="contract_project_type" name="contract_project_type" value="j" readonly>
+
+                                                @endif
+                                                </div>
                                             <!-- Fiscal Year -->
                                             <div class="col-md-3">
                                                 <label for="contract_fiscal_year"
@@ -93,8 +111,8 @@
                                                 <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                                 <select name="task_parent" id="task_parent" class="form-control">
                                                     <option value="">ไม่มี</option>
-                                                    @if ($tasks)
-                                                        @foreach ($tasks as $subtask)
+                                                    @if ($ta?sks)
+                                                        @foreach ($ta?sks as $subtask)
                                                             @if ($subtask->task_id)
                                                                 <option value="{{ $subtask->task_id }}" {{ $subtask->task_parent == $subtask->task_id ? 'selected' : '' }}>
                                                                     {{ $subtask->task_name }}
@@ -278,18 +296,26 @@
                                                                                 name="project_select"
                                                                                 id="project_select" required>
                                                                                 <option selected disabled
-                                                                                    value="">
-                                                                                    เลือกประเภท...</option>
-
-                                                                                <option value="1">งบกลาง
-                                                                                    ICT</option>
-
-                                                                                <option value="2">
-                                                                                    งบดำเนินงาน</option>
-
-                                                                                <option value="3">
-                                                                                    ค่าสาธารณูปโภค</option>
-
+                                                                                    value="">เลือกประเภท...
+                                                                                </option>
+                                                                                @if (
+                                                                                  $projectDetails->budget_it_operating  >
+                                                                                        0)
+                                                                                    <option selected value="1">
+                                                                                        งบกลาง ICT</option>
+                                                                                @endif
+                                                                                @if (  $projectDetails->budget_it_investment
+                                                                                       >
+                                                                                        0)
+                                                                                    <option selected value="2">
+                                                                                        งบดำเนินงาน</option>
+                                                                                @endif
+                                                                                @if (
+                                                                                     $projectDetails->budget_gov_utility >
+                                                                                        0)
+                                                                                    <option selected value="3">
+                                                                                        ค่าสาธารณูปโภค</option>
+                                                                                @endif
                                                                             </select>
                                                                         </div>
 
@@ -308,7 +334,10 @@
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_mm"
-                                                                                    name="contract_mm">
+                                                                                    name="contract_mm"
+                                                                                    value="{{ $ta?->task_mm }}"
+
+                                                                                    >
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
@@ -323,7 +352,10 @@
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_mm_name"
-                                                                                    name="contract_mm_name" required
+                                                                                    name="contract_mm_name"
+                                                                                    value="{{ $ta?->task_mm_name }}"
+
+                                                                                    required
                                                                                     autofocus>
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __('ชื่อสัญญา ซ้ำ') }}
@@ -341,7 +373,9 @@
                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_mm_budget"
-                                                                                    min="0">
+                                                                                    min="0"
+                                                                                    value="{{ $ta?->task_mm_budget }}"
+                                                                                    >
                                                                             </div>
                                                                         </div>
 
@@ -389,7 +423,11 @@
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_PR"
-                                                                                    name="contract_pr">
+                                                                                    name="contract_pr"
+
+
+
+                                                                                    >
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
@@ -408,6 +446,7 @@
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_pr_budget"
                                                                                     min="0"
+                                                                                    value="{{ $ta?->task_mm_budget }}"
                                                                                     onchange="calculateRefund()">
                                                                             </div>
                                                                         </div>
@@ -725,7 +764,10 @@
                                                                             {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_start_date"
-                                                                                name="contract_start_date">
+                                                                                name="contract_start_date"
+                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $ta?->task_start_date)) }}
+
+                                                                                >
                                                                             <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
                                                                     data-coreui-format="dd/MM/yyyy"></div>-->
                                                                         </div>
@@ -736,7 +778,10 @@
                                                                                 class="form-label">{{ __('วันที่สิ้นสุด สัญญา') }}</label>
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_end_date"
-                                                                                name="contract_end_date">
+                                                                                name="contract_end_date"
+                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $ta?->task_end_date)) }}
+
+                                                                                >
                                                                             <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
                                                                     data-coreui-format="dd/MM/yyyy">
                                                                 </div>-->
@@ -1182,9 +1227,9 @@
                                                 {{ __('coreuiforms.save') }}
                                             </x-button>
                                             {{--
-                @if ($origin && $task)
+                @if ($origin && $ta?sk)
                     <x-button
-                        link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
+                        link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $ta?sk]) }}"
                         class="text-black btn-light">
                         {{ __('coreuiforms.return') }}
                     </x-button>
@@ -1574,7 +1619,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
 
                         if (contract_pa_budget > contract_pr_budget ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pr_budget").val(''); // Set the value of the input field
+   // $("#contract_pr_budget").val(''); // Set the value of the input field
 }
                     else if (contract_pa_budget < -0  ) {
 
@@ -2145,7 +2190,8 @@ $("#contract_end_date").datepicker("setStartDate", fiscalYearStartDate);
             $("#contract_end_date").datepicker("setStartDate", startDate);
             $("#insurance_end_date").datepicker("setStartDate", startDate);
             $("#contract_sign_date").datepicker("setStartDate", new Date(startDate.getFullYear(), startDate.getMonth()-2, startDate.getDate()));
-            //  $("#contract_sign_date").datepicker("setStartDate", startDate);
+            $("#contract_po_start_date").datepicker("setStartDate", startDate);
+            $("#contract_er_start_date").datepicker("setStartDate", startDate);
         });
 
         $('#contract_end_date').on('changeDate', function() {

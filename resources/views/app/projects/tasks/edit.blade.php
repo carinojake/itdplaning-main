@@ -15,7 +15,7 @@
                 <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $task->task_name }}">
-                            <form method="POST"
+                            <form id = 'formId' method="POST"
                                 action="{{ route('project.task.update', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="row needs-validation"
                                 novalidate>
@@ -415,6 +415,55 @@
      });
      });
          </script>
+<script>
+    $(document).ready(function() {
+        // Define your sumbudget and budget_sub objects here as you did before
+
+        // Define the min values for each budget type
+        var minValues = {
+            operating: parseFloat('{{ $task->task_budget_it_operating }}'),
+            investment: parseFloat('{{ $task->task_budget_it_investment }}'),
+            utility: parseFloat('{{ $task->task_budget_gov_utility }}')
+        };
+        console.log( minValues);
+
+        // Form submission handler
+        $('#formId').on('submit', function(e) {
+            e.preventDefault();
+
+            // Validate each budget field before form submission
+            var isValid = true;
+            var errorMessage = "";
+
+            $('#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating').each(function() {
+                var current = parseFloat($(this).val().replace(/,/g , "")) || 0;
+                var fieldId = $(this).attr('id');
+                var budgetType = fieldId.replace('task_budget_', ''); // e.g., 'it_operating'
+                var min = minValues[budgetType];
+
+                if (current > min) {
+                    // Add error class and set the flag
+                    $(this).addClass('is-invalid');
+                    isValid = false;
+                    errorMessage = "One or more fields have values less than the minimum required.";
+                } else {
+                    // Remove error class
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            if (isValid) {
+                // If all validations pass, submit the form
+                this.submit();
+            } else {
+                // Otherwise, show an error message
+                Swal.fire(errorMessage);
+            }
+        });
+
+        // Your other code for handling the input events
+    });
+</script>
 
         <script>
             const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');
@@ -502,11 +551,31 @@
             language:"th-th",
 
         });
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
+        var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+
+        project_fiscal_year = project_fiscal_year - 543;
+
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(project_start_date_str);
+        console.log(project_end_date_str);
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+
 
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
-            $("#task_pay_date").datepicker("setStartDate", startDate);
         });
 
         $('#task_end_date').on('changeDate', function() {

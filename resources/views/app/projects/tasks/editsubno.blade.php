@@ -204,6 +204,45 @@
                                             aria-labelledby="panelsStayOpen-headingTwo">
                                             <div class="accordion-body">
 
+                                                <div  class="col-md-4" >
+                                                    @if (session('contract_id'))
+                                                        ID: {{ session('contract_id') }}
+                                                    @endif
+                                                    @if (session('contract_number'))
+                                                        Number: {{ session('contract_number') }}
+                                                    @endif
+                                                    @if (session('contract_mm'))
+                                                    Name_mm: {{ session('contract_mm') }}
+                                                @endif
+                                                    @if (session('contract_mm_name'))
+                                                    Name_mm: {{ session('contract_mm_name') }}
+                                                @endif
+                                                    @if (session('contract_name'))
+                                                        Name: {{ session('contract_name') }}
+                                                    @endif
+                                                    @if (session('contract_mm_budget'))
+                                                        MM: {{ session('contract_mm_budget') }}
+                                                    @endif
+                                                    @if (session('contract_pr_budget'))
+                                                    Pr: {{ session('contract_pr_budget') }}
+                                                @endif
+                                                @if (session('contract_pa_budget'))
+                                                pa: {{ session('contract_pa_budget') }}
+                                            @endif
+                                            @if (session('contract_refund_pa_budget'))
+                                            refund_pa_budget: {{ session('contract_refund_pa_budget') }}
+                                        @endif
+                                            @if (session('contract_start_date'))
+                                            start_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+
+
+
+                                        @endif
+                                        @if (session('contract_end_date'))
+                                        end_date:  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                                    @endif
+
+                                                    </div >
 
 
                                                 <div id="mm_form" >
@@ -266,7 +305,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 mt-4">
-                                                                <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' =>  $project->hashid, 'project' =>  $project->hashid,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                                                                <span class="text-danger"> <a href="{{ route('contract.create', ['origin' =>  1, 'project' =>  $project->hashid,'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
                                                                     class="btn btn-success text-white"
                                                                     target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
                                                             </div>
@@ -379,9 +418,19 @@
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
-                                                                         name="task_cost_it_operating" min="0" value="{{ $task->task_cost_it_operating }}"   onchange="calculateRefund()" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }} >
+                                                                         name="task_cost_it_operating" min="0"
+                                                                         @if ($task->task_type == 1)
+                                                                            value={{ session('contract_pa_budget') }}
+                                                                                @else
 
-                                                                        <div class="invalid-feedback">
+
+
+                                                                         value="{{ $task->task_cost_it_operating }}"
+                                                                         @endif
+                                                                         onchange="calculateRefund()" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}
+                                                                       >
+
+                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบกลาง ICT') }}
                                                                     </div>
                                                                     </div>
@@ -401,7 +450,8 @@
                                                                             class="form-control numeral-mask"
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
-                                                                            min="0" value="{{ $task->task_budget_it_investment }} "  onchange="calculateRefund()"
+                                                                            min="0"
+                                                                            value="{{ $task->task_budget_it_investment }} "  onchange="calculateRefund()"
                                                                             {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
                                                                         <div class="invalid-feedback">
@@ -414,8 +464,8 @@
                                                                         class="form-label">{{ __('รอการเบิก งบดำเนินงาน') }}</label>
                                                                         <input type="text" placeholder="0.00" step="0.01"
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                                         class="form-control numeral-mask" id="task_cost_it_investment"
-                                                                         name="task_cost_it_investment" min="0"  value="{{ $task->task_cost_it_investment }}"  onchange="calculateRefund()"{{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
+                                                                        class="form-control numeral-mask" id="task_cost_it_investment"
+                                                                        name="task_cost_it_investment" min="0"  value={{ session('contract_pa_budget') }}  onchange="calculateRefund()">ย
 
                                                                         <div class="invalid-feedback">
                                                                         {{ __('งบดำเนินงาน') }}
@@ -439,8 +489,11 @@
                                                                             id="task_budget_gov_utility"
                                                                             name="task_budget_gov_utility"
                                                                             min="0"
+                                                                            @if($task->task_type == 1)
+                                                                            value={{ session('contract_pa_budget') }}
+                                                                            @else
                                                                             value="{{ $task->task_budget_gov_utility }}" onchange="calculateRefund()"  {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
-
+                                                                            @endif
                                                                         <div class="invalid-feedback">
                                                                             {{ __('ค่าสาธารณูปโภค') }}
                                                                         </div>
@@ -474,7 +527,7 @@
                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                             class="form-control numeral-mask"
                                                                             id="task_refund_pa_budget"
-                                                                            name="task_refund_pa_budget" min="0"   value={{ $task->task_refund_pa_budget }} readonly>
+                                                                            name="task_refund_pa_budget" min="0"  value="{{ ( session('contract_refund_pa_budget', number_format($task->task_refund_pa_budget, 2, '.', ','))) }}" readonly>
 
                                                                         {{--  <div class="invalid-feedback">
                                                                                 {{ __('ค่าสาธารณูปโภค') }}
@@ -585,6 +638,7 @@
                                                                 {{ Form::select('contract_type', \Helper::contractType(), '4', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
 
                                                             </div>
+                                                            @if($task->task_type == 2)
                                                             <div>
                                                                 <div id="pp_form"
                                                                     class="callout callout-danger"{{--  style="display:none;" --}}>
@@ -643,6 +697,8 @@
                                                                                 >
                                                                         </div>
                                                                     </div>
+                                                                    @endif
+                                                                    @if(auth()->user()->isAdmin())
                                                                     @if($task->task_status == 1)
                                                                     <div class="col-md-3 mt-3">
                                                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
@@ -700,12 +756,13 @@
                                                                   </div>
                                                                 @endif
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                @endif
+                                                          {{--       <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="task_refund_pa_status" id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
                                                                     <label class="form-check-label" for="task_refund_pa_status1" @checked($task->task_refund_pa_status == 1) >
                                                                       ไม่ได้คืน
                                                                     </label>
-                                                                  </div>
+                                                                  </div> --}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1129,13 +1186,35 @@ updateTaskCostFields();
 
 <script>
     $(function() {
-        $("#task_start_date, #task_end_date").datepicker({
+        $("#task_start_date, #task_end_date,#task_pay_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
             language:"th-th",
 
         });
+        var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
+        var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
+        var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+
+        project_fiscal_year = project_fiscal_year - 543;
+
+        var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
+        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+
+        console.log(project_start_date_str);
+        console.log(project_end_date_str);
+        console.log(fiscalYearStartDate);
+        console.log(fiscalYearEndDate);
+// Set the start and end dates for the project_start_date datepicker
+$("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+
+    // Set the start and end dates for the project_end_date datepicker
+   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+
+
 
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
@@ -1146,6 +1225,7 @@ updateTaskCostFields();
         $('#task_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
             $("#task_start_date").datepicker("setEndDate", endDate);
+            $("#task_pay_date").datepicker("setEndDate", project_end_date_str);
         });
     });
 </script>

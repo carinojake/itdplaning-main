@@ -173,7 +173,7 @@
                 </div>
 
 
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-success">Save Changes</button>
                 <x-button link="{{ route('contract.index') }}"
                     class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
 
@@ -340,10 +340,18 @@ $("#taskcon_budget_it_investment, #taskcon_budget_gov_utility, #taskcon_budget_i
      if(budgetItOperating < -0 || budgetItInvestment < -0 || budgetGovUtility < -0
      || costItOperating < -0 || costItInvestment < -0 || costGovUtility < -0)
                         {
-                            Swal.fire("จำนวนเงินที่ใส่ต้องไม่ติดลบ");
+
                             $(this).val(0);
                         }
-             /*    var current = parseFloat($(this).val().replace(/,/g , ""));
+
+
+
+
+
+
+
+
+                        /*    var current = parseFloat($(this).val().replace(/,/g , ""));
                 if (current > max) {
 
 

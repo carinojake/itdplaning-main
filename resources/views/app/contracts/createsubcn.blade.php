@@ -8,17 +8,25 @@
                     @if ($pro)
                         {{ $pro->project_name }}
                         {{ $pro->project_fiscal_year }}
+                        {{ $pro->project_type }}
                     @endif
 
                     @if ($ta)
                         111
                         {{ $ta->task_id }}
                         {{ $ta->task_name }}
+                     {{ $ta->task_type }}
                         {{ $ta->task_budget_it_operating }}
                         {{ $ta->task_budget_it_investment }}
                         {{ $ta->task_budget_gov_utility }}
-
-
+                        {{ $ta->task_start_date }}
+                        {{ $ta->task_end_date }}
+                        {{ $ta->task_mm }}
+                        {{ $ta->task_mm_name }}
+                        {{ $ta->task_mm_budget }}
+                        {{ $ta->task_budget_it_operating }}
+                        {{ $ta->task_budget_it_investment }}
+                        {{ $ta->task_budget_gov_utility }}
                         @elseif ($tasksDetails)
                         222
                         {{ $tasksDetails->project_id }}
@@ -69,6 +77,17 @@
                                     <input name="task" value="{{ isset($task) ? $task->hashid : '' }}">
                                     </div>
 
+                                    <div class="d-none">
+                                    @if($pro->project_type == 1)
+
+                                        <input type="text" class="form-control" id="contract_project_type" name="contract_project_type" value="p" readonly>
+
+
+                                    @elseif($pro->project_type == 2)
+                                        <input type="text" class="form-control" id="contract_project_type" name="contract_project_type" value="j" readonly>
+
+                                    @endif
+                                    </div>
 
                                     <div class="row g-3 align-items-center callout callout-success ">
 
@@ -897,7 +916,7 @@ $value = 0;
                                                                                         id="expenses_delsum"
                                                                                         name="expenses_delsum" readonly>
                                                                                         <div class="invalid-feedback">
-                                                                                            {{ __('เงินงวด ต้อง 0 ') }}
+                                                                                            {{ __('เงินงวดทั้งหมด รวมกัน ต้อง = 0 ') }}
                                                                                         </div>
                                                                                 </div>
 
@@ -1040,6 +1059,8 @@ $value = 0;
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+
                                                             </div>
                                                             <!--จบ ข้อมูลสัญญา 2-->
 
@@ -1672,7 +1693,7 @@ $value = 0;
 
                         if (contract_pa_budget > contract_pr_budget ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
-    $("#contract_pr_budget").val(''); // Set the value of the input field
+   // $("#contract_pr_budget").val(''); // Set the value of the input field
 }
                     else if (contract_pa_budget < -0  ) {
 
@@ -1839,40 +1860,6 @@ $value = 0;
                     });
                 });
             </script>
-            {{--
-            <script>
-                $(document).ready(function() {
-                    $('#rounds').change(function() {
-                        var rounds = $(this).val();
-                        $('#tasksContainer').empty(); // clear the container
-                        for (var i = 0; i < rounds; i++) {
-                            $('#tasksContainer').append(`
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-
-                                    <label>ชื่องวด ` + (i + 1) +
-                                ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                                `][task_name]" value="งวด ` + (i + 1) + `"required>
-
-
-                                <label>เงินงวด ` + (i + 1) +
-                                ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                                `][taskbudget]" value="` + (i + 1) + `"required>
-
-
-                                <label>เงินเบิก ` + (i + 1) +
-                                ` &nbsp: &nbsp</label><input type="text" name="tasks[` + i +
-                                `][taskcost]" value="` + (i + 1) + `"required>
-
-
-                                </div>
-
-                        </div>
-                    `);
-                        }
-                    });
-                });
-            </script> --}}
 
 
 
@@ -2330,6 +2317,10 @@ $value = 0;
                         });
 
 var contract_fiscal_year = {{$pro->project_fiscal_year}};
+var task_start_date = {{$ta->task_start_date}};
+var task_end_date = {{$ta->task_end_date}};
+var task_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $ta->task_start_date)) }}"; // Wrap in quotes
+var task_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $ta->task_end_date)) }}"; // Wrap in quo
 contract_fiscal_year =  contract_fiscal_year -543;
         console.log( contract_fiscal_year);
 
@@ -2346,13 +2337,17 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    $("#contract_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#contract_end_date").datepicker("setEndDate", fiscalYearEndDate);
+    $("#contract_sign_date").datepicker("setEndDate", fiscalYearEndDate);
+
+
 
 
                     $('#contract_start_date').on('changeDate', function() {
                         var startDate = $(this).datepicker('getDate');
                         $("#contract_end_date").datepicker("setStartDate", startDate);
                         $("#insurance_end_date").datepicker("setStartDate", startDate);
+                        $("#contract_sign_date").datepicker("setStartDate", startDate);
+                        $("#contract_po_start_date").datepicker("setStartDate", startDate);
                         //  $("#contract_sign_date").datepicker("setStartDate", startDate);
                     });
 
@@ -2363,6 +2358,54 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
 
                     });
+ // Add click event listener for the delete button    {{ $ta->task_end_date }}    {{ $ta->task_start_date }}
+
+ $('#contract_end_date').click(function(e) {
+    e.preventDefault();
+    var contract_end_date_str = $("#contract_end_date").val();
+    var contract_end_date = convertToDate(contract_end_date_str);
+    var task_end_date = convertToDate(task_end_date_str);
+      console.log(task_end_date_str);
+        console.log(task_end_date);
+        console.log(contract_end_date);
+
+    if (contract_end_date > task_end_date) {
+        Swal.fire({
+            title: 'วันที่ เกิน ?',
+            text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ทำตามวันที่เกิน!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+
+                    'success'
+                )
+            }
+        });
+    }
+});
+
+function convertToDate(dateStr) {
+        var parts = dateStr.split("/");
+        var date = new Date(parts[2], parts[1] - 1, parts[0]);
+        return date;
+    }
+ // Add click event listener for the delete button
+
+
+
+
+
+
+
+
+
+
+
                 });
             </script>
 

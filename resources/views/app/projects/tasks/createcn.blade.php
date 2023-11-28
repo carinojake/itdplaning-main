@@ -590,7 +590,10 @@
                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                         class="form-control numeral-mask"
                                                         id="task_refund_pa_budget"
-                                                        name="task_refund_pa_budget" min="0"  value={{ session('contract_refund_pa_budget') }} readonly>
+                                                        name="task_refund_pa_budget" min="0" readonly value={{ session('contract_refund_pa_budget') }} >
+
+
+
 
                                                     {{--  <div class="invalid-feedback">
                                                             {{ __('ค่าสาธารณูปโภค') }}
@@ -806,7 +809,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+  //  $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
 
         $('#task_start_date').on('changeDate', function() {
@@ -820,6 +823,11 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
         });
     });
 </script>
+
+
+
+
+
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {

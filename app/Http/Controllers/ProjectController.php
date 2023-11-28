@@ -738,7 +738,7 @@ class ProjectController extends Controller
             ->get();
 
 
-        //  dd($project->main_task_activity);
+          //dd($project->main_task_activity);
 
 
         //  dd($taskconoverview,$taskconoverviewcon, $contractoverviewcon);
@@ -1376,8 +1376,6 @@ $mainQuery = DB::query()
         OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = id AND deleted_at IS null)))
     AND task_type is not null
         AND deleted_at IS null)
-
-
             as total_cost_null ,
 
 
@@ -1613,18 +1611,32 @@ $mainQuery = DB::query()
 
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
+                tasks.task_id as id,
             sum(COALESCE(tasks.task_budget_gov_utility,0)) as ut_totol_task_budget_gov_utility,
             sum(COALESCE(tasks.task_budget_it_operating,0)) as op_totol_task_budget_it_operating,
             sum(COALESCE(tasks.task_budget_it_investment,0)) as in_totol_task_budget_it_investment,
                 sum(COALESCE(tasks.task_cost_gov_utility,0)) as un_cost_gov_utility,
                 sum(COALESCE(tasks.task_cost_it_operating,0)) as op_cost_it_operating,
-                sum(COALESCE(tasks.task_cost_it_investment,0)) as in_cost_it_investment,
-                sum(COALESCE(tasks.task_mm_budget,0))  as in_total_task_mm_budget,
+
+
+
+                (SELECT SUM(task_cost_it_investment) FROM tasks WHERE (task_parent = id
+				OR task_parent IN ((SELECT task_id FROM tasks WHERE task_parent = id AND deleted_at IS null)))
+			AND task_type is not null
+				AND deleted_at IS null) AS in_cost_it_investment,
+
+
+
+                (SELECT SUM(task_mm_budget) FROM tasks WHERE task_parent = id  AND deleted_at IS null )   as in_total_task_mm_budget,
+
                 sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_it_investment,0))
                 as task_mm_and_investment,
+
                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as in_total_task_refund_pa_budget
+
+
                 from tasks
-                where tasks.task_budget_it_investment > 0 and tasks.deleted_at IS NULL
+                where tasks.task_budget_it_investment > 0 and tasks.deleted_at IS NULL and tasks.task_parent IS NULL
                 group by tasks.project_id
             ) as ain'),
                 'ain.project_id',
@@ -1651,6 +1663,8 @@ $mainQuery = DB::query()
                 sum(COALESCE(tasks.task_mm_budget,0))- sum(COALESCE(tasks.task_cost_it_operating,0))
                 as task_mm_and_operating,
                 sum(COALESCE(tasks.task_refund_pa_budget,0)) as op_total_task_refund_pa_budget
+
+
                 from tasks
                 where tasks.task_budget_it_operating > 0 and tasks.deleted_at IS NULL  and tasks.task_parent IS NULL
                 group by tasks.project_id
@@ -1970,7 +1984,7 @@ $mainQuery = DB::query()
 
         // ->toArray()
 
-       // dd($project);
+    // dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -2181,7 +2195,7 @@ $mainQuery = DB::query()
 
         $budget['total_cost'] =  $__total_cost_it_operating+$__total_cost_it_investment+$__total_cost_gov_utility;
         $budget['budget_total_refund_pa_budget_end'] = $__total_task_refund_pa_budget_3;
-
+       // dd($budget);
 
         //21/11/2566 total_task_budget_null
         $budget['total_task_budget_null'] = $__total_task_budget_null;
@@ -2213,7 +2227,7 @@ $mainQuery = DB::query()
         $budget['total_cost_t'] = $__op__cost_it_operating+$__total_cost_it_investment+$__total_cost_gov_utility;
 
 
-       // dd($budget);
+        //dd($budget);
 
 
 
@@ -2228,7 +2242,7 @@ $mainQuery = DB::query()
         $budget['in_root_conditional_sum_task_refund_pa_budget'] = $__in_root_conditional_sum_task_refund_pa_budget;
         $budget['in_budget_it_investment_and_mm'] = ($__budget_it_investment - $__in_root_task_mm_budget);
 
-
+      //  dd($budget);
         $budget['ut_totol_task_budget_gov_utility'] = $__ut_totol_task_budget_gov_utility;
         $budget['ut_total_cost_gov_utility'] = $__total_cost_gov_utility;
         $budget['ut_total_task_mm_budget'] = $__ut_total_task_mm_budget;
@@ -2244,10 +2258,13 @@ $mainQuery = DB::query()
 
 
 
+
+
+
         $budget['root_total_task_budget'] = $__root_total_task_budget;
 
         $budget['root_total_task_budget_null'] = $budget['total_task_budget_null']+$budget['root_total_task_budget'];
-        //dd($budget);
+      //  dd($budget);
         $budget['root_total_pay'] = $__root_total_pay;
         $budget['root_task_mm_budget'] = $__root_task_mm_budget;
 
@@ -2289,7 +2306,7 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_operating'] = 0;
     }
         if ($__in_total_task_refund_pa_budget_3 != 0) {
-        $budget['budget_total_task_budget_end_investment'] = ($__budget_it_investment - (($__in_totol_task_budget_it_investment - $__in_total_task_mm_budget - $__in_total_task_refund_pa_budget_3)));
+        $budget['budget_total_task_budget_end_investment'] = ((($budget['in_total_task_mm_budget']- $budget['in_total_cost_it_investment'])));
     } else {
         $budget['budget_total_task_budget_end_investment'] = 0;
     }
@@ -2299,6 +2316,8 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_utility'] = 0;
     }
 
+
+   // dd($budget);
         //  $budget['budget_total_task_budget_end_utility'] = ($__budget_gov_utility );
        // $budget['budget_total_task_budget_end_utility1'] = ((($__ut_totol_task_budget_gov_utility)));
         //$budget['budget_total_task_budget_end_utility2'] =  $__ut_total_task_mm_budget;
@@ -2356,6 +2375,46 @@ $mainQuery = DB::query()
         $budget['budget_total_task_budget_end_operating_toto'] =  ($__budget_it_operating-$budget['budget_total_task_budget_end_operating']);
         $budget['budget_total_task_budget_end_investment_toto'] =  ($__budget_it_investment-$budget['budget_total_task_budget_end_investment']);
         $budget['budget_total_task_budget_end_utility_toto'] =  ($__budget_gov_utility-$budget['budget_total_task_budget_end_utility']);
+
+
+// Initialize variables to avoid undefined index errors
+$budget['ictop1'] = 0;
+$budget['op_rf'] = 0;
+$budget['ictin2'] = 0;
+$budget['in_rf'] = 0;
+$budget['ictut3'] = 0;
+$budget['ut_rf'] = 0;
+$budget['totalrefund_top'] = 0;
+
+if($project['budget_it_operating'] > 0) {
+    if($budget['budget_it_operating'] < $budget['op_totol_task_budget_it_operating'] || $budget['budget_it_operating'] === $budget['op_totol_task_budget_it_operating']) {
+        $budget['ictop1'] = ($budget['budget_it_operating'] - $budget['op_totol_task_budget_it_operating']) + $budget['op_total_task_refund_pa_budget_3'];
+    } elseif($budget['budget_it_operating'] > $budget['op_totol_task_budget_it_operating']) {
+        $budget['op_rf'] = $budget['budget_total_task_budget_end_operating'];
+    }
+}
+
+if($project['budget_it_investment'] > 0) {
+    if($budget['budget_it_investment'] < $budget['in_totol_task_budget_it_investment'] || $budget['budget_it_investment'] === $budget['in_totol_task_budget_it_investment']) {
+        $budget['ictin2'] = ($budget['budget_it_investment'] - $budget['in_totol_task_budget_it_investment']) + $budget['in_total_task_refund_pa_budget_3'];
+    } elseif($budget['budget_it_investment'] > $budget['in_totol_task_budget_it_investment']) {
+        $budget['in_rf'] = $budget['budget_total_task_budget_end_investment'];
+    }
+}
+
+if($project['budget_gov_utility'] > 0) {
+    if($budget['budget_gov_utility'] < $budget['ut_totol_task_budget_gov_utility'] || $budget['budget_gov_utility'] === $budget['ut_totol_task_budget_gov_utility']) {
+        $budget['ictut3'] = ($budget['budget_gov_utility'] - $budget['ut_totol_task_budget_gov_utility']) + $budget['ut_total_task_refund_pa_budget_3'];
+    } elseif($budget['budget_gov_utility'] > $budget['ut_totol_task_budget_gov_utility']) {
+        $budget['ut_rf'] = $budget['budget_total_task_budget_end_utility'];
+    }
+}
+
+// Summing up the totals
+$budget['totalrefund_top']= $budget['ictop1'] + $budget['op_rf'] + $budget['ictin2'] + $budget['in_rf'] + $budget['ictut3'] + $budget['ut_rf'];
+
+
+
 
   //dd($budget, $result_query_op_in_un);
 
@@ -4312,7 +4371,7 @@ dd($task_sub_refund_total_count);
 
            dd($tasks); */
 
-       //  dd($tasks);
+        //dd($tasks);
 
         //  dd(['tasks' => $tasksArray, 'cteQuery' => $cteQueryArray]);
 
@@ -5521,7 +5580,7 @@ dd($task_sub_refund_total_count);
 
         $budget['z'] = max($budget['xx'], $budget['x']);
 
-        //dd($budget,$tasks);
+       // dd($budget,$tasks);
 
         //dd($budget = $request->all()); // รับข้อมูล budget ทั้งหมดจาก request
 
@@ -5545,7 +5604,7 @@ dd($task_sub_refund_total_count);
 
         //dd($project);
 
-
+       // dd($tasks);
 
         //dd($project->main_task);
 
@@ -8327,7 +8386,7 @@ $relatedData = collect($cteQuery->get());
         $task->task_parent_sub_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
         $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
         $task->task_type = $request->input('task_type');
-        // dd($task);
+      //   dd($task);
         if ($task->save()) {
             //insert contract
             /*    if( $task->task_parent_sub= 2){
@@ -8859,7 +8918,7 @@ $relatedData = collect($cteQuery->get());
                 $fileModel->task_id = $idtask;
                 $fileModel->size = $filesize;
                 $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-
+                ($fileModel);
                 if (!$fileModel->save()) {
                     // If the file failed to save, redirect back with an error message
                     return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
@@ -9286,14 +9345,18 @@ $relatedData = collect($cteQuery->get());
         // Sum the task_budget_it_operating for all tasks               ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_it_operating');
+       $sum_task_cost_it_operating  =  $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_cost_it_operating');
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_it_operating', '>', 1)->sum('task_refund_pa_budget');
 
         // Sum the task_budget_it_investment for all tasks
         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_it_investment');
+        $sum_task_cost_it_investment = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_cost_it_investment');
         $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_it_investment', '>', 1)->sum('task_refund_pa_budget');
 
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_budget_gov_utility');
+        $sum_task_cost_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_cost_gov_utility');
+
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
 //09112566
 $id_root_tasks = Task::select('task_id')->where('task_id', $task->task_id)
@@ -9625,13 +9688,14 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
     $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
   // dd($rootTaskFinancials);
 
+  $projectDetails = Project::find($id_project);
 
 
-
-//dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
+//dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
 
 
         return view('app.projects.tasks.edit', compact(
+            'projectDetails',
             'request',
             'rootTaskFinancials',
             'contracts',
@@ -9837,7 +9901,12 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
         //dd($tasksDetails);
 
+
+        $projectDetails = Project::find($id_project);
+
+       // dd($projectDetails);
         return view('app.projects.tasks.editsub', compact(
+            'projectDetails',
             'files',
             'taskcon',
             'task_parent_sub',
@@ -10141,16 +10210,51 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         // dd($task);
 
 
-        if ($task->save()) {
-            // Update contract
-            if ($request->input('task_contract')) {
-                ContractHasTask::where('task_id', $id_task)->delete();
-                ContractHasTask::create([
-                    'contract_id' => $request->input('task_contract'),
-                    'task_id' => $id_task,
-                ]);
-            } else {
+
+ if ($task->save()) {
+    $files = new File;
+    $idproject = $id_project;
+    $idtask = $task->task_id;
+    $idup = $idproject . '/' . $idtask;
+
+    $contractDir = public_path('storage/uploads/contracts/' . $idup);
+    if (!file_exists($contractDir)) {
+        mkdir($contractDir, 0755, true);
+    }
+
+    if ($request->hasFile('file')) {
+        foreach ($request->file('file') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filesize = $file->getSize();
+            $file->storeAs('public/', $filename);
+            $file->move($contractDir, $filename);
+
+            $fileModel = new File;
+            $fileModel->name = $filename;
+            //$fileModel->project_id = $idproject;
+            $fileModel->task_id = $idtask;
+            $fileModel->size = $filesize;
+            $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+            //dd($fileModel);
+            if (!$fileModel->save()) {
+                // If the file failed to save, redirect back with an error message
+                return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
             }
+        }
+    }
+                                        // Update contract
+                                        if ($request->input('task_contract')) {
+                                            ContractHasTask::where('task_id', $id_task)->delete();
+                                            ContractHasTask::create([
+                                                'contract_id' => $request->input('task_contract'),
+                                                'task_id' => $id_task,
+                                            ]);
+                                        } else {
+
+
+                                        }
+
+                                    }
 
             // Assign the project_id to the Taskcon
             $taskcon = Taskcon::where('task_id', $task->task_id)->first();
@@ -10328,59 +10432,8 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
             }
 
 
-            $files = new File;
-            $idproject = $id_project;
-            $idtask = $task->task_id;
-            $idup = $idproject . '/' . $idtask;
-
-            $contractDir = public_path('storage/uploads/contracts/' . $idup);
-            if (!file_exists($contractDir)) {
-                mkdir($contractDir, 0755, true);
-            }
-
-            if ($request->hasFile('file')) {
-                foreach ($request->file('file') as $file) {
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $filesize = $file->getSize();
-                    $file->storeAs('public/', $filename);
-                    $file->move($contractDir, $filename);
-
-                    $fileModel = new File;
-                    $fileModel->name = $filename;
-                    //$fileModel->project_id = $idproject;
-                    $fileModel->task_id = $idtask;
-                    $fileModel->size = $filesize;
-                    $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-
-                    if (!$fileModel->save()) {
-                        // If the file failed to save, redirect back with an error message
-                        return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
-                    }
-                }
-            }
 
 
-
-
-
-
-            if (!$taskcon) {
-                return redirect()->back()->withErrors('Taskcon not found.');
-            }
-
-
-
-
-
-            if (!$taskcon->save()) {
-                // If the Taskcon failed to save, redirect back with an error message
-                return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
-            }
-
-
-            // dd($task);
-            return redirect()->route('project.view', $project->hashid);
-        }
 
         // Create a new Taskcon object
         //  $taskcon = new Taskcon;
@@ -10459,11 +10512,12 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
             $files->delete(); // Delete each file individually
 
     }
-    dd($files);
+    //dd($files);
     // Continue with your logic if files are found
     // ...
 
-    return redirect()->route('project.view', $project);
+       // Use the back() method to return to the previous page.
+       return back()->with('success', 'File deleted successfully');
 }
 
 
@@ -11865,7 +11919,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
                 ($task_sub_sums['operating']['task_refund_pa_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] + ($task_sub_sums['utility']['task_refund_pa_budget']));
 
 
-            dd($task, $task_parent_sub);
+           // dd($task, $task_parent_sub);
 
             $task->save();
         }

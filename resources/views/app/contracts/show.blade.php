@@ -149,7 +149,65 @@
                                 </div>
                             </div>
 
+                            {{-- 27112566 - 2 --}}
 
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="callout callout-info accordion-item">
+                                        <h2 class="accordion-header " id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-coreui-toggle="collapse"
+                                                data-coreui-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                ข้อมูลการจัดซื้อจัดจ้าง (เลขที่สัญญา,MM,PR)
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingOne"
+                                            data-coreui-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                            <div class="row  callout callout-primary mb-3">
+                            <div class="card mb-3">
+                                <table class="table h6">
+                                    <tr>
+                                        <th>2.1 เลขที่ MM</th>
+                                        <th>2.2 เลขที่ PR</th>
+                                        <th>2.3 เลขที่ PA</th>
+                                        <th>2.4 เลขที่ CN</th>
+                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $contract->contract_mm }}</td>
+                                        <td>{{ $contract->contract_pr }}</td>
+                                        <td>{{ $contract->contract_pa }}</td>
+
+
+                                        <td>{{ $contract->contract_cn }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>2.1 จำนวนเงิน MM</th>
+                                        <th>2.2 จำนวนเงิน PR</th>
+                                        <th>2.3 จำนวนเงิน PA</th>
+                                        <th>2.4 จำนวนเงิน CN</th>
+                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $contract->contract_mm_bodget }}</td>
+                                        <td>{{ number_format($contract->contract_pr_budget, 2) }}</td>
+                                        <td>{{ number_format($contract->contract_pa_budget, 2) }}</td>
+
+
+                                        <td>{{ number_format($contract->contract_cn_budget, 2) }}</td>
+
+                                        <td>{{ number_format($contract->contract_refund_pa_budget, 2) }}</td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                             <table class="table callout callout-danger">
                                 <thead>
                                     <tr>
@@ -173,9 +231,9 @@
                                                 <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
                                                     class="text-white btn btn-success"><i class="cil-folder-open "></i>
                                                     Project</a>
-                                                <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                {{-- <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                     class="text-white btn btn-primary"><i class="cil-folder-open "></i>
-                                                    Task</a>
+                                                    Task</a> --}}
                                                 @if ($contract->contract_project_type == 'j')
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
@@ -208,6 +266,15 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
+
+
+
+
+
+
+
+
 
 
                             {{-- <div class="callout callout-info">
@@ -438,44 +505,7 @@
                             </div>
 
 
-                            <div class="card mb-3">
-                                <table class="table h5">
-                                    <tr>
-                                        <th>2.1 เลขที่ MM</th>
-                                        <th>2.2 เลขที่ PR</th>
-                                        <th>2.3 เลขที่ PA</th>
-                                        <th>2.4 เลขที่ CN</th>
-                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $contract->contract_mm }}</td>
-                                        <td>{{ $contract->contract_pr }}</td>
-                                        <td>{{ $contract->contract_pa }}</td>
 
-
-                                        <td>{{ $contract->contract_cn }}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th>2.1 จำนวนเงิน MM</th>
-                                        <th>2.2 จำนวนเงิน PR</th>
-                                        <th>2.3 จำนวนเงิน PA</th>
-                                        <th>2.4 จำนวนเงิน CN</th>
-                                        <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $contract->contract_mm_bodget }}</td>
-                                        <td>{{ number_format($contract->contract_pr_budget, 2) }}</td>
-                                        <td>{{ number_format($contract->contract_pa_budget, 2) }}</td>
-
-
-                                        <td>{{ number_format($contract->contract_cn_budget, 2) }}</td>
-
-                                        <td>{{ number_format($contract->contract_refund_pa_budget, 2) }}</td>
-
-                                    </tr>
-                                </table>
-                            </div>
 
 
 
@@ -852,26 +882,10 @@
                                 return '-';
                             }
                         }
-                    },
-
-
-                    {
-                        name: "balance",
-                        width: 50,
-                        label: "คงเหลือ",
-                        template: function(task) {
-                            //console.log((task.budget).toLocaleString("en-US", {style: 'currency', currency: 'USD'}));
-                            if (task.balance) {
-                                var tmp_class = task.balance > 0 ? 'green' : 'red';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                    style: 'currency',
-                                    currency: 'THB'
-                                }).format(task.balance) + '</span>';
-                            } else {
-                                return '';
-                            }
-                        }
                     }
+
+
+
                 ]
             };
 

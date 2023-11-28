@@ -435,14 +435,14 @@ class ContractController extends Controller
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
-
+        $projecthashid = $request->projecthashid;
 
 
         $id = $project ? Hashids::decode($project) : null;
 
         $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
 
-       // dd($projectDetails);
+       // dd($projecthashid);
 
 
         $id_project = $id_task = $pro = $ta = null;
@@ -529,7 +529,7 @@ class ContractController extends Controller
         $tasksJson = json_encode($tasksData);
 
         return view('app.contracts.create', compact
-        ('origin', 'project', 'task'
+        ('origin', 'project', 'task','projecthashid'
         , 'pro', 'ta', 'fiscal_year', 'tasks',
          'tasksJson',
          'request',
@@ -806,7 +806,7 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
             //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
         ], $messages);
         //convert date
-        function convertToGregorianDate($input_date)
+       /*  function convertToGregorianDate($input_date)
         {
             $date_object = date_create_from_format('d/m/Y', $input_date);
 
@@ -821,13 +821,67 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
             return $formatted_date;
         }
 
+
+
+
         $start_date = convertToGregorianDate($request->input('contract_start_date'));
         $end_date = convertToGregorianDate($request->input('contract_end_date'));
         $insurance_start_date = convertToGregorianDate($request->input('insurance_start_date'));
         $insurance_end_date = convertToGregorianDate($request->input('insurance_end_date'));
-        $sign_date = convertToGregorianDate($request->input('contract_sign_date'));
+        $sign_date = convertToGregorianDate($request->input('contract_sign_date')); */
 
 
+        //convert date
+     //  $start_date_obj = date_format(date_create_from_format('d/m/Y', $request->input('contract_start_date')), 'Y-m-d');
+       // $end_date_obj   = date_format(date_create_from_format('d/m/Y', $request->input('contract_end_date')), 'Y-m-d');
+
+       $sign_date_input = $request->input('contract_sign_date');
+       $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
+
+       $start_date_obj = date_create_from_format('d/m/Y', $request->input('contract_start_date'));
+       $end_date_obj = date_create_from_format('d/m/Y', $request->input('contract_end_date'));
+       $insurance_start_date_odj = date_create_from_format('d/m/Y', $request->input('insurance_start_date'));
+         $insurance_end_date_odj = date_create_from_format('d/m/Y', $request->input('insurance_end_date'));
+        $contract_po_start_date_odj = date_create_from_format('d/m/Y', $request->input('contract_po_start_date'));
+         // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+
+
+       if ($start_date_obj === false || $end_date_obj === false ||
+
+       $insurance_start_date_odj === false || $insurance_end_date_odj === false )  {
+           // Handle date conversion error
+           // You can either return an error message or use a default date
+       } else {
+           $start_date_obj->modify('-543 years');
+           $end_date_obj->modify('-543 years');
+              $insurance_start_date_odj->modify('-543 years');
+              $insurance_end_date_odj->modify('-543 years');
+                $contract_po_start_date_odj->modify('-543 years');
+
+
+           $start_date = date_format($start_date_obj, 'Y-m-d');
+           $end_date = date_format($end_date_obj, 'Y-m-d');
+              $insurance_start_date = date_format($insurance_start_date_odj, 'Y-m-d');
+                $insurance_end_date = date_format($insurance_end_date_odj, 'Y-m-d');
+                    $contract_po_start_date = date_format($contract_po_start_date_odj, 'Y-m-d');
+
+
+
+           // Check if $pay_date_obj is not null before trying to modify and format it
+
+       }
+
+
+       if ($sign_date_object !== false) {
+           $sign_date_object->modify('-543 years');
+
+           $sign_date = date_format($sign_date_object, 'Y-m-d');
+
+
+
+       } else {
+           $sign_date = null; // Default value when the date could not be converted
+       }
 
         $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
         $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
@@ -891,6 +945,9 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         $contract->insurance_start_date  =  $insurance_start_date ?? date('Y-m-d 00:00:00');
         $contract->insurance_end_date   =   $insurance_end_date ?? date('Y-m-d 00:00:00');
 
+        $contract->contract_po_start_date  =  $contract_po_start_date ?? date('Y-m-d 00:00:00');
+
+
 
 
 
@@ -935,6 +992,8 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         $contract->contract_owner        = $request->input('contract_owner');
         $contract->contract_refund_pa_status =  1;
         $contract->contract_status =  1;
+
+
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
         $contract->contract_project_type        = $request->input('contract_project_type') ?? null;
 
@@ -942,6 +1001,8 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
         $origin = $request->input('origin');
         $project = $request->input('project');
         $task = $request->input('task');
+       // $projecthashid = $request->input('projecthashid');
+
 
 
 
@@ -1053,7 +1114,7 @@ $task_sub_refund_pa_budget = $task_sub_refund->reduce(function ($carry, $subtask
 
 
 
-      // dd($contract);
+     //dd($contract);
 
         if ($contract->save()) {
 
@@ -1221,6 +1282,11 @@ if($request->hasFile('file')) {
             $origin = $request->input('origin');
             $project = $request->input('project');
             $task = $request->input('task');
+            $projecthashid = $request->input('projecthashid');
+
+
+
+          //  dd($origin, $project, $task, $projecthashid);
             $encodedProjectId = $request->input('encodedProjectId');
             $encodedTaskId = $request->input('encodedTaskId');
             // บันทึกข้อมูลลงใน session
@@ -1246,7 +1312,15 @@ if($request->hasFile('file')) {
             if ($origin == 2) {
                 // ถ้ามีทั้ง Project ID และ Task ID, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'editsub'
                 return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $task]);
-            } elseif ($task) {
+            }
+           /*  elseif ($origin == 1) {
+                // ถ้ามีเฉพาะ Task, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'createsub'
+               // dd($project);
+                return redirect()->route('project.task.editsubno', ['project' => $project, 'task' => $task]);
+            } */
+            //27112566 $origin == 1
+
+            elseif ($task) {
                 // ถ้ามีเฉพาะ Task, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'createsub'
                 return redirect()->route('project.task.createsub', ['project' => $project, 'task' => $task]);
             } elseif ($project) {
@@ -1281,8 +1355,14 @@ if($request->hasFile('file')) {
     {
         $id       = Hashids::decode($contract)[0];
         $contract = Contract::find($id);
+        ($taskcons     = Taskcon::where('contract_id', $id)->first());
 
-        return view('app.contracts.edit', compact('contract'));
+        //dd($contract,$taskcons);
+
+        return view('app.contracts.edit', compact('contract','taskcons'));
+
+
+
     }
 
 
@@ -1417,6 +1497,7 @@ if($request->hasFile('file')) {
         $contract->contract_mm        = $request->input('contract_mm');
         $contract->contract_pr        = $request->input('contract_pr');
         $contract->contract_pa        = $request->input('contract_pa');
+        $contract->contract_cn       = $request->input('contract_cn');
        /*  $contract->contract_cn_budget        = $request->input('contract_cn_budget');
         $contract->contract_pr_budget        = $request->input('contract_pr_budget');
         $contract->contract_pa_budget        = $request->input('contract_pa_budget'); */
@@ -1452,6 +1533,9 @@ if($request->hasFile('file')) {
         // $contract->budget_it_investment  = $request->input('budget_it_investment');
 
         if ($contract->save()) {
+             // Get the ID of the newly created contract
+
+
             return redirect()->route('contract.index');
         }
     }
@@ -1512,9 +1596,11 @@ if($request->hasFile('file')) {
         $contract    = Contract::find($id_contract);
         $taskcon       = taskcon::find($id_taskcon);
 
+        ($files_contract = File::where('contract_id', ($id_contract))->get());
+        ($files_taskcon = File::where('taskcon_id', ($id_taskcon))->get());
         // echo 'contract' . $task->contract->count();
-        // dd($task->contract);
-        return view('app.contracts.tasks.show', compact('contract', 'taskcon'));
+       // dd($contract,$taskcon,$files_contract,$files_taskcon);
+        return view('app.contracts.tasks.show', compact('contract', 'taskcon','files_contract','files_taskcon'));
         // return 'app.contracts.tasks.show';
     }
 
@@ -1696,7 +1782,7 @@ if($request->hasFile('file')) {
  // Fetch top-level taskcons with pagination
  $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
-      // dd ($taskcons, $contract);
+       //dd ($taskcons, $contract, $relatedTaskcons);
 
         //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
         // $id_contract = Hashids::decode($contract)[0];
@@ -1725,13 +1811,21 @@ if($request->hasFile('file')) {
         $taskcon       = Taskcon::find($id_taskcon);
         $taskcons      = Taskcon::where('contract_id', $id_contract)
             ->whereNot('taskcon_id', $id_taskcon)
-
             ->get();
+
+        $taskconsSum = Taskcon::where('contract_id', $id_contract)
+        ->whereNot('taskcon_id', $id_taskcon)
+        ->sum('taskcon_budget_gov_utility');
+
+
         $tasks = task::get();
         $contractcons = Contract::get();
 
 
+ // Fetch top-level taskcons with pagination
+ $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
+     //  dd ($taskcons, $contract, $relatedTaskcons,$taskconsSum);
 
 
 
@@ -1934,6 +2028,46 @@ if($request->hasFile('file')) {
 
 
         if ($taskcon->save()) {
+
+// $idproject =  $project;
+ // $idtask = $task->task_id;
+ $idcon = $contract->contract_id ;
+ $idtaskcon = $taskcon->taskcon_id ;
+ $idup = $idcon . '/' ;
+
+
+
+
+
+$contractDir = public_path('storage/uploads/contracts/' . $idup);
+if (!file_exists($contractDir)) {
+   mkdir($contractDir, 0755, true);
+}
+// dd($contractDir);  // print the path
+if($request->hasFile('file')) {
+   foreach ($request->file('file') as $file) {
+       $filename = time().'_'.$file->getClientOriginalName();
+       $filesize = $file->getSize();
+       $file->storeAs('public/',$filename);
+       $file->move($contractDir, $filename);
+
+       $fileModel = new File;
+       $fileModel->name = $filename;
+       //$fileModel->project_id = $idproject;
+      // $fileModel->contract_id = $idcon;
+        $fileModel->taskcon_id = $idtaskcon;
+       $fileModel->size = $filesize;
+       $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+       //dd($fileModel);
+       if (!$fileModel->save()) {
+           // If the file failed to save, redirect back with an error message
+           return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+       }
+   }
+}
+
+
+
 
             //update contract
             if ($request->input('taskcon_id')) {

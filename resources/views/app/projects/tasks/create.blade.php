@@ -84,9 +84,7 @@
 
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row g-3 needs-validation" novalidate>
-
                                 @csrf
-
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
@@ -96,11 +94,6 @@
                                     </div>
 
                                 </div>
-
-
-
-
-
                                 <div class=" row mt-3">
                                     <div class="d-none col-md-4">
                                         <label for="task_status" class="form-label">{{ __('สถานะกิจกรรม') }}</label>
@@ -120,24 +113,6 @@
                                             </label>
                                         </div>
                                     </div>
-
-                      {{--           <div class="col-md-3">
-                    <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label>
-
-
-                        <select name="task_parent" id="task_parent" class="form-control">
-
-                            <option value="">ไม่มี</option>
-                            @foreach ($tasks as $task)
-                              <option value="{{ $task->task_id }}">{{ $task->task_name }}</option>
-                            @endforeach
-                          </select>
-                </select>
-                      </select>
-                    <div class="invalid-feedback">
-                        {{ __('กิจกรรมย่อย') }}
-                    </div>
-                </div> --}}
                                     </div>
 
                                 @if (session('contract_id'))
@@ -285,6 +260,9 @@
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>
+
+                                       <!-- SweetAlert2 Trigger Button -->
+
                             </form>
                         </x-card>
                     </div>
@@ -309,7 +287,35 @@
 
 
 
+{{-- <script>
+    // Initialize SweetAlert2 Click Handler
+    $(document).ready(function() {
+    // Click event for SweetAlert trigger button
+    $('.swalDefaultSuccess').click(function() {
+        var budgetItOperating = $("#task_budget_it_operating").val();
+        var budgetItInvestment = $("#task_budget_it_investment").val();
+        var budgetGovUtility = $("#task_budget_gov_utility").val();
 
+        Swal.fire({
+            title: 'Sweet Success!',
+            text: 'Budget IT Operating: ' + budgetItOperating +
+                  ', Budget IT Investment: ' + budgetItInvestment +
+                  ', Budget Government Utility: ' + budgetGovUtility,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, save!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Reference the form and submit
+                $("#formId").submit(); // Ensure there is an id="formId" on the form
+            }
+        });
+    });
+});
+
+</script> --}}
 
 
       <script>

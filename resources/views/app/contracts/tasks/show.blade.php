@@ -74,7 +74,66 @@
                 <div class="col-9">  {{ $taskcon->taskcon_pay_date ? Helper::Date4($taskcon->taskcon_pay_date) : '' }}
                 </div>
               </div>
+  {{--             @if (count($files_contract) > 0)
+                                <table class="table table-bordered table-striped  mt-3">
+                                    <thead>
 
+                                        <th>เอกสารแนบ</th>
+
+                                        <th>File</th>
+
+                                    </thead>
+                                    <tbody>
+                                        @if (count($files_contract) > 0)
+                                            @foreach ($files_contract as $file)
+                                                <tr>
+                                                    <td>{{ $file->name }}</td>
+
+                                                    <td><a
+                                                            href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/' . $file->name) }}">{{ $file->name }}</a>
+                                                    </td>
+
+
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5" class="text-center">No Table Data</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            @endif --}}
+                            @if (count($files_taskcon) > 0)
+                            <table class="table table-bordered table-striped  mt-3">
+                                <thead>
+
+                                    <th>เอกสารแนบ</th>
+
+                                    <th>File</th>
+
+                                </thead>
+                                <tbody>
+                                    @if (count($files_taskcon) > 0)
+                                        @foreach ($files_taskcon as $file)
+                                            <tr>
+                                                <td>{{ $file->name }}</td>
+
+                                                <td><a
+                                                        href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/' . $file->name) }}">{{ $file->name }}</a>
+                                                </td>
+
+
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">No Table Data</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        @endif
 
             </div>
 

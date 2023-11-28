@@ -212,7 +212,7 @@
                                     </div>
 
                                     <div class="col-md-12 mt-3">
-                                    {{ session('contract_name') }}
+                                    {{-- {{ session('contract_name') }} --}}
 
                                         <label for="task_name"
                                             class="form-label">{{ __('ชื่อรายการ') }}</label>
@@ -286,7 +286,19 @@
                                                 @endif
                                             </div>
                                         </div>
+                                        <div class="col-md-3 mt-3 ">
 
+                                            <label for="task_mm_budget"
+                                                class="form-label">{{ __('วงเงินที่ขออนุมัติ mm') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                class="form-control numeral-mask"
+                                                id="task_mm_budget" name="task_mm_budget"
+                                                min="0"  value="{{ session('contract_mm_budget') }}"  readonly >
+                                            <div class="invalid-feedback">
+                                                {{ __('mm') }}
+                                            </div>
+                                        </div>
                                         <div class="row mt-3">
                                             <div class="col-6 mt-3">
                                                 <strong>วงเงินที่ขออนุมัติ</strong>
@@ -393,19 +405,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 mt-3 ">
 
-                                                <label for="task_mm_budget"
-                                                    class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
-                                                <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
-                                                    class="form-control numeral-mask"
-                                                    id="task_mm_budget" name="task_mm_budget"
-                                                    min="0"  value="{{ session('contract_mm_budget') }}"  readonly >
-                                                <div class="invalid-feedback">
-                                                    {{ __('mm') }}
-                                                </div>
-                                            </div>
                                             <div id="refund"  {{-- style="display:none;" --}}>
                                                 <div class=" row mt-3">
                                                     <div class="col-md-4">
@@ -812,7 +812,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
         });
     }
 });
-
+ // Add click event listener for the delete button
 //$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 

@@ -18,11 +18,11 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card title="{{ __('แก้ไขกิจกรรม11111') }} {{ $taskcon->taskcon_name }}">
+                        <x-card title="{{ __('แก้ไขกิจกรรม') }} {{ $taskcon->taskcon_name }}">
                             <form method="POST"
                                 action="{{ route('contract.task.update', ['contract' => $contract->Hashid, 'taskcon' => $taskcon->hashid]) }}"
                                 class="row needs-validation"
-                                novalidate>
+                                novalidate enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -77,17 +77,20 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-
-                                        <input readonly class="form-control" id="taskcon_start_date" name="taskcon_start_date"
-                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}">
+                                        <div class="col-9">  {{ $taskcon->taskcon_start_date ? \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) : '' }}
+                                        </div>
+                                       {{--  <input readonly class="form-control" id="taskcon_start_date" name="taskcon_start_date"
+                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}"> --}}
                                 </div>
 
 
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                      {{--    <span class="text-danger"></span> --}}
-                                     <input readonly class="form-control" id="taskcon_end_date" name="taskcon_end_date"
-                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}">
+                                     <div class="col-9">  {{ $taskcon->taskcon_end_date ? \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))): '' }}
+                                    </div>
+                                {{--      <input readonly class="form-control" id="taskcon_end_date" name="taskcon_end_date"
+                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}"> --}}
                              </div>
                                 </div>
 
@@ -191,7 +194,7 @@
 
 
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_pp" class="form-label">{{ __('PP ใบเบิก') }}</label>
+                                            <label for="taskcon_pp" class="form-label">{{ __('PP ใบเบิกจ่าย') }}</label>
                                             <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
 
                                             <div class="invalid-feedback">
@@ -208,12 +211,39 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class=" col-md-12 mt-3">
+                                        <label for="file"
+                                            class="form-label">{{ __('เอกสารแนบ') }}</label>
+                                        <div class="input-group control-group increment ">
+                                            <input type="file" name="file[]"
+                                                class="form-control" multiple>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-success"
+                                                    type="button"><i
+                                                        class="glyphicon glyphicon-plus"></i>Add</button>
+                                            </div>
+                                        </div>
+                                        <div class="clone d-none">
+                                            <div class="control-group input-group"
+                                                style="margin-top:10px">
+                                                <input type="file" name="file[]"
+                                                    class="form-control" multiple>
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                        type="button"><i
+                                                            class="glyphicon glyphicon-remove"></i>
+                                                        Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
 
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
                     <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
 
                 </form>
@@ -255,7 +285,7 @@
                 // Check if the fieldId is "task_pay"
                 if (fieldId === "taskcon_pay") {
                     if (taskcon_pay < -0) {
-                        Swal.fire("จำนวนเงินที่ใส่ต้องไม่ติดลบ");
+
                         $(this).val(0);
                     }
 
@@ -340,7 +370,20 @@
     });
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function() {
 
+        $(".btn-success").click(function() {
+            var html = $(".clone").html();
+            $(".increment").after(html);
+        });
+
+        $("body").on("click", ".btn-danger", function() {
+            $(this).parents(".control-group").remove();
+        });
+
+    });
+</script>
 
 
 

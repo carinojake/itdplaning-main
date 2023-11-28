@@ -416,21 +416,26 @@
                             <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
                                 class="btn btn-primary text-white"><i class="cil-description"></i></a></a>
                         @endforeach
-
                         @if ($task->contract->count() < 1)
+
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>
+
+
+                            @if ($task->task_status == 1)
                             @if ($task->task_parent_sub < 99)
                             <a href="{{ route('project.task.edit', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                            class="btn btn-warning text-white"><i class="cil-cog"></i></a>
+
+                                class="btn btn-warning text-white"><i class="cil-cog"></i></a>
                             @elseif ($task->task_parent_sub == 99)
+
                             <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="btn btn-info text-white"><i class="cil-cog"></i></a>
                             @endif
 
                             @endif
-
-                        @if ($task->task_parent == 0 && $task->subtask->count() == 0)
+                            @endif
+                        @if ( $task->subtask->count() == 0 || $task->task_cost_it_operating > 0 ||$task->task_cost_it_investment > 0 ||$task->task_cost_gov_utility > 0 )
                             <form class="delete-form"
                                 action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 method="POST" style="display:inline">
@@ -439,7 +444,20 @@
                                 <button class="btn btn-danger text-white btn-delete"
                                     data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
                             </form>
-                        @endif
+                            @elseif ($task->task_cost_it_operating > 0 && $task->task_cost_it_investment > 0 && $task->task_cost_gov_utility > 0)
+                            <form class="delete-form"
+                            action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                            method="POST" style="display:inline">
+                            @method('DELETE')
+                            @csrf
+                            <button class="btn btn-danger text-white btn-delete"
+                                data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
+                        </form>
+
+
+
+
+                            @endif
 
 
 
