@@ -277,7 +277,7 @@
                                                         <td><a href="{{ asset('storage/uploads/contracts/' . $file->project_id . '/' . $file->task_id . '/' . $file->name) }}">{{ $file->name }}</a></td>
 
                                                         <td>
-                                                            <a href="{{ route('project.task.filesdel', ['project' => $contract->hashid, 'task' => $taskcon->hashid]) }}" class="btn btn-danger">
+                                                            <a href="{{ route('contract.task.filesdel', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}" class="btn btn-danger">
                                                                 <i class="glyphicon glyphicon-remove"></i> Remove
                                                             </a>
                                                         </td>

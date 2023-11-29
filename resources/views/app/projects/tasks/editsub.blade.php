@@ -747,10 +747,10 @@
 
                                 </div>
 
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <x-button link="{{ route('project.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
 
-                                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                           <x-button onclick="history.back()" class="text-black btn-light">
-                                    {{ __('coreuiforms.return') }}</x-button>
+
                             </form>
                         </x-card>
                     </div>
@@ -760,14 +760,18 @@
 
     </x-slot:content>
     <x-slot:css>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+        <x-slot:css>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        </x-slot:css>
+        <x-slot:javascript>
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    </x-slot:css>
-    <x-slot:javascript>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
@@ -819,6 +823,8 @@
 </script>
 
 
+
+
 <script>
     $(document).ready(function() {
         // Initialize Select2 on the select element
@@ -833,7 +839,7 @@
     });
 </script>
 
-        <script>
+      {{--   <script>
             $(document).ready(function() {
                 // Initialize Select2 on the select element
                 $('.js-example-basic-single').select2();
@@ -845,7 +851,7 @@
                     console.log(selectedValue);
                 });
             });
-        </script>
+        </script> --}}
 
                 <script>
                     $(document).ready(function() {

@@ -202,6 +202,12 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
 
     Route::get('/contract/{contract}/task/{taskcon}/editview', [ContractController::class, 'taskconEditview'])->name('contract.task.editview');
 
+    Route::get('/contract/{contract}/task/{taskcon}/filesdel', [ContractController::class, 'filesdel'])->name('contract.task.filesdel');
+
+    Route::post('/contract/{contract}/task/{taskcon}/filesdel', [ContractController::class, 'filesdel'])->name('contract.task.filesdel');
+
+
+
     Route::resource('expenses', ExpensesController::class);
     //Route::post('/expensrs', [ExpensrController::class, 'store'])->name('expensrs.store');
 

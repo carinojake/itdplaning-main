@@ -254,6 +254,12 @@
                                 <div class="d-none col-md-3">
 
                                 </label>
+                                @if($request->budget_it_operating  < $sum_task_budget_it_operating)
+                                <input type="hidden" class="form-check-input" type="radio" name="task_refund_budget_type"
+                                id="task_refund_budget_type" value="1" checked>
+                                @endif
+
+
 {{--                                 {{ Form::select('task_parent_sub', \Helper::contractType(), '1', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
  --}}
                             </div>
