@@ -587,13 +587,14 @@
                               } */
                             if (task.p == 1 && task.budget_total_task_budget_end < 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '1<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end_3) + '</span>';
                             } else if (task.p == 1 && task.budget_total_task_budget_end > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                var tmp_class = (task.balance+task.total_task_refund_pa_budget_null)-task.total_task_budget_null > task.balance ? 'blue' : 'blue';
+                                return '2<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end) + '</span>';
@@ -602,7 +603,9 @@
 
                             else if (task.p == 1) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                var tmp_class = (task.balance+task.total_task_refund_pa_budget_null)-task.total_task_budget_null > task.balance ? 'blue' : 'blue';
+
+                                return '3<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end) + '</span>';
@@ -1307,6 +1310,8 @@
                 ]
             };
 
+
+
             gantt.templates.tooltip_text = function(start, end, task) {
                 var budget_gov = task.budget_gov ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
@@ -1344,6 +1349,9 @@
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.cost) : '';
+
+
+
 
                 var html = '<b>โครงการ/งาน:</b> ' + task.text + '<br/>';
                 html += task.owner ? '<b>เจ้าของ:</b> ' + task.owner + '<br/>' : '';
@@ -1413,7 +1421,10 @@
                 }
 
                 return html;
+
+
             };
+
 
             gantt.ext.fullscreen.getFullscreenElement = function() {
                 return document.querySelector("#gantt_here");

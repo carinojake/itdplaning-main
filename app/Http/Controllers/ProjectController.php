@@ -4919,7 +4919,7 @@ dd($task_sub_refund_total_count);
         dd($gantt, $budget); */
 
          //dd($gantt,$budget,$rootsums,$cteQuery->get());
-      // dd($gantt, $budget);
+      dd($gantt, $budget);
         $labels = [
             'project' => 'โครงการ/งานประจำ',
 
@@ -8748,6 +8748,42 @@ $relatedData = collect($cteQuery->get());
         $task->task_refund_pa_status = 1;
 
         ($task);
+
+
+        $origin = $request->input('origin');
+
+
+
+        $files = new File;
+        $idproject = $id;
+        $idtask = $task->task_id;
+        $idup = $idproject . '/' . $idtask;
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/', $filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                //$fileModel->project_id = $idproject;
+                $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+                ($fileModel);
+                if (!$fileModel->save()) {
+                    // If the file failed to save, redirect back with an error message
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
         // Save the Project
         if (!$task->save()) {
 
@@ -8891,40 +8927,7 @@ $relatedData = collect($cteQuery->get());
         //dd($task,$taskcon);
 
 
-        $origin = $request->input('origin');
 
-
-
-        $files = new File;
-        $idproject = $id;
-        $idtask = $task->task_id;
-        $idup = $idproject . '/' . $idtask;
-
-        $contractDir = public_path('storage/uploads/contracts/' . $idup);
-        if (!file_exists($contractDir)) {
-            mkdir($contractDir, 0755, true);
-        }
-
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filesize = $file->getSize();
-                $file->storeAs('public/', $filename);
-                $file->move($contractDir, $filename);
-
-                $fileModel = new File;
-                $fileModel->name = $filename;
-                //$fileModel->project_id = $idproject;
-                $fileModel->task_id = $idtask;
-                $fileModel->size = $filesize;
-                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-                ($fileModel);
-                if (!$fileModel->save()) {
-                    // If the file failed to save, redirect back with an error message
-                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
-                }
-            }
-        }
 
 
 
@@ -10055,7 +10058,6 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
      * @param  int  $project
      * @return \Illuminate\Http\Response
      */
-
     public function taskUpdate(Request $request, $project, $task)
     {
         $id_project = Hashids::decode($project)[0];
@@ -10159,7 +10161,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         }
 
 
-        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+        //$task->task_refund_pa_status = $request->input('task_refund_pa_status');
 
         $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
@@ -10210,51 +10212,46 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         // dd($task);
 
 
+        if ($task->save()) {
+            $files = new File;
+            $idproject = $id_project;
+            $idtask = $task->task_id;
+            $idup = $idproject . '/' . $idtask;
 
- if ($task->save()) {
-    $files = new File;
-    $idproject = $id_project;
-    $idtask = $task->task_id;
-    $idup = $idproject . '/' . $idtask;
-
-    $contractDir = public_path('storage/uploads/contracts/' . $idup);
-    if (!file_exists($contractDir)) {
-        mkdir($contractDir, 0755, true);
-    }
-
-    if ($request->hasFile('file')) {
-        foreach ($request->file('file') as $file) {
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $filesize = $file->getSize();
-            $file->storeAs('public/', $filename);
-            $file->move($contractDir, $filename);
-
-            $fileModel = new File;
-            $fileModel->name = $filename;
-            //$fileModel->project_id = $idproject;
-            $fileModel->task_id = $idtask;
-            $fileModel->size = $filesize;
-            $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-            //dd($fileModel);
-            if (!$fileModel->save()) {
-                // If the file failed to save, redirect back with an error message
-                return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+            $contractDir = public_path('storage/uploads/contracts/' . $idup);
+            if (!file_exists($contractDir)) {
+                mkdir($contractDir, 0755, true);
             }
-        }
-    }
-                                        // Update contract
-                                        if ($request->input('task_contract')) {
-                                            ContractHasTask::where('task_id', $id_task)->delete();
-                                            ContractHasTask::create([
-                                                'contract_id' => $request->input('task_contract'),
-                                                'task_id' => $id_task,
-                                            ]);
-                                        } else {
 
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filesize = $file->getSize();
+                    $file->storeAs('public/', $filename);
+                    $file->move($contractDir, $filename);
 
-                                        }
+                    $fileModel = new File;
+                    $fileModel->name = $filename;
+                    //$fileModel->project_id = $idproject;
+                    $fileModel->task_id = $idtask;
+                    $fileModel->size = $filesize;
+                    $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
 
-                                    }
+                    if (!$fileModel->save()) {
+                        // If the file failed to save, redirect back with an error message
+                        return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                    }
+                }
+            }
+            // Update contract
+            if ($request->input('task_contract')) {
+                ContractHasTask::where('task_id', $id_task)->delete();
+                ContractHasTask::create([
+                    'contract_id' => $request->input('task_contract'),
+                    'task_id' => $id_task,
+                ]);
+            } else {
+            }
 
             // Assign the project_id to the Taskcon
             $taskcon = Taskcon::where('task_id', $task->task_id)->first();
@@ -10434,6 +10431,28 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
 
 
+
+
+
+
+
+            if (!$taskcon) {
+                return redirect()->back()->withErrors('Taskcon not found.');
+            }
+
+
+
+
+
+            if (!$taskcon->save()) {
+                // If the Taskcon failed to save, redirect back with an error message
+                return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
+            }
+
+
+            // dd($task);
+            return redirect()->route('project.view', $project->hashid);
+        }
 
         // Create a new Taskcon object
         //  $taskcon = new Taskcon;

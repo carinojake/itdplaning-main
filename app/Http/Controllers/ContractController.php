@@ -1778,10 +1778,11 @@ if($request->hasFile('file')) {
             ->get();
         $tasks = task::get();
         $contractcons = Contract::get();
-
+      //  dd($id_contract,$id_taskcon);
  // Fetch top-level taskcons with pagination
  $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
-
+ ($files_contract = File::where('contract_id', ($id_contract))->get());
+ ($files_taskcon = File::where('taskcon_id', ($id_taskcon))->get());
        //dd ($taskcons, $contract, $relatedTaskcons);
 
         //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
@@ -1799,7 +1800,7 @@ if($request->hasFile('file')) {
         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
 
 
-        return view('app.contracts.tasks.edit', compact('relatedTaskcons','contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
+        return view('app.contracts.tasks.edit', compact('files_taskcon','relatedTaskcons','contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
 
@@ -1807,6 +1808,7 @@ if($request->hasFile('file')) {
     {
         $id_contract = Hashids::decode($contract)[0];
         $id_taskcon    = Hashids::decode($taskcon)[0];
+
         $contract    = Contract::find($id_contract);
         $taskcon       = Taskcon::find($id_taskcon);
         $taskcons      = Taskcon::where('contract_id', $id_contract)
