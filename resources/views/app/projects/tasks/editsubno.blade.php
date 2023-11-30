@@ -419,14 +419,9 @@
                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                          class="form-control numeral-mask" id="task_cost_it_operating"
                                                                          name="task_cost_it_operating" min="0"
-                                                                         @if ($task->task_type == 1)
-                                                                            value={{ session('contract_pa_budget') }}
-                                                                                @else
-
-
 
                                                                          value="{{ $task->task_cost_it_operating }}"
-                                                                         @endif
+
                                                                          onchange="calculateRefund()" {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}
                                                                        >
 
@@ -684,7 +679,7 @@
 
 
                                                                         <div class="col-md-4">
-                                                                            <label for="task_pay"
+                                                                            <label for="task_pay_d"
                                                                                 class="form-label">{{ __('จำนวนเงิน (บาท) PP') }}</label>
                                                                            {{--  <span class="text-danger">*</span> --}}
 
@@ -693,7 +688,7 @@
                                                                                 id="task_pay"
                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
                                                                                 class="form-control numeral-mask"
-                                                                                name="task_pay" min="0"  value="{{ $task->task_pay }}" {{ $task->task_status == 2 ? 'readonly' : '' }}
+                                                                                name="task_pay" min="0"  value="{{ number_format($task->task_pay,2) }} " {{ $task->task_status == 2 ? 'readonly' : '' }}
                                                                                 >
                                                                         </div>
                                                                     </div>
@@ -992,20 +987,20 @@ function updateTaskCostFields() {
     // Check for task_budget_it_operating
     console.log(budgetItOperating);
     console.log(costItOperating);
-    if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0 ) {
+    if (budgetItOperating === "0" || budgetItOperating === '' ||  parseFloat(budgetItOperating) < -0 ) {
         $("#task_cost_it_operating").val('');
-        $("#task_pay").val('');
+      $("#task_pay").val('');
     }
 
     // Check for task_budget_it_investment
     if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment > costItInvestment || parseFloat(budgetItInvestment) < -0) {
-        $("#task_cost_it_investment").val('');
+       // $("#task_cost_it_investment").val('');
         $("#task_pay").val('');
     }
 
     // Check for task_budget_gov_utility
     if (budgetGovUtility === "0" || budgetGovUtility === '' || budgetGovUtility > costGovUtility || parseFloat(budgetGovUtility) < -0) {
-        $("#task_cost_gov_utility").val('');
+      //  $("#task_cost_gov_utility").val('');
         $("#task_pay").val('');
     }
 }

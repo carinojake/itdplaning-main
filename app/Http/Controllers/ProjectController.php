@@ -1982,7 +1982,7 @@ $mainQuery = DB::query()
 
         // ->toArray()
 
-        // dd($project);
+        //dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -2118,7 +2118,7 @@ $mainQuery = DB::query()
             'balance'               => $__balance,
             'pbalance'               => $__balance,
             'project_cost_disbursement'     => $project['project_cost_disbursemen'],
-            'total_cost'                => $__cost + $__root_total_cost,
+            'total_cost'                => $__cost,
             'cost'                  => $project['project_cost'],
             'cost_pa_1'             => $project['cost_pa_1'],
             'cost_no_pa_2'             => $project['cost_no_pa_2'],
@@ -2193,7 +2193,7 @@ $mainQuery = DB::query()
 
         $budget['total_cost'] =  $__total_cost_it_operating + $__total_cost_it_investment + $__total_cost_gov_utility;
         $budget['budget_total_refund_pa_budget_end'] = $__total_task_refund_pa_budget_3;
-        // dd($budget);
+         //dd($budget);
 
         //21/11/2566 total_task_budget_null
         $budget['total_task_budget_null'] = $__total_task_budget_null;
@@ -5586,7 +5586,7 @@ dd($task_sub_refund_total_count);
 
         //dd($gantt,$budget,$result,$project);
 
-        // dd($gantt);
+        //dd($gantt);
         $gantt = json_encode($gantt);
 
 

@@ -229,15 +229,23 @@
                                                                     class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                                                 <span class="text-danger">*</span>
                                                                 <input class="form-control" id="task_start_date"
-                                                                    name="task_start_date" name="task_start_date">
+                                                                    name="task_start_date" name="task_start_date"
+                                                                   value= {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+                                                                    required
+
+                                                                    >
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label for="task_end_date"
                                                                     class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                                                 <span class="text-danger">*</span>
                                                                 <input class="form-control" id="task_end_date"
-                                                                    name="task_end_date" name="task_start_date">
-                                                            </div>
+                                                                    name="task_end_date" name="task_start_date"
+                                                                   value=  {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+                                                                    required
+                                                                    >
+
+                                                                </div>
                                                         </div>
                                                         <div class="d-none col-md-4 mt-3">
                                                             <label for="task_mm_budget"
@@ -613,7 +621,10 @@
                                                          {{--    <span class="text-danger">*</span> --}}
                                                             <input  class="form-control"
                                                                 id="task_pay_date"
-                                                                name="task_pay_date"  >
+                                                                name="task_pay_date"
+                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $task?->task_pay_date )) }}
+
+                                                                >
 
 
                                                         </div>
@@ -645,7 +656,7 @@
                                 {{ Form::select('task_parent_sub', \Helper::contractType(), '99', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
 
                             </div>
-                            @if($request->budget_it_operating  < $sum_task_budget_it_operating+1 || $request->budget_it_investment < $sum_task_budget_it_investment+1 || $request->budget_gov_utility < $sum_task_budget_gov_utility+1)
+                            @if($request->budget_it_operating+1  < $sum_task_budget_it_operating|| $request->budget_it_investment+1 < $sum_task_budget_it_investment || $request->budget_gov_utility+1 < $sum_task_budget_gov_utility)
                             <input type="hidden" class="form-check-input" type="radio" name="task_refund_budget_type"
                             id="task_refund_budget_type" value="1" checked>
                             @endif
