@@ -34,7 +34,7 @@
                             ?>
                             @if ((isset($task) && $task->task_refund_pa_status == 2) && $task->task_refund_pa_status == 3)
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
-                            @elseif ((isset($task) &&  $task->task_refund_pa_status == 3 && $task->task_status == 2))
+                            @elseif ((isset($task) &&  $task->task_refund_pa_status == 3 ))
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
 
                                 @else
@@ -69,6 +69,7 @@
                                             <?php
                                             echo isset($subtask) && $subtask->task_refund_pa_status == 2 ? '<span class="badge bg-success text-white">คืนเงิน pa</span>' : '<span class="badge bg-info text-white">ไม่คืนเงิน pa</span>';
                                             ?>
+
                                             @if ($subtask->contract->count() > 0)
                                                 @foreach ($subtask->contract as $contract)
                                                     <!-- Button trigger modal -->
@@ -416,6 +417,8 @@
                             <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
                                 class="btn btn-primary text-white"><i class="cil-description"></i></a></a>
                         @endforeach
+
+
                         @if ($task->contract->count() < 1)
 
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -431,11 +434,24 @@
 
                             <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 class="btn btn-info text-white"><i class="cil-cog"></i></a>
-                            @endif
+
+
+
+                                @endif
 
                             @endif
                             @endif
-                        @if ( $task->subtask->count() == 0 || $task->task_cost_it_operating > 0 ||$task->task_cost_it_investment > 0 ||$task->task_cost_gov_utility > 0 )
+
+                            @if (  $task->task_cost_it_operating > 0 ||$task->task_cost_it_investment > 0 ||$task->task_cost_gov_utility > 0 )
+                            <form class="delete-form d-none"
+                                action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                                method="POST" style="display:inline">
+                                @method('DELETE')
+                                @csrf
+                                <button class="btn btn-danger text-white btn-delete"
+                                    data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
+                            </form>
+                            @elseif ( $task->subtask->count() == 0 || $task->task_cost_it_operating > 0 ||$task->task_cost_it_investment > 0 ||$task->task_cost_gov_utility > 0 )
                             <form class="delete-form"
                                 action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                 method="POST" style="display:inline">
@@ -444,7 +460,11 @@
                                 <button class="btn btn-danger text-white btn-delete"
                                     data-rowid="{{ $task->hashid }}"><i class="cil-trash"></i></button>
                             </form>
+
+
+
                             @elseif ($task->task_cost_it_operating > 0 && $task->task_cost_it_investment > 0 && $task->task_cost_gov_utility > 0)
+
                             <form class="delete-form"
                             action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                             method="POST" style="display:inline">

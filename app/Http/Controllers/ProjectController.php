@@ -8741,9 +8741,10 @@ AS root_two_refund ,
 
         $task->task_po_budget = $task_po_budget ?? null;
         $task->task_er_budget = $task_er_budget ?? null;
-        $task->task_refund_pa_status = 1;
+        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+        $task->task_refund_budget_type = $request->input('task_refund_budget_type');
 
-        ($task);
+        //dd($task);
 
 
         $origin = $request->input('origin');
@@ -10155,7 +10156,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         }
 
 
-        //$task->task_refund_pa_status = $request->input('task_refund_pa_status');
+        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
 
         $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
         $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
@@ -10199,11 +10200,12 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         $task->task_mm_budget = $task_mm_budget;
         $task->task_pay = $task_pay;
         $task->task_type = $task->task_type;
+        //$task->task_refund_pa_status = $task->task_refund_pa_status;
         //  $task->task_budget_type = 1;
         // Update other task attributes as needed
         //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
         // $task->taskcon_pp        = $request->input('taskcon_pp');
-        // dd($task);
+        //dd($task);
 
 
         if ($task->save()) {

@@ -673,7 +673,10 @@
 
                                     </div>
 
-
+                                    @if($request->budget_it_operating  < $sum_task_budget_it_operating+1 || $request->budget_it_investment < $sum_task_budget_it_investment+1 || $request->budget_gov_utility < $sum_task_budget_gov_utility+1)
+                                    <input type="hidden" class="form-check-input" type="radio" name="task_refund_budget_type"
+                                    id="task_refund_budget_type" value="1" checked>
+                                    @endif
 
                                 </div>
 

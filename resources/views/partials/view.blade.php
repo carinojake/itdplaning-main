@@ -170,32 +170,39 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-blue"
 
-                             data-bs-title="งบประมาณ" data-bs-content="
+                             data-bs-title="งบประมาณ"
+
+                             data-bs-content=
+
+                             "
+
                              @if ($project['budget_it_operating'] > 0)
+
                              @if($budget['budget_it_operating']<$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] )
-                             งบกลาง ICT 1 :    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+$budget['op_total_task_refund_pa_budget_3'],2)}} บาท
+                             งบกลาง ICT  :    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+$budget['op_total_task_refund_pa_budget_3'],2)}} บาท
                         <!-- Content for Activity tab -->
                             @include('partials.icttopactivity')
 
                              @elseif($budget['budget_it_operating']>$budget['op_totol_task_budget_it_operating'])
-                             งบกลาง ICT 2 :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
+                             งบกลาง ICT  :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
                              @endif
                              @endif
 
 
                              @if ($project['budget_it_investment'] > 0)
                             @if($budget['budget_it_investment']<$budget['in_totol_task_budget_it_investment'] ||$budget['budget_it_investment']===$budget['in_totol_task_budget_it_investment']  )
-                            <p>
+
                             งบดำเนินงาน :   {{ number_format(($budget['budget_it_investment']-$budget['in_totol_task_budget_it_investment'])+ $budget['in_total_task_refund_pa_budget_3'],2)}} บาท <br>
-                                <p>
+
                                 <!-- Content for Activity tab -->
+
                                 @include('partials.intopactivity')
 
 
                                 @elseif($budget['budget_it_investment']>$budget['in_totol_task_budget_it_investment'])
 
-                                    <p>
-                                งบดำเนินงาน 2 :  {{ number_format($budget['budget_total_task_budget_end_investment'], 2) }} บาท <br>
+
+                                งบดำเนินงาน  :  {{ number_format($budget['budget_total_task_budget_end_investment'], 2) }} บาท <br>
 
                                 @include('partials.intopactivity')
                                 @endif
@@ -204,13 +211,13 @@
                          @if ($project['budget_gov_utility'] > 0)
                              @if($budget['budget_gov_utility']<$budget['ut_totol_task_budget_gov_utility'] ||$budget['budget_gov_utility']===$budget['ut_totol_task_budget_gov_utility']  )
                              <p>
-                             งบสาธารณูปโภค 1:    {{  number_format(($budget['budget_gov_utility']-$budget['ut_totol_task_budget_gov_utility'])+ $budget['ut_total_task_refund_pa_budget_3'],2)}} บาท <br>
+                             งบสาธารณูปโภค :    {{  number_format(($budget['budget_gov_utility']-$budget['ut_totol_task_budget_gov_utility'])+ $budget['ut_total_task_refund_pa_budget_3'],2)}} บาท <br>
                              <p>   <!-- Content for Activity tab -->
                                 @include('partials.uttopactivity')
 
                                 @elseif($budget['budget_gov_utility']>$budget['ut_totol_task_budget_gov_utility'])
                                 <p>
-                                งบสาธารณูปโภค 2:  {{ number_format($budget['budget_total_task_budget_end_utility'], 2) }} บาท <br>
+                                งบสาธารณูปโภค :  {{ number_format($budget['budget_total_task_budget_end_utility'], 2) }} บาท <br>
 
 
                          @endif
@@ -223,7 +230,7 @@
 
 
 
-                                                    @if ( $budget['project_type'] == 1)
+                                                    @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
                                   {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
 
@@ -241,12 +248,12 @@
  --}}
 
 
-
+{{--
                                     @elseif( $budget['project_type'] == 2 )
                                     {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }}
 
                                     @elseif( $budget['project_type'] == 2)
-                                    {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }}
+                                    {{ number_format(floatval( $budget['budget_total_task_root_op_in_ut_rf']), 2) }} --}}
 
 
 

@@ -436,6 +436,10 @@
                                                             </div> --}}
                                                     </div>
                                                 </div>
+                                                @if( $task->task_cost_it_operating > 0 && $task->task_refund_pa_budget == 0|| $task->task_cost_it_investment>0 && $task->task_refund_pa_budget == 0|| $task->task_cost_gov_utility > 0 && $task->task_refund_pa_budget == 0)
+                                                <input type="hidden" class="form-check-input" type="radio" name="task_refund_pa_status"
+                                                id="task_refund_pa_status" value="2" checked>
+                                                @endif
                                             </div>
                                         </div>
                                         @endif
@@ -1124,6 +1128,16 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
                 }
             }
         });
+        if (pr_value = $pa_value)
+{
+
+    $task_refund_pa_status = 3;
+
+
+}
+
+
+
 
         $("#task_refund_pa_budget").val(totalRefund.toFixed(2));
         $("#task_pay").val(totalRefund_2.toFixed(2));
