@@ -114,6 +114,8 @@
       }
     });
   </script>
+
+
   <!--JS PAGE-->
   {{ $javascript }}
 

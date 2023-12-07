@@ -765,7 +765,7 @@
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_start_date"
                                                                                 name="contract_start_date"
-                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $ta?->task_start_date)) }}
+                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails?->project_start_date)) }}
 
                                                                                 >
                                                                             <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
@@ -779,7 +779,7 @@
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_end_date"
                                                                                 name="contract_end_date"
-                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $ta?->task_end_date)) }}
+                                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails?->project_end_date)) }}
 
                                                                                 >
                                                                             <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"

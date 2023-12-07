@@ -179,12 +179,12 @@
                              @if ($project['budget_it_operating'] > 0)
 
                              @if($budget['budget_it_operating']<$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] )
-                             งบกลาง ICT  :    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+$budget['op_total_task_refund_pa_budget_3'],2)}} บาท
+                             งบกลาง ICT 1 :    {{   number_format(($budget['budget_it_operating']-$budget['op_totol_task_budget_it_operating'])+$budget['op_total_task_refund_pa_budget_3'],2)}} บาท
                         <!-- Content for Activity tab -->
                             @include('partials.icttopactivity')
 
                              @elseif($budget['budget_it_operating']>$budget['op_totol_task_budget_it_operating'])
-                             งบกลาง ICT  :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
+                             งบกลาง ICT  2:  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
                              @endif
                              @endif
 

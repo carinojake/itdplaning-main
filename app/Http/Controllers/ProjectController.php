@@ -22,7 +22,7 @@ use App\Rules\BudgetGreaterThanCostInvestment;
 use App\Rules\BudgetGreaterThanCostUtility;
 use App\Rules\ValidateTaskPay;
 use App\Http\Controllers\Exception;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -2414,7 +2414,7 @@ $mainQuery = DB::query()
 
 
 
-        //dd($budget, $result_query_op_in_un);
+       // dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -6408,8 +6408,12 @@ JOIN
 GROUP BY cte.root);
 
 ";
+
+
+
+
         $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
-        // dd($result_query_task_op_in_un);
+       //  dd($result_query_task_op_in_un);
 
         /*
         $contract    = Contract::find($contract_id);
@@ -6422,6 +6426,7 @@ GROUP BY cte.root);
         //  dd($task);
         // dd($project,$task);
         ($tasks_sub = $task->subtask);
+      //  dd($tasks ,$tasks_sub);
 
 
         $id_root_tasks = Task::select('task_id')->where('task_id', $task->task_id)
@@ -6431,7 +6436,7 @@ GROUP BY cte.root);
             ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
         $id_tasks_sub = Task::select('task_id')->where('task_parent', $task->task_id)
             ->whereNull('tasks.deleted_at')->get()->pluck('task_id');
-        // dd($id_root_tasks,$id_tasks,$id_tasks_sub);
+         //dd($id_root_tasks,$id_tasks,$id_tasks_sub);
 
         $result_query_task_op_in_un = DB::select(DB::raw($query_task_op_in_un));
         $collection = collect($result_query_task_op_in_un);
@@ -6444,6 +6449,71 @@ GROUP BY cte.root);
             ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->first();
         //dd($collection,$result_query_task_op_in_un,$task_ra,$task_ra_two);
 
+
+
+        $contractgannt = DB::table('tasks')
+    ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+    ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+    ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+    ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+    ->select('tasks.task_id as taskid',  'tasks.task_name', DB::raw('SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_pay_con'))
+
+    ->where('tasks.project_id', $project->project_id)
+    ->groupBy('tasks.task_id')
+/*
+       ->get()
+    ->toArray() */
+    ;
+    //dd($contractgannt);
+   ($contractganntSql = $contractgannt->toSql());
+    $contractganntBindings = $contractgannt->getBindings();
+
+
+
+
+    $taskIds = $task->pluck('task_id')->toArray()   ;
+
+    $resulttwo = DB::table('tasks')
+        ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->select(
+            'tasks.task_id as taskid',
+            'tasks.task_name',
+            DB::raw('SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_pay_con')
+        )
+        ->whereIn('tasks.task_id', $taskIds)
+
+        ->groupBy('tasks.task_id')
+        ->get();
+
+
+
+
+
+
+
+
+
+    $subtaskIds = $task->subtask->pluck('task_id')->toArray()   ;
+
+    $resultth = DB::table('tasks')
+        ->join('contract_has_tasks', 'tasks.task_id', '=', 'contract_has_tasks.task_id')
+        ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+        ->select(
+            'tasks.task_id as taskid',
+            'tasks.task_name',
+            DB::raw('SUM(COALESCE(taskcons.taskcon_pay, 0)) AS total_pay_con')
+        )
+        ->whereIn('tasks.task_id', $subtaskIds)
+        ->groupBy('tasks.task_id')
+        ->get();
+
+  // dd($resulttwo,$resultth);
+//dd($contractganntBindings);
         $cteQuery = DB::table('tasks')
             ->withRecursiveExpression('cte', function ($rec) use ($id_tasks, $project, $id_tasks_sub) {
                 $rec->select(
@@ -6452,14 +6522,18 @@ GROUP BY cte.root);
                     't.project_id',
                     't.task_parent',
                     't.task_id AS root',
+
                     DB::raw('COALESCE(t.task_budget_gov_utility, 0)
-                 + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0) AS LeastBudget'),
-                    DB::raw('COALESCE(t.task_cost_gov_utility, 0) +
+                 + COALESCE(t.task_budget_it_operating, 0) + COALESCE(t.task_budget_it_investment, 0)
+                 AS LeastBudget'),
+
+                 DB::raw('COALESCE(t.task_cost_gov_utility, 0) +
                 COALESCE(t.task_cost_it_operating, 0) + COALESCE(t.task_cost_it_investment, 0) AS LeastCost'),
 
+                DB::raw('COALESCE(t.task_pay, 0)  AS LeastPay'),
 
-                    't.task_pay as LeastPay',
-                    't.task_refund_pa_budget as Leasttask_refund_pa_budget',
+
+                DB::raw('COALESCE(t.task_refund_pa_budget, 0)  AS Leasttask_refund_pa_budget'),
 
                     DB::raw('(
                    SELECT MAX(temp.total_cost_1)
@@ -6503,6 +6577,7 @@ GROUP BY cte.root);
                 )
 
                     ->from('tasks as t')
+
                     ->whereIn('t.task_id', $id_tasks_sub)
                     ->whereNull('t.deleted_at')
                     ->unionAll(function ($uni) {
@@ -6511,9 +6586,14 @@ GROUP BY cte.root);
                             'tasks.project_id',
                             'tasks.task_parent',
                             'cte.root',
+
                             DB::raw('tasks.task_budget_it_operating + tasks.task_budget_it_investment + tasks.task_budget_gov_utility + cte.LeastBudget AS LeastBudget'),
+
                             DB::raw('tasks.task_cost_it_operating + tasks.task_cost_it_investment + tasks.task_cost_gov_utility + cte.LeastCost AS LeastCost'),
+
                             DB::raw('tasks.task_pay + cte.LeastPay AS LeastPay'),
+
+
                             DB::raw('tasks.task_refund_pa_budget +cte.Leasttask_refund_pa_budget AS Leasttask_refund_pa_budget'),
                             DB::raw('(
                            SELECT MAX(temp.total_cost_1)
@@ -6526,7 +6606,7 @@ GROUP BY cte.root);
                                WHERE inner_tasks.task_type = 1 AND inner_tasks.deleted_at IS NULL
                                GROUP BY inner_tasks.task_parent
                            ) AS temp
-                           WHERE temp.task_parent = tasks.task_id  -- assuming t is the alias of tasks in your main query
+                           WHERE temp.task_parent = tasks.task_id
                        ) AS ab_1
                '),
 
@@ -6541,7 +6621,7 @@ GROUP BY cte.root);
                        WHERE inner_tasks.task_type = 2 AND inner_tasks.deleted_at IS NULL
                        GROUP BY inner_tasks.task_parent
                    ) AS temp
-                   WHERE temp.task_parent = tasks.task_id  -- assuming t is the alias of tasks in your main query
+                   WHERE temp.task_parent = tasks.task_id
                ) AS ab_2
        '),
 
@@ -6567,12 +6647,12 @@ GROUP BY cte.root);
             ->groupBy('cte.root',) // Add these columns to the GROUP BY clause
             ->select(
                 'cte.root',
+                'ctecon.total_pay_con',
                 DB::raw('MIN(cte.LeastBudget) AS totalLeastBudget'),
                 DB::raw('SUM(cte.LeastCost) AS totalLeastCost'),
                 DB::raw('SUM(cte.LeastPay) AS totalLeastPay'),
-
-
                 DB::raw('sum(cte.Leasttask_taskcon_pay) AS totalLeastconPay'),
+
                 DB::raw('max(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget'),
                 DB::raw('sum(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget1'),
                 DB::raw('min(cte.Leasttask_refund_pa_budget) AS totalLeasttask_refund_pa_budget2'),
@@ -6581,17 +6661,27 @@ GROUP BY cte.root);
                 DB::raw('SUM(cte.ab_1) AS total_Leasttask_cost_1'), // Updated this line
                 DB::raw('SUM(cte.ab_2) AS total_Leasttask_cost_2'), // Updated this line
 
-            )
+                DB::raw('sum(COALESCE(cte.ab_1))+sum(COALESCE(cte.ab_2)) AS total_Leasttask_cost_sum'), // Updated this line
+
+
+
+                )
+                ->leftJoin(DB::raw("($contractganntSql) as ctecon"), 'ctecon.taskid', '=', 'cte.root')
+
+    // Manually apply bindings
+    ->addBinding($contractganntBindings, 'join')
             ->orderBy('cte.root')
             // ->whereNull('cte.deleted_at')
-            ->get();
+            ->get()
+           // ->toSql()
+            ;
 
 
-        //dd($combinedQuery);
+        //dd($cteQuery);
         // dd($task->subtask);
         // dd($cteQuery->get());
 
-        ($combinedQuery);
+        //dd($combinedQuery);
         //$cteQuery = $cteQuery->first();
 
         $cteQueryResults = $cteQuery->get();
@@ -6658,7 +6748,7 @@ GROUP BY cte.root);
             ->where('tasks.task_id', $task->task_id)
             ->get();
 
-        //dd($taskcons);
+       // dd($taskcons);
 
         /*         $task = Task::
          join('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
@@ -6842,7 +6932,7 @@ GROUP BY cte.root);
         ]);
 
         // dd($task_sub_sums,$cteQuery_task_sub_sums);
-        //   dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
+  // dd($task_sub_refund_pa_budget,$task_sub_sums,$cteQuery_task_sub_sums,$task_sub_refund_pa_budget_01);
 
 
 
@@ -7123,7 +7213,7 @@ AS root_two_refund ,
             ->toArray();
 
         $subtasks = $task->subtask()->whereNull('deleted_at')->get();
-
+         //dd($subtasks);
         // Assuming you want to get the ID of the first subtask
         $idRootTasktwo = optional($subtasks->first())->task_id;
 
@@ -7137,6 +7227,7 @@ AS root_two_refund ,
                     SELECT
                     2 AS RS_2,
                     task_id AS taskroot_two_id,
+                    task_name AS taskroot_two_name,
                     task_parent AS taskroot_two_parent,
                     task_budget_it_operating as taskroot_two_budget_it_operating,
                     task_budget_it_investment as taskroot_two_budget_it_investment,
@@ -7232,20 +7323,33 @@ AS root_two_refund ,
             //  ->orderBy('task_parent')
             ->orderBy('task_id');
         $rootTaskFinancialstwo = $rootTaskFinancialsQuery->get();
-        //  dd($rootTaskFinancials);
+      //   dd($rootTaskFinancials, $rootTaskFinancialstwo);
         //05112566
         $relatedData = collect($cteQuery->get());
-        //dd($relatedData);
+        $subtask = $task->subtask()->whereNull('deleted_at')->first();
+      //  $relatedData2 = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
+        $rootTaskFinancialstwo = ($rootTaskFinancialsQuery->get());
+
+
+       //dd($relatedData,$resultth);
         // Debugging the output
         // dd($task_rs_get, $id_tasks,$id_tasks_two_id_parent,$subtasks ,$idRootTasktwo,$rootTaskFinancialstwo,$task_ra,$rootTaskFinancialsQuery);
 
         // ดึงข้อมูล
         // $root_task_two = $root_task_two->get();
 
-        // dd($rootTaskFinancials,$rootTaskFinancialstwo,$task->subtask); // แสดงผลข้อมูลที่ได้
-
+ //dd($rootTaskFinancials,$rootTaskFinancialstwo,$task->subtask,$task_rs_get, $id_tasks,$id_tasks_two_id_parent,$subtasks ,$idRootTasktwo,$rootTaskFinancialstwo,$task_ra,$rootTaskFinancialsQuery); // แสดงผลข้อมูลที่ได้
+ /*  foreach ($subtask->subtaskparent as $subtask_sub){
+    ($subtask_sub);
+}
+dd($subtask_sub->task_id);
+$resultthItem = collect($resultth)->firstWhere('taskid',1109);
+dd($resultthItem); */
         return view('app.projects.tasks.show', compact(
+            'resulttwo',
+            'resultth',
             'collection',
+            'rootTaskFinancialsQuery',
             'task_rs_get',
             'cteQueryResults',
             'projectcontract',
@@ -7319,7 +7423,7 @@ AS root_two_refund ,
             ->where('project_id', $id)
             //->orderBy('projects.project_fiscal_year', 'DESC')
             ->get();
-        //  dd($projectData);
+         // dd($request,$fiscal_years,$sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility,$sum_task_refund_budget_it_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
         $projectData = $projectData->map(function ($p) {
             return [
                 'id' => $p->project_id,
@@ -8313,7 +8417,7 @@ AS root_two_refund ,
         $rules = [
             'taskcon_mm_name' => 'required',
             'task_start_date' => 'required|date_format:d/m/Y',
-            'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+           // 'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
             //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
             // 'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
             //'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
@@ -8747,40 +8851,7 @@ AS root_two_refund ,
         //dd($task);
 
 
-        $origin = $request->input('origin');
 
-
-
-        $files = new File;
-        $idproject = $id;
-        $idtask = $task->task_id;
-        $idup = $idproject . '/' . $idtask;
-
-        $contractDir = public_path('storage/uploads/contracts/' . $idup);
-        if (!file_exists($contractDir)) {
-            mkdir($contractDir, 0755, true);
-        }
-
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filesize = $file->getSize();
-                $file->storeAs('public/', $filename);
-                $file->move($contractDir, $filename);
-
-                $fileModel = new File;
-                $fileModel->name = $filename;
-                //$fileModel->project_id = $idproject;
-                $fileModel->task_id = $idtask;
-                $fileModel->size = $filesize;
-                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-                ($fileModel);
-                if (!$fileModel->save()) {
-                    // If the file failed to save, redirect back with an error message
-                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
-                }
-            }
-        }
         // Save the Project
         if (!$task->save()) {
 
@@ -8924,8 +8995,41 @@ AS root_two_refund ,
         //dd($task,$taskcon);
 
 
+        $origin = $request->input('origin');
 
 
+
+        $files = new File;
+        $idproject = $id;
+        $idtask = $task->task_id;
+        $idup = $idproject . '/' . $idtask;
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/', $filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                //$fileModel->project_id = $idproject;
+                $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+                ($fileModel);
+                if (!$fileModel->save()) {
+                    // If the file failed to save, redirect back with an error message
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
+       // dd($fileModel->toArray());
 
 
 
@@ -9471,6 +9575,7 @@ FROM tasks WHERE  tasks.deleted_at IS null AND task_parent IS NULL ORDER BY task
                 SELECT
                 2 AS RS_2,
                 task_id AS taskroot_two_id,
+
                 task_parent AS taskroot_two_parent,
                 task_budget_it_operating as taskroot_two_budget_it_operating,
                 task_budget_it_investment as taskroot_two_budget_it_investment,
@@ -9689,7 +9794,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         $projectDetails = Project::find($id_project);
 
 
-        //dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
+       // dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
 
 
         return view('app.projects.tasks.edit', compact(
@@ -10024,9 +10129,15 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         $tasksDetails = $task;
         // dd($tasks ,$taskcon);
 
+        $files = File::where('task_id', $task->task_id)->get();
 
+
+        // Continue with your logic if files are found
+        ($files->toArray()); // This will dump the array representation of the files collection
 
         return view('app.projects.tasks.editsubno', compact(
+            'files',
+
             'task_sub_sums',
             'tasksDetails',
             'taskcon',
@@ -10053,414 +10164,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
      * @param  int  $project
      * @return \Illuminate\Http\Response
      */
-    public function taskUpdate(Request $request, $project, $task)
-    {
-        $id_project = Hashids::decode($project)[0];
-        $id_task = Hashids::decode($task)[0];
-        $project = Project::find($id_project);
-        ($task = Task::find($id_task));
-        $tasks = Task::where('project_id', $id_project)
-            ->where('task_id', '!=', $id_task)
-            ->get();
-        $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
 
-        $tasks_without_parent = Task::where('project_id', $id_project)
-            ->whereNull('task_parent')
-            ->get();
-        $task_budget_it_operating = $tasks_without_parent->sum('task_budget_it_operating');
-        $task_budget_it_investment = $tasks_without_parent->sum('task_budget_it_investment');
-        $task_budget_gov_utility = $tasks_without_parent->sum('task_budget_gov_utility');
-
-
-        // dd($tasks_without_parent);
-
-
-        $costs = [
-            'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
-            'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
-            'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
-        ];
-
-        $messages = [
-            'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-            'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
-            //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
-            'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
-            //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
-
-            'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
-            //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
-            'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
-
-            'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
-            'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
-        ];
-
-
-
-        $rules = [
-            'task_start_date' => 'required|date_format:d/m/Y',
-            'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
-            //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
-            //'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
-            //'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
-            //'task_pay' => ['min:0', new ValidateTaskPay($costs)],
-
-        ];
-
-        $request->validate($rules, $messages);
-
-        //   $task_pay_date = $request->input('task_pay_date');
-
-
-        /*
-                            if ($task_pay_date) {
-                                $pay_date_obj = date_create_from_format('d/m/Y', $task_pay_date);
-                            } else {
-                                $pay_date_obj = null;
-                            } */
-
-        $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
-        $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
-        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
-
-
-        if ($start_date_obj === false || $end_date_obj === false) {
-            // Handle date conversion error
-            // You can either return an error message or use a default date
-        } else {
-            $start_date_obj->modify('-543 years');
-            $end_date_obj->modify('-543 years');
-
-            $start_date = date_format($start_date_obj, 'Y-m-d');
-            $end_date = date_format($end_date_obj, 'Y-m-d');
-
-
-            // Check if $pay_date_obj is not null before trying to modify and format it
-
-        }
-
-        if ($pay_date_obj === false) {
-            // Handle date conversion error
-            // You can either return an error message or use a default date
-        } else {
-
-            $pay_date_obj->modify('-543 years');
-
-            $pay_date = date_format($pay_date_obj, 'Y-m-d');
-
-            // Check if $pay_date_obj is not null before trying to modify and format it
-
-        }
-
-
-        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
-
-        $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
-        $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
-        $task->task_pay_date = $pay_date ?? date('Y-m-d 00:00:00');
-
-
-
-        // Convert data to decimal or set it to null if empty
-        $task_budget_it_operating = $request->input('task_budget_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_operating')) : null;
-        $task_budget_gov_utility = $request->input('task_budget_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_budget_gov_utility')) : null;
-        $task_budget_it_investment = $request->input('task_budget_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_investment')) : null;
-
-        $task_cost_it_operating = $request->input('task_cost_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_operating')) : null;
-        $task_cost_gov_utility = $request->input('task_cost_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_cost_gov_utility')) : null;
-        $task_cost_it_investment = $request->input('task_cost_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_investment')) : null;
-        $task_mm_budget = $request->input('task_mm_budget') !== '' ? (float) str_replace(',', '', $request->input('task_mm_budget')) : null;
-        $task_pay = $request->input('task_pay') !== '' ? (float) str_replace(',', '', $request->input('task_pay')) : null;
-
-        $task_refund_pa_budget = $request->input('task_refund_pa_budget') !== '' ? (float) str_replace(',', '', $request->input('task_refund_pa_budget')) : null;
-
-
-        $task->project_id = $id_project;
-        $task->task_name = $request->input('task_name');
-        $task->task_mm = $request->input('task_mm');
-        $task->task_status = $request->input('task_status');
-
-        $task->task_description = trim($request->input('task_description'));
-
-
-        $task->task_budget_it_operating = $task_budget_it_operating;
-        $task->task_budget_gov_utility = $task_budget_gov_utility;
-        $task->task_budget_it_investment = $task_budget_it_investment;
-        $task->task_budget_it_operating = $task_budget_it_operating;
-
-
-        $task->task_cost_it_operating = $task_cost_it_operating;
-        $task->task_cost_gov_utility =  $task_cost_gov_utility;
-        $task->task_cost_it_investment = $task_cost_it_investment;
-        $task->task_refund_pa_budget = $task_refund_pa_budget;
-        $task->task_parent_sub_refund_budget = $task_refund_pa_budget;
-        $task->task_mm_budget = $task_mm_budget;
-        $task->task_pay = $task_pay;
-        $task->task_type = $task->task_type;
-        //$task->task_refund_pa_status = $task->task_refund_pa_status;
-        //  $task->task_budget_type = 1;
-        // Update other task attributes as needed
-        //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
-        // $task->taskcon_pp        = $request->input('taskcon_pp');
-        //dd($task);
-
-
-        if ($task->save()) {
-            $files = new File;
-            $idproject = $id_project;
-            $idtask = $task->task_id;
-            $idup = $idproject . '/' . $idtask;
-
-            $contractDir = public_path('storage/uploads/contracts/' . $idup);
-            if (!file_exists($contractDir)) {
-                mkdir($contractDir, 0755, true);
-            }
-
-            if ($request->hasFile('file')) {
-                foreach ($request->file('file') as $file) {
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $filesize = $file->getSize();
-                    $file->storeAs('public/', $filename);
-                    $file->move($contractDir, $filename);
-
-                    $fileModel = new File;
-                    $fileModel->name = $filename;
-                    //$fileModel->project_id = $idproject;
-                    $fileModel->task_id = $idtask;
-                    $fileModel->size = $filesize;
-                    $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-
-                    if (!$fileModel->save()) {
-                        // If the file failed to save, redirect back with an error message
-                        return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
-                    }
-                }
-            }
-            // Update contract
-            if ($request->input('task_contract')) {
-                ContractHasTask::where('task_id', $id_task)->delete();
-                ContractHasTask::create([
-                    'contract_id' => $request->input('task_contract'),
-                    'task_id' => $id_task,
-                ]);
-            } else {
-            }
-
-            // Assign the project_id to the Taskcon
-            $taskcon = Taskcon::where('task_id', $task->task_id)->first();
-            if ($taskcon === null) {
-                // Handle the error, e.g., create a new Taskcon, show an error message, etc.
-                // For example, to create a new Taskcon:
-                //$taskcon = new Taskcon;
-                //$taskcon->task_id = $task->task_id;
-                // Set other properties of $taskcon as needed
-                // หลังจากปรับปรุงข้อมูลเสร็จแล้ว ให้ใช้ back() เพื่อกลับหน้าเดิม
-                //return redirect()->route('project.task.view',['project' => $project->hashid, 'task' => $task->hashid]);
-                return redirect()->route('project.view', $project->hashid);
-            } else {
-                // If $taskcon is not null, you can safely set its properties
-                $taskcon->task_id = $task->task_id;
-                // Set other properties of $taskcon as needed
-            }
-
-            $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
-            $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
-            $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
-
-            if ($start_date_obj === false || $end_date_obj === false  || $pay_date_obj === false) {
-                // Handle date conversion error
-                // You can either return an error message or use a default date
-            } else {
-                $start_date_obj->modify('-543 years');
-                $end_date_obj->modify('-543 years');
-                $pay_date_obj->modify('-543 years');
-                $start_date = date_format($start_date_obj, 'Y-m-d');
-                $end_date = date_format($end_date_obj, 'Y-m-d');
-                $pay_date = date_format($pay_date_obj, 'Y-m-d');
-            }
-
-
-            // convert input to decimal or set it to null if empty
-            $taskcon_budget_it_operating = str_replace(',', '', $request->input('taskcon_budget_it_operating'));
-            $taskcon_budget_gov_utility = str_replace(',', '', $request->input('taskcon_budget_gov_utility'));
-            $taskcon_budget_it_investment = str_replace(',', '', $request->input('taskcon_budget_it_investment'));
-
-
-            $taskcon_cost_it_operating = str_replace(',', '', $request->input('taskcon_cost_it_operating'));
-            $taskcon_cost_gov_utility = str_replace(',', '', $request->input('taskcon_cost_gov_utility'));
-            $taskcon_cost_it_investment = str_replace(',', '', $request->input('taskcon_cost_it_investment'));
-
-            $taskcon_pay = str_replace(',', '', $request->input('taskcon_pay'));
-
-            $taskcon_mm_budget = str_replace(',', '', $request->input('taskcon_mm_budget'));
-
-            $taskcon_ba_budget = str_replace(',', '', $request->input('taskcon_ba_budget'));
-
-            $taskcon_bd_budget = str_replace(',', '', $request->input('taskcon_bd_budget'));
-
-
-            if ($taskcon_budget_it_operating === '') {
-                $taskcon_budget_it_operating = null; // or '0'
-            }
-
-            if ($taskcon_budget_gov_utility === '') {
-                $taskcon_budget_gov_utility = null; // or '0'
-            }
-
-            if ($taskcon_budget_it_investment === '') {
-                $taskcon_budget_it_investment = null; // or '0'
-            }
-
-            if ($taskcon_cost_it_operating === '') {
-                $taskcon_cost_it_operating = null; // or '0'
-            }
-
-            if ($taskcon_cost_gov_utility === '') {
-                $taskcon_cost_gov_utility = null; // or '0'
-            }
-
-            if ($taskcon_cost_it_investment === '') {
-                $taskcon_cost_it_investment = null; // or '0'
-            }
-
-            if ($taskcon_pay === '') {
-                $taskcon_pay = null; // or '0'
-            }
-            if ($taskcon_mm_budget === '') {
-                $taskcon_mm_budget = null; // or '0'
-            }
-            if ($taskcon_ba_budget === '') {
-                $taskcon_ba_budget = null; // or '0'
-            }
-            if ($taskcon_bd_budget === '') {
-                $taskcon_bd_budget = null; // or '0'
-            }
-
-
-
-
-
-
-            //convert date
-            //   $start_date = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_start_date')), 'Y-m-d');
-            // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_end_date')), 'Y-m-d');
-            // $taskcon->taskcon_name        = $request->input('task_name');
-            $taskcon->task_id = $task->task_id; // Use the id of the newly created project
-            // $task->taskcon_mm = $request->input('task_mm');
-            // $taskcon->taskcon_name        = $request->input('taskcon_mm_name');
-            $taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
-            $taskcon->taskcon_pp        = $request->input('taskcon_pp');
-
-            // $taskcon->taskcon_name        = $request->input('task_name');
-
-            $taskcon->taskcon_mm_name        = $request->input('taskcon_mm_name');
-            $taskcon->taskcon_mm        = $request->input('taskcon_mm');
-            $taskcon->taskcon_ba        = $request->input('taskcon_ba');
-            $taskcon->taskcon_bd       = $request->input('taskcon_bd');
-
-            $taskcon->taskcon_description = trim($request->input('task_description'));
-            $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
-            $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
-            $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
-
-            $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
-            //convert input to decimal or set it to null if empty
-            $taskcon->taskcon_budget_gov_utility    = $task_budget_gov_utility;
-            $taskcon->taskcon_budget_it_operating   = $task_budget_it_operating;
-            $taskcon->taskcon_budget_it_investment  = $task_budget_it_investment;
-
-            $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
-            $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
-            $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
-            $taskcon->taskcon_pay                 =  $task_pay;
-            $taskcon->taskcon_mm_budget                 =  $taskcon_mm_budget;
-            $taskcon->taskcon_ba_budget                 =  $taskcon_ba_budget;
-            $taskcon->taskcon_bd_budget                 =  $taskcon_bd_budget;
-
-            //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
-            // Save the Taskcon
-            //dd($task,$taskcon);
-
-
-
-
-            // $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
-
-
-
-
-
-            $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
-
-
-
-
-            if ($task_parent_sub !== null) {
-                $totol_task_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
-
-                if ($task->task_parent_sub_cost > 1) {
-                    $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
-
-                    ($task_parent_sub);
-                    $task_parent_sub->save();
-                } elseif ($task->task_parent_sub_cost !== null) {
-                    $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
-                    // $task_parent_sub->task_parent_sub_cost = $task_parent_sub->task_parent_sub_cost + $totol_task_cost;
-                    //dd($task_parent_sub);
-                    $task_parent_sub->save();
-                } else {
-
-
-                    $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
-
-                    if ($task_parent_st !== null) {
-                        //  $task_parent_st->task_parent_sub_cost = $task_parent_st->task_parent_sub_cost + $totol_task_cost;
-                        $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $task_pay;
-                        $task_parent_st->save();
-                    }
-                }
-            }
-
-
-
-
-
-
-
-
-
-            if (!$taskcon) {
-                return redirect()->back()->withErrors('Taskcon not found.');
-            }
-
-
-
-
-
-            if (!$taskcon->save()) {
-                // If the Taskcon failed to save, redirect back with an error message
-                return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
-            }
-
-
-            // dd($task);
-           // return redirect()->route('project.view', $project->hashid);
-        }
-
-        // Create a new Taskcon object
-        //  $taskcon = new Taskcon;
-
-        // Fill the Taskcon fields from the request
-        // replace 'field1', 'field2', 'field3' with the actual fields of Taskcon
-
-
-        // If both the Project and Taskcon saved successfully, redirect to project.inde
-
-        return redirect()->route('project.view', $project->hashid);
-    }
     /*   $request->validate([
             'task_start_date' => 'required|date_format:d/m/Y',
             'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
@@ -10476,7 +10180,412 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
         ], $messages); */
 
+        public function taskUpdate(Request $request, $project, $task)
+        {
+            $id_project = Hashids::decode($project)[0];
+            $id_task = Hashids::decode($task)[0];
+            $project = Project::find($id_project);
+            ($task = Task::find($id_task));
+            $tasks = Task::where('project_id', $id_project)
+                ->where('task_id', '!=', $id_task)
+                ->get();
+            $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
 
+            $tasks_without_parent = Task::where('project_id', $id_project)
+                ->whereNull('task_parent')
+                ->get();
+            $task_budget_it_operating = $tasks_without_parent->sum('task_budget_it_operating');
+            $task_budget_it_investment = $tasks_without_parent->sum('task_budget_it_investment');
+            $task_budget_gov_utility = $tasks_without_parent->sum('task_budget_gov_utility');
+
+
+            // dd($tasks_without_parent);
+
+
+            $costs = [
+                'task_cost_it_operating' => $request->input('task_cost_it_operating', 0),
+                'task_cost_it_investment' => $request->input('task_cost_it_investment', 0),
+                'task_cost_gov_utility' => $request->input('task_cost_gov_utility', 0),
+            ];
+
+            $messages = [
+                'task_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
+                'task_budget_it_operating.required' => 'กรุณาระบุงบกลาง ICT',
+                //'task_budget_it_operating.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                'task_budget_it_operating.min' => 'กรุณาระบุงบกลาง ICT เป็นจำนวนบวก',
+                'task_budget_it_investment.required' => 'กรุณาระบุงบดำเนินงาน',
+                //'task_budget_it_investment.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                'task_budget_it_investment.min' => 'กรุณาระบุงบดำเนินงานเป็นจำนวนบวก',
+
+                'task_budget_gov_utility.required' => 'กรุณาระบุค่าสาธารณูปโภค',
+                //'task_budget_gov_utility.numeric' => 'กรุณากรอกจำนวนให้ถูกต้องและเป็นตัวเลข',
+                'task_budget_gov_utility.min' => 'กรุณาระบุค่าสาธารณูปโภคเป็นจำนวนบวก',
+
+                'task_budget_it_operating.max' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+                'task_pay.min' => 'งบประมาณงานที่ดำเนินการต้องไม่เกิน ',
+            ];
+
+
+
+            $rules = [
+                'task_start_date' => 'required|date_format:d/m/Y',
+                'task_end_date' => 'required|date_format:d/m/Y|after_or_equal:task_start_date',
+                //'task_budget_it_operating' => $request->input('task_cost_it_operating') > 0 ? ['required', 'min:0', new BudgetGreaterThanCost($request->input('task_cost_it_operating'))] : '',
+                //'task_budget_it_investment' => $request->input('task_cost_it_investment') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostInvestment($request->input('task_cost_it_investment'))] : '',
+                //'task_budget_gov_utility' => $request->input('task_cost_gov_utility') > 0 ? ['required', 'min:0', new BudgetGreaterThanCostUtility($request->input('task_cost_gov_utility'))] : '',
+                //'task_pay' => ['min:0', new ValidateTaskPay($costs)],
+
+            ];
+
+            $request->validate($rules, $messages);
+
+            //   $task_pay_date = $request->input('task_pay_date');
+
+
+            /*
+                                if ($task_pay_date) {
+                                    $pay_date_obj = date_create_from_format('d/m/Y', $task_pay_date);
+                                } else {
+                                    $pay_date_obj = null;
+                                } */
+
+            $start_date_obj = date_create_from_format('d/m/Y', $request->input('task_start_date'));
+            $end_date_obj = date_create_from_format('d/m/Y', $request->input('task_end_date'));
+            $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
+
+
+            if ($start_date_obj === false || $end_date_obj === false) {
+                // Handle date conversion error
+                // You can either return an error message or use a default date
+            } else {
+                $start_date_obj->modify('-543 years');
+                $end_date_obj->modify('-543 years');
+
+                $start_date = date_format($start_date_obj, 'Y-m-d');
+                $end_date = date_format($end_date_obj, 'Y-m-d');
+
+
+                // Check if $pay_date_obj is not null before trying to modify and format it
+
+            }
+
+            if ($pay_date_obj === false) {
+                // Handle date conversion error
+                // You can either return an error message or use a default date
+            } else {
+
+                $pay_date_obj->modify('-543 years');
+
+                $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
+                // Check if $pay_date_obj is not null before trying to modify and format it
+
+            }
+
+
+            $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+
+            $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
+            $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
+            $task->task_pay_date = $pay_date ?? date('Y-m-d 00:00:00');
+
+
+
+            // Convert data to decimal or set it to null if empty
+            $task_budget_it_operating = $request->input('task_budget_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_operating')) : null;
+            $task_budget_gov_utility = $request->input('task_budget_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_budget_gov_utility')) : null;
+            $task_budget_it_investment = $request->input('task_budget_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_budget_it_investment')) : null;
+
+            $task_cost_it_operating = $request->input('task_cost_it_operating') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_operating')) : null;
+            $task_cost_gov_utility = $request->input('task_cost_gov_utility') !== '' ? (float) str_replace(',', '', $request->input('task_cost_gov_utility')) : null;
+            $task_cost_it_investment = $request->input('task_cost_it_investment') !== '' ? (float) str_replace(',', '', $request->input('task_cost_it_investment')) : null;
+            $task_mm_budget = $request->input('task_mm_budget') !== '' ? (float) str_replace(',', '', $request->input('task_mm_budget')) : null;
+            $task_pay = $request->input('task_pay') !== '' ? (float) str_replace(',', '', $request->input('task_pay')) : null;
+
+            $task_refund_pa_budget = $request->input('task_refund_pa_budget') !== '' ? (float) str_replace(',', '', $request->input('task_refund_pa_budget')) : null;
+
+
+            $task->project_id = $id_project;
+            $task->task_name = $request->input('task_name');
+            $task->task_mm = $request->input('task_mm');
+            $task->task_status = $request->input('task_status');
+
+            $task->task_description = trim($request->input('task_description'));
+
+
+            $task->task_budget_it_operating = $task_budget_it_operating;
+            $task->task_budget_gov_utility = $task_budget_gov_utility;
+            $task->task_budget_it_investment = $task_budget_it_investment;
+            $task->task_budget_it_operating = $task_budget_it_operating;
+
+
+            $task->task_cost_it_operating = $task_cost_it_operating;
+            $task->task_cost_gov_utility =  $task_cost_gov_utility;
+            $task->task_cost_it_investment = $task_cost_it_investment;
+            $task->task_refund_pa_budget = $task_refund_pa_budget;
+            $task->task_parent_sub_refund_budget = $task_refund_pa_budget;
+            $task->task_mm_budget = $task_mm_budget;
+            $task->task_pay = $task_pay;
+            $task->task_type = $task->task_type;
+            //  $task->task_budget_type = 1;
+            // Update other task attributes as needed
+            //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
+            // $task->taskcon_pp        = $request->input('taskcon_pp');
+            // dd($task);
+
+
+            if ($task->save()) {
+                // Update contract
+                if ($request->input('task_contract')) {
+                    ContractHasTask::where('task_id', $id_task)->delete();
+                    ContractHasTask::create([
+                        'contract_id' => $request->input('task_contract'),
+                        'task_id' => $id_task,
+                    ]);
+                } else {
+                }
+
+                // Assign the project_id to the Taskcon
+                $taskcon = Taskcon::where('task_id', $task->task_id)->first();
+                if ($taskcon === null) {
+                    // Handle the error, e.g., create a new Taskcon, show an error message, etc.
+                    // For example, to create a new Taskcon:
+                    //$taskcon = new Taskcon;
+                    //$taskcon->task_id = $task->task_id;
+                    // Set other properties of $taskcon as needed
+                    // หลังจากปรับปรุงข้อมูลเสร็จแล้ว ให้ใช้ back() เพื่อกลับหน้าเดิม
+                    //return redirect()->route('project.task.view',['project' => $project->hashid, 'task' => $task->hashid]);
+                    return redirect()->route('project.view', $project->hashid);
+                } else {
+                    // If $taskcon is not null, you can safely set its properties
+                    $taskcon->task_id = $task->task_id;
+                    // Set other properties of $taskcon as needed
+                }
+
+                $start_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_start_date'));
+                $end_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_end_date'));
+                $pay_date_obj = date_create_from_format('d/m/Y', $request->input('taskcon_pay_date'));
+
+                if ($start_date_obj === false || $end_date_obj === false  || $pay_date_obj === false) {
+                    // Handle date conversion error
+                    // You can either return an error message or use a default date
+                } else {
+                    $start_date_obj->modify('-543 years');
+                    $end_date_obj->modify('-543 years');
+                    $pay_date_obj->modify('-543 years');
+                    $start_date = date_format($start_date_obj, 'Y-m-d');
+                    $end_date = date_format($end_date_obj, 'Y-m-d');
+                    $pay_date = date_format($pay_date_obj, 'Y-m-d');
+                }
+
+
+                // convert input to decimal or set it to null if empty
+                $taskcon_budget_it_operating = str_replace(',', '', $request->input('taskcon_budget_it_operating'));
+                $taskcon_budget_gov_utility = str_replace(',', '', $request->input('taskcon_budget_gov_utility'));
+                $taskcon_budget_it_investment = str_replace(',', '', $request->input('taskcon_budget_it_investment'));
+
+
+                $taskcon_cost_it_operating = str_replace(',', '', $request->input('taskcon_cost_it_operating'));
+                $taskcon_cost_gov_utility = str_replace(',', '', $request->input('taskcon_cost_gov_utility'));
+                $taskcon_cost_it_investment = str_replace(',', '', $request->input('taskcon_cost_it_investment'));
+
+                $taskcon_pay = str_replace(',', '', $request->input('taskcon_pay'));
+
+                $taskcon_mm_budget = str_replace(',', '', $request->input('taskcon_mm_budget'));
+
+                $taskcon_ba_budget = str_replace(',', '', $request->input('taskcon_ba_budget'));
+
+                $taskcon_bd_budget = str_replace(',', '', $request->input('taskcon_bd_budget'));
+
+
+                if ($taskcon_budget_it_operating === '') {
+                    $taskcon_budget_it_operating = null; // or '0'
+                }
+
+                if ($taskcon_budget_gov_utility === '') {
+                    $taskcon_budget_gov_utility = null; // or '0'
+                }
+
+                if ($taskcon_budget_it_investment === '') {
+                    $taskcon_budget_it_investment = null; // or '0'
+                }
+
+                if ($taskcon_cost_it_operating === '') {
+                    $taskcon_cost_it_operating = null; // or '0'
+                }
+
+                if ($taskcon_cost_gov_utility === '') {
+                    $taskcon_cost_gov_utility = null; // or '0'
+                }
+
+                if ($taskcon_cost_it_investment === '') {
+                    $taskcon_cost_it_investment = null; // or '0'
+                }
+
+                if ($taskcon_pay === '') {
+                    $taskcon_pay = null; // or '0'
+                }
+                if ($taskcon_mm_budget === '') {
+                    $taskcon_mm_budget = null; // or '0'
+                }
+                if ($taskcon_ba_budget === '') {
+                    $taskcon_ba_budget = null; // or '0'
+                }
+                if ($taskcon_bd_budget === '') {
+                    $taskcon_bd_budget = null; // or '0'
+                }
+
+
+
+
+
+
+                //convert date
+                //   $start_date = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_start_date')), 'Y-m-d');
+                // $end_date   = date_format(date_create_from_format('d/m/Y', $request->input('taskcon_end_date')), 'Y-m-d');
+                // $taskcon->taskcon_name        = $request->input('task_name');
+                $taskcon->task_id = $task->task_id; // Use the id of the newly created project
+                // $task->taskcon_mm = $request->input('task_mm');
+                // $taskcon->taskcon_name        = $request->input('taskcon_mm_name');
+                $taskcon->taskcon_pp_name        = $request->input('taskcon_pp_name');
+                $taskcon->taskcon_pp        = $request->input('taskcon_pp');
+
+                // $taskcon->taskcon_name        = $request->input('task_name');
+
+                $taskcon->taskcon_mm_name        = $request->input('taskcon_mm_name');
+                $taskcon->taskcon_mm        = $request->input('taskcon_mm');
+                $taskcon->taskcon_ba        = $request->input('taskcon_ba');
+                $taskcon->taskcon_bd       = $request->input('taskcon_bd');
+
+                $taskcon->taskcon_description = trim($request->input('task_description'));
+                $taskcon->taskcon_start_date  = $start_date ?? date('Y-m-d 00:00:00');
+                $taskcon->taskcon_end_date    = $end_date ?? date('Y-m-d 00:00:00');
+                $taskcon->taskcon_pay_date     =  $pay_date ?? date('Y-m-d 00:00:00');
+
+                $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
+                //convert input to decimal or set it to null if empty
+                $taskcon->taskcon_budget_gov_utility    = $task_budget_gov_utility;
+                $taskcon->taskcon_budget_it_operating   = $task_budget_it_operating;
+                $taskcon->taskcon_budget_it_investment  = $task_budget_it_investment;
+
+                $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
+                $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
+                $taskcon->taskcon_cost_it_investment  = $taskcon_cost_it_investment;
+                $taskcon->taskcon_pay                 =  $task_pay;
+                $taskcon->taskcon_mm_budget                 =  $taskcon_mm_budget;
+                $taskcon->taskcon_ba_budget                 =  $taskcon_ba_budget;
+                $taskcon->taskcon_bd_budget                 =  $taskcon_bd_budget;
+
+                //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
+                // Save the Taskcon
+               // dd($task,$taskcon);
+
+
+
+
+                // $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+
+
+
+
+
+                $task_parent_sub = Task::where('task_id', $task->task_parent)->first();
+
+
+
+
+                if ($task_parent_sub !== null) {
+                    $totol_task_cost = $task_cost_gov_utility + $task_cost_it_operating + $task_cost_it_investment ?? null;
+
+                    if ($task->task_parent_sub_cost > 1) {
+                        $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
+
+                        ($task_parent_sub);
+                        $task_parent_sub->save();
+                    } elseif ($task->task_parent_sub_cost !== null) {
+                        $task_parent_sub->task_parent_sub_pay = $task_parent_sub->task_parent_sub_pay + $task_pay;
+                        // $task_parent_sub->task_parent_sub_cost = $task_parent_sub->task_parent_sub_cost + $totol_task_cost;
+                        //dd($task_parent_sub);
+                        $task_parent_sub->save();
+                    } else {
+
+
+                        $task_parent_st = Task::where('task_id', $task_parent_sub->task_parent)->first();
+
+                        if ($task_parent_st !== null) {
+                            //  $task_parent_st->task_parent_sub_cost = $task_parent_st->task_parent_sub_cost + $totol_task_cost;
+                            $task_parent_st->task_parent_sub_pay = $task_parent_st->task_parent_sub_pay + $task_pay;
+                            $task_parent_st->save();
+                        }
+                    }
+                }
+
+
+                $files = new File;
+                $idproject = $id_project;
+                $idtask = $task->task_id;
+                $idup = $idproject . '/' . $idtask;
+
+                $contractDir = public_path('storage/uploads/contracts/' . $idup);
+                if (!file_exists($contractDir)) {
+                    mkdir($contractDir, 0755, true);
+                }
+
+                if ($request->hasFile('file')) {
+                    foreach ($request->file('file') as $file) {
+                        $filename = time() . '_' . $file->getClientOriginalName();
+                        $filesize = $file->getSize();
+                        $file->storeAs('public/', $filename);
+                        $file->move($contractDir, $filename);
+
+                        $fileModel = new File;
+                        $fileModel->name = $filename;
+                        //$fileModel->project_id = $idproject;
+                        $fileModel->task_id = $idtask;
+                        $fileModel->size = $filesize;
+                        $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+                        if (!$fileModel->save()) {
+                            // If the file failed to save, redirect back with an error message
+                            return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                        }
+                    }
+                }
+
+
+
+
+
+
+                if (!$taskcon) {
+                    return redirect()->back()->withErrors('Taskcon not found.');
+                }
+
+
+
+
+
+                if (!$taskcon->save()) {
+                    // If the Taskcon failed to save, redirect back with an error message
+                    return redirect()->back()->withErrors('An error occurred while saving the task. Please try again.');
+                }
+
+
+                // dd($task);
+                return redirect()->route('project.view', $project->hashid);
+            }
+
+            // Create a new Taskcon object
+            //  $taskcon = new Taskcon;
+
+            // Fill the Taskcon fields from the request
+            // replace 'field1', 'field2', 'field3' with the actual fields of Taskcon
+
+
+            // If both the Project and Taskcon saved successfully, redirect to project.inde
+
+            return redirect()->route('project.view', $project->hashid);
+        }
 
 
 
@@ -10504,11 +10613,44 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         if ($task) {
             $task->delete();
         }
-        return redirect()->route('project.view', $project);
+        return back()->with('success', 'File deleted successfully');
     }
 
 
+    public function filesup(Request $request, $project, $task) {
+        $id = Hashids::decode($task)[0];
+        $task = Task::find($id);
 
+        $idproject = $project; // ตรวจสอบว่าตัวแปรนี้ถูกกำหนดถูกต้อง
+        $idtask = $task->task_id;
+        $idup = $idproject . '/' . $idtask;
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/', $filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+                if (!$fileModel->save()) {
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
+
+        return back()->with('success', 'File uploaded successfully');
+    }
     // Continue with your logic if files are found
 
 

@@ -252,13 +252,28 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-4">
+                                    <label for="task_refund_budget_type"
+                                        class="form-label">{{ __('task_refund_budget_type ') }}</label>
+                                    <span class="text-danger"></span>
+
+                                    <input type="text" placeholder="0.00"
+                                    step="0.01"
+                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                    class="form-control numeral-mask"
+                                        id="task_refund_budget_type"
+                                        name="task_refund_budget_type"  readonly>
+
+
+                                </div>
+
                                 <div class="d-none col-md-3">
 
                                 </label>
-                                @if($request->budget_it_operating  < $sum_task_budget_it_operating || $request->budget_it_investment < $sum_task_budget_it_investment || $request->budget_gov_utility < $sum_task_budget_gov_utility)
+                              {{--   @if($request->budget_it_operating-1  < $sum_task_budget_it_operating )
                                 <input type="hidden" class="form-check-input" type="radio" name="task_refund_budget_type"
                                 id="task_refund_budget_type" value="1" checked>
-                                @endif
+                                @endif --}}
 
 
 {{--                                 {{ Form::select('task_parent_sub', \Helper::contractType(), '1', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
@@ -526,6 +541,67 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
 
+<script type="text/javascript">
+// ส่วนของการคำนวณงบประมาณที่เหลือ
+    var budgetItInvestmentMax = {{ $request->budget_it_investment + 0.01 }};
+    var budgetGovUtilityMax = {{ $request->budget_gov_utility + 0.01 }};
+    var budgetItOperatingMax = {{ $request->budget_it_operating + 0.01 }};
+    var budgetItInvestment_total = {{  $sum_task_budget_it_investment }};
+    var budgetGovUtility_total = {{ $sum_task_budget_gov_utility }};
+    var budgetItOperating_total = {{ $sum_task_budget_it_operating }};
+    // ... คล้ายๆ กันสำหรับตัวแปรอื่นๆ $request->budget_it_operating-1  < $sum_task_budget_it_operating
+
+</script>
+
+<script>
+    $(document).ready(function() {
+
+
+
+        $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operating").on("input", function() {
+            var fieldId = $(this).attr('id');
+            var fieldValue = parseFloat($(this).val().replace(/,/g, '')) || 0;
+
+            console.log(budgetGovUtilityMax);
+            console.log(budgetGovUtility_total);
+            console.log(budgetItOperatingMax);
+            console.log(budgetItOperating_total);
+            console.log(budgetItInvestmentMax);
+            console.log(budgetItInvestment_total);
+        console.log(fieldId);
+        console.log(fieldValue);
+
+        if (fieldId === "task_budget_it_investment") {
+            if (  budgetItInvestmentMax  < fieldValue + budgetItInvestment_total) {
+                $("#task_refund_budget_type").val(1);
+            } else {
+                $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
+            }
+        }
+
+        else if (fieldId === "task_budget_it_operating") {
+        if (  budgetItOperatingMax  < fieldValue + budgetItOperating_total) {
+                $("#task_refund_budget_type").val(1);
+            } else {
+                $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
+            }
+        }
+
+        else if (fieldId === "task_budget_gov_utility") {
+        if (  budgetGovUtilityMax  < fieldValue + budgetGovUtility_total) {
+                $("#task_refund_budget_type").val(1);
+            } else {
+                $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
+            }
+        }
+
+
+
+
+
+        });
+    });
+</script>
 
 
 

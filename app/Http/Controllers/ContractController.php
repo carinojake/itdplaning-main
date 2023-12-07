@@ -858,7 +858,7 @@ class ContractController extends Controller
         //convert date
         //  $start_date_obj = date_format(date_create_from_format('d/m/Y', $request->input('contract_start_date')), 'Y-m-d');
         // $end_date_obj   = date_format(date_create_from_format('d/m/Y', $request->input('contract_end_date')), 'Y-m-d');
-
+/*
         $sign_date_input = $request->input('contract_sign_date');
         $sign_date_object = date_create_from_format('d/m/Y', $sign_date_input);
 
@@ -866,6 +866,10 @@ class ContractController extends Controller
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('contract_end_date'));
         $insurance_start_date_odj = date_create_from_format('d/m/Y', $request->input('insurance_start_date'));
         $insurance_end_date_odj = date_create_from_format('d/m/Y', $request->input('insurance_end_date'));
+
+
+       // $contract_po_start_date_input = $request->input('contract_po_start_date');
+
         $contract_po_start_date_odj = date_create_from_format('d/m/Y', $request->input('contract_po_start_date'));
         // $pay_date_obj = date_create_from_format('d/m/Y', $request->input('task_pay_date'));
 
@@ -873,7 +877,7 @@ class ContractController extends Controller
         if (
             $start_date_obj === false || $end_date_obj === false ||
 
-            $insurance_start_date_odj === false || $insurance_end_date_odj === false
+            $insurance_start_date_odj === false || $insurance_end_date_odj === false || $contract_po_start_date_odj === false
         ) {
             // Handle date conversion error
             // You can either return an error message or use a default date
@@ -904,7 +908,12 @@ class ContractController extends Controller
             $sign_date = date_format($sign_date_object, 'Y-m-d');
         } else {
             $sign_date = null; // Default value when the date could not be converted
-        }
+        } */
+
+
+
+
+
 
         $contract_pr_budget = str_replace(',', '', $request->input('contract_pr_budget'));
         $contract_pa_budget = str_replace(',', '', $request->input('contract_pa_budget'));
@@ -952,6 +961,94 @@ class ContractController extends Controller
             $contract_refund_pa_budget = null; // or '0'
         }
 
+
+        $start_date_obj = date_create_from_format('d/m/Y', $request->input('contract_start_date'));
+        $end_date_obj = date_create_from_format('d/m/Y', $request->input('contract_end_date'));
+        $insurance_start_date_obj = date_create_from_format('d/m/Y', $request->input('insurance_start_date'));
+        $insurance_end_date_obj = date_create_from_format('d/m/Y', $request->input('insurance_end_date'));
+        $contract_po_start_date_obj = date_create_from_format('d/m/Y', $request->input('contract_po_start_date'));
+        $contract_er_start_date_obj = date_create_from_format('d/m/Y', $request->input('contract_er_start_date'));
+        $pay_date_obj = date_create_from_format('d/m/Y', $request->input('contract_pay_date'));
+
+
+        if ($start_date_obj === false || $end_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+            $start_date_obj->modify('-543 years');
+            $end_date_obj->modify('-543 years');
+
+
+
+            $start_date = date_format($start_date_obj, 'Y-m-d');
+            $end_date = date_format($end_date_obj, 'Y-m-d');
+
+
+
+
+
+
+            // Check if $pay_date_obj is not null before trying to modify and format it
+
+        }
+        if($insurance_start_date_obj === false || $insurance_end_date_obj === false)
+        {
+            $insurance_start_date = null;
+            $insurance_end_date = null;
+        }
+        else{
+            $insurance_start_date_obj->modify('-543 years');
+            $insurance_end_date_obj->modify('-543 years');
+
+            $insurance_start_date = date_format($insurance_start_date_obj, 'Y-m-d');
+            $insurance_end_date = date_format($insurance_end_date_obj, 'Y-m-d');
+        }
+
+        if($contract_po_start_date_obj === false)
+        {
+            $contract_po_start_date = null;
+        }
+        else{
+            $contract_po_start_date_obj->modify('-543 years');
+            $contract_po_start_date = date_format($contract_po_start_date_obj, 'Y-m-d');
+        }
+        if( $contract_er_start_date_obj ===  false)
+        {
+            $contract_er_start_date = null;
+        }
+        else{
+            $contract_er_start_date_obj->modify('-543 years');
+            $contract_er_start_date = date_format($contract_er_start_date_obj, 'Y-m-d');
+        }
+
+
+
+
+
+
+        if ($pay_date_obj === false) {
+            // Handle date conversion error
+            // You can either return an error message or use a default date
+        } else {
+
+            $pay_date_obj->modify('-543 years');
+
+            $pay_date = date_format($pay_date_obj, 'Y-m-d');
+
+            // Check if $pay_date_obj is not null before trying to modify and format it
+
+        }
+        //วันเดือนปี สัญญา
+        $contract->contract_start_date  = $start_date ?? date('Y-m-d 00:00:00');
+        $contract->contract_end_date    = $end_date ?? date('Y-m-d 00:00:00');
+        $contract->insurance_start_date  =  $insurance_start_date ?? null ;
+        $contract->insurance_end_date   =   $insurance_end_date  ?? null;
+        $contract->contract_po_start_date  =  $contract_po_start_date  ?? null;
+        $contract->contract_er_start_date  =  $contract_er_start_date ?? null;
+
+
+
+
         $contract->contract_type_pa        = $request->input('contract_type_pa');
 
         // $contract->reguiar_contract_id  =  $request->input('reguiar_contract_id');
@@ -961,14 +1058,9 @@ class ContractController extends Controller
         $contract->contract_number      = $request->input('contract_number') ?? null;
         $contract->contract_description = trim($request->input('contract_description'));
         $contract->contract_fiscal_year = $request->input('contract_fiscal_year');
-        $contract->contract_start_date  = $start_date ?? date('Y-m-d 00:00:00');
-        $contract->contract_end_date    = $end_date ?? date('Y-m-d 00:00:00');
 
 
-        $contract->insurance_start_date  =  $insurance_start_date ?? date('Y-m-d 00:00:00');
-        $contract->insurance_end_date   =   $insurance_end_date ?? date('Y-m-d 00:00:00');
 
-        $contract->contract_po_start_date  =  $contract_po_start_date ?? date('Y-m-d 00:00:00');
 
 
 
@@ -1019,7 +1111,7 @@ class ContractController extends Controller
 
         $contract->contract_peryear_pa_budget =  $request->input('contract_peryear_pa_budget');
         $contract->contract_project_type        = $request->input('contract_project_type') ?? null;
-
+       // dd($contract);
 
         $origin = $request->input('origin');
         $project = $request->input('project');
@@ -1330,7 +1422,7 @@ class ContractController extends Controller
             session()->flash('contract_start_date', $contract->contract_start_date);
             session()->flash('contract_end_date', $contract->contract_end_date);
 
-
+            //dd($contract);
             if ($origin == 2) {
                 // ถ้ามีทั้ง Project ID และ Task ID, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'editsub'
                 return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $task]);
@@ -2013,7 +2105,7 @@ class ContractController extends Controller
         $taskcon->taskcon_pay_date     =  $pay_date ?? null;
 
 
-
+        $taskcon->task_status           = $request->input('task_status');
         $taskcon->taskcon_projectplan = $request->input('taskcon_projectplan');
 
 
@@ -2048,6 +2140,15 @@ class ContractController extends Controller
 
             // $idproject =  $project;
             // $idtask = $task->task_id;
+            // $id_contract = Hashids::decode($contract)[0];
+            // $id_taskcon  = Hashids::decode($taskcon)[0];
+
+            // $contract = Contract::find($id_contract);
+            // $taskcon  = taskcon::find($id_taskcon);
+
+
+
+
             $idcon = $contract->contract_id;
             $idtaskcon = $taskcon->taskcon_id;
             $idup = $idcon . '/';

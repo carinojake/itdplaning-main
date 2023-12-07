@@ -95,6 +95,8 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSubno'])->name('project.task.editsubno');
     Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+    Route::get('/project/{project}/task/{task}/editup', [ProjectController::class, 'filesup'])->name('project.task.filesup');
+    Route::post('/project/{project}/task/{task}/editup', [ProjectController::class, 'filesup'])->name('project.task.filesup');
 
 
 

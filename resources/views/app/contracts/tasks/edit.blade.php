@@ -171,7 +171,7 @@
 
 
 
-                                        <div class="row mt-3">
+                                     <div  id="taskcon_pp_toto" class="row mt-3">
                                         <h4>เบิกจ่าย</h4>
 
 
@@ -188,14 +188,18 @@
                                             <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
 
                                             value="{{ $taskcon->taskcon_pay_date ? \Helper::date4($taskcon->taskcon_pay_date) : '' }}"
-                                        >
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+                                            >
                                         </div>
 
 
 
                                         <div class="col-md-4 mt-3">
                                             <label for="taskcon_pp" class="form-label">{{ __('PP ใบเบิกจ่าย') }}</label>
-                                            <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}">
+                                            <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+                                            >
 
                                             <div class="invalid-feedback">
                                                 {{ __('ใบเบิกจ่าย') }}
@@ -205,11 +209,32 @@
                                             <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย (บาท)') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                              data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
-                                             id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}">
+                                             id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}"
+                                             {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+
+                                             >
                                             <div class="invalid-feedback">
                                                 {{ __('เบิกจ่าย (บาท)') }}
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="task_status"
+                                            class="form-label">{{ __('task_status') }}</label>
+                                        <span class="text-danger"></span>
+
+                                        <input type="text" placeholder="0.00"
+                                            step="0.01"
+                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                            class="form-control numeral-mask"
+                                            id="task_status"
+                                            name="task_status"  value="{{ $taskcon->task_status }}" readonly>
+
+                                        {{--  <div class="invalid-feedback">
+                                                    {{ __('ค่าสาธารณูปโภค') }}
+                                                </div> --}}
                                     </div>
 
                                     <div class=" col-md-12 mt-3">
@@ -337,6 +362,57 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+<!-- JavaScript to set fields as read-only based on the task status -->
+
+    <script>
+        var costFields = ['taskcon_cost_it_operating', 'taskcon_cost_it_investment', 'taskcon_cost_gov_utility'];
+        var budgetFields = ['taskcon_budget_it_operating', 'taskcon_budget_it_investment', 'taskcon_budget_gov_utility'];
+        var taskcon_pay = ['taskcon_pay']
+        var tackconstatus = ['task_status'];
+        console.log(costFields);
+        console.log(budgetFields);
+        console.log(taskcon_pay);
+        console.log(tackconstatus);
+
+        function calculateRefundstatus() {
+            var totalRefundsstatus = 1; // Assuming you want to start with a default value of 0
+
+            costFields.forEach(function(costField, index) {
+                var pa_value = $("#" + costField).val();
+                var pr_value = $("#" + budgetFields[index]).val();
+                var pay_value = $("#" + taskcon_pay).val();
+                console.log(pa_value);
+        console.log(pr_value);
+        console.log(taskcon_pay);
+
+                if (pa_value && pr_value && pay_value) {
+                    var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
+                    var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+                    var pay_value = parseFloat(pay_value.replace(/,/g, "")) || 0;
+                    // Use '===' for strict comparison if you expect the same type, or '==' if types can differ
+                    if (pr_budget - pay_value === 0) {
+                        // Assuming you want to set some status when the budgets are equal
+                        totalRefundsstatus = 2;
+                    } else {
+                        // Assuming you want to set a different status when the budgets are not equal
+                        totalRefundsstatus = 1;
+                    }
+                }
+            });
+
+            $("#task_status").val(totalRefundsstatus);
+        }
+
+        $(document).ready(function() {
+            // The 'calculateRefund' function was not defined. Assuming it should be 'calculateRefundstatus'
+            taskcon_pay.forEach(function(taskcon_pay) {
+                $("#" + taskcon_pay).on("input", calculateRefundstatus);
+            });
+        });
+    </script>
+
+
+
     <script>
         $(document).ready(function() {
             $("#taskcon_pay").on("input", function() {
@@ -449,7 +525,17 @@
 </script>
 
 
-
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var task_Status = {!! json_encode($taskcon->task_status) !!}; // Ensure this is a number, not a string
+        if (task_Status === 2) {
+            var formInputs = document.querySelectorAll('#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
+            formInputs.forEach(function(input) {
+                input.setAttribute('readonly', true); // Set to read-only
+            });
+        }
+    });
+</script>
 
 
 

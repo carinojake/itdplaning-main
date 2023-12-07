@@ -60,6 +60,8 @@
 
 
         <script>
+
+
             gantt.plugins({
                 marker: true,
                 fullscreen: true,
@@ -296,6 +298,24 @@
 
                         }
                     },
+                    {
+    name: "link",
+    label: "Link",
+    width: 80,
+    align: "center",
+    template: function(task) {
+        // Check if the task has a property named 'hashid'
+        if(task.hashid && task.projectViewUrls) {
+            // Use the URL from the task object
+            return `<a href="${task.projectViewUrls}" class="text-white btn btn-success" target="_blank"><i class="cil-folder-open"></i></a>`;
+        } else {
+            // If there is no hashid or URL, display a default message or link
+            return '-';
+        }
+    }
+}
+
+
 
 
                    /*  {
@@ -337,6 +357,7 @@
                     } */
                 ]
             };
+
 
             gantt.templates.tooltip_text = function(start, end, task) {
                 var budget_gov = task.budget_gov ? new Intl.NumberFormat('th-TH', {
@@ -396,6 +417,12 @@
                     }).format(task.budget - task.total_cost) + '</span><br/>';
                 }
 
+
+         // Assuming `task.hashid` and `task.task_id.hashid` are variables already set in JavaScript
+//var taskShowUrl = `/project/${task.hashid}/task/${task.task_id.hashid}`;
+//var html = `<a href="${taskShowUrl}" class="btn btn-primary text-white"><i class="cil-folder-open"></i></a>`;
+
+
                 return html;
             };
 
@@ -403,7 +430,9 @@
                 return document.querySelector("#gantt_here");
             };
             //Config
+
             gantt.config.date_format = "%Y-%m-%d";
+           // gantt.config.link_attribute = "data-link-id"
             gantt.config.drag_links = false;
             gantt.config.drag_move = false;
             gantt.config.drag_progress = false;
@@ -453,6 +482,7 @@
                     }
                 ]
             };
+
             gantt.config.readonly = true;
             gantt.config.scales = [{
                     unit: "year",
@@ -466,7 +496,7 @@
                 },
                 {
                     unit: "month",
-                    step: 2,
+                    step: 1,
                     format: function(date) {
                         //const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
                         const thaiMonthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
@@ -484,6 +514,7 @@
             gantt.init("gantt_here");
             gantt.parse({
                 data: {!! $gantt !!}
+
             });
         </script>
     </x-slot:javascript>

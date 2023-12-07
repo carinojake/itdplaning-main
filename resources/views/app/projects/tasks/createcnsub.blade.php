@@ -456,7 +456,12 @@
                                                     class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                                 <span class="text-danger">*</span>
                                                 <input class="form-control" id="task_start_date"
-                                                    name="task_start_date" name="task_start_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }} >
+                                                    name="task_start_date" name="task_start_date"
+
+                                                    value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+
+
+                                                    >
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="task_end_date"

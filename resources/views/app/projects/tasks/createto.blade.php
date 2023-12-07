@@ -35,38 +35,7 @@
                                          {{ Form::select('task_parent_sub', \Helper::contractType(), '2', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
 
                                     </div>
-                                {{--
-                                    <div class="col-md-3">
 
-                                        <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
-
-                                        <span class="text-danger">*</span>
-
-
-
-                                        <select name="task_parent" id="task_parent" class="form-control">
-
-                                            <option value="">ไม่มี</option>
-
-                                            @foreach ($tasks as $subtask)
-
-                                                <option value="{{ $subtask->task_id }}"
-
-                                                    {{ $task->task_parent == $subtask->task_id ? 'selected' : '' }}>
-
-                                                    {{ $subtask->task_name }}</option>
-
-                                            @endforeach
-
-                                        </select>
-
-                                        <div class="invalid-feedback">
-
-                                            {{ __('กิจกรรม') }}
-
-                                        </div>
-
-                                    </div> --}}
 
                                 <div class="d-none row mt-3">
 
@@ -172,31 +141,6 @@
                                 @endif
 
 
-                                {{--     <div class="row">
-                    <div class="col-md-9  mt-3">
-                        <div class="form-group">
-                            <label for="task_contract" class="form-label">{{ __('ค่าใช้จ่ายสำนักงาน') }}</label> <span class="text-danger">*</span>
-                            <select name="task_contract" id="task_contract" class="form-control">
-                                <option value="">ไม่มี</option>
-                                @foreach ($contracts as $contract)
-                                <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                </option>
-                                @endforeach
-                            </select>
-
-
-                            <div class="invalid-feedback">
-                                {{ __('ค่าใช้จ่ายสำนักงาน') }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mt-4">
-                        <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a>
-                        <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white" target="contractCreate">ค่าใช้จ่ายสำนักงาน
-                        </a>
-                    </div>
-                </div> --}}
 
 
                                 <div class="col-md-12 mt-3">
@@ -218,7 +162,10 @@
                                         <label for="task_start_date"
                                             class="form-label">{{ __('วันที่เริ่มต้น') }} <span
                                             class="text-danger">*</span></label>
-                                        <input type="text"  class="form-control" id="task_start_date" name="task_start_date" required>
+                                        <input type="text"  class="form-control" id="task_start_date" name="task_start_date"
+                                        value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+
+                                        required>
                                         <div class="invalid-feedback">
                                             {{ __('วันที่เริ่มต้น') }}
                                         </div>
@@ -230,7 +177,9 @@
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }} <span
                                             class="text-danger">*</span></label>
 
-                                        <input type="text"  class="form-control" id="task_end_date" name="task_end_date" required>
+                                        <input type="text"  class="form-control" id="task_end_date" name="task_end_date"
+                                        value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+                                        required>
 
                                     <div class="invalid-feedback">
                                         {{ __('วันที่สิ้นสุด') }}
@@ -467,33 +416,6 @@
 
                                     </div>
                                 </div>
-
-
-
-
-
-
-
-
-
-                                <!--  <div class="row mt-3">
-
-                    <h4>เบิกจ่าย</h4>
-                    <div class="col-md-6">
-                                      <label for="task_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label> <span class="text-danger">*</span>
-                                      {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
-                                      <div data-coreui-toggle="date-picker" id="task_pay_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                      <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
-                                      <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_pay" name="task_pay" min="0" >
-                                      <div class="invalid-feedback">
-                                        {{ __('เบิกจ่าย') }}
-                                      </div>
-                                    </div>
-                                  </div>
-                                -->
 
 
                     </div>

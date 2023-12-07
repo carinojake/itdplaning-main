@@ -3,11 +3,6 @@
 @if ($task['task_parent_sub'] === 2)
 
 <x-slot:toolbar>
-    {{-- <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-warning text-white btn-taskRefund-sub"><i class="cil-money">taskRefund</i></button>
-    </form> --}}
     @if($task->task_status == 1)
     @if($task_sub_refund_total_count == $task_sub_refund_count )
     <form class="taskRefund-form" action="{{ route('project.task.taskRefund_prarent_3', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
@@ -16,39 +11,7 @@
         <button class="btn btn-primary text-dark btn-taskRefund"><i class="cil-money"></i></button>
     </form>
     @endif
-    {{-- <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-warning text-white btn-taskRefund-sub">1.1<i class="cil-money"></i></button>
-    </form>
 
-    <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub_st', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-Light text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_sub_st</i></button>
-    </form>
-    <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-info text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_str</i></button>
-    </form>
-
-
-    <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-dark text-dark btn-taskRefund-sub"><i class="cil-money">taskRefundbudget_sub</i></button>
-    </form> --}}
-
-
-
-
-
-{{--     <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_sub', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
-        @method('POST')
-        @csrf
-        <button class="btn btn-danger text-white btn-delete"><i class="cil-money">taskRefundbudget_sub</i></button>
-    </form> --}}
     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
     </a>
@@ -156,9 +119,13 @@
         </tr>
         @if ($task->subtask->count() > 0)
             @foreach ($task->subtask as $index => $subtask)
-            @php
-            $relatedData = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
-        @endphp
+
+
+
+@php
+$relatedData = collect($cteQuery)->firstWhere('root', $subtask->task_id);
+$resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
+@endphp
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>
@@ -169,7 +136,7 @@
                         </a>
 
                     @endforeach
-                        {{ $subtask->task_name }}
+                        {{ $resultthItem->task_name }}
 
 
 
@@ -194,37 +161,18 @@
                     <td></td>
                     <td>
                         {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }} บาท
-                       {{--  @if ($subtask->contract->count() > 0)
-                            @foreach ($subtask->contract as $contract)
-                                <button type="button" class="badge btn btn-success text-white"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal{{ $contract->hashid }}">
 
-                                    @if ($contract->contract_type == 4)
-                                        {{ \Helper::contractType($contract->contract_type) }}"_"{{ strtolower($contract->contract_number) }}
-                                    @else
-                                        สญ.ที่ {{ strtolower($contract->contract_number) }}
-                                    @endif
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal{{ $contract->hashid }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">สัญญา {{ $contract->contract_number }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <!-- ... (เนื้อหาในส่วนนี้เหมือนเดิม) ... -->
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif --}}
                     </td>
-                    <td>  {{ number_format($subtask->task_pay,2) }} บาท
+                    <td>
+
+                        @if ($subtask->task_pay > 1)
+                        1-{{ number_format($subtask->task_pay,2) }} บาท
+                        @else
+                       2- {{ number_format($resultthItem->total_pay_con,2) }} บาท
+                        @endif
+
+
+
                     </td>
                     <td>
 
@@ -241,7 +189,7 @@
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
                             @if ($subtask->subtask->count() < 1)
-                            @if ($relatedData->totalLeastCost < 0.01)
+                            @if ($relatedData?->totalLeastCost < 0.01 || $resultthItem->total_pay_con< 0.01)
                             <form class="delete-form"
                             action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             method="POST" style="display:inline">

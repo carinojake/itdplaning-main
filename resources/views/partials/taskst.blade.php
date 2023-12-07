@@ -123,22 +123,26 @@
             <table class="table mt-3 ">
                 <thead>
                     <tr>
-                        <th width="50">ลำดับ</th>
-                        <th>กิจกรรม</th>
-                        <th>สถานะ</th>
+                        <th width="20">ลำดับ</th>
+                        <th >กิจกรรม</th>
+                        <th width="20">สถานะ</th>
                         <th>วันที่</th>
-                        <th>งบ</th>
-                        <th></th>
-                        <th>ที่ค่าใช้จ่าย</th>
+                        <th >งบ</th>
+
+                        <th >ที่ค่าใช้จ่าย</th>
                         <th>เบิก</th>
-                        <th width="200">ข้อมูล</th>
+                        <th >ข้อมูล</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if ($task->subtask->count() > 0)
                     @foreach ($task->subtask as $index => $subtask)                            @php
                                 $relatedData = collect($cteQuery->get())->firstWhere('root', $subtask->task_id);
-                            @endphp
+
+
+                                $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
+
+                           @endphp
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
@@ -174,23 +178,32 @@
 
                                 <td>{{ number_format($subtask->task_budget_it_operating + $subtask->task_budget_it_investment + $subtask->task_budget_gov_utility, 2) }}
                                     บาท </td>
-                                <td></td>
+
                                 <td>
-                                    @if ($relatedData->totalLeastCost > 1)
-                                        {{ number_format($relatedData->totalLeastCost, 2) }} บาท
+                                    @if ($relatedData->totalLeastCost > 1 || $relatedData->total_Leasttask_cost_1 >1 || $relatedData->total_Leasttask_cost_2 > 1)
+                                    <span style="color: red;">
+                                    {{ number_format($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2, 2) }}
+
                                     @else
+
                                         {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
-                                        บาท
+
                                     @endif
+                                    </span>
+                                    บาท
                                 </td>
                                 <td>
+                                    <span class="text-warning">
                                     @if ($relatedData->totalLeastconPay > 1)
-                                        {{ number_format($relatedData->totalLeastconPay, 2) }} บาท
+
+                                        {{ number_format($relatedData->totalLeastconPay+$relatedData->totalLeastPay, 2) }}
                                     @elseif($relatedData->totalLeastPay > 1)
-                                        {{ number_format($relatedData->totalLeastPay, 2) }} บาท
+                                        {{ number_format($relatedData->totalLeastPay, 2) }}
                                     @elseif($subtask->task_pay > 1)
-                                        {{ number_format($subtask->task_pay, 2) }} บาท
+                                        {{ number_format($subtask->task_pay, 2) }}
                                     @endif
+                                    </span>
+                                    บาท
                                 </td>
 
                                 <td>
@@ -233,9 +246,23 @@
                                     </form>
                                     @endif
                                     @endif
+                                    @if(auth()->user()->isAdmin())
+                                    <form class="delete-form"
+                                    action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                    method="POST" style="display:inline">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button class="btn btn-danger text-white btn-delete"><i
+                                            class="cil-trash"></i></button>
+                                </form>
 
 
 
+
+                                <a href="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                    class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+
+                                @endif
                                 </td>
 
                             </tr>
@@ -243,7 +270,12 @@
                                 <td></td>
                                 <td>
                                     @foreach ($subtask->subtaskparent as $subtask_sub)
-                                        <div>
+                                    @php
+                                    $relatedDataSub = collect($cteQuery)->firstWhere('root', $subtask_sub->task_id);
+                                    $resulttwoItem = collect($resulttwo)->firstWhere('taskid', $subtask_sub->task_id);
+                                @endphp
+
+                                        <div  class=" mt-3">
                                             @foreach ($subtask_sub->contract as $contract)
                                                 <a
                                                     href="{{ route('contract.show', ['contract' => $contract->hashid]) }}">
@@ -251,15 +283,15 @@
                                                         class="badge btn btn-primary text-white">สญ. ที่ {{ $contract->contract_number }}</span></a>
                                             @endforeach
 
-                                            - {{ $subtask_sub->task_name }}
+                                         - {{ $subtask_sub->task_name }}
 
                                         </div>
                                     @endforeach
                                 </td>
 
-                                <td colspan="12">
+                                <td {{-- colspan="12" --}}>
                                     @foreach ($subtask->subtaskparent as $subtask_sub)
-                                        <div class="certificate-container">
+                                        <div class="certificate-container mt-3">
                                             @foreach ($subtask_sub->contract as $contract)
                                             <div class=" certificate-item">
                                                 <span
@@ -281,6 +313,53 @@
 
                                     @endforeach
                                 </td>
+                                <td></td>
+                                <td>      @foreach ($subtask->subtaskparent as $subtask_sub)
+                                    <div  class=" mt-3">
+                                    {{ number_format($subtask_sub->task_budget_it_operating +
+                                    $subtask_sub->task_budget_it_investment + $subtask_sub->task_budget_gov_utility, 2) }}
+                                    บาท
+                                    </div>
+                                @endforeach
+                             </td>
+
+                                <td>@foreach ($subtask->subtaskparent as $subtask_sub)
+                                    <div  class=" mt-3">
+                                    {{ number_format($subtask_sub->task_cost_it_operating +
+                                    $subtask_sub->task_cost_it_investment + $subtask_sub->task_cost_gov_utility, 2) }}
+                                    บาท
+                                    </div>
+                                @endforeach</td>
+                                <td>
+
+                                    @foreach ($subtask->subtaskparent as $subtask_sub)
+                                    @php
+                                    $relatedDataSub = collect($cteQuery)->firstWhere('root', $subtask_sub->task_id);
+                                    $resulttwoItem = collect($resulttwo)->firstWhere('taskid', $subtask_sub->task_id);
+                                @endphp
+
+
+
+                            <div  class=" mt-3">
+                                @if ($subtask_sub->task_pay > 1)
+                                {{ number_format($subtask_sub->task_pay ,2) }} บาท
+                                @else
+                                 {{ number_format($resulttwoItem->total_pay_con, 2) }} บาท
+                                @endif
+
+                            </div>
+
+
+                        @endforeach
+
+
+
+
+
+
+                            </td>
+                                <td></td>
+
                             </tr>
                         @endforeach
                     @endif

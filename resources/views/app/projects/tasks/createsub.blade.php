@@ -34,7 +34,22 @@
                                     <div class="col-3">{{ __('กิจกรรม') }}</div>
                                     <div class="col-3"> {{ $task->task_name }}</div>
                                 </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <label for="task_start_date2"
+                                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
+                                      {{--   <span class="text-danger">*</span> --}}
+                              {{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}
 
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="task_end_date2"
+                                            class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
+                                  {{--       <span class="text-danger">*</span> --}}
+                                   {{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}
+
+                                    </div>
+                                </div>
 
                                 <input type="hidden" class="form-control" id="task_parent" name="task_parent"
                                     value="{{ $task->task_id }}">
@@ -105,7 +120,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div  class="d-none  col-md-4" >
+                                    <div  class="  col-md-4" >
                                     @if (session('contract_id'))
                                         ID: {{ session('contract_id') }}
                                     @endif
@@ -233,16 +248,28 @@
                                             <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                             <span class="text-danger">*</span>
                                             <input class="form-control" id="task_start_date" name="task_start_date"
-                                                value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+
+
+                                            @if (session('contract_id') == 0)
+                                            value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}
+                                            @else
+                                            value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+                                            @endif
                                                  required>
-                                        </div>
+
+
+                                                </div>
 
                                         <div class="col-md-6">
                                            {{--  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }} --}}
                                             <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                             <span class="text-danger">*</span>
-                                            <input class="form-control" id="task_end_date" name="task_end_date"
-                                                value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                                            <input class="form-control" id="task_start_date" name="task_start_date"
+                                            @if (session('contract_id') == 0)
+                                            value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}
+                                            @else
+                                            value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                                            @endif
                                                 required>
                                         </div>
                                     </div>
@@ -537,17 +564,17 @@
 
                                                     max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
                                                     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
-                $("#task_budget_it_investment").val('');
+              //  $("#task_budget_it_investment").val('');
             }
                                                 } else if (fieldId === "task_budget_it_operating") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
                                                     if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
-                $("#task_budget_it_operating").val('');
+               // $("#task_budget_it_operating").val('');
             }
                                                 } else if (fieldId === "task_budget_gov_utility") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
                                                     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
-                $("#task_budget_gov_utility").val('');
+               // $("#task_budget_gov_utility").val('');
                                                     }
                                                 }
 
@@ -576,17 +603,17 @@
 
             if (fieldId === "task_cost_it_investment") {
                 if(costItInvestment === "0" || costItInvestment === '' || parseFloat(costItInvestment) < -0){
-                    $("#task_cost_it_investment").val('');
+                 //   $("#task_cost_it_investment").val('');
                 }
                 max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""))|| 0;
             } else if (fieldId === "task_cost_it_operating") {
                 if(costItOperating === "0" || costItOperating === '' || parseFloat(costItOperating) < -0){
-                    $("#task_cost_it_operating").val('');
+                 //   $("#task_cost_it_operating").val('');
                 }
                 max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""))|| 0;
             } else if (fieldId === "task_cost_gov_utility") {
                 if(costGovUtility === "0" || costGovUtility === '' || parseFloat(costGovUtility) < -0){
-                    $("#task_cost_gov_utility").val('');
+                 //   $("#task_cost_gov_utility").val('');
                 }
                 max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""))|| 0;
             }
@@ -613,7 +640,7 @@
                     var fieldValue = $("#" + field).val();
                     if (fieldValue) {  // Check if fieldValue is defined
                         if (fieldValue === "0" || fieldValue === '' || parseFloat(fieldValue) < -0) {
-                            $("#" + field).val('');
+                         //   $("#" + field).val('');
                         }
                         max += parseFloat(fieldValue.replace(/,/g, ""));
                     }
@@ -880,7 +907,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
 // Function to check and update the task cost fields
 function updateTaskCostFields() {
@@ -923,6 +950,6 @@ $("#task_budget_it_operating, #task_budget_it_investment, #task_budget_gov_utili
 // Call the function on page load to handle the initial state
 updateTaskCostFields();
 });
-</script>
+</script> --}}
     </x-slot:javascript>
 </x-app-layout>

@@ -375,14 +375,28 @@
                                                     class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                                 <span class="text-danger">*</span>
                                                 <input class="form-control" id="task_start_date"
-                                                    name="task_start_date" name="task_start_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }} >
+                                                    name="task_start_date" name="task_start_date"
+                                                    @if (session('contract_id') == 0)
+                                                    value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+                                                    @else
+                                                    value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
+                                                    @endif
+                                                    required>
+
+
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="task_end_date"
                                                     class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                                 <span class="text-danger">*</span>
                                                 <input class="form-control" id="task_end_date"
-                                                    name="task_end_date" name="task_start_date"  value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}>
+                                                    name="task_end_date" name="task_start_date"
+                                                    @if (session('contract_id') == 0)
+                                                    value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+                                                    @else
+                                                    value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
+                                                    @endif
+                                                    required>
                                             </div>
                                         </div>
                                {{--          <div class="col-md-4 mt-3">

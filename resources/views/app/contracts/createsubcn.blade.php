@@ -848,7 +848,10 @@ $value = 0;
                                                                                 {{-- <input type="text" class="form-control" id="register_date" name="register_date" required> --}}
                                                                                 <input type="text" class="form-control"
                                                                                     id="contract_start_date"
-                                                                                    name="contract_start_date">
+                                                                                    name="contract_start_date"
+                                                                                    value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails?->project_start_date)) }}
+
+                                                                                    >
                                                                                 <!--<div data-coreui-toggle="date-picker" id="contract_start_date"
                                                                         data-coreui-format="dd/MM/yyyy"></div>-->
                                                                             </div>
@@ -859,7 +862,11 @@ $value = 0;
                                                                                     class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                                                                 <input type="text" class="form-control"
                                                                                     id="contract_end_date"
-                                                                                    name="contract_end_date">
+                                                                                    name="contract_end_date"
+                                                                                    value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails?->project_end_date)) }}
+
+
+                                                                                    >
                                                                                 <!-- <div data-coreui-toggle="date-picker" id="contract_end_date"
                                                                         data-coreui-format="dd/MM/yyyy">
                                                                     </div>-->
@@ -869,7 +876,11 @@ $value = 0;
                                                                                     class="form-label">{{ __('วันที่ลงนามสัญญา') }}</label>
                                                                                 <input type="text" class="form-control"
                                                                                     id="contract_sign_date"
-                                                                                    name="contract_sign_date">
+                                                                                    name="contract_sign_date"
+                                                                                      value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails?->project_start_date)) }}
+
+
+                                                                                    >
                                                                                 <!--<div data-coreui-toggle="date-picker" id="contract_sign_date"
                                                                         data-coreui-format="dd/MM/yyyy"></div>-->
                                                                             </div>

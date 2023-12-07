@@ -137,7 +137,7 @@
                                         <div class="card ">
                                             <div class="card-body ">
 
-                                                <button class="col-md-12 btn btn btn-primary"
+                                                <button class="col-md-12 btn btn btn-info "
                                                  data-bs-toggle="collapse"
                                                     href="#multiCollapseExample1" role="button"
                                                     aria-expanded="false"
@@ -163,7 +163,7 @@
                                                                 href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
-                                                                <div class="fs-4 fw-semibold text-primary" >
+                                                                <div class="fs-4 fw-semibold text-info" >
                                                                     @if ($budgets > 1)
                                                                     {{ number_format((($ospa +$osa)), 2) }}
                                                                     @endif
@@ -180,7 +180,7 @@
                                                                 href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
-                                                                <div class="fs-4 fw-semibold text-primary" >
+                                                                <div class="fs-4 fw-semibold text-info" >
                                                                     @if ($budgets > 1)
                                                                     {{ number_format((($ispa ) + ($isa)), 2) }}
                                                                     @endif
@@ -198,7 +198,7 @@
                                                                 href="#multiCollapseExample1" role="button"
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
-                                                                <div class="fs-4 fw-semibold text-primary" >
+                                                                <div class="fs-4 fw-semibold text-info" >
                                                                     @if ($budgets > 1)
                                                                     {{ number_format($utpcs + $utsc, 2) }}
                                                                     @endif
@@ -343,7 +343,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิกจ่าย งบกลางICT ทั้งหมด</small>
+                                                        >เบิกจ่าย งบกลางICT </small>
                                                     </div>
                                                 </button>
                                                 </div>
@@ -362,7 +362,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิกจ่าย งบดำเนินงาน ทั้งหมด</small>
+                                                        >เบิกจ่าย งบดำเนินงาน </small>
                                                     </div>
                                                 </button>
                                                     </button>
@@ -383,7 +383,7 @@
                                                     <div>
                                                     <small
                                                         class="text-xl"
-                                                        >เบิกจ่าย งบสาธารณูปโภค ทั้งหมด</small>
+                                                        >เบิกจ่าย งบสาธารณูปโภค </small>
                                                     </div>
                                                 </button>
                                                     </button>
@@ -430,8 +430,9 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($ospa > 1)
+                                                    @if ($budgetscentralict > 1)
                                                     {{ number_format(($budgetscentralict- ($ospa + $osa)), 2) }}
+
                                                     @endif
                                                     </div>
 
@@ -448,7 +449,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgets > 1)
+                                                    @if ($budgetsinvestment > 1)
                                                     {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
                                                     @endif
                                                     </div>
@@ -466,7 +467,7 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($utpcs > 1)
+                                                    @if ($budgetsut > 1)
                                                     {{ number_format(($budgetsut- ($utpcs + $utsc) ), 2) }}
                                                     @endif
                                                     </div>

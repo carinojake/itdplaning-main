@@ -282,8 +282,8 @@ class DashboardController extends Controller
         ($budgetsgov =  Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0)')));
         ($budgetsict = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)')));
 
-        ($budgetscentralict = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('	COALESCE(budget_it_operating,0)')));
-        ($budgetsinvestment = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw(' COALESCE(budget_it_investment,0)')));
+        ($budgetscentralict = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_it_operating,0)')));
+        ($budgetsinvestment = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_it_investment,0)')));
         ($budgetsut  = Project::where('project_fiscal_year', $fiscal_year)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
         ///จ่ายงบict
 
@@ -447,7 +447,7 @@ as d')
         ($d = $json[0]->d);
         ($coatcons_ut = (float) $d);
 
-        //($coatstotal = $coats_ut+$coats_ict+$coats_gov)
+        //($coatstotal = $coats_ut+$coats_ict+$coats_gov) 3122266
         ($taskcosttotal = DB::table('tasks')
             ->selectRaw('sum(COALESCE(task_cost_gov_operating, 0)
          + COALESCE(task_cost_gov_investment, 0)
@@ -459,6 +459,7 @@ as d')
                     $query->select('*')
                         ->from('projects')
                         ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+
                         ->GroupBy('reguiar_id');
                 }
             )
@@ -516,7 +517,7 @@ as d')
 
         ($contracts_pa_budget = DB::table('contracts')
             ->selectRaw('SUM(COALESCE(contract_pa_budget, 0)) AS cb')
-            ->where('contract_fiscal_year', '=', 2566)
+            ->where('contract_fiscal_year', '=',  $fiscal_year)
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
         ($json = json_decode($contracts_pa_budget));
@@ -541,7 +542,7 @@ as d')
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('tasks.deleted_at', NULL)
-            ->where('contracts.contract_fiscal_year', '=', 2566)
+            ->where('contracts.contract_fiscal_year', '=',  $fiscal_year)
             ->where('contracts.contract_pa_budget', '!=', null)
             ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
@@ -556,13 +557,14 @@ as d')
         //}
 
 
-        //    ($remaining_amounts);
+        //    ($remaining_amounts);   ->where('project_fiscal_year',  $fiscal_year)
+
 
 
 
         ($contract_refund_pa_budget =  DB::table('contracts')
             ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
-            ->where('contract_fiscal_year', '=', 2566)
+            ->where('contract_fiscal_year', '=',  $fiscal_year)
             ->where('contract_refund_pa_status', '=', 1)
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
@@ -600,7 +602,8 @@ as d')
         ($project_groupby = Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
             + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budgot')
-            ->where('project_fiscal_year', 2566)
+           // ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
 
             ->GroupBy('reguiar_id')
             ->orderBy('reguiar_id', 'ASC')
@@ -618,7 +621,9 @@ as d')
              as total_cost')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('tasks.deleted_at', NULL)
-            ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+           // ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+            ->where('project_fiscal_year',  $fiscal_year)
+
             ->groupBy('reguiar_id')
             ->get()
             ->toJson(JSON_NUMERIC_CHECK)
@@ -643,8 +648,10 @@ as d')
        ')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('tasks.deleted_at', NULL)
-            ->whereRaw('project_fiscal_year = 2566')
-            ->groupBy('project_fiscal_year')
+           // ->whereRaw('project_fiscal_year = 2566')
+           ->where('project_fiscal_year',  $fiscal_year)
+
+           ->groupBy('project_fiscal_year')
             ->get()
             ->toJson(JSON_NUMERIC_CHECK)
         );
@@ -677,7 +684,7 @@ as d')
         $project_groupby_reguiar = Project::selectRaw('reguiar_id as fiscal_year_b,
             sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
             + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
 
             ->groupBy('reguiar_id')
             ->orderBy('reguiar_id', 'ASC')
@@ -692,12 +699,12 @@ as d')
              as total_cost')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('tasks.deleted_at', NULL)
-            ->where('project_fiscal_year', 2566)
+            ->where('project_fiscal_year',  $fiscal_year)
             ->groupBy('reguiar_id')
             ->get()
             ->toJson(JSON_NUMERIC_CHECK);
 
-        // Calculate percentage value for each reguiar_id
+        // Calculate percentage value for each reguiar_id    ->where('projects.project_fiscal_year', '=', $fiscal_year)
         ($taskcosttotals2 = collect(json_decode($costtotals, true))->map(function ($item) use ($project_groupby_reguiar) {
             $total_budget = collect(json_decode($project_groupby_reguiar, true))->where('fiscal_year_b', $item['fiscal_year_b'])->pluck('total_budget')->first();
             $percentage = $total_budget != 0 ? round($item['total_cost'] / $total_budget * 100, 2) : 0;
@@ -729,7 +736,7 @@ as d')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->whereNotNull('tasks.task_pay')
             ->where('tasks.deleted_at', NULL)
-            ->where('projects.project_fiscal_year', '=', 2566)
+            ->where('projects.project_fiscal_year', '=', $fiscal_year)
             ->orderByRaw("CASE task_pay_month WHEN 'January' THEN 1 WHEN 'February' THEN 2 WHEN 'March' THEN 3 WHEN 'April' THEN 4 WHEN 'May' THEN 5 WHEN 'June' THEN 6 WHEN 'July' THEN 7 WHEN 'August' THEN 8 WHEN 'September' THEN 9 WHEN 'October' THEN 10 WHEN 'November' THEN 11 WHEN 'December' THEN 12 END")
             ->get()
             ->toArray()
@@ -1161,7 +1168,7 @@ as d')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
             ->where('tasks.task_cost_it_operating', '>', 1)
             ->where('tasks.task_type', 1)
-             ->where('tasks.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
+             ->where('projects.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
  // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at'))
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1192,7 +1199,7 @@ as d')
                 ->selectRaw('SUM(COALESCE(task_pay,0)) as iv2')
                 ->where('tasks.task_cost_it_operating', '>', 2)
                 ->where('tasks.task_type', 2)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1230,7 +1237,7 @@ as d')
                 ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As ospa')
                 //->where('tasks.task_type', 1)
                 ->where('tasks.task_type', 1)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
 
@@ -1243,7 +1250,7 @@ as d')
                 ->selectRaw('SUM(COALESCE(task_cost_it_operating,0)) As osa')
                 //->where('tasks.task_type', 1)
                 ->where('tasks.task_type', 2)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1251,7 +1258,7 @@ as d')
             ($osa = $json[0]->osa);
             ($osa = (float)$osa);
 
-           // dd($osa);
+          //  dd($osa,$ospa );
 
 
 
@@ -1262,7 +1269,7 @@ as d')
             ($investment_pa_sum = DB::table('tasks')
                 ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As ispa')
                 ->where('tasks.task_type', 1)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1273,7 +1280,7 @@ as d')
             ($investment_sum = DB::table('tasks')
                 ->selectRaw('SUM(COALESCE(task_cost_it_investment,0)) As isa')
                 ->where('tasks.task_type', 2)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1284,7 +1291,7 @@ as d')
             ($investment_total_pay_sum = DB::table('tasks')
                 ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
                 ->where('tasks.task_budget_gov_investment')
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1355,7 +1362,7 @@ as d')
                 ->selectRaw('SUM(COALESCE(task_pay,0)) as iv')
                 ->where('tasks.task_cost_it_investment', '>', 1)
                 ->where('tasks.task_type', 2)
-                ->where('tasks.deleted_at', NULL)
+                ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1370,7 +1377,7 @@ as d')
             ->where('tasks.task_type',1)
 
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-             ->where('tasks.deleted_at', NULL)
+             ->where('projects.deleted_at', NULL)
              ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_pa_sum));
@@ -1384,7 +1391,7 @@ as d')
             ->where('tasks.task_type',2)
 
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->where('tasks.deleted_at', NULL)
+            ->where('projects.deleted_at', NULL)
             ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_sum));
@@ -1402,7 +1409,7 @@ as d')
 
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
              ->where('project_fiscal_year',  $fiscal_year)
-             ->where('tasks.deleted_at', NULL)
+             ->where('projects.deleted_at', NULL)
              ->get());
              ($json = json_decode($ut_pay_sum));
              ($utsc_pay = $json[0]->utsc_pay);
@@ -1427,7 +1434,7 @@ as d')
 
       ->where('tasks.task_cost_gov_utility', '>', 1)
       ->where('tasks.task_type',1)
-      ->where('tasks.deleted_at', NULL)
+      ->where('projects.deleted_at', NULL)
 
 
              ->where('project_fiscal_year',  $fiscal_year)
@@ -1644,6 +1651,22 @@ as d')
 
 
            // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน
+      /*      $id_projects = Project::select('project_id')
+           ->where('project_fiscal_year', $fiscal_year)
+           ->get();
+
+       foreach ($id_projects as $project) {
+           // echo สมมติว่าคุณมีเมธอดหรือคุณสมบัติในโมเดล Project ที่สร้าง hashid
+           $gantt[] = [
+              // 'id'                    => $project['project_id'],
+               'projects_id' => $project->hashid, // หรือใช้เมธอดของ Hashids ถ้ามี
+
+           ];
+       } */
+
+      // dd($gantt);
+
+
         ($project = Project::select(
             'projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
@@ -1754,12 +1777,24 @@ as d')
             ->where('project_fiscal_year', $fiscal_year)
 
             ->get()
-            ->toArray());
+            //->toArray()
+        );
 
 
            // dd($project = ($project));
 
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
+
+
+
+        /* // Create an empty object to store your URLs
+        $projectViewUrls = [];
+
+        // Let's say you have your projects data in a variable called `projects`
+        foreach($projects as $project)
+            // Add a new property to the projectViewUrls object with the hashid as the key and the URL as the value
+            projectViewUrls["{{ $project->hashid }}"] = "{{ route('project.view', $project->hashid) }}";
+        endforeach */
 
 
 
@@ -1781,6 +1816,10 @@ as d')
             $__project_cost     = [];
             $gantt[] = [
                 'id'                    => $project['project_id'],
+      // ... other attributes
+      'hashid' => $project->hashid,
+      'projectViewUrls' => route('project.view', ['project' => $project->hashid]),
+      // ... other attributes
                 'text'                  => $project['project_name'],
                 'start_date' =>     date('Y-m-d', ($project['project_start_date'])),
                 'end_date' =>       date('Y-m-d', ($project['project_end_date'])),
@@ -1827,6 +1866,7 @@ as d')
 
                 'open'                  => true,
                 'type'                  => 'project',
+
 
             ];
 
@@ -1953,12 +1993,23 @@ as d')
         }
 
 
-      //  dd($gantt);
+      //dd($gantt);
         // dd ($costsum = ($__project_cost))  ;
-        ($gantt = json_encode($gantt));
+     /*    ($gantt = json_encode($gantt));
+        ($id = Hashids::decode($project));
+        dd($id = $id[0]); */
+
+       //($id = Hashids::decode($project));
+        $id_tasks = Task::select('task_id')
+            ->whereNull('tasks.task_parent')->whereNull('tasks.deleted_at')->get()->pluck('task_id');
 
 
-        return view(
+
+            ($gantt = json_encode($gantt));
+   // dd($gantt);
+
+
+            return view(
             'app.dashboard.gantt',
 
 
