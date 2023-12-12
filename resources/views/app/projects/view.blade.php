@@ -392,8 +392,8 @@
 
                             if (task.total_cost > 0 || task.task_root_total_cost > 0) {
 
-                                if (task.task_root_total_cost - (task.total_pay + task.root_total_pay)=== 0) {
-                                    return '-';
+                                if (task.task_root_total_cost - (task.root_total_pay)=== 0) {
+                                    return 'uuu-';
                                 } else {
                                 return '1<span style="color:red;">'  + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
@@ -410,7 +410,7 @@
                             }
                             else if (task.root_rs_id == 1) {
                                 if (task.total_cost_op_in_gov - task.total_pay_paycons_cte === 0) {
-                                    return '-';
+                                    return '55-';
                                 } else {
                                     return '2<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
                                             style: 'currency',
@@ -439,44 +439,7 @@
                                 }).format((task.total_cost_op_in_gov - task.total_pay_paycons_cte)) + '</span>';
                             }
 
-                            /*     else if (task.task_parent_sub_cost > 0) {
 
-
-                                                         return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                                             style: 'currency',
-                                                             currency: 'THB'
-                                                         }).format(task.task_parent_sub_cost - task.task_parent_sub_pay) + '</span>';
-                                                    }
-                         */
-
-                            /*        else if (task.total_pay > 0) {
-                                                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                                                    style: 'currency',
-                                                                    currency: 'THB'
-                                                                }).format(task.total_cost - task.total_pay) + '</span>';
-                                                            }
-
-
-
-
-
-                                                            else if (task.total_task_cost > 0 ) {
-                                                                return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                                                    style: 'currency',
-                                                                    currency: 'THB'
-                                                                }).format(task.total_task_cost - task.task_total_pay) + '</span>';
-                                                            }
-                                 */
-
-
-                            /*     else if (task.total_task_cost > 0) {
-
-
-                                            return '<span style="color:red;">' + new Intl.NumberFormat('th-TH', {
-                                                style: 'currency',
-                                                currency: 'THB'
-                                            }).format(task.total_task_cost - task.pay) + '</span>';
-                                            } */
                             else {
                                 return '6';
                             }
@@ -851,6 +814,18 @@ var budget_total_formatted = formatCurrency(task.budget || 0)
                if(task.p  < 3){
 
 
+                if (task.root_rs_id == 1 && task.sumSubroot_task_task_parent_sub_value_plus ==
+                                1) {
+                                var tmp_class = task.balance < 0 ? 'blue' : 'blue';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
+                                    'green';
+
+                                return '111<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                        style: 'currency',
+                                        currency: 'THB'
+                                    }).format(task.budget - task.root_budget_mm + task.root_st_new_balance_re) +
+                                    '</span>';
+                            }
 
 
 
@@ -881,26 +856,48 @@ if (task.budget_gov_utility > 1) {
                 }
 
 
-                    html += `<b>2งบประมาณที่ใช้ไป:</b> ${formatCurrency(task.cost)}<br/>`;
+                if (task.cost) {
+        html += '<b>ค่าใช้จ่าย:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(task.cost) + '</span><br/>';
+    }
 
-
-
-                    html += `<b>3งบประมาณที่เบิกจ่ายแล้ว:</b> ${formatCurrency(task.pay)}<br/>`;
-
-        if(task.task_budget_type = '1' )
-
-        { var tmp_class = task.task_budget_type = 1 ? 'blue' : 'red';
-                    html += '2<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                        style: 'currency',
-                        currency: 'THB'
-         }).format(task.budget - task.total_cost_op_in_gov) + '</span><br/>' }
-
-
+    if (task.pay) {
+        html += '<b>3งบประมาณที่เบิกจ่ายแล้ว:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(task.pay) + '</span><br/>';
+    }
 
 
 
 
-               }//end
+    if (task.balance) {
+    var tmp_class = task.balance > 0 ? 'green' : 'red';
+    var remainingBalance;
+
+    if (task.root_rs_id == 1 && task.sumSubroot_task_task_parent_sub_value_plus ==1) {
+        remainingBalance = task.budget - task.root_budget_mm + task.root_st_new_balance_re;
+    } else if (task.root_two_new_balance_re) {
+        remainingBalance = task.budget - task.cost;
+    } else {
+        remainingBalance = task.balance; // Default case if the above conditions are not met
+    }
+
+    html += '<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' +
+        new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(remainingBalance) + '</span><br/>';
+}
+
+
+
+
+               }//
+
+
                 return html;
 
 
