@@ -372,6 +372,23 @@ $("#taskcon_budget_it_investment, #taskcon_budget_gov_utility, #taskcon_budget_i
             $(document).ready(function() {
                 $(":input").inputmask();
             });
-        </script>>
+        </script>
+
+<script>
+    $(document).ready(function() {
+
+var contract_pa_budget_v = {{$contract->contract_pa_budget}};
+var contract_fiscal_year_v = {{$contract->contract_fiscal_year}};
+
+var
+console.log( contract_pa_budget_v);
+console.log( contract_fiscal_year_v);
+
+
+
+    });
+
+</script>
+
     </x-slot:javascript>
 </x-app-layout>

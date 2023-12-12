@@ -895,7 +895,7 @@ $value = 0;
 
                                                                                         <div class="col-md-4">
                                                                                             <label for="total_pa_budget"
-                                                                                                class="form-label">{{ __('เงิน') }}</label>
+                                                                                                class="form-label">{{ __('จำนวนเงิน PA') }}</label>
                                                                                             <span class="text-danger"></span>
 
                                                                                             <input type="text"

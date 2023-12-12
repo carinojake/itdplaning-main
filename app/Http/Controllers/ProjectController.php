@@ -4648,6 +4648,8 @@ dd($task_sub_refund_total_count);
                 'root_two_new_balance_re' => $__root_two_new_balance_re,
                 'root_two_new_balance_2' => $__root_two_new_balance_2,
                 'root_two_balance_status' => $__root_two_balance_status,
+                'task_budget_type' => $task['task_budget_type'],
+                'task_refund_budget_type' => $task['task_refund_budget_type'],
 
 
 
@@ -4660,7 +4662,7 @@ dd($task_sub_refund_total_count);
             ($__project_parent[] = $task['task_parent'] ? 'T' . $task['task_parent'] . $task['project_id'] : $task['project_id']);
             ($__project_parent_cost[] = 'parent');
         }
-        //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
+        //dd($tasks,$gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
 
 
@@ -4915,7 +4917,7 @@ dd($task_sub_refund_total_count);
         /*          echo "<pre>";
         var_dump($gantt);
         dd($gantt, $budget); */
-
+        //dd($gantt, $budget);
         //dd($gantt,$budget,$rootsums,$cteQuery->get());
        // dd($gantt, $budget);
         $labels = [
@@ -10720,6 +10722,8 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         return redirect()->route('project.view', $project);
     }
 
+
+
     public function taskRefundcontract_project_type_sub_2($project, $task)
     {
         $id   = Hashids::decode($task)[0];
@@ -10741,6 +10745,33 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
         $task->save();
         return redirect()->route('project.view', $project);
     }
+
+    public function taskRefundcontract_project_type_sub_3($project, $task)
+    {
+        $id   = Hashids::decode($task)[0];
+        $idproject   = Hashids::decode($project)[0];
+
+        $task = Task::find($id);
+        $idproject = project::find($idproject);
+
+
+        $task->task_refund_pa_status = '2';
+        $task->task_budget_type = '2';
+
+        if ($task->contract) {
+            foreach ($task->contract as $contract) {
+                $contract->contract_refund_pa_status = '2';
+                $contract->save();
+            }
+        }
+        $task->save();
+        return redirect()->route('project.view', $project);
+    }
+
+
+
+
+
     public function taskRefundcontract_project_type_2($project, $task)
     {
         $taskId = Hashids::decode($task)[0];
@@ -10767,6 +10798,11 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
         return redirect()->route('project.view', $project);
     }
+
+
+
+
+
     public function taskRefund_prarent_3($project, $task)
     {
         $id   = Hashids::decode($task)[0];

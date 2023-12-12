@@ -145,6 +145,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_sub_2', [ProjectController::class, 'taskRefundcontract_project_type_sub_2'])->name('project.task.taskRefundcontract_project_type_sub_2');
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_sub_2', [ProjectController::class, 'taskRefundcontract_project_type_sub_2'])->name('project.task.taskRefundcontract_project_type_sub_2');
+    Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_sub_3', [ProjectController::class, 'taskRefundcontract_project_type_sub_3'])->name('project.task.taskRefundcontract_project_type_sub_3');
+
+
     Route::post('/project/{project}/task/{task}/taskRefundcontract_project_type_2', [ProjectController::class, 'taskRefundcontract_project_type_2'])->name('project.task.taskRefundcontract_project_type_2');
 
 
@@ -186,7 +189,10 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/contract/createsubno', [ContractController::class, 'createsubno'])->name('contract.createsubno');
 
 
+    Route::get('/contract/{contract}/editpay', [ContractController::class, 'taskconEditpay'])->name('contract.editpay');
+    Route::post('/contract/{contract}/editpay', [ContractController::class, 'taskconEditpay'])->name('contract.editpay');
 
+    Route::PUT('/contract/{contract}/updatepay', [ContractController::class, 'updatepay'])->name('contract.updatepay');
     /* Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskCreate'])->name('contract.task.create');
 Route::post('/contract/{contract}/task/store', [ContractController::class, 'taskStore'])->name('contract.task.store');
 Route::get('/contract/{contract}/task/{task}/edit', [ContractController::class, 'taskEdit'])->name('contract.task.edit');
@@ -197,12 +203,18 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
     Route::post('/contract/{contract}/task/create', [ContractController::class, 'taskconstore'])->name('contract.task.store');
     Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskconCreate'])->name('contract.task.create');
 
+
+
+
+
+
     Route::get('/contract/{contract}/task/{taskcon}/edit', [ContractController::class, 'taskconEdit'])->name('contract.task.edit');
     Route::PUT('/contract/{contract}/task/{taskcon}/update', [ContractController::class, 'taskconUpdate'])->name('contract.task.update');
     Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
 
     Route::get('/contract/{contract}/task/{taskcon}/editview', [ContractController::class, 'taskconEditview'])->name('contract.task.editview');
+   // Route::get('/contract/{contract}/task/{taskcon}/editpay', [ContractController::class, 'taskconEditpay'])->name('contract.task.editpay');
 
     Route::get('/contract/{contract}/task/{taskcon}/filesdel', [ContractController::class, 'filesdel'])->name('contract.task.filesdel');
 

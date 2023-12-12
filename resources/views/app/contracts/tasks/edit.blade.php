@@ -77,20 +77,20 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                        <div class="col-9">  {{ $taskcon->taskcon_start_date ? \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) : '' }}
-                                        </div>
-                                       {{--  <input readonly class="form-control" id="taskcon_start_date" name="taskcon_start_date"
-                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}"> --}}
+                                      {{--   <div class="col-9">  {{ Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}
+                                        </div> --}}
+                                         <input readonly class="form-control" id="taskcon_start_date" name="taskcon_start_date"
+                                        value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_start_date))) }}">
                                 </div>
 
 
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                      {{--    <span class="text-danger"></span> --}}
-                                     <div class="col-9">  {{ $taskcon->taskcon_end_date ? \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))): '' }}
-                                    </div>
-                                {{--      <input readonly class="form-control" id="taskcon_end_date" name="taskcon_end_date"
-                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}"> --}}
+                                 {{--     <div class="col-9">  {{ Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}
+                                    </div> --}}
+                                <input readonly class="form-control" id="taskcon_end_date" name="taskcon_end_date"
+                                     value="{{ \Helper::date4(date('Y-m-d H:i:s', ($taskcon->taskcon_end_date))) }}">
                              </div>
                                 </div>
 
@@ -468,9 +468,45 @@
         })()
     </script>
 
-
-
 <script>
+    $(function() {
+        if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
+            alert("jQuery or jQuery UI is not loaded");
+            return;
+        }
+
+        var d = new Date();
+        var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+        var taskconstartdate = "{{ Helper::Date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}";
+
+        console.log(taskconstartdate);
+        $("#taskcon_pay_date")
+            .datepicker({
+                dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            language:"th-th",
+
+
+            });
+            $("#taskcon_pay_date").datepicker("setStartDate", taskconstartdate);
+
+        $('#taskcon_start_date').change(function() {
+                        startDate = $(this).datepicker('getDate');
+                        $("#taskcon_end_date").datepicker("setStartDate", startDate);
+                        $("#taskcon_pay_date").datepicker("setStartDate", startDate);
+
+                    })
+
+                    $('#taskcon_end_date').change(function() {
+                        endDate = $(this).datepicker('getDate');
+                        $("#taskcon_start_date").datepicker("option", "maxDate", endDate);
+                    })
+
+    });
+</script>
+
+{{-- <script>
     $(function() {
         if (typeof jQuery == 'undefined' || typeof jQuery.ui == 'undefined') {
             alert("jQuery or jQuery UI is not loaded");
@@ -507,7 +543,7 @@
                     })
 
     });
-</script>
+</script> --}}
 
 <script type="text/javascript">
     $(document).ready(function() {

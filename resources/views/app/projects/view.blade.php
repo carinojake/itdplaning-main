@@ -583,24 +583,16 @@
                         resize: true,
                         template: function(task) {
 
-
-                            /*   if (task.p == 1 && task.budget_total_task_budget_end < 0) {
-                                  var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(0) + '</span>';
-                              } */
                             if (task.p == 1 && task.budget_total_task_budget_end < 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '1<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end_3) + '</span>';
                             } else if (task.p == 1 && task.budget_total_task_budget_end > 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 var tmp_class = (task.balance+task.total_task_refund_pa_budget_null) > task.balance ? 'blue' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '2<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end) + '</span>';
@@ -611,7 +603,7 @@
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
                                 var tmp_class = (task.balance+task.total_task_refund_pa_budget_null)> task.balance ? 'blue' : 'green';
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '55<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end) + '</span>';
@@ -620,7 +612,7 @@
 
                             else if (task.p == 2 && task.budget_total_task_budget_end < 0) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '66<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget_total_task_budget_end_3) + '</span>';
@@ -640,7 +632,7 @@
                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
                                 var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '77<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format((task.budget - (task.budget_total_task_mm_sum)) + task
@@ -656,7 +648,7 @@
                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
                                     'green';
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '111<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                         style: 'currency',
                                         currency: 'THB'
                                     }).format(task.budget - task.root_budget_mm + task.root_st_new_balance_re) +
@@ -716,7 +708,7 @@
                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
                                     'green';
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '44<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget) + '</span>';
@@ -730,7 +722,7 @@
 
 
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '33<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget - task.total_cost_op_in_gov) + '</span>';
@@ -756,299 +748,12 @@
                                     var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
                                     'green';
 
-                                return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                                return '22<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
                                     currency: 'THB'
                                 }).format(task.budget - task.total_cost_op_in_gov) + '</span>';
                             }
 
-                            //โครงการ
-                            //no
-                            /*    else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b > 2) {
-                                  var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                  var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                      'green';
-
-                                  return '<span style="color:' + tmp_class + ';">' +11 +new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(task.netSubtotal) + '</span>';
-                              }
-
-                              else if (task.budget_total_task_mm_sum > 0 && task.task_root_task_refund_pa_status ==
-                                  2) {
-                                  var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                  var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                      'green';
-
-                                  return '<span style="color:' + tmp_class + ';">' +22+ new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format((task.netSubtotal)) + '</span>';
-                              }
-                                    else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
-                                       var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                       var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                           'green';
-
-                                       return '<span style="color:' + tmp_class + ';">' +33+ new Intl.NumberFormat('th-TH', {
-                                           style: 'currency',
-                                           currency: 'THB'
-                                       }).format((task.budget - task.budget_total_task_mm_sum + task
-                                           .task_total_sum_task_refund_pa_budget)) + '</span>';
-                                   } */
-                            //no
-
-                            //up
-                            /*   else if (task.task_status == 1 && task.task_parent_sub == 99) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +44+ new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(task.budget - task.cost) + '</span>';
-                                    }
-
-                                    else if (task.task_refund_pa_status == 3 && task.task_parent_sub_refund_pa_status ==
-                                        99) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +55+ new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(task.budget - task.cost) + '</span>';
-                                    }
-
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 3  && task.total_refund_starut_b >! 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3  ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +66+ new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(task.total_sum_budget_op_in_gov-task.total_cost_op_in_gov) + '</span>';
-                                    }
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 3 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3  ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +77+ new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format((task.budget - (task.budget_total_task_mm_sum)) + task
-                                            .total_task_refund_budget_status) + '</span>';
-                                    }
-
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1
-                                    &&  task.budget_total_task_mm_sum > task.budget
-                                    && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +88 +new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format(( (task.total_task_refund_budget_status))) + '</span>';
-                                    }
-
-
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.budget - task.budget_total_task_mm_sum < 0  && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +99 +new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format((task.budget - task.budget_total_task_mm_sum + (task.task_total_sum_task_refund_pa_budget))) + '</span>';
-                                    }
-                                      else if (task.sumSubroot_task_task_parent_sub_value_plus == 1
-                                    && task.total_task_refund_budget_status >0 && task.total_refund_starut_b < 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +1010 + new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format((task.budget - task.total_cost_op_in_gov)) + '</span>';
-                                    }
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.task_refund_pa_status == 1 && task.total_refund_starut_b > 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +1011 + new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format((task.budget - task.budget_total_task_mm_sum + task.task_total_sum_task_refund_pa_budget)) + '</span>';
-                                    }
-
-                                    else if (task.sumSubroot_task_task_parent_sub_value_plus == 1 && task.budget - task.budget_total_task_mm_sum < 0  && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 2 ) {
-                                        var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                        var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                            'green';
-                                        return '<span style="color:' + tmp_class + ';">' +1012 +new Intl.NumberFormat('th-TH', {
-                                            style: 'currency',
-                                            currency: 'THB'
-                                        }).format((task.budget - task.budget_total_task_mm_sum + (task.task_total_sum_task_refund_pa_budget))) + '</span>';
-                                    }
-         */
-
-                            /*   else if (task.task_root_task_task_parent_sub_value== 2
-                             && task.sumSubroot_task_task_parent_sub_value_plus == 1  && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 2 ) {
-                                  var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                  var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                      'green';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(444444) + '</span>';
-                              } */
-
-
-                            /*
-
-                                                        else if (task.sumSubroot_task_task_parent_sub_value_plus == 1  && task.task_refund_pa_status == 1 && task.total_refund_starut_b_root > 1.99) {
-                                                            var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                                            var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                                                'green';
-                                                            return '<span style="color:' + tmp_class + ';">' +111+ new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.netSubtotal) + '</span>';
-                                                        }
-
-
-                                                        else if (task.sumSubroot_task_task_parent_sub_value_plus == 2 && task.task_refund_pa_status == 2) {
-                                                            var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                                            var tmp_class = task.task_refund_pa_status == 2 && task.task_status == 2 ? 'blue' :
-                                                                'green';
-                                                            return '<span style="color:' + tmp_class + ';">' +221+ new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.budget-task.total_task_cost) + '</span>';
-                                                        }
-
-                                                        else if (task.sumSubroot_task_task_parent_sub_value_plus == 2
-                                                        && task.task_refund_pa_status == 1 && task.total_refund_starut_b < 0
-                                                        ) {
-                                                            var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                                            var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                                                'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.budget - task.budget_total_task_mm_sum + task
-                                                                .task_total_sum_task_refund_pa_budget)) + '</span>';
-                                                        }
-
-
-
-
-                                                        else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
-                                                            var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                                            var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                                                'green';
-
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.budget - task.budget_total_task_mm_sum + task
-                                                                .task_total_sum_task_refund_pa_budget)) + '</span>';
-                                                        }
-
-                                                        else if (task.sumSubroot_task_task_parent_sub_value_plus < 1 && task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b > 0) {
-                                                            var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                                            var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                                                'green';
-
-                                                            return '<span style="color:' + tmp_class + ';">' +77+ new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.budget - (task.budget_total_task_mm_sum)) + task
-                                                                .total_task_refund_budget_status) + '</span>';
-                                                        }
-
-
-
-                                                 else if (task.budget_total_task_mm_sum > 0 && task.total_refund_starut_b < 2) {
-                                                            var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                                            var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                                                'green';
-
-                                                            return '<span style="color:' + tmp_class + ';">' +88+ new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.budget - task.budget_total_task_mm_sum+task.task_total_sum_task_refund_pa_budget)) + '</span>';
-                                                        }
-
-                                                         else if (task.total_refund_starut_b == 1 && task.cost == 0) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.budget - task.cost) + '</span>';
-                                                        }
-
-
-
-
-
-
-                                                        else if (task.task_refund_pa_status == 2) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.task_refund_pa_budget) + '</span>';
-                                                        }
-                                                        /*3*/
-                            /*   else if (task.cost > 0 && task.task_parent_sub == 99) {
-                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                 var tmp_class = task.task_refund_pa_status == 3  ? 'blue' :
-                                     'green';
-                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                     style: 'currency',
-                                     currency: 'THB'
-                                 }).format(task.budget - task.cost) + '</span>';
-                             }
-                             else if (task.cost > 0) {
-                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                     'green';
-                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                     style: 'currency',
-                                     currency: 'THB'
-                                 }).format(task.budget - task.cost) + '</span>';
-                             }
-                             else if (task.sumSubroot_task_task_parent_sub_value_plus == 3) {
-                                 var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                     'green';
-                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                     style: 'currency',
-                                     currency: 'THB'
-                                 }).format(task.budget - task.cost) + '</span>';
-                             }
-                                 else if (task.task_parent_sub == 2 && task.netSubtotal == 0) {
-                                    var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                    var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                        'green';
-                                    return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format(task.task_parent_sub_budget) + '</span>';
-                                } */
-                            /*   else if (task.balance == 0) {
-                                  return '';
-                              } */
                             else if (task.budget > 0.00) {
                                 var tmp_class = task.balance < 0 ? 'red' : 'red';
                                 var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
@@ -1059,268 +764,7 @@
                                         currency: 'THB'
                                     }).format(0) + '</span>';
                             }
-                            /* 1   else if (task.total_refund_starut_b == 1) {
-                                                   var tmp_class = task.task_refund_pa_status == 1 ? 'green' : 'green';
-                                                   return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                       style: 'currency',
-                                                       currency: 'THB'
-                                                   }).format(task.budget_total_task_budget_end) + '</span>';
-                                                   } */
 
-                            /*   else if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2 && task.task_refund_pa_status == 3
-                              && task.total_refund_starut_b > 2) {
-                                  var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'blue';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(task.totalLeastBudget-task.totalLeastCost) + '</span>';
-
-
-                              } */
-
-                            /*     else if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2) {
-                                    var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                    return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
-                                }
-                                task_root_task_refund_pa_status */
-
-                            /*   else if (task.task_root_task_refund_pa_status == 1 && task.task_root_task_task_parent_sub_value == 2) {
-                                  var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(task.tbalance-task.totalLeastCost) + '</span>';
-                              } */
-
-
-                            /*    else if (task.task_root_task_refund_pa_status == 1 && task.task_root_task_task_parent_sub_value == 2) {
-                                   var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                   return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                       style: 'currency',
-                                       currency: 'THB'
-                                   }).format(task.tbalance-task.totalLeastCost) + '</span>';
-
-
-                               } */
-                            /*
-                                                        if (task.task_root_task_refund_pa_status == 2 && task.task_root_task_task_parent_sub_value == 2) {
-                                                            var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
-
-
-                                                        } */
-
-                            /*   else if (task.p == 2) {
-                                  var tmp_class = task.balance < 0 ? 'red' : 'green';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(task.budget_total_task_budget_end_p2) + '</span>';
-                              } */
-
-                            // else if (task.task_refund_pa_status == 3 && (task.task_type == 2 || task.task_type ==1)) {
-                            //     var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'blue';
-                            //     var formattedValue = new Intl.NumberFormat('th-TH', {
-                            //         style: 'currency',
-                            //         currency: 'THB'
-                            //     }).format(task.budget - task.budget_mm + task.task_refund_pa_budget);
-
-                            //     return '<span style="color:' + tmp_class + ';">' + formattedValue + '</span>';
-                            // }
-
-
-
-                            // else if (task.task_refund_pa_status == 3 && (task.task_type == 2 || task.task_type ==1)) {
-                            //     var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'blue';
-                            //     var formattedValue = new Intl.NumberFormat('th-TH', {
-                            //         style: 'currency',
-                            //         currency: 'THB'
-                            //     }).format(task.budget - task.budget_mm + task.task_refund_pa_budget);
-
-                            //     return '<span style="color:' + tmp_class + ';">' + formattedValue + '</span>';
-                            // }
-
-                            /*
-                                                        else if (task.task_refund_pa_status == 3 && (task.task_status == 1)) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 3 ? 'green' : 'red';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.budget - task.budget_total_task_mm_sum + task
-                                                                .total_task_refund_budget_status) + '</span>';
-
-                                                            } */
-
-                            /*
-
-                                                            else if (task.task_refund_pa_status == 1 && task.task_parent_sub_refund_pa_status == 2
-                                                            && task.task_parent_sub == null
-
-                                                            ) {
-                                                            var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
-                                                            var formattedValue = new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format(task.task_refund_pa_budget+task.total_task_refund_pa_budget);
-
-                                                            return '<span style="color:' + tmp_class + ';">' + formattedValue + '</span>';
-                                                        }
-                             */
-                            /*     else if (task.task_status == 1 && task.task_refund_pa_status == 1  && task.task_parent_sub_refund_pa_status == 3
-                                    && task.task_parent_sub == null
-
-                                    ) {
-                                    var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
-                                    var formattedValue = new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format(task.totalleactdifference);
-
-                                    return '<span style="color:' + tmp_class + ';">' + formattedValue + '</span>';
-                                }
-
-                                   else if (task.task_type == null && task.task_refund_pa_status == 1 && task
-                                    .task_parent_sub_refund_pa_status == 2) {
-
-                                    var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
-                                    return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format((task.totalleactdifference)) + '</span>';
-                                }
-
-
-                                else if (task.task_type == null && task.task_refund_pa_status == 2 && task
-                                    .task_parent_sub_refund_pa_status == 2) {
-
-                                    var tmp_class = task.task_refund_pa_status == 1 ? 'blue' : 'green';
-                                    return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format((task.totalleactdifference)) + '</span>';
-                                }
-
-                                else if (task.task_type == null && task.task_refund_pa_status == 3 && task
-                                    .task_parent_sub_refund_pa_status == 2) {
-
-                                    var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
-                                    return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                        style: 'currency',
-                                        currency: 'THB'
-                                    }).format((task.totalleactdifference)) + '</span>';
-                                } */
-                            /*
-                                                        else if (task.task_parent == null && task.task_type == null && task.task_status == 1
-                                                        && task.task_refund_pa_status == 1 && task.task_parent_sub_refund_pa_status == 2) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.totalLeasttask_refund_pa_budget)) + '</span>';
-                                                        }
-
-
-                                                        else if (task.task_parent == null && task.task_type == null
-                                                        && task.task_refund_pa_status == 2 && task.task_parent_sub_refund_pa_status == 2) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 2 ? 'blue' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.totalLeasttask_refund_pa_budget)) + '</span>';
-                                                        }
-
-
-                                                         else if (task.task_type == null && task.task_status == 1 && task.task_refund_pa_status == 2 && task
-                                                            .task_parent_sub_refund_pa_status == 2) {
-
-                                                            var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
-                                                            return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                                                style: 'currency',
-                                                                currency: 'THB'
-                                                            }).format((task.totalleactdifference)) + '</span>';
-                                                        }
-
-                             */
-                            /*       else if (task.task_root_task_refund_pa_status == 2) {
-
-                                  var tmp_class = task.task_root_task_refund_pa_status == 2 ? 'blue' : 'green';
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format(task.task_total_sum_task_refund_pa_budget) + '</span>';
-                                  } */
-
-
-                            /*   else if (task.budget_total_task_mm_sum > 0 && task.task_refund_pa_status == "3" &&
-                                  task.task_parent_sub_refund_pa_status == "4" && task.type == "task") {
-                                  var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                  var tmp_class = task.task_refund_pa_status == 3 ? 'blue' : 'green';
-
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format((task.budget - (task.budget_total_task_mm_sum)) + task
-                                      .total_task_refund_budget_status) + '</span>';
-                              }
-
-
-
-                              else if (task.budget_total_task_mm_sum > 0 && task.task_parent_sub_refund_pa_status == 3 && task.task_parent_sub_refund_pa_status == 2) {
-                                  var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                  var tmp_class =task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' : 'green';
-
-                                  return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                      style: 'currency',
-                                      currency: 'THB'
-                                  }).format((task.budget - (task.total_Leasttask_cost_2)) ) + '</span>';
-                              } */
-
-
-
-
-
-                            /*      else if (task.budget > 0) {
-                                     var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                     return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                         style: 'currency',
-                                         currency: 'THB'
-                                     }).format(task.budget - task.cost) + '</span>';
-                                 } */
-                            /*
-                                 else if (task.budget_total_task_mm > 0) {
-                                     var tmp_class = task.balance < 0 ? 'green' : 'green';
-
-                                     return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                         style: 'currency',
-                                         currency: 'THB'
-                                     }).format(task.budget - task.budget_total_task_mm) + '</span>';
-                                 }
-                                  */
-                            /*    else if (task.cost_no_pa_2 > 0) {
-                                   var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                   return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                       style: 'currency',
-                                       currency: 'THB'
-                                   }).format(task.budget - task.cost_no_pa_2) + '</span>';
-                               } */
-                            /*
-                               else if (task.budget_mm > 0) {
-                                   var tmp_class = task.balance < 0 ? 'green' : 'green';
-                                   return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                                       style: 'currency',
-                                       currency: 'THB'
-                                   }).format(task.budget - task.budget_mm) + '</span>';
-                               }
-                                */
 
 
                         }
@@ -1367,81 +811,102 @@
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.cost) : '';
+                function formatCurrency(amount) {
+        return new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(amount);
+    }
 
+    // Function to determine the color class based on conditions
+    function determineColorClass(amount) {
+        if (amount < 0) {
+            return 'red';
+        } else if (amount > 0) {
+            return 'blue';
+        }
+        return 'green';
+    }
+            // Get the project type text
+            var projectTypes = {
+                    1: 'งาน',
+                    2: 'โครงการ',
+                };
+
+                var projectTypeText = projectTypes[task.p] || '';
+                var budget_it_operating_formatted = formatCurrency(task.budget_it_operating || 0);
+var budget_it_investment_formatted = formatCurrency(task.budget_it_investment || 0);
+var budget_gov_utility_formatted = formatCurrency(task.budget_gov_utility || 0);
+var budget_total_formatted = formatCurrency(task.budget || 0)
 
 
 
                 var html = '<b>โครงการ/งาน:</b> ' + task.text + '<br/>';
                 html += task.owner ? '<b>เจ้าของ:</b> ' + task.owner + '<br/>' : '';
 
+
+
+
+
+               if(task.p  < 3){
+
+
+
+
+
+
+
+               } else{
+                if(task.budget_it_operating > 1){
+    html += `ประเภท<b>  งบกลาง ict:</b> <br/>`;
+}
+if (task.budget_it_investment >1) {
+    html += `ประเภท<b>  งบดำเนินงาน:</b><br/>`;
+}
+if (task.budget_gov_utility > 1) {
+    html += `ประเภท<b>  งบสาธารณูปโภค:</b><br/>`;
+}
+
                 if (budget) {
-                    html += '<table class="table table-sm " style="font-size:9px">';
-                    html += '<tr class="text-center align-middle">\
-                                                                                                                <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
-                                                                                                                <td colspan="2">งบกลาง IT</td>\
-                                                                                                                <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
-                                                                                                              </tr>';
-                    html += '<tr>\
-                                                                                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                                                                <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                                                                <td>ค่าสาธารณูปโภค</td>\
-                                                                                                                <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
-                                                                                                                <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
-                                                                                                              </tr>';
-                    if (task.type == 'task') {
-                        html += '<tr class="text-end">\
-                                                                                                                <td>-' +
-                            budget_gov_operating + '</td>\
-                                                                                                                <td>' +
-                            budget_gov_investment + '</td>\
-                                                                                                                <td>' +
-                            budget_gov_utility + '</td>\
-                                                                                                                <td>' +
-                            budget_it_operating + '</td>\
-                                                                                                                <td>' +
-                            budget_it_investment +
-                            '</td>\
-                                                                                                                <td class="text-success">' +
-                            budget + '</td>\
-                                                                                                              </tr>';
-                    } else {
-                        html += '<tr class="text-end">\
-                                                                                                                <td>' +
-                            budget_gov_operating + '</td>\
-                                                                                                                <td>' +
-                            budget_gov_investment + '</td>\
-                                                                                                                <td>' +
-                            budget_gov_utility + '</td>\
-                                                                                                                <td>' +
-                            budget_it_operating + '</td>\
-                                                                                                                <td>' +
-                            budget_it_investment +
-                            '</td>\
-                                                                                                                <td class="text-success">' +
-                            budget + '</td>\
-                                                                                                              </tr>';
-                    }
-                    html += '</table>';
+                    if(task.budget_it_operating > 1){
+    html += `<b>งบกลาง ict:</b> ${formatCurrency(task.budget_it_operating)}<br/>`;
+}
+if (task.budget_it_investment >1) {
+    html += `<b>งบดำเนินงาน:</b> ${formatCurrency(task.budget_it_investment)}<br/>`;
+}
+if (task.budget_gov_utility > 1) {
+    html += `<b>งบสาธารณูปโภค:</b> ${formatCurrency(task.budget_gov_utility)}<br/>`;
+}
+
                 }
 
-                if (task.cost) {
-                    html += '<b>ค่าใช้จ่าย:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                        style: 'currency',
-                        currency: 'THB'
-                    }).format(task.cost) + '</span><br/>';
-                }
-                if (task.balance) {
-                    var tmp_class = task.balance > 0 ? 'green' : 'red';
-                    html += '<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
-                        style: 'currency',
-                        currency: 'THB'
-                    }).format(task.balance) + '</span><br/>';
-                }
 
+                    html += `<b>2งบประมาณที่ใช้ไป:</b> ${formatCurrency(task.cost)}<br/>`;
+
+
+
+                    html += `<b>3งบประมาณที่เบิกจ่ายแล้ว:</b> ${formatCurrency(task.pay)}<br/>`;
+
+        if(task.task_budget_type = '1' )
+
+        { var tmp_class = task.task_budget_type = 1 ? 'blue' : 'red';
+                    html += '2<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+                        style: 'currency',
+                        currency: 'THB'
+         }).format(task.budget - task.total_cost_op_in_gov) + '</span><br/>' }
+
+
+
+
+
+
+               }//end
                 return html;
 
 
             };
+
+
 
 
             gantt.ext.fullscreen.getFullscreenElement = function() {
@@ -1589,3 +1054,127 @@
 
     </x-slot:javascript>
 </x-app-layout>
+
+
+
+{{-- gantt.templates.tooltip_text = function(start, end, task) {
+    var budget_gov = task.budget_gov ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_gov) : '';
+    var budget_it = task.budget_it ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_it) : '';
+    var budget = task.budget ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget) : '';
+    var budget_gov_operating = task.budget_gov_operating ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_gov_operating) : '';
+    var budget_gov_investment = task.budget_gov_investment ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_gov_investment) : '';
+    var budget_gov_utility = task.budget_gov_utility ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_gov_utility) : '';
+    var budget_it_operating = task.budget_it_operating ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_it_operating) : '';
+    var budget_it_investment = task.budget_it_investment ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.budget_it_investment) : '';
+    var cost = task.cost ? new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB'
+    }).format(task.cost) : '';
+
+    var projectTypes = {
+1: 'งาน',
+2: 'โครงการ',
+// โค้ดอื่นๆ
+};
+
+var projectTypeText = projectTypes[task.p];
+console.log(task.p);
+console.log(projectTypeText);
+
+
+    var html =   task.text + '<br/>';
+    html += task.owner ? '<b>เจ้าของ:</b> ' + task.owner + '<br/>' : '';
+
+    if (budget) {
+        html += '<table class="table table-sm " style="font-size:9px">';
+        html += '<tr class="text-center align-middle">\
+                                                                                                    <td colspan="3">เงินงบประมาณ<br>(งบประมาณขอรัฐบาล)</td>\
+                                                                                                    <td colspan="2">งบกลาง IT</td>\
+                                                                                                    <td rowspan="2">รวมทั้งหมด<br>(เงินงบประมาณ+งบกลาง)</td>\
+                                                                                                  </tr>';
+        html += '<tr>\
+                                                                                                    <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                                                    <td>งบลงทุน IT<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                                                    <td>ค่าสาธารณูปโภค</td>\
+                                                                                                    <td>งบดำเนินงาน<br>(ค่าใช้สอยต่างๆ)</td>\
+                                                                                                    <td>งบลงทุน<br>(ครุภัณฑ์ต่างๆ)</td>\
+                                                                                                  </tr>';
+        if (task.type == 'task') {
+            html += '<tr class="text-end">\
+                                                                                                    <td>-' +
+                budget_gov_operating + '</td>\
+                                                                                                    <td>' +
+                budget_gov_investment + '</td>\
+                                                                                                    <td>' +
+                budget_gov_utility + '</td>\
+                                                                                                    <td>' +
+                budget_it_operating + '</td>\
+                                                                                                    <td>' +
+                budget_it_investment +
+                '</td>\
+                                                                                                    <td class="text-success">' +
+                budget + '</td>\
+                                                                                                  </tr>';
+        } else {
+            html += '<tr class="text-end">\
+                                                                                                    <td>' +
+                budget_gov_operating + '</td>\
+                                                                                                    <td>' +
+                budget_gov_investment + '</td>\
+                                                                                                    <td>' +
+                budget_gov_utility + '</td>\
+                                                                                                    <td>' +
+                budget_it_operating + '</td>\
+                                                                                                    <td>' +
+                budget_it_investment +
+                '</td>\
+                                                                                                    <td class="text-success">' +
+                budget + '</td>\
+                                                                                                  </tr>';
+        }
+        html += '</table>';
+    }
+
+    if (task.cost) {
+        html += '<b>ค่าใช้จ่าย:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(task.cost) + '</span><br/>';
+    }
+    if (task.balance) {
+        var tmp_class = task.balance > 0 ? 'green' : 'red';
+        html += '<b>คงเหลือ:</b> <span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
+            style: 'currency',
+            currency: 'THB'
+        }).format(task.balance) + '</span><br/>';
+    }
+
+    return html;
+
+
+};
+ --}}

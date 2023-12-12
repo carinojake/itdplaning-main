@@ -376,7 +376,7 @@ class ContractController extends Controller
 
 
 
-        //dd($request,$contractgannt, $files_contract, $contract, $gantt, $duration_p, $latestContract, $taskcons);
+      //  dd($request,$contractgannt, $files_contract, $contract, $gantt, $duration_p, $latestContract, $taskcons);
 
 
         return view('app.contracts.show', compact(
@@ -1647,6 +1647,8 @@ class ContractController extends Controller
         }
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -1662,7 +1664,12 @@ class ContractController extends Controller
         }
         return redirect()->route('contract.index');
     }
+
+
+
     //////////////////////////////////////////////////////////////
+
+
 
 
     public function taskstorestore(Request $request, Contract $contract)
@@ -1890,7 +1897,7 @@ class ContractController extends Controller
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
         ($files_contract = File::where('contract_id', ($id_contract))->get());
         ($files_taskcon = File::where('taskcon_id', ($id_taskcon))->get());
-        //dd ($taskcons, $contract, $relatedTaskcons);
+      //  dd ($taskcons, $contract, $relatedTaskcons);
 
         //$id_taskcon    = Hashids::decode($taskcon)[0];  $taskcon,$contract
         // $id_contract = Hashids::decode($contract)[0];
@@ -1924,20 +1931,17 @@ class ContractController extends Controller
 
         $taskconsSum = Taskcon::where('contract_id', $id_contract)
             ->whereNot('taskcon_id', $id_taskcon)
-            ->sum('taskcon_budget_gov_utility');
+            //->sum('taskcon_budget_gov_utility')
+            ->sum('taskcon_pay')
 
+            ;
 
         $tasks = task::get();
         $contractcons = Contract::get();
-
-
         // Fetch top-level taskcons with pagination
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
-        //  dd ($taskcons, $contract, $relatedTaskcons,$taskconsSum);
-
-
-
+       // dd ($taskcons, $contract, $relatedTaskcons,$taskconsSum);
 
         // dd ($taskcons, $contract);
 
@@ -1956,7 +1960,7 @@ class ContractController extends Controller
         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
 
 
-        return view('app.contracts.tasks.editview', compact('contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
+        return view('app.contracts.tasks.editview', compact(  'contract'  ,'contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
 
@@ -2134,7 +2138,7 @@ class ContractController extends Controller
 
 
 
-
+       // dd($taskcon);
 
         if ($taskcon->save()) {
 
@@ -2301,9 +2305,82 @@ class ContractController extends Controller
 
 
     /////////
+    public function taskconEditpay(Request $request, $contract)
+    {
+        $id_contract = Hashids::decode($contract)[0];
+      $id_taskcon    = Taskcon::where('contract_id', $id_contract)->first()->taskcon_id;
+
+        $contract    = Contract::find($id_contract);
+        $taskcon       = Taskcon::find($id_taskcon);
+        $taskcons      = Taskcon::where('contract_id', $id_contract)
+           // ->whereNot('taskcon_id', $id_taskcon)
+            ->get();
+
+        $taskconsSumpay = Taskcon::where('contract_id', $id_contract)
+            ->whereNot('taskcon_id', $id_taskcon)
+            //->sum('taskcon_budget_gov_utility')
+            ->sum('taskcon_pay')
+
+            ;
+            $taskconsSum = Taskcon::where('contract_id', $id_contract)
+           // ->whereNot('taskcon_id', $id_taskcon)
+            //->sum('taskcon_budget_gov_utility')
+            ->sum('taskcon_cost_gov_utility')
+
+            ;
+
+        $tasks = task::get();
+        $contractcons = Contract::get();
+        // Fetch top-level taskcons with pagination
+        $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
+
+       // dd ($taskcons, $contract, $relatedTaskcons,$taskconsSum, $taskconsSumpay);
+
+
+        return view('app.contracts.editpay', compact(  'contract'  ,'contractcons','taskconsSum','taskconsSumpay', 'tasks', 'contract', 'taskcon', 'taskcons'));
+    }
 
 
 
+    public function updatepay(Request $request)
+{
+    foreach ($request->tasks as $taskData) {
+        $taskcon = Taskcon::find($taskData['id']);
+
+        if ($taskcon) {
+            $taskcon->taskcon_name = $taskData['task_name'];
+
+            // ตัวอย่างการตรวจสอบเงื่อนไขและอัปเดตข้อมูล
+            if (isset($taskData['taskcon_cost_it_operating'])) {
+                $taskcon_cost_it_operating = str_replace(',', '', $taskData['taskcon_cost_it_operating']);
+                $taskcon->taskcon_cost_it_operating = $taskcon_cost_it_operating === '' ? null : $taskcon_cost_it_operating;
+                $taskcon->taskcon_budget_it_operating = $taskcon_cost_it_operating === '' ? null : $taskcon_cost_it_operating;
+            }
+
+            if (isset($taskData['taskcon_cost_it_investment'])) {
+                $taskcon_cost_it_investment = str_replace(',', '', $taskData['taskcon_cost_it_investment']);
+                $taskcon->taskcon_cost_it_investment = $taskcon_cost_it_investment === '' ? null : $taskcon_cost_it_investment;
+                $taskcon->taskcon_budget_it_investment = $taskcon_cost_it_investment === '' ? null : $taskcon_cost_it_investment;
+
+            }
+
+            if (isset($taskData['taskcon_cost_gov_utility'])) {
+                $taskcon_cost_gov_utility = str_replace(',', '', $taskData['taskcon_cost_gov_utility']);
+                $taskcon->taskcon_cost_gov_utility = $taskcon_cost_gov_utility === '' ? null : $taskcon_cost_gov_utility;
+                $taskcon->taskcon_budget_gov_utility = $taskcon_cost_gov_utility === '' ? null : $taskcon_cost_gov_utility;
+            }
+
+            if (isset($taskData['taskcon_pay'])) {
+                $taskcon_pay = str_replace(',', '', $taskData['taskcon_pay']);
+                $taskcon->taskcon_pay = $taskcon_pay === '' ? null : $taskcon_pay;
+            }
+
+            $taskcon->save();
+        }
+    }
+
+    return back();
+}
 
 
 

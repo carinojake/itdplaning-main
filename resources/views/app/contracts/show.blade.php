@@ -10,10 +10,21 @@
                             <x-slot:toolbar>
 
                                 <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning">Edit</a>
+
+
                                 <a href="{{ route('contract.task.create', $contract->hashid) }}"
                                     class="text-white btn btn-success">เพิ่มค่าใช้จ่าย</a>
 
-                                <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
+
+
+
+                                    <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
+                                        class="btn-sm btn btn-warning text-white">fffff <i class="cil-cog">
+                                          </i>
+                                    </a>
+
+
+                                         <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
                             <div class="row  callout callout-primary mb-3">
 
@@ -151,7 +162,7 @@
 
                             {{-- 27112566 - 2 --}}
 
-                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                     <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="callout callout-info accordion-item">
                                         <h2 class="accordion-header " id="flush-headingOne">
                                             <button class="accordion-button collapsed" type="button"
@@ -234,7 +245,9 @@
                                                 {{-- <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                     class="text-white btn btn-primary"><i class="cil-folder-open "></i>
                                                     Task</a> --}}
-                                                @if ($contract->contract_project_type == 'j')
+                                         @if ($contract->contract_refund_pa_status == 1)
+
+                                                    @if ($contract->contract_project_type == 'j')
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
@@ -253,6 +266,11 @@
                                                                 class="cil-money"></i></button>
                                                     </form>
                                                 @endif
+
+
+                                                @endif
+
+
                                                 {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-warning"><i class="cil-cog"></i></a>
                                             <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
