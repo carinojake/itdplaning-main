@@ -57,22 +57,36 @@
                                     class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
                             </div>
                                 <div class="row">
-                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                    <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
-                                        <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
-
+                                   {{--  @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0) --}}
+                                    <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
+                                        @if($projectDetails->budget_it_operating >= $sum_task_budget_it_operating )
+                                        <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating , 2) }} บาท</div>
+                                        @elseif($projectDetails->budget_it_operating <$sum_task_budget_it_operating)
+                                        <div class="col-2"> 0 บาท</div>
                                         @endif
+
+                                        <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
+                                        <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+
+                                        @if($increasedData->isNotEmpty())
+                                        <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
+                                        <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div>
+                                    @endif
+
+
+
+                                       {{--  @endif --}}
                                 </div>
                                 <div class="row">
                                     @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
-                                    <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
-                                        <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                    <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
+                                        <div class="col-2">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
                                     @endif
                                 </div>
                                 <div class="row">
                                     @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                    <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                        <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                    <div class="col-2">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                        <div class="col-2">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
                                     @endif
                                 </div>
 
@@ -83,7 +97,7 @@
                             </div>
 
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
-                                class="row g-3 needs-validation" novalidate>
+                                class="row needs-validation" novalidate>
                                 @csrf
                                 <div class="row mt-3">
                                     <div class="col-md-12">
@@ -187,11 +201,11 @@
                                     <h4>งบประมาณ</h4>
                                     <div class="row">
                                         <div class="row">
-                                            <div class="col-md-4 needs-validation" novalidate>
+                                            <div class="col-md-4 " >
                                                 <label for="task_budget_it_operating"
                                                     class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_operating"
                                                     name="task_budget_it_operating"
                                                     @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif>
@@ -215,7 +229,7 @@
                                                 <label for="task_budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_investment"
                                                     name="task_budget_it_investment"
 
@@ -232,7 +246,7 @@
                                                 <label for="task_budget_gov_utility"
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_gov_utility"
                                                     name="task_budget_gov_utility"
                                                     @if(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) == 0) readonly @endif>
@@ -252,14 +266,14 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-4 d-none">
                                     <label for="task_refund_budget_type"
                                         class="form-label">{{ __('task_refund_budget_type ') }}</label>
                                     <span class="text-danger"></span>
 
                                     <input type="text" placeholder="0.00"
                                     step="0.01"
-                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                     class="form-control numeral-mask"
                                         id="task_refund_budget_type"
                                         name="task_refund_budget_type"  readonly>
@@ -359,6 +373,7 @@
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+
         //var task_end_date_str = $("#task_end_date").val();
 
 

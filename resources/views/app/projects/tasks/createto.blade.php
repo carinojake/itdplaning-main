@@ -210,7 +210,7 @@
                                                     class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_operating" name="task_budget_it_operating" min="0">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_operating"
                                                     name="task_budget_it_operating" min="0">
 
@@ -223,7 +223,7 @@
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <!--  <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_it_investment" name="task_budget_it_investment" min="0">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_investment"
                                                     name="task_budget_it_investment" min="0">
 
@@ -235,7 +235,7 @@
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_budget_gov_utility" name="task_budget_gov_utility" min="0"> -->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_gov_utility"
                                                     name="task_budget_gov_utility" min="0">
 
@@ -286,7 +286,7 @@
                                                     <label for="task_budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_operating" name="task_budget_it_operating"
                                                         min="0" required>
@@ -311,7 +311,7 @@
                                                     <label for="task_budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_investment"
                                                         name="task_budget_it_investment" min="0"  required>
@@ -332,7 +332,7 @@
                                                     <label for="task_budget_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
                                                         name="task_budget_gov_utility" min="0"  required>
 
@@ -356,7 +356,7 @@
                                             <label for="task_mm_budget_1"
                                                 class="form-label">{{ __('budget') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                 class="form-control numeral-mask"
                                                 id="task_mm_budget" name="task_mm_budget"
                                                 min="0"  value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
@@ -375,7 +375,7 @@
                                                     class="form-label">{{ __('งบกลาง ICT') }}</label>
                                                 <!-- <input type="number"placeholder="0.00" step="0.01" class="form-control" id="task_cost_it_operating" name="task_cost_it_operating" min="0">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_cost_it_operating"
                                                     name="task_cost_it_operating" min="0">
 
@@ -389,7 +389,7 @@
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01"class="form-control" id="task_cost_it_investment" name="task_cost_it_investment" min="0"> -->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_cost_it_investment"
                                                     name="task_cost_it_investment" min="0">
 
@@ -403,7 +403,7 @@
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <!-- <input type="number" placeholder="0.00" step="0.01" class="form-control" id="task_cost_gov_utility" name="task_cost_gov_utility" min="0"> -->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_cost_gov_utility"
                                                     name="task_cost_gov_utility" min="0">
 

@@ -16,7 +16,9 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('เพิ่มข้อมูล งาน/โครงการ') }}">
 
-                            <form method="POST" action="{{ route('project.store') }}" class="row needs-validation"
+                            <form method="POST" action="{{ route('project.store') }}"
+
+                            class="row needs-validation"
                                 novalidate>
                                 @csrf
                                 <div class="row mt-3">
@@ -157,9 +159,14 @@
                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
 
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+
+
                                                         class="form-control numeral-mask" id="budget_it_operating"
-                                                        name="budget_it_operating" min="0">
+                                                        name="budget_it_operating"
+
+
+                                                        min="0">
 
 
                                                     <div class="invalid-feedback">
@@ -170,7 +177,7 @@
                                                     <label for="budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="budget_it_investment"
                                                         name="budget_it_investment" min="0">
                                                     <div class="invalid-feedback">
@@ -180,13 +187,13 @@
 
                                                 <div class="col-md-4">
                                                     <label for="budget_gov_utility"
-                                                        class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                        class="form-label">{{ __('งบสาธารณูปโภค') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="budget_gov_utility"
                                                         name="budget_gov_utility" min="0">
                                                     <div class="invalid-feedback">
-                                                        {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                        {{ __('ระบุงบสาธารณูปโภค') }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -242,7 +249,23 @@
 
 
 
+<script>
+    $(document).ready(function() {
+        // Assuming your fiscal year dropdown has an ID of 'fiscal_year'
+        $('#project_fiscal_year').on('change', function() {
+            // Get the selected fiscal year
+            var fiscalYear = $(this).val();
+            // Assuming the fiscal year starts on October 1st and ends on September 30th
+            // Update the following dates to match your fiscal year's start and end dates
+            var fiscalYearStart = '01/10/' + (parseInt(fiscalYear) -1);
+            var fiscalYearEnd = '30/09/' + fiscalYear;
 
+            // Assuming your start and end date inputs have IDs 'start_date' and 'end_date'
+            $('#project_start_date').val(fiscalYearStart);
+            $('#project_end_date').val(fiscalYearEnd);
+        });
+    });
+    </script>
 
 
 
@@ -254,43 +277,38 @@
 
 <script>
     $(function() {
-       // var d = new Date();
-       // var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
         $("#project_start_date, #project_end_date").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
-
-            language:"th-th",
-
+            language: "th-th",
         });
+
         $('#project_fiscal_year').on('change', function() {
-    var fiscalYearDate = $(this).datepicker('getDate');
-    var fiscalYear = fiscalYearDate.getFullYear();
-    var fiscalYearStartDate = new Date(fiscalYear - 1, 9, 1); // 1st October of the previous year
-    var fiscalYearEndDate = new Date(fiscalYear, 8, 30); // 30th September of the fiscal year
-    console.log(fiscalYearStartDate);
-    console.log(fiscalYearEndDate);
-    // Set the start and end dates for the project_start_date datepicker
-    $("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
-  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+            // Get the selected fiscal year from the datepicker
+            var fiscalYearDate = $(this).datepicker('getDate');
+            var fiscalYear = fiscalYearDate ? fiscalYearDate.getFullYear() : new Date().getFullYear();
+            // Calculate the start and end dates of the fiscal year
+            var fiscalYearStartDate = new Date(fiscalYear - 1, 9, 1); // 1st October of the previous year
+            var fiscalYearEndDate = new Date(fiscalYear, 8, 30); // 30th September of the fiscal year
+            var fiscalYearEnd = '30/09/' + fiscalYear;
+            // Set the date range for the project datepickers
+            $("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
+      //$("#project_end_date").datepicker("setEndDate", fiscalYearEnd);
+        });
 
-    // Set the start and end dates for the project_end_date datepicker
-   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#project_end_date").datepicker("setEndDate", fiscalYearEndDate);
-});
-$('#project_start_date').on('changeDate', function() {
+        $('#project_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
-
-            $("#project_end_date").datepicker("setStartDate", startDate);
+          //  $("#project_end_date").datepicker("setStartDate", startDate);
         });
 
         $('#project_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
-            $("#project_start_date").datepicker("setEndDate", endDate);
-        })
+            $("#project_start_date").datepicker("setEndDate", fiscalYearEnd);
+        });
     });
 </script>
+
 
 <script>
     $(document).ready(function() {

@@ -23,6 +23,7 @@ use App\Rules\BudgetGreaterThanCostUtility;
 use App\Rules\ValidateTaskPay;
 use App\Http\Controllers\Exception;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Increasedbudget;
 
 class ProjectController extends Controller
 {
@@ -31,6 +32,7 @@ class ProjectController extends Controller
      *
      * @return void
      */
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -1346,11 +1348,31 @@ $mainQuery = DB::query()
             'anull.total_pay_null',
 
 
+            'increasedbudgets.totoi_increased_budget_it_operting',
+            'increasedbudgets.totoi_increased_budget_it_investment',
+            'increasedbudgets.totoi_increased_budget_gov_utility',
+
+
 
 
 
 
         )
+        //19122566  งบกลาง ICT เพิ่ม
+            ->leftJoin(
+                DB::raw('(select increasedbudgets.project_id,
+                increasedbudgets.increased_budget_id,
+
+                sum(COALESCE(increasedbudgets.increased_budget_it_operating,0)) as totoi_increased_budget_it_operting,
+                sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as totoi_increased_budget_it_investment,
+                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0)) as totoi_increased_budget_gov_utility
+                from increasedbudgets
+                where increasedbudgets.deleted_at IS NULL) as increasedbudgets'),
+                'increasedbudgets.project_id',
+                '=',
+                'projects.project_id'
+
+            )
             //21112566
             ->leftJoin(
                 DB::raw('(select tasks.project_id,
@@ -1982,7 +2004,7 @@ $mainQuery = DB::query()
 
         // ->toArray()
 
-        //dd($project);
+       //dd($project);
         /*      $project = Project::select('projects.*', 'tasks.*', 'contract_has_tasks.*', 'contracts.*', 'taskcons.*')
 ->join('tasks', 'tasks.project_id', '=', 'projects.project_id')
 ->join('contract_has_tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
@@ -2096,6 +2118,15 @@ $mainQuery = DB::query()
         ((float) $__total_task_refund_pa_budget_null      = (float)($project['total_task_refund_pa_budget_null']));
         ((float) $__total_task_pay_null      = (float)($project['total_task_pay_null']));
 
+        //19/12/2566 งบประมาณเพิ่ม
+        ((float) $__totoi_increased_budget_it_operting      = (float)($project['totoi_increased_budget_it_operting']));
+        ((float) $__totoi_increased_budget_it_investment      = (float)($project['totoi_increased_budget_it_investment']));
+        ((float) $__totoi_increased_budget_gov_utility      = (float)($project['totoi_increased_budget_gov_utility']));
+        ((float) $__totoi_increased_budget      = (float)($project['totoi_increased_budget_it_operting'])+(float)($project['totoi_increased_budget_it_investment'])+(float)($project['totoi_increased_budget_gov_utility']));
+
+
+
+
         //21/11/2566 total_task_op
         //(float) $__op_totol_task_budget_it_operating_99 = (float) $project['op_totol_task_budget_it_operating_99'];
         // (float) $__in_totol_task_budget_it_investment_99 = (float) $project['in_totol_task_budget_it_investment_99'];
@@ -2168,6 +2199,10 @@ $mainQuery = DB::query()
             'op_totol_task_budget_it_operating' => $__op_totol_task_budget_it_operating_99,
             'in_totol_task_budget_it_investment' => $__in_totol_task_budget_it_investment_99,
             'ut_totol_task_budget_gov_utility' => $__ut_totol_task_budget_gov_utility_99,
+            //19/12/2566 งบประมาณเพิ่ม
+            'totoi_increased_budget_it_operting' => $__totoi_increased_budget_it_operting,
+            'totoi_increased_budget_it_investment' => $__totoi_increased_budget_it_investment,
+            'totoi_increased_budget_gov_utility' => $__totoi_increased_budget_gov_utility,
 
 
             // 'duration'              => 360,
@@ -2412,9 +2447,16 @@ $mainQuery = DB::query()
         $budget['totalrefund_top'] = $budget['ictop1'] + $budget['op_rf'] + $budget['ictin2'] + $budget['in_rf'] + $budget['ictut3'] + $budget['ut_rf'];
 
 
+        //19/12/2566 งบประมาณเพิ่ม
+        $budget['totoi_increased_budget'] = $__totoi_increased_budget;
+        $budget['totoi_increased_budget_it_operting'] = $__totoi_increased_budget_it_operting;
+        $budget['totoi_increased_budget_it_investment'] = $__totoi_increased_budget_it_investment;
+        $budget['totoi_increased_budget_gov_utility'] = $__totoi_increased_budget_gov_utility;
 
 
-       // dd($budget, $result_query_op_in_un);
+
+
+       dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -4772,7 +4814,7 @@ dd($task_sub_refund_total_count);
             ];
 
         } */
-        // dd($gantt);
+         //dd($gantt);
 
         //dd($gantt,$budget, $result_query_op_in_un,$ctesumsurplusSqlnull->get(),$ctetasksumsurplusQuery,$ctesumsurplus = $ctesumsurplusQuery->get(),$results_task_refund_pa);
 
@@ -5607,8 +5649,129 @@ dd($task_sub_refund_total_count);
         // dd($tasks);
 
         //dd($project->main_task);
+//budget_it_operating
+        $totalBudgetItOperating = 0;
+        $totalrefundpabudget_it_operating = 0;
+        $totaltaskrefunbudget_ItOperating = 0;
+
+
+        foreach ($project->main_task as $task) {
+            if ($task->task_budget_it_operating && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+                $totalBudgetItOperating += $task->task_budget_it_operating;
+                $totaltaskrefunbudget_ItOperating += $task->task_refund_budget;
+            }
+            elseif ($task->task_budget_it_operating && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetItOperating += $task->task_budget_it_operating;
+            }
+            elseif
+
+            ($task->task_budget_it_operating && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetItOperating += $task->task_budget_it_operating;
+            }
+
+        }
+
+        foreach ($project->main_task as $task) {
+        if ($task->task_budget_it_operating && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+                $totalrefundpabudget_it_operating += $task->task_refund_pa_budget;
+            }
+
+        }
+   //budget_it_investment
+        $totalBudgetItInvestment = 0;
+        $totalrefundpabudget_it_investment = 0;
+        $totaltaskrefunbudget_ItInvestment = 0;
+        foreach ($project->main_task as $task) {
+            if ($task->task_budget_it_investment && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+                $totalBudgetItInvestment += $task->task_budget_it_investment;
+                $totaltaskrefunbudget_ItInvestment += $task->task_refund_budget;
+            }
+            elseif ($task->task_budget_it_investment && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetItInvestment += $task->task_budget_it_investment;
+            }
+            elseif
+
+            ($task->task_budget_it_investment && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetItInvestment += $task->task_budget_it_investment;
+            }
+
+        }
+        foreach ($project->main_task as $task) {
+            if ($task->task_budget_it_investment && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+                  $totalrefundpabudget_it_investment += $task->task_refund_pa_budget;
+                }
+
+            }
+
+
+  //budget_gov_utility
+          $totalBudgetGovUtility = 0;
+        $totalrefundpabudget_gov_utility = 0;
+        $totaltaskrefunbudget_GovUtility = 0;
+
+        foreach ($project->main_task as $task) {
+            if ($task->task_budget_gov_utility && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+                $totalBudgetGovUtility += $task->task_budget_gov_utility;
+                $totaltaskrefunbudget_GovUtility += $task->task_refund_budget;
+            }
+            elseif ($task->task_budget_gov_utility && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetGovUtility += $task->task_budget_gov_utility;
+            }
+            elseif
+
+            ($task->task_budget_gov_utility && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+                # code...
+                $totalBudgetGovUtility += $task->task_budget_gov_utility;
+            }
+
+        }
+        foreach ($project->main_task as $task) {
+            if ($task->task_budget_gov_utility && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+                  $totalrefundpabudget_gov_utility += $task->task_refund_pa_budget;
+                }
+
+            }
+
+
+
+
+
+
+
+
+
+       //dd($totalBudgetItOperating,$totalrefundpabudget_it_operating,$totaltaskrefunbudget_ItOperating,$totalBudgetItInvestment,$totalrefundpabudget_it_investment,$totaltaskrefunbudget_ItInvestment,$totalBudgetGovUtility,$totalrefundpabudget_gov_utility,$totaltaskrefunbudget_GovUtility);
+            //budget_it_operating
+       $budget['totalBudgetItOperating'] = $totalBudgetItOperating;
+         $budget['total_refund_pa_budget_it_operating'] = $totalrefundpabudget_it_operating;
+            $budget['total_task_refun_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
+            //budget_it_investment
+            $budget['totalBudgetItInvestment'] = $totalBudgetItInvestment;
+            $budget['total_refund_pa_budget_it_investment'] = $totalrefundpabudget_it_investment;
+            $budget['total_task_refun_budget_ItInvestment'] = $totaltaskrefunbudget_ItInvestment;
+            //budget_gov_utility
+            $budget['totalBudgetGovUtility'] = $totalBudgetGovUtility;
+            $budget['total_refund_pa_budget_gov_utility'] = $totalrefundpabudget_gov_utility;
+            $budget['total_task_refun_budget_GovUtility'] = $totaltaskrefunbudget_GovUtility;
+
+
+//รวม  +  - $budget
+        $budget['totalbudget_budget'] = $budget['totalBudgetItOperating'] + $budget['totalBudgetItInvestment'] + $budget['totalBudgetGovUtility'];
+        $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
+        $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
+
+
+
+            //dd($budget);
 
         return view('app.projects.view', compact(
+            'totalrefundpabudget_it_operating',
+            'totalBudgetItOperating',
             'result_query_it_operating_idParentCategory',
             'result_query_it_investment_idParentCategory',
             'result_query_gov_utility_idParentCategory',
@@ -5681,6 +5844,8 @@ dd($task_sub_refund_total_count);
             $reguiar_id = 1; // Use 1 as default if not provided
         }
 
+    // Call the ProjectService to create a new project
+   // $project = $this->projectService->createProject($request->all());
 
 
         return view('app.projects.create', compact('fiscal_year', 'reguiar_id'));
@@ -5764,6 +5929,32 @@ dd($task_sub_refund_total_count);
     {
         $id      = Hashids::decode($project)[0];
         ($project = Project::find($id));
+        $increasedbudgetData = DB::table('increasedbudgets')
+        //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('increasedbudgets.*')
+        ->where('project_id', $id)
+        ->where('increasedbudgets.deleted_at', NULL)
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+       // dd($increasedbudgetData);
+
+        $increasedbudget_sum_budget_it_operating =  $increasedbudgetData->sum('increased_budget_it_operating');
+        $increasedbudget_sum_budget_it_investment =  $increasedbudgetData->sum('increased_budget_it_investment');
+        $increasedbudget_sum_budget_gov_utility =  $increasedbudgetData->sum('increased_budget_gov_utility');
+        $increasedbudget_sum = $increasedbudget_sum_budget_it_operating + $increasedbudget_sum_budget_it_investment + $increasedbudget_sum_budget_gov_utility;
+
+        $increaseData['increasedbudget_sum'] = $increasedbudget_sum;
+        $increaseData['increasedbudget_sum_budget_it_operating'] = $increasedbudget_sum_budget_it_operating;
+        $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
+        $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
+
+
+       //dd($increaseData);
+
+
+
+
+
 
         $projectDetails = Project::find($id);
         $projectData = DB::table('projects')
@@ -5794,7 +5985,7 @@ dd($task_sub_refund_total_count);
 
 
 
-        return view('app.projects.edit', compact('project', 'projectsJson', 'projectDetails', 'request'));
+        return view('app.projects.edit', compact('project','increaseData','increasedbudgetData', 'projectsJson', 'projectDetails', 'request'));
     }
 
     /**
@@ -5807,6 +5998,10 @@ dd($task_sub_refund_total_count);
     {
         $id = Hashids::decode($project)[0];
         $project = Project::find($id);
+        $id_increasedbudgets = increasedbudget::where('project_id', $id)->get();
+      //  $projectId = Hashids::decode($projectHash)[0];
+        $increasedBudgets = IncreasedBudget::where('project_id', $id)->get();
+      //  dd($id_increasedbudgets);
 
         $messages = [
             'required' => 'กรุณากรอกข้อมูล :attribute',
@@ -5872,10 +6067,85 @@ dd($task_sub_refund_total_count);
         $project->budget_it_operating = $budget_it_operating;
         $project->budget_it_investment = $budget_it_investment;
         $project->reguiar_id = $request->input('reguiar_id');
+    $project->project_status_during_year = $request->input('project_status_during_year') ?? null;
+
+        // Save the Project
+           // Process each increased budget entry    foreach ($request->file('file') as $file)
+    // Assuming $increasedBudgets is a collection of IncreasedBudget models
+/*     foreach ( $request->increasedBudgets as $increasedBudgetdate) {
+        // The key to access the request data
+        $increasedBudgets = IncreasedBudget::find($increasedBudgetdate['increased_budget_id']);
+        dd($increasedBudgets);
+        if($increasedBudgets){
+            $increasedBudgets->increased_budget_status =$increasedBudgetdate['increased_budget_status'];
+            // ตัวอย่างการตรวจสอบเงื่อนไขและอัปเดตข้อมูล
+            if(isset($increasedBudgetdate['increased_budget_it_operating'])){
+                $increased_budget_it_operating = str_replace(',','',$increasedBudgetdate['increased_budget_it_operating']);
+                $increasedBudgets->increased_budget_it_operating = $increased_budget_it_operating === '' ? null : $increased_budget_it_operating;
+            }
+
+
+
+            dd($increasedBudgetdate);
+
+        // Save the updated increased budget entry
+        $increasedBudgetdate->save();
+
+
+        }
+
+
+    }
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $increasedbudget = new Increasedbudget;
+       // $increasedbudget->project_id = $id;
+        $increasedbudget->increased_budget_status = '1';
+
+        //dd($project,$increasedbudget);  $budget_gov_operating = $request->input('budget_gov_operating') !== null ? (float) str_replace(',', '', $request->input('budget_gov_operating')) : null;
+
+
 
         if ($project->save()) {
-            return redirect()->route('project.index');
+           if ($request->input('increased_budget_status') == '1') {
+                $increasedbudget = new Increasedbudget;
+                $increasedbudget->project_id = $id;
+                $increasedbudget->increased_budget_status = '1';
+
+
+
+
+                $increased_budget_it_operating = $request
+                ->input('increased_budget_it_operating') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_operating')) : null;
+                $increased_budget_it_investment = $request->input('increased_budget_it_investment') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_investment')) : null;
+                $increased_budget_gov_utility = $request->input('increased_budget_gov_utility') !== null ? (float) str_replace(',', '', $request->input('increased_budget_gov_utility')) : null;
+
+                $increasedbudget->increased_budget_it_operating = $increased_budget_it_operating;
+
+
+
+                $increasedbudget->increased_budget_it_investment = $increased_budget_it_investment;
+                $increasedbudget->increased_budget_gov_utility = $increased_budget_gov_utility;
+
+       // dd($project,$increasedbudget);
+
+                $increasedbudget->save();
+            }
+            return redirect()->route('project.view', ['project' => Hashids::encode($project->project_id)]);
         }
+
     }
 
     public function CreateSubno(Request $request, $project, $task = null)
@@ -7389,6 +7659,8 @@ dd($resultthItem); */
 
     public function taskCreate(Request $request, $project, $task = null)
     {
+        DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $id        = Hashids::decode($project)[0];
         $project = $request->project;
         //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
@@ -7396,10 +7668,11 @@ dd($resultthItem); */
         ($taskcons     = Taskcon::where('task_id', $id)->get());
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
+
         ($request = Project::find($id));
         $fiscal_years = Project::where('project_id', $id)->whereNotNull('project_fiscal_year')->pluck('project_fiscal_year')->unique()->sort()->values();
 
-
+       // dd($increased);
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
@@ -7418,6 +7691,43 @@ dd($resultthItem); */
         } else {
             $task = null;
         }
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+        )
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
+
+   // dd($increasedData);
+
+ /*      $increasedData = $increasedData->map(function ($p) {
+        return [
+            'increased_budget_id' => $p->increased_budget_id,
+            'project_id' => $p->project_id,
+            'increased_budget_it_operating' => $p->increased_budget_it_operating ?? null,
+            'increased_budget_it_investment' => $p->increased_budget_it_investment ?? null,
+            'increased_budget_gov_utility' => $p->increased_budget_gov_utility ?? null,
+        ];
+    }); */
+
+
+
+        //dd($increasedData);
+
+
+
+
+
+
         $projectDetails = Project::find($id);
         $projectData = DB::table('projects')
             //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
@@ -7447,7 +7757,7 @@ dd($resultthItem); */
 
      //dd ( $fiscal_years,$taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.create', compact(
-
+            'increasedData',
             'request',
             'fiscal_years',
             'taskcons',
@@ -10285,7 +10595,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
             }
 
 
-            $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+            $task->task_refund_pa_status = $task->task_refund_pa_status;
 
             $task->task_start_date = $start_date ?? date('Y-m-d 00:00:00');
             $task->task_end_date = $end_date ?? date('Y-m-d 00:00:00');
@@ -10333,7 +10643,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
             // Update other task attributes as needed
             //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
             // $task->taskcon_pp        = $request->input('taskcon_pp');
-            // dd($task);
+           // dd($task);
 
 
             if ($task->save()) {
@@ -10401,7 +10711,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
 
                 if ($taskcon_budget_it_operating === '') {
-                    $taskcon_budget_it_operating = null; // or '0'
+                    $taskcon_budget_it_operating = null ; // or '0'
                 }
 
                 if ($taskcon_budget_gov_utility === '') {
@@ -10480,7 +10790,7 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
                 //$taskcon->taskcon_description = trim($request->input('taskcon_description'));
                 // Save the Taskcon
-               // dd($task,$taskcon);
+              //  dd($task,$taskcon);
 
 
 

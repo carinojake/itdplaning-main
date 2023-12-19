@@ -161,7 +161,7 @@
 
 
 
-                                <div class="row">
+                                <div  id='budget_form'class="row">
 
 
                                     <div class="row">
@@ -172,10 +172,13 @@
                                                     class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                 <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="budget_it_operating"
                                                     name="budget_it_operating" min="0"
-                                                    value="{{ $project->budget_it_operating }}">
+                                                    value="{{ $project->budget_it_operating }}"
+
+
+                                                    >
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
@@ -187,7 +190,7 @@
                                                 <label for="budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="budget_it_investment"
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}">
@@ -200,7 +203,7 @@
                                                 <label for="budget_gov_utility"
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="budget_gov_utility"
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}">
@@ -214,6 +217,131 @@
 
 
                                     </div>
+                                </div>
+
+
+
+                                <div id="increaseData_form"class="row mt-3">
+                                    @foreach($increasedbudgetData as $key => $increaseData)
+                                    <div class="row mt-3">
+                                        <h4>งบประมาณ เพิ่ม {{ $key+1 }}</h4>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="increased_budget_it_operating"
+                                                    class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                                <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                class="form-control" id="increased_budget_it_operating_{{ $key }}"
+                                                name="increased_budget_it_operating[{{ $key }}]" min="0"
+                                                value="{{ $increaseData->increased_budget_it_operating }}" >
+
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบกลาง ICT') }}
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-4">
+                                                <label for="increased_budget_it_investment"
+                                                    class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                    class="form-control" id="increased_budget_it_investment[{{ $key }}]"
+                                                    name="increased_budget_it_investment" min="0"
+                                                    value="{{ $increaseData->increased_budget_it_investment }}" >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบดำเนินงาน') }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="increased_budget_gov_utility"
+                                                    class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                    class="form-control" id="increased_budget_gov_utility[{{ $key }}]"
+                                                    name="increased_budget_gov_utility" min="0"
+                                                    value="{{$increaseData->increased_budget_gov_utility}}" >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="row mt-3">
+
+                                    <div class="col-md-3">
+                                        <label for="increased_budget_status"
+                                            class="form-label">{{ __('งบประมาณ เพิ่ม') }}</label> <span
+                                            class="text-danger"></span>
+                                        <div >
+                                            <input class="form-check-input" type="radio" name="increased_budget_status"
+                                                id="increased_budget_status" value="1" >
+                                            <label class="form-check-label" for="increased_budget_status"
+                                               >
+                                                งบประมาณ เพิ่ม
+                                            </label>
+                                        </div>
+
+                                    <div class="invalid-feedback">
+                                        {{ __('งบประมาณ เพิ่ม') }}
+                                    </div>
+                                </div>
+                                    <div class="row">
+                                        <h4>งบประมาณ เพิ่ม</h4>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="increased_budget_it_operating"
+                                                    class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                                <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                    class="form-control" id="increased_budget_it_operating"
+                                                    name="increased_budget_it_operating" min="0"
+                                                    >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบกลาง ICT') }}
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-4">
+                                                <label for="increased_budget_it_investment"
+                                                    class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                    class="form-control" id="increased_budget_it_investment"
+                                                    name="increased_budget_it_investment" min="0"
+                                                    >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุงบดำเนินงาน') }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="increased_budget_gov_utility"
+                                                    class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                                <input type="text" placeholder="0.00" step="0.01"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                    class="form-control" id="increased_budget_gov_utility"
+                                                    name="increased_budget_gov_utility" min="0"
+                                                >
+                                                <div class="invalid-feedback">
+                                                    {{ __('ระบุค่าสาธารณูปโภค') }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
                                 </div>
 
 
@@ -246,6 +374,21 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+
+
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                var project_status_during_year = {!! json_encode($project->project_status_during_year == 2) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
+                if (project_status_during_year == 2) {
+                    var formInputs = document.querySelectorAll(
+                        '#increaseData_form input, #mm_form textarea, #mm_form select,#budget_form input'
+                        ); // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+                    formInputs.forEach(function(input) {
+                        input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
+                    });
+                }
+            });
+        </script>
         <script>
          $(document).ready(function(){
     $(":input").inputmask();

@@ -276,7 +276,7 @@
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01" class="form-control"
                                                                             id="contract_mm_budget"
-                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                             class="form-control numeral-mask"
                                                                             name="contract_mm_budget"
                                                                             min="0">
@@ -308,7 +308,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_pr_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_pr_budget"
                                                                                 min="0">
@@ -340,7 +340,7 @@
                                                                         <input type="taxt" placeholder="0.00"
                                                                             step="0.01" class="form-control"
                                                                             id="contract_pa_budget"
-                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                             class="form-control numeral-mask"
                                                                             name="contract_pa_budget"
                                                                             min="0">
@@ -356,7 +356,7 @@
 
                                                                             <input type="text"
                                                                                 placeholder="0.00" step="0.01"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 id="contract_refund_pa_budget"
                                                                                 name="contract_refund_pa_budget"
@@ -399,7 +399,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_po_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_po_budget"
                                                                                 min="0">
@@ -446,7 +446,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_er_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_po_budget"
                                                                                 min="0">
@@ -493,7 +493,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_cn_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_cn_budget"
                                                                                 min="0">
@@ -526,7 +526,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_ba_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_ba_budget"
                                                                                 min="0">
@@ -560,7 +560,7 @@
                                                                                 placeholder="0.00" step="0.01"
                                                                                 class="form-control"
                                                                                 id="contract_bd_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_bd_budget"
                                                                                 min="0">
@@ -591,7 +591,7 @@
                                                                         <input type="text" placeholder="0.00"
                                                                             step="0.01" class="form-control"
                                                                             id="contract_pay"
-                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                             class="form-control numeral-mask"
                                                                             name="contract_pay" min="0">
                                                                     </div>

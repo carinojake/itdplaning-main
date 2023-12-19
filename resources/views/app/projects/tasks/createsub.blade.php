@@ -318,7 +318,7 @@
                                             <label for="task_mm_budget"
                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ mm') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                 class="form-control numeral-mask"
                                                 id="task_mm_budget" name="task_mm_budget"
                                                 min="0"  value="{{ session('contract_mm_budget') }}"  readonly >
@@ -336,7 +336,7 @@
                                                     <label for="task_budget_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_operating" name="task_budget_it_operating"
                                                         min="0"  value={{ session('contract_mm_budget') }}
@@ -356,7 +356,7 @@
                                                     <label for="task_budget_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask"
                                                         id="task_budget_it_investment"
                                                         name="task_budget_it_investment" min="0" value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
@@ -371,7 +371,7 @@
                                                     <label for="task_budget_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค (PR)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_budget_gov_utility"
                                                         name="task_budget_gov_utility" min="0" value={{ session('contract_mm_budget') }}  onchange="calculateRefund()" >
 
@@ -390,7 +390,7 @@
                                                     <label for="task_cost_it_operating"
                                                         class="form-label">{{ __('งบกลาง ICT (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_it_operating"
                                                         name="task_cost_it_operating" min="0" value={{ session('contract_pa_budget') }} onchange="calculateRefund()" >
 
@@ -405,7 +405,7 @@
                                                     <label for="task_cost_it_investment"
                                                         class="form-label">{{ __('งบดำเนินงาน (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_it_investment"
                                                         name="task_cost_it_investment" min="0"  value={{ session('contract_pa_budget') }}  onchange="calculateRefund()">
 
@@ -420,7 +420,7 @@
                                                     <label for="task_cost_gov_utility"
                                                         class="form-label">{{ __('ค่าสาธารณูปโภค (PA)') }}</label>
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_gov_utility"
                                                         name="task_cost_gov_utility" min="0"  value={{ session('contract_pa_budget') }}  onchange="calculateRefund()">
 
@@ -442,7 +442,7 @@
 
                                                         <input type="text" placeholder="0.00"
        step="0.01"
-       data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+        data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
        class="form-control numeral-mask"
        id="task_refund_pa_budget"
        name="task_refund_pa_budget"

@@ -96,7 +96,7 @@
                                                                 class="form-label">{{ __('จำนวนเงิน PA') }}</label>
                                                             <span class="text-danger"></span>
                                                             <input type="text" placeholder="0.00" step="0.01"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask" id="total_pa_budget"
                                                                 name="total_pa_budget" min="0"
                                                                 value="{{ number_format($contract->contract_pa_budget, 2) }}"
@@ -148,7 +148,7 @@
                                                             <label class="form-label">เงินงวด</label>
                                                             <input type="text" placeholder="0.00" step="0.01"     min="0"
                                                             class="form-control numeral-mask installment-amount"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
 
                                        @if ($contract->contract_budget_type == 1) name="tasks[{{ $index }}][taskcon_cost_it_operating]"
                                                 value="{{ number_format($taskcon->taskcon_cost_it_operating, 2) }}"
@@ -170,7 +170,7 @@
                                                         <div class="col-md-2">
                                                             <label class="form-label">เบิกเงินงวด</label>
                                                             <input type="text" placeholder="0.00" step="0.01"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask" min="0"
                                                                 name="tasks[{{ $index }}][taskpay]"
                                                                 value="{{ $taskcon->taskcon_pay }}">

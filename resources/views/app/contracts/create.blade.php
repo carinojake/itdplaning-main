@@ -230,7 +230,7 @@
                                                             <input type="text"
                                                                 placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
                                                                 step="0.01"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask"
                                                                 id="budget_it_operating" name="budget_it_operating"
                                                                 min="0" disabled readonly>
@@ -244,7 +244,7 @@
                                                             <input type="text"
                                                                 placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
                                                                 step="0.01"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask"
                                                                 id="budget_it_investment" name="budget_it_investment"
                                                                 min="0" disabled readonly>
@@ -258,7 +258,7 @@
                                                             <input type="text"
                                                                 placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท"
                                                                 step="0.01"
-                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask"
                                                                 id="budget_gov_utility" name="budget_gov_utility"
                                                                 min="0" disabled readonly>
@@ -370,7 +370,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_mm_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_mm_budget"
                                                                                     min="0"
@@ -442,7 +442,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_pr_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_pr_budget"
                                                                                     min="0"
@@ -483,7 +483,7 @@
                                                                             <input type="taxt" placeholder="0.00"
                                                                                 step="0.01" class="form-control"
                                                                                 id="contract_pa_budget"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_pa_budget"
                                                                                 min="0"
@@ -499,7 +499,7 @@
 
                                                                                 <input type="text"
                                                                                     placeholder="0.00" step="0.01"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     id="contract_refund_pa_budget"
                                                                                     name="contract_refund_pa_budget"
@@ -538,7 +538,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_po_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_po_budget"
                                                                                     min="0">
@@ -589,7 +589,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_er_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_er_budget"
                                                                                     min="0">
@@ -636,7 +636,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_cn_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_cn_budget"
                                                                                     min="0">
@@ -679,7 +679,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_ba_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_ba_budget"
                                                                                     min="0">
@@ -713,7 +713,7 @@
                                                                                     placeholder="0.00" step="0.01"
                                                                                     class="form-control"
                                                                                     id="contract_bd_budget"
-                                                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                     class="form-control numeral-mask"
                                                                                     name="contract_bd_budget"
                                                                                     min="0">
@@ -744,7 +744,7 @@
                                                                             <input type="text" placeholder="0.00"
                                                                                 step="0.01" class="form-control"
                                                                                 id="contract_pay"
-                                                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 name="contract_pay" min="0">
                                                                         </div>
@@ -806,12 +806,12 @@
 
                                                                                     <div class="col-md-4">
                                                                                         <label for="total_pa_budget"
-                                                                                            class="form-label">{{ __('เงินสัญญา') }}</label>
+                                                                                            class="form-label">{{ __('เงิน PA') }}</label>
                                                                                         <span class="text-danger"></span>
 
                                                                                         <input type="text"
                                                                                             placeholder="0.00" step="0.01"
-                                                                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                             class="form-control numeral-mask"
                                                                                             id="total_pa_budget"
                                                                                             name="total_pa_budget"
@@ -838,7 +838,7 @@
                                                                                     id="expenses_delsum"
                                                                                     name="expenses_delsum" readonly>
                                                                                     <div class="invalid-feedback">
-                                                                                        {{ __('เงินงวดทั้งหมด รวมกัน ต้อง = 0 ') }}
+                                                                                        {{ __('เงินงวดทั้งหมด รวมกันเท่ากับ PA') }}
                                                                                     </div>
                                                                             </div>
 
@@ -1808,16 +1808,21 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
-                            <input type="text" name="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses" data-inputmask="'alias': 'decimal', 'groupSeparator': ','" required>
+                            <input
+                            id="[${i}][expenses]"
+                            type="text"
+                            name="tasks[${i}][taskbudget]"
+                            class="form-control custom-input numeral-mask expenses"
+                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
                             <div class="invalid-feedback">ระบุเงินงวด</div>
-                            <div class="valid-feedback">Looks good!</div>
+
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">วันที่เริ่มต้น ${i + 1} งวด</label>
+                            <label class="form-label">งวด ${i + 1} วันที่เริ่มต้น</label>
                             <input type="text" class="form-control datepickerop" id="start_date_${i}" name="tasks[${i}][start_date]">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">วันที่สิ้นสุด ${i + 1} งวด</label>
+                            <label class="form-label">งวด ${i + 1} วันที่สิ้นสุด </label>
                             <input type="text" class="form-control datepickeropend" id="end_date_${i}" name="tasks[${i}][end_date]">
                         </div>
                     </div>`;
@@ -1939,7 +1944,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                                             minimumFractionDigits: 2,
                                             maximumFractionDigits: 2
                                         }) + " บาท" +
-                                        "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
+                                        "<p>จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
                                         .toLocaleString('en-US', {
                                             minimumFractionDigits: 2,
                                             maximumFractionDigits: 2
@@ -1991,23 +1996,67 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
         return remainingBudget;
     }
 
-    // Form submission handler
-    $('#formId').on('submit', function(e) { // Make sure this is the ID of your form
-        e.preventDefault();
+    $('#formId').on('submit', function(e) {
+    e.preventDefault(); // Prevent the default form submission
 
-        var remainingBudget = calculateRemainingBudget();
+    var remainingBudget = calculateRemainingBudget();
+    var sumOfExpenses = $('.expenses').map(function() {
+        return parseFloat($(this).val().replace(/,/g, "")) || 0;
+    }).get().reduce(function(a, b) {
+        return a + b;
+    }, 0);
 
-        if (remainingBudget !== 0) {
-            $('#expenses_delsum').addClass('is-invalid');
-           // $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
-        } else {
-            // If the remaining budget is zero, remove validation error
-            $('#expenses_delsum').removeClass('is-invalid');
-            $('.invalid-feedback').text(''); // Clear the feedback text
-                 // ส่งฟอร์ม
-                 this.submit();
-        }
-    });
+    // You need to ensure that `contract_pa_budget` is defined and holds the correct value
+    var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+    console.log( contract_pa_budget);
+    console.log( remainingBudget, sumOfExpenses);
+    console.log( sumOfExpenses);
+
+    if (contract_pa_budget > sumOfExpenses) {
+
+        $('.expenses').each(function() {
+            // Add or remove validation based on the value of each expense
+            if (parseFloat($(this).val().replace(/,/g, "")) <= contract_pa_budget ) {
+                $(this).addClass('is-invalid');
+
+            } else {
+                $(this).removeClass('is-invalid');
+
+            }
+        });
+        // Display feedback to the user
+
+
+    }
+    // Check if there are any discrepancies in the budget or if any of the expenses inputs are invalid
+    if (remainingBudget !== 0 ) {
+        $('#expenses_delsum').addClass('is-invalid');
+
+        // Display feedback to the user
+        $('.invalid-feedback').text('กรุณาตรวจสอบงวดและเงินงวดให้ถูกต้อง');
+    } else {
+        // If everything checks out, remove validation classes and proceed to submit the form
+        $('#expenses_delsum').removeClass('is-invalid');
+      //  $('.expenses').removeClass('is-invalid');
+        $('.invalid-feedback').text(''); // Optionally clear any feedback text
+   // ส่งฟอร์ม
+   this.submit();
+        // TODO: Submit the form using AJAX or another method as required.
+        // Example:
+        // $.ajax({
+        //     url: '/path/to/submit',
+        //     type: 'POST',
+        //     data: $('#formId').serialize(),
+        //     success: function(response) {
+        //         // Handle success
+        //     },
+        //     error: function(xhr, status, error) {
+        //         // Handle error
+        //     }
+        // });
+    }
+});
+
 
 
                     });

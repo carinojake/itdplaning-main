@@ -56,9 +56,9 @@
                                             <span class="text-danger">*</span>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="task_status"
-                                                    id="task_status1" value="1" @checked($task_parent_sub->task_status == 1)>
+                                                    id="task_status1" value="1" @checked($task->task_status == 1)>
                                                 <label class="form-check-label" for="task_status1"
-                                                    @checked($task_parent_sub->task_status == 1)>
+                                                    @checked($task->task_status == 1)>
                                                     ระหว่างดำเนินการ
                                                 </label>
                                             </div>
@@ -66,7 +66,7 @@
                                                 <input class="form-check-input" type="radio" name="task_status"
                                                     id="task_status2" value="2" @checked($task->task_status == 2)>
                                                 <label class="form-check-label" for="task_status2"
-                                                    @checked($task_parent_sub->task_status == 2)>
+                                                    @checked($task->task_status == 2)>
                                                     ดำเนินการแล้วเสร็จ
                                                 </label>
                                             </div>
@@ -74,9 +74,9 @@
                                             @if (auth()->user()->isAdmin())
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="task_status"
-                                                        id="task_status2" value="2" @checked($task_parent_sub->task_status == 2)>
+                                                        id="task_status2" value="2" @checked($task->task_status == 2)>
                                                     <label class="form-check-label" for="task_status2"
-                                                        @checked($task_parent_sub->task_status == 2)>
+                                                        @checked($task->task_status == 2)>
                                                         ดำเนินการแล้วเสร็จ
                                                     </label>
                                                 </div>
@@ -315,7 +315,7 @@
                                                         value="{{ $task->task_budget_it_operating }}"> --}}
 
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_operating"
                                                     name="task_budget_it_operating" min="0"
                                                     value="{{ $task->task_budget_it_operating }}">
@@ -338,7 +338,7 @@
                                                         name="task_budget_it_investment" min="0"
                                                         value="{{ $task->task_budget_it_investment }}"> --}}
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_it_investment"
                                                     name="task_budget_it_investment" min="0"
                                                     value="{{ $task->task_budget_it_investment }}">
@@ -358,7 +358,7 @@
                                                         value="{{ $task->task_budget_gov_utility }}"> --}}
 
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask" id="task_budget_gov_utility"
                                                     name="task_budget_gov_utility" min="0"
                                                     value="{{ $task->task_budget_gov_utility }}">
@@ -387,7 +387,7 @@
                                                         value="{{ $task->task_cost_it_operating }}">
  --}}
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_it_operating"
                                                         name="task_cost_it_operating" min="0"
                                                         value={{ session('contract_pa_budget') }}
@@ -409,7 +409,7 @@
 
 
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_it_investment"
                                                         name="task_cost_it_investment" min="0"
                                                         value={{ session('contract_pa_budget') }}
@@ -433,7 +433,7 @@
                                                         value="{{ $task->task_cost_gov_utility }}"> --}}
 
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_cost_gov_utility"
                                                         name="task_cost_gov_utility" min="0"
                                                         value={{ session('contract_pa_budget') }}
@@ -457,7 +457,7 @@
                                                     <span class="text-danger"></span>
 
                                                     <input type="text" placeholder="0.00" step="0.01"
-                                                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                         class="form-control numeral-mask" id="task_refund_pa_budget"
                                                         name="task_refund_pa_budget" min="0"
                                                         value={{ session('contract_refund_pa_budget') }}
@@ -468,32 +468,30 @@
                                                             </div> --}}
                                                 </div>
                                             </div>
-                                            @if (
+                                           {{--  @if (
                                                 ($task->task_cost_it_operating > 0 && $task->task_refund_pa_budget == 0) ||
                                                     ($task->task_cost_it_investment > 0 && $task->task_refund_pa_budget == 0) ||
                                                     ($task->task_cost_gov_utility > 0 && $task->task_refund_pa_budget == 0))
-                                                <input type="hidden" class="form-check-input" type="radio"
+                                                <input  class="form-check-input" type="radio"
                                                     name="task_refund_pa_status" id="task_refund_pa_status"
                                                     value="2" checked>
                                             @endif
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 ">
                                             <label for="task_status"
                                                 class="form-label">{{ __('task_status PA') }}</label>
                                             <span class="text-danger"></span>
 
                                             <input type="text" placeholder="0.00"
                                             step="0.01"
-                                            data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                             class="form-control numeral-mask"
                                                 id="task_status"
                                                 name="task_status"  readonly>
 
-                                            {{--  <div class="invalid-feedback">
-                                                    {{ __('ค่าสาธารณูปโภค') }}
-                                                </div> --}}
+
                                         </div>
-                                </div>
+                                </div> --}}
                                 @endif
                             </div>
                     </div>
@@ -545,7 +543,7 @@
                                         <div class="col-md-6">
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                 class="form-control numeral-mask" id="task_pay" name="task_pay"
                                                 min="0" value="{{ $task->task_pay }}">
                                             <!-- <input type="number" placeholder="0.00" step="0.01"
@@ -558,9 +556,9 @@
                         @endif
                                     {{-- เอก --}}
 
-                        @if (auth()->user()->isAdmin())
+                       {{--  @if (auth()->user()->isAdmin())
                             <div class="col-md-12 mt-3">
-                                @if ($task->task_refund_pa_status == 1)
+                                @if ($task->task_refund_pa_status == null)
                                     <label for="task_refund_pa_status"
                                         class="form-label">{{ __('งบประมาณ ') }}</label> <span
                                         class="text-danger"></span>
@@ -570,7 +568,7 @@
                                             id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
                                         <label class="form-check-label" for="task_refund_pa_status1"
                                             @checked($task->task_refund_pa_status == 1)>
-                                            ไม่ได้คืน
+                                            ไม่ได้คืน322222
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline ms-5">
@@ -578,17 +576,17 @@
                                             id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
                                         <label class="form-check-label" for="task_refund_pa_status2"
                                             @checked($task->task_refund_pa_status == 2)>
-                                            คืน
+                                            คืน323333
                                         </label>
                                     </div>
                                 @elseif($task->task_refund_pa_status == 2)
                                     <div class=" d-nome form-check form-check-inline ms-5">
                                         <input class="form-check-input" type="radio" name="task_refund_pa_status"
                                             id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)
-                                            {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                          >
                                         <label class="form-check-label" for="task_refund_pa_status3"
                                             @checked($task->task_refund_pa_status == 2)>
-                                            คืน
+                                            คืน7777
                                         </label>
                                     </div>
                                 @endif
@@ -604,16 +602,16 @@
                                     ไม่ได้คืน
                                 </label>
                             </div>
-
+ --}}
                             {{-- Content for admin --}}
-                            1
 
 
-                            <div class="form-check form-check-inline">
+
+                           {{--  <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="task_budget_type"
                                     id="task_budget_type" value="1" @checked($task->task_budget_type == 1)>
                                 <label class="form-check-label" for="task_budget_type1" @checked($task->task_budget_type == 1)>
-                                    คืน1task_budget_type1
+                                    คืน  1task_budget_type1
                                 </label>
                             </div>
 
@@ -622,7 +620,7 @@
                             <div class=" d-nome form-check form-check-inline ms-5">
                                 <input class="form-check-input" type="radio" name="task_budget_type"
                                     id="task_budget_type" value="2" @checked($task->task_refund_pa_status == 2)
-                                    {{-- {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}  --}}>
+                                >
                                 <label class="form-check-label" for="task_budget_type2" @checked($task->task_refund_pa_status == 2)>
                                     คืนtask_budget_type2
                                 </label>
@@ -640,9 +638,9 @@
 
                         @endif
                     @else
-                        {{-- Content for regular user --}}
-                    @endif
 
+                    @endif --}}
+  @endif
 
                 </div>
                 @if ($task->task_parent_sub == 2)
@@ -654,7 +652,7 @@
                                 <span class="text-danger"></span>
 
                                 <input type="text" placeholder="0.00" step="0.01"
-                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                     class="form-control numeral-mask" id="task_parent_sub_budget"
                                     name="task_parent_sub_budget" min="0"
                                     value={{ $task->task_parent_sub_budget }} readonly>
@@ -674,7 +672,7 @@
                                 <span class="text-danger"></span>
 
                                 <input type="text" placeholder="0.00" step="0.01"
-                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                     class="form-control numeral-mask" id="task_parent_sub_cost"
                                     name="task_parent_sub_cost" min="0"
                                     value={{ $task->task_parent_sub_cost }} readonly>
@@ -694,7 +692,7 @@
                                 <span class="text-danger"></span>
 
                                 <input type="text" placeholder="0.00" step="0.01"
-                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                     class="form-control numeral-mask" id="task_parent_sub_refund_budget"
                                     name="task_parent_sub_refund_budget" min="0"
                                     value={{ $task->task_parent_sub_refund_budget }} readonly>
@@ -712,7 +710,7 @@
         <div class="col-md-3 mt-3 d-none">
             <label for="task_mm_budget_1" class="form-label">{{ __('budget') }}</label>
             <input type="text" placeholder="0.00" step="0.01"
-                data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
+                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" class="form-control numeral-mask"
                 id="task_mm_budget" name="task_mm_budget" min="0" value={{ $task->task_mm_budget }}
                 onchange="calculateRefund1()">
 
@@ -732,11 +730,11 @@
 
 
         </div>
-
+    <div class="mt-3">
         <button type="submit" class="btn btn-success">Save Changes</button>
         <x-button link="{{ route('project.index') }}"
             class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
-
+        </div>
 
         </form>
         </x-card>

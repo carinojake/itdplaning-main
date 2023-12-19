@@ -110,7 +110,7 @@
                   <div class="col-md-3">
                     <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask" id="contract_pr_budget"
                     name="contract_pr_budget" min="0"
                     value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
@@ -126,7 +126,7 @@
                   <div class="col-md-3">
                     <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask"
                      id="contract_pa_budget" name="contract_pa_budget"
                      min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
@@ -249,7 +249,7 @@
                   <div class="col-md-4 mt-3">
                     <label for="contract_mm_budget" class="form-label">{{ __('จำนวนเงิน mm') }}</label> <span class="text-danger">*</span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask" id="contract_mm_budget"
                     name="contract_mm_budget" min="0"
                     value="{{ $contract->contract_mm_budget }}"  readonly >
@@ -259,7 +259,7 @@
                   <div class="col-md-4 mt-3">
                     <label for="contract_pr_budget" class="form-label">{{ __('จำนวนเงิน PR') }}</label> <span class="text-danger">*</span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask" id="contract_pr_budget"
                     name="contract_pr_budget" min="0"
                     value="{{ $contract->contract_pr_budget }}" onchange="calculateRefund()">
@@ -268,7 +268,7 @@
                   <div class="col-md-4 mt-3">
                     <label for="contract_pa_budget" class="form-label">{{ __('จำนวนเงิน PA') }}</label> <span class="text-danger">*</span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask"
                      id="contract_pa_budget" name="contract_pa_budget"
                      min="0" value="{{ $contract->contract_pa_budget }}" onchange="calculateRefund()">
@@ -278,7 +278,7 @@
                   <div class="col-md-6 mt-3">
                     <label for="contract_refund_pa_budget" class="form-label">{{ __('จำนวนคงเหลือหลังเงิน PA') }}</label> <span class="text-danger"></span>
                     <input type="text" placeholder="0.00"
-                    step="0.01"  data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                    step="0.01"   data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask"
 
 
@@ -288,7 +288,7 @@
                   <div class="col-md-6 mt-3">
                     <label for="contract_peryear_pa_budget" class="form-label">{{ __('ต่อปี') }}</label> <span class="text-danger"></span>
                     <input type="text" placeholder="0.00" step="0.01"
-                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                     class="form-control numeral-mask"
 
                      id="contract_peryear_pa_budget" name="contract_peryear_pa_budget" min="0" value="{{ $contract->contract_refund_pa_budget }}" readonly>
@@ -316,7 +316,7 @@
                         placeholder="0.00" step="0.01"
                         class="form-control"
                         id="contract_cn_budget"
-                        data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                         class="form-control numeral-mask"
                         name="contract_cn_budget"
                         min="0"

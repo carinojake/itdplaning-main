@@ -188,7 +188,7 @@
                                                     class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                 <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="task_budget_it_operating"
                                                     name="task_budget_it_operating" min="0"
                                                     value="{{ $task->task_budget_it_operating }}"
@@ -207,7 +207,7 @@
                                                 <label for="task_budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="task_budget_it_investment"
                                                     name="task_budget_it_investment" min="0"
                                                     value="{{ $task->task_budget_it_investment }}"
@@ -228,7 +228,7 @@
                                                 <label for="task_budget_gov_utility"
                                                     class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                                                 <input type="text" placeholder="0.00" step="0.01"
-                                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control" id="task_budget_gov_utility"
                                                     name="task_budget_gov_utility" min="0"
                                                     value="{{ $task->task_budget_gov_utility }}"
@@ -287,7 +287,7 @@
                                             <label for="task_pay" class="form-label">{{ __('เบิกจ่าย') }}</label>
                                             <input type="text" placeholder="0.00" step="0.01"
                                                 class="form-control" id="task_pay" name="task_pay"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ','"
+                                                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                 min="0" value="{{ $task->task_pay }}">
                                             <div class="invalid-feedback">
                                                 {{ __('เบิกจ่าย') }}
