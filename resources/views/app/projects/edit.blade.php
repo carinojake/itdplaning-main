@@ -291,7 +291,7 @@
                                         {{ __('งบประมาณ เพิ่ม') }}
                                     </div>
                                 </div>
-                                    <div class="row">
+                                    <div class="row mt-3">
                                         <h4>งบประมาณ เพิ่ม</h4>
                                         <div class="row">
                                             <div class="col-md-4">

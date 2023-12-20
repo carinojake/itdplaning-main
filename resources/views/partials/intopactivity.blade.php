@@ -41,6 +41,8 @@
         {{ 'รวม'}}: {{ number_format($totalrefundpabudgetin, 2) }} บาท<br>
     </p>
     <p>
+
+    @if($totalBudgetItinvestment)
         กิจกรรม ใช้งบประมาณ ที่คืนงบประมาณ
         <br>
     @foreach ($project->main_task as $index => $task)
@@ -61,5 +63,5 @@
     <p>
         {{ 'รวม'}}: {{ number_format($totalBudgetItinvestment, 2) }} บาท<br>
     </p>
-
+@endif
 

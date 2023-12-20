@@ -170,6 +170,7 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-blue"
 
+
                              data-bs-title="งบประมาณ"
 
                              data-bs-content=
@@ -178,7 +179,7 @@
 
                              @if ($project['budget_it_operating'] > 0)
 
-                             @if($budget['budget_it_operating']<$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] )
+                             @if($budget['budget_it_operating']<=$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] || $budget['total_refund_pa_budget_it_operating'] > 1)
 {{--                              งบกลาง ICT  :    {{   number_format(($budget['budget_it_operating']+$budget['op_total_task_refund_pa_budget_3'])-$budget['op_totol_task_budget_it_operating'],2)}} บาท
  --}}
 
@@ -235,7 +236,8 @@
 
                                                     @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
-                                 1 {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
+{{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
+ --}}                         11     {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
@@ -243,10 +245,15 @@
                                 <br>  2-  {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                 <br>    3-  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} --}}
                                     {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
-                                    @elseif($budget['budget_total_refund_pa_budget_end']>0)
+                             {{--   333    {{ number_format($budget['budget_total_refund_pa_budget_end']-  $budget['totalbudget_budget'], 2) }} --}}
+
+                               @elseif($budget['budget_total_refund_pa_budget_end']>0)
                                  {{--   3-1 {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
                                    2-1 {{ number_format(floatval($budget['totalrefund_top']), 2) }} --}}
-                                   1-1 {{ number_format($budget['total_refund_pa_budget']-  $budget['total_task_refun_budget'], 2)}}
+                                  {{--  1-1 --}}
+
+
+                                  fff{{ number_format($budget['total_refund_pa_budget']-  $budget['total_task_refun_budget'], 2)}}
 
                                      @elseif($budget['total'] )
                                     2-1 {{ number_format(floatval($budget['totalrefund_top']), 2) }}

@@ -2200,6 +2200,7 @@ $mainQuery = DB::query()
             'in_totol_task_budget_it_investment' => $__in_totol_task_budget_it_investment_99,
             'ut_totol_task_budget_gov_utility' => $__ut_totol_task_budget_gov_utility_99,
             //19/12/2566 งบประมาณเพิ่ม
+            'totoi_increased_budget' => $__totoi_increased_budget,
             'totoi_increased_budget_it_operting' => $__totoi_increased_budget_it_operting,
             'totoi_increased_budget_it_investment' => $__totoi_increased_budget_it_investment,
             'totoi_increased_budget_gov_utility' => $__totoi_increased_budget_gov_utility,
@@ -2456,7 +2457,7 @@ $mainQuery = DB::query()
 
 
 
-       dd($budget, $result_query_op_in_un);
+      // dd($budget, $result_query_op_in_un);
 
         //  $tasks =  Project::find($id);
 
@@ -7676,14 +7677,41 @@ dd($resultthItem); */
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
-
-        // Sum the task_budget_it_investment for all tasks
+        $sum_task_refund_budget_type_it_operating = $tasks->where('task_refund_budget_type', '=', 1)
+        ->sum('task_budget_it_operating');
+// Sum the task_budget_it_investment for all tasks
         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
         $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('task_budget_it_investment', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+
+        $sum_task_refund_budget_type_it_investment = $tasks->whereNull('task_parent')->where('task_refued_budget_type', '=', 1)->sum('task_budget_it_investment');
 
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_type_gov_utility = $tasks->where('task_refued_budget_type', '=', 1)->sum('task_budget_gov_utility');
+
+
+
+
+        $budget_task['sum_task_budget_it_operating'] = $sum_task_budget_it_operating;
+    $budget_task['sum_task_budget_it_investment'] = $sum_task_budget_it_investment;
+    $budget_task['sum_task_budget_gov_utility'] = $sum_task_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_it_operating'] = $sum_task_refund_budget_it_operating;
+    $budget_task['sum_task_refund_budget_it_investment'] = $sum_task_refund_budget_it_investment;
+    $budget_task['sum_task_refund_budget_gov_utility'] = $sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_oiu'] = $sum_task_refund_budget_it_operating+$sum_task_refund_budget_it_investment+$sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_type_it_operating'] = $sum_task_refund_budget_type_it_operating;
+    $budget_task['sum_task_refund_budget_type_it_investment'] = $sum_task_refund_budget_type_it_investment;
+    $budget_task['sum_task_refund_budget_type_gov_utility'] = $sum_task_refund_budget_type_gov_utility;
+
+
+
+
+
+
 
         if ($task) {
             $taskId = Hashids::decode($task)[0];
@@ -7702,6 +7730,7 @@ dd($resultthItem); */
             DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
             DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
         )
+        ->where('increasedbudgets.deleted_at', '=', null)
         ->where('increasedbudgets.project_id', $id)
         ->where('increasedbudgets.increased_budget_status', '=', 1)
         //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
@@ -7750,13 +7779,14 @@ dd($resultthItem); */
             ];
         });
 
-        // dd($projectData);
+   //  dd($projectData,$projectDetails,$increasedData,$budget_task);
 
         $projectsJson = json_encode($projectData);
 
 
      //dd ( $fiscal_years,$taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.create', compact(
+            'budget_task',
             'increasedData',
             'request',
             'fiscal_years',
@@ -8798,7 +8828,7 @@ dd($resultthItem); */
         $task->task_parent_sub_refund_budget = $task_refund_pa_budget ?? null;
         $task->task_type = $request->input('task_type');
         $task->task_refund_budget_type = $request->input('task_refund_budget_type');
-        //   dd($task);
+         // dd($task);
         if ($task->save()) {
             //insert contract
             /*    if( $task->task_parent_sub= 2){

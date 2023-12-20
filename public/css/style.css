@@ -14752,9 +14752,14 @@ html:not([dir=rtl]) .wrapper {
     --cui-popover-header-color: var(--cui-white);
     --cui-popover-body-padding-x: 1rem;
     --cui-popover-body-padding-y: .5rem;
-    /* --cui-popover-body-color: var(--cui-info);
- */
+     --cui-popover-body-color: var(--cui-red);
+
+
 }
+
+.custom-tooltip {
+    --cui-tooltip-bg: var(--cui-primary);
+  }
 .custom-popover-dark {
     --cui-popover-max-width: 200px;
     --cui-popover-border-color: var(--cui-dark);

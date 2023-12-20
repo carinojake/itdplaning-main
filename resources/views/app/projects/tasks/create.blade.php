@@ -58,15 +58,19 @@
                             </div>
                                 <div class="row">
                                    {{--  @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0) --}}
-                                    <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
-                                        @if($projectDetails->budget_it_operating >= $sum_task_budget_it_operating )
+                                 {{--   @if($projectDetails->budget_it_operating >= $sum_task_budget_it_operating )
+ --}}
+                                   <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
+
+
+                                   @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                         <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating , 2) }} บาท</div>
                                         @elseif($projectDetails->budget_it_operating <$sum_task_budget_it_operating)
                                         <div class="col-2"> 0 บาท</div>
                                         @endif
 
                                         <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
-                                        <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+                                        <div class="col-2"> {{ number_format($budget_task['sum_task_refund_budget_it_operating'] -$budget_task['sum_task_refund_budget_type_it_operating'], 2) }}  บาท</div>
 
                                         @if($increasedData->isNotEmpty())
                                         <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
@@ -197,10 +201,48 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row mt-3">
                                     <h4>งบประมาณ</h4>
                                     <div class="row">
-                                        <div class="row">
+
+
+                                    @if($budget_task['sum_task_refund_budget_oiu'])
+                                        <div class="col-md-2">
+                                            <label for="task_refund_budget_type_0" class="form-label">{{ __('งบประมาณ') }}</label> <span class="text-danger"></span>
+                                            <div>
+                                                <input class="form-check-input" type="radio" name="task_refund_budget_type" id="task_refund_budget_type_0" value="0">
+                                                <label class="form-check-label" for="task_refund_budget_type_0">งบประมาณ</label>
+                                            </div>
+                                            <div class="invalid-feedback">{{ __('งบประมาณ ') }}</div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label for="task_refund_budget_type_1" class="form-label">{{ __('งบประมาณคืน') }}</label> <span class="text-danger"></span>
+                                            <div>
+                                                <input class="form-check-input" type="radio" name="task_refund_budget_type" id="task_refund_budget_type_1" value="1">
+                                                <label class="form-check-label" for="task_refund_budget_type_1">งบประมาณคืน</label>
+                                            </div>
+                                            <div class="invalid-feedback">{{ __('งบประมาณ ') }}</div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label for="task_refund_budget_type_2" class="form-label">{{ __('งบประมาณ+งบประมาณคืน') }}</label> <span class="text-danger"></span>
+                                            <div>
+                                                <input class="form-check-input" type="radio" name="task_refund_budget_type" id="task_refund_budget_type_2" value="2">
+                                                <label class="form-check-label" for="task_refund_budget_type_2">งบประมาณ+งบประมาณคืน</label>
+                                            </div>
+                                            <div class="invalid-feedback">{{ __('งบประมาณ ') }}</div>
+                                        </div>
+                                    @endif
+
+
+
+
+
+                                        <div class="row mt-3">
+
+
+                                        <div class="row mt-3">
                                             <div class="col-md-4 " >
                                                 <label for="task_budget_it_operating"
                                                     class="form-label">{{ __('งบกลาง ICT') }}</label>
@@ -259,13 +301,15 @@
                                             </div>
                                         </div>
                                     </div>
+                                  {{--
+                                    20/12/2566 ตัดออก
                                     <div type="hidden" class="form-check form-check-inline">
                                         <input type="hidden" class="form-check-input" type="radio" name="task_refund_pa_status"
                                             id="task_refund_pa_status" value="3" checked>
 
-                                    </div>
+                                    </div> --}}
                                 </div>
-
+{{--
                                 <div class="col-md-4 d-none">
                                     <label for="task_refund_budget_type"
                                         class="form-label">{{ __('task_refund_budget_type ') }}</label>
@@ -279,7 +323,7 @@
                                         name="task_refund_budget_type"  readonly>
 
 
-                                </div>
+                                </div> --}}
 
                                 <div class="d-none col-md-3">
 
@@ -568,7 +612,7 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 </script>
 
-<script>
+{{-- <script>
     $(document).ready(function() {
 
 
@@ -616,7 +660,7 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
         });
     });
-</script>
+</script> --}}
 
 
 

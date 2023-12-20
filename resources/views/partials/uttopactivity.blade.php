@@ -41,6 +41,7 @@
     {{ 'รวม'}}: {{ number_format($totalrefundpabudget, 2) }} บาท<br>
 </p>
 <p>
+    @if($totalBudgetItutility)
  กิจกรรม ใช้งบประมาณ ที่คืนงบประมาณ
     <br>
 @foreach ($project->main_task as $index => $task)
@@ -62,7 +63,7 @@
     {{ 'รวม'}}: {{ number_format($totalBudgetItutility, 2) }} บาท<br>
 </p>
 
-
+@endif
 {{--
                                             @foreach ($project->main_task as $index => $task)
                             @if ($task->task_budget_gov_utility > 0 && $task->task_budget_type == 0 && $task->task_refund_budget_type == 1)
