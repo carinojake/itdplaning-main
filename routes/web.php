@@ -330,3 +330,7 @@ Route::post('/fileupload/store','UploadController@store')->name('upload.file'); 
 
 Route::resource('conflict', ConflictController::class);
 });
+
+
+Route::get('/get-last-reguiar-id', 'App\Http\Controllers\ProjectController@getLastReguiarId');
+

@@ -1,6 +1,16 @@
 @if ($task['task_parent'] == null)
 
-    <h2>{{ $task->task_name }}  @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
+    <h2>
+
+        <span class="<?= $task->task_refund_pa_status == 3 ? 'text-blue' : '' ?>">
+        {{ $task->task_name }}
+        </span>
+
+
+        @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif
+
+
+        <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
         {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
     </span></h2>
     <div class="container">
@@ -152,21 +162,25 @@
                                         สญ.ที่ {{ $contract->contract_number }}
                                     </a>
                                     @endforeach
-                                    {{ $subtask->task_name }}
+
+                                    <span class="<?= $subtask->task_refund_pa_status == 2 ? 'text-blue' : '' ?>">
+                                  {{$subtask->task_name}}
+                                    </span>
+
 
                                   {{--   @if($task->task_status == 2)
                                         <span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>
                                     @endif --}}
                                 </td>
                                 <td>
-                                    <span class="badge {{ $subtask->task_status == 2 ? 'bg-success' : 'bg-warning' }}">
-                                        {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : 'อยู่ในระหว่างดำเนินการ' }}
+                                    <span class="badge bg-success">
+                                        {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '-' }}
                                     </span>
-                                    @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
+                               {{--      @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
                                         <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
                                     @else
                                         <span class="badge bg-info">ไม่คืนเงิน pa</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
 
                                 <td>
@@ -282,8 +296,10 @@
                                                     <span
                                                         class="badge btn btn-primary text-white">สญ. ที่ {{ $contract->contract_number }}</span></a>
                                             @endforeach
-
+                                            <span class="<?= $subtask_sub->task_refund_pa_status == 2 ? 'text-blue' : '' ?>">
                                          - {{ $subtask_sub->task_name }}
+                                            </span>
+
 
                                         </div>
                                     @endforeach
@@ -344,7 +360,7 @@
                                 @if ($subtask_sub->task_pay > 1)
                                 {{ number_format($subtask_sub->task_pay ,2) }} บาท
                                 @else
-                                 {{ number_format($resulttwoItem->total_pay_con, 2) }} บาท
+                                 {{ number_format($resulttwoItem?->total_pay_con, 2) }} บาท
                                 @endif
 
                             </div>
@@ -545,3 +561,4 @@
             </table>
         @endif
 @endif
+

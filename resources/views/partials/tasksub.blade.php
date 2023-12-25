@@ -38,8 +38,10 @@
 <a href="{{ route('project.view', ['project' => $project->hashid]) }}"
     class="btn btn-secondary">กลับ</a>
 </x-slot:toolbar>
+<span class="<?= $task->task_refund_pa_status == 2 ? 'text-blue' : '' ?>">
 
 <h2>{{ $task->task_name }}   @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif</h2>
+</span>
 <div class="container">
     <div class="row mt-5">
         <div class="col-sm">
@@ -136,21 +138,22 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                         </a>
 
                     @endforeach
-                        {{ $resultthItem->task_name }}
-
+                    <span class="<?= $subtask->task_refund_pa_status == 2 ? 'text-blue' : '' ?>">
+                        {{ $subtask?->task_name }}
+                    </span>
 
 
                     </td>
                     <td>
 
-                        <span class="badge {{ $subtask->task_status == 2 ? 'bg-success' : 'bg-warning' }}">
-                            {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : 'อยู่ในระหว่างดำเนินการ' }}
+                        <span class="badge {{ $subtask->task_status == 2 ? 'bg-success' : '' }}">
+                            {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
                         </span>
-                        @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
+                   {{--      @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
                             <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
                         @else
                             <span class="badge bg-info">ไม่คืนเงิน pa</span>
-                        @endif
+                        @endif --}}
                     </td>
                     <td>
                         <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
@@ -165,11 +168,11 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                     </td>
                     <td>
 
-                        @if ($subtask->task_pay > 1)
+                      {{--   @if ($subtask->task_pay > 1)
                         1-{{ number_format($subtask->task_pay,2) }} บาท
                         @else
                        2- {{ number_format($resultthItem->total_pay_con,2) }} บาท
-                        @endif
+                        @endif --}}
 
 
 
@@ -184,22 +187,25 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
                     @if ($subtask->contract->count() < 1)
                         <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
-                        @endif
-                        @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1)
+                    @endif
+
+                    @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1)
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                             class="btn btn-warning btn-sm" ><i class="cil-cog"></i></a>
-                            @if ($subtask->subtask->count() < 1)
-                            @if ($relatedData?->totalLeastCost < 0.01 || $resultthItem->total_pay_con< 0.01)
-                            <form class="delete-form"
-                            action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                            method="POST" style="display:inline">
-                            @method('DELETE')
-                            @csrf
-                            <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
-                        </form>
-                            @endif
-                        @endif
-                        @endif
+
+                 @endif
+
+
+                @if($subtask->task_status == 2)
+                 <form class="delete-form"
+                 action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                 method="POST" style="display:inline">
+                 @method('DELETE')
+                 @csrf
+                 <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
+             </form>
+                @endif
+
                     </td>
                 </tr>
                 <tr>

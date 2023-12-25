@@ -37,12 +37,20 @@
                                {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
 
                                 </div>
-                                <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12 mt-3">
                                     <label for="reguiar_id"
-                                        class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
+                                        class="form-label">{{ __('ลำดับ') }}</label>
+                                {{ $projectDetails->reguiar_id  }}
 
+                                <label for="project_name"
+                                class="form-label">{{ Helper::projectsType($projectDetails->project_type ) }}</label>
+                        {{  $projectDetails->project_name }}
                                 </div>
+
+                            </div>
+
+
                                 <div class="col-md-12 mt-3">
                                     <div class="col-md-12">
                                         <label for="project_description"
@@ -64,7 +72,7 @@
 
 
                                    @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
-                                        <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating , 2) }} บาท</div>
+                                        <div class="col-2">{{ number_format(($projectDetails->budget_it_operating- $sum_task_budget_it_operating)+$budget_task['sum_task_refund_budget_type_it_operating']  , 2) }} บาท</div>  {{-- - $sum_task_budget_it_operating  --}}
                                         @elseif($projectDetails->budget_it_operating <$sum_task_budget_it_operating)
                                         <div class="col-2"> 0 บาท</div>
                                         @endif

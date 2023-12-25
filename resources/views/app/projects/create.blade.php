@@ -28,14 +28,6 @@
                                             class="text-danger">*</span>
                                             <input type="text" class="form-control" id="project_fiscal_year"
                                             name="project_fiscal_year" required>
-                                        {{-- <select name="project_fiscal_year"
-                                            class="form-select @error('project_fiscal_year') is-invalid @enderror">
-                                            @for ($i = date('Y') + 541; $i <= date('Y') + 543 + 10; $i++)
-                                                <option value="{{ $i }}"
-                                                    {{ $fiscal_year == $i ? 'selected' : '' }}>{{ $i }}
-                                                </option>
-                                            @endfor
-                                        </select> --}}
                                         @error('project_fiscal_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -59,14 +51,13 @@
                                             </label>
                                         </div>
                                     </div>
-
-
+                            {{--         $fiscal_year,$reguiar_id --}}
                                     <div class="col-md-3">
                                         <label for="reguiar_id"
                                             class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"
-                                            required autofocus>
+                                        >
                                         <!-- <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
                                                 @for ($i = $reguiar_id; $i <= $reguiar_id; $i++)
 <option value="{{ $i }}" {{ $reguiar_id == $i ? 'selected' : '' }}>{{ $i }}</option>
@@ -79,7 +70,6 @@
                                                งาน/โครงการ
                                               </div>
                                     </div>
-
 
                                     <div class="col-md-3 d-none">
                                         <label for="project_status"
@@ -229,6 +219,39 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+    <script>
+        $(document).ready(function() {
+            var projectFiscalYearStart = "{{ $fiscal_year }}";
+
+            function checkFiscalYear() {
+                var fiscalYear = $('#project_fiscal_year').val();
+                var project_type = $('input[name="project_type"]:checked').val();
+
+                if(fiscalYear === projectFiscalYearStart) {
+                    if(project_type == "1"){
+                        // ดำเนินการทำอะไรบางอย่างสำหรับโปรเจคประเภท 1
+                        // ตัวอย่างเช่น ตั้งค่า 'reguiar_id' เป็นค่าสูงสุดที่มีอยู่
+                        $('#reguiar_id').val('{{ $project_type_1_reguiar_id }}');
+                    } else if(project_type == "2"){
+                        // ดำเนินการทำอะไรบางอย่างสำหรับโปรเจคประเภท 2
+                        // ตัวอย่างเช่น ตั้งค่า 'reguiar_id' เป็น 1
+                        $('#reguiar_id').val('{{ $project_type_2_reguiar_id }}');
+                    }
+                } else {
+                    $('#reguiar_id').val('Desired Value');
+                }
+            }
+
+            $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
+            checkFiscalYear();
+        });
+    </script>
+
+
+
+
+
+
         <script>
             $(document).ready(function() {
                 $(":input").inputmask();
@@ -335,13 +358,9 @@ var budgetItOperating = $("#budget_it_operating").val();
          if (budgetItOperating === "0" || budgetItOperating === ''|| parseFloat(budgetItOperating) < -0 ) {
              $("#budget_it_operating").val('');
          }
-
-
-
 });
 });
  </script>
-
 
 
 

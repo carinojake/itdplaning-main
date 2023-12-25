@@ -1,33 +1,6 @@
-@php
-    $totalBudgetItutility = 0;
-    $totalrefundpabudget = 0;
-
-    foreach ($project->main_task as $task) {
-        if ($task->task_budget_gov_utility && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
-            $totalBudgetItutility += $task->task_budget_gov_utility;
-        }
-        elseif ($task->task_budget_gov_utility && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
-            # code...
-            $totalBudgetItutility += $task->task_budget_gov_utility;
-        }
-
-
-    }
-
-    foreach ($project->main_task as $task) {
-    if ($task->task_budget_gov_utility && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
-            $totalrefundpabudget += $task->task_refund_pa_budget;
-        }
-
-
-
-
-    }
-
-
-
-@endphp
-
+<h6>
+    <p  class=text-utility  >งบสาธาณูปโภค : {{ number_format($budget['total_refund_pa_budget_gov_utility']-$budget['total_task_refun_budget_GovUtility'], 2) }} บาท<br>
+    </h6>
 <p>
 กิจกรรม ที่คืนงบประมาณ
 <br>
@@ -37,11 +10,11 @@
         - {{ $task->task_name }}: {{ number_format($task->task_refund_pa_budget, 2) }} บาท<br>
     @endif
 @endforeach
-<p>
-    {{ 'รวม'}}: {{ number_format($totalrefundpabudget, 2) }} บาท<br>
+<p class=text-blue>
+    {{ 'รวม'}}: {{ number_format($budget['total_refund_pa_budget_gov_utility'], 2) }} บาท<br>
 </p>
 <p>
-    @if($totalBudgetItutility)
+    @if($budget['total_task_refun_budget_GovUtility'])
  กิจกรรม ใช้งบประมาณ ที่คืนงบประมาณ
     <br>
 @foreach ($project->main_task as $index => $task)
@@ -59,8 +32,8 @@
 
     @endforeach
 
-<p>
-    {{ 'รวม'}}: {{ number_format($totalBudgetItutility, 2) }} บาท<br>
+    <p class=text-success>
+    {{ 'รวม'}}: {{ number_format($budget['total_task_refun_budget_GovUtility'], 2) }} บาท<br>
 </p>
 
 @endif

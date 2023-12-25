@@ -218,7 +218,14 @@
                         <div>{{ $taskcon->taskcon_id}}</div
             @endforeach --}}
 
+  <div class="tab-content">
+                                <div class="mt-3">
+                                    หมายเหตุ: <span style="color:rgb(7, 173, 7);">[ตัวเขียว= ดำเนินการแล้วเสร็จ]</span>
+                                    <span></span>
+                                    <span style="color:blue;">[ตัวน้ำเงิน= งบประมาณ คืน]</span>
+                                </div>
 
+                            </div>
 
 
 

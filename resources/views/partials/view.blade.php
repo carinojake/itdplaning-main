@@ -128,8 +128,13 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-warning"
                              data-bs-title="งบประมาณ" data-bs-content="
+                         <p class=text-warningpay_underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท <br>
+
+
                              @if ($project['budget_it_operating'] > 0)
-                             งบกลาง ICT :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท <br>
+                             <p class=text-red> รอการเบิกจ่าย งบกลาง ICT :  {{ number_format( ($ospa + $osa)-( $otpsa1 + $otpsa2), 2) }} บาท </p>
+
+                             เบิกจ่ายแล้ว      งบกลาง ICT :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท <br>
                          @endif
                          @if ($project['budget_it_investment'] > 0)
                              งบดำเนินงาน :{{ number_format( $itpsa1 + $itpsa2, 2) }} บาท <br>
@@ -137,6 +142,7 @@
                          @if ($project['budget_gov_utility'] > 0)
                              งบสาธารณูปโภค : {{ number_format( $utsc_pay_pa + $utsc_pay, 2) }} บาท <br>
                          @endif
+
                          " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold text-warning">
@@ -196,8 +202,8 @@
                              @if ($project['budget_it_investment'] > 0)
                             @if($budget['budget_it_investment']<$budget['in_totol_task_budget_it_investment'] ||$budget['budget_it_investment']===$budget['in_totol_task_budget_it_investment']  )
 
-                            งบดำเนินงาน :   {{ number_format(($budget['budget_it_investment']-$budget['in_totol_task_budget_it_investment'])+ $budget['in_total_task_refund_pa_budget_3'],2)}} บาท <br>
-
+{{--                             งบดำเนินงาน :   {{ number_format(($budget['budget_it_investment']-$budget['in_totol_task_budget_it_investment'])+ $budget['in_total_task_refund_pa_budget_3'],2)}} บาท <br>
+ --}}
                                 <!-- Content for Activity tab -->
 
                                 @include('partials.intopactivity')
@@ -214,9 +220,11 @@
                              @endif
                          @if ($project['budget_gov_utility'] > 0)
                              @if($budget['budget_gov_utility']<$budget['ut_totol_task_budget_gov_utility'] ||$budget['budget_gov_utility']===$budget['ut_totol_task_budget_gov_utility']  )
-                             <p>
+                             {{-- <p>
                              งบสาธารณูปโภค :    {{  number_format(($budget['budget_gov_utility']-$budget['ut_totol_task_budget_gov_utility'])+ $budget['ut_total_task_refund_pa_budget_3'],2)}} บาท <br>
-                             <p>   <!-- Content for Activity tab -->
+                             <p>  --}}
+
+                                <!-- Content for Activity tab -->
                                 @include('partials.uttopactivity')
 
                                 @elseif($budget['budget_gov_utility']>$budget['ut_totol_task_budget_gov_utility'])
@@ -253,7 +261,7 @@
                                   {{--  1-1 --}}
 
 
-                                  fff{{ number_format($budget['total_refund_pa_budget']-  $budget['total_task_refun_budget'], 2)}}
+                                  11     {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
                                      @elseif($budget['total'] )
                                     2-1 {{ number_format(floatval($budget['totalrefund_top']), 2) }}

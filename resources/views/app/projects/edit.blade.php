@@ -21,7 +21,7 @@
 
 
                             <form method="POST" action="{{ route('project.update', $project->hashid) }}"
-                                class="row g-3"  class="row needs-validation"
+                                class="row needs-validation"
                                 novalidate >
                                 @csrf
                                 {{ method_field('PUT') }}
@@ -144,7 +144,7 @@
                                     <input type="text" class="form-control" id="project_name" name="project_name"
                                         value="{{ $project->project_name }}" required autofocus>
                                     <div class="invalid-feedback">
-                                        {{ __('ชื่องาน/โครงการ ซ้ำ') }}
+                                        {{ __('ชื่องาน/โครงการ') }}
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -344,7 +344,22 @@
 
                                 </div>
 
+                                {{-- <div class="col-md-4">
+                                    <label for="budget_it_operating"
+                                        class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                    <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                                    <input type="text" placeholder="0.00" step="0.01"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                        class="form-control" id="budget_it_operating"
+                                        name="budget_it_operating" min="0"
+                                        value=" {{$projectDetails->budget_it_operating}}"
 
+
+                                        >
+                                    <div class="invalid-feedback">
+                                        {{ __('ระบุงบกลาง ICT') }}
+                                    </div>
+                                </div> --}}
 
                     </div>
 
@@ -364,7 +379,10 @@
 
     </x-slot:css>
     <x-slot:javascript>
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -518,7 +536,14 @@ var budgetItOperating = $("#budget_it_operating").val();
  var budgetItInvestment = $("#budget_it_investment").val();
  var budgetGovUtility = $("#budget_gov_utility").val();
 
+ var olebudgetItOperating = {{$project->budget_it_operating}};
+    var olebudgetItInvestment = {{$project->budget_it_investment}};
+    var olebudgetGovUtility = {{$project->budget_gov_utility}};
  if (fieldId === "budget_it_investment") {
+
+
+
+
 
      if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
          $("#budget_it_investment").val('');
@@ -529,6 +554,8 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
   if (fieldId === "budget_it_operating") {
+
+
          if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
              $("#budget_it_operating").val('');
          }
@@ -536,6 +563,14 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
      if (fieldId === "budget_gov_utility") {
+
+        if (parseFloat(budgetGovUtility) < olebudgetGovUtility ) {
+                $(this).addClass('is-invalid');
+
+            } else {
+                $(this).removeClass('is-invalid');
+
+            }
      if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
          $("#budget_gov_utility").val('');
      }
@@ -553,6 +588,64 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
 
+<script>
+    $(document).ready(function() {
+        var formIsValid = true;
+        var invalidFieldId = '';
+        var oldValues = {
+            'budget_it_operating': parseFloat({{$project->budget_it_operating}}) || 0,
+            'budget_it_investment': parseFloat({{$project->budget_it_investment}}) || 0,
+            'budget_gov_utility': parseFloat({{$project->budget_gov_utility}}) || 0
+        };
+        function numberFormat(number) {
+        return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+        function validateBudget(fieldId, enteredValue) {
+            var oldValue = oldValues[fieldId];
+            if (enteredValue < oldValue) {
+                console.log(fieldId + ":", enteredValue);
+                console.log("old" + fieldId + ":", oldValue);
+                $('#' + fieldId).addClass('is-invalid');
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้'); // "Warn not to do so."
+                formIsValid = false;
+                invalidFieldId = fieldId; // Track the invalid field
+            } else {
+                $('#' + fieldId).removeClass('is-invalid');
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้');
+                if (fieldId === invalidFieldId) {
+                    // If the current field was the one that caused the form to be invalid
+                    invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
+                }
+            }
+        }
+
+        // Check the budget amount entered when data is input
+        $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
+            formIsValid = true; // Reset the form validity state on new input
+            invalidFieldId = ''; // Reset the invalid field tracking
+
+            validateBudget('budget_it_operating', parseFloat($("#budget_it_operating").val().replace(/,/g, "")) || 0);
+            validateBudget('budget_it_investment', parseFloat($("#budget_it_investment").val().replace(/,/g, "")) || 0);
+            validateBudget('budget_gov_utility', parseFloat($("#budget_gov_utility").val().replace(/,/g, "")) || 0);
+        });
+
+        // Prevent form submission if validation fails
+    // Prevent form submission if validation fails
+    $("form").on("submit", function(e) {
+        if (!formIsValid) {
+            e.preventDefault(); // Prevent form submission
+            var formattedOldValue = numberFormat(oldValues[invalidFieldId]);
+            var alertText = 'งบประมาณถูกใช้ไป ' + formattedOldValue + ' แล้วจะไม่สามารถน้อยกว่านี้ได้';
+            Swal.fire({
+                title: 'เตือน!',
+                text: alertText,
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
+        }
+        });
+    });
+    </script>
 
 
 

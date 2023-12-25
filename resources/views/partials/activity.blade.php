@@ -14,7 +14,9 @@
         </thead>
         <tbody>
             @foreach ($project->main_task as $index => $task)
-                {{--  {{ var_dump($task->hashid) main_task_activity}} --}}
+                {{--  {{ var_dump($task->hashid) main_task_activity}}
+                            echo isset($task) && $task->task_status == 2 ? '<span class="badge bg-success text-white">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
+                             --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
 
@@ -27,12 +29,13 @@
                                 @endforeach
                             @endif <span
                                 style="color: green;">{{ isset($task->taskcon_mm) ? $task->taskcon_mm . ' - ' : '' }}</span>
+                                <span class="<?= $task->task_refund_pa_status == 3 ? 'text-blue' : '' ?>">
+
                             {{ $task->task_name }}
-                             {{-- {!! $task->task_status == 2 ? '<span class="badge bg-info">ดำเนินการแล้วเสร็จ</span>' : '' !!} --}}
-                            <?php
-                            echo isset($task) && $task->task_status == 2 ? '<span class="badge bg-success text-white">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
-                            ?>
-                            @if ((isset($task) && $task->task_refund_pa_status == 2) && $task->task_refund_pa_status == 3)
+                                </span>
+                      {!! $task->task_status == 2 ? '<span class="badge bg-success">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+
+                          {{--   @if ((isset($task) && $task->task_refund_pa_status == 2) && $task->task_refund_pa_status == 3)
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
                             @elseif ((isset($task) &&  $task->task_refund_pa_status == 3 ))
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
@@ -40,7 +43,7 @@
                                 @else
                                 <span class="badge bg-info">ไม่คืนเงิน pa</span>
                             @endif
-
+ --}}
                         </div>
 
 
@@ -61,21 +64,30 @@
                                                     </button>
                                                 @endforeach
                                             @endif
-                                            {{ $subtask->task_name }}
 
                                             <?php
-                                            echo isset($subtask) && $subtask->task_status == 2 ? '<span class="badge bg-success text-white ">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
+        echo isset($subtask) && $subtask->task_refund_pa_status == 2 ? '<span class="text-blue">' . $subtask->task_name . '</span>' : '<span >' . $subtask->task_name . '</span>' ;
+        ?>
+
+
+
+
+
+                                         <?php
+                                            echo isset($subtask) && $subtask->task_status == 2 ? '<span class="badge bg-success text-white ">ดำเนินการแล้วเสร็จ</span>' : '';
                                             ?>
-                                            <?php
-                                            echo isset($subtask) && $subtask->task_refund_pa_status == 2 ? '<span class="badge bg-success text-white">คืนเงิน pa</span>' : '<span class="badge bg-info text-white">ไม่คืนเงิน pa</span>';
-                                            ?>
+
 
                                             @if ($subtask->contract->count() > 0)
                                                 @foreach ($subtask->contract as $contract)
                                                     <!-- Button trigger modal -->
 
 
-                                                    {{--                                   <button
+                                                    {{--
+
+                                                        echo isset($subtask) && $subtask->task_refund_pa_status == 2 ? '<span class="badge bg-success text-white">คืนเงิน pa</span>' : '<span class="badge bg-info text-white">ไม่คืนเงิน pa</span>';
+                                                        ?>
+                                                        <button
                                                        type="button"
                                                        class="badge btn btn-primary text-white "
                                                 data-coreui-toggle="modal"
@@ -107,7 +119,7 @@
                                                                         สัญญา
                                                                         {{ $contract->contract_number }}
                                                                         <?php
-                                                                        echo isset($contract) && $contract->contract_status == 2 ? '<span class="badge bg-success text-white ">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
+                                                                        echo isset($contract) && $contract->contract_status == 2 ? '<span class="badge bg-success text-white ">ดำเนินการแล้วเสร็จ</span>':'' ;
                                                                         ?>
 
                                                                     </h5>
@@ -347,13 +359,11 @@
                                                             <span
                                                                 class="badge btn btn-primary text-white"> สญ. ที่ {{ $contract->contract_number }}</span></a>
                                                     @endforeach
-                                                    - {{ $subtask_sub->task_name }}
+                                                    <span class="<?= $subtask_sub->task_refund_pa_status == 2 ? 'text-blue' : '' ?>">
 
-                                                    <?php
-                                                    echo isset($subtask_sub) && $subtask_sub->task_status == 2 ? '<span class="badge bg-success text-white">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
-                                                    ?> <?php
-                                                    echo isset($subtask_sub) && $subtask_sub->task_refund_pa_status == 2 ? '<span class="badge bg-success  text-white">คืนเงิน pa</span>' : '<span class="badge bg-info text-white">ไม่คืนเงิน pa</span>';
-                                                    ?>
+                                                    - {{ $subtask_sub->task_name }}
+                                                    </span>
+
 
                                                     @foreach ($subtask_sub->contract as $contract)
                                                     @endforeach
@@ -373,6 +383,10 @@
 
 
 
+                            echo isset($subtask_sub) && $subtask_sub->task_status == 2 ? '<span class="badge bg-success text-white">ดำเนินการแล้วเสร็จ</span>' : '<span class="badge bg-warning text-white">อยู่ในระหว่างดำเนินการ</span>';
+                            ?>
+                            echo isset($subtask_sub) && $subtask_sub->task_refund_pa_status == 2 ? '<span class="badge bg-success  text-white">คืนเงิน pa</span>' : '<span class="badge bg-info text-white">ไม่คืนเงิน pa</span>';
+                            ?>
 
                         </div>
                     </td> --}}
