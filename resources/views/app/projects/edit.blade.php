@@ -179,8 +179,13 @@
 
 
                                                     >
-                                                    <div class="col-md-4">
-                                                        {{$project->budget_it_operating}}
+                                                    <div class="col-md-4 mt-3">
+                                                        @if( $budget['totalBudgetItOperating'])
+
+                                                        {{number_format( $budget['totalBudgetItOperating'])}}@endif
+
+
+
                                                     </div>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
@@ -197,6 +202,11 @@
                                                     class="form-control" id="budget_it_investment"
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}">
+                                                    <div class="col-md-4 mt-3">
+                                                        @if( $budget['totalBudgetItInvestment'])
+
+                                                        {{number_format( $budget['totalBudgetItInvestment'])}}@endif
+                                                    </div>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
@@ -210,6 +220,12 @@
                                                     class="form-control" id="budget_gov_utility"
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}">
+                                                    <div class="col-md-4 mt-3">
+                                                        @if( $budget['totalBudgetGovUtility'])
+
+                                                        {{number_format( $budget['totalBudgetGovUtility'])}}@endif
+                                                    </div>
+
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
@@ -238,6 +254,8 @@
                                                 class="form-control" id="increased_budget_it_operating_{{ $key }}"
                                                 name="increased_budget_it_operating[{{ $key }}]" min="0"
                                                 value="{{ $increaseData->increased_budget_it_operating }}" >
+
+
 
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
