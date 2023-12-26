@@ -56,7 +56,9 @@
                                             <span class="text-danger">*</span>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="task_status"
-                                                    id="task_status1" value="1" @checked($task->task_status == 1)>
+                                                    id="task_status1" value="1" @checked($task->task_status == 1)
+                                                    {{ $task->task_status == 2 ? 'disabled' : '' }}
+                                                    >
                                                 <label class="form-check-label" for="task_status1"
                                                     @checked($task->task_status == 1)>
                                                     ระหว่างดำเนินการ
@@ -64,7 +66,9 @@
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="task_status"
-                                                    id="task_status2" value="2" @checked($task->task_status == 2)>
+                                                    id="task_status2" value="2" @checked($task->task_status == 2)
+                                                    {{ $task->task_status == 2 ? 'disabled' : '' }}
+                                                    >
                                                 <label class="form-check-label" for="task_status2"
                                                     @checked($task->task_status == 2)>
                                                     ดำเนินการแล้วเสร็จ
@@ -731,7 +735,9 @@
 
         </div>
     <div class="mt-3">
-        <button type="submit" class="btn btn-success">Save Changes</button>
+
+            <button type="submit" class="btn btn-success"  {{ $task->task_status == 2 ? 'disabled' : '' }}>Save Changes</button>
+
         <x-button link="{{ route('project.index') }}"
             class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
         </div>

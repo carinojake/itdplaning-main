@@ -128,21 +128,29 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-warning"
                              data-bs-title="งบประมาณ" data-bs-content="
-                         <p class=text-warningpay_underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท <br>
-
-
+                            @if($budget['total_op_totol_task_budget_it_op_in_ut_root'])
+                         <div class=text-warningpay_underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท</div>
                              @if ($project['budget_it_operating'] > 0)
-                             <p class=text-red> รอการเบิกจ่าย งบกลาง ICT :  {{ number_format( ($ospa + $osa)-( $otpsa1 + $otpsa2), 2) }} บาท </p>
-
-                             เบิกจ่ายแล้ว      งบกลาง ICT :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท <br>
+                             <div class=text-ict> งบกลาง ICT </div>
+                             <div class=text-red> รอการเบิกจ่าย :  {{ number_format( ($ospa + $osa)-( $otpsa1 + $otpsa2), 2) }} บาท</div>
+                             <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท</div>
+                             <p>
                          @endif
                          @if ($project['budget_it_investment'] > 0)
-                             งบดำเนินงาน :{{ number_format( $itpsa1 + $itpsa2, 2) }} บาท <br>
+                         <div class=text-investment mt-3> งบดำเนินงาน </div>
+                            <div class=text-red> รอการเบิกจ่าย :  {{ number_format( ($ispa + $isa)-( $itpsa1 + $itpsa2), 2) }} บาท</div>
+                            <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $itpsa1 + $itpsa2, 2) }} บาท</div>
+                            <p>
+
                          @endif
                          @if ($project['budget_gov_utility'] > 0)
-                             งบสาธารณูปโภค : {{ number_format( $utsc_pay_pa + $utsc_pay, 2) }} บาท <br>
-                         @endif
+                            <div class=text-utility> งบสาธารณูปโภค</div>
 
+                               <div class=text-red> รอการเบิกจ่าย :   {{ number_format($utpcs - $utsc_pay_pa + ($utsc - $utsc_pay), 2) }}บาท</div>
+                                <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $utpcs + $utsc, 2) }} บาท</div>
+                                <p>
+                         @endif
+                         @endif
                          " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold text-warning">
@@ -245,7 +253,7 @@
                                                     @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
 {{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
- --}}                         11     {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}                              {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
@@ -261,10 +269,10 @@
                                   {{--  1-1 --}}
 
 
-                                  11     {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+                                      {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
                                      @elseif($budget['total'] )
-                                    2-1 {{ number_format(floatval($budget['totalrefund_top']), 2) }}
+                                 {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                      @endif
                                    {{--  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}

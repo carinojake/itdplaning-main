@@ -41,12 +41,18 @@
                                    {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
 
                                     </div>
-                                    <div class="col-md-12 mt-3">
+                                    <div class="row">
+                                        <div class="col-md-12 mt-3">
                                         <label for="reguiar_id"
-                                            class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                    {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
+                                            class="form-label">{{ __('ลำดับ') }}</label>
+                                    {{ $projectDetails->reguiar_id  }}
 
+                                    <label for="project_name"
+                                    class="form-label">{{ Helper::projectsType($projectDetails->project_type ) }}</label>
+                            {{  $projectDetails->project_name }}
                                     </div>
+
+                                </div>
                                     <div class="d-none col-md-3 ">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label>

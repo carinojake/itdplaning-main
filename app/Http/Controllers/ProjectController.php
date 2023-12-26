@@ -5827,7 +5827,7 @@ dd($task_sub_refund_total_count);
 
 
 
-            //dd($budget);
+           // dd($budget,$tasks,$project);
 
         return view('app.projects.view', compact(
             'totalrefundpabudget_it_operating',
@@ -6085,7 +6085,7 @@ $data = [
 
         //$projectsJson = json_encode($projectData);
 
-        //dd($projectData);
+       // dd($projectData);
 
 
         return view('app.projects.edit', compact('project','increaseData','increasedbudgetData', 'projectDetails', 'request'));

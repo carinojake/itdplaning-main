@@ -10457,7 +10457,7 @@ html:not([dir=rtl]) .text-center {
     text-decoration: underline;
   }
 
-.c{
+  .text-pay{
     --cui-text-opacity: 1;
     color: rgba(var(--cui-pay-rgb), var(--cui-text-opacity)) !important;
   }

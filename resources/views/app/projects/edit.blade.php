@@ -179,6 +179,9 @@
 
 
                                                     >
+                                                    <div class="col-md-4">
+                                                        {{$project->budget_it_operating}}
+                                                    </div>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>

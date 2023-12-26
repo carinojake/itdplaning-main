@@ -484,7 +484,7 @@
                                                                             name="task_cost_it_investment"
                                                                             min="0"
                                                                             value={{ session('contract_pa_budget') }}
-                                                                            onchange="calculateRefund()">ย
+                                                                            onchange="calculateRefund()">
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('งบดำเนินงาน') }}
@@ -495,46 +495,45 @@
                                                         @endif
 
                                                         @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                                            <div id="utility" {{-- style="display:none;" --}}>
-                                                                <div class="row mt-3">
-                                                                    <div class="col-md-4">
-                                                                        <label for="task_budget_gov_utility"
-                                                                            class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
-                                                                        <input type="text" placeholder="0.00"
-                                                                            step="0.01"
-                                                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                                                            class="form-control numeral-mask"
-                                                                            id="task_budget_gov_utility"
-                                                                            name="task_budget_gov_utility"
-                                                                            min="0"
-                                                                            @if ($task->task_type == 1) value={{ session('contract_pa_budget') }}
-                                                                            @else
-                                                                            value="{{ $task->task_budget_gov_utility }}" onchange="calculateRefund()"  {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}> @endif
-                                                                            <div class="invalid-feedback">
+                                                        <div id="utility" {{-- style="display:none;" --}}>
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="task_budget_gov_utility"
+                                                                        class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค') }}</label>
+                                                                    <input type="text" placeholder="0.00"
+                                                                        step="0.01"
+                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                                        class="form-control numeral-mask"
+                                                                        id="task_budget_gov_utility"
+                                                                        name="task_budget_gov_utility"
+                                                                        min="0"
+                                                                        onchange="calculateRefund()">
+
+                                                                    <div class="invalid-feedback">
                                                                         {{ __('ค่าสาธารณูปโภค') }}
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-md-4">
                                                                     <label for="task_cost_gov_utility"
-                                                                        class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค') }}</label>
+                                                                        class="form-label">{{ __('รอการเบิก งบสาธารณูปโภค (ยอด pa / ไม่ pa )') }}</label>
                                                                     <input type="text" placeholder="0.00"
                                                                         step="0.01"
                                                                          data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                         class="form-control numeral-mask"
                                                                         id="task_cost_gov_utility"
-                                                                        name="task_cost_gov_utility" min="0"
-                                                                        value="{{ $task->task_cost_gov_utility }}"
-                                                                        onchange="calculateRefund()"
-                                                                        {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
+                                                                        name="task_cost_gov_utility"
+                                                                        min="0"
+                                                                        onchange="calculateRefund()">
 
                                                                     <div class="invalid-feedback">
                                                                         {{ __('ค่าสาธารณูปโภค') }}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                    </div>
+                                                        </div>
                                                     @endif
+
                                                 </div>
                                                 <div id="refund" {{-- style="display:none;" --}}>
                                                     <div class=" row mt-3">

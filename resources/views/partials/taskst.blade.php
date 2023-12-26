@@ -235,6 +235,8 @@
 
 
                                     @endif --}}
+
+
                                     @foreach ($subtask->contract as $contract)
                                         <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
                                             class="btn btn-success btn-sm"><i class="cil-description"></i></a>
@@ -247,8 +249,11 @@
                                     @endif
                                     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                         class="btn btn-warning btn-sm"><i class="cil-cog"></i></a>
-                                      {{--   {{$subtask->subtask->count()}} --}}
+
+                                        {{--   {{$subtask->subtask->count()}} --}}
+
                                         @if ($subtask->subtask->count() < 1)
+                                        @if ($subtask->task_status == 1)
                                         @if ($relatedData->totalLeastCost < 0.01)
                                         <form class="delete-form"
                                         action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -260,6 +265,9 @@
                                     </form>
                                     @endif
                                     @endif
+                                    @endif
+
+                                   {{-- admin --}}
                                     @if(auth()->user()->isAdmin())
                                     <form class="delete-form"
                                     action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -269,14 +277,11 @@
                                     <button class="btn btn-danger text-white btn-delete"><i
                                             class="cil-trash"></i></button>
                                 </form>
-
-
-
-
                                 <a href="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                                     class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
 
                                 @endif
+                                {{-- admin --}}
                                 </td>
 
                             </tr>
@@ -317,7 +322,7 @@
                                             </div>
                                             @endforeach
                                         </div>
-                                        <div class="certificate-container">
+                                 {{--        <div class="certificate-container">
                                             {!! $subtask_sub->task_status == 2 ? '<span class="badge bg-success text-white">ดำเนินการแล้วเสร็จ</span>' : '' !!}
                                             <div class=" certificate-item">
                                                 <span
@@ -325,7 +330,7 @@
                                                     {{ $subtask_sub->task_refund_pa_status == 2 ? 'ดำเนินการแล้วเสร็จคืนเงิน pa' : 'ไม่คืนเงิน pa' }}
                                                 </span>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     @endforeach
                                 </td>
