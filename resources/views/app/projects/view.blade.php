@@ -746,18 +746,32 @@
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.total_cost) : '';
+
+
+
+
+
                 var total_cost_it_operating =   task.total_cost_it_operating ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.total_cost_it_operating) : '';
+
                 var total_cost_it_investment =   task.total_cost_it_investment ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.total_cost_it_investment) : '';
+
+
                 var total_cost_gov_utility =   task.total_cost_gov_utility ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
                     currency: 'THB'
                 }).format(task.total_cost_gov_utility) : '';
+
+
+                var total_gantt_cost_op_in_gov = task.total_cost_it_operating+task.total_cost_it_investment+task.total_cost_gov_utility ? new Intl.NumberFormat('th-TH', {
+                    style: 'currency',
+                    currency: 'THB'
+                }).format(task.total_cost_it_operating+task.total_cost_it_investment+task.total_cost_gov_utility) : '';
 
 
 
@@ -792,7 +806,7 @@
                 var totalBudgetre_root_total =[task.budget_re_root_total_task_budget] // Sum of IT operating budgets from tasks
                 var totalrefundpabudget = [task.refund_pa_budget_end]; // Sum of refun
 
-                var budget_cost_total = formatCurrency([task.budget]-[task.total_cost]); // Sum of IT operating budgets from tasks
+                var budget_cost_total = formatCurrency([task.budget]-[task.total_cost_it_operating+task.total_cost_it_investment+task.total_cost_gov_utility]); // Sum of IT operating budgets from tasks
 
 
 
