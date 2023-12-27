@@ -69,7 +69,7 @@
                                     <h4>งบประมาณ</h4>
 
                                     <div class="row mt-3">
-                                        <div class="col-6">
+                                        <div id='taskcon_budget'class="col-6">
                                             <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
                                             @if ($taskcon->taskcon_budget_it_operating > 1)
                                                 <div class="col-md-12 mt-3">
@@ -118,7 +118,7 @@
                                             @endif
                                         </div>
 
-                                        <div class="col-6">
+                                        <div id='taskcon_cost' class="col-6">
                                             <strong>ค่าใช้จ่าย (งวด/ต่อครั้ง)</strong>
                                             @if ($taskcon->taskcon_cost_it_operating > 1)
                                                 <div class="col-md-12 mt-3">
@@ -206,7 +206,23 @@
         {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                // Pass the total sum to JavaScript
+                var totaltaskcons_Sum = {!! json_encode($totaltaskcons_Sum) !!};
 
+                // Convert to a float to ensure numerical comparison
+                totaltaskcons_Sum = parseFloat(totaltaskcons_Sum);
+
+                // Check if the sum is greater than 0 (or any other condition you deem appropriate)
+                if (totaltaskcons_Sum > 1) {
+                    var formInputs = document.querySelectorAll('#taskcon_budget input ,#taskcon_cost input ,#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
+                    formInputs.forEach(function(input) {
+                        input.setAttribute('readonly', true); // Set to read-only
+                    });
+                }
+            });
+        </script>
         <script>
             $(document).ready(function() {
                 $("#taskcon_pay").on("input", function() {
@@ -380,7 +396,6 @@ $("#taskcon_budget_it_investment, #taskcon_budget_gov_utility, #taskcon_budget_i
 var contract_pa_budget_v = {{$contract->contract_pa_budget}};
 var contract_fiscal_year_v = {{$contract->contract_fiscal_year}};
 
-var
 console.log( contract_pa_budget_v);
 console.log( contract_fiscal_year_v);
 

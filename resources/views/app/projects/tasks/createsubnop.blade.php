@@ -459,7 +459,7 @@
                                                                         </div> --}}
                                                             </div>
 
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-4 d-none">
                                                                 <label for="task_refund_pa_status"
                                                                     class="form-label">{{ __('task_refund_pa_status PA') }}</label>
                                                                 <span class="text-danger"></span>
@@ -1188,7 +1188,7 @@
 
                 // Set the start and end dates for the project_end_date datepicker
                 // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-                $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+                $("#task_end_date").datepicker("setStartDate", project_start_date_str);
 
 
 

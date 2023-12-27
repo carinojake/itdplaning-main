@@ -99,8 +99,8 @@
                                         <div class="row mt-3">
                                             <h4>งบประมาณ</h4>
 
-                                            <div class="row mt-3">
-                                                <div class="col-6">
+                                            <div id ="taskcon_budget"class="row mt-3">
+                                              <div class="col-6 d-none">
                                                     <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
                                                     @if($taskcon->taskcon_budget_it_operating >1)
                                                     <div class="col-md-12 mt-3">
@@ -133,7 +133,7 @@
                                                     @endif
                                                 </div>
 
-                                                <div class="col-6">
+                                                <div id = 'taskcon_budget'class="col-6">
                                                     <strong>ค่าใช้จ่าย  (งวด/ต่อครั้ง)</strong>
                                                     @if($taskcon->taskcon_cost_it_operating >1)
                                                         <div class="col-md-12 mt-3">
@@ -175,14 +175,10 @@
                                         <h4>เบิกจ่าย</h4>
 
 
-                                        <div class="col-md-12">
-                                            <label for="taskcon_projectplan" class="form-label">{{ __('บันทึกข้อความ') }}</label>
-                                   {{--          <input type="textarea" class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" value="{{ $taskcon->taskcon_projectplan }}" > --}}
-                                            <textarea class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" style="height: 100px">{{ $taskcon->taskcon_projectplan }}</textarea>
-                                            <div class="invalid-feedback">
-                                              {{ __('บันทึกข้อความ') }}
-                                            </div>
-                                          </div>
+
+
+
+
                                         <div class="col-md-4 mt-3" >
                                             <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
                                             <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
@@ -218,9 +214,18 @@
                                                 {{ __('เบิกจ่าย (บาท)') }}
                                             </div>
                                         </div>
+
+                                        <div class="col-md-12">
+                                            <label for="taskcon_projectplan" class="form-label">{{ __('บันทึกข้อความ') }}</label>
+                                   {{--          <input type="textarea" class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" value="{{ $taskcon->taskcon_projectplan }}" > --}}
+                                            <textarea class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" style="height: 100px">{{ $taskcon->taskcon_projectplan }}</textarea>
+                                            <div class="invalid-feedback">
+                                              {{ __('บันทึกข้อความ') }}
+                                            </div>
+                                          </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <label for="task_status"
                                             class="form-label">{{ __('task_status') }}</label>
                                         <span class="text-danger"></span>
@@ -363,6 +368,24 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 <!-- JavaScript to set fields as read-only based on the task status -->
+<script>
+    $(document).ready(function() {
+        // Pass the total sum to JavaScript
+        var totaltaskcons_Sum = {!! json_encode($totaltaskcons_Sum) !!};
+
+        // Convert to a float to ensure numerical comparison
+        totaltaskcons_Sum = parseFloat(totaltaskcons_Sum);
+
+        // Check if the sum is greater than 0 (or any other condition you deem appropriate)
+        if (totaltaskcons_Sum > 1) {
+            var formInputs = document.querySelectorAll('#taskcon_budget input ,#taskcon_cost input ,#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
+            formInputs.forEach(function(input) {
+                input.setAttribute('readonly', true); // Set to read-only
+            });
+        }
+    });
+</script>
+
 
     <script>
         var costFields = ['taskcon_cost_it_operating', 'taskcon_cost_it_investment', 'taskcon_cost_gov_utility'];

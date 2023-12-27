@@ -173,9 +173,12 @@
                                     @endif --}}
                                 </td>
                                 <td>
-                                    <span class="badge bg-success">
-                                        {{ $subtask->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '-' }}
-                                    </span>
+                                    @if(isset($subtask) && $subtask->task_status == 2)
+                                    <span class="badge bg-success">ดำเนินการแล้วเสร็จ</span>
+                                @else
+                                    <span class="badge bg-danger">-</span>
+                                @endif
+
                                {{--      @if(isset($subtask) && $subtask->task_refund_pa_status == 2)
                                         <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
                                     @else

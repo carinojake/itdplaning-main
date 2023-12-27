@@ -823,7 +823,15 @@
                                                                                     </div>
 
 
-
+                                                                                    <div class="col-md-4">
+                                                                                        <label for="expenses_sum"
+                                                                                            class="form-label">{{ __('ใช้ไป เงินงวดทั้งหมด') }}</label>
+                                                                                        <span class="text-danger"></span>
+                                                                                        <input type="text"
+                                                                                        class="form-control"
+                                                                                        id="expenses_sum"
+                                                                                        name="expenses_sum" readonly>
+                                                                                    </div>
 
 
 
@@ -842,15 +850,7 @@
                                                                                     </div>
                                                                             </div>
 
-                                                                            <div class="col-md-4">
-                                                                                <label for="expenses_sum"
-                                                                                    class="form-label">{{ __('ใช้ไป เงินงวดทั้งหมด') }}</label>
-                                                                                <span class="text-danger"></span>
-                                                                                <input type="text"
-                                                                                class="form-control"
-                                                                                id="expenses_sum"
-                                                                                name="expenses_sum" readonly>
-                                                                            </div>
+
                                                                         </div>
                                                                     </div>
 
@@ -1798,7 +1798,9 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
             var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
             var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-
+  console.log( contract_fiscal_year);
+  console.log( fiscalYearStartDate);
+    console.log( fiscalYearStartDate);
                         for (var i = 0; i < rounds; i++) {
                             var content = `
                     <div class="row">
@@ -1859,7 +1861,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                 changeYear: true,
                 language: "th-th",
                 startDate: fiscalYearStartDate,
-                endDate: fiscalYearEndDate,
+               // endDate: fiscalYearEndDate,
                 autoclose: true
             }).on('changeDate', function(selected) {
            // Set the start date of the end date datepicker to the selected start date
@@ -1872,10 +1874,6 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
             newEndDate.setDate(newEndDate.getDate() + 1); // Set the minimum start date of the next period to one day after the end date of the current period
             $(next_start_date).datepicker("setStartDate", newEndDate);
         }
-
-
-
-
 
             });
 

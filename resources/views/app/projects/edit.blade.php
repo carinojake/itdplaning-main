@@ -164,7 +164,7 @@
                                 <div  id='budget_form'class="row">
 
 
-                                    <div class="row">
+                                    <div class=" mt-3">
                                         <h4>งบประมาณ</h4>
                                         <div class="row">
                                             <div class="col-md-4">
@@ -179,10 +179,10 @@
 
 
                                                     >
-                                                    <div class="col-md-4 mt-3">
+                                                    <div class="mt-3">
                                                         @if( $budget['totalBudgetItOperating'])
 
-                                                        {{number_format( $budget['totalBudgetItOperating'])}}@endif
+                                                        งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ  {{number_format(  $project->budget_it_operating)}} บาท@endif
 
 
 
@@ -202,10 +202,10 @@
                                                     class="form-control" id="budget_it_investment"
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}">
-                                                    <div class="col-md-4 mt-3">
+                                                    <div class="mt-3">
                                                         @if( $budget['totalBudgetItInvestment'])
 
-                                                        {{number_format( $budget['totalBudgetItInvestment'])}}@endif
+                                                        งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ   {{number_format( $project->budget_it_investment)}}  บาท@endif
                                                     </div>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
@@ -220,10 +220,10 @@
                                                     class="form-control" id="budget_gov_utility"
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}">
-                                                    <div class="col-md-4 mt-3">
+                                                    <div class="mt-3">
                                                         @if( $budget['totalBudgetGovUtility'])
 
-                                                        {{number_format( $budget['totalBudgetGovUtility'])}}@endif
+                                                        งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ {{number_format( $project->budget_gov_utility)}} บาท@endif
                                                     </div>
 
                                                 <div class="invalid-feedback">
@@ -240,7 +240,7 @@
 
 
 
-                                <div id="increaseData_form"class="row mt-3">
+                                <div id="increaseData_form"class="row mt-3  d-none">
                                     @foreach($increasedbudgetData as $key => $increaseData)
                                     <div class="row mt-3">
                                         <h4>งบประมาณ เพิ่ม {{ $key+1 }}</h4>
@@ -293,7 +293,9 @@
                                     </div>
                                     @endforeach
                                 </div>
-                                <div class="row mt-3">
+
+
+                                <div class="row mt-3  d-none">
 
                                     <div class="col-md-3">
                                         <label for="increased_budget_status"
@@ -383,10 +385,11 @@
                                 </div> --}}
 
                     </div>
-
+                 {{--    <x-button link="{{ route('project.view', ['project' => $project->hashid]) }}"
+                        class="btn-warning text-black">{{ __('view') }}</x-button> --}}
 
                     <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                    <x-button link="{{ route('project.index') }}" class="btn-light text-black">
+                    <x-button link="{{ route('project.view', ['project' => $project->hashid]) }}" class="btn-light text-black">
                         {{ __('coreuiforms.return') }}</x-button>
                     </form>
                     </x-card>
@@ -453,15 +456,16 @@
         project_fiscal_year = project_fiscal_year - 543;
 
         var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
-        var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
+     //   var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
 
         console.log(project_start_date_str);
         console.log(project_end_date_str);
         console.log(fiscalYearStartDate);
-        console.log(fiscalYearEndDate);
+      //  console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
-$("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
-  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+//$("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
+//วันที่สิ้นสุด * ห้ามเกินวันที่เริ่มต้น
+ // $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
@@ -503,7 +507,7 @@ $("#project_start_date").datepicker("setStartDate", fiscalYearStartDate);
     }
 }); */
 
-$("#project_end_date").datepicker("setEndDate", fiscalYearEndDate);
+var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
     $('#project_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#project_end_date").datepicker("setStartDate", startDate);
@@ -613,11 +617,22 @@ var budgetItOperating = $("#budget_it_operating").val();
     $(document).ready(function() {
         var formIsValid = true;
         var invalidFieldId = '';
-        var oldValues = {
-            'budget_it_operating': parseFloat({{$project->budget_it_operating}}) || 0,
-            'budget_it_investment': parseFloat({{$project->budget_it_investment}}) || 0,
-            'budget_gov_utility': parseFloat({{$project->budget_gov_utility}}) || 0
+            // Define oldValues with ternary operators
+            var oldValues = {
+            'budget_it_operating': {{$budget['totalBudgetItOperating']}} ? parseFloat({{$project->budget_it_operating}}) : 0,
+            'budget_it_investment': {{$budget['totalBudgetItInvestment']}} ? parseFloat({{$project->budget_it_investment}}) : 0,
+            'budget_gov_utility': {{$budget['totalBudgetGovUtility']}} ? parseFloat({{$project->budget_gov_utility}}) : 0
         };
+
+        var oldtaskValues = {
+            'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
+            'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
+            'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
+        };
+
+        console.log(oldtaskValues);
+
+
         function numberFormat(number) {
         return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }

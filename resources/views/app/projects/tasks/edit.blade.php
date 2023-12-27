@@ -270,6 +270,8 @@
 
                                 </div>
 
+                                {{ $rootTaskbudget->root_two_cost }}
+                                {{ $rootTaskbudget->wait_pay }}
 
 
                                {{--  <div class="row mt-3">
@@ -299,8 +301,8 @@
                     </div>
 
                     <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                    <x-button onclick="history.back()" class="text-black btn-light">
-                        {{ __('coreuiforms.return') }}</x-button>
+                    <x-button link="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                        class="text-black btn-light">{{ __('show') }}</x-button>
                     </form>
                     </x-card>
                 </div>
@@ -325,7 +327,80 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-        <script>
+         <script>
+            $(document).ready(function() {
+                var formIsValid = true;
+                var invalidFieldId = '';
+                    // Define oldValues with ternary operators
+                    var oldValues = {
+                    'budget_it_operating': {{$budget['totalBudgetItOperating']}} ? parseFloat({{$project->budget_it_operating}}) : 0,
+                    'budget_it_investment': {{$budget['totalBudgetItInvestment']}} ? parseFloat({{$project->budget_it_investment}}) : 0,
+                    'budget_gov_utility': {{$budget['totalBudgetGovUtility']}} ? parseFloat({{$project->budget_gov_utility}}) : 0
+                };
+
+                var oldtaskValues = {
+                    'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
+                    'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
+                    'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
+                };
+
+                console.log(oldtaskValues);
+
+
+                function numberFormat(number) {
+                return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            }
+                function validateBudget(fieldId, enteredValue) {
+                    var oldValue = oldValues[fieldId];
+                    if (enteredValue < oldValue) {
+                        console.log(fieldId + ":", enteredValue);
+                        console.log("old" + fieldId + ":", oldValue);
+                        $('#' + fieldId).addClass('is-invalid');
+                        $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้'); // "Warn not to do so."
+                        formIsValid = false;
+                        invalidFieldId = fieldId; // Track the invalid field
+                    } else {
+                        $('#' + fieldId).removeClass('is-invalid');
+                        $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้');
+                        if (fieldId === invalidFieldId) {
+                            // If the current field was the one that caused the form to be invalid
+                            invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
+                        }
+                    }
+                }
+
+                // Check the budget amount entered when data is input
+                $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
+                    formIsValid = true; // Reset the form validity state on new input
+                    invalidFieldId = ''; // Reset the invalid field tracking
+
+                    validateBudget('budget_it_operating', parseFloat($("#budget_it_operating").val().replace(/,/g, "")) || 0);
+                    validateBudget('budget_it_investment', parseFloat($("#budget_it_investment").val().replace(/,/g, "")) || 0);
+                    validateBudget('budget_gov_utility', parseFloat($("#budget_gov_utility").val().replace(/,/g, "")) || 0);
+                });
+
+                // Prevent form submission if validation fails
+            // Prevent form submission if validation fails
+            $("form").on("submit", function(e) {
+                if (!formIsValid) {
+                    e.preventDefault(); // Prevent form submission
+                    var formattedOldValue = numberFormat(oldValues[invalidFieldId]);
+                    var alertText = 'งบประมาณถูกใช้ไป ' + formattedOldValue + ' แล้วจะไม่สามารถน้อยกว่านี้ได้';
+                    Swal.fire({
+                        title: 'เตือน!',
+                        text: alertText,
+                        icon: 'warning',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                });
+            });
+            </script>
+
+
+
+
+     <script>
             $(document).ready(function() {
         // Function to check and update the task cost fields
         function updateTaskCostFields() {
@@ -566,11 +641,12 @@
         console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+//วันที่สิ้นสุด * ไม่เกินวันที่สิ้นสุดโครงการ
   //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+   $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
 
 
         $('#task_start_date').on('changeDate', function() {

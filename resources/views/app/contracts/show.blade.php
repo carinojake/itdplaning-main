@@ -18,17 +18,17 @@
 
 
 
-                                    <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
+                               {{--      <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
                                         class="btn-sm btn btn-warning text-white">fffff <i class="cil-cog">
                                           </i>
-                                    </a>
+                                    </a> --}}
 
 
                                          <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
                             <div class="row  callout callout-primary mb-3">
 
-
+                            {{--     {{$contractgannt['total_pay']}} --}}
 
 
                                 <div class="col-sm-6 col-md-3 col-lg-4">
@@ -654,6 +654,7 @@
                                                     class="btn-sm btn btn-warning text-white"> <i class="cil-cog">
                                                         เบิกจ่าย</i>
                                                 </a>
+                                                @if($contractgannt['total_pay']  < 1)
                                                 <form
                                                     action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
                                                     method="POST" style="display:inline">
@@ -662,6 +663,7 @@
                                                     <button class="btn btn-danger text-white"><i
                                                             class="cil-trash"></i></button>
                                                 </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

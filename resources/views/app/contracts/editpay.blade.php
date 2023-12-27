@@ -27,20 +27,20 @@
                                         <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
                                         <p class="card-text">
                                             {{ \Helper::project_select($contract->contract_budget_type) }}</p>
-                                        <div class="accordion accordion-flush " id="accordionFlushExample">
+                                        <div class="accordion accordion-flush  " id="accordionFlushExample">
                                             <div class="callout callout-info accordion-item">
                                                 <h2 class="accordion-header " id="flush-headingOne">
-                                                    <button class="accordion-button collapsed " type="button"
+                                                    <button class="accordion-button collapsed bg-primary text-white" type="button"
                                                         data-coreui-toggle="collapse"
                                                         data-coreui-target="#flush-collapseOne" aria-expanded="false"
                                                         aria-controls="flush-collapseOne">
                                                         ข้อมูลการจัดซื้อจัดจ้าง (เลขที่สัญญา,MM,PR)
                                                     </button>
                                                 </h2>
-                                                <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                                <div id="flush-collapseOne" class="accordion-collapse "
                                                     aria-labelledby="flush-headingOne"
                                                     data-coreui-parent="#accordionFlushExample">
-                                                    <div class="accordion-body">
+                                                    <div class="accordion-body ">
                                                         <div class="row  callout callout-primary mb-3">
                                                             <div class="card mb-3">
                                                                 <table class="table h6">
@@ -133,9 +133,10 @@
                                             <div class="mt-3">
                                                 @foreach ($taskcons as $index => $taskcon)
                                                     <div class="row mb-3">
-
-                                                        <input name="tasks[{{ $index }}][id]"
-                                                            value="{{ $taskcon->taskcon_id }}">
+                                                        <div class="d-none" id="taskcon_id">
+                                                            <input name="tasks[{{ $index }}][id]"
+                                                                value="{{ $taskcon->taskcon_id }}">
+                                                        </div>
 
 
                                                         <div class="col-md-2">

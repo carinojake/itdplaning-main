@@ -163,7 +163,7 @@ class ContractController extends Controller
 
             ->toArray()
         );
-        // dd ($contractgannt);
+       //  dd ($contractgannt);
 
         //   คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         //   (float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility'];
@@ -376,7 +376,7 @@ class ContractController extends Controller
 
 
 
-      //  dd($request,$contractgannt, $files_contract, $contract, $gantt, $duration_p, $latestContract, $taskcons);
+//dd($request,$contractgannt, $files_contract, $contract, $gantt, $duration_p, $latestContract, $taskcons);
 
 
         return view('app.contracts.show', compact(
@@ -1912,9 +1912,15 @@ class ContractController extends Controller
         // ->get();
         // $taskcon = Taskcon::first()->toArray();
         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
+        $totaltaskcons_Sum = Taskcon::where('contract_id', $id_contract)
+        ->sum('taskcon_pay')
+
+        ;
+
+        ;
 
 
-        return view('app.contracts.tasks.edit', compact('files_taskcon', 'relatedTaskcons', 'contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
+        return view('app.contracts.tasks.edit', compact('totaltaskcons_Sum','files_taskcon', 'relatedTaskcons', 'contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
 
@@ -1925,6 +1931,8 @@ class ContractController extends Controller
 
         $contract    = Contract::find($id_contract);
         $taskcon       = Taskcon::find($id_taskcon);
+
+
         $taskcons      = Taskcon::where('contract_id', $id_contract)
             ->whereNot('taskcon_id', $id_taskcon)
             ->get();
@@ -1936,12 +1944,19 @@ class ContractController extends Controller
 
             ;
 
+            $totaltaskcons_Sum = Taskcon::where('contract_id', $id_contract)
+            ->sum('taskcon_pay')
+
+            ;
+
+            //dd($totaltaskcons_Sum);
+
         $tasks = task::get();
         $contractcons = Contract::get();
         // Fetch top-level taskcons with pagination
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
-       // dd ($taskcons, $contract, $relatedTaskcons,$taskconsSum);
+       // dd ($taskcon,$taskcons, $contract, $relatedTaskcons,$taskconsSum);
 
         // dd ($taskcons, $contract);
 
@@ -1960,7 +1975,7 @@ class ContractController extends Controller
         // $task= Task::get();  'contract', 'taskcon','taskcons','task'
 
 
-        return view('app.contracts.tasks.editview', compact(  'contract'  ,'contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
+        return view('app.contracts.tasks.editview', compact( 'totaltaskcons_Sum', 'contract'  ,'contractcons', 'tasks', 'contract', 'taskcon', 'taskcons'));
     }
 
 

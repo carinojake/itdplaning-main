@@ -67,7 +67,7 @@
                                 <div class="row">
                                    {{--  @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0) --}}
                                  {{--   @if($projectDetails->budget_it_operating >= $sum_task_budget_it_operating )
- --}}
+ --}}             @if($projectDetails->budget_it_operating > 0.01)
                                    <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
 
 
@@ -84,7 +84,7 @@
                                         <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
                                         <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div>
                                     @endif
-
+                                    @endif
 
 
                                        {{--  @endif --}}
@@ -440,13 +440,13 @@
         console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
-  //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
+   $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
-   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-   //var task_end_date_str = $("#task_end_date").val();
-   // var task_end_date = (task_end_date_str);
-   // var project_end_date =(project_end_date_str);
+    $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+   var task_end_date_str = $("#task_end_date").val();
+    var task_end_date = (task_end_date_str);
+    var project_end_date =(project_end_date_str);
      // console.log(task_end_date_str);
        // console.log(task_end_date);
         //console.log(project_end_date);
@@ -482,7 +482,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
     }
 });
 
-$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+//$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
 
@@ -495,10 +495,10 @@ $("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
             $("#task_end_date").datepicker("setStartDate", startDate);
         });
 
-     /*    $('#task_end_date').on('changeDate', function() {
+         $('#task_end_date').on('changeDate', function() {
             var endDate = $(this).datepicker('getDate');
             $("#task_start_date").datepicker("setEndDate", endDate);
-        }); */
+        });
     });
 
     function convertToDate(dateStr) {
