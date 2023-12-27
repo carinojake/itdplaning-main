@@ -269,9 +269,9 @@
 
 
                                 </div>
-
+{{--
                                 {{ $rootTaskbudget->root_two_cost }}
-                                {{ $rootTaskbudget->wait_pay }}
+                                {{ $rootTaskbudget->wait_pay }} --}}
 
 
                                {{--  <div class="row mt-3">

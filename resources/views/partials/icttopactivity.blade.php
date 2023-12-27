@@ -9,7 +9,7 @@
 @foreach ($project->main_task as $index => $task)
     {{-- Check for tasks with refund budget type 1 --}}
     @if ($task->task_budget_it_operating > 1 && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3 )
-        - {{ $task->task_name }}: {{ number_format($task->task_refund_pa_budget, 2) }} บาท
+        - {{ $task->task_name }}: {{ number_format($task->task_refund_pa_budget, 2) }} บาท<p>
     @endif
 @endforeach
 <h6>

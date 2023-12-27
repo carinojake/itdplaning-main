@@ -10391,12 +10391,15 @@ foreach ($project->main_task as $task) {
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
 
 
-           $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray()[0]
-
-           ; // Get the first result
+           $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray();
 
 
-        // dd($task,$tasks,$rootTaskbudget);
+
+
+           // Get the first result
+
+
+//         dd($budget,$task,$tasks,$rootTaskbudget);
 
 
 
