@@ -1,9 +1,7 @@
 <h6>
-    <p  class=text-utility  >งบสาธาณูปโภค : {{ number_format($budget['total_refund_pa_budget_gov_utility']-$budget['total_task_refun_budget_GovUtility'], 2) }} บาท<br>
+    <div class=text-black-underline>งบสาธาณูปโภค : {{ number_format($budget['total_refund_pa_budget_gov_utility']-$budget['total_task_refun_budget_GovUtility'], 2) }} บาท</div>
     </h6>
-<p>
 กิจกรรม ที่คืนงบประมาณ
-<br>
 @foreach ($project->main_task as $index => $task)
     {{-- Check for tasks with refund budget type 1 --}}
     @if ($task->task_budget_gov_utility && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3 )

@@ -41,18 +41,37 @@
                              data-bs-custom-class="custom-popover"
                              data-bs-title="งบประมาณ" data-bs-content="
                             @if ($project['budget_it_operating'] > 0)
-                                งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท <br>
+
+
+                                งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท
+                                @if ($increaseData['increasedbudget_sum_budget_it_operating'])
+                                <br>   งบกลาง ICT เพิ่ม : {{ number_format( $increaseData['increasedbudget_sum_budget_it_operating']),2 }} บาท
+
+                                <br> <b> รวมงบกลาง ICT : {{ number_format($project['budget_it_operating']+$increaseData['increasedbudget_sum_budget_it_operating']),2 }} บาท</b>
+                                @endif
+                                <br>
                             @endif
                             @if ($project['budget_it_investment'] > 0)
-                                งบดำเนินงาน :{{ number_format($project['budget_it_investment']),2 }} บาท <br>
+                                งบดำเนินงาน :{{ number_format($project['budget_it_investment']),2 }} บาท
+                                @if ($increaseData['increasedbudget_sum_budget_it_investment'])
+                                <br>  งบดำเนินงาน เพิ่ม : {{number_format( $increaseData['increasedbudget_sum_budget_it_investment']),2}} บาท
+                              <br>  <b> รวมงบดำเนินงาน : {{ number_format($project['budget_it_investment']+$increaseData['increasedbudget_sum_budget_it_investment']),2 }} บาท</b>
+
+                                @endif
+                                <br>
                             @endif
                             @if ($project['budget_gov_utility'] > 0)
-                                งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท <br>
+                                งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท
+                                @if ($increaseData['increasedbudget_sum_budget_gov_utility'])
+                              <br>   งบสาธารณูปโภค เพิ่ม : {{ number_format($increaseData['increasedbudget_sum_budget_gov_utility']),2 }} บาท
+                                <br>  <b> รวมงบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']+$increaseData['increasedbudget_sum_budget_gov_utility']),2 }} บาท</b>
+                                @endif
+                                <br>
                             @endif
                             " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold">
-                                    {{ number_format($budget['total'], 2) }}
+                                    {{ number_format($budget['total'],2) }}
                                 </div>
                                 <small class="text-xl">
                                     งบประมาณที่ได้รับการจัดสรร
@@ -128,29 +147,31 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-warning"
                              data-bs-title="งบประมาณ" data-bs-content="
-                            @if($budget['total_op_totol_task_budget_it_op_in_ut_root'])
-                         <div class=text-warningpay_underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท</div>
-                             @if ($project['budget_it_operating'] > 0)
-                             <div class=text-ict> งบกลาง ICT </div>
-                             <div class=text-red> รอการเบิกจ่าย :  {{ number_format( ($ospa + $osa)-( $otpsa1 + $otpsa2), 2) }} บาท</div>
-                             <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $otpsa1 + $otpsa2, 2) }} บาท</div>
+                            @if(($ospa + $osa)||($ispa+$isa)||($utpcs+$utsc))
+                         <div class=text-black-underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท</div>
+                            @endif
+                         @if ($ospa||$osa )
+                             <div class=text-black-underline> งบกลาง ICT </div>
+
+                             <div> รอการเบิกจ่าย :  <b class=text-red> {{ number_format( ($ospa + $osa)-( $otpsa1 + $otpsa2), 2) }}</b> บาท</div>
+                             <div>  เบิกจ่ายแล้ว : <b class=text-pay> {{ number_format( $otpsa1 + $otpsa2, 2) }}</b> บาท</div>
                              <p>
-                         @endif
-                         @if ($project['budget_it_investment'] > 0)
-                         <div class=text-investment mt-3> งบดำเนินงาน </div>
-                            <div class=text-red> รอการเบิกจ่าย :  {{ number_format( ($ispa + $isa)-( $itpsa1 + $itpsa2), 2) }} บาท</div>
-                            <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $itpsa1 + $itpsa2, 2) }} บาท</div>
+                                @endif
+                         @if ($ispa||$isa)
+                         <div class=text-black-underline mt-3> งบดำเนินงาน </div>
+                            <div > รอการเบิกจ่าย : <b class=text-red> {{ number_format( ($ispa + $isa)-( $itpsa1 + $itpsa2), 2) }}</b> บาท</div>
+                            <div >  เบิกจ่ายแล้ว :  <b class=text-pay>  {{ number_format( $itpsa1 + $itpsa2, 2) }} </b>บาท</div>
                             <p>
 
                          @endif
-                         @if ($project['budget_gov_utility'] > 0)
-                            <div class=text-utility> งบสาธารณูปโภค</div>
+                         @if ($utpcs||$utsc)
+                         <div class=text-black-underline> งบสาธารณูปโภค</div>
 
-                               <div class=text-red> รอการเบิกจ่าย :   {{ number_format($utpcs - $utsc_pay_pa + ($utsc - $utsc_pay), 2) }}บาท</div>
-                                <div class=text-pay>  เบิกจ่ายแล้ว :  {{ number_format( $utpcs + $utsc, 2) }} บาท</div>
+                               <div > รอการเบิกจ่าย :  <b class=text-red> {{ number_format($utpcs - $utsc_pay_pa + ($utsc - $utsc_pay), 2) }} </b>บาท</div>
+                                <div >  เบิกจ่ายแล้ว :  <b class=text-pay>{{ number_format( $utpcs + $utsc, 2) }} บาท</b></div>
                                 <p>
                          @endif
-                         @endif
+
                          " data-bs-trigger="hover focus">
 
                                 <div class="fs-4 fw-semibold text-warning">
@@ -191,7 +212,7 @@
 
                              "
 
-                             @if ($project['budget_it_operating'] > 0)
+                        @if ($budget['total_refund_pa_budget_it_operating'] > 0)
 
                              @if($budget['budget_it_operating']<=$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] || $budget['total_refund_pa_budget_it_operating'] > 1)
 {{--                              งบกลาง ICT  :    {{   number_format(($budget['budget_it_operating']+$budget['op_total_task_refund_pa_budget_3'])-$budget['op_totol_task_budget_it_operating'],2)}} บาท
@@ -202,12 +223,12 @@
                             @include('partials.icttopactivity')
 
                              @elseif($budget['budget_it_operating']>$budget['op_totol_task_budget_it_operating'])
-                             งบกลาง ICT  :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br>
+                             <div class=text-black-underline>  งบกลาง ICT  :  {{ number_format($budget['budget_total_task_budget_end_operating'], 2) }} บาท <br></div>
                              @endif
                              @endif
 
 
-                             @if ($project['budget_it_investment'] > 0)
+                             @if ($budget['in_totol_task_budget_it_investment'] > 0)
                             @if($budget['budget_it_investment']<$budget['in_totol_task_budget_it_investment'] ||$budget['budget_it_investment']===$budget['in_totol_task_budget_it_investment']  )
 
 {{--                             งบดำเนินงาน :   {{ number_format(($budget['budget_it_investment']-$budget['in_totol_task_budget_it_investment'])+ $budget['in_total_task_refund_pa_budget_3'],2)}} บาท <br>
@@ -220,13 +241,13 @@
                                 @elseif($budget['budget_it_investment']>$budget['in_totol_task_budget_it_investment'])
 
 
-                                งบดำเนินงาน  :  {{ number_format($budget['budget_total_task_budget_end_investment'], 2) }} บาท <br>
+                                <div class=text-black-underline>  งบดำเนินงาน  :  {{ number_format($budget['budget_total_task_budget_end_investment'], 2) }} บาท <br></div>
 
                                {{--  @include('partials.intopactivity') --}}
                                 @endif
 
                              @endif
-                         @if ($project['budget_gov_utility'] > 0)
+                         @if ($budget['ut_totol_task_budget_gov_utility'])
                              @if($budget['budget_gov_utility']<$budget['ut_totol_task_budget_gov_utility'] ||$budget['budget_gov_utility']===$budget['ut_totol_task_budget_gov_utility']  )
                              {{-- <p>
                              งบสาธารณูปโภค :    {{  number_format(($budget['budget_gov_utility']-$budget['ut_totol_task_budget_gov_utility'])+ $budget['ut_total_task_refund_pa_budget_3'],2)}} บาท <br>
@@ -236,8 +257,7 @@
                                 @include('partials.uttopactivity')
 
                                 @elseif($budget['budget_gov_utility']>$budget['ut_totol_task_budget_gov_utility'])
-                                <p>
-                                งบสาธารณูปโภค :  {{ number_format($budget['budget_total_task_budget_end_utility'], 2) }} บาท <br>
+                                    <div class=text-black-underline> งบสาธารณูปโภค :  {{ number_format($budget['budget_total_task_budget_end_utility'], 2) }} บาท <br></div>
 
 
                          @endif

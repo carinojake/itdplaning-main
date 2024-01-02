@@ -18,10 +18,10 @@
 
 
 
-                               {{--      <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
+                                   <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
                                         class="btn-sm btn btn-warning text-white">fffff <i class="cil-cog">
                                           </i>
-                                    </a> --}}
+                                    </a>
 
 
                                          <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>

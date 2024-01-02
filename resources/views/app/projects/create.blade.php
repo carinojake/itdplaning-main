@@ -27,7 +27,7 @@
                                             class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
                                             class="text-danger">*</span>
                                             <input type="text" class="form-control" id="project_fiscal_year"
-                                            name="project_fiscal_year" required>
+                                            name="project_fiscal_year" required autofocus>
                                         @error('project_fiscal_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -58,11 +58,7 @@
                                         <span class="text-danger">*</span>
                                         <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"
                                         >
-                                        <!-- <select name="reguiar_id" class="form-select @error('reguiar_id') is-invalid @enderror">
-                                                @for ($i = $reguiar_id; $i <= $reguiar_id; $i++)
-<option value="{{ $i }}" {{ $reguiar_id == $i ? 'selected' : '' }}>{{ $i }}</option>
-@endfor
-                                            </select>-->
+
                                             <div class="valid-feedback">
                                                 Looks good!
                                             </div>
@@ -219,6 +215,7 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+
     <script>
         $(document).ready(function() {
             var projectFiscalYearStart = "{{ $fiscal_year }}";
@@ -249,8 +246,53 @@
 
 
 
+<!-- ใส่สคริปต์นี้ในเทมเพลต Blade ของคุณในแท็ก head หรือ body -->
+{{--  <script>
+    $(document).ready(function() {
+        function checkFiscalYear() {
+            var fiscalYear = $('#project_fiscal_year').val();
+            var projectType = $('input[name="project_type"]:checked').val();
+            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
+
+            if(fiscalYear && projectType) {
+                // ทำการเรียก AJAX ไปยังเส้นทางของ Laravel ที่ส่งกลับค่า 'reguiar_id' สูงสุด
+                $.get('/api/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
+                    // สมมุติว่า 'data' มีค่า 'reguiar_id' สูงสุด
+                    $('#reguiar_id').val(data.max_reguiar_id);
+                });
+            } else {
+                $('#reguiar_id').val('Default Value');
+            }
+        }
+
+        $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
+        checkFiscalYear(); // ตรวจสอบค่าเริ่มต้น
+    });
+</script> --}}
 
 
+<!-- Blade Template: resources/views/app/projects/create.blade.php -->
+{{-- <script>
+    $(document).ready(function() {
+        // Function to update 'reguiar_id' based on 'project_fiscal_year' and 'project_type'
+        function updateReguiarId() {
+            var fiscalYear = $('#project_fiscal_year').val();
+            var projectType = $('input[name="project_type"]:checked').val();
+
+           // ใน Blade template
+$.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
+    // อัปเดต 'reguiar_id' ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์
+    $('#reguiar_id').val(data.max_reguiar_id);
+});
+        }
+
+        // Event listener for when the fiscal year or project type changes
+        $('#project_fiscal_year, input[name="project_type"]').change(updateReguiarId);
+
+        // Initial update on page load
+        updateReguiarId();
+    });
+    </script> --}}
 
         <script>
             $(document).ready(function() {

@@ -1,12 +1,14 @@
 @charset "UTF-8";
 :root {
   --cui-blue: #0d6efd;
+  --cui-blue-ganll: #0000ff;
   --cui-indigo: #6610f2;
   --cui-purple: #6f42c1;
   --cui-pink: #d63384;
   --cui-red: #dc3545;
   --cui-orange: #fd7e14;
   --cui-yellow: #f6c501;
+  --cui-green-hex: #008000;
   --cui-green: #198754;
   --cui-teal: #20c997;
   --cui-cyan: #0dcaf0;
@@ -53,6 +55,8 @@
   --cui-body-bg: #fff;
   --cui-pay-rgb: 244,217,16;
   --cui-blue-rgb:  13,110,253;
+--cui-blue-ganll-rgb: 0,0,255;
+--cui-green-ganll-rgb: 0,128,0;
     --cui-warningpay-rgb: 86, 7, 117;
 }
 
@@ -10430,6 +10434,12 @@ html:not([dir=rtl]) .text-center {
   color: rgba(var(--cui-success-rgb), var(--cui-text-opacity)) !important;
 }
 
+
+.taxt-green-ganll {
+    --cui-text-opacity: 1;
+    color: rgba(var(--cui-green-ganll-rgb), var(--cui-text-opacity)) !important;
+  }
+
 .text-info {
   --cui-text-opacity: 1;
   color: rgba(var(--cui-info-rgb), var(--cui-text-opacity)) !important;
@@ -10439,6 +10449,12 @@ html:not([dir=rtl]) .text-center {
     --cui-text-opacity: 1;
     color: rgba(var(--cui-blue-rgb), var(--cui-text-opacity)) !important;
   }
+
+.text-blue-ganll {
+    --cui-text-opacity: 1;
+    color: rgba(var(--cui-blue-ganll-rgb), var(--cui-text-opacity)) !important;
+  }
+
   .text-red {
     --cui-text-opacity: 1;
     color: rgba(var(--cui-danger-rgb), var(--cui-text-opacity)) !important;
@@ -10451,7 +10467,7 @@ html:not([dir=rtl]) .text-center {
     --cui-text-opacity: 1;
     color: rgba(var(--cui-warningpay-rgb), var(--cui-text-opacity)) !important;
   }
-  .text-warningpay_underline {
+  .text-warningpay-underline {
     --cui-text-opacity: 1;
     color: rgba(var(--cui-warningpay-rgb), var(--cui-text-opacity)) !important;
     text-decoration: underline;
@@ -10487,7 +10503,14 @@ html:not([dir=rtl]) .text-center {
 .text-black {
   --cui-text-opacity: 1;
   color: rgba(var(--cui-black-rgb), var(--cui-text-opacity)) !important;
+
 }
+
+.text-black-underline {
+    --cui-text-opacity: 1;
+    color: rgba(var(--cui-black-rgb), var(--cui-text-opacity)) !important;
+    text-decoration: underline;
+  }
 
 .text-white {
   --cui-text-opacity: 1;

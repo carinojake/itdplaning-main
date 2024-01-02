@@ -1,28 +1,27 @@
-<h6>
-    <p  class=text-investment  >งบดำเนินงาน : {{ number_format($budget['total_refund_pa_budget_it_investment']-$budget['totalBudgetItInvestment'], 2) }} บาท<br>
-    </h6>
+
+    <div  class=text-black-underline>งบดำเนินงาน :  <b class=text-blue-ganll  >{{ number_format($budget['total_refund_pa_budget_it_investment']-$budget['totalBudgetItInvestment'], 2) }} </b>บาท
+    </div>
+
     <!-- Rest of your code -->
-
-
-
-
-<p>
+    <div  class=text-blue-ganll  >
     กิจกรรม ที่คืนงบประมาณ
-    <br>
+    </div>
+
     @foreach ($project->main_task as $index => $task)
         {{-- Check for tasks with refund budget type 1 --}}
         @if ($task->task_budget_it_investment && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3 )
             - {{ $task->task_name }}: {{ number_format($task->task_refund_pa_budget, 2) }} บาท<br>
         @endif
     @endforeach
-    <p class=text-blue>
-        {{ 'รวม'}}: {{ number_format($budget['total_refund_pa_budget_it_investment'], 2) }}  บาท<br>
-    </p>
-    <p>
+    <div >
+        <b>  {{ 'รวม'}}:</b>  <b class=text-blue-ganll  >{{ number_format($budget['total_refund_pa_budget_it_investment'], 2) }}</b>  บาท<br>
+    </div>
 
     @if( $budget['totalBudgetItInvestment'])
+    <div class=taxt-green-ganll>
         กิจกรรม ใช้งบประมาณ ที่คืนงบประมาณ
-        <br>
+    </div>
+
     @foreach ($project->main_task as $index => $task)
         {{-- Check for tasks with refund budget type 4 --}}
 
@@ -38,9 +37,7 @@
 
         @endforeach
 
-        <p class=text-success>
-        {{ 'รวม'}}: {{ number_format($budget['totalBudgetItInvestment'], 2) }} บาท<br>
-
-    </p>
+        <div >
+            <b>  {{ 'รวม'}}:</b> <b class=taxt-green-ganll>{{ number_format($budget['totalBudgetItInvestment'], 2) }}</b> บาท</div>
 @endif
 

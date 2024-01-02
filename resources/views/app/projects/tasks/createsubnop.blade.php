@@ -71,11 +71,18 @@
 
 
 
+                                                    <div class="row">
                                                         <div class="col-md-12 mt-3">
-                                                            <label for="reguiar_id"
-                                                                class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                                                {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}
-                                                        </div>
+                                                        <label for="reguiar_id"
+                                                            class="form-label">{{ __('ลำดับ') }}</label>
+                                                    {{ $projectDetails->reguiar_id  }}
+
+                                                    <label for="project_name"
+                                                    class="form-label">{{ Helper::projectsType($projectDetails->project_type ) }}</label>
+                                            {{  $projectDetails->project_name }}
+                                                    </div>
+
+                                                </div>
 
 
                                                     <div class="d-none col-md-3 ">

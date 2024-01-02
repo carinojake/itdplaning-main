@@ -1,6 +1,6 @@
 
 <h6>
-<div class=text-ict  >งบกลาง ICT  : {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }} บาท</div>
+<div class=text-black-underline>งบกลาง ICT  : {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }} บาท</div>
 </h6>
 <!-- Rest of your code -->
 <div>
@@ -13,7 +13,7 @@
     @endif
 @endforeach
 <h6>
-<div class=text-blue>
+<div class=text-blue-ganll>
     {{ 'รวม'}}: {{ number_format($budget['total_refund_pa_budget_it_operating'], 2) }} บาท
 </div></h6>
 @if($totalBudgetItOperating)

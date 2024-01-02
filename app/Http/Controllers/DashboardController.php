@@ -14,7 +14,7 @@ use Vinkla\Hashids\Facades\Hashids;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use App\Models\Increasedbudget;
 class DashboardController extends Controller
 
 
@@ -131,7 +131,7 @@ class DashboardController extends Controller
 
 
 
-        //($fiscal_years);
+       // dd($fiscal_years, $fiscal_year);
 
          (
             $taskcon_pay_sum_1 = DB::table('tasks')
@@ -162,6 +162,15 @@ class DashboardController extends Controller
             ->get()
            //->toJson(JSON_NUMERIC_CHECK)
     );
+
+
+
+
+
+
+
+
+
 
         ($taskcon_pay_sum_1);
         ($task_pay_xy  =
@@ -1472,6 +1481,29 @@ as d')
 
             ($total_expenses = (($osa) + ($isa) + ($utsc)));;
 
+            $increasedbudgetData = DB::table('increasedbudgets')
+            ->join('projects', 'increasedbudgets.project_id', '=', 'projects.project_id')
+            ->select('increasedbudgets.*')
+           // ->where('project_id', $id)
+            ->where('increasedbudgets.deleted_at', NULL)
+         //   ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->where('project_fiscal_year',  $fiscal_year)
+            ->orderBy('projects.project_fiscal_year', 'DESC')
+            ->get();
+           // dd($increasedbudgetData);
+
+            $increasedbudget_sum_budget_it_operating =  $increasedbudgetData->sum('increased_budget_it_operating');
+            $increasedbudget_sum_budget_it_investment =  $increasedbudgetData->sum('increased_budget_it_investment');
+            $increasedbudget_sum_budget_gov_utility =  $increasedbudgetData->sum('increased_budget_gov_utility');
+            $increasedbudget_sum = $increasedbudget_sum_budget_it_operating + $increasedbudget_sum_budget_it_investment + $increasedbudget_sum_budget_gov_utility;
+
+            $increaseData['increasedbudget_sum'] = $increasedbudget_sum;
+            $increaseData['increasedbudget_sum_budget_it_operating'] = $increasedbudget_sum_budget_it_operating;
+            $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
+            $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
+
+
+           //dd($increaseData);
 
 // คัดเลือก tasks ที่เป็นในไตรมาสที่ 2 และปี 2566
 
@@ -1503,6 +1535,7 @@ as d')
  return view (
                 'app.dashboard.index',
                 compact(
+                    'increaseData',
                     'taskcon_pay_sum_1',
                     'fiscal_years',
                     'fiscal_year',
@@ -1671,8 +1704,25 @@ as d')
             'projects.*','a.total_task_budget', 'a.total_task_refund_pa_budget',
             'a.total_cost', 'a.tta', 'a.ttb', 'a.total_pay',
             'a.total_task_mm_budget', 'ab.cost_pa_1', 'ac.cost_no_pa_2',
-            'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3'
+            'ad.total_taskcon_pay_con','ae.total_task_refund_pa_budget_3',
+            'a_increasedbudgets.total_task_budget_increasedbudgets'
         )
+
+//
+            ->leftJoin( // คำนวณงบประมาณทั้งหมดของโปรเจกต์
+                DB::raw('(select increasedbudgets.project_id,
+                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0))
+                +sum(COALESCE(increasedbudgets.increased_budget_it_operating,0))
+                +sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as total_task_budget_increasedbudgets
+                from increasedbudgets
+                where increasedbudgets.deleted_at IS NULL
+                group by increasedbudgets.project_id)
+                as a_increasedbudgets'),
+                'a_increasedbudgets.project_id',
+                '=',
+                'projects.project_id'
+            )
+
         ->leftJoin(
             DB::raw('(select tasks.project_id,
 
@@ -1781,7 +1831,7 @@ as d')
         );
 
 
-           // dd($project = ($project));
+         //  dd($project = ($project));
 
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
 
@@ -1803,6 +1853,12 @@ as d')
         foreach ($project as $project) {
             ((float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'] + (float) $project['budget_gov_investment']);
             ((float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment']);
+            ((float) $__budget_total_task_budget_increasedbudgets  = (float) $project['total_task_budget_increasedbudgets']);
+
+
+
+
+
             (float) $__budget     = $__budget_gov + $__budget_it;
             ((float) $__cost       = (float) $project['project_cost']);
             ((float) $__total_task_budget       = (float) $project['total_task_budget']);
@@ -1811,7 +1867,15 @@ as d')
             ((float) $__prmm       = (float) $project['total_task_refund_pa_budget']);
             ((float) $__total_task_refund_pa_budget_3       = (float) $project['total_task_refund_pa_budget_3']);
 
+
+
+
+
+
             ((float) $__balance    = $__budget + (float) $project['project_cost']);
+
+
+
 
             $__project_cost     = [];
             $gantt[] = [
@@ -1834,7 +1898,7 @@ as d')
                 //  'project_cost_disbursement'     => $project['project_cost_disbursemen'],
                 // 'cost_disbursement'     => $project['cost_disbursement'],
                 'budget_it'             => $__budget_it,
-                'budget'                => $__budget,
+                'budget'                => $__budget+ $__budget_total_task_budget_increasedbudgets,
                 'balance'               => $__balance,
                 'pbalance'               => $__balance,
                 //  'cost_disbursement'     => $project['cost_disbursement'],

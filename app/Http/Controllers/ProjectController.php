@@ -1353,6 +1353,7 @@ $mainQuery = DB::query()
             'increasedbudgets.totoi_increased_budget_it_operting',
             'increasedbudgets.totoi_increased_budget_it_investment',
             'increasedbudgets.totoi_increased_budget_gov_utility',
+            'increasedbudgets.total_task_budget_increasedbudgets',
 
             'budget_re_root.budget_re_op_totol_task_budget_it_operating',
             'budget_re_root.budget_re_in_totol_task_budget_it_investment',
@@ -1403,7 +1404,10 @@ $mainQuery = DB::query()
 
                 sum(COALESCE(increasedbudgets.increased_budget_it_operating,0)) as totoi_increased_budget_it_operting,
                 sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as totoi_increased_budget_it_investment,
-                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0)) as totoi_increased_budget_gov_utility
+                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0)) as totoi_increased_budget_gov_utility,
+                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0))
+                +sum(COALESCE(increasedbudgets.increased_budget_it_operating,0))
+                +sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as total_task_budget_increasedbudgets
                 from increasedbudgets
                 where increasedbudgets.deleted_at IS NULL) as increasedbudgets'),
                 'increasedbudgets.project_id',
@@ -2112,9 +2116,15 @@ $mainQuery = DB::query()
         (float) $__ut_root_conditional_sum_task_refund_pa_budget = (float) $project['ut_root_conditional_sum_task_refund_pa_budget'];
 
 
+        //19/12/2566 งบประมาณเพิ่ม
+        ((float) $__totoi_increased_budget_it_operting      = (float)($project['totoi_increased_budget_it_operting']));
+        ((float) $__totoi_increased_budget_it_investment      = (float)($project['totoi_increased_budget_it_investment']));
+        ((float) $__totoi_increased_budget_gov_utility      = (float)($project['totoi_increased_budget_gov_utility']));
+        ((float) $__totoi_increased_budget      = (float)($project['totoi_increased_budget_it_operting'])+(float)($project['totoi_increased_budget_it_investment'])+(float)($project['totoi_increased_budget_gov_utility']));
 
 
-        (float) $__budget     = $__budget_gov + $__budget_it;
+
+        (float) $__budget     = $__budget_gov + $__budget_it+$__totoi_increased_budget ;
         ((float) $__cost       = (float) $project['total_cost']);
 
         // dd($__cost,$project['total_cost'],$__total_cost_it_operating);
@@ -2156,12 +2166,6 @@ $mainQuery = DB::query()
         ((float) $__total_task_refund_pa_budget_null      = (float)($project['total_task_refund_pa_budget_null']));
         ((float) $__total_task_pay_null      = (float)($project['total_task_pay_null']));
 
-        //19/12/2566 งบประมาณเพิ่ม
-        ((float) $__totoi_increased_budget_it_operting      = (float)($project['totoi_increased_budget_it_operting']));
-        ((float) $__totoi_increased_budget_it_investment      = (float)($project['totoi_increased_budget_it_investment']));
-        ((float) $__totoi_increased_budget_gov_utility      = (float)($project['totoi_increased_budget_gov_utility']));
-        ((float) $__totoi_increased_budget      = (float)($project['totoi_increased_budget_it_operting'])+(float)($project['totoi_increased_budget_it_investment'])+(float)($project['totoi_increased_budget_gov_utility']));
-
         //25121256 budget_re_root_total_task_budget
         ((float) $__budget_re_root_total_task_budget      = (float)($project['budget_re_root_total_task_budget']));
         ((float) $__budget_re_op_totol_task_budget_it_operating     = (float)($project['budget_re_op_totol_task_budget_it_operating']));
@@ -2194,8 +2198,8 @@ $mainQuery = DB::query()
             'budget_it_operating'   => str_replace(',', '', $project['budget_it_operating']),
             'budget_it_investment'  => $project['budget_it_investment'],
             'budget_it'             => $__budget_it,
-            'budget'                => $__budget,
-            'balance'               => $__balance,
+            'budget'                => $__budget ,
+            'balance'               => $__balance ,
             'pbalance'               => $__balance,
             'project_cost_disbursement'     => $project['project_cost_disbursemen'],
             'total_cost'                => $__cost,
@@ -2274,10 +2278,14 @@ $mainQuery = DB::query()
         $budget['budget_it_operating'] = $__budget_it_operating;
         $budget['budget_it_investment'] = $__budget_it_investment;
         $budget['budget_gov_utility'] = $__budget_gov_utility;
-        $budget['total'] = $__budget;
-        $budget['budgettotal_root'] = $__budget;
+        $budget['total'] = $__budget ;
+        $budget['budgettotal_root'] = $__budget ;
         $budget['total_op_totol_task_budget_it_op_in_ut_root'] = $__op_totol_task_budget_it_operating + $__in_totol_task_budget_it_investment + $__ut_totol_task_budget_gov_utility;
-
+        //01/01/2567
+        $budget['totoi_increased_budget'] = $__totoi_increased_budget;
+        $budget['totoi_increased_budget_it_operting'] = $__totoi_increased_budget_it_operting;
+        $budget['totoi_increased_budget_it_investment'] = $__totoi_increased_budget_it_investment;
+        $budget['totoi_increased_budget_gov_utility'] = $__totoi_increased_budget_gov_utility;
 
         $budget['total_cost_it_operating_root'] = $__total_cost_it_operating;
         $budget['total_cost_it_investment_root'] = $__total_cost_it_investment;
@@ -2454,9 +2462,9 @@ $mainQuery = DB::query()
 
         $budget['budget_total_cost'] = ($__budget) - ($__cost);
         // dd($__cost);
-        $budget['budget_total_cost_op'] = ($__budget_it_operating) - ($__total_cost_it_operating);
-        $budget['budget_total_cost_in'] = ($__budget_it_investment) - ($__total_cost_it_investment);
-        $budget['budget_total_cost_ut'] = ($__budget_gov_utility) - ($__total_cost_gov_utility);
+        $budget['budget_total_cost_op'] = (($__budget_it_operating)+ $budget['totoi_increased_budget_it_operting'])   - ($__total_cost_it_operating);
+        $budget['budget_total_cost_in'] = (($__budget_it_investment)+ $budget['totoi_increased_budget_it_investment']) - ($__total_cost_it_investment);
+        $budget['budget_total_cost_ut'] = (($__budget_gov_utility)+ $budget['totoi_increased_budget_gov_utility'] )- ($__total_cost_gov_utility);
         $budget['budget_total_mm_pr'] = ($__budget) - ($__mm - $__prmm);
         $budget['budget_total_pay_con'] = ($__budget) - ($__pay + $__paycon);
 
@@ -5828,8 +5836,33 @@ dd($task_sub_refund_total_count);
 
 
            // dd($budget,$tasks,$project);
+           $increasedbudgetData = DB::table('increasedbudgets')
+           //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+           ->select('increasedbudgets.*')
+           ->where('project_id', $id)
+           ->where('increasedbudgets.deleted_at', NULL)
+           //->orderBy('projects.project_fiscal_year', 'DESC')
+           ->get();
+          // dd($increasedbudgetData);
+
+           $increasedbudget_sum_budget_it_operating =  $increasedbudgetData->sum('increased_budget_it_operating');
+           $increasedbudget_sum_budget_it_investment =  $increasedbudgetData->sum('increased_budget_it_investment');
+           $increasedbudget_sum_budget_gov_utility =  $increasedbudgetData->sum('increased_budget_gov_utility');
+           $increasedbudget_sum = $increasedbudget_sum_budget_it_operating + $increasedbudget_sum_budget_it_investment + $increasedbudget_sum_budget_gov_utility;
+
+           $increaseData['increasedbudget_sum'] = $increasedbudget_sum;
+           $increaseData['increasedbudget_sum_budget_it_operating'] = $increasedbudget_sum_budget_it_operating;
+           $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
+           $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
+
+
+         // dd($increaseData);
+
+
+
 
         return view('app.projects.view', compact(
+            'increaseData',
             'totalrefundpabudget_it_operating',
             'totalBudgetItOperating',
             'result_query_it_operating_idParentCategory',
@@ -5891,6 +5924,25 @@ dd($task_sub_refund_total_count);
         ));
     }
 
+    public function getMaxRegularId(Request $request)
+    {
+        $fiscalYear = $request->input('fiscal_year');
+        $projectType = $request->input('project_type');
+
+        $last_reguiar_id = Project::where('project_fiscal_year', $fiscalYear)
+                                  ->where('project_type', $projectType)
+                                  ->max('reguiar_id');
+
+        $reguiar_id = $last_reguiar_id ? $last_reguiar_id + 1 : 1;
+        if ($projectType == 1) {
+            // โลจิกเฉพาะสำหรับ 'project_type' 1
+            // ตัวอย่าง: ถ้า 'project_type' 1 ควรเริ่มนับจาก 100
+            $reguiar_id = $last_reguiar_id ? $last_reguiar_id + 1 : 100;
+        }
+
+        // ส่งกลับค่า 'reguiar_id' ในรูปแบบ JSON
+        return response()->json(['max_reguiar_id' => $reguiar_id]);
+    }
 
     public function create(Request $request)
     {
@@ -5902,8 +5954,25 @@ dd($task_sub_refund_total_count);
         if (!$project_type) {
             $project_type = 1; // Use current year if not provided
         }
+        $project_reguiar_id = Project::select('project_fiscal_year', 'reguiar_id', 'project_type')->get();
 
-        $last_reguiar_id = Project::where('project_fiscal_year', $fiscal_year)->where('project_type',$project_type)->max('reguiar_id');
+        // Calculate the max regular id for project type 1
+        $reguiar_id_new_1 = $project_reguiar_id->where('project_type', 1)->max('reguiar_id');
+
+        // Calculate the max regular id for project type 2
+        $reguiar_id_new_2 = $project_reguiar_id->where('project_type', 2)->max('reguiar_id');
+
+        //dd($reguiar_id_new_1, $reguiar_id_new_2);
+
+
+
+
+
+
+
+        $last_reguiar_id = Project::where('project_type',$project_type)->max('reguiar_id');
+       // dd($last_reguiar_id);
+
 
         $reguiar_id = $request->input('reguiar_id');
         if (!$reguiar_id) {
@@ -5938,7 +6007,9 @@ $data = [
 'reguiar_id' => $reguiar_id,
 'project_type' => $project_type,
 'project_type_1_reguiar_id' => $project_type_1_reguiar_id, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 1
-'project_type_2_reguiar_id' => $project_type_2_reguiar_id // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
+'project_type_2_reguiar_id' => $project_type_2_reguiar_id, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
+'reguiar_id_new_1' => $reguiar_id_new_1, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 1
+'reguiar_id_new_2' => $reguiar_id_new_2, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
 ];
         // If you need additional project data, ensure you're handling it correctly here.
         // For example, if you're trying to edit an existing project, you'd retrieve it by its ID.
@@ -5953,7 +6024,6 @@ $data = [
         return view('app.projects.create', $data);
     }
 
-
     public function store(Request $request)
     {
         $messages = [
@@ -5964,18 +6034,40 @@ $data = [
             // เพิ่มข้อความผิดพลาดเพิ่มเติมตามความเหมาะสม
         ];
 
+        $messages = [
+            'required' => 'กรุณากรอกข้อมูล :attribute',
+            'date_format' => 'รูปแบบวันที่ไม่ถูกต้อง :attribute',
+            'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
+            'integer' => 'กรุณากรอกตัวเลขเท่านั้น :attribute',
+        ];
+
         $request->validate([
             'project_name' => 'required',
             'reguiar_id' => 'required',
             'project_start_date' => 'required|date_format:d/m/Y',
             'project_end_date' => 'required|date_format:d/m/Y|after_or_equal:project_start_date',
-            /*    'project_fiscal_year' => 'required|integer',
-            'budget_gov_operating' => 'nullable|numeric',
+            'project_type' => 'required|in:1,2', // Assuming project_type can only be 1 or 2
+            'project_fiscal_year' => 'required|integer',
+      /*       'budget_gov_operating' => 'nullable|numeric',
             'budget_gov_investment' => 'nullable|numeric',
             'budget_gov_utility' => 'nullable|numeric',
             'budget_it_operating' => 'nullable|numeric',
-            'budget_it_investment' => 'nullable|numeric',*/
+            'budget_it_investment' => 'nullable|numeric', */
         ], $messages);
+
+        $existingReguiarId = Project::where('project_fiscal_year', $request->input('project_fiscal_year'))
+            ->where('project_type', $request->input('project_type'))
+            ->where('reguiar_id', $request->input('reguiar_id'))
+            ->first();
+
+        if ($existingReguiarId) {
+            $projectTypeText = $request->input('project_type') == 1 ? '1' : '2';
+            return back()->withErrors([
+                'reguiar_id' => 'ลำดับ.ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว ลำดับ.ชื่องาน/โครงการ ' . $projectTypeText
+            ])->withInput();
+        }
+
+
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('project_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('project_end_date'));
@@ -6134,6 +6226,24 @@ foreach ($project->main_task as $task) {
     }
 }
 
+$totalBudgetItOperating_task_refund_budget_type = 0;
+$totalBudgetItInvestment_task_refund_budget_type = 0;
+$totalBudgetGovUtility_task_refund_budget_type = 0;
+
+foreach ($project->main_task as $task) {
+    if ($task->task_budget_it_operating > 1 && $task->task_refund_budget_type == 1) {
+        $totalBudgetItOperating_task_refund_budget_type += $task->task_budget_it_operating;
+    }
+    if ($task->task_budget_it_investment > 1 && $task->task_refund_budget_type == 1) {
+        $totalBudgetItInvestment_task_refund_budget_type += $task->task_budget_it_investment;
+    }
+    if ($task->task_budget_gov_utility > 1 && $task->task_refund_budget_type == 1) {
+        $totalBudgetGovUtility_task_refund_budget_type += $task->task_budget_gov_utility;
+    }
+}
+$totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budget_type + $totalBudgetItInvestment_task_refund_budget_type + $totalBudgetGovUtility_task_refund_budget_type;
+    //dd($totalBudgetItOperating_task_refund_budget_type,$totalBudgetItInvestment_task_refund_budget_type,$totalBudgetGovUtility_task_refund_budget_type);
+
 
 
 
@@ -6142,24 +6252,33 @@ foreach ($project->main_task as $task) {
             $budget['totalBudgetItOperating'] = $totalBudgetItOperating;
             $budget['total_refund_pa_budget_it_operating'] = $totalrefundpabudget_it_operating;
                $budget['total_task_refun_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
+               $budget['increasedbudget_sum_budget_it_operating'] =  $increasedbudget_sum_budget_it_operating;
+               $budget['totalBudgetItOperating_task_refund_budget_type'] = $totalBudgetItOperating_task_refund_budget_type;
+
+
                //budget_it_investment
                $budget['totalBudgetItInvestment'] = $totalBudgetItInvestment;
                $budget['total_refund_pa_budget_it_investment'] = $totalrefundpabudget_it_investment;
                $budget['total_task_refun_budget_ItInvestment'] = $totaltaskrefunbudget_ItInvestment;
+                $budget['increasedbudget_sum_budget_it_investment'] =  $increasedbudget_sum_budget_it_investment;
+                $budget['totalBudgetItInvestment_task_refund_budget_type'] = $totalBudgetItInvestment_task_refund_budget_type;
                //budget_gov_utility
                $budget['totalBudgetGovUtility'] = $totalBudgetGovUtility;
                $budget['total_refund_pa_budget_gov_utility'] = $totalrefundpabudget_gov_utility;
                $budget['total_task_refun_budget_GovUtility'] = $totaltaskrefunbudget_GovUtility;
+                $budget['increasedbudget_sum_budget_gov_utility'] =  $increasedbudget_sum_budget_gov_utility;
+                $budget['totalBudgetGovUtility_task_refund_budget_type'] = $totalBudgetGovUtility_task_refund_budget_type;
 
 
    //รวม  +  - $budget
            $budget['totalbudget_budget'] = $budget['totalBudgetItOperating'] + $budget['totalBudgetItInvestment'] + $budget['totalBudgetGovUtility'];
            $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
+           $budget['increasedbudget_sum'] = $increaseData['increasedbudget_sum'];
+           $budget['$totalBudget_task_refund_budget_type'] = $totalBudget_task_refund_budget_type;
 
 
-
-             // dd($budget);
+            // dd($budget);
 
 
 
@@ -6187,7 +6306,7 @@ foreach ($project->main_task as $task) {
         $id_increasedbudgets = increasedbudget::where('project_id', $id)->get();
       //  $projectId = Hashids::decode($projectHash)[0];
         $increasedBudgets = IncreasedBudget::where('project_id', $id)->get();
-      //  dd($id_increasedbudgets);
+       // dd($id_increasedbudgets,$increasedBudgets,$project);
 
         $messages = [
             'required' => 'กรุณากรอกข้อมูล :attribute',
@@ -6253,79 +6372,49 @@ foreach ($project->main_task as $task) {
         $project->budget_it_operating = $budget_it_operating;
         $project->budget_it_investment = $budget_it_investment;
         $project->reguiar_id = $request->input('reguiar_id');
-    $project->project_status_during_year = $request->input('project_status_during_year') ?? null;
+         $project->project_status_during_year = $request->input('project_status_during_year') ?? null;
 
-        // Save the Project
-           // Process each increased budget entry    foreach ($request->file('file') as $file)
-    // Assuming $increasedBudgets is a collection of IncreasedBudget models
-/*     foreach ( $request->increasedBudgets as $increasedBudgetdate) {
-        // The key to access the request data
-        $increasedBudgets = IncreasedBudget::find($increasedBudgetdate['increased_budget_id']);
-        dd($increasedBudgets);
-        if($increasedBudgets){
-            $increasedBudgets->increased_budget_status =$increasedBudgetdate['increased_budget_status'];
-            // ตัวอย่างการตรวจสอบเงื่อนไขและอัปเดตข้อมูล
-            if(isset($increasedBudgetdate['increased_budget_it_operating'])){
-                $increased_budget_it_operating = str_replace(',','',$increasedBudgetdate['increased_budget_it_operating']);
-                $increasedBudgets->increased_budget_it_operating = $increased_budget_it_operating === '' ? null : $increased_budget_it_operating;
+         if (isset($request->increaseData) && is_array($request->increaseData)) {
+            foreach ($request->increaseData as $data) {
+                if (isset($data['increased_budget_id'])) {
+                    $increasedbudget = Increasedbudget::find($data['increased_budget_id']);
+
+                    if ($increasedbudget) {
+                        // It's important to check if the keys exist in the $data array before trying to use them
+                        $increasedbudget->increased_budget_it_operating = isset($data['increased_budget_it_operating']) ? (float) str_replace(',', '', $data['increased_budget_it_operating']) : null;
+                        $increasedbudget->increased_budget_it_investment = isset($data['increased_budget_it_investment']) ? (float) str_replace(',', '', $data['increased_budget_it_investment']) : null;
+                        $increasedbudget->increased_budget_gov_utility = isset($data['increased_budget_gov_utility']) ? (float) str_replace(',', '', $data['increased_budget_gov_utility']) : null;
+
+                        // Save the updated model
+                        $increasedbudget->save();
+                    } else {
+                        // Handle the case where the increased budget ID doesn't exist
+                    }
+                } else {
+                    // Handle the case where 'increased_budget_id' is not set
+                }
             }
-
-
-
-            dd($increasedBudgetdate);
-
-        // Save the updated increased budget entry
-        $increasedBudgetdate->save();
-
-
+        } else {
+            // Handle the error scenario, perhaps return a response indicating the error
         }
 
 
-    }
- */
+         if ($project->save()) {
 
 
-
-
-
-
-
-
-
-
-
-
-
-        $increasedbudget = new Increasedbudget;
-       // $increasedbudget->project_id = $id;
-        $increasedbudget->increased_budget_status = '1';
-
-        //dd($project,$increasedbudget);  $budget_gov_operating = $request->input('budget_gov_operating') !== null ? (float) str_replace(',', '', $request->input('budget_gov_operating')) : null;
-
-
-
-        if ($project->save()) {
            if ($request->input('increased_budget_status') == '1') {
                 $increasedbudget = new Increasedbudget;
                 $increasedbudget->project_id = $id;
                 $increasedbudget->increased_budget_status = '1';
+                $increased_budget_it_operating_new = $request
+                ->input('increased_budget_it_operating_new') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_operating_new')) : null;
+                $increased_budget_it_investment_new = $request->input('increased_budget_it_investment_new') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_investment_new')) : null;
+                $increased_budget_gov_utility_new = $request->input('increased_budget_gov_utility_new') !== null ? (float) str_replace(',', '', $request->input('increased_budget_gov_utility_new')) : null;
+                $increasedbudget->increased_budget_it_operating = $increased_budget_it_operating_new;
+                $increasedbudget->increased_budget_it_investment = $increased_budget_it_investment_new;
+                $increasedbudget->increased_budget_gov_utility = $increased_budget_gov_utility_new;
 
-
-
-
-                $increased_budget_it_operating = $request
-                ->input('increased_budget_it_operating') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_operating')) : null;
-                $increased_budget_it_investment = $request->input('increased_budget_it_investment') !== null ? (float) str_replace(',', '', $request->input('increased_budget_it_investment')) : null;
-                $increased_budget_gov_utility = $request->input('increased_budget_gov_utility') !== null ? (float) str_replace(',', '', $request->input('increased_budget_gov_utility')) : null;
-
-                $increasedbudget->increased_budget_it_operating = $increased_budget_it_operating;
-
-
-
-                $increasedbudget->increased_budget_it_investment = $increased_budget_it_investment;
-                $increasedbudget->increased_budget_gov_utility = $increased_budget_gov_utility;
-
-       // dd($project,$increasedbudget);
+      //dd($project,$increasedbudget);
 
                 $increasedbudget->save();
             }
@@ -7851,6 +7940,7 @@ dd($resultthItem); */
         $project = $request->project;
         //  ($project = Project::find($id)); // รับข้อมูลของโครงการจากฐานข้อมูล
         ($tasks     = Task::where('project_id', $id)->get());
+       // dd($tasks);
         ($taskcons     = Taskcon::where('task_id', $id)->get());
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
@@ -7861,26 +7951,35 @@ dd($resultthItem); */
        // dd($increased);
 
         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
         $sum_task_refund_budget_type_it_operating = $tasks->where('task_refund_budget_type', '=', 1)
         ->sum('task_budget_it_operating');
+        $sum_task_budget_type_it_operating_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_operating');
 // Sum the task_budget_it_investment for all tasks
         $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+
         $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('task_budget_it_investment', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
-        $sum_task_refund_budget_type_it_investment = $tasks->whereNull('task_parent')->where('task_refued_budget_type', '=', 1)->sum('task_budget_it_investment');
-
+        $sum_task_refund_budget_type_it_investment = $tasks->whereNull('task_parent')->where('task_refund_budget_type', '=', 1)->sum('task_budget_it_investment');
+        $sum_task_budget_type_it_investment_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_investment');
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
-        $sum_task_refund_budget_type_gov_utility = $tasks->where('task_refued_budget_type', '=', 1)->sum('task_budget_gov_utility');
+        $sum_task_refund_budget_type_gov_utility = $tasks->where('task_refund_budget_type', '=', 1)->sum('task_budget_gov_utility');
+        $sum_task_budget_type_gov_utility_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_gov_utility');
 
 
 
 
-        $budget_task['sum_task_budget_it_operating'] = $sum_task_budget_it_operating;
+    $budget_task['sum_task_budget_it_operating'] = $sum_task_budget_it_operating;
     $budget_task['sum_task_budget_it_investment'] = $sum_task_budget_it_investment;
     $budget_task['sum_task_budget_gov_utility'] = $sum_task_budget_gov_utility;
+
+    $budget_task['sum_task_budget_type_it_operating_no'] = $sum_task_budget_type_it_operating_no;
+    $budget_task['sum_task_budget_type_it_investment_no'] = $sum_task_budget_type_it_investment_no;
+    $budget_task['sum_task_budget_type_gov_utility_no'] = $sum_task_budget_type_gov_utility_no;
+    $budget_task['sum_task_budget_type_it_oiu'] = $sum_task_budget_type_it_operating_no+$sum_task_budget_type_it_investment_no+$sum_task_budget_type_gov_utility_no;
 
     $budget_task['sum_task_refund_budget_it_operating'] = $sum_task_refund_budget_it_operating;
     $budget_task['sum_task_refund_budget_it_investment'] = $sum_task_refund_budget_it_investment;
@@ -7894,7 +7993,7 @@ dd($resultthItem); */
 
 
 
-
+  //  dd($budget_task);
 
 
 
@@ -10390,13 +10489,13 @@ foreach ($project->main_task as $task) {
            $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
 
-
+/*
            $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray()[0]
 
            ; // Get the first result
 
-
-        // dd($task,$tasks,$rootTaskbudget);
+           $budget['root_two_cost'] = $rootTaskbudget->root_two_cost; */
+       //  dd($budget,$rootTaskbudget);
 
 
 
@@ -10406,7 +10505,7 @@ foreach ($project->main_task as $task) {
 
 
         return view('app.projects.tasks.edit', compact(
-            'rootTaskbudget',
+            // 'rootTaskbudget',
             'budget',
             'projectDetails',
             'request',

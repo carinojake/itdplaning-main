@@ -76,15 +76,16 @@
                                         @elseif($projectDetails->budget_it_operating <$sum_task_budget_it_operating)
                                         <div class="col-2"> 0 บาท</div>
                                         @endif
-
+                                        @if($budget_task['sum_task_refund_budget_it_operating'])
                                         <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
                                         <div class="col-2"> {{ number_format($budget_task['sum_task_refund_budget_it_operating'] -$budget_task['sum_task_refund_budget_type_it_operating'], 2) }}  บาท</div>
+                                        @endif
 
-                                        @if($increasedData->isNotEmpty())
+                                        @if($increasedData->isNotEmpty() && $increasedData->first()->total_it_operating)
                                         <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
                                         <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div>
                                     @endif
-                                    @endif
+                                @endif
 
 
                                        {{--  @endif --}}
@@ -92,14 +93,36 @@
                                 <div class="row">
                                     @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                     <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
-                                        <div class="col-2">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                        <div class="col-2">     {{ number_format(($projectDetails->budget_it_investment - $sum_task_budget_it_investment)+$budget_task['sum_task_refund_budget_type_it_investment'] , 2) }} บาท</div>
+                                        @elseif($projectDetails->budget_it_investment <$sum_task_budget_it_investmentg)
+                                        <div class="col-2"> 0 บาท</div>
+                                        @endif
+                                        @if($budget_task['sum_task_refund_budget_it_investment'])
+                                        <div class="col-2">{{ __('งบดำเนินงาน คืน') }}</div>
+                                        <div class="col-2">{{ number_format($budget_task['sum_task_refund_budget_it_investment'] -$budget_task['sum_task_refund_budget_type_it_investment'] , 2) }} บาท</div>
+                                        @endif
+                                        @if($increasedData->isNotEmpty() && $increasedData->first()->total_it_investment)
+                                        <div class="col-2">{{ __('งบดำเนินงาน เพิ่ม ') }}</div>
+                                        <div class="col-2">{{ number_format($increasedData->first()->total_it_investment, 2) }} บาท</div>
                                     @endif
                                 </div>
                                 <div class="row">
                                     @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
-                                    <div class="col-2">{{ __('ค่าสาธารณูปโภค') }}</div>
+                                    <div class="col-2">{{ __('งบค่าสาธารณูปโภค') }}</div>
                                         <div class="col-2">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                        @elseif($projectDetails->budget_gov_utility <$sum_task_budget_gov_utility)
+                                        <div class="col-2"> 0 บาท</div>
+                                        @endif
+                                        @if($budget_task['sum_task_refund_budget_gov_utility'])
+                                        <div class="col-2">{{ __('งบค่าสาธารณูปโภค คืน') }}</div>
+                                        <div class="col-2">{{ number_format($budget_task['sum_task_refund_budget_gov_utility'] -$budget_task['sum_task_refund_budget_type_gov_utility'], 2) }} บาท</div>
+                                        @endif
+                                        @if($increasedData->isNotEmpty() && $increasedData->first()->total_gov_utility)
+                                        <div class="col-2">{{ __('งบค่าสาธารณูปโภค เพิ่ม ') }}</div>
+                                        <div class="col-2">{{ number_format($increasedData->first()->total_gov_utility, 2) }} บาท</div>
                                     @endif
+
+
                                 </div>
 
 
@@ -107,7 +130,53 @@
 
 
                             </div>
+{{-- เพิ่ม 31/12/2566 --}}
+                            <div class="callout callout-primary row mt-3">
+                                <div class="row mt-3">
+                                    <label
+                                    class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
+                                <div class="col-2">{{ number_format($projectDetails->budget_it_operating, 2) }} บาท</div>   {{-- งบกลาง ICT --}}
+                                <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
+                                <div class="col-2">{{ number_format($projectDetails->budget_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน --}}
+                                <div class="col-2">{{ __('งบค่าสาธารณูปโภค') }}</div>
+                                <div class="col-2">{{ number_format($projectDetails->budget_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค --}}
+                            </div>  {{-- row --}}
+                            <div class="row">
+                                <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
+                                <div class="col-2">{{ number_format($budget_task['sum_task_refund_budget_it_operating'], 2) }} บาท</div> {{-- งบกลาง ICT คืน --}}
+                                <div class="col-2">{{ __('งบดำเนินงาน คืน') }}</div>
+                                <div class="col-2">{{ number_format($budget_task['sum_task_refund_budget_it_investment'], 2) }} บาท</div> {{-- งบดำเนินงาน คืน --}}
+                                <div class="col-2">{{ __('งบค่าสาธารณูปโภค คืน') }}</div>
+                                <div class="col-2">{{ number_format($budget_task['sum_task_refund_budget_gov_utility'], 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค คืน --}}
+                            </div>  {{-- row --}}
+                            <div class="row">
+                                <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
+                                <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT เพิ่ม --}}
+                                <div class="col-2">{{ __('งบดำเนินงาน เพิ่ม ') }}</div>
+                                <div class="col-2">{{ number_format($increasedData->first()->total_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน เพิ่ม --}}
+                                <div class="col-2">{{ __('งบค่าสาธารณูปโภค เพิ่ม ') }}</div>
+                                <div class="col-2">{{ number_format($increasedData->first()->total_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค เพิ่ม --}}
+                            </div>  {{-- row --}}
+                            <div class="row">
+                                <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
+                                <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $budget_task['sum_task_refund_budget_it_operating'] + $increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
+                                <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
+
+                                <div class="col-2">{{number_format(($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment)- , 2) }} บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
+
+
+                                <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
+                                <div class="col-2">{{ number_format($projectDetails->budget_gov_utility - $budget_task['sum_task_refund_budget_gov_utility'] + $increasedData->first()->total_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
+
+
+
+
+                        </div>
+                            {{-- </div> ปิด--}}
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row needs-validation" novalidate>
                                 @csrf
@@ -333,7 +402,7 @@
 
                                 </div> --}}
 
-                                <div class="d-none col-md-3">
+                                <div class="d-none col-md-3 mt-3">
 
                                 </label>
                               {{--   @if($request->budget_it_operating-1  < $sum_task_budget_it_operating )
@@ -345,6 +414,7 @@
 {{--                                 {{ Form::select('task_parent_sub', \Helper::contractType(), '1', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
  --}}
                             </div>
+
                                 <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>

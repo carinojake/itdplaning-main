@@ -79,7 +79,7 @@
                                                             aria-expanded="true"
                                                             aria-controls="multiCollapseExample1">
                                                         <div class="fs-4 fw-semibold">
-                                                            {{ number_format($budgets,2) }}
+                                                            {{ number_format($budgets+$increaseData['increasedbudget_sum'],2) }}
                                                         </div>
                                                         <small class="text-xl">
                                                             งบประมาณ
@@ -95,7 +95,7 @@
                                                                 aria-expanded="true"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetscentralict,2) }}
+                                                                {{ number_format($budgetscentralict+ $increaseData['increasedbudget_sum_budget_it_operating'],2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบกลาง ICT
@@ -108,7 +108,7 @@
                                                                 aria-expanded="true"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetsinvestment,2) }}
+                                                                {{ number_format($budgetsinvestment+ $increaseData['increasedbudget_sum_budget_it_investment'],2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบดำเนินงาน
@@ -121,7 +121,7 @@
                                                                 aria-expanded="false"
                                                                 aria-controls="multiCollapseExample1">
                                                             <div class="fs-4 fw-semibold">
-                                                                {{ number_format($budgetsut,2) }}
+                                                                {{ number_format($budgetsut+ $increaseData['increasedbudget_sum_budget_gov_utility'],2) }}
                                                             </div>
                                                             <small class="text-xl">
                                                                 งบสาธารณูปโภค
@@ -412,7 +412,7 @@
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold ">
                                                     @if ($budgets > 1)
-                                                    {{ number_format(($budgets- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc)),2) }}
+                                                    {{ number_format((($budgets+ $increaseData['increasedbudget_sum'])- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc)),2) }}
                                                     @endif
                                                 </div>
 
@@ -431,7 +431,7 @@
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($budgetscentralict > 1)
-                                                    {{ number_format(($budgetscentralict- ($ospa + $osa)), 2) }}
+                                                    {{ number_format((($budgetscentralict+$increaseData['increasedbudget_sum_budget_it_operating'])    - ($ospa + $osa)), 2) }}
 
                                                     @endif
                                                     </div>
@@ -450,7 +450,7 @@
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($budgetsinvestment > 1)
-                                                    {{ number_format(($budgetsinvestment- ($ispa + $isa) ), 2) }}
+                                                    {{ number_format((($budgetsinvestment+$increaseData['increasedbudget_sum_budget_it_investment'] )- ($ispa + $isa) ), 2) }}
                                                     @endif
                                                     </div>
 
@@ -468,7 +468,7 @@
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
                                                     @if ($budgetsut > 1)
-                                                    {{ number_format(($budgetsut- ($utpcs + $utsc) ), 2) }}
+                                                    {{ number_format((($budgetsut+$increaseData['increasedbudget_sum_budget_gov_utility'])      - ($utpcs + $utsc) ), 2) }}
                                                     @endif
                                                     </div>
 

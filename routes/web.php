@@ -13,16 +13,35 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ConflictController;
+
+use Illuminate\Http\Request;
+use App\Models\Project;
 /*
 | Core Route
  */
 
 require __DIR__ . '/core.php';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 | App Route
  */
 Route::group(['middleware' => ['role:user', 'get.menu']], function () {
+
+
+
 
     /*   //Project
     Route::get('/contract/{project}/create', [ContractController::class, 'create'])->name('contract.create');
@@ -56,6 +75,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     // Project
 
     Route::resource('project', ProjectController::class);
+
+    Route::get('/getMaxRegularId', [ProjectController::class, 'getMaxRegularId']);
+
     Route::get('/project/{project}/task/createcn', [ProjectController::class, 'taskCreatecn'])->name('project.task.createcn');
     Route::get('/project/{project}/task/createsubno', [ProjectController::class, 'taskCreatesubno'])->name('project.task.createsubno');
 

@@ -19,7 +19,7 @@
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str_root_99', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-info text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
+                                <button class="btn btn-primary text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
                             </form>
 
                             @elseif ($project['project_type'] == 1)
@@ -30,7 +30,7 @@
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-warning text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
+                                <button class="btn btn-primary  text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
                             </form>
                             @endif
                             @endif
@@ -39,7 +39,7 @@
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefund_two', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
-                                <button class="btn btn-info text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())2.1 @endif <i class="cil-money"></i></button>
+                                <button class="btn btn-primary text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())2.1 @endif <i class="cil-money"></i></button>
                             </form>
                             @endif
                             @endif
