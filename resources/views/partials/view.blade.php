@@ -273,14 +273,14 @@
                                                     @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
 {{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
- --}}                              {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}                            1  {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
                           {{--         1- {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
                                 <br>  2-  {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                 <br>    3-  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} --}}
-                                    {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+                                2    {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }}
                              {{--   333    {{ number_format($budget['budget_total_refund_pa_budget_end']-  $budget['totalbudget_budget'], 2) }} --}}
 
                                @elseif($budget['budget_total_refund_pa_budget_end']>0)
@@ -289,10 +289,10 @@
                                   {{--  1-1 --}}
 
 
-                                      {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+                                  3    {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
                                      @elseif($budget['total'] )
-                                 {{ number_format(floatval($budget['totalrefund_top']), 2) }}
+                            4     {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                      @endif
                                    {{--  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}

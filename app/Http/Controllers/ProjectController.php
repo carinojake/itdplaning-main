@@ -10489,13 +10489,17 @@ foreach ($project->main_task as $task) {
            $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
 
-/*
+
            $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray()[0]
 
-           ; // Get the first result
 
-           $budget['root_two_cost'] = $rootTaskbudget->root_two_cost; */
-       //  dd($budget,$rootTaskbudget);
+
+        // dd($task,$tasks,$rootTaskbudget);
+
+           // Get the first result
+
+
+//         dd($budget,$task,$tasks,$rootTaskbudget);
 
 
 

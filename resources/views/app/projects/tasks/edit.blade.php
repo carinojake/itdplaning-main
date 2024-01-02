@@ -269,8 +269,13 @@
 
 
                                 </div>
+<<<<<<< HEAD
 
                               {{--   {{ $rootTaskbudget->root_two_cost }}
+=======
+{{--
+                                {{ $rootTaskbudget->root_two_cost }}
+>>>>>>> 6c1abb297dce243e12f8b4402bd19d5d16cdd616
                                 {{ $rootTaskbudget->wait_pay }} --}}
 
 
