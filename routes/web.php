@@ -72,11 +72,11 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::DELETE('/contract/{contract}/task/{taskcon}/destroy', [ContractController::class, 'taskconDestroy'])->name('contract.task.destroy');
     Route::get('/contract/{contract}/task/{taskcon}', [ContractController::class, 'taskconShow'])->name('contract.task.show');
     */
-    // Project
+    // Project  App\Http\Controllers\ProjectController   'ProjectController@getFiscalYearData'
 
     Route::resource('project', ProjectController::class);
 
-    Route::get('/getMaxRegularId', [ProjectController::class, 'getMaxRegularId']);
+    //Route::get('/getMaxRegularId', [ProjectController::class, 'getMaxRegularId']);
 
     Route::get('/project/{project}/task/createcn', [ProjectController::class, 'taskCreatecn'])->name('project.task.createcn');
     Route::get('/project/{project}/task/createsubno', [ProjectController::class, 'taskCreatesubno'])->name('project.task.createsubno');
@@ -186,6 +186,8 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
     Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');
 
 
+
+    Route::get('/get-fiscal-year-data', 'ProjectController@getFiscalYearData');
 
 
 
@@ -354,5 +356,5 @@ Route::resource('conflict', ConflictController::class);
 });
 
 
-Route::get('/get-last-reguiar-id', 'App\Http\Controllers\ProjectController@getLastReguiarId');
+//Route::get('/get-last-reguiar-id', 'App\Http\Controllers\ProjectController@getLastReguiarId');
 

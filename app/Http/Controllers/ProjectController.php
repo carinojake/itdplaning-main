@@ -5924,7 +5924,7 @@ dd($task_sub_refund_total_count);
         ));
     }
 
-    public function getMaxRegularId(Request $request)
+/*     public function getMaxRegularId(Request $request)
     {
         $fiscalYear = $request->input('fiscal_year');
         $projectType = $request->input('project_type');
@@ -5942,87 +5942,97 @@ dd($task_sub_refund_total_count);
 
         // ส่งกลับค่า 'reguiar_id' ในรูปแบบ JSON
         return response()->json(['max_reguiar_id' => $reguiar_id]);
+    } */
+/*     public function getFiscalYearData(Request $request)
+    {
+        $project_fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก Ajax request
+
+        // ทำสิ่งที่คุณต้องการกับ $project_fiscal_year โดยการค้นหาข้อมูลในฐานข้อมูล
+        // ยกตัวอย่าง:
+        $data = Project::select('project_fiscal_year', 'reguiar_id')
+            ->where('project_fiscal_year', $project_fiscal_year)
+            ->whereNull('deleted_at')
+            ->where('project_type', 1)
+            ->get();
+
+        return response()->json($data); // ส่งข้อมูลกลับในรูปแบบ JSON
+    } */
+
+
+// ในส่วนของ create method
+public function create(Request $request)
+{
+
+    if($request->ajax()) {
+        $project_fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก Ajax request
+        $project_type = $request->input('project_type'); // รับค่า project_type จาก Ajax request
+        // ทำสิ่งที่คุณต้องการกับ $project_fiscal_year โดยการค้นหาข้อมูลในฐานข้อมูล
+        // ยกตัวอย่าง:
+
+        $data = Project::select('project_fiscal_year', 'reguiar_id')
+            ->where('project_fiscal_year', $project_fiscal_year)
+            ->whereNull('deleted_at')
+            ->where('project_type',$project_type)
+            ->max('reguiar_id')+1;
+
+
+
+
+
+        return response()->json($data); // ส่งข้อมูลกลับในรูปแบบ JSON
     }
 
-    public function create(Request $request)
-    {
-        $fiscal_year = $request->input('fiscal_year');
-        if (!$fiscal_year) {
-            $fiscal_year = date('Y') + 543; // Use current year if not provided
-        }
-        $project_type = $request->input('project_type');
-        if (!$project_type) {
-            $project_type = 1; // Use current year if not provided
-        }
-        $project_reguiar_id = Project::select('project_fiscal_year', 'reguiar_id', 'project_type')->get();
-
-        // Calculate the max regular id for project type 1
-        $reguiar_id_new_1 = $project_reguiar_id->where('project_type', 1)->max('reguiar_id');
-
-        // Calculate the max regular id for project type 2
-        $reguiar_id_new_2 = $project_reguiar_id->where('project_type', 2)->max('reguiar_id');
-
-        //dd($reguiar_id_new_1, $reguiar_id_new_2);
 
 
 
 
 
 
+    $fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก request
+   /*  if (!$fiscal_year) {
+        $fiscal_year = date('Y') + 543; // ใช้ปีปัจจุบันหากไม่ได้รับค่า
+    } */
 
-        $last_reguiar_id = Project::where('project_type',$project_type)->max('reguiar_id');
-       // dd($last_reguiar_id);
+    $fiscal_year_last_reguiar_id_1 = Project::select('project_fiscal_year', 'reguiar_id')
+    ->where('project_fiscal_year',  $fiscal_year)
+    ->whereNull('deleted_at')
+    ->where('project_type', 1)
+    ->get();
+
+//dd($fiscal_year_last_reguiar_id_1)  ;
 
 
-        $reguiar_id = $request->input('reguiar_id');
-        if (!$reguiar_id) {
-            $reguiar_id = $last_reguiar_id ? $last_reguiar_id + 1 : 1;
-        }
+    $project_type = $request->input('project_type');
+    if (!$project_type) {
+        $project_type = 1; // ใช้ project type 1 หากไม่ได้รับค่า
+    }
 
-
-        $last_reguiar_id = Project::where('project_fiscal_year', $fiscal_year)
-        ->where('project_type', $project_type)
+    $last_reguiar_id = Project::where('project_type', $project_type)
+        ->where('project_fiscal_year', $fiscal_year)
         ->max('reguiar_id');
 
-// สมมติว่าคุณต้องการค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 1
-$project_type_1_reguiar_id = Project::where('project_type', 1)
-       ->max('reguiar_id')+1;
+    $project_type_1_reguiar_id = Project::where('project_type', 1)
+        ->where('project_fiscal_year', $fiscal_year)
+        ->max('reguiar_id') + 1;
 
-// ตั้งค่า 'reguiar_id'
-if (!$reguiar_id) {
-$reguiar_id = ($project_type == 1) ? $project_type_1_reguiar_id  : ($last_reguiar_id ? $last_reguiar_id + 1 : 1);
+    $project_type_2_reguiar_id = Project::where('project_type', 2)
+        ->where('project_fiscal_year', $fiscal_year)
+        ->max('reguiar_id') + 1;
+
+    $data = [
+        'fiscal_year' => $fiscal_year,
+        'reguiar_id' => $fiscal_year, // ตั้งค่าเป็นปีปัจจุบันหรือปีที่รับค่ามา
+        'project_type' => $project_type,
+        'project_type_1_reguiar_id' => $project_type_1_reguiar_id,
+        'project_type_2_reguiar_id' => $project_type_2_reguiar_id,
+        'last_reguiar_id' => $last_reguiar_id,
+    ];
+//    dd($data);
+    // Return the view with data
+    return view('app.projects.create', $data);
 }
 
-// สมมติว่าคุณต้องการค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
-$project_type_2_reguiar_id = Project::where('project_type', 2)
-       ->max('reguiar_id')+1;
-// ตั้งค่า 'reguiar_id'
-if (!$reguiar_id) {
-    $reguiar_id = ($project_type == 1) ? $project_type_2_reguiar_id  : ($last_reguiar_id ? $last_reguiar_id + 1 : 1);
-    }
 
-// ส่งค่าไปที่วิว
-$data = [
-'fiscal_year' => $fiscal_year,
-'reguiar_id' => $reguiar_id,
-'project_type' => $project_type,
-'project_type_1_reguiar_id' => $project_type_1_reguiar_id, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 1
-'project_type_2_reguiar_id' => $project_type_2_reguiar_id, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
-'reguiar_id_new_1' => $reguiar_id_new_1, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 1
-'reguiar_id_new_2' => $reguiar_id_new_2, // ส่งค่าสูงสุดของ 'reguiar_id' สำหรับโปรเจคประเภท 2
-];
-        // If you need additional project data, ensure you're handling it correctly here.
-        // For example, if you're trying to edit an existing project, you'd retrieve it by its ID.
-
-        // Uncomment and complete this line if you need to create or retrieve a project.
-        // $project = $this->projectService->createProject($request->all());
-
-        // Prepare data for the view
-
-      //dd($data,$last_reguiar_id,$project_type);
-        // Return the view with data
-        return view('app.projects.create', $data);
-    }
 
     public function store(Request $request)
     {
@@ -6103,14 +6113,17 @@ $data = [
         $project->budget_gov_utility = $budget_gov_utility;
         $project->budget_it_operating = $budget_it_operating;
         $project->budget_it_investment = $budget_it_investment;
-        $project->reguiar_id = $request->input('reguiar_id');
+        $project->reguiar_id = $reguiar_id;
 
-        //   dd($project);
-
-        if ($project->save()) {
-            return redirect()->route('project.index');
-        }
+        // Attempt to save the project
+    if ($project->save()) {
+        return redirect()->route('project.index');
+    } else {
+        // Handle the case where project saving fails (e.g., show an error message)
+        // You can customize this part based on your needs.
+        return back()->withErrors(['message' => 'Failed to save the project.'])->withInput();
     }
+}
 
 
 
@@ -10489,17 +10502,13 @@ foreach ($project->main_task as $task) {
            $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
 
-
+/*
            $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray()[0]
 
+           ; // Get the first result
 
-
-        // dd($task,$tasks,$rootTaskbudget);
-
-           // Get the first result
-
-
-//         dd($budget,$task,$tasks,$rootTaskbudget);
+           $budget['root_two_cost'] = $rootTaskbudget->root_two_cost; */
+       //  dd($budget,$rootTaskbudget);
 
 
 

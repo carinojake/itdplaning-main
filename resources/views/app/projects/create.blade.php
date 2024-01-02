@@ -17,21 +17,11 @@
                         <x-card title="{{ __('เพิ่มข้อมูล งาน/โครงการ') }}">
 
                             <form method="POST" action="{{ route('project.store') }}"
-
+                            enctype="multipart/form-data" id="add-project-form"
                             class="row needs-validation"
                                 novalidate>
                                 @csrf
                                 <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label for="project_fiscal_year"
-                                            class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
-                                            class="text-danger">*</span>
-                                            <input type="text" class="form-control" id="project_fiscal_year"
-                                            name="project_fiscal_year" required autofocus>
-                                        @error('project_fiscal_year')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                     <div class="col-md-3 ">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
@@ -51,6 +41,18 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <label for="project_fiscal_year"
+                                            class="form-label">{{ __('ปีงบประมาณ') }}</label> <span
+                                            class="text-danger">*</span>
+                                            <input type="text" class="form-control" id="project_fiscal_year"
+                                            name="project_fiscal_year" required autofocus>
+                                        @error('project_fiscal_year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+
                             {{--         $fiscal_year,$reguiar_id --}}
                                     <div class="col-md-3">
                                         <label for="reguiar_id"
@@ -216,33 +218,34 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-    <script>
-        $(document).ready(function() {
-            var projectFiscalYearStart = "{{ $fiscal_year }}";
+  <script>
+    $(document).ready(function() {
+        // เมื่อมีการเปลี่ยนค่าในฟิลด์ project_fiscal_year
+        $('#project_fiscal_year,#project_type').on('change', function() {
+            var fiscalYear = $(this).val(); // รับค่า project_fiscal_year จากฟิลด์
+            var projectType = $('input[name="project_type"]:checked').val(); // รับค่า project_type จากฟิลด์
+            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
+            // ทำการส่งค่า project_fiscal_year ไปยัง Laravel โดยใช้ Ajax
+            $.ajax({
 
-            function checkFiscalYear() {
-                var fiscalYear = $('#project_fiscal_year').val();
-                var project_type = $('input[name="project_type"]:checked').val();
 
-                if(fiscalYear === projectFiscalYearStart) {
-                    if(project_type == "1"){
-                        // ดำเนินการทำอะไรบางอย่างสำหรับโปรเจคประเภท 1
-                        // ตัวอย่างเช่น ตั้งค่า 'reguiar_id' เป็นค่าสูงสุดที่มีอยู่
-                        $('#reguiar_id').val('{{ $project_type_1_reguiar_id }}');
-                    } else if(project_type == "2"){
-                        // ดำเนินการทำอะไรบางอย่างสำหรับโปรเจคประเภท 2
-                        // ตัวอย่างเช่น ตั้งค่า 'reguiar_id' เป็น 1
-                        $('#reguiar_id').val('{{ $project_type_2_reguiar_id }}');
-                    }
-                } else {
-                    $('#reguiar_id').val('Desired Value');
+                method: 'GET',
+                data: { project_fiscal_year: fiscalYear ,project_type:projectType}, // ส่งค่า project_fiscal_year ไปยัง Laravel
+                success: function(data) {
+                    // ทำอะไรกับข้อมูลที่ได้รับกลับมา
+                    console.log(data);
+                    $('#reguiar_id').val(data);
+                },
+                error: function(xhr, status, error) {
+                    // กรณีเกิดข้อผิดพลาด
+                    console.error(error);
                 }
-            }
-
-            $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
-            checkFiscalYear();
+            });
         });
-    </script>
+
+
+    });
+</script>
 
 
 
