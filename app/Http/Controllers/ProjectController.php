@@ -1258,6 +1258,30 @@ $mainQuery = DB::query()
         // ->get();
         //  $taskid = Hashids::decode($task)[0];
         // Query ดึงข้อมูลโปรเจคและคำนวณค่าใช้จ่ายและการจ่ายเงิน   AND tasks.task_parent_sub IS NULL
+        $increasedbudgetData = DB::table('increasedbudgets')
+        //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+        ->select('increasedbudgets.*')
+        ->where('project_id', $id)
+        ->where('increasedbudgets.deleted_at', NULL)
+        //->orderBy('projects.project_fiscal_year', 'DESC')
+        ->get();
+       //dd($increasedbudgetData);
+
+        $increasedbudget_sum_budget_it_operating =  $increasedbudgetData->sum('increased_budget_it_operating');
+        $increasedbudget_sum_budget_it_investment =  $increasedbudgetData->sum('increased_budget_it_investment');
+        $increasedbudget_sum_budget_gov_utility =  $increasedbudgetData->sum('increased_budget_gov_utility');
+        $increasedbudget_sum = $increasedbudget_sum_budget_it_operating + $increasedbudget_sum_budget_it_investment + $increasedbudget_sum_budget_gov_utility;
+
+        $increaseData['increasedbudget_sum'] = $increasedbudget_sum;
+        $increaseData['increasedbudget_sum_budget_it_operating'] = $increasedbudget_sum_budget_it_operating;
+        $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
+        $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
+
+            // dd($increaseData);
+
+
+
+
         ($project = Project::select(
             'projects.*',
             'at.task_refund_pa_status',
@@ -1350,10 +1374,10 @@ $mainQuery = DB::query()
             'anull.total_pay_null',
 
 
-            'increasedbudgets.totol_increased_budget_it_operting',
-            'increasedbudgets.totol_increased_budget_it_investment',
-            'increasedbudgets.totol_increased_budget_gov_utility',
-            'increasedbudgets.total_task_budget_increasedbudgets',
+            'increased.totol_increased_budget_it_operting',
+            'increased.totol_increased_budget_it_investment',
+            'increased.totol_increased_budget_gov_utility',
+            'increased.total_task_budget_increasedbudgets',
 
             'budget_re_root.budget_re_op_totol_task_budget_it_operating',
             'budget_re_root.budget_re_in_totol_task_budget_it_investment',
@@ -1400,7 +1424,7 @@ $mainQuery = DB::query()
         //19122566  งบกลาง ICT เพิ่ม
             ->leftJoin(
                 DB::raw('(select increasedbudgets.project_id,
-                increasedbudgets.increased_budget_id,
+                increasedbudgets.increased_budget_id as id,
 
                 sum(COALESCE(increasedbudgets.increased_budget_it_operating,0)) as totol_increased_budget_it_operting,
                 sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as totol_increased_budget_it_investment,
@@ -1411,8 +1435,8 @@ $mainQuery = DB::query()
                 +sum(COALESCE(increasedbudgets.increased_budget_it_operating,0))
                 +sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as total_task_budget_increasedbudgets
                 from increasedbudgets
-                where increasedbudgets.deleted_at IS NULL) as increasedbudgets'),
-                'increasedbudgets.project_id',
+                where increasedbudgets.deleted_at IS NULL) as increased'),
+                'increased.project_id',
                 '=',
                 'projects.project_id'
 
@@ -2062,6 +2086,10 @@ $mainQuery = DB::query()
 
         //dd($p=$project->contract);
 
+
+
+
+
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         (float) $__budget_gov = (float) $project['budget_gov_operating'] + (float) $project['budget_gov_utility'];
         (float) $__budget_it  = (float) $project['budget_it_operating'] + (float) $project['budget_it_investment'];
@@ -2118,15 +2146,23 @@ $mainQuery = DB::query()
         (float) $__ut_root_conditional_sum_task_refund_pa_budget = (float) $project['ut_root_conditional_sum_task_refund_pa_budget'];
 
 
-        //19/12/2566 งบประมาณเพิ่ม
-        ((float) $__totol_increased_budget_it_operting      = (float)($project['totol_increased_budget_it_operting']));
-        ((float) $__totol_increased_budget_it_investment      = (float)($project['totol_increased_budget_it_investment']));
-        ((float) $__totol_increased_budget_gov_utility      = (float)($project['totol_increased_budget_gov_utility']));
-        ((float) $__totol_increased_budget      = (float)($project['totol_increased_budget_it_operting'])+(float)($project['totol_increased_budget_it_investment'])+(float)($project['totol_increased_budget_gov_utility']));
-        dd($__totol_increased_budget_it_operting,$__totol_increased_budget_it_investment,$__totol_increased_budget_gov_utility,$__totol_increased_budget);
+        //19/12/2566 งบประมาณเพิ่ม  //03/01/2567 งบประมาณเพิ่ม
+        ((float) $__totol_increased_budget_it_operting      =  (float)($increaseData['increasedbudget_sum_budget_it_operating'])); //(float)($project['totol_increased_budget_it_operting']));
+        ((float) $__totol_increased_budget_it_investment      =      (float)($increaseData['increasedbudget_sum_budget_it_investment']));                //(float)($project['totol_increased_budget_it_investment']));
+        ((float) $__totol_increased_budget_gov_utility      = (float)($increaseData['increasedbudget_sum_budget_gov_utility']));// (float)($project['totol_increased_budget_gov_utility']));
+        ((float) $__totol_increased_budget      = (float)($increaseData['increasedbudget_sum']));//(float)($project['totol_increased_budget_it_operting'])+(float)($project['totol_increased_budget_it_investment'])+(float)($project['totol_increased_budget_gov_utility']));
+    // dd($__totol_increased_budget_it_operting,$__totol_increased_budget_it_investment,$__totol_increased_budget_gov_utility,$__totol_increased_budget);
+//03/01/2567 งบประมาณเพิ่ม
 
 
-        (float) $__budget     = $__budget_gov + $__budget_it;
+
+
+
+
+
+
+
+        (float) $__budget     = $__budget_gov + $__budget_it+$__totol_increased_budget ;
         ((float) $__cost       = (float) $project['total_cost']);
 
         // dd($__cost,$project['total_cost'],$__total_cost_it_operating);
@@ -5839,7 +5875,7 @@ dd($task_sub_refund_total_count);
 
 
            // dd($budget,$tasks,$project);
-           $increasedbudgetData = DB::table('increasedbudgets')
+/*            $increasedbudgetData = DB::table('increasedbudgets')
            //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
            ->select('increasedbudgets.*')
            ->where('project_id', $id)
@@ -5857,9 +5893,15 @@ dd($task_sub_refund_total_count);
            $increaseData['increasedbudget_sum_budget_it_operating'] = $increasedbudget_sum_budget_it_operating;
            $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
            $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
+ */
 
 
-         // dd($increaseData);
+
+
+
+
+
+           // dd($increaseData);
          ($files_project = File::join('projects', 'files.project_id', '=', 'projects.project_id')
          ->where('projects.project_id', $project->project_id)
          ->get());
@@ -6433,7 +6475,7 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
         ->where('reguiar_id', $request->input('reguiar_id'))
         ->where('project_id', '!=', $id)
         ->first();
-
+        //dd($existingReguiarId);
         if ($existingReguiarId) {
             $projectTypeText = $request->input('project_type') == 1 ? 'งาน' : 'โครง';
             $nextReguiarId = Project::where('project_type', $projectTypeText)
