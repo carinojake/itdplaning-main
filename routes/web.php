@@ -107,6 +107,9 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     Route::post('/project/storesub', [ProjectController::class, 'Storesub'])->name('project.storesub');
 
+    Route::get('/project/createreguiar', [ProjectController::class, 'createreguiar'])->name('project.createreguiar');
+
+    //Route::post('/project/createreguiar', [ProjectController::class, 'Storesub'])->name('project.storesub');
 
 
     Route::post('/project/{project}/task/store', [ProjectController::class, 'taskStore'])->name('project.task.store');
@@ -183,11 +186,16 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
 
 
+
+
+
     Route::get('/project/view/{project}', [ProjectController::class, 'view'])->name('project.view');
 
 
 
     Route::get('/get-fiscal-year-data', 'ProjectController@getFiscalYearData');
+
+
 
 
 

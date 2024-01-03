@@ -27,18 +27,9 @@
                                 {{ method_field('PUT') }}
 
                         <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                    <span class="text-danger">*</span>
-                                    <input type="text" class="form-control" id="project_fiscal_year"
-                                        name="project_fiscal_year" value="{{ $project->project_fiscal_year }}"
-                                        readonly>
-                                    <div class="invalid-feedback">
-                                        {{ __('ปีงบประมาณ') }}
-                                    </div>
-                                </div>
 
-                                <div class="col-md-3">
+
+                                <div class="col-md-2">
                                     <label for="project_type"
                                         class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
                                         class="text-danger">*</span>
@@ -63,10 +54,20 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
+                                    <label for="project_fiscal_year" class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                                    <span class="text-danger">*</span>
+                                    <input type="text" class="form-control" id="project_fiscal_year"
+                                        name="project_fiscal_year" value="{{ $project->project_fiscal_year }}"
+                                        readonly>
+                                    <div class="invalid-feedback">
+                                        {{ __('ปีงบประมาณ') }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <label for="reguiar_id" class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ *') }}</label>
                                     <span class="text-danger"></span>
-                                    <input type="text" class="form-control" id="reguiar_id" name="reguiar_id"
-                                        value="{{ $project->reguiar_id }}">
+                                    <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"
+                                        value="{{ $project->reguiar_id }}" min="1">
                                     <div class="invalid-feedback">
                                         {{ __('ลำดับ.ชื่องาน/โครงการ * ') }}
                                     </div>
@@ -251,8 +252,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div id="increaseData_form" class="row mt-3">
                                     @foreach($increasedbudgetData as $key => $increaseData)
                                         <div class="mt-3">
@@ -311,7 +310,7 @@
                                             class="form-label">{{ __('งบประมาณ เพิ่ม') }}</label> <span
                                             class="text-danger"></span>
                                         <div >
-                                            <input class="form-check-input" type="radio" name="increased_budget_status"
+                                            <input class="form-check-input" type="checkbox" name="increased_budget_status"
                                                 id="increased_budget_status" value="1" >
                                             <label class="form-check-label" for="increased_budget_status"
                                                >
@@ -325,7 +324,7 @@
                                 </div>
 
 
-                                <div class="mt-3">
+                                <div id='increased_budget_new' class="mt-3">
                                         <h4>งบประมาณ เพิ่ม</h4>
                                         <div class="row">
                                             <div class="col-md-4">
@@ -408,6 +407,119 @@
             </div>
         </div>
         </div>
+
+        <div class="row ">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <x-card title="{{ __('เอกสารแนบ ของ') }}{{-- {{ $task->task_name }} --}}">
+                    <form id = 'formId' method="POST"
+                       {{--  action="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $task->hashid]) }}" --}}
+                        enctype="multipart/form-data" class="needs-validation" novalidate>
+                        @csrf
+                        <div class=" col-md-12 mt-3">
+                            <label for="file" class="form-label">{{ __('เอกสารแนบ') }}</label>
+                            <div class="input-group control-group increment ">
+                                <input type="file" name="file[]" class="form-control" multiple>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-success" type="button"><i
+                                            class="glyphicon glyphicon-plus"></i>Add</button>
+
+                                </div>
+                            </div>
+                            <div class="clone d-none">
+                                <div class="control-group input-group" style="margin-top:10px">
+                                    <input type="file" name="file[]" class="form-control" multiple>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-danger" type="button"><i
+                                                class="glyphicon glyphicon-remove"></i> Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (count($filesproject) > 0)
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                {{--  <th>Photo</th> --}}
+                                <th>File Name</th>
+                                {{--   <th>File project_id</th>
+                                    <th>File task_id</th>
+                                    <th>File contract_id</th> --}}
+                                <th>File Size</th>
+                                <th>Date Uploaded</th>
+                                <th>File Location</th>
+
+                                <th>ลบ</th>
+                            </thead>
+                            <tbody>
+                                @if (count($filesproject) > 0)
+                                    @foreach ($filesproject as $filedel)
+                                        <tr>
+                                            {{--  <td><img src='storage/{{$file->name}}' name="{{$file->name}}" style="width:90px;height:90px;"></td> --}}
+                                            <td>{{ $filedel->name }}</td>
+                                            {{--          <td>{{ $file->project_id }}</td>
+                                                <td>{{ $file->task_id }}</td>
+                                                <td>{{ $file->contract_id }}</td> --}}
+
+
+                                            <td>
+                                                @if ($filedel->size < 1000)
+                                                    {{ number_format($file->size, 2) }} bytes
+                                                @elseif($filedel->size >= 1000000)
+                                                    {{ number_format($filedel->size / 1000000, 2) }} mb
+                                                @else
+                                                    {{ number_format($filedel->size / 1000, 2) }} kb
+                                                @endif
+                                            </td>
+                                            <td>{{ date('M d, Y h:i A', strtotime($filedel->created_at)) }}</td>
+
+
+                                            <td><a
+                                                    href="{{ asset('storage/uploads/contracts/' . $filedel->project_id . '/0/' . $filedel->name) }}">{{ $filedel->name }}</a>
+                                            </td>
+
+                                            <td>
+                                                @if(isset($task) && !empty($task->hashid))
+                                                <a href="{{ route('project.task.filesdel', ['project' => $project->hashid, 'task' => $task->hashid]) }}" class="btn btn-danger">
+                                                    <i class="glyphicon glyphicon-remove"></i> Remove
+                                                </a>
+                                            @else
+                                                <!-- Handle the case where $task is not set as expected -->
+                                                <a href="{{ route('project.task.filesdel', ['project' => $project->hashid, 'task' => 0]) }}" class="btn btn-danger">
+                                                    <i class="glyphicon glyphicon-remove"></i> Remove
+                                                </a>
+                                            @endif
+
+                                            </td>
+
+
+                                            {{--  <td><a href="{{ $file->location }}">{{ $file->location }}</a></td> --}}
+
+
+
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="12" class="text-center">No Table Data</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    @endif
+                        <!-- Submit Button -->
+                        <div class="mt-3">
+                        <button type="submit" class="btn btn-primary ">Upload</button>
+{{--                         <x-button link="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                            class="btn-warning text-black">{{ __('show') }}</x-button> --}}
+
+
+
+                    </form>
+            </div>
+            </x-card>
+        </div>
+
+
+
     </x-slot:content>
     <x-slot:css>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
@@ -426,8 +538,70 @@
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+{{--
+        <script>
+            $(document).ready(function() {
+                // Check initial state of the "มี PA" radio button
 
 
+                if ($('#increased_budget_status').is(':checked')) {
+                    $('#increased_budget_new').show();
+                } else {
+                    $('#increased_budget_new').hide();
+                }
+
+                // Listen for changes on the radio buttons
+                $('input[type=radio][name=increased_budget_status]').change(function() {
+                    if (this.value == '1') {
+                        $('#increased_budget_new').show();
+                    } else {
+                        $('#increased_budget_new').hide();
+                    }
+                });
+            });
+        </script> --}}
+
+        <script>
+            $(document).ready(function() {
+                // Initial check
+                $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
+
+                // Listen for changes on the checkbox
+                $('#increased_budget_status').change(function() {
+                    $('#increased_budget_new').toggle(this.checked);
+                });
+            });
+        </script>
+
+
+
+
+        <script>
+            $(document).ready(function() {
+                $('form').on('submit', function(e) {
+                    // ตรวจสอบว่าไฟล์ถูกเลือกหรือไม่
+                    if ($('#file').get(0).files.length === 0) {
+                        e.preventDefault(); // หยุดการส่งฟอร์ม
+                        alert('กรุณาเลือกไฟล์');
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+
+                $(".btn-success").click(function() {
+                    var html = $(".clone").html();
+                    $(".increment").after(html);
+                });
+
+                $("body").on("click", ".btn-danger", function() {
+                    $(this).parents(".control-group").remove();
+                });
+
+            });
+        </script>
 
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
@@ -479,7 +653,7 @@
  // $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
-   // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
    //var task_end_date_str = $("#task_end_date").val();
    // var task_end_date = (task_end_date_str);
    // var project_end_date =(project_end_date_str);

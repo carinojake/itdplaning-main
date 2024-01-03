@@ -289,7 +289,7 @@ class ProjectController extends Controller
             // 'duration'              => 360,
         ];
 
-        $budget['total'] = $__budget;
+//$budget['total'] = $__budget;
 
         //  $tasks =  Project::find($id);
 
@@ -1350,9 +1350,9 @@ $mainQuery = DB::query()
             'anull.total_pay_null',
 
 
-            'increasedbudgets.totoi_increased_budget_it_operting',
-            'increasedbudgets.totoi_increased_budget_it_investment',
-            'increasedbudgets.totoi_increased_budget_gov_utility',
+            'increasedbudgets.totol_increased_budget_it_operting',
+            'increasedbudgets.totol_increased_budget_it_investment',
+            'increasedbudgets.totol_increased_budget_gov_utility',
             'increasedbudgets.total_task_budget_increasedbudgets',
 
             'budget_re_root.budget_re_op_totol_task_budget_it_operating',
@@ -1402,9 +1402,11 @@ $mainQuery = DB::query()
                 DB::raw('(select increasedbudgets.project_id,
                 increasedbudgets.increased_budget_id,
 
-                sum(COALESCE(increasedbudgets.increased_budget_it_operating,0)) as totoi_increased_budget_it_operting,
-                sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as totoi_increased_budget_it_investment,
-                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0)) as totoi_increased_budget_gov_utility,
+                sum(COALESCE(increasedbudgets.increased_budget_it_operating,0)) as totol_increased_budget_it_operting,
+                sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as totol_increased_budget_it_investment,
+                sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0)) as totol_increased_budget_gov_utility,
+
+
                 sum(COALESCE(increasedbudgets.increased_budget_gov_utility,0))
                 +sum(COALESCE(increasedbudgets.increased_budget_it_operating,0))
                 +sum(COALESCE(increasedbudgets.increased_budget_it_investment,0)) as total_task_budget_increasedbudgets
@@ -2117,14 +2119,14 @@ $mainQuery = DB::query()
 
 
         //19/12/2566 งบประมาณเพิ่ม
-        ((float) $__totoi_increased_budget_it_operting      = (float)($project['totoi_increased_budget_it_operting']));
-        ((float) $__totoi_increased_budget_it_investment      = (float)($project['totoi_increased_budget_it_investment']));
-        ((float) $__totoi_increased_budget_gov_utility      = (float)($project['totoi_increased_budget_gov_utility']));
-        ((float) $__totoi_increased_budget      = (float)($project['totoi_increased_budget_it_operting'])+(float)($project['totoi_increased_budget_it_investment'])+(float)($project['totoi_increased_budget_gov_utility']));
+        ((float) $__totol_increased_budget_it_operting      = (float)($project['totol_increased_budget_it_operting']));
+        ((float) $__totol_increased_budget_it_investment      = (float)($project['totol_increased_budget_it_investment']));
+        ((float) $__totol_increased_budget_gov_utility      = (float)($project['totol_increased_budget_gov_utility']));
+        ((float) $__totol_increased_budget      = (float)($project['totol_increased_budget_it_operting'])+(float)($project['totol_increased_budget_it_investment'])+(float)($project['totol_increased_budget_gov_utility']));
+        dd($__totol_increased_budget_it_operting,$__totol_increased_budget_it_investment,$__totol_increased_budget_gov_utility,$__totol_increased_budget);
 
 
-
-        (float) $__budget     = $__budget_gov + $__budget_it+$__totoi_increased_budget ;
+        (float) $__budget     = $__budget_gov + $__budget_it;
         ((float) $__cost       = (float) $project['total_cost']);
 
         // dd($__cost,$project['total_cost'],$__total_cost_it_operating);
@@ -2253,10 +2255,10 @@ $mainQuery = DB::query()
             'in_totol_task_budget_it_investment' => $__in_totol_task_budget_it_investment_99,
             'ut_totol_task_budget_gov_utility' => $__ut_totol_task_budget_gov_utility_99,
             //19/12/2566 งบประมาณเพิ่ม
-            'totoi_increased_budget' => $__totoi_increased_budget,
-            'totoi_increased_budget_it_operting' => $__totoi_increased_budget_it_operting,
-            'totoi_increased_budget_it_investment' => $__totoi_increased_budget_it_investment,
-            'totoi_increased_budget_gov_utility' => $__totoi_increased_budget_gov_utility,
+            'totol_increased_budget' => $__totol_increased_budget,
+            'totol_increased_budget_it_operting' => $__totol_increased_budget_it_operting,
+            'totol_increased_budget_it_investment' => $__totol_increased_budget_it_investment,
+            'totol_increased_budget_gov_utility' => $__totol_increased_budget_gov_utility,
             //25121256 budget_re_root_total_task_budget
             'budget_re_root_total_task_budget' => $__budget_re_root_total_task_budget,
             'budget_re_op_totol_task_budget_it_operating' => $__budget_re_op_totol_task_budget_it_operating,
@@ -2282,10 +2284,11 @@ $mainQuery = DB::query()
         $budget['budgettotal_root'] = $__budget ;
         $budget['total_op_totol_task_budget_it_op_in_ut_root'] = $__op_totol_task_budget_it_operating + $__in_totol_task_budget_it_investment + $__ut_totol_task_budget_gov_utility;
         //01/01/2567
-        $budget['totoi_increased_budget'] = $__totoi_increased_budget;
-        $budget['totoi_increased_budget_it_operting'] = $__totoi_increased_budget_it_operting;
-        $budget['totoi_increased_budget_it_investment'] = $__totoi_increased_budget_it_investment;
-        $budget['totoi_increased_budget_gov_utility'] = $__totoi_increased_budget_gov_utility;
+        $budget['totol_increased_budget'] = $__totol_increased_budget;
+        $budget['totol_increased_budget_it_operting'] = $__totol_increased_budget_it_operting;
+        $budget['totol_increased_budget_it_investment'] = $__totol_increased_budget_it_investment;
+        $budget['totol_increased_budget_gov_utility'] = $__totol_increased_budget_gov_utility;
+
 
         $budget['total_cost_it_operating_root'] = $__total_cost_it_operating;
         $budget['total_cost_it_investment_root'] = $__total_cost_it_investment;
@@ -2462,9 +2465,9 @@ $mainQuery = DB::query()
 
         $budget['budget_total_cost'] = ($__budget) - ($__cost);
         // dd($__cost);
-        $budget['budget_total_cost_op'] = (($__budget_it_operating)+ $budget['totoi_increased_budget_it_operting'])   - ($__total_cost_it_operating);
-        $budget['budget_total_cost_in'] = (($__budget_it_investment)+ $budget['totoi_increased_budget_it_investment']) - ($__total_cost_it_investment);
-        $budget['budget_total_cost_ut'] = (($__budget_gov_utility)+ $budget['totoi_increased_budget_gov_utility'] )- ($__total_cost_gov_utility);
+        $budget['budget_total_cost_op'] = (($__budget_it_operating)+ $budget['totol_increased_budget_it_operting'])   - ($__total_cost_it_operating);
+        $budget['budget_total_cost_in'] = (($__budget_it_investment)+ $budget['totol_increased_budget_it_investment']) - ($__total_cost_it_investment);
+        $budget['budget_total_cost_ut'] = (($__budget_gov_utility)+ $budget['totol_increased_budget_gov_utility'] )- ($__total_cost_gov_utility);
         $budget['budget_total_mm_pr'] = ($__budget) - ($__mm - $__prmm);
         $budget['budget_total_pay_con'] = ($__budget) - ($__pay + $__paycon);
 
@@ -2515,10 +2518,10 @@ $mainQuery = DB::query()
 
 
         //19/12/2566 งบประมาณเพิ่ม
-        $budget['totoi_increased_budget'] = $__totoi_increased_budget;
-        $budget['totoi_increased_budget_it_operting'] = $__totoi_increased_budget_it_operting;
-        $budget['totoi_increased_budget_it_investment'] = $__totoi_increased_budget_it_investment;
-        $budget['totoi_increased_budget_gov_utility'] = $__totoi_increased_budget_gov_utility;
+    /*     $budget['totol_increased_budget'] = $__totol_increased_budget;
+        $budget['totol_increased_budget_it_operting'] = $__totol_increased_budget_it_operting;
+        $budget['totol_increased_budget_it_investment'] = $__totol_increased_budget_it_investment;
+        $budget['totol_increased_budget_gov_utility'] = $__totol_increased_budget_gov_utility; */
 
 
 
@@ -5857,11 +5860,14 @@ dd($task_sub_refund_total_count);
 
 
          // dd($increaseData);
+         ($files_project = File::join('projects', 'files.project_id', '=', 'projects.project_id')
+         ->where('projects.project_id', $project->project_id)
+         ->get());
 
-
-
+           // dd($files_project);
 
         return view('app.projects.view', compact(
+            'files_project',
             'increaseData',
             'totalrefundpabudget_it_operating',
             'totalBudgetItOperating',
@@ -5960,10 +5966,12 @@ dd($task_sub_refund_total_count);
 
 
 // ในส่วนของ create method
+
+
 public function create(Request $request)
 {
 
-    if($request->ajax()) {
+     if($request->ajax()) {
         $project_fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก Ajax request
         $project_type = $request->input('project_type'); // รับค่า project_type จาก Ajax request
         // ทำสิ่งที่คุณต้องการกับ $project_fiscal_year โดยการค้นหาข้อมูลในฐานข้อมูล
@@ -5974,18 +5982,8 @@ public function create(Request $request)
             ->whereNull('deleted_at')
             ->where('project_type',$project_type)
             ->max('reguiar_id')+1;
-
-
-
-
-
         return response()->json($data); // ส่งข้อมูลกลับในรูปแบบ JSON
     }
-
-
-
-
-
 
 
     $fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก request
@@ -6033,27 +6031,27 @@ public function create(Request $request)
 }
 
 
-
     public function store(Request $request)
     {
+
+
         $messages = [
             'required' => 'กรุณากรอกข้อมูล :attribute',
             'date_format' => 'รูปแบบวันที่ไม่ถูกต้อง :attribute',
             'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
             'integer' => 'กรุณากรอกตัวเลขเท่านั้น :attribute',
+            'reguiar_id.min' => 'ลำดับ.ชื่องาน/โครงการต้องไม่ต่ำกว่า 1',
+           // 'project_name.unique' => 'ชื่องาน/โครงการนี้ถูกใช้งานแล้ว',
             // เพิ่มข้อความผิดพลาดเพิ่มเติมตามความเหมาะสม
         ];
 
-        $messages = [
-            'required' => 'กรุณากรอกข้อมูล :attribute',
-            'date_format' => 'รูปแบบวันที่ไม่ถูกต้อง :attribute',
-            'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
-            'integer' => 'กรุณากรอกตัวเลขเท่านั้น :attribute',
-        ];
+
 
         $request->validate([
-            'project_name' => 'required',
-            'reguiar_id' => 'required',
+            //'project_name' => 'required|unique:projects,project_name',
+            'project_name' => 'required|unique:projects,project_name,NULL,id,project_fiscal_year,' . $request->input('project_fiscal_year'),
+
+            'reguiar_id' => 'required|integer|min:1',
             'project_start_date' => 'required|date_format:d/m/Y',
             'project_end_date' => 'required|date_format:d/m/Y|after_or_equal:project_start_date',
             'project_type' => 'required|in:1,2', // Assuming project_type can only be 1 or 2
@@ -6070,13 +6068,26 @@ public function create(Request $request)
             ->where('reguiar_id', $request->input('reguiar_id'))
             ->first();
 
-        if ($existingReguiarId) {
-            $projectTypeText = $request->input('project_type') == 1 ? '1' : '2';
+            if ($existingReguiarId) {
+                $projectTypeText = $request->input('project_type') == 1 ? 'งาน' : 'โครง';
+                $nextReguiarId = Project::where('project_type', $projectTypeText)
+                                        ->where('project_fiscal_year', $request->input('project_fiscal_year'))
+                                        ->max('reguiar_id') + 1;
+
+                return back()->withErrors([
+                    'reguiar_id' => 'ลำดับ.ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว  ถึง ลำดับ'. $projectTypeText .' '. $nextReguiarId
+                ])->withInput();
+            }
+
+
+        $existingProjectname = Project::where('project_name', $request->input('project_name'))
+        ->where('project_fiscal_year', $request->input('project_fiscal_year'))
+        ->first();
+if ($existingProjectname) {
             return back()->withErrors([
-                'reguiar_id' => 'ลำดับ.ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว ลำดับ.ชื่องาน/โครงการ ' . $projectTypeText
+                'project_name' => 'ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว'
             ])->withInput();
         }
-
 
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('project_start_date'));
@@ -6113,10 +6124,76 @@ public function create(Request $request)
         $project->budget_gov_utility = $budget_gov_utility;
         $project->budget_it_operating = $budget_it_operating;
         $project->budget_it_investment = $budget_it_investment;
-        $project->reguiar_id = $reguiar_id;
+        $project->reguiar_id = $request->input('reguiar_id');
+
+
+
+
+
+
+
+
+
+
+
 
         // Attempt to save the project
     if ($project->save()) {
+
+        $id = $project->project_id;
+        $project->project_id = $id;
+
+        $files = new File;
+        $idproject = $id;
+        $idtask = 0;
+        $idup = $idproject;
+        $idup = $idproject . '/' . $idtask;
+
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/', $filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                $fileModel->project_id = $idproject;
+               // $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+              //  dd($fileModel);
+                if (!$fileModel->save()) {
+                    // If the file failed to save, redirect back with an error message
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return redirect()->route('project.index');
     } else {
         // Handle the case where project saving fails (e.g., show an error message)
@@ -6293,17 +6370,22 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
 
             // dd($budget);
 
+            $filesproject = File::where('project_id', $project->project_id)->get();
+
+
+            // Continue with your logic if files are found
+            ($filesproject->toArray()); // This will dump the array representation of the files collection
 
 
 
 
 
+            //dd($filesproject);
+
+     // dd($filesproject,$projectData,$projectDetails,$increasedbudgetData,$increaseData,$project);
 
 
-       // dd($projectData,$projectDetails,$increasedbudgetData,$increaseData,$project);
-
-
-        return view('app.projects.edit', compact('budget','project','increaseData','increasedbudgetData', 'projectDetails', 'request'));
+        return view('app.projects.edit', compact('budget','filesproject','project','increaseData','increasedbudgetData', 'projectDetails', 'request'));
     }
 
     /**
@@ -6320,18 +6402,23 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
       //  $projectId = Hashids::decode($projectHash)[0];
         $increasedBudgets = IncreasedBudget::where('project_id', $id)->get();
        // dd($id_increasedbudgets,$increasedBudgets,$project);
+       $attributes = [
+        'integer' => 'ลำดับ.ชื่องาน/โครงการ *',
+        // Add other attribute mappings as needed
+    ];
+    $messages = [
+        'required' => 'กรุณากรอกข้อมูล :attribute',
+        'date_format' => 'รูปแบบวันที่ไม่ถูกต้อง :attribute',
+        'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
+        'integer' => 'กรุณากรอกตัวเลขเท่านั้น ลำดับ.ชื่องาน/โครงการ *',
+        // Add other custom messages as needed
+    ];
 
-        $messages = [
-            'required' => 'กรุณากรอกข้อมูล :attribute',
-            'date_format' => 'รูปแบบวันที่ไม่ถูกต้อง :attribute',
-            'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
-            'integer' => 'กรุณากรอกตัวเลขเท่านั้น :attribute',
-            // เพิ่มข้อความผิดพลาดเพิ่มเติมตามความเหมาะสม
-        ];
+
 
         $request->validate([
             'project_name' => 'required',
-            'reguiar_id' => 'required',
+            'reguiar_id' => 'required|integer',
             'project_start_date' => 'required|date_format:d/m/Y',
             'project_end_date' => 'required|date_format:d/m/Y|after_or_equal:project_start_date',
             'project_fiscal_year' => 'required|integer',
@@ -6340,7 +6427,23 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
             //'budget_gov_utility' => 'nullable|numeric',
             //'budget_it_operating' => 'nullable|numeric',
             //'budget_it_investment' => 'nullable|numeric',
-        ], $messages);
+        ], $messages, $attributes);
+        $existingReguiarId = Project::where('project_fiscal_year', $request->input('project_fiscal_year'))
+        ->where('project_type', $request->input('project_type'))
+        ->where('reguiar_id', $request->input('reguiar_id'))
+        ->where('project_id', '!=', $id)
+        ->first();
+
+        if ($existingReguiarId) {
+            $projectTypeText = $request->input('project_type') == 1 ? 'งาน' : 'โครง';
+            $nextReguiarId = Project::where('project_type', $projectTypeText)
+                                    ->where('project_fiscal_year', $request->input('project_fiscal_year'))
+                                    ->max('reguiar_id') + 1;
+
+            return back()->withErrors([
+                'reguiar_id' => 'ลำดับ.ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว'
+            ])->withInput();
+        }
 
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('project_start_date'));
@@ -11338,6 +11441,42 @@ foreach ($project->main_task as $task) {
         return back()->with('success', 'File deleted successfully');
     }
 
+    public function filesprojectup(Request $request, $project, $task) {
+        $id = Hashids::decode($task)[0];
+        $task = Task::find($id);
+
+        $idproject = $project; // ตรวจสอบว่าตัวแปรนี้ถูกกำหนดถูกต้อง
+        $idtask = $task->task_id;
+        $idup = $idproject . '/' . $idtask;
+
+        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        if (!file_exists($contractDir)) {
+            mkdir($contractDir, 0755, true);
+        }
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filesize = $file->getSize();
+                $file->storeAs('public/', $filename);
+                $file->move($contractDir, $filename);
+
+                $fileModel = new File;
+                $fileModel->name = $filename;
+                $fileModel->task_id = $idtask;
+                $fileModel->size = $filesize;
+                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+
+                if (!$fileModel->save()) {
+                    return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                }
+            }
+        }
+
+        return back()->with('success', 'File uploaded successfully');
+    }
+
+
 
     public function filesup(Request $request, $project, $task) {
         $id = Hashids::decode($task)[0];
@@ -11378,11 +11517,23 @@ foreach ($project->main_task as $task) {
 
     public function filesdel($project, $task)
     {
-        $id = Hashids::decode($task)[0];
-        $task = Task::find($id);
+        $project_id = Hashids::decode($project)[0];
+        $project = Project::find($project_id);
+        if($task==0){
+            $taskprojectdel = 0 ;
+            $files = File::where('project_id', $project->project_id)->first();
+        }else{
+            $id = Hashids::decode($task)[0];
+            $task = Task::find($id);
+            $files = File::where('task_id', $task->task_id)->first();
+        }
+       // $id = Hashids::decode($task)[0];
+        //$task = Task::find($id);
+        //$taskprojectdel = 0 ;
+          //  dd($task,$project,$project_id,$taskprojectdel);
 
         //dd($id,$task);
-        $files = File::where('task_id', $task->task_id)->first();
+
         // dd($files);
 
 

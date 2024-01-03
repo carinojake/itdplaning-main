@@ -62,9 +62,9 @@
                             @endif
                             @if ($project['budget_gov_utility'] > 0)
                                 งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท
-                                @if ($increaseData['increasedbudget_sum_budget_gov_utility'])
-                              <br>   งบสาธารณูปโภค เพิ่ม : {{ number_format($increaseData['increasedbudget_sum_budget_gov_utility']),2 }} บาท
-                                <br>  <b> รวมงบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']+$increaseData['increasedbudget_sum_budget_gov_utility']),2 }} บาท</b>
+                                @if ($budget['totol_increased_budget_gov_utility'])
+                              <br>   งบสาธารณูปโภค เพิ่ม : {{ number_format($budget['totol_increased_budget_gov_utility']),2 }} บาท
+                                <br>  <b> รวมงบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']+ $budget['totol_increased_budget_gov_utility']),2 }} บาท</b>
                                 @endif
                                 <br>
                             @endif

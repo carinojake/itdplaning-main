@@ -17,12 +17,11 @@
                         <x-card title="{{ __('เพิ่มข้อมูล งาน/โครงการ') }}">
 
                             <form method="POST" action="{{ route('project.store') }}"
-                            enctype="multipart/form-data" id="add-project-form"
-                            class="row needs-validation"
+                            class="row needs-validation" enctype="multipart/form-data"
                                 novalidate>
                                 @csrf
                                 <div class="row mt-3">
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-2 ">
                                         <label for="project_type"
                                             class="form-label">{{ __('ประเภทงาน/โครงการ') }}</label> <span
                                             class="text-danger">*</span>
@@ -59,7 +58,7 @@
                                             class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"
-                                        >
+                                        min="1" >
 
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -94,6 +93,12 @@
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="project_name" name="project_name"
                                             required autofocus>
+
+                                            @if ($errors->has('project_name'))
+    <div class="alert alert-danger">
+        {{ $errors->first('project_name') }}
+    </div>
+@endif
 
                                         <div class="valid-feedback">
                                             Looks good!
@@ -134,6 +139,34 @@
                                             {{ __('รายละเอียดงาน/โครงการ') }}
                                         </div>
                                     </div>
+
+
+                                    <div class=" col-md-12 mt-3">
+                                        <label for="file"
+                                            class="form-label">{{ __('เอกสารแนบ') }}</label>
+                                    <div class="input-group control-group increment " >
+                                        <input type="file" name="file[]" class="form-control" multiple >
+                                        <div class="input-group-btn">
+                                          <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                        </div>
+                                      </div>
+                                      <div class="clone d-none">
+                                        <div class="control-group input-group" style="margin-top:10px">
+                                          <input type="file" name="file[]" class="form-control" multiple>
+                                          <div class="input-group-btn">
+                                            <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+
+
+
+
+
+
 
 
                                     <div class="row mt-3">
@@ -218,7 +251,27 @@
     <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-  <script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function() {
+
+          $(".btn-success").click(function(){
+              var html = $(".clone").html();
+              $(".increment").after(html);
+          });
+
+          $("body").on("click",".btn-danger",function(){
+              $(this).parents(".control-group").remove();
+          });
+
+        });
+
+    </script>
+
+
+
+<script>
     $(document).ready(function() {
         // เมื่อมีการเปลี่ยนค่าในฟิลด์ project_fiscal_year
         $('#project_fiscal_year,#project_type').on('change', function() {
@@ -227,8 +280,6 @@
             console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
             // ทำการส่งค่า project_fiscal_year ไปยัง Laravel โดยใช้ Ajax
             $.ajax({
-
-
                 method: 'GET',
                 data: { project_fiscal_year: fiscalYear ,project_type:projectType}, // ส่งค่า project_fiscal_year ไปยัง Laravel
                 success: function(data) {

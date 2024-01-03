@@ -244,7 +244,7 @@
 
                             </div>
 
-                            @if(count($files) > 0)
+                         @if(count($files) > 0)
                             <table class="table table-bordered table-striped">
                                 <thead>
                                    {{--  <th>Photo</th> --}}

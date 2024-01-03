@@ -83,6 +83,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#contract" data-bs-toggle="pill">สัญญา</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#projectfile" data-bs-toggle="pill">ไฟล์เอกสาร</a>
+
                         </ul>
 
                         <div class="tab-content">
@@ -97,6 +100,10 @@
                             <div class="tab-pane fade" id="contract">
                                 <!-- Content for Contract tab -->
                                 @include('partials.contract')
+                            </div>
+                            <div class="tab-pane fade" id="projectfile">
+                                <!-- Content for Contract tab -->
+                                @include('partials.projectfile')
                             </div>
                         </div>
 
