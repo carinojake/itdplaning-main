@@ -159,13 +159,10 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6">
-                                        <label for="task_start_date"
-                                            class="form-label">{{ __('วันที่เริ่มต้น') }} <span
-                                            class="text-danger">*</span></label>
-                                        <input type="text"  class="form-control" id="task_start_date" name="task_start_date"
-                                        value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
-
-                                        required>
+                                        <label for="task_start_date" class="form-label">{{ __('วันที่เริ่มต้น') }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="task_start_date" name="task_start_date"
+                                               value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_start'] }}"
+                                               required>
                                         <div class="invalid-feedback">
                                             {{ __('วันที่เริ่มต้น') }}
                                         </div>
@@ -174,20 +171,21 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }} <span
-                                            class="text-danger">*</span></label>
+                                        <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }} <span class="text-danger">*</span></label>
 
-                                        <input type="text"  class="form-control" id="task_end_date" name="task_end_date"
-                                        value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
-                                        required>
+                                        <input type="text" class="form-control" id="task_end_date" name="task_end_date"
+                                               value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_end'] }}"
+                                               required>
 
-                                    <div class="invalid-feedback">
-                                        {{ __('วันที่สิ้นสุด') }}
-                                    </div>
-                                    <div class="valid-feedback">
-                                        Looks good!
+                                        <div class="invalid-feedback">
+                                            {{ __('วันที่สิ้นสุด') }}
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                 </div>
+
 
 
 
@@ -593,6 +591,8 @@ $(this).val(0);
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+        var task_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}"; // Wrap in quotes
+        var task_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}"; // Wrap in quotes
 
         project_fiscal_year = project_fiscal_year - 543;
 
@@ -603,15 +603,21 @@ $(this).val(0);
         console.log(project_end_date_str);
         console.log(fiscalYearStartDate);
         console.log(fiscalYearEndDate);
+        console.log(task_start_date_str);
+        console.log(task_end_date_str)
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
   //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
+   // $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
+    $("#task_end_date").datepicker("setEndDate", task_end_date_str);
+   // $("#task_end_date").datepicker("fiscalYearEndDate","setEndDate");
 
-        $('#task_start_date').on('changeDate', function() {
+
+
+    $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
             $("#task_pay_date").datepicker("setStartDate", startDate);

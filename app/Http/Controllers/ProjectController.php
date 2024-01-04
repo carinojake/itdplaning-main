@@ -6083,7 +6083,7 @@ public function create(Request $request)
             'after_or_equal' => 'วันที่สิ้นสุดต้องเป็นวันที่หลังหรือเท่ากับวันที่เริ่มต้น :attribute',
             'integer' => 'กรุณากรอกตัวเลขเท่านั้น :attribute',
             'reguiar_id.min' => 'ลำดับ.ชื่องาน/โครงการต้องไม่ต่ำกว่า 1',
-           // 'project_name.unique' => 'ชื่องาน/โครงการนี้ถูกใช้งานแล้ว',
+//'project_name.unique' => 'ชื่องาน/โครงการนี้ถูกใช้งานแล้ว',
             // เพิ่มข้อความผิดพลาดเพิ่มเติมตามความเหมาะสม
         ];
 
@@ -6091,7 +6091,7 @@ public function create(Request $request)
 
         $request->validate([
             //'project_name' => 'required|unique:projects,project_name',
-            'project_name' => 'required|unique:projects,project_name,NULL,id,project_fiscal_year,' . $request->input('project_fiscal_year'),
+            //'project_name' => 'required|unique:projects,project_name,NULL,id,project_fiscal_year,' . $request->input('project_fiscal_year'),
 
             'reguiar_id' => 'required|integer|min:1',
             'project_start_date' => 'required|date_format:d/m/Y',
@@ -6124,6 +6124,7 @@ public function create(Request $request)
 
         $existingProjectname = Project::where('project_name', $request->input('project_name'))
         ->where('project_fiscal_year', $request->input('project_fiscal_year'))
+        ->where('deleted_at', null)
         ->first();
 if ($existingProjectname) {
             return back()->withErrors([
@@ -6217,23 +6218,6 @@ if ($existingProjectname) {
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         return redirect()->route('project.index');
@@ -6424,7 +6408,7 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
 
             //dd($filesproject);
 
-     // dd($filesproject,$projectData,$projectDetails,$increasedbudgetData,$increaseData,$project);
+      //dd($filesproject,$projectData,$projectDetails,$increasedbudgetData,$increaseData,$project);
 
 
         return view('app.projects.edit', compact('budget','filesproject','project','increaseData','increasedbudgetData', 'projectDetails', 'request'));
@@ -8416,6 +8400,7 @@ dd($resultthItem); */
     {
         ($id = Hashids::decode($project)[0]);
         ($projectDetails = Project::find($id));
+        //dd($projectDetails);
         ($tasks = Task::where('project_id', $id)->get());
         $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
         ($request = Project::find($id));
@@ -8528,9 +8513,27 @@ dd($resultthItem); */
         // dd($task_sub_refund_pa_budget);
 
         ($tasksDetails = $task);
+        $project_fiscal_year = $projectDetails->project_fiscal_year;
+
+        // Assuming $project_fiscal_year is a valid integer representing the year
+
+        // Calculate the start date of the fiscal year (September 1st of the previous year)
+        $fiscalyear_project_start = date('Y-m-d', strtotime(($project_fiscal_year - 1) . '-09-01'));
+
+        // Calculate the end date of the fiscal year (August 30th of the current year)
+        $fiscalyear_project_end = date('Y-m-d', strtotime($project_fiscal_year . '-08-30'));
+
+        $fiscalyear = [
+            'fiscalyear_project' => $project_fiscal_year,
+            'fiscalyear_project_start' => $fiscalyear_project_start,
+            'fiscalyear_project_end' => $fiscalyear_project_end,
+        ];
+
+       // dd($fiscalyear);
 
 
         return view('app.projects.tasks.createto', compact(
+            'fiscalyear',
             'request',
             'tasksDetails',
             'task_sub_sums',
@@ -8684,10 +8687,33 @@ dd($resultthItem); */
         ]);
 
 
-        // dd($task_sub_refund_pa_budget);
+     //dd($task);
         $tasksDetails = $task;
         //  dd($contracts);
+        $project_fiscal_year = $projectDetails->project_fiscal_year;
+
+        // Assuming $project_fiscal_year is a valid integer representing the year
+
+        // Calculate the start date of the fiscal year (September 1st of the previous year)
+        $fiscalyear_project_start = date('Y-m-d', strtotime(($project_fiscal_year - 1) . '-09-01'));
+
+        // Calculate the end date of the fiscal year (August 30th of the current year)
+        $fiscalyear_project_end = date('Y-m-d', strtotime($project_fiscal_year . '-08-30'));
+
+        $fiscalyear = [
+            'fiscalyear_project' => $project_fiscal_year,
+            'fiscalyear_project_start' => $fiscalyear_project_start,
+            'fiscalyear_project_end' => $fiscalyear_project_end,
+        ];
+
+       // dd($fiscalyear);
+
+
+
+
+
         return view('app.projects.tasks.createsub', compact(
+            'fiscalyear',
             'task_sub_refund_pa_budget',
             'task_sub_sums',
             'request',
@@ -8921,12 +8947,31 @@ dd($resultthItem); */
         // dd($task_sub_refund_pa_budget);
 
         $projectsJson = json_encode($projectData);
+        $project_fiscal_year = $projectDetails->project_fiscal_year;
+
+        // Assuming $project_fiscal_year is a valid integer representing the year
+
+        // Calculate the start date of the fiscal year (September 1st of the previous year)
+        $fiscalyear_project_start = date('Y-m-d', strtotime(($project_fiscal_year - 1) . '-09-01'));
+
+        // Calculate the end date of the fiscal year (August 30th of the current year)
+        $fiscalyear_project_end = date('Y-m-d', strtotime($project_fiscal_year . '-08-30'));
+
+        $fiscalyear = [
+            'fiscalyear_project' => $project_fiscal_year,
+            'fiscalyear_project_start' => $fiscalyear_project_start,
+            'fiscalyear_project_end' => $fiscalyear_project_end,
+        ];
+
+       // dd($fiscalyear);
+
 
         //dd($projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
 
         //  dd($projectDetails,$tasks,$taskcons,$projectyear);
 
         return view('app.projects.tasks.createsubno', compact(
+            'fiscalyear',
             'request',
 
             'projectData',
@@ -9105,10 +9150,26 @@ dd($resultthItem); */
 
 
         // dd($task_sub_refund_pa_budget);
+        $project_fiscal_year = $projectDetails->project_fiscal_year;
+
+        // Assuming $project_fiscal_year is a valid integer representing the year
+
+        // Calculate the start date of the fiscal year (September 1st of the previous year)
+        $fiscalyear_project_start = date('Y-m-d', strtotime(($project_fiscal_year - 1) . '-09-01'));
+
+        // Calculate the end date of the fiscal year (August 30th of the current year)
+        $fiscalyear_project_end = date('Y-m-d', strtotime($project_fiscal_year . '-08-30'));
+
+        $fiscalyear = [
+            'fiscalyear_project' => $project_fiscal_year,
+            'fiscalyear_project_start' => $fiscalyear_project_start,
+            'fiscalyear_project_end' => $fiscalyear_project_end,
+        ];
 
 
         // dd( $tasksDetails ,$projectDetails,$projectyear ,$contracts,$tasks,$task);
         return view('app.projects.tasks.createsubnop', compact(
+            'fiscalyear',
             'task_sub_refund_pa_budget',
             'request',
             'task_sub_sums',
@@ -10225,7 +10286,7 @@ dd($resultthItem); */
             ->get();
         $contracts = contract::orderBy('contract_fiscal_year', 'desc')->get();
 
-
+        //dd($task);
 
 
 
@@ -10586,11 +10647,11 @@ $totalrefundpabudget_it_operating = 0;
 $totaltaskrefunbudget_ItOperating = 0;
 
 
-foreach ($project->main_task as $task) {
-    if ($task->task_budget_it_operating > 1 && $task->task_refund_budget_type == null) {
-        $totalBudgetItOperating += $task->task_budget_it_operating;
-        $totaltaskrefunbudget_ItOperating += $task->task_refund_budget;
-        $totalrefundpabudget_it_operating += $task->task_refund_pa_budget;
+foreach ($project->main_task as $tasksubmain) {
+    if ($tasksubmain->task_budget_it_operating > 1 && $tasksubmain->task_refund_budget_type == null) {
+        $totalBudgetItOperating += $tasksubmain->task_budget_it_operating;
+        $totaltaskrefunbudget_ItOperating += $tasksubmain->task_refund_budget;
+        $totalrefundpabudget_it_operating += $tasksubmain->task_refund_pa_budget;
 
 
 }
@@ -10601,12 +10662,12 @@ foreach ($project->main_task as $task) {
 $totalBudgetItInvestment = 0;
 $totalrefundpabudget_it_investment = 0;
 $totaltaskrefunbudget_ItInvestment = 0;
-foreach ($project->main_task as $task) {
-    if ($task->task_budget_it_investment > 1 && $task->task_refund_budget_type == null) {
+foreach ($project->main_task as $tasksubmain) {
+    if ($tasksubmain->task_budget_it_investment > 1 && $tasksubmain->task_refund_budget_type == null) {
 
-        $totalBudgetItInvestment += $task->task_budget_it_investment;
-        $totaltaskrefunbudget_ItInvestment += $task->task_refund_budget;
-        $totalrefundpabudget_it_investment += $task->task_refund_pa_budget;
+        $totalBudgetItInvestment += $tasksubmain->task_budget_it_investment;
+        $totaltaskrefunbudget_ItInvestment += $tasksubmain->task_refund_budget;
+        $totalrefundpabudget_it_investment += $tasksubmain->task_refund_pa_budget;
 
 }
 }
@@ -10616,11 +10677,11 @@ foreach ($project->main_task as $task) {
 $totalrefundpabudget_gov_utility = 0;
 $totaltaskrefunbudget_GovUtility = 0;
 
-foreach ($project->main_task as $task) {
-        if($task->task_budget_gov_utility > 1 && $task->task_refund_budget_type == null){
-        $totalBudgetGovUtility += $task->task_budget_gov_utility;
-        $totaltaskrefunbudget_GovUtility += $task->task_refund_budget;
-        $totalrefundpabudget_gov_utility += $task->task_refund_pa_budget;
+foreach ($project->main_task as $tasksubmain) {
+        if($tasksubmain->task_budget_gov_utility > 1 && $tasksubmain->task_refund_budget_type == null){
+        $totalBudgetGovUtility += $tasksubmain->task_budget_gov_utility;
+        $totaltaskrefunbudget_GovUtility += $tasksubmain->task_refund_budget;
+        $totalrefundpabudget_gov_utility += $tasksubmain->task_refund_pa_budget;
     }
 }
 
@@ -10657,9 +10718,9 @@ foreach ($project->main_task as $task) {
 
 
 
+   // dd($task);
 
-
-        //dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
+      //  dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
 
 
         return view('app.projects.tasks.edit', compact(

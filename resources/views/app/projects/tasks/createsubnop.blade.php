@@ -282,8 +282,7 @@
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_start_date"
                                                                     name="task_start_date"
-                                                                  value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}
-
+                                                                    value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_start'] }}"
                                                                     >
                                                             </div>
                                                             <div class="col-md-6">
@@ -292,8 +291,7 @@
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_end_date"
                                                                     name="task_end_date"
-                                                                   value= {{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}
-                                                                    >
+                                                                    value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_end'] }}"                                                                    >
                                                             </div>
                                                         </div>
 
@@ -1179,6 +1177,8 @@
                     "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
                 var project_end_date_str =
                     "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+                    var task_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}"; // Wrap in quotes
+        var task_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}"; // Wrap in quotes
 
                 project_fiscal_year = project_fiscal_year - 543;
 
@@ -1195,12 +1195,40 @@
 
                 // Set the start and end dates for the project_end_date datepicker
                 // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
-                $("#task_end_date").datepicker("setStartDate", project_start_date_str);
+             /*    $("#task_end_date").datepicker("setStartDate", project_start_date_str);
+                $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
+                $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate); */
+$("#task_end_date").datepicker("setEndDate", task_end_date_str);
 
+$('#task_end_date').click(function(e) {
+    e.preventDefault();
+    var task_end_date_str = $("#task_end_date").val();
+    var task_end_date = convertToDate(task_end_date_str);
+    var project_end_date = convertToDate(project_end_date_str);
+      console.log(task_end_date_str);
+        console.log(task_end_date);
+        console.log(project_end_date);
 
+    if (task_end_date > fiscalYearEndDate) {
+        Swal.fire({
+            title: 'วันที่ เกิน ?',
+            text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ทำตามวันที่เกิน!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
 
-
+                    'success'
+                )
+            }
+        });
+    }
+});
 
                 $('#task_start_date').on('changeDate', function() {
                     var startDate = $(this).datepicker('getDate');
@@ -1208,10 +1236,10 @@
                     $("#task_pay_date").datepicker("setStartDate", startDate);
                 });
 
-                $('#task_end_date').on('changeDate', function() {
+                /* $('#task_end_date').on('changeDate', function() {
                     var endDate = $(this).datepicker('getDate');
                     $("#task_start_date").datepicker("setEndDate", endDate);
-                });
+                }); */
             });
         </script>
 

@@ -148,7 +148,7 @@
                              data-bs-custom-class="custom-popover-warning"
                              data-bs-title="งบประมาณ" data-bs-content="
                             @if(($ospa + $osa)||($ispa+$isa)||($utpcs+$utsc))
-                         <div class=text-black-underline>   รวมทั้งหมด : {{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }} บาท</div>
+                         <div>   รวมทั้งหมด : <b class=text-info>{{ number_format(  ($ospa + $osa)+($ispa+$isa)+($utpcs+$utsc), 2) }}</b> บาท</div>
                             @endif
                          @if ($ospa||$osa )
                              <div class=text-black-underline> งบกลาง ICT </div>
@@ -273,14 +273,14 @@
                                                     @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
 {{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
- --}}                            1  {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}                              {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
                           {{--         1- {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
                                 <br>  2-  {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                 <br>    3-  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} --}}
-                                2    {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }}
+                                    {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }}
                              {{--   333    {{ number_format($budget['budget_total_refund_pa_budget_end']-  $budget['totalbudget_budget'], 2) }} --}}
 
                                @elseif($budget['budget_total_refund_pa_budget_end']>0)
@@ -289,10 +289,10 @@
                                   {{--  1-1 --}}
 
 
-                                  3    {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+                                      {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
                                      @elseif($budget['total'] )
-                            4     {{ number_format(floatval($budget['totalrefund_top']), 2) }}
+                                 {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                      @endif
                                    {{--  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}
@@ -359,7 +359,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
 
-                                        {{ number_format($project['budget_it_operating'],2) }}
+                                        {{ number_format($project['budget_it_operating']+ $increaseData['increasedbudget_sum_budget_it_operating'],2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -634,7 +634,7 @@
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-transparent ">
 
-                                        {{ number_format($project['budget_it_investment'],2) }}
+                                        {{ number_format($project['budget_it_investment']+ $increaseData['increasedbudget_sum_budget_it_investment'],2) }}
                                     </div>
                                     <div>
                                         <small class="text-xl">
@@ -921,7 +921,7 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-transparent ">
-                                            {{ number_format($project['budget_gov_utility'], 2) }}
+                                            {{ number_format($project['budget_gov_utility']+ $increaseData['increasedbudget_sum_budget_gov_utility'], 2) }}
 
                                         </div>
                                         <div>

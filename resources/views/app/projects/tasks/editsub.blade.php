@@ -994,6 +994,7 @@
                     // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
                     $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
 
+                    $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
 
                     $('#task_start_date').on('changeDate', function() {

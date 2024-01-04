@@ -180,15 +180,10 @@
                                                     @foreach($increasedbudgetData as $key => $increaseData)
                                                     {{ $increaseData->increased_budget_it_operating  > 1 ? 'readonly' : '' }}
                                                     @endforeach
-
                                                     >
                                                     <div class="mt-3">
                                                         @if( $budget['totalBudgetItOperating'])
-
                                                         งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ  {{number_format(  $project->budget_it_operating)}} บาท@endif
-
-
-
                                                     </div>
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
@@ -298,7 +293,44 @@
                                         </div>
                                     @endforeach
                                 </div>
+                               {{--  <div  id='totalbudget' class="row">
+                                    <div class="col-md-4">
+                                        <label for="budget_it_operating"
+                                            class="form-label">{{ __('งบกลาง ICT ') }}</label>
+                                        <!--<input type="text" placeholder="0.00" step="0.01" class="form-control" id="budget_it_investment" name="budget_it_investment" min="0" value="100000.00">-->
+                                        <input type="text" placeholder="0.00" step="0.01"
+                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                            class="form-control" id="budget_it_operating"
+                                            name="budget_it_operating" min="0"
+                                            value="{{ $budget['totalBudgetItOperating'] }}"
+                                            readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="budget_it_investment"
+                                            class="form-label">{{ __('งบดำเนินงาน') }}</label>
+                                        <input type="text" placeholder="0.00" step="0.01"
+                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                            class="form-control" id="budget_it_investment"
+                                            name="budget_it_investment" min="0"
+                                            value="{{ $budget['totalBudgetItInvestment'] }}"
+                                            readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="budget_gov_utility"
+                                                class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
+                                                class="form-control" id="budget_gov_utility"
+                                                name="budget_gov_utility" min="0"
+                                                value="{{ $budget['totalBudgetGovUtility'] }}"
+                                                readonly>
 
+
+
+
+
+
+                                </div> --}}
 
 
 

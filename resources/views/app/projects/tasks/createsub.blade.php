@@ -251,7 +251,7 @@
 
 
                                             @if (session('contract_id') == 0)
-                                            value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}
+                                            value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_start'] }}"
                                             @else
                                             value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_start_date')))) }}
                                             @endif
@@ -264,9 +264,10 @@
                                            {{--  {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }} --}}
                                             <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                             <span class="text-danger">*</span>
-                                            <input class="form-control" id="task_start_date" name="task_start_date"
+                                            <input class="form-control" id="task_end_date" name="task_end_date"
                                             @if (session('contract_id') == 0)
-                                            value={{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}
+                                            value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_end'] }}"
+
                                             @else
                                             value= {{ Helper::Date4(date('Y-m-d H:i:s', (session('contract_end_date')))) }}
                                             @endif
@@ -784,6 +785,9 @@
         var project_fiscal_year = {{$projectDetails->project_fiscal_year}};
         var project_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}"; // Wrap in quotes
         var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}"; // Wrap in quotes
+        var task_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}"; // Wrap in quotes
+        var task_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}"; // Wrap in quotes
+
         //var task_end_date_str = $("#task_end_date").val();
 
 
@@ -796,8 +800,14 @@
         console.log(project_end_date_str);
         console.log(fiscalYearStartDate);
         console.log(fiscalYearEndDate);
+        console.log(task_start_date_str);
+        console.log(task_end_date_str);
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+$("#task_end_date").datepicker("setEndDate", task_end_date_str);
+
+
+
   //  $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
@@ -820,7 +830,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
         console.log(task_end_date);
         console.log(project_end_date);
 
-    if (task_end_date > project_end_date) {
+    if (task_end_date >!fiscalYearEndDate) {
         Swal.fire({
             title: 'วันที่ เกิน ?',
             text: "คุณจะทำตามวันที่เกินใช่หรือไม่!",
@@ -848,6 +858,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
 
 
+
     $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');
             $("#task_end_date").datepicker("setStartDate", startDate);
@@ -857,6 +868,8 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
             var endDate = $(this).datepicker('getDate');
             $("#task_start_date").datepicker("setEndDate", endDate);
         }); */
+
+        //$("#task_end_date").datepicker("setEndDate", task_end_date_str);
     });
 
     function convertToDate(dateStr) {

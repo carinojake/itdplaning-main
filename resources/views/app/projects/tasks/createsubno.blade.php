@@ -238,7 +238,7 @@
                                                                 <span class="text-danger">*</span>
                                                                 <input class="form-control" id="task_start_date"
                                                                     name="task_start_date" name="task_start_date"
-                                                                   value= {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
+                                                                    value="{{ Helper::calculateFiscalYearDates($projectDetails['project_fiscal_year'])['fiscalyear_start'] }}"
                                                                     required
 
                                                                     >
@@ -249,7 +249,7 @@
                                                                 <span class="text-danger">*</span>
                                                                 <input class="form-control" id="task_end_date"
                                                                     name="task_end_date" name="task_start_date"
-                                                                   value=  {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+                                                                    value="{{ Helper::calculateFiscalYearDates($projectDetails['project_fiscal_year'])['fiscalyear_end'] }}"
                                                                     required
                                                                     >
 
@@ -943,7 +943,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
     // Set the start and end dates for the project_end_date datepicker
    // $("#project_end_date").datepicker("setStartDate", fiscalYearStartDate);
    //วันที่สิ้นสุด *
- //   $("#task_end_date").datepicker("setEndDate", project_end_date_str);
+ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
         $('#task_start_date').on('changeDate', function() {
             var startDate = $(this).datepicker('getDate');

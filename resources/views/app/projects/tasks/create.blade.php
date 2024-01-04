@@ -90,11 +90,13 @@
 
                                        {{--  @endif --}}
                                 </div>
+
+
                                 <div class="row">
                                     @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                     <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
                                         <div class="col-2">     {{ number_format(($projectDetails->budget_it_investment - $sum_task_budget_it_investment)+$budget_task['sum_task_refund_budget_type_it_investment'] , 2) }} บาท</div>
-                                        @elseif($projectDetails->budget_it_investment <$sum_task_budget_it_investmentg)
+                                        @elseif($projectDetails->budget_it_investment < $sum_task_budget_it_investment)
                                         <div class="col-2"> 0 บาท</div>
                                         @endif
                                         @if($budget_task['sum_task_refund_budget_it_investment'])
@@ -131,7 +133,8 @@
 
                             </div>
 {{-- เพิ่ม 31/12/2566 --}}
-                            <div class="callout callout-primary row mt-3">
+                   @if( $budget_task['sum_task_refund_budget_it_operating']||$budget_task['sum_task_refund_budget_it_investment']||$budget_task['sum_task_refund_budget_gov_utility']||$increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+                              <div class="callout callout-primary row mt-3">
                                 <div class="row mt-3">
                                     <label
                                     class="form-label">{{ __('งบประมาณที่ได้รับจัดสรร') }}</label>
@@ -166,7 +169,7 @@
                                 <div class="col-2">{{ number_format($projectDetails->budget_it_operating - $budget_task['sum_task_refund_budget_it_operating'] + $increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
                                 <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
 
-                                <div class="col-2">{{number_format(($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment)- , 2) }} บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
+                                <div class="col-2">{{number_format(($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment),2) }} บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
 
 
                                 <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
@@ -176,6 +179,8 @@
 
 
                         </div>
+                    </div>
+                    @endif
                             {{-- </div> ปิด--}}
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                                 class="row needs-validation" novalidate>
@@ -259,13 +264,18 @@
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
                                         <span class="text-danger">*</span>
                                         <input class="form-control" id="task_start_date" name="task_start_date"
-                                        value=   {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
-                                            required>
+                                     {{--    value=   {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }} --}}
+                                        value="{{ Helper::calculateFiscalYearDates($projectDetails['project_fiscal_year'])['fiscalyear_start'] }}"
+
+
+                                        required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input class="form-control" id="task_end_date" name="task_end_date"  value=   {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }} required>
+                                        <input class="form-control" id="task_end_date" name="task_end_date"
+
+                                        value="{{ Helper::calculateFiscalYearDates($projectDetails['project_fiscal_year'])['fiscalyear_end'] }}" required>
                                     </div>
                                 </div>
 
@@ -510,6 +520,7 @@
         console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
+$("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
    $("#project_start_date").datepicker("setEndDate", fiscalYearEndDate);
 
     // Set the start and end dates for the project_end_date datepicker
@@ -552,7 +563,7 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
     }
 });
 
-//$("#task_end_date").datepicker("setEndDate", fiscalYearEndDate);
+$("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
 
 

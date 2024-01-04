@@ -94,11 +94,12 @@
                                         <input type="text" class="form-control" id="project_name" name="project_name"
                                             required autofocus>
 
+
                                             @if ($errors->has('project_name'))
-    <div class="alert alert-danger">
-        {{ $errors->first('project_name') }}
-    </div>
-@endif
+                                        <div class="alert alert-danger">
+                                            {{ $errors->first('project_name') }}
+                                        </div>
+                                    @endif
 
                                         <div class="valid-feedback">
                                             Looks good!

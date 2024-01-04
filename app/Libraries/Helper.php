@@ -81,6 +81,37 @@ class Helper
     }
 
 
+
+    public static function calculateFiscalYearDates(string $date) {
+        // Calculate the start date of the fiscal year (September 1st of the previous year)
+        $fiscalyear_start = date('Y-m-d', strtotime(($date - 1) . '-10-01'));
+
+        // Calculate the end date of the fiscal year (August 30th of the current year)
+        $fiscalyear_end = date('Y-m-d', strtotime($date . '-09-30'));
+
+        // Convert to Thai year (543 years added)
+        $thai_fiscalyear_start = \Carbon\Carbon::parse($fiscalyear_start)->format('d/m/Y');
+        $thai_fiscalyear_end = \Carbon\Carbon::parse($fiscalyear_end)->format('d/m/Y');
+
+        return [
+            'fiscalyear_start' => $thai_fiscalyear_start,
+            'fiscalyear_end' => $thai_fiscalyear_end,
+        ];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static function Attachment(Object $attachment)
     {
         switch ($attachment->file_extension) {
@@ -461,4 +492,16 @@ public static function taskconrounds2($rounds = null)
         }
         return $format;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }
