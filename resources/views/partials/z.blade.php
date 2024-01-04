@@ -10,7 +10,7 @@
                                 method="POST" style="display:inline">
                                 @method('POST') {{-- Use POST method to submit the form --}}
                                 @csrf
-                                <button class="btn btn-info text-dark btn-taskRefund"><i
+                                <button class="btn btn-primary text-dark btn-taskRefund"><i
                                         class="cil-money"></i></button>
                             </form>
 

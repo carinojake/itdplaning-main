@@ -540,12 +540,19 @@
                                      {{--    <p> 1. {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }}
 
                                     <p> 3. {{ number_format(floatval($op_refund_mm_pr), 2) }}
- --}}
-                                        <p> {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+
+                                                                       <p> {{ number_format(floatval($budget['budget_it_operating']- $budget['budget_no1_op_totol_task_budget_it_operating'] ), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
-                                        {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+                                        {{ number_format(floatval($budget['budget_it_operating']- $budget['budget_no1_op_totol_task_budget_it_operating'] ), 2) }}
+                                        @endif
+ --}}
+                                        1<p> {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+
+
+                                        @elseif( $budget['project_type'] == 2)
+                                       2 {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
                                         @endif
                                     </div>
                                     <div>
