@@ -286,8 +286,8 @@
 {{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}
 
-                        {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refund_budget'])-  $budget['totalbudget_budget'], 2)}}
-
+{{--                         {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refund_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
                           {{--         1- {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
@@ -302,10 +302,10 @@
                                   {{--  1-1 --}}
 
 
-                                   2   {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
-
+{{--                                    2   {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}
                                      @elseif($budget['total'] )
-                              3   {{ number_format(floatval($budget['totalrefund_top']), 2) }}
+                      {{--         3   {{ number_format(floatval($budget['totalrefund_top']), 2) }} --}}
                                      @endif
                                    {{--  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}

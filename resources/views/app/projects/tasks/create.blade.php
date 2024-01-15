@@ -316,7 +316,7 @@
                                     <div class="row">
 
 
-                                    @if($budget_task['sum_task_refund_budget_oiu'])
+                                  {{--   @if($budget_task['sum_task_refund_budget_oiu'])
                                         <div class="col-md-2">
                                             <label for="task_refund_budget_type_0" class="form-label">{{ __('งบประมาณ') }}</label> <span class="text-danger"></span>
                                             <div>
@@ -354,28 +354,20 @@
                                             <label for="task_refund_budget_type_2" class="form-label">{{ __('งบประมาณ+งบประมาณคืน') }}</label> <span class="text-danger"></span>
                                             <div>
                                                 <input class="form-check-input" type="radio" name="task_refund_budget_type" id="task_refund_budget_type_2" value="1">
-
+{{--
                                                 <label class="form-check-label" for="task_refund_budget_left">งบประมาณ+งบประมาณคืน</label>
 
                                                 <label class="form-check-label" for="task_refund_budget_left">งบประมาณคืน</label>
+ --}}
+                                           {{--  {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating,2) }} --}}
+                                             {{--  <label class="form-check-label" for="task_refund_budget_left">งบกลาง ICT เพิ่ม</label> --}}
+                                             {{-- {{number_format($increasedData->first()->total_it_operating,2) }} --}}
 
-                                                <input type="text" placeholder="0.00" step="0.01"
-                                                data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                               class="form-control numeral-mask" id="task_refund_budget"
-                                               name="task_refund_budget"
-                                              value= {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating,2) }}>
-                                              <label class="form-check-label" for="task_refund_budget_left">งบกลาง ICT เพิ่ม</label>
-                                              <input type="text" placeholder="0.00" step="0.01"
-                                              data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                             class="form-control numeral-mask" id="task_refund_budget"
-                                             name="task_refund_budget"
-                                            value= {{number_format($increasedData->first()->total_it_operating,2) }}>
-
-                                            </div>
+                              {{--               </div>
                                             <div class="invalid-feedback">{{ __('งบประมาณ ') }}</div>
 
                                         </div>
-                                    @endif
+                                    @endif --}}
 
 
 
@@ -491,9 +483,17 @@
                                     <label for="total_budget_input" class="form-label">งบประมาณ+งบประมาณคืน</label>
                                     <input type="text" class="form-control" id="total_budget_input" name="total_budget" readonly>
                                 </div>
+                                <div class="col-md-2">
+                                    <label for="task_refund_budget" class="form-label">+งบประมาณคืน</label>
+                                    <input type="text" class="form-control" id="task_refund_budget" name="task_refund_budget" readonly>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="task_refund_budget_left" class="form-label">งบประมาณ+งบประมาณคืน</label>
+                                    <input type="text" class="form-control" id="task_refund_budget_left" name="task_refund_budget_left" readonly>
+                                </div>
 
-{{--
-                                <div class="col-md-4 d-none">
+
+                                <div class="col-md-4 ">
                                     <label for="task_refund_budget_type"
                                         class="form-label">{{ __('task_refund_budget_type ') }}</label>
                                     <span class="text-danger"></span>
@@ -506,7 +506,7 @@
                                         name="task_refund_budget_type"  readonly>
 
 
-                                </div> --}}
+                                </div>
 
                                 <div class="d-none col-md-3 mt-3">
 
@@ -610,7 +610,7 @@
 
 
 
-      <script>
+{{--       <script>
     $(document).ready(function() {
         // Define the function outside of the event listener
         function calculateDebtPayment(totalBudget, debt1, dabt2Paid_it_operating, dabt2Paid_it_investment, dabt2Paid_gov_utility) {
@@ -667,30 +667,63 @@
             var budgetGovUtility = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
             var totalRemainingBudget = budgetItOperating + budgetItInvestment + budgetGovUtility;
 
-            <?php
-            if ($sum_task_refund_budget_it_operating > 0) {
-                echo "var debt1 = " . json_encode($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) . ";";
-            } elseif ($sum_task_refund_budget_it_investment > 0) {
-                echo "var debt1 = " . json_encode($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) . ";";
-            } elseif ($sum_task_refund_budget_gov_utility > 0) {
-                echo "var debt1 = " . json_encode($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) . ";";
-            } else {
-                echo "var debt1 = 0;";
-            }
-            ?>
-
-            // คำนวณหนี้
-            var dabt2Paid_it_operating = parseFloat(<?php echo json_encode($increasedData->first()->total_it_operating); ?>) || 0;
-            var dabt2Paid_it_investment = parseFloat(<?php echo json_encode($increasedData->first()->total_it_investment); ?>) || 0;
-            var dabt2Paid_gov_utility = parseFloat(<?php echo json_encode($increasedData->first()->total_gov_utility); ?>) || 0;
 
             var result = calculateDebtPayment(totalRemainingBudget, debt1, dabt2Paid_it_operating, dabt2Paid_it_investment, dabt2Paid_gov_utility);
             console.log(result);
         });
     });
 </script>
+ --}}
 
 
+ <script>
+      $(document).ready(function() {
+        // Define the function outside of the event listener
+        function calculateDebtPayment(totalBudget, debt1, debt2) {
+            var debt1Paid = parseFloat(debt1);
+            var debt2Paid = parseFloat(debt2);
+
+            // ชำระหนี้คนที่ 1 ก่อน
+            if (totalBudget >= debt1Paid) {
+                totalBudget -= debt1Paid;
+            } else {
+                debt1Paid = totalBudget;
+                totalBudget = 0;
+            }
+
+            // ชำระหนี้คนที่ 2 หากยังมีงบประมาณเหลือ
+            if (totalBudget >= debt2Paid) {
+                totalBudget -= debt2Paid;
+            } else {
+                debt2Paid = totalBudget;
+                totalBudget = 0;
+            }
+
+            return {
+                remainingBudget: totalBudget,
+                debt1Paid: debt1Paid,
+                debt2Paid: debt2Paid
+            };
+        }
+
+        // Event listener for input changes
+        $("#task_budget_it_operating").on("input", function() {
+            var budgetItOperating = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
+
+            var totalRemainingBudget = budgetItOperating ;
+
+        var debt1 = {{ json_encode($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }};
+        var debt2 = {{$increased['total_it_operating']}};
+
+        var result = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
+        console.log(result);
+
+        $("#task_refund_budget").val(result.debt1Paid);
+
+        $("#task_refund_budget_left").val(result.debt2Paid);
+    });
+});
+</script>
 
 
 <script>
@@ -975,7 +1008,7 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
 </script>
 
-{{-- <script>
+ <script>
     $(document).ready(function() {
 
 
@@ -1023,7 +1056,7 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
 
         });
     });
-</script> --}}
+</script>
 
 
 

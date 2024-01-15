@@ -8295,7 +8295,7 @@ dd($resultthItem); */
             //->orderBy('projects.project_fiscal_year', 'DESC')
             ->get();
 
-     dd($taskData,$projectData,$projectDetails,$increasedData,$budget_task);
+    // dd($taskData,$projectData,$projectDetails,$increasedData,$budget_task);
 
         $projectsJson = json_encode($projectData);
          // ดึงข้อมูล task_refund_pa_budget จากฐานข้อมูล
@@ -8327,7 +8327,7 @@ dd($resultthItem); */
                 }
             }
         } */
-     dd($taskRefundPaBudget);
+    // dd($taskRefundPaBudget);
 
 
 
@@ -9387,6 +9387,7 @@ dd($resultthItem); */
         $task_mm_budget = $request->input('task_mm_budget') !== null ? (float) str_replace(',', '', $request->input('task_mm_budget')) : null;
         $taskcon_pay = $request->input('taskcon_pay') !== null ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
         $task_refund_budget = $request->input('task_refund_budget') !== null ? (float) str_replace(',', '', $request->input('task_refund_budget')) : null;
+        $task_refund_budget_left = $request->input('task_refund_budget_left') !== null ? (float) str_replace(',', '', $request->input('task_refund_budget_left')) : null;
 
         // $tasks = Task::where('project_id', $id)->get(); // Fetch all tasks for the project
 
@@ -9501,8 +9502,12 @@ dd($resultthItem); */
 
         $task->task_refund_budget = $task_refund_budget ?? null;
 
-        $task->task_refund_budget_left = ($task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment)-$task_refund_budget ?? null;
 
+        if($task->task_refund_budget_type == 1){
+            $task->task_refund_budget_left = $task_refund_budget_left ?? null;
+        }else{
+            $task->task_refund_budget_left = null;
+        }
         $refund = []; // กำหนดค่าเริ่มต้นของ $refund เป็นอาร์เรย์ว่างหรือตามโครงสร้างของข้อมูลที่คุณคาดหวัง
 
         $refunds = []; // กำหนดค่าเริ่มต้นของ $refunds เป็นอาร์เรย์ว่างหรือตามโครงสร้างของข้อมูลที่คุณคาดหวัง

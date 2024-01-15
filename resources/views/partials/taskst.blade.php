@@ -199,9 +199,11 @@
                                 <td>
                                     @if ($relatedData->totalLeastCost > 1 || $relatedData->total_Leasttask_cost_1 >1 || $relatedData->total_Leasttask_cost_2 > 1)
                                     <span style="color: red;">
-                                     {{ number_format($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2, 2) }}
-{{--                                    {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
- --}}
+                                        @if($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2>0){
+                                            {{ number_format($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2, 2) }}
+                                        }   @else
+                                          {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
+                                        @endif
 
                                     @else
 
