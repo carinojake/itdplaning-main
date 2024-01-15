@@ -527,7 +527,7 @@ $(this).val(0);
 
 
 
-       <script>
+      {{--  <script>
             var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
 
             function calculateRefund() {
@@ -554,7 +554,33 @@ $(this).val(0);
                     $("#" + costField).on("input", calculateRefund);
                 });
             });
+        </script> --}}
+        <script>
+            var budgetFields = ['task_budget_it_operating', 'task_budget_it_investment', 'task_budget_gov_utility'];
+
+            function calculateRefund() {
+                var totalRefund = 0;
+
+                budgetFields.forEach(function(costField) {
+                    var pr_value = $("#" + costField).val();
+                    if (pr_value) {
+                        var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+                        if (pr_budget != 0) {
+                            totalRefund += pr_budget;
+                        }
+                    }
+                });
+
+                $("#task_mm_budget").val(totalRefund.toFixed(2));
+            }
+
+            $(document).ready(function() {
+                budgetFields.forEach(function(costField) {
+                    $("#" + costField).on("change", calculateRefund);
+                });
+            });
         </script>
+
 
 
 

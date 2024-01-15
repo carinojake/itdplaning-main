@@ -21,8 +21,7 @@
 
 
                             <form method="POST" action="{{ route('project.update', $project->hashid) }}"
-                                class="row needs-validation"
-                                novalidate >
+                                class="row needs-validation" novalidate >
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -181,10 +180,10 @@
                                                     {{ $increaseData->increased_budget_it_operating  > 1 ? 'readonly' : '' }}
                                                     @endforeach
                                                     >
-                                                    <div class="mt-3">
+                                                  {{--   <div class="mt-3">
                                                         @if( $budget['totalBudgetItOperating'])
                                                         งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ  {{number_format(  $project->budget_it_operating)}} บาท@endif
-                                                    </div>
+                                                    </div> --}}
                                                 <div class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
@@ -250,7 +249,7 @@
                                 <div id="increaseData_form" class="row mt-3">
                                     @foreach($increasedbudgetData as $key => $increaseData)
                                         <div class="mt-3">
-                                            <h4>งบประมาณ เพิ่มที่ {{ $key +1}}</h4>
+                                            <h4>งบประมาณ เพิ่ม ครั้งที่ {{ $key +1}}</h4>
                                             <input  type="hidden"  name="increaseData[{{ $key + 1 }}][increased_budget_id]" value="{{ $increaseData->increased_budget_id }}">
 
                                             <div class="row">
@@ -570,6 +569,12 @@
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+
+            });
+        </script>
 {{--
         <script>
             $(document).ready(function() {
@@ -905,12 +910,12 @@ var budgetItOperating = $("#budget_it_operating").val();
                 console.log(fieldId + ":", enteredValue);
                 console.log("old" + fieldId + ":", oldValue);
                 $('#' + fieldId).addClass('is-invalid');
-                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้'); // "Warn not to do so."
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้11'); // "Warn not to do so."
                 formIsValid = false;
                 invalidFieldId = fieldId; // Track the invalid field
             } else {
                 $('#' + fieldId).removeClass('is-invalid');
-                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้');
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้22');
                 if (fieldId === invalidFieldId) {
                     // If the current field was the one that caused the form to be invalid
                     invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
@@ -920,7 +925,7 @@ var budgetItOperating = $("#budget_it_operating").val();
 
         // Check the budget amount entered when data is input
         $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
-            formIsValid = true; // Reset the form validity state on new input
+            formIsValid = false; // Reset the form validity state on new input
             invalidFieldId = ''; // Reset the invalid field tracking
 
             validateBudget('budget_it_operating', parseFloat($("#budget_it_operating").val().replace(/,/g, "")) || 0);
@@ -945,6 +950,9 @@ var budgetItOperating = $("#budget_it_operating").val();
         });
     });
     </script>
+
+
+
 
 
 

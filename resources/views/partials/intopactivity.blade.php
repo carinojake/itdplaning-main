@@ -1,9 +1,9 @@
-
+<h6>
     <div  class=text-black-underline>งบดำเนินงาน :  <b class=text-blue-ganll  >{{ number_format($budget['total_refund_pa_budget_it_investment']-$budget['totalBudgetItInvestment'], 2) }} </b>บาท
     </div>
-
+</h6>
     <!-- Rest of your code -->
-    <div  class=text-blue-ganll  >
+    <div {{--  class=text-blue-ganll  --}} >
     กิจกรรม ที่คืนงบประมาณ
     </div>
 
@@ -18,7 +18,7 @@
     </div>
 
     @if( $budget['totalBudgetItInvestment'])
-    <div class=taxt-green-ganll>
+    <div {{-- class=taxt-green-ganll --}}>
         กิจกรรม ใช้งบประมาณ ที่คืนงบประมาณ
     </div>
 
@@ -38,6 +38,8 @@
         @endforeach
 
         <div >
-            <b>  {{ 'รวม'}}:</b> <b class=taxt-green-ganll>{{ number_format($budget['totalBudgetItInvestment'], 2) }}</b> บาท</div>
-@endif
+            {{ 'รวม'}}:  <b class=text-red-crimson> {{ number_format($budget['totalBudgetItInvestment'], 2) }}  </b>บาท
+{{--             <b>  {{ 'รวม'}}:</b> <b class=taxt-green-ganll>{{ number_format($budget['totalBudgetItInvestment'], 2) }}</b> บาท</div>
+ --}}@endif
 
+<p>

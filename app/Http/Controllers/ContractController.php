@@ -33,7 +33,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_fiscal_year', 'desc');
+            $records = contract::orderBy('contract_number', 'ASC')->orderBy('contract_fiscal_year', 'desc');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
@@ -1051,7 +1051,7 @@ class ContractController extends Controller
 
         $contract->contract_type_pa        = $request->input('contract_type_pa');
 
-        // $contract->reguiar_contract_id  =  $request->input('reguiar_contract_id');
+        $contract->reguiar_contract_id  =  $request->input('reguiar_contract_id');
         $contract->contract_name        = $request->input('contract_name');
         $contract->contract_mm_name        = $request->input('contract_mm_name');
 

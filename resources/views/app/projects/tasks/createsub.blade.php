@@ -550,11 +550,10 @@
     $(document).ready(function() {
 
 
-        $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",
-                                function() {
-                                    var max = 0;
-                                    var fieldId = $(this).attr('id');
-                                    var budgetItOperating = $("#task_budget_it_operating").val();
+        $("#task_budget_it_operating,#task_budget_it_investment, #task_budget_gov_utility").on("input",function() {
+        var max = 0;
+        var fieldId = $(this).attr('id');
+        var budgetItOperating = $("#task_budget_it_operating").val();
         var budgetItInvestment = $("#task_budget_it_investment").val();
         var budgetGovUtility = $("#task_budget_gov_utility").val();
         var costItOperating = $("#task_cost_it_operating").val();
@@ -565,17 +564,17 @@
 
                                                     max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
                                                     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
-              //  $("#task_budget_it_investment").val('');
+                $("#task_budget_it_investment").val('');
             }
                                                 } else if (fieldId === "task_budget_it_operating") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
                                                     if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
-               // $("#task_budget_it_operating").val('');
+                $("#task_budget_it_operating").val('');
             }
                                                 } else if (fieldId === "task_budget_gov_utility") {
                                                     max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
                                                     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
-               // $("#task_budget_gov_utility").val('');
+                $("#task_budget_gov_utility").val('');
                                                     }
                                                 }
 

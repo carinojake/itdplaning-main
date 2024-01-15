@@ -1,5 +1,7 @@
 @charset "UTF-8";
 :root {
+  --cui-redcrimson : #dc143c;
+  --cui-redcrimson-rgb : 220,20,60;
   --cui-blue: #0d6efd;
   --cui-blue-ganll: #0000ff;
   --cui-indigo: #6610f2;
@@ -10465,6 +10467,12 @@ html:not([dir=rtl]) .text-center {
     --cui-text-opacity: 1;
     color: rgba(var(--cui-danger-rgb), var(--cui-text-opacity)) !important;
   }
+
+    .text-red-crimson {
+        --cui-text-opacity: 1;
+        color: rgba(var(--cui-redcrimson-rgb), var(--cui-text-opacity)) !important;
+    /*   //  text-decoration: underline; */
+    }
 .text-warning {
   --cui-text-opacity: 1;
   color: rgba(var(--cui-warning-rgb), var(--cui-text-opacity)) !important;

@@ -195,6 +195,7 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     Route::get('/get-fiscal-year-data', 'ProjectController@getFiscalYearData');
 
+    Route::get('/check-project', [ProjectController::class, 'checkProject'])->name('project.check-project');
 
 
 

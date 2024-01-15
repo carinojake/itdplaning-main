@@ -1277,7 +1277,7 @@ $mainQuery = DB::query()
         $increaseData['increasedbudget_sum_budget_it_investment'] = $increasedbudget_sum_budget_it_investment;
         $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
 
-            // dd($increaseData);
+       // dd($increaseData);
 
 
 
@@ -5888,21 +5888,25 @@ dd($task_sub_refund_total_count);
             //budget_it_operating
        $budget['totalBudgetItOperating'] = $totalBudgetItOperating;
          $budget['total_refund_pa_budget_it_operating'] = $totalrefundpabudget_it_operating;
-            $budget['total_task_refun_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
+            $budget['total_task_refund_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
             //budget_it_investment
             $budget['totalBudgetItInvestment'] = $totalBudgetItInvestment;
             $budget['total_refund_pa_budget_it_investment'] = $totalrefundpabudget_it_investment;
-            $budget['total_task_refun_budget_ItInvestment'] = $totaltaskrefunbudget_ItInvestment;
+            $budget['total_task_refund_budget_ItInvestment'] = $totaltaskrefunbudget_ItInvestment;
             //budget_gov_utility
             $budget['totalBudgetGovUtility'] = $totalBudgetGovUtility;
             $budget['total_refund_pa_budget_gov_utility'] = $totalrefundpabudget_gov_utility;
-            $budget['total_task_refun_budget_GovUtility'] = $totaltaskrefunbudget_GovUtility;
+            $budget['total_task_refund_budget_GovUtility'] = $totaltaskrefunbudget_GovUtility;
 
 
 //รวม  +  - $budget
         $budget['totalbudget_budget'] = $budget['totalBudgetItOperating'] + $budget['totalBudgetItInvestment'] + $budget['totalBudgetGovUtility'];
         $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
-        $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
+        $budget['total_task_refund_budget'] = $budget['total_task_refund_budget_ItOperating'] + $budget['total_task_refund_budget_ItInvestment'] + $budget['total_task_refund_budget_GovUtility'];
+
+
+
+
 
 
 
@@ -5927,7 +5931,12 @@ dd($task_sub_refund_total_count);
            $increaseData['increasedbudget_sum_budget_gov_utility'] = $increasedbudget_sum_budget_gov_utility;
  */
 
+ ($budget['totol_operating_balance']  =($budget['budget_it_operating']+ $increaseData['increasedbudget_sum_budget_it_operating']+$budget['totalBudgetItOperating']+$budget['total_refund_pa_budget_it_operating'])- $budget['budget_no1_op_totol_task_budget_it_operating']- $budget['totalBudgetItOperating']);
+    ($budget['totol_investment_balance']  =($budget['budget_it_investment']+ $increaseData['increasedbudget_sum_budget_it_investment']+$budget['totalBudgetItInvestment']+$budget['total_refund_pa_budget_it_investment'])- $budget['budget_no1_in_totol_task_budget_it_investment']- $budget['totalBudgetItInvestment']);
+    ($budget['totol_gov_utility_balance']  =($budget['budget_gov_utility']+ $increaseData['increasedbudget_sum_budget_gov_utility']+$budget['totalBudgetGovUtility']+$budget['total_refund_pa_budget_gov_utility'])- $budget['budget_no1_ut_totol_task_budget_gov_utility']- $budget['totalBudgetGovUtility']);
+    $budget['totol_op_in_ut_balance'] = $budget['totol_operating_balance'] + $budget['totol_investment_balance'] + $budget['totol_gov_utility_balance'];
 
+          //  dd($budget,$tasks,$project);
 
 
 
@@ -6040,44 +6049,66 @@ dd($task_sub_refund_total_count);
 
 
 // ในส่วนของ create method
-
-
-public function create(Request $request)
+public function checkProject(Request $request)
 {
+    if ($request->ajax()) {
+        $project_fiscal_year = $request->input('project_fiscal_year');
+        $project_type = $request->input('project_type');
+        $project_name = $request->input('project_name');
+         $reguiar_id = $request->input('reguiar_id');
 
-     if($request->ajax()) {
-        $project_fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก Ajax request
-        $project_type = $request->input('project_type'); // รับค่า project_type จาก Ajax request
-        // ทำสิ่งที่คุณต้องการกับ $project_fiscal_year โดยการค้นหาข้อมูลในฐานข้อมูล
-        // ยกตัวอย่าง:
 
+        // ตรวจสอบชื่อโครงการซ้ำ
+        $exists = Project::where('project_fiscal_year', $project_fiscal_year)
+            ->where('project_name', $project_name)
+            ->whereNull('deleted_at')
+            ->exists();
+
+        // คำนวณ reguiar_id ตามที่คุณต้องการ
         $data = Project::select('project_fiscal_year', 'reguiar_id')
             ->where('project_fiscal_year', $project_fiscal_year)
             ->whereNull('deleted_at')
-            ->where('project_type',$project_type)
-            ->max('reguiar_id')+1;
-        return response()->json($data); // ส่งข้อมูลกลับในรูปแบบ JSON
+            ->where('project_type', $project_type)
+            ->max('reguiar_id') + 1;
+
+       // ตรวจสอบ reguiar_id ซ้ำ
+      // ตรวจสอบ reguiar_id ซ้ำ
+      $exists_reguiar_id = Project::where('project_fiscal_year', $project_fiscal_year)
+      ->where('reguiar_id', $reguiar_id)
+      ->whereNull('deleted_at')
+      ->exists();
+
+
+            return response()->json(['exists' => $exists, 'data' => $data, 'exists_reguiar_id' => $exists_reguiar_id]);
     }
+}
 
+public function create(Request $request)
+{
+    /* if ($request->ajax()) {
+        $project_fiscal_year = $request->input('project_fiscal_year');
+        $project_type = $request->input('project_type');
+        $project_name = $request->input('project_name');
 
-    $fiscal_year = $request->input('project_fiscal_year'); // รับค่า project_fiscal_year จาก request
-   /*  if (!$fiscal_year) {
-        $fiscal_year = date('Y') + 543; // ใช้ปีปัจจุบันหากไม่ได้รับค่า
+        // ตรวจสอบชื่อโครงการซ้ำ
+        $exists = Project::where('project_fiscal_year', $project_fiscal_year)
+            ->where('project_name', $project_name)
+            ->whereNull('deleted_at')
+            ->exists();
+
+        // คำนวณ reguiar_id
+        $data = Project::select('project_fiscal_year', 'reguiar_id')
+            ->where('project_fiscal_year', $project_fiscal_year)
+            ->whereNull('deleted_at')
+            ->where('project_type', $project_type)
+            ->max('reguiar_id') + 1;
+
+        return response()->json(['exists' => $exists, 'data' => $data]);
     } */
 
-    $fiscal_year_last_reguiar_id_1 = Project::select('project_fiscal_year', 'reguiar_id')
-    ->where('project_fiscal_year',  $fiscal_year)
-    ->whereNull('deleted_at')
-    ->where('project_type', 1)
-    ->get();
-
-//dd($fiscal_year_last_reguiar_id_1)  ;
-
-
-    $project_type = $request->input('project_type');
-    if (!$project_type) {
-        $project_type = 1; // ใช้ project type 1 หากไม่ได้รับค่า
-    }
+    // ตรวจสอบและกำหนดค่าในหน้า View ของคุณ
+    $fiscal_year = $request->input('project_fiscal_year', date('Y') + 543);
+    $project_type = $request->input('project_type', 1);
 
     $last_reguiar_id = Project::where('project_type', $project_type)
         ->where('project_fiscal_year', $fiscal_year)
@@ -6091,18 +6122,16 @@ public function create(Request $request)
         ->where('project_fiscal_year', $fiscal_year)
         ->max('reguiar_id') + 1;
 
-    $data = [
+    return view('app.projects.create', [
         'fiscal_year' => $fiscal_year,
-        'reguiar_id' => $fiscal_year, // ตั้งค่าเป็นปีปัจจุบันหรือปีที่รับค่ามา
+        'reguiar_id' => $fiscal_year,
         'project_type' => $project_type,
         'project_type_1_reguiar_id' => $project_type_1_reguiar_id,
         'project_type_2_reguiar_id' => $project_type_2_reguiar_id,
         'last_reguiar_id' => $last_reguiar_id,
-    ];
-//    dd($data);
-    // Return the view with data
-    return view('app.projects.create', $data);
+    ]);
 }
+
 
 
     public function store(Request $request)
@@ -8185,17 +8214,21 @@ dd($resultthItem); */
             'increasedbudgets.increased_budget_id',
             'increasedbudgets.project_id',
             'increasedbudgets.increased_budget_status',
+            'increasedbudgets.created_at',
+            'increasedbudgets.updated_at',
             DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
             DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
             DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
-        )
+
+
+            )
         ->where('increasedbudgets.deleted_at', '=', null)
         ->where('increasedbudgets.project_id', $id)
         ->where('increasedbudgets.increased_budget_status', '=', 1)
         //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
         ->get();
 
-   // dd($increasedData);
+    //dd($increasedData);
 
  /*      $increasedData = $increasedData->map(function ($p) {
         return [
@@ -8211,6 +8244,12 @@ dd($resultthItem); */
 
         //dd($increasedData);
 
+
+        $increased['total_it_operating']  =  $increasedData->first()->total_it_operating ?? 0;
+        $increased['total_it_investment']  =  $increasedData->first()->total_it_investment ?? 0;
+        $increased['total_gov_utility']  =  $increasedData->first()->total_gov_utility ?? 0;
+
+       // dd($increased);
 
 
 
@@ -8238,13 +8277,64 @@ dd($resultthItem); */
             ];
         });
 
-   //  dd($projectData,$projectDetails,$increasedData,$budget_task);
+
+        $taskData = DB::table('tasks')
+            //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->select(
+            'tasks.created_at',
+            'tasks.updated_at',
+            DB::raw('SUM(tasks.task_budget_it_operating) AS total_task_it_operating'),
+            DB::raw('SUM(tasks.task_budget_it_investment) AS total_task_it_investment'),
+            DB::raw('SUM(tasks.task_budget_gov_utility) AS total_task_gov_utility'),
+            DB::raw('SUM(tasks.task_refund_pa_budget)  AS total_task_refund_pa_budget' )
+            )
+            ->where('project_id', $id)
+            ->where('task_budget_type', 0)
+            ->whereNull('deleted_at')
+
+            //->orderBy('projects.project_fiscal_year', 'DESC')
+            ->get();
+
+     dd($taskData,$projectData,$projectDetails,$increasedData,$budget_task);
 
         $projectsJson = json_encode($projectData);
+         // ดึงข้อมูล task_refund_pa_budget จากฐานข้อมูล
+         $taskRefundPaBudget = Task::join('projects', 'projects.project_id', '=', 'tasks.project_id')
+         ->where('projects.project_id', $id)
+         ->where('tasks.task_budget_type', 0)
+         ->whereNull('tasks.deleted_at')
+         ->select('tasks.task_id','tasks.task_name',
+         'tasks.task_refund_pa_budget', 'tasks.task_budget_it_operating', 'tasks.task_refund_budget_left')
+         ->get();
+
+
+     // นำข้อมูลที่ดึงมาจากฐานข้อมูลมาบวกกันแล้วเก็บไว้ที่ $total_refund
+     // $total_refund += $taskRefundPaBudget->task_refund_pa_budget;
+     //$budget =  Task::where('project_id', $id) ->where('tasks.task_budget_type', 0)
+     // ->whereNull('tasks.deleted_at')->get();
+
+
+
+       /*   foreach ($taskRefundPaBudget as $refundItem) {
+             if ($refundItem->task_id == $task->task_id) {
+                 $refundItem['task_budget_it_operating'] -= $task->task_budget_it_operating;
+             }
+         } */
+    /*      if ($task) {
+            foreach ($taskRefundPaBudget as $refundItem) {
+                if ($refundItem->task_id == $task->task_id) {
+                    $refundItem->task_budget_it_operating -= $task->task_budget_it_operating;
+                }
+            }
+        } */
+     dd($taskRefundPaBudget);
+
 
 
      //dd ( $fiscal_years,$taskcons,$request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.create', compact(
+            'increased',
+            'taskRefundPaBudget',
             'budget_task',
             'increasedData',
             'request',
@@ -8270,6 +8360,8 @@ dd($resultthItem); */
 
     public function taskCreatecn(Request $request, $project, $task = null)
     {
+        DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $id        = Hashids::decode($project)[0];
         $project = $request->project;
         $projectDetails = Project::find($id);
@@ -8318,7 +8410,24 @@ dd($resultthItem); */
             $task = null;
         }
 
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+        )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
 
+       // dd($increasedData);
         $projectData = DB::table('projects')
             //  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->select('projects.*')
@@ -8404,6 +8513,7 @@ dd($resultthItem); */
 
         //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.createcn', compact(
+            'increasedData',
             'request',
             'contracts',
             'project',
@@ -8785,6 +8895,8 @@ dd($resultthItem); */
 
     public function taskCreateSubno(Request $request, $project, $task = null)
     {
+        DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         ($id = Hashids::decode($project)[0]);
         $projectDetails = Project::find($id);
 
@@ -8996,6 +9108,25 @@ dd($resultthItem); */
             'fiscalyear_project_end' => $fiscalyear_project_end,
         ];
 
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+        )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
+
+      //  dd($increasedData);
+
        // dd($fiscalyear);
 
 
@@ -9004,6 +9135,7 @@ dd($resultthItem); */
         //  dd($projectDetails,$tasks,$taskcons,$projectyear);
 
         return view('app.projects.tasks.createsubno', compact(
+            'increasedData',
             'fiscalyear',
             'request',
 
@@ -9254,6 +9386,7 @@ dd($resultthItem); */
         $taskcon_pay = $request->input('taskcon_pay') !== null ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
         $task_mm_budget = $request->input('task_mm_budget') !== null ? (float) str_replace(',', '', $request->input('task_mm_budget')) : null;
         $taskcon_pay = $request->input('taskcon_pay') !== null ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
+        $task_refund_budget = $request->input('task_refund_budget') !== null ? (float) str_replace(',', '', $request->input('task_refund_budget')) : null;
 
         // $tasks = Task::where('project_id', $id)->get(); // Fetch all tasks for the project
 
@@ -9365,7 +9498,44 @@ dd($resultthItem); */
         $task->task_type = $request->input('task_type');
         $task->task_refund_budget_type = $request->input('task_refund_budget_type');
         $task->task_budget_no = $request->input('task_budget_no');
-         // dd($task);
+
+        $task->task_refund_budget = $task_refund_budget ?? null;
+
+        $task->task_refund_budget_left = ($task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment)-$task_refund_budget ?? null;
+
+        $refund = []; // กำหนดค่าเริ่มต้นของ $refund เป็นอาร์เรย์ว่างหรือตามโครงสร้างของข้อมูลที่คุณคาดหวัง
+
+        $refunds = []; // กำหนดค่าเริ่มต้นของ $refunds เป็นอาร์เรย์ว่างหรือตามโครงสร้างของข้อมูลที่คุณคาดหวัง
+
+        $total_refund = 0; // กำหนดค่าเริ่มต้นของ $total_refund เป็น 0
+
+        // ดึงข้อมูล task_refund_pa_budget จากฐานข้อมูล
+        $taskRefundPaBudget = DB::table('projects')
+            ->join('tasks', 'projects.project_id', '=', 'tasks.project_id')
+            ->where('projects.project_id', $id)
+            ->where('tasks.task_budget_type', 0)
+            ->whereNull('tasks.deleted_at')
+            ->select('tasks.task_id','tasks.task_refund_pa_budget','tasks.task_budget_it_operating','task_refund_budget_left')
+            ->get();
+
+        // นำข้อมูลที่ดึงมาจากฐานข้อมูลมาบวกกันแล้วเก็บไว้ที่ $total_refund
+        // $total_refund += $taskRefundPaBudget->task_refund_pa_budget;
+        //$budget =  Task::where('project_id', $id) ->where('tasks.task_budget_type', 0)
+        // ->whereNull('tasks.deleted_at')->get();
+
+
+
+            foreach ($taskRefundPaBudget as $refundItem) {
+                if ($refundItem->task_id == $task->task_id) {
+                    $refundItem['task_budget_it_operating'] -= $task->task_budget_it_operating;
+                }
+            }
+
+
+       // dd($task->task_budget_it_operating,$refund, $taskRefundPaBudget,$total_refund,$refundItem);
+
+
+          dd($task);
         if ($task->save()) {
             //insert contract
             /*    if( $task->task_parent_sub= 2){
@@ -9726,6 +9896,7 @@ dd($resultthItem); */
         $task->task_er_budget = $task_er_budget ?? null;
         $task->task_refund_pa_status = $request->input('task_refund_pa_status');
         $task->task_refund_budget_type = $request->input('task_refund_budget_type');
+        $task->task_budget_no = $request->input('task_budget_no');
 
         //dd($task);
 
@@ -10138,6 +10309,9 @@ dd($resultthItem); */
         // $task->task_cost_disbursement =  $taskcon_bd_budget + $taskcon_ba_budget;
 
         $task->task_type = $request->input('task_type');
+        $task->task_refund_pa_status = $request->input('task_refund_pa_status');
+        $task->task_refund_budget_type = $request->input('task_refund_budget_type');
+        $task->task_budget_no = $request->input('task_budget_no');
         // $task->task_refund_pa_status = 1;
         //  dd($task);
         // Save the Project
@@ -10755,10 +10929,28 @@ foreach ($project->main_task as $tasksubmain) {
    // dd($task);
 
       //  dd ($request, $contracts, $project, $task, $tasks, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility, $sum_task_budget_it_operating,$sum_task_budget_it_investment,$sum_task_budget_gov_utility, $sum_task_refund_budget_it_operating, $sum_task_refund_budget_it_investment, $sum_task_refund_budget_gov_utility);
+      $increaseddetails = Increasedbudget::where('project_id', $id_project);
+      $increasedData = DB::table('increasedbudgets')
+      ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+      ->select(
+          'increasedbudgets.increased_budget_id',
+          'increasedbudgets.project_id',
+          'increasedbudgets.increased_budget_status',
+          DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+          DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+          DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+      )
+      ->where('increasedbudgets.deleted_at', '=', null)
+      ->where('increasedbudgets.project_id', $id_project)
+      ->where('increasedbudgets.increased_budget_status', '=', 1)
+      //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+      ->get();
 
+ // dd($increasedData);
 
         return view('app.projects.tasks.edit', compact(
             // 'rootTaskbudget',
+            'increasedData',
             'budget',
             'projectDetails',
             'request',
@@ -10810,19 +11002,34 @@ foreach ($project->main_task as $tasksubmain) {
 
         $contract_s = Contract::join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->select('contracts.*', 'projects.*', 'tasks.*')
+           // ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+            ->select('contracts.*', 'tasks.*')
 
 
 
 
-            ->where('projects.project_id', $project->project_id)
-            ->where('tasks.task_id', $task->task_id)
+            //->where('projects.project_id', $project->project_id)
+            //->where('tasks.task_id', $task->task_id)
             ->whereNull('tasks.deleted_at')
-            ->first();
+            ->get();
 
-        // dd($contract_s);
+        // dd($contract_s,$contracts);
+        $contracts_task = DB::table('contract_has_tasks')
+        ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
+        ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
+        ->whereNull('tasks.deleted_at')
+        ->whereColumn('contract_has_tasks.task_id', '!=', 'tasks.task_id')
+        ->select('contract_has_tasks.*', 'contracts.contract_id', 'contract_has_tasks.contract_id', 'contract_has_tasks.task_id')
+        ->get();
 
+
+        $contracts_without_task = Contract::leftJoin('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
+        ->whereNull('contract_has_tasks.task_id')
+        ->get();
+// Convert the collection to JSON
+
+
+       // dd($contracts_task_s);
 
         $task_budget_it_operating = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_operating');
         $task_budget_it_investment = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_investment');
@@ -10971,6 +11178,7 @@ foreach ($project->main_task as $tasksubmain) {
 
         // dd($projectDetails);
         return view('app.projects.tasks.editsub', compact(
+            'contracts_without_task',
             'projectDetails',
             'files',
             'taskcon',
@@ -11316,8 +11524,9 @@ foreach ($project->main_task as $tasksubmain) {
                     //$taskcon->task_id = $task->task_id;
                     // Set other properties of $taskcon as needed
                     // หลังจากปรับปรุงข้อมูลเสร็จแล้ว ให้ใช้ back() เพื่อกลับหน้าเดิม
-                    //return redirect()->route('project.task.view',['project' => $project->hashid, 'task' => $task->hashid]);
-                    return redirect()->route('project.view', $project->hashid);
+                    return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
+                   // return redirect()->route('project.task.show', $project->hashid, $task->hashid)->with('success', 'Task updated successfully');
+
                 } else {
                     // If $taskcon is not null, you can safely set its properties
                     $taskcon->task_id = $task->task_id;
@@ -11534,7 +11743,7 @@ foreach ($project->main_task as $tasksubmain) {
 
 
                 // dd($task);
-                return redirect()->route('project.view', $project->hashid);
+                return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
             }
 
             // Create a new Taskcon object
@@ -11545,8 +11754,8 @@ foreach ($project->main_task as $tasksubmain) {
 
 
             // If both the Project and Taskcon saved successfully, redirect to project.inde
+            return redirect()->route('project.task.show',['project' => $project->hashid, 'task' => $task->hashid]);
 
-            return redirect()->route('project.view', $project->hashid);
         }
 
 

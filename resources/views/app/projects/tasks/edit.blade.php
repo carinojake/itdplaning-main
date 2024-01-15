@@ -201,8 +201,8 @@
 
 
                                               ไม่เกิน
-                                                {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }}
-                                                บาท                                              </div>
+                                              {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating,2) }}
+                                              บาท                                              </div>
                                             <div class="col-4">
                                                 <label for="task_budget_it_investment"
                                                     class="form-label">{{ __('งบดำเนินงาน') }}</label>
@@ -220,7 +220,7 @@
 
 
                                               ไม่เกิน
-                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }}
+                                                {{ number_format($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment,2) }}
                                                 บาท
                                             </div>
 
@@ -239,7 +239,7 @@
 
 
                                                ไม่เกิน
-                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility+$sum_task_refund_budget_gov_utility ) }}
+                                                {{ number_format($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility,2) }}
                                                 บาท
                                             </div>
                                         </div>
@@ -455,14 +455,14 @@
                     var budgetGovUtility = $("#task_budget_gov_utility").val();
 
          if (fieldId === "task_budget_it_investment") {
-             max = parseFloat({{$request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment}});
+             max = parseFloat({{$request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment}});
              if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
 
 
             } else if (fieldId === "task_budget_it_operating") {
-             max = parseFloat({{$request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating}});
+             max = parseFloat({{$request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating}});
              if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
                     $("#task_budget_it_operating").val('');
                 }
@@ -470,7 +470,7 @@
 
 
             } else if (fieldId === "task_budget_gov_utility") {
-             max = parseFloat({{$request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility}});
+             max = parseFloat({{$request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility}});
              if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
             }
@@ -501,8 +501,62 @@
             utility: parseFloat('{{ $task->task_budget_gov_utility }}')
         };
         console.log( minValues);
+        function numberFormat(number) {
+        return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+    function validateBudget(fieldId, enteredValue) {
+            var oldValue = oldValues[fieldId];
+            if (enteredValue < oldValue) {
+                console.log(fieldId + ":", enteredValue);
+                console.log("old" + fieldId + ":", oldValue);
+                $('#' + fieldId).addClass('is-invalid');
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้11'); // "Warn not to do so."
+                formIsValid = false;
+                invalidFieldId = fieldId; // Track the invalid field
+            } else {
+                $('#' + fieldId).removeClass('is-invalid');
+                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้22');
+                if (fieldId === invalidFieldId) {
+                    // If the current field was the one that caused the form to be invalid
+                    invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
+                }
+            }
+        }
+
+        // Check the budget amount entered when data is input
+        $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
+            formIsValid = true; // Reset the form validity state on new input
+            invalidFieldId = ''; // Reset the invalid field tracking
+
+            validateBudget('budget_it_operating', parseFloat($("#budget_it_operating").val().replace(/,/g, "")) || 0);
+            validateBudget('budget_it_investment', parseFloat($("#budget_it_investment").val().replace(/,/g, "")) || 0);
+            validateBudget('budget_gov_utility', parseFloat($("#budget_gov_utility").val().replace(/,/g, "")) || 0);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Form submission handler
+
+
+
+
+
+
+
+
+
+
         $('#formId').on('submit', function(e) {
             e.preventDefault();
 
@@ -515,6 +569,19 @@
                 var fieldId = $(this).attr('id');
                 var budgetType = fieldId.replace('task_budget_', ''); // e.g., 'it_operating'
                 var min = minValues[budgetType];
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 if (current > min) {
                     // Add error class and set the flag

@@ -974,9 +974,9 @@ $value = 0;
                                                                             <span class="text-danger">*</span>
                                                                             {{ Form::select('contract_type', \Helper::taskconrounds(), null, ['class' => ' js-example-basic-single', 'placeholder' => 'งวด...', 'id' => 'rounds', 'name' => 'change']) }}
                                                                             <div id="tasksContainer"></div>
-                                                                            <div class="invalid-feedback">
+                                                                            {{-- <div class="invalid-feedback">
                                                                                 {{ __(' ') }}
-                                                                            </div>
+                                                                            </div> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1412,17 +1412,14 @@ $value = 0;
                     });
 
                     $("#total_pa_budget").val(totalRefund_pa.toFixed(2));
+                    $("#contract_cn_budget").val(totalRefund_pa.toFixed(2));
                 }
 
                 $(document).ready(function() {
                     budgetFields_pa.forEach(function(costField) {
-                        $("#" + costField).on("input", calculateRefund_pa);
+                        $("#" + costField).on("change", calculateRefund_pa);
                     });
                 });
-
-
-
-
             </script>
 
 
@@ -1433,7 +1430,7 @@ $value = 0;
 
 
                     // Show the fields when a value is entered in task_cost_it_operating
-                    $("#contract_pa_budget").on("input", function() {
+                    $("#contract_pa_budget").on("change", function() {
                         if ($(this).val() != '') {
                             $("#rounds_form").show();
                         } else {
@@ -1486,7 +1483,7 @@ $value = 0;
 
                 $(document).ready(function() {
                     costFields.forEach(function(costField, index) {
-                        $("#" + costField).on("input", calculateRefund);
+                        $("#" + costField).on("change", calculateRefund);
                     });
                 });
             </script>
@@ -1878,6 +1875,22 @@ $value = 0;
 
             <script>
                 $(document).ready(function() {
+    function calculateInstallmentAmounts() {
+        var totalPA = parseFloat($('#contract_pa_budget').val().replace(/,/g, '')) || 0;
+        $('#tasksContainer .row').each(function() {
+            var percentage = parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
+            var installmentp = (totalPA * percentage) / 100;
+            $(this).find('[name$="[taskbudget]"]').val(installmentp.toFixed(2));
+        });
+    }
+
+    $('#tasksContainer').on('input', '[name$="[taskbudget_percentage]"]', calculateInstallmentAmounts);
+     // Initial calculation on page load
+     calculateInstallmentAmounts();
+
+
+
+
                     $('#rounds').change(function() {
                         var rounds = $(this).val();
                         $('#tasksContainer').empty(); // clear the container
@@ -1891,21 +1904,29 @@ $value = 0;
                         for (var i = 0; i < rounds; i++) {
                             var content = `
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">ชื่องวด ${i + 1} &nbsp: &nbsp</label>
                             <input class="form-control" type="text" name="tasks[${i}][task_name]" value="งวด ${i + 1}">
                         </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label">ร้อยละ เงินงวด  ${i + 1} &nbsp: &nbsp</label>
+                            <input type="text" name="tasks[${i}][taskbudget_percentage]" id="tasks[${i}][taskbudget_percentage]" class="form-control custom-input numeral-mask expenses"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
+                            <div class="invalid-feedback">ระบุ ร้อยละ  เงินงวด</div>
+
+                        </div>
+
                         <div class="col-md-3">
                             <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
-                            <input type="text" name="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
+                            <input type="text" name="tasks[${i}][taskbudget]" id="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
                             <div class="invalid-feedback">ระบุเงินงวด</div>
 
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">งวด ${i + 1} วันที่เริ่มต้น </label>
                             <input type="text" class="form-control datepickerop" id="start_date_${i}" name="tasks[${i}][start_date]">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">งวด ${i + 1} วันที่สิ้นสุด </label>
                             <input type="text" class="form-control datepickeropend" id="end_date_${i}" name="tasks[${i}][end_date]">
                         </div>
@@ -2020,7 +2041,7 @@ $value = 0;
 
 
                     // When an expense input changes, update the total and check against the budget
-                    $(document).on('input', '.expenses', function() {
+                    $(document).on('change', '.expenses', function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
                         var sum = 0;
                         var tasksContainer = $('#tasksContainer');
@@ -2028,7 +2049,7 @@ $value = 0;
                            // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
         var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
         if (value < 0) {
-            $(this).val(''); // รีเซ็ตค่าถ้าติดลบ
+            $(this).val(''); // รีเซ็ตค่าถ้าติดลบ  parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
             value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
         }
         return value
@@ -2043,18 +2064,25 @@ $value = 0;
                             return a + b;
                         }, 0);
 
+
+                        console.log(sum.toFixed(2)+"-"+inputs[i]);
+
                         // Calculate the remaining budget after each installment
                         var remainingBudget = contract_pa_budget;
                         for (var i = 0; i < inputs.length; i++) {
-                            remainingBudget -= inputs[i];
+                            remainingBudget = remainingBudget - inputs[i];
+                            console.log(remainingBudget.toFixed(2)+"-"+inputs[i]);
 
-                            if (remainingBudget < 0) {
+
+                            if (remainingBudget.toFixed(2) < 0) {
    // วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
    $('.expenses').each(function() {
             if (parseFloat($(this).val()) < 0) {
                 $(this).val('');
             }
         });
+
+        console.log(remainingBudget);
 
                                 // If the remaining budget after any installment is negative, show an error
                                 Swal.fire({
@@ -2091,7 +2119,9 @@ $value = 0;
                         }
 
 
-
+                        if (Math.abs(remainingBudget) < 0.01) {
+        remainingBudget = 0;
+    }
                             $('#expenses_sum').val(sum.toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
@@ -2213,6 +2243,11 @@ $value = 0;
         var budgetUsed = parseFloat($('#budget-used').val().replace(/,/g, "")) || 0;
         var remainingBudget = budgetUsed - totalInstallments;
 
+           // ใช้ Math.abs() เพื่อจัดการกับค่าที่ใกล้เคียง 0 และปัดเศษทศนิยม
+    if (Math.abs(remainingBudget) < 0.01) {
+        remainingBudget = 0;
+    }
+
         $('#expenses_sum').val(totalInstallments.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
@@ -2228,7 +2263,7 @@ $value = 0;
     }
 
     // ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์เงินงวด
-    $(document).on('input', '.installment', function() {
+    $(document).on('change', '.installment', function() {
         checkTotalAgainstBudget();
     });
 
@@ -2239,6 +2274,9 @@ $value = 0;
         checkTotalAgainstBudget();
     });
                 });
+
+
+
             </script>
 
 

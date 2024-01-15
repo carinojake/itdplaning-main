@@ -101,7 +101,7 @@ class Project extends Model
     }
     public function main_task()
     {
-        return $this->task()->whereNull('task_parent')
+        return $this->task()->whereNull('task_parent')->OrderBy('created_at');
 
       //->leftJoin('taskcons', 'tasks.task_id', '=', 'taskcons.task_id')
 

@@ -359,6 +359,8 @@
                         tree: true,
                         resize: true,
                         template: function(task) {
+
+
                             if (task.task_type == 2) {
                                 return '<span style="color:#560775;">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',

@@ -163,16 +163,20 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                     <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}  บาท </td>
                     <td></td>
                     <td>
-                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }} บาท
+                        <span style="color: red;">
+                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}    </span>บาท
 
                     </td>
                     <td>
 
-                      {{--   @if ($subtask->task_pay > 1)
-                        1-{{ number_format($subtask->task_pay,2) }} บาท
+                    @if ($subtask->task_pay > 1)
+                    <span class="text-warning">
+                        {{ number_format($subtask->task_pay,2) }} </span>บาท
                         @else
-                       2- {{ number_format($resultthItem->total_pay_con,2) }} บาท
-                        @endif --}}
+                        <span class="text-warning">
+                       2- {{ number_format($resultthItem->total_pay_con,2) }}    </span>บาท
+                        @endif
+
 
 
 

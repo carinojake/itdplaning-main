@@ -6,17 +6,17 @@
             type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">ภาพรวมทั้งหมด
             <!--{{ Helper::projectsType($project->project_type) }}{{ $project->reguiar_id }}-->
         </button>
-        @if ($project['budget_it_operating'] > 0)
+        @if ($project['budget_it_operating'] > 0 || $increaseData['increasedbudget_sum_budget_it_operating'] > 0)
             <button class="nav-link " id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
                 type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">งบกลาง
                 ICT</button>
         @endif
-        @if ($project['budget_it_investment'] > 0)
+        @if ($project['budget_it_investment'] > 0 || $increaseData['increasedbudget_sum_budget_it_investment'] > 0)
             <button class="nav-link " id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
                 type="button" role="tab" aria-controls="v-pills-messages"
                 aria-selected="false">งบดำเนินงาน</button>
         @endif
-        @if ($project['budget_gov_utility'] > 0)
+        @if ($project['budget_gov_utility'] > 0 || $budget['totol_increased_budget_gov_utility'] > 0)
             <button class="nav-link " id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
                 type="button" role="tab" aria-controls="v-pills-settings"
                 aria-selected="false">งบสาธารณูปโภค</button>
@@ -40,33 +40,39 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover"
                              data-bs-title="งบประมาณ" data-bs-content="
-                            @if ($project['budget_it_operating'] > 0)
+                            @if ($project['budget_it_operating'] > 0 )
 
 
-                                งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท
-                                @if ($increaseData['increasedbudget_sum_budget_it_operating'])
-                                <br>   งบกลาง ICT เพิ่ม : {{ number_format( $increaseData['increasedbudget_sum_budget_it_operating']),2 }} บาท
-
+                                งบกลาง ICT :  {{ number_format($project['budget_it_operating']),2 }} บาท<br>
+                                @if($increaseData['increasedbudget_sum_budget_it_operating'] > 0)
+                                งบกลาง ICT เพิ่ม : {{ number_format( $increaseData['increasedbudget_sum_budget_it_operating']),2 }} บาท
                                 <br> <b> รวมงบกลาง ICT : {{ number_format($project['budget_it_operating']+$increaseData['increasedbudget_sum_budget_it_operating']),2 }} บาท</b>
-                                @endif
-                                <br>
-                            @endif
-                            @if ($project['budget_it_investment'] > 0)
-                                งบดำเนินงาน :{{ number_format($project['budget_it_investment']),2 }} บาท
-                                @if ($increaseData['increasedbudget_sum_budget_it_investment'])
-                                <br>  งบดำเนินงาน เพิ่ม : {{number_format( $increaseData['increasedbudget_sum_budget_it_investment']),2}} บาท
-                              <br>  <b> รวมงบดำเนินงาน : {{ number_format($project['budget_it_investment']+$increaseData['increasedbudget_sum_budget_it_investment']),2 }} บาท</b>
 
-                                @endif
                                 <br>
+                                @endif
+
                             @endif
-                            @if ($project['budget_gov_utility'] > 0)
-                                งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท
-                                @if ($budget['totol_increased_budget_gov_utility'])
-                              <br>   งบสาธารณูปโภค เพิ่ม : {{ number_format($budget['totol_increased_budget_gov_utility']),2 }} บาท
-                                <br>  <b> รวมงบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']+ $budget['totol_increased_budget_gov_utility']),2 }} บาท</b>
-                                @endif
+                            @if ($project['budget_it_investment'] > 0 )
+                                งบดำเนินงาน :{{ number_format($project['budget_it_investment']),2 }} บาท<br>
+                                @if($increaseData['increasedbudget_sum_budget_it_investment'] > 0)
+                                 งบดำเนินงาน เพิ่ม : {{number_format( $increaseData['increasedbudget_sum_budget_it_investment']),2}} บาท
+                                <br>  <b> รวมงบดำเนินงาน : {{ number_format($project['budget_it_investment']+$increaseData['increasedbudget_sum_budget_it_investment']),2 }} บาท</b>
+
+
                                 <br>
+                                @endif
+
+                            @endif
+                            @if ($project['budget_gov_utility'] > 0 )
+                                งบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']),2 }} บาท
+                                @if($budget['totol_increased_budget_gov_utility'] > 0)
+                                 งบสาธารณูปโภค เพิ่ม : {{ number_format($budget['totol_increased_budget_gov_utility']),2 }} บาท
+                              <br>  <b> รวมงบสาธารณูปโภค : {{ number_format($project['budget_gov_utility']+ $budget['totol_increased_budget_gov_utility']),2 }} บาท</b>
+
+                              <br>
+                              @endif
+
+
                             @endif
                             " data-bs-trigger="hover focus">
 
@@ -94,14 +100,17 @@
                              data-bs-placement="bottom"
                              data-bs-custom-class="custom-popover-success"
                              data-bs-title="งบประมาณ" data-bs-content="
-                             @if ($project['budget_it_operating'] > 0)
-                             งบกลาง ICT :  {{ number_format( $budget['budget_total_cost_op'], 2) }} บาท <br>
+                             @if ($project['budget_it_operating'] > 0 || $increaseData['increasedbudget_sum_budget_it_operating'] > 0)
+                          {{--    งบกลาง ICT :  {{ number_format( $budget['budget_total_cost_op'], 2) }} บาท <br> --}}
+                             งบกลาง ICT :   {{ number_format( $budget['totol_operating_balance'], 2) }} บาท  <br>
                          @endif
-                         @if ($project['budget_it_investment'] > 0)
-                             งบดำเนินงาน :{{ number_format( $budget['budget_total_cost_in'], 2) }} บาท <br>
+                         @if ($project['budget_it_investment'] > 0 || $increaseData['increasedbudget_sum_budget_it_investment'] > 0)
+                         {{--     งบดำเนินงาน :{{ number_format( $budget['budget_total_cost_in'], 2) }} บาท <br> --}}
+                                งบดำเนินงาน :{{ number_format( $budget['totol_investment_balance'], 2) }} บาท <br>
                          @endif
-                         @if ($project['budget_gov_utility'] > 0)
-                             งบสาธารณูปโภค : {{ number_format( $budget['budget_total_cost_ut'], 2) }} บาท <br>
+                         @if ($project['budget_gov_utility'] > 0 || $increaseData['increasedbudget_sum_budget_gov_utility'] > 0)
+                            {{--  งบสาธารณูปโภค : {{ number_format( $budget['budget_total_cost_ut'], 2) }} บาท <br> --}}
+                                งบสาธารณูปโภค : {{ number_format( $budget['totol_gov_utility_balance'], 2) }} บาท <br>
                          @endif
                       {{--    total_task_budget : {{ number_format( $budget['total_task_budget'], 2) }} บาท <br>
 
@@ -114,9 +123,11 @@
 
                                 <div class="fs-4 fw-semibold text-success">
                                     @if ( $budget['project_type'] == 1)
-                                    {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }}
+                                   {{--  {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }} --}}
+                                    {{ number_format(floatval($budget['totol_op_in_ut_balance']), 2) }}
+
                                     @elseif( $budget['project_type'] == 2 )
-                                    {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }}
+                                 {{--    {{ number_format(floatval( $budget['total']-$budget['total_cost']), 2) }} --}}
 
                                     {{-- {{ number_format(floatval( $budget['budget_total_task_budget_end']), 2) }} --}}
 
@@ -212,7 +223,7 @@
 
                              "
 
-                        @if ($budget['total_refund_pa_budget_it_operating'] > 0)
+                        @if ($budget['total_refund_pa_budget_it_operating'] > 0 )
 
                              @if($budget['budget_it_operating']<=$budget['op_totol_task_budget_it_operating'] ||$budget['budget_it_operating']===$budget['op_totol_task_budget_it_operating'] || $budget['total_refund_pa_budget_it_operating'] > 1)
 {{--                              งบกลาง ICT  :    {{   number_format(($budget['budget_it_operating']+$budget['op_total_task_refund_pa_budget_3'])-$budget['op_totol_task_budget_it_operating'],2)}} บาท
@@ -228,7 +239,7 @@
                              @endif
 
 
-                             @if ($budget['in_totol_task_budget_it_investment'] > 0)
+                          @if ($budget['total_refund_pa_budget_it_investment'] > 0)
                             @if($budget['budget_it_investment']<$budget['in_totol_task_budget_it_investment'] ||$budget['budget_it_investment']===$budget['in_totol_task_budget_it_investment']  )
 
 {{--                             งบดำเนินงาน :   {{ number_format(($budget['budget_it_investment']-$budget['in_totol_task_budget_it_investment'])+ $budget['in_total_task_refund_pa_budget_3'],2)}} บาท <br>
@@ -247,7 +258,7 @@
                                 @endif
 
                              @endif
-                         @if ($budget['ut_totol_task_budget_gov_utility'])
+                         @if ($budget['total_refund_pa_budget_gov_utility'])
                              @if($budget['budget_gov_utility']<$budget['ut_totol_task_budget_gov_utility'] ||$budget['budget_gov_utility']===$budget['ut_totol_task_budget_gov_utility']  )
                              {{-- <p>
                              งบสาธารณูปโภค :    {{  number_format(($budget['budget_gov_utility']-$budget['ut_totol_task_budget_gov_utility'])+ $budget['ut_total_task_refund_pa_budget_3'],2)}} บาท <br>
@@ -273,14 +284,16 @@
                                                     @if ( $budget['project_type'] == 1 || $budget['project_type'] == 2)
                                     @if($budget['total']>$budget['total_op_totol_task_budget_it_op_in_ut_root'] || $budget['total']===$budget['total_task_budget'])
 {{--                               55555    {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
- --}}                              {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+ --}}
+
+                        {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refund_budget'])-  $budget['totalbudget_budget'], 2)}}
 
 
                                   @elseif($budget['total']<$budget['total_op_totol_task_budget_it_op_in_ut_root']  )
                           {{--         1- {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
                                 <br>  2-  {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                 <br>    3-  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} --}}
-                                    {{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }}
+                                    {{ number_format($budget['total_refund_pa_budget']- $budget['totalbudget_budget'], 2) }}
                              {{--   333    {{ number_format($budget['budget_total_refund_pa_budget_end']-  $budget['totalbudget_budget'], 2) }} --}}
 
                                @elseif($budget['budget_total_refund_pa_budget_end']>0)
@@ -289,10 +302,10 @@
                                   {{--  1-1 --}}
 
 
-                                      {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
+                                   2   {{ number_format(($budget['total_refund_pa_budget']+ $budget['total_task_refun_budget'])-  $budget['totalbudget_budget'], 2)}}
 
                                      @elseif($budget['total'] )
-                                 {{ number_format(floatval($budget['totalrefund_top']), 2) }}
+                              3   {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                      @endif
                                    {{--  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
  --}}
@@ -548,11 +561,11 @@
                                         {{ number_format(floatval($budget['budget_it_operating']- $budget['budget_no1_op_totol_task_budget_it_operating'] ), 2) }}
                                         @endif
  --}}
-                                        1<p> {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+                                        <p> {{ number_format(floatval(($budget['budget_it_operating']+ $increaseData['increasedbudget_sum_budget_it_operating']+$budget['totalBudgetItOperating']+$budget['total_refund_pa_budget_it_operating'])- $budget['budget_no1_op_totol_task_budget_it_operating']- $budget['totalBudgetItOperating']), 2) }}
 
 
                                         @elseif( $budget['project_type'] == 2)
-                                       2 {{ number_format(floatval($budget['budget_total_cost_op']), 2) }}
+                                        {{ number_format(floatval(($budget['budget_it_operating']+ $increaseData['increasedbudget_sum_budget_it_operating']+$budget['totalBudgetItOperating']+$budget['total_refund_pa_budget_it_operating'])- $budget['budget_no1_op_totol_task_budget_it_operating']- $budget['totalBudgetItOperating']), 2) }}
                                         @endif
                                     </div>
                                     <div>
@@ -824,7 +837,7 @@
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
-                                        {{ number_format(floatval( $budget['budget_total_cost_in']), 2) }}
+                                        {{ number_format(floatval( ($budget['budget_it_investment']+ $increaseData['increasedbudget_sum_budget_it_investment']+$budget['total_refund_pa_budget_it_investment'])-$budget['budget_no1_in_totol_task_budget_it_investment']+ $budget['totalBudgetItInvestment']), 2) }}
 {{--                                         {{ number_format(floatval($is_refund_mm_pr), 2) }}
  --}}{{--                                       is  {{ number_format(floatval(($project['budget_it_investment']-(($budget['in_totol_task_budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))), 2) }}
  --}}                                 {{--    @if($project['budget_gov_utility'] > 1)
@@ -1185,7 +1198,7 @@
                                         href="#multiCollapseExample1" role="button" aria-expanded="false"
                                         aria-controls="multiCollapseExample1">
                                         <div class="fs-4 fw-semibold btn btn-success">
-                                            {{ number_format(floatval($budget['budget_total_cost_ut']), 2) }}
+                                            {{ number_format(floatval(($budget['budget_gov_utility']+ $increaseData['increasedbudget_sum_budget_gov_utility']+$budget['total_refund_pa_budget_gov_utility'])-$budget['budget_no1_ut_totol_task_budget_gov_utility']), 2) }}
                                             {{-- {{ number_format(floatval($ut_refund_mm_pr), 2) }} --}}
 
 {{--

@@ -154,20 +154,22 @@
                                             <div class="row">
                                                 @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                 <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
-                                                    <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+                                                <div class="col-3">{{ number_format(($projectDetails->budget_it_operating+$increasedData->first()->total_it_operating+ $sum_task_refund_budget_it_operating)-($sum_task_budget_it_operating ), 2) }} บาท</div>
+
+
 
                                                     @endif
                                             </div>
                                             <div class="row">
                                                 @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                                 <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
-                                                    <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                                <div class="col-3">{{ number_format(($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment+ $sum_task_refund_budget_it_investment)-($sum_task_budget_it_investment ), 2) }} บาท</div>
                                                 @endif
                                             </div>
                                             <div class="row">
                                                 @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
                                                 <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                    <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                                <div class="col-3">{{ number_format(($projectDetails->budget_gov_utility+$increasedData->first()->total_gov_utility+ $sum_task_refund_budget_gov_utility)-($sum_task_budget_gov_utility ), 2) }} บาท</div>
                                                 @endif
                                             </div>
                                         </div>
@@ -306,11 +308,11 @@
                                                 <label for="taskcon_mm_name"
                                                     class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
 
-
+                                                    <span class="text-danger">*</span>
                                                 <input type="text" class="form-control"
-                                                    id="taskcon_mm_name" name="taskcon_mm_name"  value= {{ session('contract_mm_name') }}>
+                                                    id="taskcon_mm_name" name="taskcon_mm_name" required value= {{ session('contract_mm_name') }} >
                                                 <div class="invalid-feedback">
-                                                    {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                    {{ __('ชื่อ MM / ชื่อบันทึกข้อความ *') }}
                                                 </div>
                                             </div>
 
@@ -318,14 +320,15 @@
 
                                                 <label for="task_mm_budget"
                                                     class="form-label">{{ __('วงเงินที่ขออนุมัติ') }}</label>
-                                                <input type="text" placeholder="0.00" step="0.01"
+                                                    <span class="text-danger">*</span>
+                                                <input required type="text" placeholder="0.00" step="0.01"
                                                      data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                     class="form-control numeral-mask"
                                                     id="task_mm_budget" name="task_mm_budget"
                                                     min="0"  value={{ session('contract_mm_budget') }} >
 
                                                 <div class="invalid-feedback">
-                                                    {{ __('mm') }}
+                                                    {{ __('วงเงินที่ขออนุมัติ') }}
                                                 </div>
 
 
@@ -454,19 +457,20 @@
                                                 <div class="row">
                                                     @if ($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating > 0)
                                                     <div class="col-3">{{ __('งบกลาง ICT ') }}</div>
-                                                        <div class="col-3">{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท</div>
+                                                    <div class="col-3">{{ number_format(($projectDetails->budget_it_operating+$increasedData->first()->total_it_operating+ $sum_task_refund_budget_it_operating)-($sum_task_budget_it_operating ), 2) }} บาท</div>
+
                                                     @endif
                                                 </div>
                                                 <div class="row">
                                                     @if ($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment > 0)
                                                     <div class="col-3">{{ __('งบดำเนินงาน') }}</div>
-                                                        <div class="col-3">     {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท</div>
+                                                    <div class="col-3">{{ number_format(($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment+ $sum_task_refund_budget_it_investment)-($sum_task_budget_it_investment ), 2) }} บาท</div>
                                                     @endif
                                                 </div>
                                                 <div class="row">
                                                     @if ($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility > 0)
                                                     <div class="col-3">{{ __('ค่าสาธารณูปโภค') }}</div>
-                                                        <div class="col-3">{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }}บาท</div>
+                                                    <div class="col-3">{{ number_format(($projectDetails->budget_gov_utility+$increasedData->first()->total_gov_utility+ $sum_task_refund_budget_gov_utility)-($sum_task_budget_gov_utility ), 2) }} บาท</div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -653,7 +657,8 @@
 
                                 </label>
                                 {{ Form::select('task_parent_sub', \Helper::contractType(), '99', ['class' => 'form-control', 'placeholder' => 'เลือกประเภท...', 'id' => 'contract_type']) }}
-
+                                <input type="hidden" class="form-check-input" type="radio" name="task_budget_no"
+                                id="task_budget_no" value="1" checked>
                             </div>
                               {{--   <div class="row">
                                     <h4>งบประมาณ</h4>
@@ -868,25 +873,26 @@ $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
         if (fieldId === "task_budget_it_investment") {
 
-            max = parseFloat({{ $request->budget_it_investment - $sum_task_budget_it_investment+ $sum_task_refund_budget_it_investment }});
+            max = parseFloat({{ ($request->budget_it_investment +$increasedData->first()->total_it_investment+ $sum_task_refund_budget_it_investment)-($sum_task_budget_it_investment)  }});
             if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
 
         }
+       // {{ ($projectDetails->budget_it_investment+$increasedData->first()->total_it_investment+ $sum_task_refund_budget_it_investment)-($sum_task_budget_it_investment)  }}
 
 
         else if (fieldId === "task_budget_gov_utility") {
-            max = parseFloat({{ $request->budget_gov_utility - $sum_task_budget_gov_utility+ $sum_task_refund_budget_gov_utility }});
+            max = parseFloat({{ ($request->budget_gov_utility +$increasedData->first()->total_gov_utility+ $sum_task_refund_budget_gov_utility)-($sum_task_budget_gov_utility)  }});
             if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
             }
         } else if (fieldId === "task_budget_it_operating") {
+            max = parseFloat({{ ($request->budget_it_operating +$increasedData->first()->total_it_operating+ $sum_task_refund_budget_it_operating)-($sum_task_budget_it_operating)  }});
             if (budgetItOperating === "0" || budgetItOperating === '' ||  parseFloat(budgetItOperating) < -0) {
                     $("#task_budget_it_operating").val('');
                 }
 
-            max = parseFloat({{ $request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating }});
         }
 
         var current = parseFloat($(this).val().replace(/,/g , ""));

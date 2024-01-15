@@ -845,7 +845,7 @@
                                                                                     class="form-control"
                                                                                     id="expenses_delsum"
                                                                                     name="expenses_delsum" readonly>
-                                                                                    <div class="invalid-feedback">
+                                                                                    <div id="expenses_delsum_feedback"class="invalid-feedback">
                                                                                         {{ __('เงินงวดทั้งหมด รวมกันเท่ากับ PA') }}
                                                                                     </div>
                                                                             </div>
@@ -2030,8 +2030,8 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
     if (remainingBudget !== 0 ) {
         $('#expenses_delsum').addClass('is-invalid');
 
-        // Display feedback to the user
-        $('.invalid-feedback').text('กรุณาตรวจสอบงวดและเงินงวดให้ถูกต้อง');
+        // Display feedback to the user   $('#' + fieldId + '_feedback').text('ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
+        $('#' + fieldId + '_feedback').text('กรุณาตรวจสอบงวดและเงินงวดให้ถูกต้อง');
     } else {
         // If everything checks out, remove validation classes and proceed to submit the form
         $('#expenses_delsum').removeClass('is-invalid');
