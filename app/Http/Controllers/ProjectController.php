@@ -8197,7 +8197,7 @@ dd($resultthItem); */
 
 
 
-  //  dd($budget_task);
+   // dd($budget_task);
 
 
 
@@ -8372,7 +8372,7 @@ dd($resultthItem); */
 
         ($request = Project::find($id));
 
-        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+/*         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
 
@@ -8383,6 +8383,61 @@ dd($resultthItem); */
         // Sum the task_budget_gov_utility for all tasks
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+
+ */
+
+
+
+
+
+        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+
+        $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_type_it_operating = $tasks->where('task_refund_budget_type', '=', 1)
+        ->sum('task_budget_it_operating');
+        $sum_task_budget_type_it_operating_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_operating');
+// Sum the task_budget_it_investment for all tasks
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+
+        $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('task_budget_it_investment', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+
+        $sum_task_refund_budget_type_it_investment = $tasks->whereNull('task_parent')->where('task_refund_budget_type', '=', 1)->sum('task_budget_it_investment');
+        $sum_task_budget_type_it_investment_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_investment');
+        // Sum the task_budget_gov_utility for all tasks
+        $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
+        $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_type_gov_utility = $tasks->where('task_refund_budget_type', '=', 1)->sum('task_budget_gov_utility');
+        $sum_task_budget_type_gov_utility_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_gov_utility');
+
+
+
+
+    $budget_task['sum_task_budget_it_operating'] = $sum_task_budget_it_operating;
+    $budget_task['sum_task_budget_it_investment'] = $sum_task_budget_it_investment;
+    $budget_task['sum_task_budget_gov_utility'] = $sum_task_budget_gov_utility;
+
+    $budget_task['sum_task_budget_type_it_operating_no'] = $sum_task_budget_type_it_operating_no;
+    $budget_task['sum_task_budget_type_it_investment_no'] = $sum_task_budget_type_it_investment_no;
+    $budget_task['sum_task_budget_type_gov_utility_no'] = $sum_task_budget_type_gov_utility_no;
+    $budget_task['sum_task_budget_type_it_oiu'] = $sum_task_budget_type_it_operating_no+$sum_task_budget_type_it_investment_no+$sum_task_budget_type_gov_utility_no;
+
+    $budget_task['sum_task_refund_budget_it_operating'] = $sum_task_refund_budget_it_operating;
+    $budget_task['sum_task_refund_budget_it_investment'] = $sum_task_refund_budget_it_investment;
+    $budget_task['sum_task_refund_budget_gov_utility'] = $sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_oiu'] = $sum_task_refund_budget_it_operating+$sum_task_refund_budget_it_investment+$sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_type_it_operating'] = $sum_task_refund_budget_type_it_operating;
+    $budget_task['sum_task_refund_budget_type_it_investment'] = $sum_task_refund_budget_type_it_investment;
+    $budget_task['sum_task_refund_budget_type_gov_utility'] = $sum_task_refund_budget_type_gov_utility;
+
+
+
+   //dd($budget_task);
+
+
+
+
 
         //dd( $sum_task_refund_budget_it_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
 
@@ -8509,10 +8564,10 @@ dd($resultthItem); */
             // คุณสามารถปรับแต่งตามความต้องการของแอปพลิเคชันได้
         }
 
-
-
-        //       dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
+     //  dd($sum_task_refund_budget_gov_utility);
+             //  dd ($request,$contracts, $project,$tasks,$task, $sum_task_budget_it_operating, $sum_task_budget_it_investment, $sum_task_budget_gov_utility);
         return view('app.projects.tasks.createcn', compact(
+            'budget_task',
             'increasedData',
             'request',
             'contracts',
@@ -8908,7 +8963,7 @@ dd($resultthItem); */
         $contractText = ''; // กำหนดค่าเริ่มต้นให้กับ $contractText
 
 
-        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+/*         $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
         $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
 
@@ -8920,7 +8975,60 @@ dd($resultthItem); */
         $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
 
-        //dd( $sum_task_refund_budgt_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
+  */       //dd( $sum_task_refund_budgt_operating,$sum_task_refund_budget_it_investment,$sum_task_refund_budget_gov_utility);
+
+
+
+//16012567
+        $sum_task_budget_it_operating = $tasks->whereNull('task_parent')->sum('task_budget_it_operating');
+
+        $sum_task_refund_budget_it_operating = $tasks->whereNull('task_parent')->where('task_budget_it_operating', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_type_it_operating = $tasks->where('task_refund_budget_type', '=', 1)
+        ->sum('task_budget_it_operating');
+        $sum_task_budget_type_it_operating_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_operating');
+// Sum the task_budget_it_investment for all tasks
+        $sum_task_budget_it_investment = $tasks->whereNull('task_parent')->sum('task_budget_it_investment');
+
+        $sum_task_refund_budget_it_investment = $tasks->whereNull('task_parent')->where('task_budget_it_investment', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+
+        $sum_task_refund_budget_type_it_investment = $tasks->whereNull('task_parent')->where('task_refund_budget_type', '=', 1)->sum('task_budget_it_investment');
+        $sum_task_budget_type_it_investment_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_it_investment');
+        // Sum the task_budget_gov_utility for all tasks
+        $sum_task_budget_gov_utility = $tasks->whereNull('task_parent')->sum('task_budget_gov_utility');
+        $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('task_budget_gov_utility', '>', 1)->where('task_refund_pa_status', '=', 3)->sum('task_refund_pa_budget');
+        $sum_task_refund_budget_type_gov_utility = $tasks->where('task_refund_budget_type', '=', 1)->sum('task_budget_gov_utility');
+        $sum_task_budget_type_gov_utility_no = $tasks->where('task_budget_no', '=', 1)->wherenull('task_refund_budget_type')->sum('task_budget_gov_utility');
+
+
+
+
+    $budget_task['sum_task_budget_it_operating'] = $sum_task_budget_it_operating;
+    $budget_task['sum_task_budget_it_investment'] = $sum_task_budget_it_investment;
+    $budget_task['sum_task_budget_gov_utility'] = $sum_task_budget_gov_utility;
+
+    $budget_task['sum_task_budget_type_it_operating_no'] = $sum_task_budget_type_it_operating_no;
+    $budget_task['sum_task_budget_type_it_investment_no'] = $sum_task_budget_type_it_investment_no;
+    $budget_task['sum_task_budget_type_gov_utility_no'] = $sum_task_budget_type_gov_utility_no;
+    $budget_task['sum_task_budget_type_it_oiu'] = $sum_task_budget_type_it_operating_no+$sum_task_budget_type_it_investment_no+$sum_task_budget_type_gov_utility_no;
+
+    $budget_task['sum_task_refund_budget_it_operating'] = $sum_task_refund_budget_it_operating;
+    $budget_task['sum_task_refund_budget_it_investment'] = $sum_task_refund_budget_it_investment;
+    $budget_task['sum_task_refund_budget_gov_utility'] = $sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_oiu'] = $sum_task_refund_budget_it_operating+$sum_task_refund_budget_it_investment+$sum_task_refund_budget_gov_utility;
+
+    $budget_task['sum_task_refund_budget_type_it_operating'] = $sum_task_refund_budget_type_it_operating;
+    $budget_task['sum_task_refund_budget_type_it_investment'] = $sum_task_refund_budget_type_it_investment;
+    $budget_task['sum_task_refund_budget_type_gov_utility'] = $sum_task_refund_budget_type_gov_utility;
+
+
+
+  // dd($budget_task);
+
+
+
+
+
 
         $reguiar_id = $request->input('reguiar_id');
         if (!$reguiar_id) {
@@ -8990,8 +9098,8 @@ dd($resultthItem); */
             ->where('project_id', $id)
             //->orderBy('projects.project_fiscal_year', 'DESC')
             ->get();
-        //  dd($projectData);
-        $projectData = $projectData->map(function ($p) {
+        // dd($projectData);
+       /*  $projectData = $projectData->map(function ($p) {
             return [
                 'id' => $p->project_id,
                 'project_fiscal_year' => $p->project_fiscal_year,
@@ -9003,9 +9111,9 @@ dd($resultthItem); */
                 'budget_it_investment' => $p->budget_it_investment,
                 'budget_gov_utility' => $p->budget_gov_utility,
             ];
-        });
+        }); */
 
-
+       // dd($projectData);
 
         if ($task) {
             $task_sub = $task->subtask;
@@ -9129,12 +9237,13 @@ dd($resultthItem); */
 
        // dd($fiscalyear);
 
-
-        //dd($projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
+           // dd($budget_task);
+       // dd($projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
 
         //  dd($projectDetails,$tasks,$taskcons,$projectyear);
 
         return view('app.projects.tasks.createsubno', compact(
+            'budget_task',
             'increasedData',
             'fiscalyear',
             'request',
@@ -9388,6 +9497,9 @@ dd($resultthItem); */
         $taskcon_pay = $request->input('taskcon_pay') !== null ? (float) str_replace(',', '', $request->input('taskcon_pay')) : null;
         $task_refund_budget = $request->input('task_refund_budget') !== null ? (float) str_replace(',', '', $request->input('task_refund_budget')) : null;
         $task_refund_budget_left = $request->input('task_refund_budget_left') !== null ? (float) str_replace(',', '', $request->input('task_refund_budget_left')) : null;
+        $task_er_budget = $request->input('task_er_budget') !== null ? (float) str_replace(',', '', $request->input('task_er_budget')) : null;
+        $task_po_budget = $request->input('task_po_budget') !== null ? (float) str_replace(',', '', $request->input('task_po_budget')) : null;
+        $task_or_budget = $request->input('task_or_budget') !== null ? (float) str_replace(',', '', $request->input('task_or_budget')) : null;
 
         // $tasks = Task::where('project_id', $id)->get(); // Fetch all tasks for the project
 
@@ -9491,6 +9603,8 @@ dd($resultthItem); */
 
         $task->task_refund_pa_status = 1;
 
+        $task->task_er_budget = $task_er_budget ?? null;
+
 
         $task->task_parent_sub_refund_pa_status = 1 ?? null;
         $task->task_parent_sub_budget = $task_budget_gov_utility + $task_budget_it_operating + $task_budget_it_investment ?? null;
@@ -9500,12 +9614,15 @@ dd($resultthItem); */
         $task->task_refund_budget_type = $request->input('task_refund_budget_type');
         $task->task_budget_no = $request->input('task_budget_no');
 
-        $task->task_refund_budget = $task_refund_budget ?? null;
+
+
 
 
         if($task->task_refund_budget_type == 1){
+            $task->task_refund_budget = $task_refund_budget ?? null;
             $task->task_refund_budget_left = $task_refund_budget_left ?? null;
         }else{
+            $task->task_refund_budget = null;
             $task->task_refund_budget_left = null;
         }
         $refund = []; // กำหนดค่าเริ่มต้นของ $refund เป็นอาร์เรย์ว่างหรือตามโครงสร้างของข้อมูลที่คุณคาดหวัง
@@ -9540,7 +9657,7 @@ dd($resultthItem); */
        // dd($task->task_budget_it_operating,$refund, $taskRefundPaBudget,$total_refund,$refundItem);
 
 
-          dd($task);
+       //  dd($task);
         if ($task->save()) {
             //insert contract
             /*    if( $task->task_parent_sub= 2){

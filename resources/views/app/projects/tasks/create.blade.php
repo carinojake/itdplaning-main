@@ -395,7 +395,7 @@
                                                 ไม่เกิน
                                                 {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating,2) }}
                                                 บาท <br>
-
+                                                <div class="d-none">
                                                 @if($request->budget_it_operating - $sum_task_budget_it_operating > 0)
                                                 {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating ,2) }}
                                                 บาท <br>
@@ -404,11 +404,13 @@
                                                 @endif
 
                                                 @if($sum_task_refund_budget_it_operating)
+
                                                 งบกลาง ICT คืน {{ number_format($request->budget_it_operating - $sum_task_budget_it_operating+ $sum_task_refund_budget_it_operating,2) }} <br>
                                                 @endif
                                                 @if($increasedData->isNotEmpty() && $increasedData->first()->total_it_operating)
                                                 งบกลาง ICT เพิ่ม   {{ number_format($increasedData->first()->total_it_operating,2) }}
                                                 @endif
+                                                </div>
 
 
                                               <span id="password-error"> </span>
@@ -468,7 +470,7 @@
 
 
                                 </div>
-
+                             <div id="refundItemRow" class="d-none">
                                 <div class="col-md-2">
                                     <label for="budget_return_input" class="form-label">งบประมาณคืน</label>
                                     <input type="text" placeholder="0.00" class="form-control numeral-mask" id="budget_return_input" name="budget_return" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false">
@@ -498,15 +500,14 @@
                                         class="form-label">{{ __('task_refund_budget_type ') }}</label>
                                     <span class="text-danger"></span>
 
-                                    <input type="text" placeholder="0.00"
-                                    step="0.01"
-                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                    class="form-control numeral-mask"
+                                    <input type="text"
+                                        class="form-control"
                                         id="task_refund_budget_type"
                                         name="task_refund_budget_type"  readonly>
 
 
                                 </div>
+                             </div>
 
                                 <div class="d-none col-md-3 mt-3">
 
@@ -715,14 +716,56 @@
         var debt1 = {{ json_encode($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }};
         var debt2 = {{$increased['total_it_operating']}};
 
-        var result = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
-        console.log(result);
+        var result_operating = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
+        console.log(result_operating);
 
-        $("#task_refund_budget").val(result.debt1Paid);
+//        $("#task_refund_budget").val(result.debt1Paid);
 
-        $("#task_refund_budget_left").val(result.debt2Paid);
+  //      $("#task_refund_budget_left").val(result.debt2Paid);
+    });
+
+   // Event listener for input changes
+   $("#task_budget_it_investment").on("input", function() {
+            var budgetItInvestment = parseFloat($("#task_budget_it_investment").val().replace(/,/g, "")) || 0;
+
+            var totalRemainingBudget = budgetItInvestment ;
+
+            var debt1 = {{ json_encode($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) }};
+            var debt2 = {{$increased['total_it_investment']}};
+
+        var result_investment = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
+        console.log(result_investment);
+
+        $("#task_refund_budget").val(result_investment.debt1Paid);
+
+        $("#task_refund_budget_left").val(result_investment.debt2Paid);
+    });
+
+
+// Event listener for input changes
+$("#task_budget_gov_utility").on("input", function() {
+            var budgetGovUtility = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, "")) || 0;
+
+            var totalRemainingBudget = budgetGovUtility ;
+
+            var debt1 = {{ json_encode($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) }};
+            var debt2 = {{$increased['total_gov_utility']}};
+
+        var result_gov_utility = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
+        console.log(result_gov_utility);
+
+        $("#task_refund_budget").val(result_gov_utility.debt1Paid);
+
+        $("#task_refund_budget_left").val(result_gov_utility.debt2Paid);
     });
 });
+
+
+
+
+
+
+
 </script>
 
 
@@ -1004,8 +1047,10 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
     var budgetItInvestment_total = {{  $sum_task_budget_it_investment }};
     var budgetGovUtility_total = {{ $sum_task_budget_gov_utility }};
     var budgetItOperating_total = {{ $sum_task_budget_it_operating }};
+    var budget_sum_task_refund_budget_oiu = {{ $budget_task['sum_task_refund_budget_oiu'] }};
     // ... คล้ายๆ กันสำหรับตัวแปรอื่นๆ $request->budget_it_operating-1  < $sum_task_budget_it_operating
 
+    console.log(budget_sum_task_refund_budget_oiu);
 </script>
 
  <script>
@@ -1027,7 +1072,7 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
         console.log(fieldValue);
 
         if (fieldId === "task_budget_it_investment") {
-            if (  budgetItInvestmentMax  < fieldValue + budgetItInvestment_total) {
+            if (  budgetItInvestmentMax  < fieldValue + budgetItInvestment_total && budget_sum_task_refund_budget_oiu > 1) {
                 $("#task_refund_budget_type").val(1);
             } else {
                 $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
@@ -1035,7 +1080,7 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
         }
 
         else if (fieldId === "task_budget_it_operating") {
-        if (  budgetItOperatingMax  < fieldValue + budgetItOperating_total) {
+        if (  budgetItOperatingMax  < fieldValue + budgetItOperating_total && budget_sum_task_refund_budget_oiu > 1) {
                 $("#task_refund_budget_type").val(1);
             } else {
                 $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
@@ -1043,7 +1088,7 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
         }
 
         else if (fieldId === "task_budget_gov_utility") {
-        if (  budgetGovUtilityMax  < fieldValue + budgetGovUtility_total) {
+        if (  budgetGovUtilityMax  < fieldValue + budgetGovUtility_total && budget_sum_task_refund_budget_oiu > 1) {
                 $("#task_refund_budget_type").val(1);
             } else {
                 $("#task_refund_budget_type").val(0); // หรือค่าเริ่มต้นที่ควรจะเป็น
