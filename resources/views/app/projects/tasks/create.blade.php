@@ -147,57 +147,81 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
-                                <div class="col-2">{{ number_format($projectDetails->budget_it_operating, 2) }} บาท</div>   {{-- งบกลาง ICT --}}
+                                @if($request->budget_it_operating > 0)
+                                <div id='ICT' class="col-2">{{ __('งบกลาง ICT ') }}</div>
+                                <div id='ICT' class="col-2">{{ number_format($projectDetails->budget_it_operating, 2) }} บาท</div>   {{-- งบกลาง ICT --}}
+                                @endif
+                                @if($request->budget_it_investment > 0)
                                 <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
                                 <div class="col-2">{{ number_format($projectDetails->budget_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน --}}
+                                @endif
+                                @if($request->budget_gov_utility > 0)
                                 <div class="col-2">{{ __('งบค่าสาธารณูปโภค') }}</div>
                                 <div class="col-2">{{ number_format($projectDetails->budget_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค --}}
-
+                                @endif
                             </div>
-                            @if( $budget_task['sum_task_refund_budget_it_operating']||$budget_task['sum_task_refund_budget_it_investment']||$budget_task['sum_task_refund_budget_gov_utility']||$increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)  {{-- row --}}
+                     @if( $budget_task['sum_task_refund_budget_it_operating']||$budget_task['sum_task_refund_budget_it_investment']||$budget_task['sum_task_refund_budget_gov_utility']||$increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)  {{-- row --}}
                             <div class="row">
-                                @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
 
+
+                                @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+                                @if($request->budget_it_operating > 0)
                                 <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT เพิ่ม --}}
+                                @endif
+                                @if($request->budget_it_investment > 0)
                                 <div class="col-2">{{ __('งบดำเนินงาน เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน เพิ่ม --}}
+                                @endif
+                                @if($request->budget_gov_utility > 0)
                                 <div class="col-2">{{ __('งบค่าสาธารณูปโภค เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค เพิ่ม --}}
+                                @endif
                                 @endif
 
                             </div>
                             <hr width="200px"/>{{-- row --}}
                             <div class="row">
+                                @if($request->budget_it_operating > 0)
                                 <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
                                 <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_it_operating'] -$budget_task['sum_task_refund_budget_type_it_operating'], 2) }} </b> บาท</div> {{-- งบกลาง ICT คืน --}}
+                                @endif
+                                @if($request->budget_it_investment > 0)
                                 <div class="col-2">{{ __('งบดำเนินงาน คืน') }}</div>
                                 <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_it_investment']-$budget_task['sum_task_refund_budget_type_it_investment'], 2) }}</b> บาท</div> {{-- งบดำเนินงาน คืน --}}
+                                @endif
+                                @if($request->budget_gov_utility > 0)
                                 <div class="col-2">{{ __('งบค่าสาธารณูปโภค คืน') }}</div>
                                 <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_gov_utility']-$budget_task['sum_task_refund_budget_type_gov_utility'], 2) }} </b>บาท</div> {{-- งบค่าสาธารณูปโภค คืน --}}
-                                <hr width="200px"/>
-                            </div>  {{-- row --}}
-                            <div class="row">
-                                @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
-                                <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
-                                <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
-
-
-                                <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
-                                <div class="col-2"><b class=text-success>{{ number_format(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment) ,2) }}</b> บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
-
-
-                                <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
-                                <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
                                 @endif
+                                <hr width="200px"/>
+
+                            </div>  {{-- row --}}
 
 
-
-                        </div>
-                    </div>
                     @endif
-                            {{-- </div> ปิด--}}
+                    <div class="row">
+                        {{--                                 @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+                         --}}
+                         @if($request->budget_it_operating > 0)
+                          <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
+                                                        <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
+
+                                                        @endif
+                                                        @if($request->budget_it_investment > 0)
+                                                        <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
+                                                        <div class="col-2"><b class=text-success>{{ number_format(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment) ,2) }}</b> บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
+                                                        @endif
+                                                        @if($request->budget_gov_utility > 0)
+
+                                                        <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
+                                                        <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
+                                                        @endif
+                                                        {{--  @endif --}}
+                                                </div>
+                </div>     {{-- </div> ปิด--}}
+
+                <div class="callout callout-primary row mt-3">
                             <form method="POST" action="{{ route('project.task.create', $project) }}"
                             class="row needs-validation" enctype="multipart/form-data"
                             novalidate>
@@ -608,8 +632,30 @@
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+{{--
+
+ <script>
+                $(document).ready(function() {
+                    $('#project_select').change(function() {
+                        // ซ่อนทุกฟิลด์ก่อน
+                        var project_select = $(this).val();
 
 
+                        $('#ICT').hide();
+                        $('#inv').hide();
+                        $('#utility').hide();
+
+                        // แสดงฟิลด์ที่เกี่ยวข้องตามประเภทงบประมาณที่เลือก
+                        if ($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) == 0 {
+                            $('#ICT').hide();
+                        } else if ($(this).val() == 'task_budget_it_investment') {
+                            $('#inv').show();
+                        } else if ($(this).val() == 'task_budget_gov_utility') {
+                            $('#utility').show();
+                        }
+                    });
+                });
+            </script> --}}
 
 {{--       <script>
     $(document).ready(function() {

@@ -82,6 +82,28 @@
             });
 
             //Template
+            var resourcePanelConfig = {
+           /*      columns: [
+			{
+				name: "ทั้งหมด", label: "ทั้งหมด", template: function (resource) {
+					return resource.label;
+				}
+			},
+
+            {
+				name: "งบประมาน", label: "งบประมาน", template: function (resource) {
+                    return resource.budget;
+				}
+			},
+
+
+		] */
+            };
+
+
+
+
+
             var leftGridColumns = {
                 columns: [
 
@@ -359,6 +381,7 @@
             };
 
 
+
             gantt.templates.tooltip_text = function(start, end, task) {
                 var budget_gov = task.budget_gov ? new Intl.NumberFormat('th-TH', {
                     style: 'currency',
@@ -426,10 +449,14 @@
                 return html;
             };
 
+
+
+
             gantt.ext.fullscreen.getFullscreenElement = function() {
                 return document.querySelector("#gantt_here");
             };
             //Config
+
 
             gantt.config.date_format = "%Y-%m-%d";
            // gantt.config.link_attribute = "data-link-id"
@@ -440,8 +467,11 @@
             gantt.config.grid_resize = true;
             gantt.config.layout = {
                 css: "gantt_container",
-                rows: [{
-                        cols: [{
+    rows: [{
+                        cols: [
+
+
+                              {
                                 view: "grid",
                                 width: 200,
                                 scrollX: "scrollHor",
@@ -468,6 +498,7 @@
                                 scrollY: "scrollVer",
                                 config: rightGridColumns
                             },
+
                             {
                                 view: "scrollbar",
                                 id: "scrollVer"
@@ -475,11 +506,43 @@
                         ]
 
                     },
+
+                  /*   {
+				config: resourcePanelConfig,
+				cols: [
                     {
-                        view: "scrollbar",
-                        id: "scrollHor",
-                        height: 20
-                    }
+						view: "grid",
+						id: "resourceGrid",
+						bind: "resources",
+
+
+                        scrollY: "scrollVer",
+					},
+                    {
+                                resizer: true,
+                                width: 1
+                            },
+					{
+						view: "grid",
+						id: "resourceGrid2",
+                        width: 1200,
+						group:"grids",
+                        //bind: "task",
+                        scrollY: "scrollVer",
+                        config: rightGridColumns
+					}
+
+				]
+			}, */
+
+
+
+
+
+            {
+                                view: "scrollbar",
+                                id: "scrollVer"
+                            }
                 ]
             };
 
@@ -516,6 +579,23 @@
                 data: {!! $gantt !!}
 
             });
+
+            var resourcesStore = gantt.createDatastore({
+		name: "resources",
+		initItem: function (item) {
+			item.id = item.key || gantt.uid();
+			return item;
+		}
+	});
+    var tasksStore = gantt.getDatastore("task");
+	tasksStore.attachEvent("onStoreUpdated", function (id, item, mode) {
+		resourcesStore.refresh();
+	});
+            resourcesStore.parse([// resources
+		{key: '0', label: "ทั้งหมด"},
+
+	]);
+
         </script>
     </x-slot:javascript>
 </x-app-layout>

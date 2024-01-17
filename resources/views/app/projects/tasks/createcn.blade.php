@@ -237,10 +237,11 @@
     <div class="col-2">{{ __('งบค่าสาธารณูปโภค คืน') }}</div>
     <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_gov_utility']-$budget_task['sum_task_refund_budget_type_gov_utility'], 2) }} </b>บาท</div> {{-- งบค่าสาธารณูปโภค คืน --}}
     <hr width="200px"/>
-</div>  {{-- row --}}
+</div>
+@endif {{-- row --}}
 <div class="row">
-    @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
-    <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
+{{--     @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+ --}}    <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
     <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
 
 
@@ -250,13 +251,14 @@
 
     <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
     <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
-    @endif
+{{--     @endif --}}
 
 
 
 </div>
 </div>
-@endif
+</div>
+
 {{-- </div> ปิด--}}
                                 <form method="POST"
                                 action="{{ route('project.task.store', $project) }}"

@@ -838,7 +838,7 @@
                                     href="#multiCollapseExample1" role="button" aria-expanded="false"
                                     aria-controls="multiCollapseExample1">
                                     <div class="fs-4 fw-semibold btn btn-success">
-                                  1      {{ number_format(floatval( ($budget['budget_it_investment']+ $increaseData['increasedbudget_sum_budget_it_investment']+$budget['total_refund_pa_budget_it_investment'])-$budget['budget_no1_in_totol_task_budget_it_investment']+ $budget['totalBudgetItInvestment']), 2) }}
+                                        {{ number_format(floatval( ($budget['budget_it_investment']+ $increaseData['increasedbudget_sum_budget_it_investment']+$budget['total_refund_pa_budget_it_investment'])-$budget['budget_no1_in_totol_task_budget_it_investment']+ $budget['totalBudgetItInvestment']), 2) }}
 {{--                                         {{ number_format(floatval($is_refund_mm_pr), 2) }}
  --}}{{--                                       is  {{ number_format(floatval(($project['budget_it_investment']-(($budget['in_totol_task_budget_it_investment']-($ispa + $isa))+$itpsa1 + $itpsa2))), 2) }}
  --}}                                 {{--    @if($project['budget_gov_utility'] > 1)
