@@ -39,49 +39,69 @@ class PdfController extends Controller
 
     public function ex2()
     {
-
+        DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $year_q = '2566';
         $title = 'รายงานประจำปี ';
 
-        ($budgetscentralict = Project::where('project_fiscal_year', 2566)->sum(DB::raw('	COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
-        ($budgetsinvestment = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
-        ($budgetsut  = Project::where('project_fiscal_year', 2566)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
-
-
-        $projects = DB::table('projects')
-            ->select(
-                'project_id as id',
-                'project_name as name',
-                'reguiar_id as fiscal_year_b',
-                'project_fiscal_year as year',
-                DB::raw('sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
-                 + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budgot')
-            )
-            ->where('project_fiscal_year', '=', 2566)
-            ->groupBy('project_id', 'project_name', 'reguiar_id', 'project_fiscal_year')
-            ->orderBy('reguiar_id', 'asc')
-            ->get();
-
-        ($taskcosttotals = DB::table('tasks')
-            ->selectRaw('reguiar_id as fiscal_year_b,sum(COALESCE(task_cost_gov_operating, 0)
-        + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
-        + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
-         as total_cost')
-            ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-            ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
-            ->groupBy('reguiar_id')
-            ->get());
+        ($budgetscentralict = Project::where('project_fiscal_year', 2566) ->where('deleted_at', '=', null)->sum(DB::raw('COALESCE(budget_gov_operating,0) + COALESCE(budget_it_operating,0)')));
+        ($budgetsinvestment = Project::where('project_fiscal_year', 2566) ->where('deleted_at', '=', null)->sum(DB::raw('COALESCE(budget_gov_investment,0) + COALESCE(budget_it_investment,0)')));
+        ($budgetsut  = Project::where('project_fiscal_year', 2566) ->where('deleted_at', '=', null)->sum(DB::raw('COALESCE(budget_gov_utility,0)	')));
 
 
 
 
+       // dd($budgetscentralict,$budgetsinvestment,$budgetsut);
+       $projects = DB::table('projects')
+       ->select(
+           'project_id as id',
+           'project_type',
+           'project_name as name',
+           'reguiar_id as reguiar_id',
+           'project_fiscal_year as year',
+           DB::raw('sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0)
+            + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budgot')
+       )
+       ->where('project_fiscal_year', '=', 2566)
+       ->groupBy('project_id', 'project_name', 'reguiar_id', 'project_fiscal_year')
+       ->where('deleted_at', '=', null)
+       ->orderBy('project_type', 'asc')
+       ->orderBy('reguiar_id', 'asc')
+       ->get();
+      // dd($projects);
 
 
+
+
+      $taskcosttotals = DB::table('tasks')
+      ->selectRaw('reguiar_id as reguiar_id, sum(COALESCE(task_cost_gov_operating, 0)
+      + COALESCE(task_cost_gov_investment, 0) + COALESCE(task_cost_gov_utility, 0)
+      + COALESCE(task_cost_it_operating, 0) + COALESCE(task_cost_it_investment, 0))
+       as total_cost, sum(COALESCE(task_pay, 0)) as total_pay'
+       )
+      ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+      ->whereRaw('tasks.project_id = projects.project_id AND project_fiscal_year = 2566')
+      ->whereRaw('(' . Helper::budget_fiscal_quarter($year_q) . ' = 1 OR ' . Helper::budget_fiscal_quarter($year_q) . ' = 2 OR ' . Helper::budget_fiscal_quarter($year_q) . ' = 3 OR ' . Helper::budget_fiscal_quarter($year_q) . ' = 4)')
+      ->whereNull('tasks.deleted_at')
+      ->groupBy('reguiar_id')
+      ->get();
+
+
+
+
+      dd($taskcosttotals);
+
+
+
+
+
+
+/*
         ($project_data = $projects->toArray());
         ($taskcost_data = $taskcosttotals->toArray());
 
         ($combined_data = array_combine(array_column($project_data, 'total_budgot'), array_column($taskcost_data, 'total_cost')));
-
+ */
 
 
         $pdf = Pdf::loadView('app.pdf.ex2', [

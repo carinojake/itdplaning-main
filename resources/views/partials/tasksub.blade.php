@@ -171,10 +171,10 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
                     @if ($subtask->task_pay > 1)
                     <span class="text-warning">
-                        {{ number_format($subtask->task_pay,2) }} </span>บาท
+                        {{ number_format($subtask?->task_pay,2) }} </span>บาท
                         @else
                         <span class="text-warning">
-                       2- {{ number_format($resultthItem->total_pay_con,2) }}    </span>บาท
+                  {{ number_format($resultthItem?->total_pay_con,2) }}    </span>บาท
                         @endif
 
 

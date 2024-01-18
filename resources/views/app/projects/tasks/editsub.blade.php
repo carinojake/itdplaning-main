@@ -294,12 +294,6 @@
                                             {{ __('รายละเอียดการที่ใช้จ่าย') }}
                                         </div>
                                     </div>
-
-
-
-
-
-
                             </div>
 
                             <div id="budget_pay_form">
@@ -1077,6 +1071,11 @@
                                 if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(
                                         budgetItInvestment) < -0) {
                                     $("#task_budget_it_investment").val('');
+                                    $("#task_cost_it_investment").val('');
+                                    $("#task_pay").val('');
+
+
+
                                 }
 
                             } else if (fieldId === "task_budget_it_operating") {
@@ -1086,6 +1085,8 @@
                                 if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(
                                         budgetItOperating) < -0) {
                                     $("#task_budget_it_operating").val('');
+                                    $("#task_cost_it_operating").val('');
+                                    $("#task_pay").val('');
                                 }
 
 
@@ -1096,6 +1097,8 @@
                                 if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(
                                     budgetGovUtility) < -0) {
                                     $("#task_budget_gov_utility").val('');
+                                    $("#task_cost_gov_utility").val('');
+                                    $("#task_pay").val('');
                                 }
 
                             }

@@ -416,6 +416,20 @@ public static function taskconrounds2($rounds = null)
                         }
 
 
+                        public static function budget_fiscal_quarter($fiscal_year = null)
+{
+    if ($fiscal_year === null) {
+        $fiscal_year = date('Y') + 543;
+    }
+
+    return "CASE
+        WHEN task_start_date IN ('ต.ย. " . ($fiscal_year - 1) . "', 'พ.ย. " . ($fiscal_year - 1) . "', 'ธ.ค. " . ($fiscal_year - 1) . "') THEN 1
+        WHEN task_start_date IN ('ม.ค. $fiscal_year', 'ก.พ. $fiscal_year', 'มี.ค. $fiscal_year') THEN 2
+        WHEN task_start_date IN ('เม.ย. $fiscal_year', 'พ.ค. $fiscal_year', 'มิ.ย. $fiscal_year') THEN 3
+        WHEN task_start_date IN ('ก.ค. $fiscal_year', 'ส.ค. $fiscal_year', 'ก.ย. $fiscal_year') THEN 4
+        END";
+}
+
     public static function JuristicType($juristic_type_id = null)
     {
         $juristic_types = [

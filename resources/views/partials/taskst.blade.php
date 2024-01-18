@@ -199,9 +199,9 @@
                                 <td>
                                     @if ($relatedData->totalLeastCost > 1 || $relatedData->total_Leasttask_cost_1 >1 || $relatedData->total_Leasttask_cost_2 > 1)
                                     <span style="color: red;">
-                                        @if($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2>0){
+                                        @if($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2>0)
                                             {{ number_format($relatedData->total_Leasttask_cost_1+$relatedData->total_Leasttask_cost_2, 2) }}
-                                        }   @else
+                                           @else
                                           {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
                                         @endif
 
@@ -263,14 +263,15 @@
                                         @if ($subtask->subtask->count() < 1)
                                         @if ($subtask->task_status == 1)
                                         @if ($relatedData->totalLeastCost < 0.01)
+
                                         <form class="delete-form"
-                                        action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
-                                        method="POST" style="display:inline">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button class="btn btn-danger text-white btn-delete"><i
-                                                class="cil-trash"></i></button>
-                                    </form>
+                                    action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                    method="POST" style="display:inline">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm text-white btn-delete"><i class="cil-trash"></i></button>
+                                </form>
+
                                     @endif
                                     @endif
                                     @endif

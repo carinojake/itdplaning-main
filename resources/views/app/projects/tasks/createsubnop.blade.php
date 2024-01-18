@@ -253,10 +253,8 @@
                                                             <div class="col-md-4 mt-3">
                                                                 <label for="taskcon_mm"
                                                                     class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
-                                                                <span class="text-danger"></span>
-
                                                                 <input type="text" class="form-control"
-                                                                    id="taskcon_mm" name="taskcon_mm" required>
+                                                                    id="taskcon_mm" name="taskcon_mm" >
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                                                 </div>
@@ -282,7 +280,7 @@
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_start_date"
                                                                     name="task_start_date"
-                                                                    value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_start'] }}"
+                                                                    value="{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}"
                                                                     >
                                                             </div>
                                                             <div class="col-md-6">
@@ -291,7 +289,7 @@
                                                                 <span class="text-danger"></span>
                                                                 <input class="form-control" id="task_end_date"
                                                                     name="task_end_date"
-                                                                    value="{{ Helper::calculateFiscalYearDates($fiscalyear['fiscalyear_project'])['fiscalyear_end'] }}"                                                                    >
+                                                                    value="{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}"                                                                    >
                                                             </div>
                                                         </div>
 
@@ -326,8 +324,10 @@
 
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-4">
+
                                                                             <label for="task_budget_it_operating"
                                                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ งบกลาง ICT (PR)') }}</label>
+                                                                            <span class="text-danger">*</span>
                                                                             <input type="text" placeholder="0.00"
                                                                                 step="0.01"
                                                                                  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
@@ -335,7 +335,7 @@
                                                                                 id="task_budget_it_operating"
                                                                                 name="task_budget_it_operating"
                                                                                 min="0"
-                                                                                onchange="calculateRefund()" />
+                                                                                onchange="calculateRefund()" required/>
 
                                                                             <div class="invalid-feedback">
                                                                                 {{ __('ระบุงบกลาง ICT') }}
@@ -352,10 +352,10 @@
                                                                                 id="task_cost_it_operating"
                                                                                 name="task_cost_it_operating"
                                                                                 min="0"
-                                                                                onchange="calculateRefund()" />
+                                                                                onchange="calculateRefund()" value=0/>
 
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('งบกลาง ICT') }}
+                                                                                {{ __('กรุณาใส่งบกลาง ICT') }}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -366,8 +366,10 @@
                                                                 <div id="inv" {{-- style="display:none;" --}}>
                                                                     <div class="row mt-3">
                                                                         <div class="col-md-4">
+
                                                                             <label for="task_budget_it_investment"
                                                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ งบดำเนินงาน (PR)') }}</label>
+                                                                            <span class="text-danger">*</span>
                                                                             <input type="text" placeholder="0.00"
                                                                                 step="0.01"
                                                                                  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
@@ -375,10 +377,10 @@
                                                                                 id="task_budget_it_investment"
                                                                                 name="task_budget_it_investment"
                                                                                 min="0"
-                                                                                onchange="calculateRefund()" />
+                                                                                onchange="calculateRefund()"  required/>
 
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('งบดำเนินงาน') }}
+                                                                                {{ __('กรุณาใส่ งบดำเนินงาน') }}
                                                                             </div>
                                                                         </div>
 
@@ -395,7 +397,7 @@
                                                                                 onchange="calculateRefund()" />
 
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('งบดำเนินงาน') }}
+                                                                                {{ __('กรุณาใส่งบดำเนินงาน') }}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -408,14 +410,15 @@
                                                                         <div class="col-md-4">
                                                                             <label for="task_budget_gov_utility"
                                                                                 class="form-label">{{ __('วงเงินที่ขออนุมัติ งบสาธารณูปโภค (PR)') }}</label>
-                                                                            <input type="text" placeholder="0.00"
+                                                                                <span class="text-danger">*</span>
+                                                                                <input type="text" placeholder="0.00"
                                                                                 step="0.01"
                                                                                  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                                 class="form-control numeral-mask"
                                                                                 id="task_budget_gov_utility"
                                                                                 name="task_budget_gov_utility"
                                                                                 min="0"
-                                                                                onchange="calculateRefund()" />
+                                                                                onchange="calculateRefund()" required/>
 
                                                                             <div class="invalid-feedback">
                                                                                 {{ __('ค่าสาธารณูปโภค') }}
@@ -827,7 +830,7 @@
                     }
 
                     // Check for task_budget_it_investment
-                    if (budgetItInvestment === "0" || budgetItInvestment === '' || budgetItInvestment >
+                    if (budgetItInvestment === "0" || budgetItInvestment == '' || budgetItInvestment >
                         costItInvestment || parseFloat(budgetItInvestment) < -0) {
                         $("#task_cost_it_investment").val('');
                         $("#task_pay").val('');
@@ -919,25 +922,28 @@
                     var costItOperating = $("#task_cost_it_operating").val();
                     var costItInvestment = $("#task_cost_it_investment").val();
                     var costGovUtility = $("#task_cost_gov_utility").val();
+
+
+
                     if (fieldId === "task_cost_it_investment") {
-                        max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""));
+                        max = parseFloat($("#task_budget_it_investment").val().replace(/,/g, ""))||null;
                         if (costItInvestment === "0" || costItInvestment === '' || parseFloat(
-                            costItInvestment) < -0) {
+                            costItInvestment) < -0 || costItInvestment > max) {
                             $("#task_cost_it_investment").val('');
                         }
 
 
                     } else if (fieldId === "task_cost_it_operating") {
-                        max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""));
+                        max = parseFloat($("#task_budget_it_operating").val().replace(/,/g, ""))||null;
                         if (costItOperating === "0" || costItOperating === '' || parseFloat(costItOperating) < -
-                            0) {
+                            0 || costItOperating > max) {
                             $("#task_cost_it_operating").val('');
                         }
 
                     } else if (fieldId === "task_cost_gov_utility") {
-                        max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""));
+                        max = parseFloat($("#task_budget_gov_utility").val().replace(/,/g, ""))||null;
                         if (costGovUtility === "0" || costGovUtility === '' || parseFloat(costGovUtility) < -
-                            0) {
+                            0 || costGovUtility > max) {
                             $("#task_cost_gov_utility").val('')
                         }
                     }
@@ -1200,6 +1206,7 @@
 
                 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate); */
 $("#task_end_date").datepicker("setEndDate", task_end_date_str);
+$("#task_pay_date").datepicker("setStartDate", task_start_date_str);
 
 $('#task_end_date').click(function(e) {
     e.preventDefault();

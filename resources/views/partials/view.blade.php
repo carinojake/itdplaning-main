@@ -205,6 +205,8 @@
                         </div>
                     </div>
                 </div>
+
+                @if($budget['total_refund_pa_budget'])
                 <div class="col-md-auto">
                     <!--คงเหลือ ม่วง-->
                     <div class="card  ">
@@ -332,7 +334,7 @@
                     </div>
 
                 </div>
-
+                @endif
 
                 <!--คงเหลือ ฟ้า ทดสอบ-->
 {{--    <div class="col-md-auto">

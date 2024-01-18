@@ -7,5 +7,8 @@
         "bold": "C:\\xampp\\htdocs\\itdplaning-main\\storage\\fonts\/thsarabunnew_bold_d3c21aaf0ab9316ab6ed58bf6e615310",
         "italic": "C:\\xampp\\htdocs\\itdplaning-main\\storage\\fonts\/thsarabunnew_italic_6c2dd19e28065e730ef14acc155bea60",
         "bold_italic": "thsarabunnew_bold_italic_f54aefbb516c4473f76e3a452b0f65c6"
+    },
+    "prompt": {
+        "normal": "prompt_normal_ee49727ae3bde5327837b74caaf65633"
     }
 }
