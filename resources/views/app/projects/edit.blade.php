@@ -896,9 +896,17 @@ var budgetItOperating = $("#budget_it_operating").val();
             'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
             'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
             'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
+            'total_task_mm_operating': {{$budget['totaltotal_task_mm_operating']}} || 0,
+            'total_task_mm_investment': {{$budget['totaltotal_task_mm_investment']}} || 0,
+            'total_task_mm_gov_utility': {{$budget['totaltotal_task_mm_gov_utility']}} || 0,
         };
 
-        console.log(oldtaskValues);
+
+
+
+        console.log('oldValues:',oldValues);
+        console.log('oldtaskValues:',oldtaskValues);
+        //console.log('oldtaskValuesmm:',oldtaskValuesmm);
 
 
         function numberFormat(number) {

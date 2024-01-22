@@ -397,13 +397,25 @@
                                                                             <span class="text-danger">*</span>
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_mm" name="contract_mm"
+                                                                                value="{{ $tasksDetails->task_mm }}"
                                                                                 required autofocus>
                                                                             <div class="invalid-feedback">
                                                                                 {{ __('') }}
                                                                             </div>
                                                                         </div>
 
+                                                                        <div class="col-md-3 d-none">
 
+                                                                            <label for="reguiar_contract_id"
+                                                                                class="form-label">{{ __('no.') }}</label>
+                                                                            <span class="text-danger"></span>
+                                                                            <input type="text" class="form-control"
+                                                                                id="reguiar_contract_id" name="reguiar_contract_id"
+                                                                                >
+                                                                            <div class="invalid-feedback">
+                                                                                {{ __('') }}
+                                                                            </div>
+                                                                        </div>
                                                                         <div class="col-md-6 ">
                                                                             <label for="contract_mm_name"
                                                                                 class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
@@ -414,8 +426,8 @@
                                                                                 name="contract_mm_name"
                                                                                 value="{{ $tasksDetails->task_mm_name }}"
                                                                                 required autofocus>
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                            <div id="contract_mm_name_feedback" class="invalid-feedback">
+                                                                                {{ __('ชื่อสัญญา') }}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-3 ">
@@ -454,7 +466,7 @@ $value = 0;
                                                                                 name="contract_number" required>
 
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('เลขที่สัญญา required ') }}
+                                                                                {{ __('เลขที่สัญญา') }}
                                                                             </div>
                                                                         </div>
 
@@ -471,7 +483,7 @@ $value = 0;
                                                                                 name="contract_name" required
                                                                                 autofocus>
                                                                             <div class="invalid-feedback">
-                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
+                                                                                {{ __('ชื่อสัญญา') }}
                                                                             </div>
                                                                         </div>
 
@@ -911,9 +923,18 @@ $value = 0;
 
                                                                                         </div>
 
-
-
-
+                                                                                        <div class="col-md-4">
+                                                                                            <label for="expenses_sum"
+                                                                                                class="form-label">{{ __('ใช้ไป เงินทั้งหมด') }}</label>
+                                                                                            <span class="text-danger"></span>
+                                                                                            <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="expenses_sum"
+                                                                                            name="expenses_sum" readonly>
+                                                                                            <div id="expenses_sum_feedback"class="invalid-feedback">
+                                                                                                {{ __('เงินงวดทั้งหมด รวมกันเท่ากับ PA') }}
+                                                                                            </div>
+                                                                                        </div>
 
 
 
@@ -926,20 +947,18 @@ $value = 0;
                                                                                         class="form-control"
                                                                                         id="expenses_delsum"
                                                                                         name="expenses_delsum" readonly>
-                                                                                        <div class="invalid-feedback">
-                                                                                            {{ __('เงินงวดทั้งหมด รวมกัน ต้อง = 0 ') }}
+                                                                                        <div id="expenses_delsum_feedback"class="invalid-feedback">
+                                                                                            {{ __('เงินงวดทั้งหมด รวมกันเท่ากับ PA') }}
                                                                                         </div>
+
                                                                                 </div>
 
-                                                                                <div class="col-md-4">
-                                                                                    <label for="expenses_sum"
-                                                                                        class="form-label">{{ __('ใช้ไป เงินทั้งหมด') }}</label>
-                                                                                    <span class="text-danger"></span>
-                                                                                    <input type="text"
-                                                                                    class="form-control"
-                                                                                    id="expenses_sum"
-                                                                                    name="expenses_sum" readonly>
-                                                                                </div>
+
+
+
+
+
+
                                                                             </div>
                                                                         </div>
 
@@ -1870,414 +1889,441 @@ $value = 0;
             </script>
 
 
+{{-- <div class="col-md-2">
+    <label class="form-label">ร้อยละ เงินงวด  ${i + 1} &nbsp: &nbsp</label>
+    <input type="text" name="tasks[${i}][taskbudget_percentage]" id="tasks[${i}][taskbudget_percentage]" class="form-control custom-input numeral-mask exp"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" >
+    <div class="invalid-feedback">ระบุ ร้อยละ  เงินงวด</div>
+
+</div> --}}
 
 
-
-            <script>
-                $(document).ready(function() {
-    function calculateInstallmentAmounts() {
-        var totalPA = parseFloat($('#contract_pa_budget').val().replace(/,/g, '')) || 0;
-        $('#tasksContainer .row').each(function() {
-            var percentage = parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
-            var installmentp = (totalPA * percentage) / 100;
-            $(this).find('[name$="[taskbudget]"]').val(installmentp.toFixed(2));
-        });
-    }
-
-    $('#tasksContainer').on('input', '[name$="[taskbudget_percentage]"]', calculateInstallmentAmounts);
-     // Initial calculation on page load
-     calculateInstallmentAmounts();
+<script>
+    $(document).ready(function() {
 
 
 
 
-                    $('#rounds').change(function() {
-                        var rounds = $(this).val();
-                        $('#tasksContainer').empty(); // clear the container
-                        var contract_fiscal_year = {{$pro->project_fiscal_year}};
-            contract_fiscal_year = contract_fiscal_year - 543;
 
-            var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
-            var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
+        $('#rounds').change(function() {
+            var rounds = $(this).val();
+            $('#tasksContainer').empty(); // clear the container
+            var contract_fiscal_year = {{$pro->project_fiscal_year}};
+contract_fiscal_year = contract_fiscal_year - 543;
+
+var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
+var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
 
-                        for (var i = 0; i < rounds; i++) {
-                            var content = `
-                    <div class="row">
-                        <div class="col-md-2">
+            for (var i = 0; i < rounds; i++) {
+                var content = `
+                <div class="row">
+                        <div class="col-md-3">
                             <label class="form-label">ชื่องวด ${i + 1} &nbsp: &nbsp</label>
                             <input class="form-control" type="text" name="tasks[${i}][task_name]" value="งวด ${i + 1}">
                         </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label">ร้อยละ เงินงวด  ${i + 1} &nbsp: &nbsp</label>
-                            <input type="text" name="tasks[${i}][taskbudget_percentage]" id="tasks[${i}][taskbudget_percentage]" class="form-control custom-input numeral-mask expenses"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
-                            <div class="invalid-feedback">ระบุ ร้อยละ  เงินงวด</div>
-
-                        </div>
-
                         <div class="col-md-3">
                             <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
-                            <input type="text" name="tasks[${i}][taskbudget]" id="tasks[${i}][taskbudget]" class="form-control custom-input numeral-mask expenses"  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
+                            <input
+                            id="[${i}][expenses]"
+                            type="text"
+                            name="tasks[${i}][taskbudget]"
+                            class="form-control custom-input numeral-mask expenses"
+                             data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
                             <div class="invalid-feedback">ระบุเงินงวด</div>
 
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">งวด ${i + 1} วันที่เริ่มต้น </label>
+                        <div class="col-md-3">
+                            <label class="form-label">งวด ${i + 1} วันที่เริ่มต้น</label>
                             <input type="text" class="form-control datepickerop" id="start_date_${i}" name="tasks[${i}][start_date]">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label class="form-label">งวด ${i + 1} วันที่สิ้นสุด </label>
                             <input type="text" class="form-control datepickeropend" id="end_date_${i}" name="tasks[${i}][end_date]">
                         </div>
                     </div>`;
 
-                $('#tasksContainer').append(content);
-                initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
-                // Initialize the datepickers for the newly added elements
+    $('#tasksContainer').append(content);
+    initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
+    // Initialize the datepickers for the newly added elements
 
-                console.log("round===="+i);
-                /*if(i == 0){
-                    $(`#start_date_${i}`).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        startDate: fiscalYearStartDate,
-                        endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                        // When a start date is selected, update the minDate of the next round's start date
-                        var index = parseInt(this.id.replace('start_date_', '')) + 1;
-                        var nextStartDatePicker = $('#start_date_' + index);
-                        if(nextStartDatePicker.length) {
-                            var newMinDate = selected.date;
-                            newMinDate.setDate(newMinDate.getDate() + 1); // Set next start date to at least one day after selected
-                            nextStartDatePicker.datepicker('setStartDate', newMinDate);
-                        }
-                    });
-                    $(`#end_date_${i}`).datepicker({
-                        dateFormat: 'dd/mm/yy',
-                                changeMonth: true,
-                                changeYear: true,
-                                language: "th-th",
-                        startDate: fiscalYearStartDate,
-                        //endDate: fiscalYearEndDate,
-                        autoclose: true
-                        }).on('changeDate', function(selected) {
-                        // When an end date is selected, update the maxDate of the current round's start date
-                        var index = parseInt(this.id.replace('end_date_', ''));
-                        var startDatePicker = $('#start_date_' + index);
-                        if(startDatePicker.length) {
-                            var newMaxDate = selected.date;
-                            startDatePicker.datepicker('setEndDate', newMaxDate);
-                        }
-                    });
-                }*/
-                //var text_end_date = [];
-               // var text_start_date = [];
-
-
-            }
-
-
-
-
-
-
-                        // Apply inputmask to the newly added input elements
-                        $(":input").inputmask();
-                    });
-
-                    function initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate) {
-            var text_start_date = '#start_date_' + i;
-            var text_end_date = '#end_date_' + i;
-            var next_start_date = '#start_date_' + (i + 1);
-    var prev_end_date = '#end_date_' + (i - 1);
-    var next_start_date = i + 1 < 10 ? '#start_date_' + (i + 1) : null; // ตรวจสอบว่ามีงวดถัดไปหรือไม่
-
-
-            // Initialize start date datepicker
-            $(text_start_date).datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                language: "th-th",
-                startDate: fiscalYearStartDate,
-               // endDate: fiscalYearEndDate,
-                autoclose: true
+    console.log("round===="+i);
+    /*if(i == 0){
+        $(`#start_date_${i}`).datepicker({
+            dateFormat: 'dd/mm/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: "th-th",
+            startDate: fiscalYearStartDate,
+            endDate: fiscalYearEndDate,
+            autoclose: true
             }).on('changeDate', function(selected) {
-           // Set the start date of the end date datepicker to the selected start date
-           var newStartDate = selected.date;
-        $(text_end_date).datepicker("setStartDate", newStartDate);
-
-        // If there is a next start date datepicker, set its start date to the day after the selected end date
-        if (next_start_date && $(next_start_date).length) {
-            var newEndDate = new Date(newStartDate);
-            newEndDate.setDate(newEndDate.getDate() + 1); // Set the minimum start date of the next period to one day after the end date of the current period
-            $(next_start_date).datepicker("setStartDate", newEndDate);
-        }
-
-            });
-
-            // Initialize end date datepicker
-            $(text_end_date).datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                language: "th-th",
-                autoclose: true
-            }).on('changeDate', function(selected) {
-               // If there is a next start date datepicker, set its start date to the day after the selected end date
-        if (next_start_date && $(next_start_date).length) {
-            var newStartDate = new Date(selected.date);
-            newStartDate.setDate(newStartDate.getDate() + 1); // Plus one day
-            $(next_start_date).datepicker("setStartDate", newStartDate);
-        }
-            });
-        }
-
-
-
-
-                    // When an expense input changes, update the total and check against the budget
-                    $(document).on('change', '.expenses', function() {
-                        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-                        var sum = 0;
-                        var tasksContainer = $('#tasksContainer');
-                        var inputs = $('.expenses').map(function() {
-                           // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
-        var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
-        if (value < 0) {
-            $(this).val(''); // รีเซ็ตค่าถ้าติดลบ  parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
-            value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
-        }
-        return value
-
-
-
-
-                        }).get();
-
-                        sum = inputs.reduce(function(a, b) {
-
-                            return a + b;
-                        }, 0);
-
-
-                        console.log(sum.toFixed(2)+"-"+inputs[i]);
-
-                        // Calculate the remaining budget after each installment
-                        var remainingBudget = contract_pa_budget;
-                        for (var i = 0; i < inputs.length; i++) {
-                            remainingBudget = remainingBudget - inputs[i];
-                            console.log(remainingBudget.toFixed(2)+"-"+inputs[i]);
-
-
-                            if (remainingBudget.toFixed(2) < 0) {
-   // วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
-   $('.expenses').each(function() {
-            if (parseFloat($(this).val()) < 0) {
-                $(this).val('');
+            // When a start date is selected, update the minDate of the next round's start date
+            var index = parseInt(this.id.replace('start_date_', '')) + 1;
+            var nextStartDatePicker = $('#start_date_' + index);
+            if(nextStartDatePicker.length) {
+                var newMinDate = selected.date;
+                newMinDate.setDate(newMinDate.getDate() + 1); // Set next start date to at least one day after selected
+                nextStartDatePicker.datepicker('setStartDate', newMinDate);
             }
         });
+        $(`#end_date_${i}`).datepicker({
+            dateFormat: 'dd/mm/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: "th-th",
+            startDate: fiscalYearStartDate,
+            //endDate: fiscalYearEndDate,
+            autoclose: true
+            }).on('changeDate', function(selected) {
+            // When an end date is selected, update the maxDate of the current round's start date
+            var index = parseInt(this.id.replace('end_date_', ''));
+            var startDatePicker = $('#start_date_' + index);
+            if(startDatePicker.length) {
+                var newMaxDate = selected.date;
+                startDatePicker.datepicker('setEndDate', newMaxDate);
+            }
+        });
+    }*/
+    //var text_end_date = [];
+   // var text_start_date = [];
 
-        console.log(remainingBudget);
 
-                                // If the remaining budget after any installment is negative, show an error
-                                Swal.fire({
-                                    title: "เกิดข้อผิดพลาด",
-                                    html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum -
-                                            inputs[i])).toLocaleString('en-US', {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2
-                                        }) + " บาท" +
-                                        "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
-                                        .toLocaleString('en-US', {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2
-                                        }) + " บาท)",
-
-
-                                    icon: "error",
-                                    confirmButtonColor: "#3085d6",
-                                    confirmButtonText: "ตกลง"
-                                }).then((result) => {
-                                    if (result.value) {
-                                        $('.expenses').eq(i).val(
-                                        ''); // Reset the value of the input that caused the error
-                                        $('.expenses').eq(i).trigger(
-                                        'input'); // Trigger input event to recalculate
-                                    }
-                                });
-                                break; // Exit the loop as we have found an error
-
-                            }
+}
 
 
 
-                        }
 
 
-                        if (Math.abs(remainingBudget) < 0.01) {
-        remainingBudget = 0;
-    }
-                            $('#expenses_sum').val(sum.toLocaleString('en-US', {
+
+            // Apply inputmask to the newly added input elements
+            $(":input").inputmask();
+        });
+
+        function initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate) {
+var text_start_date = '#start_date_' + i;
+var text_end_date = '#end_date_' + i;
+var next_start_date = '#start_date_' + (i + 1);
+var prev_end_date = '#end_date_' + (i - 1);
+var next_start_date = i + 1 < 10 ? '#start_date_' + (i + 1) : null; // ตรวจสอบว่ามีงวดถัดไปหรือไม่
+
+
+// Initialize start date datepicker
+$(text_start_date).datepicker({
+    dateFormat: 'dd/mm/yy',
+    changeMonth: true,
+    changeYear: true,
+    language: "th-th",
+    startDate: fiscalYearStartDate,
+   // endDate: fiscalYearEndDate,
+    autoclose: true
+}).on('changeDate', function(selected) {
+// Set the start date of the end date datepicker to the selected start date
+var newStartDate = selected.date;
+$(text_end_date).datepicker("setStartDate", newStartDate);
+
+// If there is a next start date datepicker, set its start date to the day after the selected end date
+if (next_start_date && $(next_start_date).length) {
+var newEndDate = new Date(newStartDate);
+newEndDate.setDate(newEndDate.getDate() + 1); // Set the minimum start date of the next period to one day after the end date of the current period
+$(next_start_date).datepicker("setStartDate", newEndDate);
+}
+
+});
+
+// Initialize end date datepicker
+$(text_end_date).datepicker({
+    dateFormat: 'dd/mm/yy',
+    changeMonth: true,
+    changeYear: true,
+    language: "th-th",
+    autoclose: true
+}).on('changeDate', function(selected) {
+   // If there is a next start date datepicker, set its start date to the day after the selected end date
+if (next_start_date && $(next_start_date).length) {
+var newStartDate = new Date(selected.date);
+newStartDate.setDate(newStartDate.getDate() + 1); // Plus one day
+$(next_start_date).datepicker("setStartDate", newStartDate);
+}
+});
+}
+
+
+/*
+        function calculateInstallmentAmounts() {
+var totalPA = parseFloat($('#contract_pa_budget').val().replace(/,/g, '')) || 0;
+$('#tasksContainer .row').each(function() {
+var percentage = parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
+var installmentp = (totalPA * percentage) / 100;
+$(this).find('[name$="[taskbudget]"]').val(installmentp.toFixed(2));
+});
+}
+$('#tasksContainer').on('input', '[name$="[taskbudget_percentage]"]', calculateInstallmentAmounts);
+// Initial calculation on page load
+calculateInstallmentAmounts();
+*/
+
+            // การจัดการกับการเปลี่ยนแปลงของอินพุต "ร้อยละ เงินงวด"
+         /*    $(document).on('change', '.exp', function() {
+            function calculateInstallmentAmounts() {
+            var totalPA = parseFloat($('#contract_pa_budget').val().replace(/,/g, '')) || 0;
+            $('#tasksContainer .row').each(function() {
+            var percentage = parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
+            var installmentp = (totalPA * percentage) / 100;
+            $(this).find('[name$="[taskbudget]"]').val(installmentp.toFixed(2));
+            });
+            }
+            $('#tasksContainer').on('input', '[name$="[taskbudget_percentage]"]', calculateInstallmentAmounts);
+            // Initial calculation on page load
+            calculateInstallmentAmounts();
+            }); */
+
+
+
+
+
+// When an expense input changes, update the total and check against the budget focus
+        $(document).on('input', '.expenses', function() {
+
+
+
+            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+            var sum = 0;
+            var index = $(this).data('index');
+            var tasksContainer = $('#tasksContainer');
+            var inputs = $('.expenses').map(function() {
+               // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
+var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
+if (value < 0) {
+$(this).val(''); // รีเซ็ตค่าถ้าติดลบ  parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
+value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
+}
+return value
+
+
+
+
+            }).get();
+
+            sum = inputs.reduce(function(a, b) {
+
+                return a + b;
+            }, 0);
+
+
+         //   console.log(sum.toFixed(2)+"-"+inputs[i]);
+
+            // Calculate the remaining budget after each installment
+            var remainingBudget = contract_pa_budget;
+            for (var i = 0; i < inputs.length; i++) {
+                remainingBudget -= inputs[i];
+               // console.log(remainingBudget.toFixed(2)+"-"+inputs[i]);
+
+
+                if (remainingBudget.toFixed(2) < 0) {
+// วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
+$('.expenses').each(function() {
+if (parseFloat($(this).val()) < 0) {
+    $(this).val('');
+}
+});
+
+// console.log(remainingBudget);
+
+                    // If the remaining budget after any installment is negative, show an error
+                    Swal.fire({
+                        title: "เกิดข้อผิดพลาด",
+                        html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum -
+                                inputs[i])).toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
-                            }));
-                            $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+                            }) + " บาท" +
+                            "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
+                            .toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }) + " บาท)",
 
 
-                            }));
+                        icon: "error",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "ตกลง"
+                    }).then((result) => {
+                        if (result.value) {
+                            $('.expenses').eq(i).val(
+                            ''); // Reset the value of the input that caused the error
+                            $('.expenses').eq(i).trigger(
+                            'input'); // Trigger input event to recalculate
+                        }
+                    });
+                    break; // Exit the loop as we have found an error
 
-  // Function to calculate the remaining budget
-  function calculateRemainingBudget() {
-        var sum = $('.expenses').map(function() {
-            return parseFloat($(this).val().replace(/,/g, "")) || 0;
-        }).get().reduce(function(a, b) {
-            return a + b;
-        }, 0);
+                }
 
-        var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
-        var remainingBudget = contract_pa_budget - sum;
-        return remainingBudget;
-    }
 
-  /*   // Form submission handler
-    $('#formId').on('submit', function(e) { // Make sure this is the ID of your form
-        e.preventDefault();
-
-        var remainingBudget = calculateRemainingBudget();
-
-        if (remainingBudget !== 0) {
-            $('#expenses_delsum').addClass('is-invalid');
-           // $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
-        } else {
-            // If the remaining budget is zero, remove validation error
-            $('#expenses_delsum').removeClass('is-invalid');
-            $('.invalid-feedback').text(''); // Clear the feedback text
-                 // ส่งฟอร์ม
-                 this.submit();
-        }
-    }); */
-    $('#formId').on('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission
-
-    var remainingBudget = calculateRemainingBudget();
-    var sumOfExpenses = $('.expenses').map(function() {
-        return parseFloat($(this).val().replace(/,/g, "")) || 0;
-    }).get().reduce(function(a, b) {
-        return a + b;
-    }, 0);
-
-    // You need to ensure that `contract_pa_budget` is defined and holds the correct value
-    var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
-    console.log( contract_pa_budget);
-    console.log( remainingBudget, sumOfExpenses);
-    console.log( sumOfExpenses);
-
-    if (contract_pa_budget > sumOfExpenses) {
-
-        $('.expenses').each(function() {
-            // Add or remove validation based on the value of each expense
-            if (parseFloat($(this).val().replace(/,/g, "")) <= contract_pa_budget ) {
-                $(this).addClass('is-invalid');
-
-            } else {
-                $(this).removeClass('is-invalid');
 
             }
-        });
-        // Display feedback to the user
 
 
-    }
-    // Check if there are any discrepancies in the budget or if any of the expenses inputs are invalid
-    if (remainingBudget !== 0 ) {
+            if (Math.abs(remainingBudget) < 0.01) {
+remainingBudget = 0;
+}
+
+if (Math.abs(sum) < 0.01) {
+sum = 0;
+}
+                $('#expenses_sum').val(sum.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+                $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+
+
+                }));
+//console.log( remainingBudget);
+//console.log( sum);
+// Function to calculate the remaining budget
+function calculateRemainingBudget() {
+var sum = $('.expenses').map(function() {
+return parseFloat($(this).val().replace(/,/g, "")) || 0;
+}).get().reduce(function(a, b) {
+return a + b;
+}, 0);
+
+var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+var remainingBudget = contract_pa_budget.toFixed(2) - sum.toFixed(2);
+return remainingBudget.toFixed(2);
+}
+
+/*   // Form submission handler
+$('#formId').on('submit', function(e) { // Make sure this is the ID of your form
+e.preventDefault();
+
+var remainingBudget = calculateRemainingBudget();
+
+if (remainingBudget !== 0) {
+$('#expenses_delsum').addClass('is-invalid');
+// $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
+} else {
+// If the remaining budget is zero, remove validation error
+$('#expenses_delsum').removeClass('is-invalid');
+$('.invalid-feedback').text(''); // Clear the feedback text
+     // ส่งฟอร์ม
+     this.submit();
+}
+}); */
+$('#formId').on('submit', function(e) {
+    e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+
+    // คำนวณผลรวมของค่าใช้จ่าย
+    var sumOfExpenses = 0;
+
+    $('.expenses').each(function(index) {
+        sumOfExpenses += parseFloat($(this).val().replace(/,/g, "")) || 0;
+        // ลบคลาส 'is-invalid' ก่อนการตรวจสอบใหม่
+        $(this).removeClass('is-invalid');
+        $('#tasks_' + index + '_taskbudget_feedback').text('');
+    });
+
+    // คำนวณงบประมาณที่เหลือ
+    var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+    var remainingBudgetform = contract_pa_budget - sumOfExpenses;
+
+    // แสดงผลค่าที่คำนวณได้บน console สำหรับการตรวจสอบ
+    console.log('Contract PA Budget:', contract_pa_budget);
+    console.log('Sum of Expenses:', sumOfExpenses);
+    console.log('Remaining Budget:', remainingBudgetform);
+
+    // ตรวจสอบว่าผลรวมของค่าใช้จ่ายเท่ากับงบประมาณหรือไม่
+    if (remainingBudgetform !== 0) {
+        // ถ้าไม่เท่ากันแสดงข้อความผิดพลาด
         $('#expenses_delsum').addClass('is-invalid');
+        $('#expenses_delsum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
+        $('#expenses_sum').addClass('is-invalid');
+        $('#expenses_sum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ')
+        $('.expenses').each(function(index) {
+            $(this).addClass('is-invalid');
+            $('#tasks_' + index + '_taskbudget_feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
 
-        // Display feedback to the user
-        $('.invalid-feedback').text('กรุณาตรวจสอบงวดและเงินงวดให้ถูกต้อง');
+
+        });
+
+        return; // หยุดการทำงานของฟังก์ชั่น
     } else {
-        // If everything checks out, remove validation classes and proceed to submit the form
+        // ถ้าเท่ากันลบคลาส 'is-invalid' และส่งฟอร์ม
         $('#expenses_delsum').removeClass('is-invalid');
-      //  $('.expenses').removeClass('is-invalid');
-        $('.invalid-feedback').text(''); // Optionally clear any feedback text
-   // ส่งฟอร์ม
-   this.submit();
-        // TODO: Submit the form using AJAX or another method as required.
-        // Example:
-        // $.ajax({
-        //     url: '/path/to/submit',
-        //     type: 'POST',
-        //     data: $('#formId').serialize(),
-        //     success: function(response) {
-        //         // Handle success
-        //     },
-        //     error: function(xhr, status, error) {
-        //         // Handle error
-        //     }
-        // });
+        $('#expenses_delsum').next('.invalid-feedback').text('');
+        $('#expenses_sum').removeClass('is-invalid');
+        $('#expenses_sum').next('.invalid-feedback').text('');
+        $('.expenses').each(function(index) {
+            $(this).removeClass('is-invalid');
+            $('#tasks_' + index + '_taskbudget_feedback').text('');
+
+
+        });
+
+
+
+        this.submit(); // ส่งฟอร์ม
     }
 });
 
 
-                    });
 
-                     // ฟังก์ชันสำหรับคำนวณผลรวมของเงินงวดทั้งหมด
-    function calculateTotalInstallments() {
-        var total = 0;
-        $('.installment').each(function() {
-            var amount = parseFloat($(this).val().replace(/,/g, "")) || 0;
-            total += amount;
         });
-        return total;
-    }
 
-    // ฟังก์ชันสำหรับตรวจสอบว่าผลรวมของเงินงวดเท่ากับเงินที่ใช้ไปทั้งหมดหรือไม่
-    function checkTotalAgainstBudget() {
-        var totalInstallments = calculateTotalInstallments();
-        var budgetUsed = parseFloat($('#budget-used').val().replace(/,/g, "")) || 0;
-        var remainingBudget = budgetUsed - totalInstallments;
+         // ฟังก์ชันสำหรับคำนวณผลรวมของเงินงวดทั้งหมด
+function calculateTotalInstallments() {
+var total = 0;
+$('.installment').each(function() {
+var amount = parseFloat($(this).val().replace(/,/g, "")) || 0;
+total += amount;
+});
+return total;
+}
 
-           // ใช้ Math.abs() เพื่อจัดการกับค่าที่ใกล้เคียง 0 และปัดเศษทศนิยม
-    if (Math.abs(remainingBudget) < 0.01) {
-        remainingBudget = 0;
-    }
+// ฟังก์ชันสำหรับตรวจสอบว่าผลรวมของเงินงวดเท่ากับเงินที่ใช้ไปทั้งหมดหรือไม่
+function checkTotalAgainstBudget() {
+var totalInstallments = calculateTotalInstallments();
+// var budgetUsed = parseFloat($('#budget-used').val().replace(/,/g, "")) || 0;
+var remainingBudget =totalInstallments;
 
-        $('#expenses_sum').val(totalInstallments.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }));
-        $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }));
+// ใช้ Math.abs() เพื่อจัดการกับค่าที่ใกล้เคียง 0 และปัดเศษทศนิยม
+if (Math.abs(remainingBudget) < 0.01) {
+remainingBudget = 0;
+}
 
-        if(remainingBudget !== 0) {
-            alert('เงินเหลือทั้งหมด ' + remainingBudget.toFixed(2) + ' บาท ต้องเหลือ 0 บาท');
-        }
-    }
+$('#expenses_sum').val(totalInstallments.toLocaleString('en-US', {
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+}));
+$('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+}));
 
-    // ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์เงินงวด
-    $(document).on('change', '.installment', function() {
-        checkTotalAgainstBudget();
+if(remainingBudget !== 0) {
+alert('เงินเหลือทั้งหมด ' + remainingBudget.toFixed(2) + ' บาท ต้องเหลือ 0 บาท');
+}
+}
+
+// ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์เงินงวด
+$(document).on('change', '.installment', function() {
+checkTotalAgainstBudget();
+});
+
+// ตรวจสอบเมื่อมีการเปลี่ยนแปลงจำนวนงวด
+$('#rounds').change(function() {
+// ... โค้ดสำหรับการเปลี่ยนแปลงจำนวนงวด ...
+// เรียกใช้ checkTotalAgainstBudget เมื่อเพิ่มฟิลด์เงินงวดใหม่
+checkTotalAgainstBudget();
+});
     });
 
-    // ตรวจสอบเมื่อมีการเปลี่ยนแปลงจำนวนงวด
-    $('#rounds').change(function() {
-        // ... โค้ดสำหรับการเปลี่ยนแปลงจำนวนงวด ...
-        // เรียกใช้ checkTotalAgainstBudget เมื่อเพิ่มฟิลด์เงินงวดใหม่
-        checkTotalAgainstBudget();
-    });
-                });
 
 
-
-            </script>
+</script>
 
 
 
@@ -2637,7 +2683,7 @@ $("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
                 });
             </script>
 
-
+{{--
 
             <script>
                 // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -2660,7 +2706,38 @@ $("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
                             }, false)
                         })
                 })()
-            </script>
+            </script> --}}
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+'use strict'
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms)
+.forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+        } else {
+            // เพิ่มเงื่อนไขการตรวจสอบความถูกต้องของข้อมูลของคุณที่นี่
+            // เช่น ตรวจสอบชื่อโครงการซ้ำ
+            if (someValidationCondition) {
+                event.preventDefault() // ป้องกันการส่งข้อมูลเซฟ
+            }
+        }
+
+        form.classList.add('was-validated')
+    }, false)
+})
+})()
+
+</script>
 
 {{-- <script>
     $(document).ready(function(){

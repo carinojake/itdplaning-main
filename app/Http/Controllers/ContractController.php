@@ -33,7 +33,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_number', 'ASC')->orderBy('contract_fiscal_year', 'desc');
+            $records = contract::orderByRaw('CAST(contract_number AS UNSIGNED) ASC')->orderBy('contract_number', 'ASC');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()

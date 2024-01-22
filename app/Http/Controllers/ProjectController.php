@@ -6810,6 +6810,12 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
 
         // ดึงข้อมูลทั้งหมดจากตาราง contracts โดยเรียงตาม contract_fiscal_year จากมากไปน้อย
         $contracts = Contract::orderBy('contract_fiscal_year', 'desc')->get();
+
+
+
+
+
+
         $fiscal_year = $request->input('fiscal_year');
         if (!$fiscal_year) {
             $fiscal_year = date('Y') + 543; // Use current year if not provided
@@ -7618,7 +7624,7 @@ GROUP BY cte.root);
         ]);
 
 
-        //      dd($task_sub_sums,$cteQuery_task_sub_sums);
+           //   dd($task_sub_sums,$cteQuery_task_sub_sums);
 
 
         ($task_sub_refund = $task->subtask->where('task_refund_pa_status', 2));
@@ -8906,11 +8912,18 @@ dd($resultthItem); */
 
        // dd($fiscalyear);
 
+       $contracts_left = Contract::doesntHave('contractHasTasks')
+       ->whereNull('deleted_at')
+       ->orderBy('contract_fiscal_year', 'desc')
+       ->get();
 
+
+     //  dd($contracts_left);
 
 
 
         return view('app.projects.tasks.createsub', compact(
+            'contracts_left',
             'fiscalyear',
             'task_sub_refund_pa_budget',
             'task_sub_sums',
@@ -10638,6 +10651,10 @@ dd($resultthItem); */
         $sum_task_cost_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->sum('task_cost_gov_utility');
 
         $sum_task_refund_budget_gov_utility = $tasks->whereNull('task_parent')->where('tasks.deleted_at', NULL)->where('task_budget_gov_utility', '>', 1)->sum('task_refund_pa_budget');
+
+
+       // dd($sum_task_budget_it_operating,$sum_task_cost_it_operating,$sum_task_refund_budget_it_operating,$sum_task_budget_it_investment,$sum_task_cost_it_investment,$sum_task_refund_budget_it_investment,$sum_task_budget_gov_utility,$sum_task_cost_gov_utility,$sum_task_refund_budget_gov_utility);
+
         //09112566
         $id_root_tasks = Task::select('task_id')->where('task_id', $task->task_id)
             ->whereNull('tasks.deleted_at')->get()->pluck('task_id');
@@ -10970,11 +10987,67 @@ FROM tasks WHERE  tasks.deleted_at IS null  ORDER BY task_id ASC
 
         $projectDetails = Project::find($id_project);
 
+        $task_sub = $task->subtask->where('tasks.deleted_at', NULL);
+        $task_sub_sums = $task_sub->reduce(function ($carry, $subtask) {
+           if ($subtask->task_budget_it_operating > 0.01) {
+               $carry['operating']['task_budget'] += round($subtask->task_budget_it_operating, 3);
+               $carry['operating']['task_cost'] += round($subtask->task_cost_it_operating, 2);
+               $carry['operating']['task_refund_pa_budget'] += round($subtask->task_refund_pa_budget, 2);
+               $carry['operating']['task_mm_budget'] += round($subtask->task_mm_budget, 2);
+               $carry['operating']['task_pay'] += round($subtask->task_pay, 2);
+           }
+
+           if ($subtask->task_budget_it_investment > 0.01) {
+               $carry['investment']['task_budget'] += $subtask->task_budget_it_investment;
+               $carry['investment']['task_cost'] += $subtask->task_cost_it_investment;
+
+
+
+               $carry['investment']['task_refund_pa_status'] =  $subtask->task_refund_pa_status;
+               $carry['investment']['task_pay'] += $subtask->task_pay;
+
+               // ($carry); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
+
+
+               $refundPaBudget = is_int($subtask->task_refund_pa_status) ? collect([$subtask->task_refund_pa_status]) : $subtask->task_refund_pa_status;
+               ($refundPaBudget); // เพิ่มบรรทัดนี้เพื่อดูค่าของ $refundPaBudget
+
+               // ใช้ฟังก์ชัน where() กับคอลเลกชัน
+               //  ($filteredRefundTasks = $refundPaBudget->where('task_refund_pa_status', 2));
+               //    $carry['investment']['task_refund_pa_budget'] += $filteredRefundTasks->sum('task_refund_pa_budget');
+
+
+               $carry['investment']['task_refund_pa_budget_2'] += $subtask->task_refund_pa_budget;
+               $carry['investment']['task_mm_budget'] += $subtask->task_mm_budget;
+           }
+
+           if ($subtask->task_budget_gov_utility > 0.01) {
+               $carry['utility']['task_budget'] += $subtask->task_budget_gov_utility;
+               $carry['utility']['task_cost'] += $subtask->task_cost_gov_utility;
+               $carry['utility']['task_refund_pa_budget'] += $subtask->task_refund_pa_budget;
+               $carry['utility']['task_mm_budget'] += $subtask->task_mm_budget;
+               $carry['utility']['task_pay'] += $subtask->task_pay;
+
+               // Add other fields as necessary...
+           }
+
+           return $carry;
+       }, [
+           'operating' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0, 'task_pay' => 0],
+           'investment' => ['task_budget' => 0, 'task_cost' => 0,  'task_refund_pa_budget' => 0, 'task_refund_pa_budget_2' => 0, 'task_mm_budget' => 0, 'task_pay' => 0],
+           'utility' => ['task_budget' => 0, 'task_cost' => 0, 'task_refund_pa_budget' => 0, 'task_mm_budget' => 0, 'task_pay' => 0]
+       ]);
+
+
+           //  dd($task_sub_sums['operating']['task_mm_budget']);
+
+       //$budget = [];
 
       //budget_it_operating
 $totalBudgetItOperating = 0;
 $totalrefundpabudget_it_operating = 0;
 $totaltaskrefunbudget_ItOperating = 0;
+$totaltask_mm_operating = 0;
 
 
 foreach ($project->main_task as $tasksubmain) {
@@ -10982,6 +11055,7 @@ foreach ($project->main_task as $tasksubmain) {
         $totalBudgetItOperating += $tasksubmain->task_budget_it_operating;
         $totaltaskrefunbudget_ItOperating += $tasksubmain->task_refund_budget;
         $totalrefundpabudget_it_operating += $tasksubmain->task_refund_pa_budget;
+        $totaltask_mm_operating += $tasksubmain->task_mm_budget;
 
 
 }
@@ -10992,12 +11066,14 @@ foreach ($project->main_task as $tasksubmain) {
 $totalBudgetItInvestment = 0;
 $totalrefundpabudget_it_investment = 0;
 $totaltaskrefunbudget_ItInvestment = 0;
+$totaltask_mm_investment = 0;
 foreach ($project->main_task as $tasksubmain) {
     if ($tasksubmain->task_budget_it_investment > 1 && $tasksubmain->task_refund_budget_type == null) {
 
         $totalBudgetItInvestment += $tasksubmain->task_budget_it_investment;
         $totaltaskrefunbudget_ItInvestment += $tasksubmain->task_refund_budget;
         $totalrefundpabudget_it_investment += $tasksubmain->task_refund_pa_budget;
+        $totaltask_mm_investment += $tasksubmain->task_mm_budget;
 
 }
 }
@@ -11006,12 +11082,14 @@ foreach ($project->main_task as $tasksubmain) {
   $totalBudgetGovUtility = 0;
 $totalrefundpabudget_gov_utility = 0;
 $totaltaskrefunbudget_GovUtility = 0;
+$totaltask_mm_gov_utility = 0;
 
 foreach ($project->main_task as $tasksubmain) {
         if($tasksubmain->task_budget_gov_utility > 1 && $tasksubmain->task_refund_budget_type == null){
         $totalBudgetGovUtility += $tasksubmain->task_budget_gov_utility;
         $totaltaskrefunbudget_GovUtility += $tasksubmain->task_refund_budget;
         $totalrefundpabudget_gov_utility += $tasksubmain->task_refund_pa_budget;
+        $totaltask_mm_gov_utility += $tasksubmain->task_mm_budget;
     }
 }
 
@@ -11023,14 +11101,20 @@ foreach ($project->main_task as $tasksubmain) {
             $budget['totalBudgetItOperating'] = $totalBudgetItOperating;
             $budget['total_refund_pa_budget_it_operating'] = $totalrefundpabudget_it_operating;
                $budget['total_task_refun_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
+               $budget['total_task_mm_operating'] = $totaltask_mm_operating;
+               $budget['total_task_sub_sums_mm_operating'] = $task_sub_sums['operating']['task_mm_budget'];
                //budget_it_investment
                $budget['totalBudgetItInvestment'] = $totalBudgetItInvestment;
                $budget['total_refund_pa_budget_it_investment'] = $totalrefundpabudget_it_investment;
                $budget['total_task_refun_budget_ItInvestment'] = $totaltaskrefunbudget_ItInvestment;
+                $budget['total_task_mm_investment'] = $totaltask_mm_investment;
+                $budget['total_task_sub_sums_mm_investment'] = $task_sub_sums['investment']['task_mm_budget'];
                //budget_gov_utility
                $budget['totalBudgetGovUtility'] = $totalBudgetGovUtility;
                $budget['total_refund_pa_budget_gov_utility'] = $totalrefundpabudget_gov_utility;
                $budget['total_task_refun_budget_GovUtility'] = $totaltaskrefunbudget_GovUtility;
+                $budget['total_task_mm_gov_utility'] = $totaltask_mm_gov_utility;
+                $budget['total_task_sub_sums_mm_utility'] = $task_sub_sums['utility']['task_mm_budget'];
 
 
    //รวม  +  - $budget
@@ -11038,13 +11122,15 @@ foreach ($project->main_task as $tasksubmain) {
            $budget['total_refund_pa_budget'] = $budget['total_refund_pa_budget_it_operating'] + $budget['total_refund_pa_budget_it_investment'] + $budget['total_refund_pa_budget_gov_utility'];
            $budget['total_task_refun_budget'] = $budget['total_task_refun_budget_ItOperating'] + $budget['total_task_refun_budget_ItInvestment'] + $budget['total_task_refun_budget_GovUtility'];
 
+
+           $budget['total_task_sub_sums_mm']=$task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['utility']['task_mm_budget'];
 /*
            $rootTaskbudget  = $rootTaskFinancialsQuery->get()->toArray()[0]
 
            ; // Get the first result
 
            $budget['root_two_cost'] = $rootTaskbudget->root_two_cost; */
-       //  dd($budget,$rootTaskbudget);
+     // dd($budget, $rootTaskFinancialsQuery,$rootTaskFinancials);
 
 
 
@@ -11070,8 +11156,20 @@ foreach ($project->main_task as $tasksubmain) {
 
  // dd($increasedData);
 
+ $contracts_left = Contract::doesntHave('contractHasTasks')
+ ->whereNull('deleted_at')
+ ->orderBy('contract_fiscal_year', 'desc')
+ ->get();
+
+
+
+
+
+
         return view('app.projects.tasks.edit', compact(
             // 'rootTaskbudget',
+            'contracts_left',
+            'task_sub_sums',
             'increasedData',
             'budget',
             'projectDetails',
@@ -11146,12 +11244,12 @@ foreach ($project->main_task as $tasksubmain) {
 
 
         $contracts_without_task = Contract::leftJoin('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
-        ->whereNull('contract_has_tasks.task_id')
+->whereNull('contract_has_tasks.task_id')
         ->get();
 // Convert the collection to JSON
 
 
-       // dd($contracts_task_s);
+//dd($contracts_without_task,  $contracts_task,$contract_s,$contracts,$contract,$project,$task,$tasks,$id_task,$id_project,$request);
 
         $task_budget_it_operating = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_operating');
         $task_budget_it_investment = Task::where('project_id', $id_project)->whereNull('tasks.deleted_at')->where('task_id', '!=', $id_task)->sum('task_budget_it_investment');
@@ -11297,9 +11395,13 @@ foreach ($project->main_task as $tasksubmain) {
 
 
         $projectDetails = Project::find($id_project);
-
+        $contracts_left = Contract::doesntHave('contractHasTasks')
+        ->whereNull('deleted_at')
+        ->orderBy('contract_fiscal_year', 'desc')
+        ->get();
         // dd($projectDetails);
         return view('app.projects.tasks.editsub', compact(
+            'contracts_left',
             'contracts_without_task',
             'projectDetails',
             'files',
@@ -11623,7 +11725,7 @@ foreach ($project->main_task as $tasksubmain) {
             // Update other task attributes as needed
             //  $task->taskcon_pp_name        = $request->input('taskcon_pp_name');
             // $task->taskcon_pp        = $request->input('taskcon_pp');
-           // dd($task);
+         //   dd($task);
 
 
             if ($task->save()) {

@@ -88,4 +88,6 @@ class ContractHasTask extends Model
         return $this->hasMany('App\Models\Task');
     }
 
+
+
 }

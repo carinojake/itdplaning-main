@@ -172,5 +172,10 @@ class Contract extends Model
             return $this->main_task()->join('projects', 'tasks.project_id', '=', 'projects.project_id')->where('tasks.task_parent', $task_parent)->select('tasks.*', 'projects.project_id as project_project_id')->get();
         }
 
+        public function contractHasTasks()
+        {
+            return $this->hasMany(ContractHasTask::class, 'contract_id', 'contract_id');
+        }
+
 
 }

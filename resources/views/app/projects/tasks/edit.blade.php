@@ -194,7 +194,7 @@
                                                     value="{{ $task->task_budget_it_operating }}"
                                                     @if(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) == 0) readonly @endif required>
 
-                                                <div class="invalid-feedback">
+                                                <div  id="task_budget_it_operating_feedback" class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
 
@@ -214,7 +214,7 @@
 
 
                                                     @if(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment) == 0) readonly @endif>
-                                                <div class="invalid-feedback">
+                                                <div  id="task_budget_it_investment_feedback"class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
 
@@ -233,7 +233,7 @@
                                                     name="task_budget_gov_utility" min="0"
                                                     value="{{ $task->task_budget_gov_utility }}"
                                                     @if(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility) == 0) readonly @endif>
-                                                <div class="invalid-feedback">
+                                                <div id="task_budget_gov_utility_feedback" class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
 
@@ -326,76 +326,70 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
-
-         <script>
+  {{--       // คำนวณค่างบประมาณที่ถูกใช้ไปแล้ว
+        var oldtaskmmValues = {
+            operating: parseFloat('{{ $task_sub_sums["operating"]["task_mm_budget"] }}') || 0,
+            investment: parseFloat('{{ $task_sub_sums["investment"]["task_mm_budget"] }}') || 0,
+            utility: parseFloat('{{ $task_sub_sums["utility"]["task_mm_budget"] }}') || 0
+        }; --}}
+        <script>
             $(document).ready(function() {
-                var formIsValid = true;
-                var invalidFieldId = '';
-                    // Define oldValues with ternary operators
-                    var oldValues = {
-                    'budget_it_operating': {{$budget['totalBudgetItOperating']}} ? parseFloat({{$project->budget_it_operating}}) : 0,
-                    'budget_it_investment': {{$budget['totalBudgetItInvestment']}} ? parseFloat({{$project->budget_it_investment}}) : 0,
-                    'budget_gov_utility': {{$budget['totalBudgetGovUtility']}} ? parseFloat({{$project->budget_gov_utility}}) : 0
+                // ค่างบประมาณขั้นต่ำที่กำหนด
+                var minBudgetValues = {
+                    task_budget_it_operating: parseFloat('{{ $task_sub_sums["operating"]["task_mm_budget"] }}') || 0,
+                    task_budget_it_investment:  parseFloat('{{ $task_sub_sums["investment"]["task_mm_budget"] }}') || 0,
+                    task_budget_gov_utility: parseFloat('{{ $task_sub_sums["utility"]["task_mm_budget"] }}') || 0
                 };
-
-                var oldtaskValues = {
-                    'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
-                    'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
-                    'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
-                };
-
-                console.log(oldtaskValues);
-
-
+                console.log('minValues:', minBudgetValues);
+                // ฟังก์ชันสำหรับการแปลงตัวเลขเป็นรูปแบบที่มีคอมม่า
                 function numberFormat(number) {
-                return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            }
-                function validateBudget(fieldId, enteredValue) {
-                    var oldValue = oldValues[fieldId];
-                    if (enteredValue < oldValue) {
-                        console.log(fieldId + ":", enteredValue);
-                        console.log("old" + fieldId + ":", oldValue);
-                        $('#' + fieldId).addClass('is-invalid');
-                        $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้'); // "Warn not to do so."
-                        formIsValid = false;
-                        invalidFieldId = fieldId; // Track the invalid field
+                    return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                }
+
+                // ฟังก์ชันสำหรับตรวจสอบค่างบประมาณที่ป้อน
+                function validateBudget(inputId) {
+                    var enteredValue = parseFloat($('#' + inputId).val().replace(/,/g, '')) || 0;
+                    var minBudget = minBudgetValues[inputId];
+                    if (enteredValue < minBudget) {
+                        $('#' + inputId + '_feedback').text('ค่างบประมาณที่ป้อนต้องไม่น้อยกว่า ' + numberFormat(minBudget) + ' บาท');
+                        $('#' + inputId + '_feedback').show();
+                        $('#' + inputId).addClass('is-invalid');
+                        return false;
                     } else {
-                        $('#' + fieldId).removeClass('is-invalid');
-                        $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้');
-                        if (fieldId === invalidFieldId) {
-                            // If the current field was the one that caused the form to be invalid
-                            invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
-                        }
+                        $('#' + inputId + '_feedback').hide();
+                        $('#' + inputId).removeClass('is-invalid');
+                        return true;
                     }
                 }
 
-                // Check the budget amount entered when data is input
-                $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
-                    formIsValid = true; // Reset the form validity state on new input
-                    invalidFieldId = ''; // Reset the invalid field tracking
-
-                    validateBudget('budget_it_operating', parseFloat($("#budget_it_operating").val().replace(/,/g, "")) || 0);
-                    validateBudget('budget_it_investment', parseFloat($("#budget_it_investment").val().replace(/,/g, "")) || 0);
-                    validateBudget('budget_gov_utility', parseFloat($("#budget_gov_utility").val().replace(/,/g, "")) || 0);
+                // ตรวจสอบเมื่อมีการป้อนข้อมูลในฟิลด์
+                $('#formId input[type="text"]').on("input", function() {
+                    validateBudget($(this).attr('id'));
                 });
 
-                // Prevent form submission if validation fails
-            // Prevent form submission if validation fails
-            $("form").on("submit", function(e) {
-                if (!formIsValid) {
-                    e.preventDefault(); // Prevent form submission
-                    var formattedOldValue = numberFormat(oldValues[invalidFieldId]);
-                    var alertText = 'งบประมาณถูกใช้ไป ' + formattedOldValue + ' แล้วจะไม่สามารถน้อยกว่านี้ได้';
-                    Swal.fire({
-                        title: 'เตือน!',
-                        text: alertText,
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
+                // ตรวจสอบก่อนส่งฟอร์ม
+                $('#formId').on('submit', function(e) {
+                    var formIsValid = true;
+                    $('#formId input[type="text"]').each(function() {
+                        if (!validateBudget($(this).attr('id'))) {
+                            formIsValid = false;
+                        }
                     });
-                }
+
+                    if (!formIsValid) {
+                        e.preventDefault(); // ป้องกันการส่งฟอร์ม
+                        Swal.fire({
+                            title: 'ข้อผิดพลาด!',
+                            text: 'กรุณาป้อนค่างบประมาณที่ถูกต้อง',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                    // ถ้า formIsValid เป็น true ฟอร์มจะถูกส่งไปยังเซิร์ฟเวอร์
                 });
             });
             </script>
+
 
 
 
@@ -412,8 +406,8 @@
             var costGovUtility = $("#task_cost_gov_utility").val();
             var taskpay = $("#task_pay").val();
             // Check for task_budget_it_operating
-            console.log(budgetItOperating);
-            console.log(costItOperating);
+          //  console.log(budgetItOperating);
+            //console.log(costItOperating);
             if (budgetItOperating === "0" || budgetItOperating === '' || budgetItOperating > costItOperating || parseFloat(budgetItOperating) < -0 ) {
                 $("#task_cost_it_operating").val('');
                 $("#task_pay").val('');
@@ -490,7 +484,7 @@
      });
      });
          </script>
-<script>
+{{-- <script>
     $(document).ready(function() {
         // Define your sumbudget and budget_sub objects here as you did before
 
@@ -500,7 +494,8 @@
             investment: parseFloat('{{ $task->task_budget_it_investment }}'),
             utility: parseFloat('{{ $task->task_budget_gov_utility }}')
         };
-        console.log( minValues);
+
+        console.log('minValues:', minValues);
         function numberFormat(number) {
         return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
@@ -534,28 +529,7 @@
         });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         // Form submission handler
-
-
-
-
-
-
-
-
-
 
         $('#formId').on('submit', function(e) {
             e.preventDefault();
@@ -569,20 +543,6 @@
                 var fieldId = $(this).attr('id');
                 var budgetType = fieldId.replace('task_budget_', ''); // e.g., 'it_operating'
                 var min = minValues[budgetType];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 if (current > min) {
                     // Add error class and set the flag
                     $(this).addClass('is-invalid');
@@ -605,7 +565,7 @@
 
         // Your other code for handling the input events
     });
-</script>
+</script> --}}
 
         <script>
             const taskTypeRadios = document.querySelectorAll('input[name="task_type"]');

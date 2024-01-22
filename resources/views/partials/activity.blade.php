@@ -398,9 +398,9 @@
 
                     <td>
                         <span
-                            class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
+                            class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
                         <span
-                            class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
+                            class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                     </td>
                     <td>
                         <div class="row">

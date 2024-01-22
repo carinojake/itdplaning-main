@@ -187,11 +187,25 @@
                                             </div>
                                         </div> --}}
                                             @if ($task->task_type == 1)
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <label for="task_mm"
+                                                        class="form-label">{{ __('mm') }}</label>
+                                                        <span class="text-danger">*</span>
+                                                        <input type="text" class="form-control" id='task_mm'
+                                                            name="task_mm" value="{{ $task->task_mm }}"
+                                                            {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                                    </div>
+                                                </div>
+
+
                                                 <div class="col-md-9">
                                                     <div class="form-group">
                                                         <label for="task_contract"
                                                             class="form-label">{{ __('สัญญา') }}</label> <span
                                                             class="text-danger">*</span>
+
+
                                                         @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
                                                             <input type="text" class="form-control"
                                                                 id="contract_number"
@@ -201,7 +215,10 @@
                                                             <select name="task_contract" id="task_contract"
                                                                 class="form-control">
                                                                 <option value="">ไม่มี</option>
-                                                                @foreach ($contracts as $contract)
+
+                                                                @foreach ($contracts_left as $contract)
+
+
                                                                     <option value="{{ $contract->contract_id }}"
                                                                         {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
                                                                         [{{ $contract->contract_number }}]{{ $contract->contract_name }}

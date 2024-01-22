@@ -234,9 +234,9 @@
                                             <td>
                                                 {{ $task['task_name'] }}<br>
                                                 <span
-                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
+                                                    class="badge bg-info">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_start_date)) }}</span>
                                                 <span
-                                                    class="badge bg-primary">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
+                                                    class="badge bg-info">{{ Helper::Date4(date('Y-m-d H:i:s', $task->task_end_date)) }}</span>
                                             </td>
                                             <td class="text-end">
                                                 <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
@@ -253,7 +253,7 @@
                                                         method="POST" style="display:inline">
                                                         @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
-                                                        <button class="btn btn-info text-dark btn-taskRefund"><i
+                                                        <button class="btn btn-primary text-dark btn-taskRefund"><i
                                                                 class="cil-money"></i></button>
                                                     </form>
                                                 @elseif($contract->contract_project_type == 'p')
@@ -262,7 +262,7 @@
                                                         method="POST" style="display:inline">
                                                         @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
-                                                        <button class="btn btn-warning text-white btn-taskRefund-sub"><i
+                                                        <button class="btn btn-primary text-white btn-taskRefund-sub"><i
                                                                 class="cil-money"></i></button>
                                                     </form>
                                                 @endif
@@ -610,10 +610,10 @@
                                             </td>
                                             <td>
                                                 <span
-                                                    class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}</span>
+                                                    class="badge bg-info">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}</span>
                                                 -
                                                 <span
-                                                    class="badge bg-primary">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
+                                                    class="badge bg-info">{{ Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}</span>
                                             </td>
                                             <td>
                                                 @if ($taskcon->taskcon_budget_it_operating > 0)
