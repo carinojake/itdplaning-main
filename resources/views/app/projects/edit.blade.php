@@ -20,8 +20,8 @@
 
 
 
-                            <form method="POST" action="{{ route('project.update', $project->hashid) }}"
-                                class="row needs-validation" novalidate >
+                            <form id='formId' method="POST" action="{{ route('project.update', $project->hashid) }}"
+                                class="row needs-validation"  novalidate >
                                 @csrf
                                 {{ method_field('PUT') }}
 
@@ -184,7 +184,7 @@
                                                         @if( $budget['totalBudgetItOperating'])
                                                         งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ  {{number_format(  $project->budget_it_operating)}} บาท@endif
                                                     </div> --}}
-                                                <div class="invalid-feedback">
+                                                <div id="budget_it_operating_feedback" class="invalid-feedback">
                                                     {{ __('ระบุงบกลาง ICT') }}
                                                 </div>
                                             </div>
@@ -210,7 +210,7 @@
 
                                                         งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ   {{number_format( $project->budget_it_investment)}}  บาท@endif
                                                     </div> --}}
-                                                <div class="invalid-feedback">
+                                                <div id='budget_it_investment_feedback' class="invalid-feedback">
                                                     {{ __('ระบุงบดำเนินงาน') }}
                                                 </div>
                                             </div>
@@ -234,7 +234,7 @@
                                                         งบประมาณมีการถูกใช้ไปแล้วไม่สามารถต่ำ {{number_format( $project->budget_gov_utility)}} บาท@endif
                                                     </div> --}}
 
-                                                <div class="invalid-feedback">
+                                                <div id='budget_gov_utility_feedback' class="invalid-feedback">
                                                     {{ __('ระบุค่าสาธารณูปโภค') }}
                                                 </div>
                                             </div>
@@ -442,8 +442,8 @@
         <div class="row ">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <x-card title="{{ __('เอกสารแนบ ของ') }}{{-- {{ $task->task_name }} --}}">
-                    <form id = 'formId' method="POST"
-                       {{--  action="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $task->hashid]) }}" --}}
+                    <form id = 'formId_file' method="POST"
+                         action="{{ route('project.filesprojectup', ['project' => $project->hashid]) }}"
                         enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         <div class=" col-md-12 mt-3">
@@ -613,7 +613,7 @@
 
 
 
-        <script>
+ {{--        <script>
             $(document).ready(function() {
                 $('form').on('submit', function(e) {
                     // ตรวจสอบว่าไฟล์ถูกเลือกหรือไม่
@@ -623,7 +623,7 @@
                     }
                 });
             });
-        </script>
+        </script> --}}
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -896,9 +896,7 @@ var budgetItOperating = $("#budget_it_operating").val();
             'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
             'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
             'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
-            'total_task_mm_operating': {{$budget['totaltotal_task_mm_operating']}} || 0,
-            'total_task_mm_investment': {{$budget['totaltotal_task_mm_investment']}} || 0,
-            'total_task_mm_gov_utility': {{$budget['totaltotal_task_mm_gov_utility']}} || 0,
+
         };
 
 
@@ -912,25 +910,28 @@ var budgetItOperating = $("#budget_it_operating").val();
         function numberFormat(number) {
         return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
-        function validateBudget(fieldId, enteredValue) {
-            var oldValue = oldValues[fieldId];
-            if (enteredValue < oldValue) {
-                console.log(fieldId + ":", enteredValue);
-                console.log("old" + fieldId + ":", oldValue);
-                $('#' + fieldId).addClass('is-invalid');
-                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้11'); // "Warn not to do so."
-                formIsValid = false;
-                invalidFieldId = fieldId; // Track the invalid field
-            } else {
-                $('#' + fieldId).removeClass('is-invalid');
-                $('.invalid-feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้22');
-                if (fieldId === invalidFieldId) {
-                    // If the current field was the one that caused the form to be invalid
-                    invalidFieldId = 'งบประมาณถูกใช้ไป '  + ' แล้วจะไม่สามารถน้อยกว่านี้ได้'; // Reset invalid field tracking if it's now valid
-                }
-            }
-        }
 
+function validateBudget(fieldId) {
+        var enteredValue = parseFloat($('#' + fieldId).val().replace(/,/g, '')) || 0;
+        var oldValue = oldValues[fieldId];
+        if (enteredValue < oldValue) {
+            console.log(fieldId + ":", enteredValue, "oldValue:", oldValue);
+            $('#' + fieldId).addClass('is-invalid');
+            $('#' + fieldId + '_feedback').text('งบประมาณถูกใช้ไป แล้วจะไม่สามารถน้อยกว่านี้ได้');
+
+
+            return false;
+        } else {
+            $('#' + fieldId).removeClass('is-invalid');
+            $('#' + fieldId + '_feedback').text('');
+            return true;
+        }
+    }
+
+    // Validate individual fields on input
+    $('#formId input[type="text"]').on("input", function() {
+        validateBudget($(this).attr('id'));
+    });
         // Check the budget amount entered when data is input
         $("#budget_it_operating, #budget_it_investment, #budget_gov_utility").on("input", function() {
             formIsValid = false; // Reset the form validity state on new input
@@ -943,19 +944,36 @@ var budgetItOperating = $("#budget_it_operating").val();
 
         // Prevent form submission if validation fails
     // Prevent form submission if validation fails
-    $("form").on("submit", function(e) {
-        if (!formIsValid) {
-            e.preventDefault(); // Prevent form submission
-            var formattedOldValue = numberFormat(oldValues[invalidFieldId]);
-            var alertText = 'งบประมาณถูกใช้ไป ' + formattedOldValue + ' แล้วจะไม่สามารถน้อยกว่านี้ได้';
-            Swal.fire({
-                title: 'เตือน!',
-                text: alertText,
-                icon: 'warning',
-                confirmButtonText: 'Ok'
-            });
+  // Validate all fields on form submission
+  $('#formId').on('submit', function(e) {
+        var formIsValid = true;
+        var invalidFieldId = '';
+
+      // Validate each input field and determine if the form is valid
+      $('#formId input[type="text"]').each(function() {
+        var fieldId = $(this).attr('id');
+        if (!validateBudget(fieldId)) {
+            formIsValid = false;
+            invalidFieldId = fieldId; // Track the first invalid field ID
+            return false; // Exit the .each() loop on first invalid field
         }
+    });
+
+    // If the form is not valid, prevent submission and show an alert
+    if (!formIsValid && invalidFieldId) {
+        e.preventDefault(); // Prevent form submission
+
+        var formattedOldValue = numberFormat(oldValues[invalidFieldId]);
+        var alertText = 'งบประมาณถูกใช้ไป ' + formattedOldValue + ' แล้วจะไม่สามารถน้อยกว่านี้ได้';
+
+        Swal.fire({
+            title: 'เตือน!',
+            text: alertText,
+            icon: 'warning',
+            confirmButtonText: 'Ok'
         });
+    }
+    });
     });
     </script>
 

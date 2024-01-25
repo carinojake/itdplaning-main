@@ -411,9 +411,9 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold ">
-                                                    @if ($budgets > 1)
+
                                                     {{ number_format((($budgets+ $increaseData['increasedbudget_sum'])- ($ospa + $osa)- ($ispa + $isa)-($utpcs + $utsc)),2) }}
-                                                    @endif
+
                                                 </div>
 
                                                     <small
@@ -430,10 +430,10 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgetscentralict > 1)
+
                                                     {{ number_format((($budgetscentralict+$increaseData['increasedbudget_sum_budget_it_operating'])    - ($ospa + $osa)), 2) }}
 
-                                                    @endif
+
                                                     </div>
 
                                                     <small
@@ -449,9 +449,9 @@
                                                     $tmp_class_bal = $budget['balance'] > 1000000 ? 'success'  :'danger';
                                                   @endphp --}}
                                                 <div class="fs-4 fw-semibold text-success">
-                                                    @if ($budgetsinvestment > 1)
+
                                                     {{ number_format((($budgetsinvestment+$increaseData['increasedbudget_sum_budget_it_investment'] )- ($ispa + $isa) ), 2) }}
-                                                    @endif
+
                                                     </div>
 
                                                     <small

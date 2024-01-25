@@ -205,7 +205,7 @@
                                             aria-labelledby="panelsStayOpen-headingTwo">
                                             <div class="accordion-body">
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 d-none">
                                                     @if (session('contract_id'))
                                                         ID: {{ session('contract_id') }}
                                                     @endif
@@ -257,7 +257,7 @@
 
                                                                 <input type="text" class="form-control"
                                                                     id="taskcon_mm" name="taskcon_mm"
-                                                                    value="{{ $taskcon->taskcon_mm ?? '' }}"
+                                                                    value="{{ session('contract_mm') ?: $task->task_mm }}"
                                                                     {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                                 <div class="invalid-feedback">
                                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
@@ -370,7 +370,10 @@
                                                                  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                                 class="form-control numeral-mask"
                                                                 name="task_mm_budget" min="0"
-                                                                value="{{ $task->task_mm_budget }}"
+                                                                value={{ session('contract_mm_budget') ?: $task->task_mm_budget }}
+
+
+
                                                                 {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                         </div>
                                                     </div>
@@ -420,7 +423,7 @@
                                                                             id="task_budget_it_operating"
                                                                             name="task_budget_it_operating"
                                                                             min="0"
-                                                                            value="{{ $task->task_budget_it_operating }}"
+                                                                            value= {{session('contract_budget_type') == 1 ? session('contract_mm_budget') :$task->task_budget_it_operating }}
                                                                             onchange="calculateRefund()"
                                                                             {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
@@ -439,9 +442,12 @@
                                                                             id="task_cost_it_operating"
                                                                             name="task_cost_it_operating"
                                                                             min="0"
-                                                                            value="{{ $task->task_cost_it_operating }}"
+                                                                            value={{ session('contract_budget_type') == 1 ? session('contract_pa_budget') : $task->task_cost_it_operating }}
+                                                                          {{--   value="{{ $task->task_cost_it_operating }}" --}}
                                                                             onchange="calculateRefund()"
-                                                                            {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
+                                                                            {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}
+
+                                                                            >
 
                                                                         <div class="invalid-feedback">
                                                                             {{ __('งบกลาง ICT') }}
@@ -464,7 +470,7 @@
                                                                             id="task_budget_it_investment"
                                                                             name="task_budget_it_investment"
                                                                             min="0"
-                                                                            value="{{ $task->task_budget_it_investment }} "
+                                                                            value={{ session('contract_budget_type') == 2 ? session('contract_mm_budget') : $task->task_budget_it_investment }}
                                                                             onchange="calculateRefund()"
                                                                             {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
 
@@ -483,7 +489,7 @@
                                                                             id="task_cost_it_investment"
                                                                             name="task_cost_it_investment"
                                                                             min="0"
-                                                                            value={{ session('contract_pa_budget') }}
+                                                                            value={{ session('contract_budget_type') == 2 ? session('contract_pa_budget') : $task->task_cost_it_investment }}
                                                                             onchange="calculateRefund()">
 
                                                                         <div class="invalid-feedback">
@@ -507,6 +513,7 @@
                                                                         id="task_budget_gov_utility"
                                                                         name="task_budget_gov_utility"
                                                                         min="0"
+                                                                        value={{ session('contract_budget_type') == 3 ? session('contract_mm_budget') : $task->task_budget_gov_utility }}
                                                                         onchange="calculateRefund()">
 
                                                                     <div class="invalid-feedback">
@@ -524,6 +531,7 @@
                                                                         id="task_cost_gov_utility"
                                                                         name="task_cost_gov_utility"
                                                                         min="0"
+                                                                        value={{ session('contract_budget_type') == 3 ? session('contract_pa_budget') : $task->task_cost_gov_utility }}
                                                                         onchange="calculateRefund()">
 
                                                                     <div class="invalid-feedback">

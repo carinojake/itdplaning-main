@@ -37,7 +37,11 @@
                                     <div class="col-md-12 mt-3 ">
                                         <label for="taskcon_name">ชื่อ กิจกรรม</label>
                                         <input type="text" class="form-control" id="taskcon_name" name="taskcon_name"
-                                            value="{{ $taskcon->taskcon_name }}">
+                                            value="{{ $taskcon->taskcon_name }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+
+                                            >
                                     </div>
                                     <div class="form-group mt-3">
                                         <label for="taskcon_description">กิจกรรม</label>
@@ -51,7 +55,11 @@
                                             class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
 
                                         <input class="form-control" id="taskcon_start_date" name="taskcon_start_date"
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}">
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+
+                                            >
                                     </div>
 
 
@@ -59,7 +67,10 @@
                                         <label for="taskcon_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
                                         {{--    <span class="text-danger"></span> --}}
                                         <input class="form-control" id="taskcon_end_date" name="taskcon_end_date"
-                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}">
+                                            value="{{ \Helper::date4(date('Y-m-d H:i:s', $taskcon->taskcon_end_date)) }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+                                            >
                                     </div>
                                 </div>
 

@@ -376,9 +376,9 @@
         // Convert to a float to ensure numerical comparison
         totaltaskcons_Sum = parseFloat(totaltaskcons_Sum);
 
-        // Check if the sum is greater than 0 (or any other condition you deem appropriate)
-        if (totaltaskcons_Sum > 1) {
-            var formInputs = document.querySelectorAll('#taskcon_budget input ,#taskcon_cost input ,#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
+        // Check if the sum is greater than 0 (or any other condition you deem appropriate) #taskcon_pay input,, #taskcon_pp input, #taskcon_pay_date input
+        if (totaltaskcons_Sum < 1) {
+            var formInputs = document.querySelectorAll('#taskcon_budget input ,#taskcon_cost input , #taskcon_projectplan textarea');
             formInputs.forEach(function(input) {
                 input.setAttribute('readonly', true); // Set to read-only
             });
@@ -392,10 +392,10 @@
         var budgetFields = ['taskcon_budget_it_operating', 'taskcon_budget_it_investment', 'taskcon_budget_gov_utility'];
         var taskcon_pay = ['taskcon_pay']
         var tackconstatus = ['task_status'];
-        console.log(costFields);
-        console.log(budgetFields);
-        console.log(taskcon_pay);
-        console.log(tackconstatus);
+        //console.log(costFields);
+        //console.log(budgetFields);
+        //console.log(taskcon_pay);
+        //console.log(tackconstatus);
 
         function calculateRefundstatus() {
             var totalRefundsstatus = 1; // Assuming you want to start with a default value of 0
@@ -404,15 +404,17 @@
                 var pa_value = $("#" + costField).val();
                 var pr_value = $("#" + budgetFields[index]).val();
                 var pay_value = $("#" + taskcon_pay).val();
-                console.log(pa_value);
-        console.log(pr_value);
-        console.log(taskcon_pay);
+           //     console.log(pa_value);
+        //console.log(pr_value);
+        //console.log(taskcon_pay);
 
                 if (pa_value && pr_value && pay_value) {
                     var pa_budget = parseFloat(pa_value.replace(/,/g, "")) || 0;
                     var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
                     var pay_value = parseFloat(pay_value.replace(/,/g, "")) || 0;
                     // Use '===' for strict comparison if you expect the same type, or '==' if types can differ
+                    console.log(pr_budget);
+                    console.log(pay_value);
                     if (pr_budget - pay_value === 0) {
                         // Assuming you want to set some status when the budgets are equal
                         totalRefundsstatus = 2;
@@ -422,7 +424,7 @@
                     }
                 }
             });
-
+            console.log(totalRefundsstatus);
             $("#task_status").val(totalRefundsstatus);
         }
 
@@ -502,7 +504,7 @@
         var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
         var taskconstartdate = "{{ Helper::Date4(date('Y-m-d H:i:s', $taskcon->taskcon_start_date)) }}";
 
-        console.log(taskconstartdate);
+      //  console.log(taskconstartdate);
         $("#taskcon_pay_date")
             .datepicker({
                 dateFormat: 'dd/mm/yy',

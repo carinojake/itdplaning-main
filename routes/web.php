@@ -120,10 +120,13 @@ Route::group(['middleware' => ['role:user', 'get.menu']], function () {
 
     Route::get('/project/{project}/task/{task}/editsubno', [ProjectController::class, 'taskEditSubno'])->name('project.task.editsubno');
     Route::get('/project/{project}/task/{task}/editsub', [ProjectController::class, 'taskEditSub'])->name('project.task.editsub');
+
+
     Route::get('/project/{project}/task/{task}/editup', [ProjectController::class, 'filesup'])->name('project.task.filesup');
     Route::post('/project/{project}/task/{task}/editup', [ProjectController::class, 'filesup'])->name('project.task.filesup');
 
-
+    Route::get('/project/{project}/editup', [ProjectController::class, 'filesprojectup'])->name('project.filesprojectup');
+    Route::post('/project/{project}/editup', [ProjectController::class, 'filesprojectup'])->name('project.filesprojectup');
 
 //  Route::post('/project/{project}/task/createsub', [ProjectController::class, 'taskStoresub'])->name('project.task.storesub');
     //Route::post('/project/{project}/task/createsubno', [ProjectController::class, 'taskStoresubno'])->name('project.task.storesubno');
@@ -263,6 +266,12 @@ Route::get('/contract/{contract}/task/{task}', [ContractController::class, 'task
 
     Route::get('/contract/getdata', [ContractController::class, 'getData'])->name('contract.getdata');
 
+
+   // Route::get('/check-project', [ProjectController::class, 'checkProject'])->name('project.check-project');
+
+
+
+    Route::get('/contract/check-contract', [ContractController::class, 'checkContract'])->name('contract.check-contract');
 
 
     /* Route::get('/contract/{contract}/task/create', [ContractController::class, 'taskCreate'])->name('contract.task.create');

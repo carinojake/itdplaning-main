@@ -389,8 +389,8 @@
                                                     class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
                                                 <span class="text-danger">*</span>
 
-                                                <input type="text" class="form-control"
-                                                    id="task_mm" name="task_mm"  required  >
+                                                <input required type="text" class="form-control"
+                                                    id="task_mm" name="task_mm"value= {{ session('contract_mm') }}    >
                                                 <div class="invalid-feedback">
                                                     {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                                 </div>
@@ -568,7 +568,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 mt-3 ">
+                                            <div class="col-md-3 mt-3 d-none ">
 
                                                 <label for="task_mm_budget"
                                                     class="form-label">{{ __('วงเงินที่ขออนุมัติ mm') }}</label>

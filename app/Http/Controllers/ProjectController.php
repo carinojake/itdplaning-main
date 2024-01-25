@@ -81,7 +81,9 @@ class ProjectController extends Controller
 
                     //if (Auth::user()->hasRole('admin')) {
 
+                        if ($row->project_status <2 ) {
                     $html .= '<a href="' . route('project.edit', $row->hashid) . '" class="text-white btn btn-warning btn-edit " ><i class="cil-pencil "></i></a>';
+                }
                     if ($row->task_count === 0) {
                         $html .= '<button data-rowid="' . $row->hashid . '" class="text-white btn btn-danger btn-delete"><i class="cil-trash "></i></button>';
                     }
@@ -5794,17 +5796,17 @@ dd($task_sub_refund_total_count);
 
 
         foreach ($project->main_task as $task) {
-            if ($task->task_budget_it_operating && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+            if ($task->task_budget_it_operating > 1&& $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
                 $totalBudgetItOperating += $task->task_budget_it_operating;
                 $totaltaskrefunbudget_ItOperating += $task->task_refund_budget;
             }
-            elseif ($task->task_budget_it_operating && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+            elseif ($task->task_budget_it_operating > 1&& $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetItOperating += $task->task_budget_it_operating;
             }
             elseif
 
-            ($task->task_budget_it_operating && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+            ($task->task_budget_it_operating > 1&& $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetItOperating += $task->task_budget_it_operating;
             }
@@ -5813,7 +5815,7 @@ dd($task_sub_refund_total_count);
         }
 
         foreach ($project->main_task as $task) {
-        if ($task->task_budget_it_operating && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+        if ($task->task_budget_it_operating >1&& $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
                 $totalrefundpabudget_it_operating += $task->task_refund_pa_budget;
             }
 
@@ -5823,24 +5825,24 @@ dd($task_sub_refund_total_count);
         $totalrefundpabudget_it_investment = 0;
         $totaltaskrefunbudget_ItInvestment = 0;
         foreach ($project->main_task as $task) {
-            if ($task->task_budget_it_investment && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+            if ($task->task_budget_it_investment > 1&& $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
                 $totalBudgetItInvestment += $task->task_budget_it_investment;
                 $totaltaskrefunbudget_ItInvestment += $task->task_refund_budget;
             }
-            elseif ($task->task_budget_it_investment && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+            elseif ($task->task_budget_it_investment >1 && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetItInvestment += $task->task_budget_it_investment;
             }
             elseif
 
-            ($task->task_budget_it_investment && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+            ($task->task_budget_it_investment >1&& $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetItInvestment += $task->task_budget_it_investment;
             }
 
         }
         foreach ($project->main_task as $task) {
-            if ($task->task_budget_it_investment && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+            if ($task->task_budget_it_investment >1&& $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
                   $totalrefundpabudget_it_investment += $task->task_refund_pa_budget;
                 }
 
@@ -5853,24 +5855,24 @@ dd($task_sub_refund_total_count);
         $totaltaskrefunbudget_GovUtility = 0;
 
         foreach ($project->main_task as $task) {
-            if ($task->task_budget_gov_utility && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
+            if ($task->task_budget_gov_utility >1&& $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1) {
                 $totalBudgetGovUtility += $task->task_budget_gov_utility;
                 $totaltaskrefunbudget_GovUtility += $task->task_refund_budget;
             }
-            elseif ($task->task_budget_gov_utility && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
+            elseif ($task->task_budget_gov_utility>1 && $task->task_status == 2 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetGovUtility += $task->task_budget_gov_utility;
             }
             elseif
 
-            ($task->task_budget_gov_utility && $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
+            ($task->task_budget_gov_utility >1&& $task->task_status == 1 && $task->task_parent_sub == 3 && $task->task_refund_budget_type == 1) {
                 # code...
                 $totalBudgetGovUtility += $task->task_budget_gov_utility;
             }
 
         }
         foreach ($project->main_task as $task) {
-            if ($task->task_budget_gov_utility && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
+            if ($task->task_budget_gov_utility >1&& $task->task_budget_type == 0 && $task->task_refund_pa_status == 3){
                   $totalrefundpabudget_gov_utility += $task->task_refund_pa_budget;
                 }
 
@@ -6057,7 +6059,8 @@ public function checkProject(Request $request)
         $project_name = $request->input('project_name');
          $reguiar_id = $request->input('reguiar_id');
 
-
+         $contract_fiscal_year = $request->input('contract_fiscal_year');
+         $contract_number = $request->input('contract_number');
         // ตรวจสอบชื่อโครงการซ้ำ
         $exists = Project::where('project_fiscal_year', $project_fiscal_year)
             ->where('project_name', $project_name)
@@ -6078,8 +6081,10 @@ public function checkProject(Request $request)
       ->whereNull('deleted_at')
       ->exists();
 
-
-            return response()->json(['exists' => $exists, 'data' => $data, 'exists_reguiar_id' => $exists_reguiar_id]);
+      $exists_contract_number = Contract::where('contract_number', $contract_number)
+      ->whereNull('deleted_at')
+    ->exists();
+            return response()->json(['exists_contract_number' => $exists_contract_number,'exists' => $exists, 'data' => $data, 'exists_reguiar_id' => $exists_reguiar_id]);
     }
 }
 
@@ -6165,7 +6170,7 @@ public function create(Request $request)
             'budget_it_operating' => 'nullable|numeric',
             'budget_it_investment' => 'nullable|numeric', */
         ], $messages);
-
+/*
         $existingReguiarId = Project::where('project_fiscal_year', $request->input('project_fiscal_year'))
             ->where('project_type', $request->input('project_type'))
             ->where('reguiar_id', $request->input('reguiar_id'))
@@ -6192,7 +6197,7 @@ if ($existingProjectname) {
                 'project_name' => 'ชื่องาน/โครงการ *นี้ถูกใช้งานแล้ว'
             ])->withInput();
         }
-
+ */
 
         $start_date_obj = date_create_from_format('d/m/Y', $request->input('project_start_date'));
         $end_date_obj = date_create_from_format('d/m/Y', $request->input('project_end_date'));
@@ -6230,6 +6235,8 @@ if ($existingProjectname) {
         $project->budget_it_investment = $budget_it_investment;
         $project->reguiar_id = $request->input('reguiar_id');
 
+
+       // dd($project);
 
 
 
@@ -6456,7 +6463,7 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
            $budget['$totalBudget_task_refund_budget_type'] = $totalBudget_task_refund_budget_type;
 
 
-            // dd($budget);
+        // dd($budget);
 
             $filesproject = File::where('project_id', $project->project_id)->get();
 
@@ -6605,6 +6612,41 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
 
          if ($project->save()) {
 
+            $id = $project->project_id;
+            $project->project_id = $id;
+
+            $files = new File;
+            $idproject = $id;
+            $idtask = 0;
+            $idup = $idproject;
+            $idup = $idproject . '/' . $idtask;
+
+
+            $contractDir = public_path('storage/uploads/contracts/' . $idup);
+            if (!file_exists($contractDir)) {
+                mkdir($contractDir, 0755, true);
+            }
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filesize = $file->getSize();
+                    $file->storeAs('public/', $filename);
+                    $file->move($contractDir, $filename);
+
+                    $fileModel = new File;
+                    $fileModel->name = $filename;
+                    $fileModel->project_id = $idproject;
+                   // $fileModel->task_id = $idtask;
+                    $fileModel->size = $filesize;
+                    $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
+                  //  dd($fileModel);
+                    if (!$fileModel->save()) {
+                        // If the file failed to save, redirect back with an error message
+                        return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
+                    }
+                }
+            }
 
            if ($request->input('increased_budget_status') == '1') {
                 $increasedbudget = new Increasedbudget;
@@ -12011,17 +12053,20 @@ foreach ($project->main_task as $tasksubmain) {
         return back()->with('success', 'File deleted successfully');
     }
 
-    public function filesprojectup(Request $request, $project, $task) {
-        $id = Hashids::decode($task)[0];
-        $task = Task::find($id);
+    public function filesprojectup(Request $request, $project) {
+        $id = Hashids::decode($project)[0];
+        $project = Project::find($id);
 
-        $idproject = $project; // ตรวจสอบว่าตัวแปรนี้ถูกกำหนดถูกต้อง
-        $idtask = $task->task_id;
-        $idup = $idproject . '/' . $idtask;
+        // ตรวจสอบว่าตัวแปรนี้ถูกกำหนดถูกต้อง
+        $idproject = $id; // ใช้ $id แทน $idproject
+        $idtask = 0; // ตั้งค่าเริ่มต้นเป็น 0
 
-        $contractDir = public_path('storage/uploads/contracts/' . $idup);
+        $contractDir = public_path('storage/uploads/contracts/' . $idproject . '/' . $idtask);
+
         if (!file_exists($contractDir)) {
-            mkdir($contractDir, 0755, true);
+            if (!mkdir($contractDir, 0755, true)) {
+                return redirect()->back()->withErrors('An error occurred while creating the directory. Please try again.');
+            }
         }
 
         if ($request->hasFile('file')) {
@@ -12033,10 +12078,11 @@ foreach ($project->main_task as $tasksubmain) {
 
                 $fileModel = new File;
                 $fileModel->name = $filename;
-                $fileModel->task_id = $idtask;
+                $fileModel->project_id = $idproject; // กำหนดค่า project_id ให้เป็น $idproject
+                $fileModel->task_id = $idtask; // กำหนดค่า task_id ให้เป็น $idtask
                 $fileModel->size = $filesize;
-                $fileModel->location = 'storage/uploads/contracts/' . $idup . '/' . $filename;
-
+                $fileModel->location = 'storage/uploads/contracts/' . $idproject . '/' . $idtask . '/' . $filename;
+            ($fileModel);
                 if (!$fileModel->save()) {
                     return redirect()->back()->withErrors('An error occurred while saving the file. Please try again.');
                 }
@@ -12045,6 +12091,8 @@ foreach ($project->main_task as $tasksubmain) {
 
         return back()->with('success', 'File uploaded successfully');
     }
+
+
 
 
 

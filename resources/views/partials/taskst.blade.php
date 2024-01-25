@@ -174,7 +174,7 @@
                                 </td>
                                 <td>
                                     @if(isset($subtask) && $subtask->task_status == 2)
-                                    <span class="badge bg-success">ดำเนินการแล้วเสร็จ</span>
+                                    <span class="badge bg-success"><i class="cil-check"></i></span>
                                 @else
                                     <span class="badge bg-danger">-</span>
                                 @endif
@@ -326,7 +326,7 @@
                                             <div class=" certificate-item">
                                                 <span
                                                     class="badge {{ $contract->contract_status == 2 ? 'bg-success' : 'bg-warning' }} text-white">
-                                                    {{ $contract->contract_status == 2 ? 'ดำเนินการแล้วเสร็จ' : 'อยู่ในระหว่างดำเนินการ' }}
+                                                    {{ $contract->contract_status == 2 ? '-' : '-' }}
                                                 </span>
                                             </div>
                                             @endforeach

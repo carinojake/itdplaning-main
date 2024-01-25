@@ -206,7 +206,7 @@
                     </div>
                 </div>
 
-                @if($budget['total_refund_pa_budget'])
+          {{--  @if($budget['total_refund_pa_budget']) --}}
                 <div class="col-md-auto">
                     <!--คงเหลือ ม่วง-->
                     <div class="card  ">
@@ -296,7 +296,7 @@
                           {{--         1- {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }}
                                 <br>  2-  {{ number_format(floatval($budget['totalrefund_top']), 2) }}
                                 <br>    3-  {{ number_format($budget['budget_total_refund_pa_budget_end'], 2) }} --}}
-                                    {{ number_format($budget['total_refund_pa_budget']- $budget['totalbudget_budget'], 2) }}
+                                   {{--  {{ number_format($budget['total_refund_pa_budget']- $budget['totalbudget_budget'], 2) }} --}}
                              {{--   333    {{ number_format($budget['budget_total_refund_pa_budget_end']-  $budget['totalbudget_budget'], 2) }} --}}
 
                                @elseif($budget['budget_total_refund_pa_budget_end']>0)
@@ -334,7 +334,7 @@
                     </div>
 
                 </div>
-                @endif
+                {{-- @endif --}}
 
                 <!--คงเหลือ ฟ้า ทดสอบ-->
 {{--    <div class="col-md-auto">

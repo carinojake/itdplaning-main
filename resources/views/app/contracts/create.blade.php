@@ -135,7 +135,7 @@
                                                     <label for="contract_type" class="form-label">{{ __('ประเภท') }}
                                                         <span class="text-danger">*</span></label>
                                                     <select name="contract_type" id="contract_type"
-                                                        class="form-control">
+                                                        class="form-control" required>
                                                         <option value="" disabled selected>
                                                             {{ __('เลือกประเภท...') }}
                                                         </option>
@@ -151,7 +151,7 @@
                                                         class="form-label">{{ __('ประเภท') }}</label>
                                                     <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
-                                                        class="form-control">
+                                                        class="form-control" required>
                                                         <option value="" disabled selected>
                                                             {{ __('เลือกประเภท...') }}
                                                         </option>
@@ -332,15 +332,16 @@
                                                                                     class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
                                                                                 <span class="text-danger"></span>
                                                                                 <input type="text"
-                                                                                    class="form-control"
+                                                                                class="form-control "
                                                                                     id="contract_mm"
                                                                                     name="contract_mm"
                                                                                     value="{{ $ta?->task_mm }}"
-
+                                                                                    required autofocus
                                                                                     >
-                                                                                <div class="invalid-feedback">
-                                                                                    {{ __(' ') }}
-                                                                                </div>
+
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}
+                                                                                    </div>
                                                                             </div>
 
 
@@ -357,9 +358,9 @@
 
                                                                                     required
                                                                                     autofocus>
-                                                                                <div class="invalid-feedback">
-                                                                                    {{ __('ชื่อสัญญา ซ้ำ') }}
-                                                                                </div>
+                                                                                    <div id="contract_mm_name_feedback" class="invalid-feedback">
+                                                                                        {{ __('ชื่อmm ') }}
+                                                                                    </div>
                                                                             </div>
                                                                             <div class="col-md-3 ">
                                                                                 <label for="contract_mm_budget"
@@ -375,7 +376,7 @@
                                                                                     name="contract_mm_budget"
                                                                                     min="0"
                                                                                     value="{{ $ta?->task_mm_budget }}"
-                                                                                    >
+                                                                                    required autofocus>
                                                                             </div>
                                                                         </div>
 
@@ -403,9 +404,9 @@
                                                                                 id="contract_name"
                                                                                 name="contract_name" required
                                                                                 autofocus>
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('ชื่อสัญญา ซ้ำ') }}
-                                                                            </div>
+                                                                                <div  id="contract_name_label_feedback" class="invalid-feedback">
+                                                                                    {{ __('ชื่อสัญญา') }}
+                                                                                </div>
                                                                         </div>
 
 
@@ -424,12 +425,13 @@
                                                                                     class="form-control"
                                                                                     id="contract_PR"
                                                                                     name="contract_pr"
-
+                                                                                    required
+                                                                                    autofocus
 
 
                                                                                     >
                                                                                 <div class="invalid-feedback">
-                                                                                    {{ __(' ') }}
+                                                                                    {{ __('ใบขอดำเนินการซื้อ/จ้าง (PR)') }}
                                                                                 </div>
                                                                             </div>
 
@@ -469,9 +471,9 @@
                                                                             <span class="text-danger"></span>
 
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_PA" name="contract_pa">
+                                                                                id="contract_PA" name="contract_pa"  required autofocus>
                                                                             <div class="invalid-feedback">
-                                                                                {{ __(' ') }}
+                                                                                {{ __('ใบขออนุมัติซื้อ/จ้าง (PA) ') }}
                                                                             </div>
                                                                         </div>
 
@@ -831,6 +833,9 @@
                                                                                         class="form-control"
                                                                                         id="expenses_sum"
                                                                                         name="expenses_sum" readonly>
+                                                                                        <div id="expenses_sum_feedback"class="invalid-feedback">
+                                                                                            {{ __('เงินงวดทั้งหมด รวมกันเท่ากับ PA') }}
+                                                                                        </div>
                                                                                     </div>
 
 
@@ -1275,40 +1280,97 @@
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-
-
             <script>
-                var budgetFields_pa = ['contract_pa_budget'];
+                $(document).ready(function() {
+                    var oldContract_number = ''; // เก็บเลขที่สัญญาเดิม
+                    var oldValues = {}; // เก็บค่าเดิมของฟิลด์
+                    var formIsValid = true; // ตรวจสอบความถูกต้องของฟอร์ม
 
-                function calculateRefund_pa() {
-                    var totalRefund_pa = 0;
+                    $('#contract_fiscal_year, #contract_number').on('change', function() {
+                        var contract_number = $('#contract_number').val();
+                        var fiscalYear = $('#contract_fiscal_year').val();
+                        var fieldId = $(this).attr('id');
 
-                    budgetFields_pa.forEach(function(costField, index) {
-                        var pr_value = $("#" + costField).val();
+                        $.ajax({
+    method: 'GET',
+   // url: '{{ route("contract.check-contract") }}',
+    url: '{{ route("project.check-project") }}',
+    data: {
+        contract_fiscal_year: fiscalYear,
+        contract_number: contract_number
+    },
+    success: function(data) {
+        if (data.exists_contract_number) {
+            $('#' + fieldId).addClass('is-invalid');
+            $('#' + fieldId + '_feedback').text('เลขที่สัญญา มีอยู่แล้ว');
+            formIsValid = false;
+        } else {
+            $('#' + fieldId).removeClass('is-invalid');
+            oldValues[fieldId] = contract_number;
+            formIsValid = true;
+        }
+    },
+    error: function(xhr, status, error) {
+        // เมื่อมีข้อผิดพลาดในการเรียก AJAX สามารถแสดงข้อความข้อผิดพลาดได้ที่นี่
+        console.error(error);
+    }
+});
 
-                        if (pr_value) {
-                            var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
-
-                            if (pr_budget != 0) { // Corrected comparison operator from '=' to '!='
-                                var refund = pr_budget;
-                                totalRefund_pa += refund;
-                            }
+                        if (oldContract_number === contract_number) {
+                            $('#' + fieldId).addClass('is-invalid');
+                            $('#' + fieldId + '_feedback').text('เลขที่สัญญา มีอยู่แล้ว');
+                            formIsValid = false;
+                        } else {
+                            $('#' + fieldId).removeClass('is-invalid');
+                            oldValues[fieldId] = contract_number;
+                            formIsValid = true;
                         }
                     });
 
-                    $("#total_pa_budget").val(totalRefund_pa.toFixed(2));
-                }
-
-                $(document).ready(function() {
-                    budgetFields_pa.forEach(function(costField) {
-                        $("#" + costField).on("input", calculateRefund_pa);
+                    $("form").on("submit", function(e) {
+                        if (!formIsValid) {
+                            e.preventDefault();
+                            var alertText =  'เลขที่สัญญา มีอยู่แล้ว';
+                            Swal.fire({
+                                title: 'เตือน!',
+                                text: alertText,
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
                     });
                 });
-
-
-
-
             </script>
+
+<script>
+    var budgetFields_pa = ['contract_pa_budget'];
+
+    function calculateRefund_pa() {
+        var totalRefund_pa = 0;
+
+        budgetFields_pa.forEach(function(costField, index) {
+            var pr_value = $("#" + costField).val();
+
+            if (pr_value) {
+                var pr_budget = parseFloat(pr_value.replace(/,/g, "")) || 0;
+
+                if (pr_budget != 0) { // Corrected comparison operator from '=' to '!='
+                    var refund = pr_budget;
+                    totalRefund_pa += refund;
+                }
+            }
+        });
+
+        $("#total_pa_budget").val(totalRefund_pa.toFixed(2));
+        $("#contract_cn_budget").val(totalRefund_pa.toFixed(2));
+    }
+
+    $(document).ready(function() {
+        budgetFields_pa.forEach(function(costField) {
+            $("#" + costField).on("change", calculateRefund_pa);
+        });
+    });
+</script>
 
             <script>
                 var costFields = ['contract_pa_budget', 'task_cost_it_investment', 'task_cost_gov_utility'];
@@ -1341,6 +1403,8 @@
                     });
                 });
             </script>
+
+
 
             <script type="text/javascript">
                 $(document).ready(function() {
@@ -1713,8 +1777,8 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                     // Group tasks by project parent ID and project fiscal year
                     var groupedTasks = tasksData.reduce(function(groups, task) {
 
-                        console.log('a', groups);
-                        console.log('ab', task);
+                        //console.log('a', groups);
+                        //console.log('ab', task);
 
 
                         var projectParent = task.task_parent_id;
@@ -1798,9 +1862,9 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
             var fiscalYearStartDate = new Date(contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
             var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-  console.log( contract_fiscal_year);
-  console.log( fiscalYearStartDate);
-    console.log( fiscalYearStartDate);
+  //console.log( contract_fiscal_year);
+  //console.log( fiscalYearStartDate);
+   // console.log( fiscalYearStartDate);
                         for (var i = 0; i < rounds; i++) {
                             var content = `
                     <div class="row">
@@ -1816,7 +1880,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                             name="tasks[${i}][taskbudget]"
                             class="form-control custom-input numeral-mask expenses"
                              data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
-                            <div class="invalid-feedback">ระบุเงินงวด</div>
+                            <div id="tasks_${i}_taskbudget_feedback" class="invalid-feedback">ระบุเงินงวด</div>
 
                         </div>
                         <div class="col-md-3">
@@ -1833,7 +1897,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                 initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
                 // Initialize the datepickers for the newly added elements
 
-                console.log("round===="+i);
+                //console.log("round===="+i);
 
             }
 
@@ -1901,6 +1965,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                     $(document).on('input', '.expenses', function() {
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
                         var sum = 0;
+                        var index = $(this).data('index');
                         var tasksContainer = $('#tasksContainer');
                         var inputs = $('.expenses').map(function() {
                            // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
@@ -1974,7 +2039,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             }));
-                            $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+                            $('#expenses_delsum').val(remainingBudget.toLocaleString('budgeten-US', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
 
@@ -1994,66 +2059,62 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
         return remainingBudget;
     }
 
-    $('#formId').on('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission
-
-    var remainingBudget = calculateRemainingBudget();
-    var sumOfExpenses = $('.expenses').map(function() {
-        return parseFloat($(this).val().replace(/,/g, "")) || 0;
-    }).get().reduce(function(a, b) {
-        return a + b;
-    }, 0);
-
-    // You need to ensure that `contract_pa_budget` is defined and holds the correct value
-    var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
-    console.log( contract_pa_budget);
-    console.log( remainingBudget, sumOfExpenses);
-    console.log( sumOfExpenses);
-
-    if (contract_pa_budget > sumOfExpenses) {
-
-        $('.expenses').each(function() {
-            // Add or remove validation based on the value of each expense
-            if (parseFloat($(this).val().replace(/,/g, "")) <= contract_pa_budget ) {
-                $(this).addClass('is-invalid');
-
-            } else {
+    var sumOfExpenses = 0;
+                $('.expenses').each(function(index) {
+                sumOfExpenses += parseFloat($(this).val().replace(/,/g, "")) || 0;
+                // ลบคลาส 'is-invalid' ก่อนการตรวจสอบใหม่
                 $(this).removeClass('is-invalid');
+                $('#tasks_' + index + '_taskbudget_feedback').text('');
+                });
+          // คำนวณงบประมาณที่เหลือ
+          var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+                    var remainingBudgetform = contract_pa_budget - sumOfExpenses;
+        // แสดงผลค่าที่คำนวณได้บน console สำหรับการตรวจสอบ
+                      console.log('Contract PA Budget-1:', contract_pa_budget);
+                    console.log('Sum of Expenses-2:', sumOfExpenses);
+                    console.log('Remaining Budget-3:', remainingBudgetform);
+ // var formIsValid = true; // Initialize form validity state
+                    // ตรวจสอบว่าผลรวมของค่าใช้จ่ายเท่ากับงบประมาณหรือไม่
+                    if (remainingBudgetform !== 0) {
+                        // ถ้าไม่เท่ากันแสดงข้อความผิดพลาด
+                        $('#expenses_delsum').addClass('is-invalid');
+                        $('#expenses_delsum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ1');
+                        $('#expenses_sum').addClass('is-invalid');
+                        $('#expenses_sum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ2');
+                        $('.expenses').each(function(index) {
+                            $(this).addClass('is-invalid');
+                            $('#tasks_' + index + '_taskbudget_feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ3');
+                        });
+                        //$('.expenses, #expenses_delsum, #expenses_sum').addClass('is-invalid');
+                        //$('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
+                       // formIsValid = false; // Set form as invalid
+                       formIsValid = false; // Set form as invalid
+                    } else {
+                        // ถ้าเท่ากันลบคลาส 'is-invalid' และส่งฟอร์ม
+                        $('#expenses_delsum').removeClass('is-invalid');
+                        $('#expenses_delsum').next('.invalid-feedback').text('');
+                        $('#expenses_sum').removeClass('is-invalid');
+                        $('#expenses_sum').next('.invalid-feedback').text('');
+                        $('.expenses').each(function(index) {
+                            $(this).removeClass('is-invalid');
+                            $('#tasks_' + index + '_taskbudget_feedback').text('');
 
-            }
-        });
-        // Display feedback to the user
+                            formIsValid = true;
+                        });
+                    }
 
-
-    }
-    // Check if there are any discrepancies in the budget or if any of the expenses inputs are invalid
-    if (remainingBudget !== 0 ) {
-        $('#expenses_delsum').addClass('is-invalid');
-
-        // Display feedback to the user   $('#' + fieldId + '_feedback').text('ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
-        $('#' + fieldId + '_feedback').text('กรุณาตรวจสอบงวดและเงินงวดให้ถูกต้อง');
-    } else {
-        // If everything checks out, remove validation classes and proceed to submit the form
-        $('#expenses_delsum').removeClass('is-invalid');
-      //  $('.expenses').removeClass('is-invalid');
-        $('.invalid-feedback').text(''); // Optionally clear any feedback text
-   // ส่งฟอร์ม
-   this.submit();
-        // TODO: Submit the form using AJAX or another method as required.
-        // Example:
-        // $.ajax({
-        //     url: '/path/to/submit',
-        //     type: 'POST',
-        //     data: $('#formId').serialize(),
-        //     success: function(response) {
-        //         // Handle success
-        //     },
-        //     error: function(xhr, status, error) {
-        //         // Handle error
-        //     }
-        // });
-    }
-});
+                    $("form").on("submit", function(e) {
+                        if (!formIsValid) {
+                            e.preventDefault();
+                            var alertText =  'ผลรวมของเงินงวดไม่เท่ากับงบประมาณ3';
+                            Swal.fire({
+                                title: 'เตือน!',
+                                text: alertText,
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    });
 
 
 
@@ -2103,83 +2164,95 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
                 });
             </script>
 
-           <script>
-                $(document).ready(function() {
-                    $('#contract_type').change(function() {
-                        var contract_type = $(this).val();
-                        var contract_name_label = $('#contract_name_label');
-                        var rounds_form = $('#rounds_form');
-                        var rounds_label = $('#rounds_label');
+<script>
+    $(document).ready(function() {
+        $('#contract_type').change(function() {
+            var contract_type = $(this).val();
+            var contract_name_label = $('#contract_name_label');
+            var contract_name_label_feedback = $('#contract_name_label_feedback');
+            var rounds_form = $('#rounds_form');
+            var rounds_label = $('#rounds_label');
 
 
 
-                        if (contract_type == 1) {
-                            contract_name_label.text('ชื่อ สั่งจ้าง PO');
-                            rounds_label.text('จำนวนงวด');
-                            $('#mm_form').show();
-                            $('#pr_form').show();
-                            $('#pa_form').show();
-                            $('#po_form').show();
-                            $('#er_form').hide();
-                            $('#cn_form').show();
-                            $('#oe_form').hide();
-                            $('#pp_form').hide();
-                            $('#rounds_form').show();
-                        } else if (contract_type == 2) {
-                            contract_name_label.text('ชื่อ สั่งจ้าง ER');
-                            rounds_label.text('จำนวนงวด');
-                            $('#mm_form').show();
-                            $('#pr_form').show();
-                            $('#pa_form').show();
-                            $('#po_form').hide();
-                            $('#er_form').show();
-                            $('#cn_form').show();
-                            $('#oe_form').hide();
-                            $('#pp_form').hide();
-                            $('#rounds_form').show();
-                        } else if (contract_type == 3) {
-                            contract_name_label.text('ชื่อ สัญญา CN');
-                            rounds_label.text('จำนวนงวด');
-                            $('#mm_form').show();
-                            $('#pr_form').show();
-                            $('#pa_form').show();
-                            $('#po_form').show();
-                            $('#er_form').hide();
-                            $('#cn_form').show();
-                            $('#oe_form').hide();
-                            $('#pp_form').hide();
-                            $('#rounds_form').show();
-                        } else if (contract_type == 4) {
-                            contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
-                            rounds_label.text('ค่าใช้จ่ายสำนักงาน');
-                            $('#mm_form').show();
-                            $('#pr_form').hide();
-                            $('#pa_form').hide();
-                            $('#po_form').hide();
-                            $('#er_form').hide();
-                            $('#cn_form').hide();
-                            $('#oe_form').show();
-                            $('#pp_form').show();
-                            $('#ba_form').show();
-                            $('#bd_form').show();
-                            $('#rounds_form').show();
-                        } else {
-                            contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
-                            $('#mm_form').show();
-                            $('#pr_form').show();
-                            $('#pa_form').show();
-                            $('#po_form').show();
-                            $('#er_form').show();
-                            $('#cn_form').show();
-                            $('#oe_form').show();
-                            $('#pp_form').show();
-                            $('#ba_form').show();
-                            $('#bd_form').show();
-                            $('#rounds_form').show();
-                        }
-                    });
-                });
-            </script>
+            if (contract_type == 1) {
+                contract_name_label.text('ชื่อ สั่งจ้าง PO');
+                contract_name_label_feedback.text('ชื่อ สั่งจ้าง PO');
+
+                rounds_label.text('จำนวนงวด');
+                $('#mm_form').show();
+                $('#pr_form').show();
+                $('#pa_form').show();
+                $('#po_form').show();
+                $('#er_form').hide();
+                $('#cn_form').show();
+                $('#oe_form').hide();
+                $('#pp_form').hide();
+                $('#rounds_form').show();
+
+            } else if (contract_type == 2) {
+                contract_name_label.text('ชื่อ สั่งจ้าง ER');
+                contract_name_label_feedback.text('ชื่อ สั่งจ้าง ER')
+                rounds_label.text('จำนวนงวด');
+                $('#mm_form').show();
+                $('#pr_form').show();
+                $('#pa_form').show();
+                $('#po_form').hide();
+                $('#er_form').show();
+                $('#cn_form').show();
+                $('#oe_form').hide();
+                $('#pp_form').hide();
+                $('#rounds_form').show();
+
+            } else if (contract_type == 3) {
+                contract_name_label.text('ชื่อ สัญญา CN');
+                contract_name_label_feedback.text('ชื่อ สัญญา CN')
+                rounds_label.text('จำนวนงวด');
+                $('#mm_form').show();
+                $('#pr_form').show();
+                $('#pa_form').show();
+                $('#po_form').show();
+                $('#er_form').hide();
+                $('#cn_form').show();
+                $('#oe_form').hide();
+                $('#pp_form').hide();
+                $('#rounds_form').show();
+
+            } else if (contract_type == 4) {
+                contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
+                contract_name_label_feedback.text('ชื่อ ค่าใช้จ่ายสำนักงาน')
+                rounds_label.text('ค่าใช้จ่ายสำนักงาน');
+                $('#mm_form').show();
+                $('#pr_form').hide();
+                $('#pa_form').hide();
+                $('#po_form').hide();
+                $('#er_form').hide();
+                $('#cn_form').hide();
+                $('#oe_form').show();
+                $('#pp_form').show();
+                $('#ba_form').show();
+                $('#bd_form').show();
+                $('#rounds_form').show();
+
+            } else {
+                contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
+                contract_name_label_feedback.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน')
+                $('#mm_form').show();
+                $('#pr_form').show();
+                $('#pa_form').show();
+                $('#po_form').show();
+                $('#er_form').show();
+                $('#cn_form').show();
+                $('#oe_form').show();
+                $('#pp_form').show();
+                $('#ba_form').show();
+                $('#bd_form').show();
+                $('#rounds_form').show();
+
+            }
+        });
+    });
+</script>
 
 <script>
     $(function() {

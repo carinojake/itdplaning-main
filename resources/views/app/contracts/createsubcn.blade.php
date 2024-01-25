@@ -64,8 +64,7 @@
                                 </x-slot:toolbar>
 
 
-                                <form   id="formId" method="POST" action="{{ route('contract.store') }}" class="row needs-validation"
-                                    novalidate enctype="multipart/form-data">
+                                <form   enctype="multipart/form-data" id="formId" method="POST" action="{{ route('contract.store') }}" class="row needs-validation" novalidate >
                                     @csrf
                                     <div class="d-none">
                                     <input  name="origin" value="{{ $origin }}">
@@ -178,7 +177,7 @@
                                                         class="form-label">{{ __('ประเภท') }}</label>
                                                         <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
-                                                        class="form-control">
+                                                        class="form-control" required>
                                                         <option value="*" disabled selected>
                                                             {{ __('เลือกประเภท...') }}
                                                         </option>
@@ -187,6 +186,9 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <div id='contract_type_feedback' class="invalid-feedback">
+                                                        You must agree before submitting.
+                                                      </div>
                                                 </div>
                                             @else
                                                 <div class="col-md-3">
@@ -194,7 +196,7 @@
                                                         class="form-label">{{ __('ประเภท') }}</label>
                                                     <span class="text-danger">*</span>
                                                     <select name="contract_type" id="contract_type"
-                                                        class="form-control">
+                                                        class="form-control" required>
                                                         <option value="" disabled selected>
                                                             {{ __('เลือกประเภท...') }}
                                                         </option>
@@ -203,9 +205,12 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <div id='contract_type_feedback' class="invalid-feedback">
+                                                        You must agree before submitting.
+                                                      </div>
                                                 </div>
 
-                                        </div>
+                                                </div>
 
 
 
@@ -396,11 +401,12 @@
                                                                                 class="form-label">{{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}</label>
                                                                             <span class="text-danger">*</span>
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_mm" name="contract_mm"
+                                                                                id="contract_mm"
+                                                                                aria-describedby="contract_mm_Feedback"
                                                                                 value="{{ $tasksDetails->task_mm }}"
-                                                                                required autofocus>
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('') }}
+                                                                                required >
+                                                                            <div id="contract_mm_Feedback" name="contract_mm_Feedback"class="invalid-feedback">
+                                                                                {{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}
                                                                             </div>
                                                                         </div>
 
@@ -427,7 +433,7 @@
                                                                                 value="{{ $tasksDetails->task_mm_name }}"
                                                                                 required autofocus>
                                                                             <div id="contract_mm_name_feedback" class="invalid-feedback">
-                                                                                {{ __('ชื่อสัญญา') }}
+                                                                                {{ __('ชื่อmm ') }}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-3 ">
@@ -482,7 +488,7 @@ $value = 0;
                                                                                 id="contract_name"
                                                                                 name="contract_name" required
                                                                                 autofocus>
-                                                                            <div class="invalid-feedback">
+                                                                            <div  id="contract_name_label_feedback" class="invalid-feedback">
                                                                                 {{ __('ชื่อสัญญา') }}
                                                                             </div>
                                                                         </div>
@@ -504,7 +510,7 @@ $value = 0;
                                                                                     id="contract_PR"
                                                                                     name="contract_pr" required>
                                                                                 <div class="invalid-feedback">
-                                                                                    {{ __(' ') }}
+                                                                                    {{ __('ใบขอดำเนินการซื้อ/จ้าง (PR) ') }}
                                                                                 </div>
                                                                             </div>
 
@@ -1469,7 +1475,7 @@ $value = 0;
                 var contractNumber = "contract_number";
                 var parts = contractNumber.split("/");
                 var contractReguiarId = parts[0];
-                document.getElementById("contract_reguiar_id").value = contractReguiarId;
+
             </script>
 
             <script>
@@ -1544,7 +1550,7 @@ $value = 0;
                         // Get the selected value
                         const selectedValue = $(this).val();
                         // Handle the selected value as needed
-                        console.log(selectedValue);
+                       // console.log(selectedValue);
                     });
                 });
             </script>
@@ -1603,7 +1609,7 @@ $value = 0;
 
                         if (fieldId === "contract_mm_budget") {
                             if (task_budget_it_operating > 0) {
-                                console.log("test");
+                               // console.log("test");
                                 if (contract_mm_budget < contract_pr_budget || contract_mm_budget < -0 ) {
     $("#contract_mm_budget").val(''); // Set the value of the input field
     $("#contract_pr_budget").val(''); // Set the value of the input field
@@ -1618,7 +1624,7 @@ $value = 0;
 
 
                             else if (task_budget_it_investment > 0) {
-                                console.log(contract_mm_budget+"<"+contract_pr_budget);
+                              //  console.log(contract_mm_budget+"<"+contract_pr_budget);
 
 
                                 if (contract_mm_budget < contract_pr_budget || contract_mm_budget < -0) {
@@ -1814,8 +1820,8 @@ $value = 0;
                     // Group tasks by project parent ID and project fiscal year
                     var groupedTasks = tasksData.reduce(function(groups, task) {
 
-                        console.log('a', groups);
-                        console.log('ab', task);
+                      //  console.log('a', groups);
+                       // console.log('ab', task);
 
 
                         var projectParent = task.task_parent_id;
@@ -1923,13 +1929,13 @@ var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
-                            <input
+                            <input aria-describedby="tasks_${i}_taskbudget_feedback"
                             id="[${i}][expenses]"
                             type="text"
                             name="tasks[${i}][taskbudget]"
                             class="form-control custom-input numeral-mask expenses"
                              data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" required>
-                            <div class="invalid-feedback">ระบุเงินงวด</div>
+                            <div id="tasks_${i}_taskbudget_feedback"class="invalid-feedback">ระบุเงินงวด</div>
 
                         </div>
                         <div class="col-md-3">
@@ -1946,7 +1952,7 @@ var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September
     initializeDatepickers(i, fiscalYearStartDate, fiscalYearEndDate);
     // Initialize the datepickers for the newly added elements
 
-    console.log("round===="+i);
+    //console.log("round===="+i);
     /*if(i == 0){
         $(`#start_date_${i}`).datepicker({
             dateFormat: 'dd/mm/yy',
@@ -2081,193 +2087,249 @@ calculateInstallmentAmounts();
 
 
 
-// When an expense input changes, update the total and check against the budget focus
-        $(document).on('input', '.expenses', function() {
+                // When an expense input changes, update the total and check against the budget focus
+                        $(document).on('input', '.expenses', function() {
+                            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                            var sum = 0;
+                            var index = $(this).data('index');
+                            var tasksContainer = $('#tasksContainer');
+                            var inputs = $('.expenses').map(function() {
+                            // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
+                var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
+                if (value < 0) {
+                $(this).val(''); // รีเซ็ตค่าถ้าติดลบ  parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
+                value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
+                }
+                return value
+                            }).get();
+                            sum = inputs.reduce(function(a, b) {
+                                return a + b;
+                            }, 0);
 
 
+                        //   console.log(sum.toFixed(2)+"-"+inputs[i]);
 
-            var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
-            var sum = 0;
-            var index = $(this).data('index');
-            var tasksContainer = $('#tasksContainer');
-            var inputs = $('.expenses').map(function() {
-               // ตรวจสอบว่าค่าในอินพุตไม่ติดลบ
-var value = parseFloat($(this).val().replace(/,/g, "")) || 0;
-if (value < 0) {
-$(this).val(''); // รีเซ็ตค่าถ้าติดลบ  parseFloat($(this).find('[name$="[taskbudget_percentage]"]').val()) || 0;
-value = 0; // ใช้ค่า 0 สำหรับการคำนวณถัดไป
-}
-return value
+                            // Calculate the remaining budget after each installment
+                            var remainingBudget = contract_pa_budget;
+                            for (var i = 0; i < inputs.length; i++) {
+                                remainingBudget -= inputs[i];
+                            // console.log(remainingBudget.toFixed(2)+"-"+inputs[i]);
 
 
+                                if (remainingBudget.toFixed(2) < 0) {
+                // วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
+                $('.expenses').each(function() {
+                if (parseFloat($(this).val()) < 0) {
+                    $(this).val('');
+                }
+                });
+
+                // console.log(remainingBudget);
+
+                                    // If the remaining budget after any installment is negative, show an error
+                                    Swal.fire({
+                                        title: "เกิดข้อผิดพลาด",
+                                        html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum -
+                                                inputs[i])).toLocaleString('en-US', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            }) + " บาท" +
+                                            "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
+                                            .toLocaleString('en-US', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            }) + " บาท)",
 
 
-            }).get();
+                                        icon: "error",
+                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonText: "ตกลง"
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            $('.expenses').eq(i).val(
+                                            ''); // Reset the value of the input that caused the error
+                                            $('.expenses').eq(i).trigger(
+                                            'input'); // Trigger input event to recalculate
+                                        }
+                                    });
+                                    break; // Exit the loop as we have found an error
 
-            sum = inputs.reduce(function(a, b) {
-
-                return a + b;
-            }, 0);
-
-
-         //   console.log(sum.toFixed(2)+"-"+inputs[i]);
-
-            // Calculate the remaining budget after each installment
-            var remainingBudget = contract_pa_budget;
-            for (var i = 0; i < inputs.length; i++) {
-                remainingBudget -= inputs[i];
-               // console.log(remainingBudget.toFixed(2)+"-"+inputs[i]);
-
-
-                if (remainingBudget.toFixed(2) < 0) {
-// วน loop เพื่อรีเซ็ตค่าของอินพุตที่ทำให้เงินที่เหลือน้อยกว่าศูนย์
-$('.expenses').each(function() {
-if (parseFloat($(this).val()) < 0) {
-    $(this).val('');
-}
-});
-
-// console.log(remainingBudget);
-
-                    // If the remaining budget after any installment is negative, show an error
-                    Swal.fire({
-                        title: "เกิดข้อผิดพลาด",
-                        html: "จำนวนเงินที่ใส่ต้องไม่เกิน " + (contract_pa_budget - (sum -
-                                inputs[i])).toLocaleString('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }) + " บาท" +
-                            "<p>(จำนวนเงินทั้งหมดที่ใส่ต้องไม่เกิน " + (contract_pa_budget)
-                            .toLocaleString('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }) + " บาท)",
-
-
-                        icon: "error",
-                        confirmButtonColor: "#3085d6",
-                        confirmButtonText: "ตกลง"
-                    }).then((result) => {
-                        if (result.value) {
-                            $('.expenses').eq(i).val(
-                            ''); // Reset the value of the input that caused the error
-                            $('.expenses').eq(i).trigger(
-                            'input'); // Trigger input event to recalculate
-                        }
-                    });
-                    break; // Exit the loop as we have found an error
-
+                                }
+                            }
+                            if (Math.abs(remainingBudget) < 0.01) {
+                remainingBudget = 0;
                 }
 
+                if (Math.abs(sum) < 0.01) {
+                sum = 0;
+                }
+                                $('#expenses_sum').val(sum.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }));
+                                $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
 
 
-            }
+                                }));
+                //console.log( remainingBudget);
+                //console.log( sum);
+                // Function to calculate the remaining budget
+                function calculateRemainingBudget() {
+                var sum = $('.expenses').map(function() {
+                return parseFloat($(this).val().replace(/,/g, "")) || 0;
+                }).get().reduce(function(a, b) {
+                return a + b;
+                }, 0);
+
+                var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+                var remainingBudget = contract_pa_budget.toFixed(2) - sum.toFixed(2);
+                return remainingBudget.toFixed(2);
+                }
+
+                /*   // Form submission handler
+                $('#formId').on('submit', function(e) { // Make sure this is the ID of your form
+                e.preventDefault();
+
+                var remainingBudget = calculateRemainingBudget();
+
+                if (remainingBudget !== 0) {
+                $('#expenses_delsum').addClass('is-invalid');
+                // $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
+                } else {
+                // If the remaining budget is zero, remove validation error
+                $('#expenses_delsum').removeClass('is-invalid');
+                $('.invalid-feedback').text(''); // Clear the feedback text
+                    // ส่งฟอร์ม
+                    this.submit();
+                }
+                }); */
+                var sumOfExpenses = 0;
+                $('.expenses').each(function(index) {
+                sumOfExpenses += parseFloat($(this).val().replace(/,/g, "")) || 0;
+                // ลบคลาส 'is-invalid' ก่อนการตรวจสอบใหม่
+                $(this).removeClass('is-invalid');
+                $('#tasks_' + index + '_taskbudget_feedback').text('');
+                });
+          // คำนวณงบประมาณที่เหลือ
+          var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
+                    var remainingBudgetform = contract_pa_budget - sumOfExpenses;
+        // แสดงผลค่าที่คำนวณได้บน console สำหรับการตรวจสอบ
+                      console.log('Contract PA Budget-1:', contract_pa_budget);
+                    console.log('Sum of Expenses-2:', sumOfExpenses);
+                    console.log('Remaining Budget-3:', remainingBudgetform);
+ // var formIsValid = true; // Initialize form validity state
+                    // ตรวจสอบว่าผลรวมของค่าใช้จ่ายเท่ากับงบประมาณหรือไม่
+                    if (remainingBudgetform !== 0) {
+                        // ถ้าไม่เท่ากันแสดงข้อความผิดพลาด
+                        $('#expenses_delsum').addClass('is-invalid');
+                        $('#expenses_delsum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ1');
+                        $('#expenses_sum').addClass('is-invalid');
+                        $('#expenses_sum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ2');
+                        $('.expenses').each(function(index) {
+                            $(this).addClass('is-invalid');
+                            $('#tasks_' + index + '_taskbudget_feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ3');
+                        });
+                        //$('.expenses, #expenses_delsum, #expenses_sum').addClass('is-invalid');
+                        //$('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
+                       // formIsValid = false; // Set form as invalid
+                       formIsValid = false; // Set form as invalid
+                    } else {
+                        // ถ้าเท่ากันลบคลาส 'is-invalid' และส่งฟอร์ม
+                        $('#expenses_delsum').removeClass('is-invalid');
+                        $('#expenses_delsum').next('.invalid-feedback').text('');
+                        $('#expenses_sum').removeClass('is-invalid');
+                        $('#expenses_sum').next('.invalid-feedback').text('');
+                        $('.expenses').each(function(index) {
+                            $(this).removeClass('is-invalid');
+                            $('#tasks_' + index + '_taskbudget_feedback').text('');
+
+                            formIsValid = true;
+                        });
+                    }
+
+                    $("form").on("submit", function(e) {
+                        if (!formIsValid) {
+                            e.preventDefault();
+                            var alertText =  'ผลรวมของเงินงวดไม่เท่ากับงบประมาณ3';
+                            Swal.fire({
+                                title: 'เตือน!',
+                                text: alertText,
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    });
+
+                      /*   $('#formId input[type="text"]').each(function() {
+                        var fieldId = $(this).attr('id');
+                        if (typeof validateBudget === "function" && !validateBudget(fieldId)) {
+                            formIsValid = false; // Set form as invalid
+                        }
+                    });
+ */
+                    /* if (contract_pa_budget !== sumOfExpenses) {
+                        $('#' + fieldId).addClass('is-invalid');
+                            $('#' + fieldId + '_feedback').text('เลขที่สัญญา มีอยู่แล้ว444');
 
 
-            if (Math.abs(remainingBudget) < 0.01) {
-remainingBudget = 0;
-}
+                            formIsValid = false;
 
-if (Math.abs(sum) < 0.01) {
-sum = 0;
-}
-                $('#expenses_sum').val(sum.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }));
-                $('#expenses_delsum').val(remainingBudget.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
+                        } else {
+                            $('#' + fieldId).removeClass('is-invalid');
+                            contract_pa_budget = sumOfExpenses
+                            formIsValid = true;
+                        }
 
-
-                }));
-//console.log( remainingBudget);
-//console.log( sum);
-// Function to calculate the remaining budget
-function calculateRemainingBudget() {
-var sum = $('.expenses').map(function() {
-return parseFloat($(this).val().replace(/,/g, "")) || 0;
-}).get().reduce(function(a, b) {
-return a + b;
-}, 0);
-
-var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
-var remainingBudget = contract_pa_budget.toFixed(2) - sum.toFixed(2);
-return remainingBudget.toFixed(2);
-}
-
-/*   // Form submission handler
-$('#formId').on('submit', function(e) { // Make sure this is the ID of your form
-e.preventDefault();
-
-var remainingBudget = calculateRemainingBudget();
-
-if (remainingBudget !== 0) {
-$('#expenses_delsum').addClass('is-invalid');
-// $('.invalid-feedback').text(' ต้องเหลือ 0 '); // Set the text of the feedback
-} else {
-// If the remaining budget is zero, remove validation error
-$('#expenses_delsum').removeClass('is-invalid');
-$('.invalid-feedback').text(''); // Clear the feedback text
-     // ส่งฟอร์ม
-     this.submit();
-}
-}); */
-$('#formId').on('submit', function(e) {
-    e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
-
-    // คำนวณผลรวมของค่าใช้จ่าย
-    var sumOfExpenses = 0;
-
-    $('.expenses').each(function(index) {
-        sumOfExpenses += parseFloat($(this).val().replace(/,/g, "")) || 0;
-        // ลบคลาส 'is-invalid' ก่อนการตรวจสอบใหม่
-        $(this).removeClass('is-invalid');
-        $('#tasks_' + index + '_taskbudget_feedback').text('');
-    });
-
-    // คำนวณงบประมาณที่เหลือ
-    var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, "")) || 0;
-    var remainingBudgetform = contract_pa_budget - sumOfExpenses;
-
-    // แสดงผลค่าที่คำนวณได้บน console สำหรับการตรวจสอบ
-    console.log('Contract PA Budget:', contract_pa_budget);
-    console.log('Sum of Expenses:', sumOfExpenses);
-    console.log('Remaining Budget:', remainingBudgetform);
-
-    // ตรวจสอบว่าผลรวมของค่าใช้จ่ายเท่ากับงบประมาณหรือไม่
-    if (remainingBudgetform !== 0) {
-        // ถ้าไม่เท่ากันแสดงข้อความผิดพลาด
-        $('#expenses_delsum').addClass('is-invalid');
-        $('#expenses_delsum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
-        $('#expenses_sum').addClass('is-invalid');
-        $('#expenses_sum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ')
-        $('.expenses').each(function(index) {
-            $(this).addClass('is-invalid');
-            $('#tasks_' + index + '_taskbudget_feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
-
-
-        });
-
-        return; // หยุดการทำงานของฟังก์ชั่น
-    } else {
-        // ถ้าเท่ากันลบคลาส 'is-invalid' และส่งฟอร์ม
-        $('#expenses_delsum').removeClass('is-invalid');
-        $('#expenses_delsum').next('.invalid-feedback').text('');
-        $('#expenses_sum').removeClass('is-invalid');
-        $('#expenses_sum').next('.invalid-feedback').text('');
-        $('.expenses').each(function(index) {
-            $(this).removeClass('is-invalid');
-            $('#tasks_' + index + '_taskbudget_feedback').text('');
-
-
-        });
+                        $("form").on("submit", function(e) {
+                        if (!formIsValid) {
+                            e.preventDefault();
+                            var alertText =  'เลขที่สัญญา มีอยู่แล้ว3333';
+                            Swal.fire({
+                                title: 'เตือน!',
+                                text: alertText,
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    }); */
 
 
 
-        this.submit(); // ส่งฟอร์ม
-    }
-});
+
+
+
+                    /*       if (formIsValid) {
+                     // this.submit(); // Submit the form without jQuery to avoid re-triggering the submit handler
+                     Swal.fire({
+                            title: 'ข้อผิดพลาด!',
+                            text: 'กรุณาป้อนค่างบประมาณที่ถูกต้อง',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    } else {
+                        // If not valid, show an error modal
+                       Swal.fire({
+                            title: 'ข้อผิดพลาด!',
+                            text: 'กรุณาป้อนค่างบประมาณที่ถูกต้อง',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    } */
+                                    // ถ้า formIsValid เป็น true ฟอร์มจะถูกส่งไปยังเซิร์ฟเวอร์
+
+                    //  this.submit(); // ส่งฟอร์ม
+
+
+
+
+
+      /* $('#formId').on('submit', function(e) {
+                    e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+
+                    // คำนวณผลรวมของค่าใช้จ่าย
+                }); */
 
 
 
@@ -2366,6 +2428,7 @@ checkTotalAgainstBudget();
                     $('#contract_type').change(function() {
                         var contract_type = $(this).val();
                         var contract_name_label = $('#contract_name_label');
+                        var contract_name_label_feedback = $('#contract_name_label_feedback');
                         var rounds_form = $('#rounds_form');
                         var rounds_label = $('#rounds_label');
 
@@ -2373,6 +2436,8 @@ checkTotalAgainstBudget();
 
                         if (contract_type == 1) {
                             contract_name_label.text('ชื่อ สั่งจ้าง PO');
+                            contract_name_label_feedback.text('ชื่อ สั่งจ้าง PO');
+
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -2385,6 +2450,7 @@ checkTotalAgainstBudget();
 
                         } else if (contract_type == 2) {
                             contract_name_label.text('ชื่อ สั่งจ้าง ER');
+                            contract_name_label_feedback.text('ชื่อ สั่งจ้าง ER')
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -2397,6 +2463,7 @@ checkTotalAgainstBudget();
 
                         } else if (contract_type == 3) {
                             contract_name_label.text('ชื่อ สัญญา CN');
+                            contract_name_label_feedback.text('ชื่อ สัญญา CN')
                             rounds_label.text('จำนวนงวด');
                             $('#mm_form').show();
                             $('#pr_form').show();
@@ -2409,6 +2476,7 @@ checkTotalAgainstBudget();
 
                         } else if (contract_type == 4) {
                             contract_name_label.text('ชื่อ ค่าใช้จ่ายสำนักงาน');
+                            contract_name_label_feedback.text('ชื่อ ค่าใช้จ่ายสำนักงาน')
                             rounds_label.text('ค่าใช้จ่ายสำนักงาน');
                             $('#mm_form').show();
                             $('#pr_form').hide();
@@ -2423,6 +2491,7 @@ checkTotalAgainstBudget();
 
                         } else {
                             contract_name_label.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน');
+                            contract_name_label_feedback.text('ชื่อ PO/ER/CN/ค่าใช้จ่ายสำนักงาน')
                             $('#mm_form').show();
                             $('#pr_form').show();
                             $('#pa_form').show();
@@ -2477,13 +2546,13 @@ var task_end_date = {{$ta->task_end_date}};
 var task_start_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $ta->task_start_date)) }}"; // Wrap in quotes
 var task_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $ta->task_end_date)) }}"; // Wrap in quo
 contract_fiscal_year =  contract_fiscal_year -543;
-        console.log( contract_fiscal_year);
+       // console.log( contract_fiscal_year);
 
         var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
         var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-        console.log(fiscalYearStartDate);
-        console.log(fiscalYearEndDate);
+        //console.log(fiscalYearStartDate);
+        //console.log(fiscalYearEndDate);
 
 
 // Set the start and end dates for the project_start_date datepicker
@@ -2520,9 +2589,9 @@ $("#contract_start_date").datepicker("setStartDate", fiscalYearStartDate);
     var contract_end_date_str = $("#contract_end_date").val();
     var contract_end_date = convertToDate(contract_end_date_str);
     var task_end_date = convertToDate(task_end_date_str);
-      console.log(task_end_date_str);
-        console.log(task_end_date);
-        console.log(contract_end_date);
+      //console.log(task_end_date_str);
+        //console.log(task_end_date);
+        //console.log(contract_end_date);
 
     if (contract_end_date > task_end_date) {
         Swal.fire({
@@ -2615,13 +2684,13 @@ function convertToDate(dateStr) {
                     });
                     var contract_fiscal_year = {{$pro->project_fiscal_year}};
 contract_fiscal_year =  contract_fiscal_year -543;
-        console.log( contract_fiscal_year);
+        //console.log( contract_fiscal_year);
 
         var fiscalYearStartDate = new Date( contract_fiscal_year - 1, 9, 1); // 1st October of the previous year
         var fiscalYearEndDate = new Date( contract_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-        console.log(fiscalYearStartDate);
-        console.log(fiscalYearEndDate);
+       // console.log(fiscalYearStartDate);
+      //  console.log(fiscalYearEndDate);
 
 // Set the start and end dates for the project_start_date datepicker
 $("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
@@ -2708,35 +2777,88 @@ $("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
                 })()
             </script> --}}
 
+            <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function() {
+                    'use strict'
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    const forms = document.querySelectorAll('.needs-validation')
+                    // Loop over them and prevent submission
+                    Array.prototype.slice.call(forms)
+                        .forEach(form => {
+                            form.addEventListener('submit', event => {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+
+                                }
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                })()
+            </script>
+
+
 <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-'use strict'
+    $(document).ready(function() {
+        var oldContract_number = ''; // เก็บเลขที่สัญญาเดิม
+        var oldValues = {}; // เก็บค่าเดิมของฟิลด์
+        var formIsValid = true; // ตรวจสอบความถูกต้องของฟอร์ม
 
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-var forms = document.querySelectorAll('.needs-validation')
+        $('#contract_fiscal_year, #contract_number').on('change', function() {
+            var contract_number = $('#contract_number').val();
+            var fiscalYear = $('#contract_fiscal_year').val();
+            var fieldId = $(this).attr('id');
 
-// Loop over them and prevent submission
-Array.prototype.slice.call(forms)
-.forEach(function(form) {
-    form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
-            // เพิ่มเงื่อนไขการตรวจสอบความถูกต้องของข้อมูลของคุณที่นี่
-            // เช่น ตรวจสอบชื่อโครงการซ้ำ
-            if (someValidationCondition) {
-                event.preventDefault() // ป้องกันการส่งข้อมูลเซฟ
+            $.ajax({
+method: 'GET',
+// url: '{{ route("contract.check-contract") }}',
+url: '{{ route("project.check-project") }}',
+data: {
+contract_fiscal_year: fiscalYear,
+contract_number: contract_number
+},
+success: function(data) {
+if (data.exists_contract_number) {
+$('#' + fieldId).addClass('is-invalid');
+$('#' + fieldId + '_feedback').text('เลขที่สัญญา มีอยู่แล้ว');
+formIsValid = false;
+} else {
+$('#' + fieldId).removeClass('is-invalid');
+oldValues[fieldId] = contract_number;
+formIsValid = true;
+}
+},
+error: function(xhr, status, error) {
+// เมื่อมีข้อผิดพลาดในการเรียก AJAX สามารถแสดงข้อความข้อผิดพลาดได้ที่นี่
+console.error(error);
+}
+});
+
+            if (oldContract_number === contract_number) {
+                $('#' + fieldId).addClass('is-invalid');
+                $('#' + fieldId + '_feedback').text('เลขที่สัญญา มีอยู่แล้ว');
+                formIsValid = false;
+            } else {
+                $('#' + fieldId).removeClass('is-invalid');
+                oldValues[fieldId] = contract_number;
+                formIsValid = true;
             }
-        }
+        });
 
-        form.classList.add('was-validated')
-    }, false)
-})
-})()
-
+        $("form").on("submit", function(e) {
+            if (!formIsValid) {
+                e.preventDefault();
+                var alertText =  'เลขที่สัญญา มีอยู่แล้ว';
+                Swal.fire({
+                    title: 'เตือน!',
+                    text: alertText,
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        });
+    });
 </script>
 
 {{-- <script>

@@ -82,8 +82,11 @@ class ContractController extends Controller
                     $html .= '<a href="' . route('contract.show', $row->hashid) . '" class="btn btn-success text-white"><i class="cil-folder-open "></i></a>';
                     //if (Auth::user()->hasRole('admin')) {
                     $html .= '<a href="' . route('contract.edit', $row->hashid) . '" class="btn btn-warning btn-edit text-white"><i class="cil-pencil "></i></a>';
+
+                     if ($row->contract_name === null) {
+
                     $html .= '<button data-rowid="' . $row->hashid . '" class="btn btn-danger btn-delete text-white"><i class="cil-trash "></i></button>';
-                    //}
+                     }
                     $html .= '</div>';
 
                     return $html;
@@ -435,6 +438,38 @@ class ContractController extends Controller
 
         return view('app.contracts.create', compact('origin', 'project', 'task', 'pro', 'ta', 'fiscal_year'));
     }
+
+
+// ในส่วนของ create method
+public function checkContract(Request $request)
+{
+    if ($request->ajax()) {
+        $contract_fiscal_year = $request->input('contract_fiscal_year');
+         $contract_number = $request->input('contract_number');
+        // ตรวจสอบชื่อโครงการซ้ำ
+
+
+       // ตรวจสอบ reguiar_id ซ้ำ
+      // ตรวจสอบ reguiar_id ซ้ำ
+      $exists_contract_number = Contract::where('contract_fiscal_year', $contract_fiscal_year)
+        ->where('contract_number', $contract_number)
+        ->whereNull('deleted_at')
+      ->exists();
+
+
+     // dd($data,$contract_fiscal_year,$contract_number,$exists_contract_number);
+     return response()->json(['error' => 'เลขที่สัญญามีอยู่แล้ว']);
+
+            return response()->json([ 'exists_contract_number' => $exists_contract_number]);
+    }
+}
+
+
+
+
+
+
+
 
 
     public function create(Request $request, $project = null)
@@ -1427,11 +1462,11 @@ class ContractController extends Controller
                 // ถ้ามีทั้ง Project ID และ Task ID, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'editsub'
                 return redirect()->route('project.task.editsub', ['project' => $project, 'task' => $task]);
             }
-            /*  elseif ($origin == 1) {
+              elseif ($origin == 1) {
                 // ถ้ามีเฉพาะ Task, ทำการเปลี่ยนหน้าไปยังเส้นทาง 'createsub'
                // dd($project);
                 return redirect()->route('project.task.editsubno', ['project' => $project, 'task' => $task]);
-            } */
+            }
             //27112566 $origin == 1
 
             elseif ($task) {

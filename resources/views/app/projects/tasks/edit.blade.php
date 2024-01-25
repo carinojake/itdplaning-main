@@ -638,12 +638,6 @@
 
 
 
-        <script>
-            $(document).ready(function() {
-                $(":input").inputmask();
-            });
-        </script>
-
 <script>
     $(function() {
         $("#task_start_date, #task_end_date").datepicker({

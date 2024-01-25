@@ -60,7 +60,7 @@
                                         <label for="reguiar_id"
                                             class="form-label">{{ __('ลำดับ.ชื่องาน/โครงการ') }}</label>
                                         <span class="text-danger">*</span>
-                                        <input type="number" class="form-control" id="reguiar_id" name="reguiar_id"  aria-describedby="reguiar_id"
+                                        <input type="number" class="form-control" id="reguiar_id" name="reguiar_id" required autofocus
                                         min="1" >
                                         <div id="reguiar_id_feedback" class="invalid-feedback">
                                             ลำดับ.ชื่องาน/โครงการ

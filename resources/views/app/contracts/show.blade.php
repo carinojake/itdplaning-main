@@ -18,10 +18,10 @@
 
 
 
-                                   <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
+                                {{--    <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
                                         class="btn-sm btn btn-warning text-white">fffff <i class="cil-cog">
                                           </i>
-                                    </a>
+                                    </a> --}}
 
 
                                          <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
@@ -245,9 +245,9 @@
                                                 {{-- <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                     class="text-white btn btn-primary"><i class="cil-folder-open "></i>
                                                     Task</a> --}}
-                                         @if ($contract->contract_refund_pa_status == 1)
+                                         @if ($contract->contract_refund_pa_status == 1 )
 
-                                                    @if ($contract->contract_project_type == 'j')
+                                                    @if ($contract->contract_project_type == 'j' ||$task->task_budget_no == 1)
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
@@ -256,7 +256,22 @@
                                                         <button class="btn btn-primary text-dark btn-taskRefund"><i
                                                                 class="cil-money"></i></button>
                                                     </form>
-                                                @elseif($contract->contract_project_type == 'p')
+
+                                                    @elseif($contract->contract_project_type == 'p' && $task->task_parent_sud == null && $task->task_parent != null  )
+                                                    <form class="taskRefund-form"
+                                                        action="{{ route('project.task.taskRefund_two', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                        method="POST" style="display:inline">
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
+                                                        @csrf
+                                                        <button class="btn btn-primary text-white btn-taskRefund-sub"><i
+                                                                class="cil-money">taskRefund_two</i></button>
+                                                    </form>
+
+
+
+
+
+                                                    @elseif($contract->contract_project_type == 'p')
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_sub_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
