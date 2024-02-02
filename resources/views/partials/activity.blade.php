@@ -33,7 +33,7 @@
 
                             {{ $task->task_name }}
                                 </span>
-                      {!! $task->task_status == 2 ? '<span class="badge bg-success">ดำเนินการแล้วเสร็จ</span>' : '' !!}
+                      {!! $task->task_status == 2 ? '<span class="badge bg-success"><i class="cil-check"></i></span>' : '' !!}
 
                           {{--   @if ((isset($task) && $task->task_refund_pa_status == 2) && $task->task_refund_pa_status == 3)
                                 <span class="badge bg-success">ดำเนินการแล้วเสร็จคืนเงิน pa</span>
@@ -74,7 +74,7 @@
 
 
                                          <?php
-                                            echo isset($subtask) && $subtask->task_status == 2 ? '<span class="badge bg-success text-white ">ดำเนินการแล้วเสร็จ</span>' : '';
+                                            echo isset($subtask) && $subtask->task_status == 2 ? '<span class="badge bg-success text-white "><i class="cil-check"></i></span>' : '';
                                             ?>
 
 
@@ -447,7 +447,7 @@
                             @elseif ($task->task_parent_sub == 99)
 
                             <a href="{{ route('project.task.editsubno', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
-                                class="btn btn-info text-white"><i class="cil-cog"></i></a>
+                                class="btn btn-warning text-white"><i class="cil-cog"></i></a>
 
 
 

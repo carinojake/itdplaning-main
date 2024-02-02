@@ -678,8 +678,7 @@
         </div>
 
 
-        <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
-        </x-button>
+        <x-button class="btn-success" type="submit" preventDouble>{{ __('coreuiforms.save') }}</x-button>
         <x-button onclick="history.back()" class="text-black btn-light">
             {{ __('coreuiforms.return') }}</x-button>
 
@@ -872,7 +871,7 @@
                         if (fieldId === "task_budget_it_investment") {
 
                             max = parseFloat(
-                                {{ $task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] }}
+                                {{ $task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] }}
                                 );
                             if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(
                                     budgetItInvestment) < -0) {
@@ -882,7 +881,7 @@
 
                         } else if (fieldId === "task_budget_it_operating") {
                             max = parseFloat(
-                                {{ $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] }}
+                                {{ $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] }}
                                 );
                             if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(
                                     budgetItOperating) < -0) {
@@ -892,7 +891,7 @@
 
                         } else if (fieldId === "task_budget_gov_utility") {
                             max = parseFloat(
-                                {{ $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] }}
+                                {{ $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] }}
                                 );
                             if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(
                                 budgetGovUtility) < -0) {

@@ -14,13 +14,13 @@
                 @endif
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <x-card
-                            title="{{ __('แก้ไข') }} {{ Helper::projectsType($project->project_type) }} {{ $project->project_name }}">
+            <x-card
+                       title="{{ __('แก้ไข') }} {{ Helper::projectsType($project->project_type) }} {{ $project->project_name }}">
 
 
 
 
-                            <form id='formId' method="POST" action="{{ route('project.update', $project->hashid) }}"
+            <form id='formId' method="POST" action="{{ route('project.update', $project->hashid) }}"
                                 class="row needs-validation"  novalidate >
                                 @csrf
                                 {{ method_field('PUT') }}
@@ -138,7 +138,7 @@
 
 
 
-                                <div class="col-md-12">
+                                <div id='project_name_form'class="col-md-12">
                                     <label for="project_name" class="form-label">{{ __('ชื่องาน/โครงการ') }}</label>
                                     <span class="text-danger">*</span>
                                     <input type="text" class="form-control" id="project_name" name="project_name"
@@ -151,15 +151,12 @@
                                     <label for="project_description"
                                         class="form-label">{{ __('รายละเอียดงาน/โครงการ') }}</label>
                                     <textarea class="form-control" name="project_description" id="project_description" rows="10">
-                    {{ $project->project_description }}
+                    {{$project->project_description}}
                   </textarea>
                                     <div class="invalid-feedback">
                                         {{ __('รายละเอียดงาน/โครงการ') }}
                                     </div>
                                 </div>
-
-
-
 
                                 <div  id='budget_form'class="row">
 
@@ -177,7 +174,7 @@
                                                     name="budget_it_operating" min="0"
                                                     value="{{ $project->budget_it_operating }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_it_operating  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
                                                     >
                                                   {{--   <div class="mt-3">
@@ -200,7 +197,7 @@
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_it_investment  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
 
 
@@ -224,7 +221,7 @@
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_gov_utility  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
 
                                                     >
@@ -265,6 +262,9 @@
                                                            {{ $key < count($increasedbudgetData) - 1 ? 'readonly' : '' }}>
                                                 </div>
 
+
+
+
                                                 <!-- Input for increased_budget_it_investment -->
                                                 <div class="col-md-4">
                                                     <input type="text" placeholder="0.00" step="0.01"
@@ -292,6 +292,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+
                                {{--  <div  id='totalbudget' class="row">
                                     <div class="col-md-4">
                                         <label for="budget_it_operating"
@@ -336,7 +337,7 @@
 
                                 <div class="row mt-3  ">
 
-                                    <div class="col-md-3">
+                                    <div id='increased_budget_status'class="col-md-3">
                                         <label for="increased_budget_status"
                                             class="form-label">{{ __('งบประมาณ เพิ่ม') }}</label> <span
                                             class="text-danger"></span>
@@ -428,12 +429,13 @@
                     </div>
                  {{--    <x-button link="{{ route('project.view', ['project' => $project->hashid]) }}"
                         class="btn-warning text-black">{{ __('view') }}</x-button> --}}
-
-                    <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
+                        <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                            {{ __('Save') }}
+                        </x-button>
                     <x-button link="{{ route('project.view', ['project' => $project->hashid]) }}" class="btn-light text-black">
                         {{ __('coreuiforms.return') }}</x-button>
-                    </form>
-                    </x-card>
+        </form>
+         </x-card>
                 </div>
             </div>
         </div>
@@ -570,11 +572,108 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <script>
-            $(document).ready(function() {
+            // เมื่อเอกสารโหลดเสร็จสมบูรณ์
+            document.addEventListener("DOMContentLoaded", function() {
+                // รับอินพุตฟิลด์สำหรับงบกลาง ICT
+                var budgetItOperatingInput = document.getElementById("budget_it_operating");
+                // รับทุกอินพุตฟิลด์ที่เกี่ยวข้องกับงบประมาณที่เพิ่มขึ้น
+                var increasedBudgetInputs = document.querySelectorAll('input[id^="increased_budget_it_operating_"]');
+                // ตั้งค่าเริ่มต้นของงบประมาณจากฐานข้อมูล
+                var oldtaskValues = {
+                    'totalBudgetItOperating': {{ $budget['totalBudgetItOperating'] }},
+                };
+
+                // ฟังก์ชันสำหรับคำนวณงบประมาณที่เหลือ
+                function calculateRemainingBudget(totalBudget, debt1, debt2, debt3) {
+                    // แปลงค่าจากฟอร์มเป็นตัวเลขและลบเครื่องหมายคอมม่า
+                    var budgetItOperating = parseFloat(budgetItOperatingInput.value.replace(/,/g, '')) || 0;
+                    var totalIncreasedBudget = 0;
+                    var debt1Paid = parseFloat(debt1);
+            var debt2Paid = parseFloat(debt2);
+            var debt3Paid = parseFloat(debt3);
+
+
+
+                    // รวมค่าจากทุกอินพุตฟิลด์ของงบประมาณที่เพิ่มขึ้น
+                    increasedBudgetInputs.forEach(function(input) {
+                        var value = parseFloat(input.value.replace(/,/g, '')) || 0;
+                        totalIncreasedBudget += value;
+                    });
+
+
+                    var budgetItOperating_inc = (budgetItOperating + totalIncreasedBudget);
+                    // คำนวณงบประมาณที่เหลือโดยการหักด้วยค่าที่เพิ่มขึ้น
+                    var remainingBudget = (budgetItOperating + totalIncreasedBudget) - oldtaskValues.totalBudgetItOperating;
+
+                    // แสดงค่างบประมาณที่เหลือในคอนโซล
+                    console.log('budgetItOperating', budgetItOperating);
+                    console.log('totalIncreasedBudget', totalIncreasedBudget);
+                    console.log('budgetItOperating_inc', budgetItOperating_inc);
+                    console.log('oldtaskValues.totalBudgetItOperating', oldtaskValues.totalBudgetItOperating);
+                    console.log('remainingBudget', remainingBudget);
+
+                    // ตั้งค่าอินพุตฟิลด์เป็น readonly หากงบประมาณที่เหลือน้อยกว่า 0
+                    increasedBudgetInputs.forEach(function(input) {
+//input.readOnly = (oldtaskValues.totalBudgetItOperating = 0);
+
+
+
+
+
+
+
+
+
+});
+                }
+
+                // เพิ่มตัวจับเหตุการณ์สำหรับอินพุตฟิลด์
+                budgetItOperatingInput.addEventListener('input', calculateRemainingBudget);
+                increasedBudgetInputs.forEach(function(input) {
+                    input.addEventListener('input', calculateRemainingBudget);
+                });
+
+                // โหลดฟังก์ชันคำนวณเมื่อเพจโหลดเสร็จสมบูรณ์
+                calculateRemainingBudget();
 
             });
-        </script>
+            </script>
+
+
+
+
+            <script>
+                $(document).ready(function() {
+                    // Initial check
+                    $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
+
+                    // Listen for changes on the checkbox
+                    $('#increased_budget_status').change(function() {
+                        $('#increased_budget_new').toggle(this.checked);
+                    });
+                });
+            </script>
+
+
 {{--
         <script>
             $(document).ready(function() {
@@ -597,18 +696,20 @@
                 });
             });
         </script> --}}
-
+{{--
         <script>
             $(document).ready(function() {
                 // Initial check
+                var  totalbudget_budget = $budget['totalbudget_budget']
+                if (totalbudget_budget)
                 $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
-
                 // Listen for changes on the checkbox
                 $('#increased_budget_status').change(function() {
                     $('#increased_budget_new').toggle(this.checked);
                 });
+                else
             });
-        </script>
+        </script> --}}
 
 
 
@@ -639,6 +740,15 @@
 
             });
         </script>
+
+
+
+
+
+
+
+
+
 
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
@@ -779,7 +889,11 @@ var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails
 $("#budget_it_operating,#budget_it_investment,#budget_gov_utility,#increased_budget_it_operating,#increased_budget_it_investment,#increased_budget_gov_utility,#increased_budget_it_operating_new,#increased_budget_it_investment_new,#increased_budget_gov_utility_new").on("input", function() {
  var max = 0;
  var fieldId = $(this).attr('id');
-var budgetItOperating = $("#budget_it_operating").val();
+    var key = $(this).data('key');
+
+
+
+ var budgetItOperating = $("#budget_it_operating").val();
  var budgetItInvestment = $("#budget_it_investment").val();
  var budgetGovUtility = $("#budget_gov_utility").val();
     var increasedBudgetItOperating = $("#increased_budget_it_operating").val();
@@ -790,9 +904,10 @@ var budgetItOperating = $("#budget_it_operating").val();
     var increasedBudgetItInvestment_new = $("#increased_budget_it_investment_new").val();
     var increasedBudgetGovUtility_new = $("#increased_budget_gov_utility_new").val();
 
- var olebudgetItOperating = {{$project->budget_it_operating}};
-    var olebudgetItInvestment = {{$project->budget_it_investment}};
-    var olebudgetGovUtility = {{$project->budget_gov_utility}};
+    var olebudgetItOperating = {{ $project->budget_it_operating }} || 0;
+var olebudgetItInvestment = {{ $project->budget_it_investment }} || 0;
+var olebudgetGovUtility = {{ $project->budget_gov_utility }} || 0;
+
 
     if (fieldId === "budget_it_investment") {
 
@@ -879,7 +994,40 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
 
+<script>
+    $(document).ready(function() {
+        $(document).ready(function() {
+    // Define a function to validate the input
+    function validateInput(value, oldValue, selector) {
+        if (value === "0" || value === '' || parseFloat(value) < 0) {
+            $(selector).val('');
+        }
+        if (parseFloat(value) < oldValue) {
+            $(selector).addClass('is-invalid');
+        } else {
+            $(selector).removeClass('is-invalid');
+        }
+    }
 
+    // Event listener for input fields
+    $("[id^=increased_budget_]").on("input", function() {
+        var fieldId = $(this).attr('id');
+        var key = fieldId.split('_').pop(); // Assuming the last part of ID is the key
+        var value = $(this).val().replace(/,/g , "");
+        var oldValue = 0; // Set the old value based on the fieldId
+
+        // Add your logic to determine oldValue here based on fieldId
+
+        validateInput(value, oldValue, '#' + fieldId);
+    });
+
+    // Similar event listeners for other fields...
+});
+
+
+    });
+
+        </script>
 
 <script>
     $(document).ready(function() {
@@ -893,17 +1041,30 @@ var budgetItOperating = $("#budget_it_operating").val();
         };
 
         var oldtaskValues = {
-            'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
-            'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
-            'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
+            'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} ,
+            'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} ,
+            'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}}
 
         };
 
 
 
 
+
+
+
         console.log('oldValues:',oldValues);
         console.log('oldtaskValues:',oldtaskValues);
+
+         // Check if any of the values in oldtaskValues is greater than 0
+    var anyValueGreaterThanZero = Object.values(oldtaskValues).some(value => value > 0);
+    console.log('anyValueGreaterThanZero:',anyValueGreaterThanZero);
+if (anyValueGreaterThanZero === false) {
+    $('#increased_budget_status').hide();
+
+}
+
+
         //console.log('oldtaskValuesmm:',oldtaskValuesmm);
 
 
@@ -979,8 +1140,62 @@ function validateBudget(fieldId) {
 
 
 
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var oldtaska = {
+            'totalBudgetItOperating':  {{$budget['totalBudgetItOperating']}} || 0,
+            'totalBudgetItInvestment': {{$budget['totalBudgetItInvestment']}} || 0,
+            'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}} || 0
+        };
+
+        var project_status_during_year = {!! json_encode($project->project_status_during_year == 2) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
+
+        // Assuming you want to set form inputs to readonly if any budget value is greater than 1
+        if (oldtaska.totalBudgetItOperating > 1 || oldtaska.totalBudgetItInvestment > 1 || oldtaska.totalBudgetGovUtility > 1) {
+            var formInputs = document.querySelectorAll('#budget_form input,#project_name_form input');
+            formInputs.forEach(function(input) {
+                input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
+            });
+        }
+    });
+</script>
 
 
+<script>
+ $(document).ready(function() {
+let debt = 1000000; // งบทั้งหมด
+let debt_inc = 7000000 // งบทั้งหมดเพิ่ม
+let installments = 4; // จำนวนงวดที่ต้องชำระ
+let availableAmount = 6200000; // จำนวนเงินที่มีอยู่
+
+
+let totaldebt = debt + debt_inc; // คำนวณจำนวนเงินที่ต้องชำระทั้งหมด
+// คำนวณจำนวนเงินที่ต้องชำระต่องวด
+let paymentPerInstallment = Math.floor(totaldebt / installments);
+
+// คำนวณจำนวนงวดที่คุณสามารถชำระได้ด้วยจำนวนเงินที่มีอยู่
+let installmentsPaid = Math.floor(availableAmount / paymentPerInstallment);
+
+//ปัดเศษขึ้น
+installmentsPaidup = Math.ceil(availableAmount / paymentPerInstallment);
+
+// คำนวณจำนวนเงินที่เหลืออยู่หลังจากชำระเงินแล้ว
+let remainingAmount = totaldebt-availableAmount;
+
+console.log(`Total Debt: ${debt}`);
+console.log(`Total Debt Increased: ${debt_inc}`);
+console.log(`Total Debt: ${totaldebt}`);
+console.log(`Number of Installments: ${installments}`);
+console.log(`Payment per Installment: ${paymentPerInstallment}`);
+console.log(`Available Amount: ${availableAmount}`);
+console.log(`Installments Paid: ${installmentsPaid}`);
+console.log(`ปัดเศษขึ้น: ${installmentsPaidup}`);
+console.log(`Remaining Amount: ${remainingAmount}`);
+ });
+
+
+
+    </script>
 
 {{-- <script>
     $(document).ready(function() {

@@ -493,7 +493,7 @@ as d')
             //   ->GroupBy('reguiar_id');
             // }
             //)
-
+            ->where('taskcons.deleted_at', NULL)
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
         ($json = json_decode($taskconcosttotal));
@@ -551,6 +551,7 @@ as d')
             ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('tasks.deleted_at', NULL)
+            ->where('contracts.deleted_at', NULL)
             ->where('contracts.contract_fiscal_year', '=',  $fiscal_year)
             ->where('contracts.contract_pa_budget', '!=', null)
             ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
@@ -590,6 +591,7 @@ as d')
         ($contract_groupby_fiscal_years = Contract::selectRaw('contract_fiscal_year as fiscal_year, count(*) as total')
             ->GroupBy('contract_fiscal_year')
             ->orderBy('contract_fiscal_year', 'desc')
+            ->where('contracts.deleted_at', NULL)
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
 
@@ -597,6 +599,7 @@ as d')
         ($project_groupby_fiscal_years = Project::selectRaw('project_fiscal_year as fiscal_year, count(*) as total')
             ->GroupBy('project_fiscal_year')
             ->orderBy('project_fiscal_year', 'desc')
+
             ->get()
             ->toJson(JSON_NUMERIC_CHECK));
 
@@ -1177,6 +1180,7 @@ as d')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
             ->where('tasks.task_cost_it_operating', '>', 1)
             ->where('tasks.task_type', 1)
+            ->where('tasks.deleted_at', NULL)
              ->where('projects.deleted_at', NULL) // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at')
  // เปลี่ยนจาก where('tasks.deleted_at', notnull) เป็น whereNotNull('tasks.deleted_at'))
                 ->where('project_fiscal_year',  $fiscal_year)
@@ -1210,6 +1214,7 @@ as d')
                 ->where('tasks.task_type', 2)
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+                ->where('tasks.deleted_at', NULL)
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
             ($json = json_decode($operating_pay_sum_2));
@@ -1248,6 +1253,7 @@ as d')
                 ->where('tasks.task_type', 1)
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+                ->where('tasks.deleted_at', NULL)
                 ->where('project_fiscal_year',  $fiscal_year)
 
                 ->get());
@@ -1261,6 +1267,7 @@ as d')
                 ->where('tasks.task_type', 2)
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
+                ->where('tasks.deleted_at', NULL)
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
             ($json = json_decode($operating_sum));
@@ -1281,6 +1288,7 @@ as d')
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
+                ->where('tasks.deleted_at', NULL)
                 ->get());
             ($json = json_decode($investment_pa_sum));
             ($ispa = $json[0]->ispa);
@@ -1292,6 +1300,7 @@ as d')
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
+                ->where('tasks.deleted_at', NULL)
                 ->get());
             ($json = json_decode($investment_sum));
             ($isa = $json[0]->isa);
@@ -1303,6 +1312,7 @@ as d')
                 ->where('projects.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
+                ->where('tasks.deleted_at', NULL)
                 ->get());
             ($json = json_decode($investment_total_pay_sum));
             ($itpsa = $json[0]->iv);
@@ -1372,6 +1382,7 @@ as d')
                 ->where('tasks.task_cost_it_investment', '>', 1)
                 ->where('tasks.task_type', 2)
                 ->where('projects.deleted_at', NULL)
+                ->where('tasks.deleted_at', NULL)
                 ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                 ->where('project_fiscal_year',  $fiscal_year)
                 ->get());
@@ -1387,6 +1398,7 @@ as d')
 
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
              ->where('projects.deleted_at', NULL)
+             ->where('tasks.deleted_at', NULL)
              ->where('project_fiscal_year',  $fiscal_year)
             ->get());
             ($json = json_decode($ut_pa_sum));
@@ -1419,6 +1431,8 @@ as d')
              ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
              ->where('project_fiscal_year',  $fiscal_year)
              ->where('projects.deleted_at', NULL)
+
+             ->where('tasks.deleted_at', NULL)
              ->get());
              ($json = json_decode($ut_pay_sum));
              ($utsc_pay = $json[0]->utsc_pay);
@@ -1444,6 +1458,7 @@ as d')
       ->where('tasks.task_cost_gov_utility', '>', 1)
       ->where('tasks.task_type',1)
       ->where('projects.deleted_at', NULL)
+      ->where('tasks.deleted_at', NULL)
 
 
              ->where('project_fiscal_year',  $fiscal_year)
@@ -1486,6 +1501,7 @@ as d')
             ->select('increasedbudgets.*')
            // ->where('project_id', $id)
             ->where('increasedbudgets.deleted_at', NULL)
+
          //   ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->where('project_fiscal_year',  $fiscal_year)
             ->orderBy('projects.project_fiscal_year', 'DESC')
@@ -1794,7 +1810,7 @@ as d')
                 ON contract_has_tasks.contract_id = contracts.contract_id
                 INNER JOIN taskcons
                 ON contracts.contract_id = taskcons.contract_id
-                where tasks.task_type = 1 AND tasks.deleted_at IS NULL
+                where tasks.task_type = 1 AND tasks.deleted_at IS NULL AND taskcons.deleted_at IS NULL
                 group by tasks.project_id
             ) as ad'),
             'ad.project_id',
@@ -1831,7 +1847,7 @@ as d')
         );
 
 
-         //  dd($project = ($project));
+        //  dd($project = ($project));
 
         // คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
 

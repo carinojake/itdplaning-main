@@ -402,8 +402,10 @@
                                                                             <span class="text-danger">*</span>
                                                                             <input type="text" class="form-control"
                                                                                 id="contract_mm"
+                                                                                name="contract_mm"
                                                                                 aria-describedby="contract_mm_Feedback"
                                                                                 value="{{ $tasksDetails->task_mm }}"
+                                                                                {{ $tasksDetails->task_mm  ? 'readonly' : '' }}
                                                                                 required >
                                                                             <div id="contract_mm_Feedback" name="contract_mm_Feedback"class="invalid-feedback">
                                                                                 {{ __('บันทึกข้อความ (MM)/เลขที่ สท.') }}
@@ -431,6 +433,7 @@
                                                                                 id="contract_mm_name"
                                                                                 name="contract_mm_name"
                                                                                 value="{{ $tasksDetails->task_mm_name }}"
+                                                                                {{ $tasksDetails->task_mm  ? 'readonly' : '' }}
                                                                                 required autofocus>
                                                                             <div id="contract_mm_name_feedback" class="invalid-feedback">
                                                                                 {{ __('ชื่อmm ') }}
@@ -457,7 +460,10 @@ $value = 0;
                                                                                 } elseif ($tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] > 0) {
                                                                                     $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
                                                                                 }
-                                                                                echo $value; @endphp">
+                                                                                echo $value; @endphp"
+                                                                                 {{ $tasksDetails->task_mm  ? 'readonly' : '' }}
+
+                                                                                >
 
                                                                         </div>
                                                                     </div>
@@ -535,7 +541,12 @@ $value = 0;
                                                                                         $value = $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'];
                                                                                     }
                                                                                     echo $value; @endphp"
-                                                                                    onchange="calculateRefund()">
+                                                                                    onchange="calculateRefund()"
+
+                                                                                    {{ $tasksDetails->task_mm  ? 'readonly' : '' }}
+
+
+                                                                                    >
 
                                                                             </div>
                                                                         </div>
@@ -749,7 +760,7 @@ $value = 0;
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="contract_ba"
-                                                                                    name="contract_cn">
+                                                                                    name="contract_ba">
                                                                                 <div class="invalid-feedback">
                                                                                     {{ __(' ') }}
                                                                                 </div>
@@ -815,7 +826,7 @@ $value = 0;
                                                                             <span class="text-danger"></span>
 
                                                                             <input type="text" class="form-control"
-                                                                                id="contract_pp" name="contract_cn">
+                                                                                id="contract_pp" name="contract_pp">
                                                                             <div class="invalid-feedback">
                                                                                 {{ __(' ') }}
                                                                             </div>
@@ -1365,9 +1376,9 @@ $value = 0;
 
 
 
-                                            <x-button  class="btn-success" type="submit">
-                                                {{ __('coreuiforms.save') }}
-                                            </x-button>
+               <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                                    {{ __('Save') }}
+                                </x-button>
 
                                             {{--
                 @if ($origin && $task)
@@ -1591,11 +1602,11 @@ $value = 0;
             <script>
                 $(document).ready(function() {
                     var task_budget_it_operating =
-                        {{ $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_sums['operating']['task_refund_pa_budget'] }};
+                        {{ $tasksDetails->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] }};
                     var task_budget_it_investment =
-                        {{ $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_sums['investment']['task_refund_pa_budget'] }};
+                        {{ $tasksDetails->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] }};
                     var task_budget_gov_utility =
-                        {{ $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_sums['utility']['task_refund_pa_budget'] }};
+                        {{ $tasksDetails->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] }};
 
                     $("#contract_mm_budget").on("input", function() {
                         var max = 0;
@@ -1720,6 +1731,9 @@ $value = 0;
                     $("#contract_pa_budget").on("input", function() {
                         var contract_pr_budget = parseFloat($("#contract_pr_budget").val().replace(/,/g, ""));
                         var contract_pa_budget = parseFloat($("#contract_pa_budget").val().replace(/,/g, ""));
+                        var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
+                        var contract_refund_pa_budget = parseFloat($("#contract_refund_pa_budget").val().replace(/,/g, ""));
+
 
                         var current = parseFloat($(this).val().replace(/,/g, ""));
 
@@ -1727,10 +1741,17 @@ $value = 0;
                         if (contract_pa_budget > contract_pr_budget ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
    // $("#contract_pr_budget").val(''); // Set the value of the input field
+   $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+    $("#contract_refund_pa_budget").val(''); // Set the value of the input field
 }
                     else if (contract_pa_budget < -0  ) {
 
+
     $("#contract_pa_budget").val(''); // Set the value of the input field
+    $("#contract_cn_budget").val(''); // Set the value of the input field
+    $("#contract_refund_pa_budget").val(''); // Set the value of the input field
+
                     }
                         if (current > contract_pr_budget || contract_pr_budget === "") {
                             Swal.fire({
@@ -1758,13 +1779,15 @@ $value = 0;
                         var contract_er_budget = parseFloat($("#contract_er_budget").val().replace(/,/g, ""));
                         var contract_po_budget = parseFloat($("#contract_po_budget").val().replace(/,/g, ""));
                         var contract_cn_budget = parseFloat($("#contract_cn_budget").val().replace(/,/g, ""));
+                        var contract_refund_pa_budget = parseFloat($("#contract_refund_pa_budget").val().replace(/,/g, ""));
                         var current = parseFloat($(this).val().replace(/,/g, ""));
 
-                        if (contract_er_budget < -0 || contract_po_budget < -0 || contract_cn_budget < -0) {
+                        if (contract_er_budget < -0 || contract_po_budget < -0 || contract_cn_budget < -0 ||contract_refund_pa_budget < -0 ) {
     //$("#contract_pr_budget").val('0'); // Set the value of the input field
     $("#contract_er_budget").val(''); // Set the value of the input field
     $("#contract_po_budget").val(''); // Set the value of the input field
     $("#contract_cn_budget").val(''); // Set the value of the input field
+    $("#contract_refund_pa_budget").val(''); // Set the value of the input field
 }
 
 
@@ -1929,6 +1952,9 @@ var fiscalYearEndDate = new Date(contract_fiscal_year, 8, 30); // 30th September
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">เงินงวด ${i + 1} &nbsp: &nbsp</label>
+
+                            <span    id="tasks_${i}_taskbudget_feedback" class="text-danger">*</span>
+
                             <input aria-describedby="tasks_${i}_taskbudget_feedback"
                             id="[${i}][expenses]"
                             type="text"
@@ -2224,12 +2250,12 @@ calculateInstallmentAmounts();
                     if (remainingBudgetform !== 0) {
                         // ถ้าไม่เท่ากันแสดงข้อความผิดพลาด
                         $('#expenses_delsum').addClass('is-invalid');
-                        $('#expenses_delsum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ1');
+                        $('#expenses_delsum').next('.invalid-feedback').text('ตรวงเงิน');
                         $('#expenses_sum').addClass('is-invalid');
-                        $('#expenses_sum').next('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ2');
+                        $('#expenses_sum').next('.invalid-feedback').text('ตรวงเงิน');
                         $('.expenses').each(function(index) {
                             $(this).addClass('is-invalid');
-                            $('#tasks_' + index + '_taskbudget_feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ3');
+                            $('#tasks_' + index + '_taskbudget_feedback').text('ตรวงเงิน');
                         });
                         //$('.expenses, #expenses_delsum, #expenses_sum').addClass('is-invalid');
                         //$('.invalid-feedback').text('ผลรวมของเงินงวดไม่เท่ากับงบประมาณ');
@@ -2698,7 +2724,7 @@ $("#insurance_start_date").datepicker("setStartDate", fiscalYearStartDate);
 
     // Set the start and end dates for the project_end_date datepicker
    $("#insurance_end_date").datepicker("setStartDate", fiscalYearStartDate);
-    $("#insurance_end_date").datepicker("setEndDate", fiscalYearEndDate);
+  //Z  $("#insurance_end_date").datepicker("setEndDate", fiscalYearEndDate);
 
 
 

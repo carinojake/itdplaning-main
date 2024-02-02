@@ -224,8 +224,10 @@
                                     </div>
                                 </div>
                     </div>
-                    <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}
+                    <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                        {{ __('Save') }}
                     </x-button>
+
                     <x-button link="{{ route('project.index') }}" class="text-black btn-light">
                         {{ __('coreuiforms.return') }}</x-button>
                     </form>
@@ -255,9 +257,18 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script type="text/javascript">
 
 
+
+
+
+
+
+
+
+
+
+   <script type="text/javascript">
         $(document).ready(function() {
 
           $(".btn-success").click(function(){
@@ -270,88 +281,7 @@
           });
 
         });
-
     </script>
-
-
-
-{{-- <script>
-    $(document).ready(function() {
-        // เมื่อมีการเปลี่ยนค่าในฟิลด์ project_fiscal_year
-        $('#project_fiscal_year,#project_type').on('change', function() {
-            var fiscalYear = $(this).val(); // รับค่า project_fiscal_year จากฟิลด์
-            var projectType = $('input[name="project_type"]:checked').val(); // รับค่า project_type จากฟิลด์
-            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
-            // ทำการส่งค่า project_fiscal_year ไปยัง Laravel โดยใช้ Ajax
-            $.ajax({
-                method: 'GET',
-                data: { project_fiscal_year: fiscalYear ,project_type:projectType}, // ส่งค่า project_fiscal_year ไปยัง Laravel
-                success: function(data) {
-                    // ทำอะไรกับข้อมูลที่ได้รับกลับมา
-                    console.log(data);
-                    $('#reguiar_id').val(data);
-                },
-                error: function(xhr, status, error) {
-                    // กรณีเกิดข้อผิดพลาด
-                    console.error(error);
-                }
-            });
-        });
-
-
-    });
-</script> --}}
-
-
-
-<!-- ใส่สคริปต์นี้ในเทมเพลต Blade ของคุณในแท็ก head หรือ body -->
-{{--  <script>
-    $(document).ready(function() {
-        function checkFiscalYear() {
-            var fiscalYear = $('#project_fiscal_year').val();
-            var projectType = $('input[name="project_type"]:checked').val();
-            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
-
-            if(fiscalYear && projectType) {
-                // ทำการเรียก AJAX ไปยังเส้นทางของ Laravel ที่ส่งกลับค่า 'reguiar_id' สูงสุด
-                $.get('/api/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
-                    // สมมุติว่า 'data' มีค่า 'reguiar_id' สูงสุด
-                    $('#reguiar_id').val(data.max_reguiar_id);
-                });
-            } else {
-                $('#reguiar_id').val('Default Value');
-            }
-        }
-
-        $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
-        checkFiscalYear(); // ตรวจสอบค่าเริ่มต้น
-    });
-</script> --}}
-
-
-<!-- Blade Template: resources/views/app/projects/create.blade.php -->
-{{-- <script>
-    $(document).ready(function() {
-        // Function to update 'reguiar_id' based on 'project_fiscal_year' and 'project_type'
-        function updateReguiarId() {
-            var fiscalYear = $('#project_fiscal_year').val();
-            var projectType = $('input[name="project_type"]:checked').val();
-
-           // ใน Blade template
-$.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
-    // อัปเดต 'reguiar_id' ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์
-    $('#reguiar_id').val(data.max_reguiar_id);
-});
-        }
-
-        // Event listener for when the fiscal year or project type changes
-        $('#project_fiscal_year, input[name="project_type"]').change(updateReguiarId);
-
-        // Initial update on page load
-        updateReguiarId();
-    });
-    </script> --}}
-
         <script>
             $(document).ready(function() {
                 $(":input").inputmask();
@@ -370,45 +300,6 @@ $.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }
     });
 </script>
 
-{{-- <script>
-    $(document).ready(function() {
-        var oldprojectname = $('#project_name').val();
-        var $project_name = 'ค่าที่คุณต้องการเปรียบเทียบ';
-        $.ajax({
-            method: 'GET',
-            data: { project_fiscal_year: fiscalYear, project_name: name }, // ส่งค่า project_fiscal_year และ project_name ไปยัง Laravel
-            success: function(data) {
-                // ทำอะไรกับข้อมูลที่ได้รับกลับมา
-                console.log(data);
-                if (data.exists) {
-                    $('#project_name').val('');
-                    $('.invalid-feedback').text('ชื่อโครงการนี้มีอยู่แล้ว');
-                } else {
-                    // ไม่มีชื่อโครงการที่ซ้ำ
-                    // คุณสามารถทำอะไรก็ได้ที่นี่
-                }
-            },
-            error: function(xhr, status, error) {
-                // กรณีเกิดข้อผิดพลาด
-                console.error(error);
-            }
-        });
-
-        if (oldprojectname === $project_name) {
-            $('#project_name').val('');
-            $('.invalid-feedback').text('ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
-        } else {
-            // ไม่ซ้ำ
-            // คุณสามารถทำอะไรก็ได้ที่นี่
-        }
-    });
-</script> --}}
-
-
-
-
-
-
 <script>
     $(document).ready(function() {
         // Assuming your fiscal year dropdown has an ID of 'fiscal_year'
@@ -426,13 +317,6 @@ $.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }
         });
     });
     </script>
-
-
-
-
-
-
-
 
 
 <script>
@@ -499,57 +383,31 @@ var budgetItOperating = $("#budget_it_operating").val();
 });
  </script>
 
-{{-- <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
-        'use strict'
 
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
 
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script> --}}
 
 
         <script>
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-    'use strict'
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
 
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                } else {
-                    // เพิ่มเงื่อนไขการตรวจสอบความถูกต้องของข้อมูลของคุณที่นี่
-                    // เช่น ตรวจสอบชื่อโครงการซ้ำ
-                    if (someValidationCondition) {
-                        event.preventDefault() // ป้องกันการส่งข้อมูลเซฟ
-                    }
-                }
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
 
-                form.classList.add('was-validated')
-            }, false)
-        })
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
 })()
 
         </script>
@@ -642,65 +500,215 @@ var budgetItOperating = $("#budget_it_operating").val();
     });
 </script>
 
+
 <script>
-$(document).ready(function() {
-    var oldReguiarId = ''; // เก็บค่าเดิมของฟิลด์
-    var formIsValid = true; // ตรวจสอบความถูกต้องของฟอร์ม
+    $(document).ready(function() {
+        var oldReguiarId = ''; // เก็บค่าเดิมของฟิลด์
+        var formIsValid = true; // ตรวจสอบความถูกต้องของฟอร์ม
 
-    $('#reguiar_id').on('change', function() {
-        var reguiar_id_new = $('#reguiar_id').val();
-        var fiscalYear = $('#project_fiscal_year').val();
-        var fieldId = $(this).attr('id');
-
-        $.ajax({
-            method: 'GET',
-            url: '{{ route("project.check-project") }}',
-            data: {
-                project_fiscal_year: fiscalYear,
-                reguiar_id: reguiar_id_new
-            },
-            success: function(data) {
-                console.log(data);
-
-                if (data.exists_reguiar_id) {
-                    // หากมีลำดับงานที่ซ้ำกันในปีงบประมาณเดียวกัน
-                    // ให้แสดงข้อความเตือนที่เหมือนกับที่คุณต้องการ
-                    $('#' + fieldId).addClass('is-invalid');
-                    $('#' + fieldId + '_feedback').text('ลำดับ.ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
-                    formIsValid = false; // ตั้งค่าให้ฟอร์มไม่ถูกต้อง
-                } else {
-                    $('#' + fieldId).removeClass('is-invalid');
-                    oldReguiarId = reguiar_id_new; // อัปเดตค่าเดิมของลำดับงาน
-                    formIsValid = true; // ตั้งค่าให้ฟอร์มถูกต้อง
+        // ฟังก์ชันสำหรับตรวจสอบโครงการที่มีอยู่แล้ว
+        function checkProjectExists(reguiar_id, fiscalYear, projectType) {
+            var fieldId = 'reguiar_id'; // ใช้ ID ของฟิลด์ reguiar_id สำหรับอ้างอิงและแสดงผล
+            $.ajax({
+                method: 'GET',
+                url: '{{ route("project.check-project") }}', // ตรวจสอบ URL ให้ถูกต้องตามการตั้งค่า route ของคุณ
+                data: {
+                    project_fiscal_year: fiscalYear,
+                    projectType: projectType,
+                    reguiar_id: reguiar_id
+                },
+                success: function(data) {
+                    if (data.exists_reguiar_id) {
+                        $('#' + fieldId).addClass('is-invalid');
+                        $('#' + fieldId + '_feedback').text('ลำดับ.ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
+                        formIsValid = false;
+                    } else {
+                        $('#' + fieldId).removeClass('is-invalid');
+                        formIsValid = true;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    formIsValid = false; // ตั้งค่าฟอร์มให้ไม่ถูกต้องหากเกิดข้อผิดพลาด
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
+            });
+        }
+
+        // ตรวจจับการเปลี่ยนแปลงของฟิลด์ reguiar_id และ project_fiscal_year
+        $('#reguiar_id, #project_fiscal_year, input[name="project_type"]').on('change', function() {
+            var reguiar_id = $('#reguiar_id').val();
+            var fiscalYear = $('#project_fiscal_year').val();
+            var projectType = $('input[name="project_type"]:checked').val(); // รับค่าประเภทโครงการ
+
+            // ตรวจสอบโครงการที่มีอยู่แล้ว
+            checkProjectExists(reguiar_id, fiscalYear, projectType);
+        });
+
+        // ตรวจจับการส่งฟอร์ม
+        $("form").on("submit", function(e) {
+            if (!formIsValid) {
+                e.preventDefault(); // ป้องกันไม่ให้ฟอร์มส่งข้อมูลหากมีข้อผิดพลาด
+                Swal.fire({
+                    title: 'เตือน!',
+                    text: 'ลำดับ.ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        });
+
+        // ตรวจจับการเปลี่ยนแปลงประเภทโครงการและคืนค่าฟิลด์เป็นค่าเริ่มต้น
+        $('input[name="project_type"]').on('change', function() {
+            if(formIsValid) { // ตรวจสอบเฉพาะเมื่อฟอร์มถูกต้อง
+                $('#reguiar_id').val(oldReguiarId); // คืนค่า reguiar_id เป็นค่าเดิม
             }
         });
     });
+    </script>
 
 
 
 
+<script>
+    $(document).ready(function() {
+        var fieldId = $(this).attr('id');
+      // กำหนดเหตุการณ์ 'change' สำหรับปุ่ม radio
+      $("input[name='project_type']").on("change", function() {
+        // ตรวจสอบค่าของปุ่ม radio ที่เลือก
+        if ($("#project_type1").is(":checked")) {
+          // ถ้าเลือก 'งานประจำ' ทำการล้างค่าในฟิลด์ 'ปีงบประมาณ' และ 'ลำดับ.ชื่องาน/โครงการ'
+          $("#project_fiscal_year").val('').removeClass('is-invalid');
+          $("#reguiar_id").val('').removeClass('is-invalid');
+            $('#' + fieldId).removeClass('is-invalid');
+         //  $("#reguiar_id").removeClass('is-invalid');
+           // ล้างค่าข้อความเตือน 6/02/2567
+        } else if ($("#project_type2").is(":checked")) {
+          // ถ้าเลือก 'โครงการ' ทำการล้างค่าในฟิลด์ 'ปีงบประมาณ' และ 'ลำดับ.ชื่องาน/โครงการ'
 
+          $("#project_fiscal_year").val('').removeClass('is-invalid');
+          $("#reguiar_id").val('').removeClass('is-invalid');
+         // $("#reguiar_id").removeClass('is-invalid');
+          $('#' + fieldId).removeClass('is-invalid');
+             // ล้างค่าข้อความเตือน 6/02/2567
+        }
+      });
+    });
+    </script>
+    </x-slot:javascript>
+</x-app-layout>
 
-    $("form").on("submit", function(e) {
-        if (!formIsValid) {
-            e.preventDefault(); // ป้องกันการส่งข้อมูลเซฟ
-            var alertText = 'ลำดับ.ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว';
-            Swal.fire({
-                title: 'เตือน!',
-                text: alertText,
-                icon: 'warning',
-                confirmButtonText: 'Ok'
-            });
+{{-- <script>
+    $(document).ready(function() {
+        var oldprojectname = $('#project_name').val();
+        var $project_name = 'ค่าที่คุณต้องการเปรียบเทียบ';
+        $.ajax({
+            method: 'GET',
+            data: { project_fiscal_year: fiscalYear, project_name: name }, // ส่งค่า project_fiscal_year และ project_name ไปยัง Laravel
+            success: function(data) {
+                // ทำอะไรกับข้อมูลที่ได้รับกลับมา
+                console.log(data);
+                if (data.exists) {
+                    $('#project_name').val('');
+                    $('.invalid-feedback').text('ชื่อโครงการนี้มีอยู่แล้ว');
+                } else {
+                    // ไม่มีชื่อโครงการที่ซ้ำ
+                    // คุณสามารถทำอะไรก็ได้ที่นี่
+                }
+            },
+            error: function(xhr, status, error) {
+                // กรณีเกิดข้อผิดพลาด
+                console.error(error);
+            }
+        });
+
+        if (oldprojectname === $project_name) {
+            $('#project_name').val('');
+            $('.invalid-feedback').text('ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว');
+        } else {
+            // ไม่ซ้ำ
+            // คุณสามารถทำอะไรก็ได้ที่นี่
         }
     });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        // เมื่อมีการเปลี่ยนค่าในฟิลด์ project_fiscal_year
+        $('#project_fiscal_year,#project_type').on('change', function() {
+            var fiscalYear = $(this).val(); // รับค่า project_fiscal_year จากฟิลด์
+            var projectType = $('input[name="project_type"]:checked').val(); // รับค่า project_type จากฟิลด์
+            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
+            // ทำการส่งค่า project_fiscal_year ไปยัง Laravel โดยใช้ Ajax
+            $.ajax({
+                method: 'GET',
+                data: { project_fiscal_year: fiscalYear ,project_type:projectType}, // ส่งค่า project_fiscal_year ไปยัง Laravel
+                success: function(data) {
+                    // ทำอะไรกับข้อมูลที่ได้รับกลับมา
+                    console.log(data);
+                    $('#reguiar_id').val(data);
+                },
+                error: function(xhr, status, error) {
+                    // กรณีเกิดข้อผิดพลาด
+                    console.error(error);
+                }
+            });
+        });
+
+
+    });
+</script> --}}
+
+
+
+<!-- ใส่สคริปต์นี้ในเทมเพลต Blade ของคุณในแท็ก head หรือ body -->
+{{--  <script>
+    $(document).ready(function() {
+        function checkFiscalYear() {
+            var fiscalYear = $('#project_fiscal_year').val();
+            var projectType = $('input[name="project_type"]:checked').val();
+            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
+
+            if(fiscalYear && projectType) {
+                // ทำการเรียก AJAX ไปยังเส้นทางของ Laravel ที่ส่งกลับค่า 'reguiar_id' สูงสุด
+                $.get('/api/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
+                    // สมมุติว่า 'data' มีค่า 'reguiar_id' สูงสุด
+                    $('#reguiar_id').val(data.max_reguiar_id);
+                });
+            } else {
+                $('#reguiar_id').val('Default Value');
+            }
+        }
+
+        $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
+        checkFiscalYear(); // ตรวจสอบค่าเริ่มต้น
+    });
+</script> --}}
+
+
+<!-- Blade Template: resources/views/app/projects/create.blade.php -->
+{{-- <script>
+    $(document).ready(function() {
+        // Function to update 'reguiar_id' based on 'project_fiscal_year' and 'project_type'
+        function updateReguiarId() {
+            var fiscalYear = $('#project_fiscal_year').val();
+            var projectType = $('input[name="project_type"]:checked').val();
+
+           // ใน Blade template
+$.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
+    // อัปเดต 'reguiar_id' ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์
+    $('#reguiar_id').val(data.max_reguiar_id);
 });
+        }
+
+        // Event listener for when the fiscal year or project type changes
+        $('#project_fiscal_year, input[name="project_type"]').change(updateReguiarId);
+
+        // Initial update on page load
+        updateReguiarId();
+    });
+    </script> --}}
 
 
-</script>
 
 {{-- <script>
 $('#project_fiscal_year,#project_name').on('change', function() {
@@ -739,8 +747,25 @@ $('#project_fiscal_year,#project_name').on('change', function() {
 })
 </script> --}}
 
+{{-- <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict'
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
 
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
 
-    </x-slot:javascript>
-</x-app-layout>
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script> --}}

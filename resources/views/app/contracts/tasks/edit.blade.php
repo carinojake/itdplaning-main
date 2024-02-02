@@ -336,7 +336,7 @@
                         </div>
 
 
-                    <button type="submit" class="btn btn-success">Save Changes</button>
+                        <x-button class="btn-success" type="submit" preventDouble>{{ __('coreuiforms.save') }}</x-button>
                     <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
 
                 </form>
@@ -448,7 +448,7 @@
 
                 // Check if the fieldId is "task_pay"
                 if (fieldId === "taskcon_pay") {
-                    if (taskcon_pay < -0) {
+                    if (parseFloat(taskcon_pay) < -0) {
 
                         $(this).val(0);
                     }

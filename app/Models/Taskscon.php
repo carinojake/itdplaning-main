@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int    $taskscon_id
  * @property int    $contract_id
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Taskscon extends Model
 {
-
+    use SoftDeletes;
     protected $table = 'taskscon';
 
      /**

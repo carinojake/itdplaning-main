@@ -25,11 +25,11 @@
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3 needs-validation" novalidate>
                                 @csrf
 
-
                                 <h2>เพิ่ม สัญญา</h2>
 
 
                                 <div class="callout callout-primary row mt-3">
+
                                 <div class="row">
                                     <div class="col-3">{{ __('กิจกรรม') }}</div>
                                     <div class="col-3"> {{ $task->task_name }}</div>
@@ -161,14 +161,15 @@
                                     </div >
 
 
+                              <div class="callout callout-primary row mt-3">
                                     <div class="row">
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_mm"
+                                            <label for="task_mm"
                                                 class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
                                             <span class="text-danger">*</span>
 
                                             <input type="text" class="form-control"
-                                                id="taskcon_mm" name="taskcon_mm" value="{{ session('contract_mm') }}" required>
+                                                id="task_mm" name="task_mm" value="{{ session('contract_mm') }}" required>
                                             <div class="invalid-feedback">
                                                 {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                             </div>
@@ -187,43 +188,6 @@
                                         </div>
 
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9 mt-3">
-                                            <div class="form-group">
-                                                <label for="task_contract"
-                                                    class="form-label">{{ __('สัญญา') }}</label>
-                                                    {{-- <span class="text-danger">*</span> --}}
-                                                <select name="task_contract" id="task_contract" class="form-control">
-                                                    <option value="">ไม่มี</option>
-                                                    @foreach ($contracts_left as $contract)
-                                                        <option value="{{ $contract->contract_id }}"
-                                                            {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                            [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-
-
-                                                <div class="invalid-feedback">
-                                                    {{ __('สัญญา') }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @if (session('contract_id') == 0)
-                                        <div class="col-md-3  mt-4">
-                                            <div class="form-group">
-                                                <label for="task_contract"
-                                                class="form-label">{{ __('สัญญา') }}</label>
-                                                {{-- <span class="text-danger">*</span> --}}
-                                            {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => 10, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
-                                                class="btn btn-success text-white"
-                                                target="contractCreate">เพิ่มสัญญา</a></span>
-                                            </div>
-                                        </div>
-                                        @endif
                                     </div>
 
                                     <div class="col-md-12 mt-3">
@@ -274,20 +238,9 @@
                                                 required>
                                         </div>
                                     </div>
+                              </div>
 
-
-
-
-
-                                    <div class="col-md-12 mt-3">
-                                        <label for="task_description"
-                                            class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
-                                        <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
-                                        <div class="invalid-feedback">
-                                            {{ __('รายละเอียดการที่ใช้จ่าย') }}
-                                        </div>
-                                    </div>
-
+                              <div class="callout callout-warning">
                                     <div class="row">
                                         <h4>งบประมาณ  </h4>
 
@@ -322,7 +275,7 @@
                                                  data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
                                                 class="form-control numeral-mask"
                                                 id="task_mm_budget" name="task_mm_budget"
-                                                min="0"  value="{{ session('contract_mm_budget') }}"  readonly >
+                                                min="0"  value="{{ session('contract_mm_budget') }}"   >
                                             <div class="invalid-feedback">
                                                 {{ __('mm') }}
                                             </div>
@@ -462,9 +415,66 @@
 
 
                                             </div>
+
+
+                                            <div class="col-md-12 mt-3">
+                                                <label for="task_description"
+                                                    class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
+                                                <textarea class="form-control" name="task_description" id="task_description" rows="10"></textarea>
+                                                <div class="invalid-feedback">
+                                                    {{ __('รายละเอียดการที่ใช้จ่าย') }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                                    <div class="callout callout-primary row mt-3 d-none">
+                                    <div class="row">
+                                        <div class="col-md-9 mt-3">
+                                            <div class="form-group">
+                                                <label for="task_contract"
+                                                    class="form-label">{{ __('สัญญา') }}</label>
+                                                    {{-- <span class="text-danger">*</span> --}}
+                                                <select name="task_contract" id="task_contract" class="form-control">
+                                                    <option value="">ไม่มี</option>
+                                                    @foreach ($contracts_left as $contract)
+                                                        <option value="{{ $contract->contract_id }}"
+                                                            {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                            [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
 
+
+                                                <div class="invalid-feedback">
+                                                    {{ __('สัญญา') }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if (session('contract_id') == 0)
+                                        <div class="col-md-3  mt-5">
+                                            <div class="form-group">
+                                          {{--       <label for="task_contract"
+                                                class="form-label">{{ __('สัญญา') }}</label>--}}
+                                                {{-- <span class="text-danger">*</span> --}}
+                                            {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
+                                            <span class="text-danger"> <a href="{{ route('contract.createsubcn', ['origin' => 10, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                                class="btn btn-success text-white"
+                                                target="contractCreate">บันทึกสัญญา</a></span>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                    <div class=" col-md-3 d-none ">
+
+
+
+                                    <input type="text" class="form-control" name="task_budget_no"
+                                    id="task_budget_no" value= {{   $task_rs_get['rs']+1 }} >
+                                </div>
 
                                {{--      <div class="d-none col-md-3">
 
@@ -478,7 +488,9 @@
 
                             </div>
 
-                                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
+                                       <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                                    {{ __('Save') }}
+                                </x-button>
                                 <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>
                             </form>
@@ -562,17 +574,17 @@
 
                                     if (fieldId === "task_budget_it_investment") {
 
-                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] }});
                                                     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
                                                 } else if (fieldId === "task_budget_it_operating") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_refund_pa_budget['operating']['task_refund_pa_budget']}});
                                                     if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
                 $("#task_budget_it_operating").val('');
             }
                                                 } else if (fieldId === "task_budget_gov_utility") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_refund_pa_budget['utility']['task_refund_pa_budget']}});
                                                     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
                                                     }

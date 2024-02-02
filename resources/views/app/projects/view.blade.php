@@ -33,6 +33,7 @@
                                     <a href="{{ route('project.task.createsubno', ['project' => $project->hashid]) }}"
                                         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
                                 @endif
+                                {{-- <a href="{{ route('project.destroy', ['project' => $project->hashid]) }}" class="btn bbtn btn-danger btn-delete"><i class="cil-trash "></i></button></a> --}}
 
                                 <a href="{{ route('project.index') }}" class="btn btn-secondary">กลับ</a>
                             </x-slot:toolbar>
@@ -689,10 +690,10 @@
                                 }).format(task.budget) + '</span>';
                             } else if (task.sumSubroot_task_task_parent_sub_value_plus == 0) {
                                 var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                    'green';
-                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                    'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 || task.task_status == 1? 'green' :
+                                    'blue';
+                            /*     var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green'; */
 
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',

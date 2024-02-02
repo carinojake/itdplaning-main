@@ -202,8 +202,9 @@
 
                                             <div class="row">
                                                 <div class="col-12 text-center mt-4">
-                                                    <x-button class="btn-success"
-                                                        type="submit">{{ __('coreuiforms.save') }}</x-button>
+                                                    <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                                                        {{ __('Save') }}
+                                                    </x-button>
                                                     <x-button link="{{ route('contract.index') }}"
                                                         class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
                                                 </div>

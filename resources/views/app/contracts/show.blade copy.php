@@ -6,84 +6,23 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="เลขที่ สัญญา {{ $contract->contract_number }} {{ $contract->contract_name }}">
-                            @foreach ($contract->taskcont as $index => $task)
 
-                            @endforeach
                             <x-slot:toolbar>
-                               @foreach ($contract->taskcont as $index => $task)
 
-                                {{--
-                                @if ($contract->contract_refund_pa_status == 1 )
+                                <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning">Edit</a>
 
-                                @if ($contract->contract_project_type == 'j' ||$task->task_budget_no == 1)
-                                <form class="taskRefund-form"
-                                    action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                    method="POST" style="display:inline">
-                                    @method('POST')
-                                    @csrf
-                                    <button class="btn btn-primary text-dark btn-taskRefund"><i
-                                            class="cil-money"></i></button>
-                                </form>
-                                @elseif($contract->contract_project_type == 'p' && $task->task_budget_no == 2  )
-                                <form class="taskRefund-form"
-                                    action="{{ route('project.task.taskRefund_con_one', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                    method="POST" style="display:inline">
-                                    @method('POST')
-                                    @csrf
-                                    <button class="btn btn-primary text-dark btn-taskRefund-sub"><i
-                                            class="cil-money"></i></button>
-                                </form>
+
+                                <a href="{{ route('contract.task.create', $contract->hashid) }}"
+                                    class="text-white btn btn-success">เพิ่มค่าใช้จ่าย</a>
 
 
 
 
-                                @elseif($contract->contract_project_type == 'p' && $task->task_parent_sud == null && $task->task_parent != null  )
-                                <form class="taskRefund-form"
-                                    action="{{ route('project.task.taskRefund_con_two', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                    method="POST" style="display:inline">
-                                    @method('POST')
-                                    @csrf
-                                    <button class="btn btn-primary text-dark btn-taskRefund-sub"><i
-                                            class="cil-money"></i></button>
-                                </form>
-
-
-
-
-
-                                @elseif($contract->contract_project_type == 'p')
-                                <form class="taskRefund-form"
-                                    action="{{ route('project.task.taskRefundcontract_project_type_sub_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
-                                    method="POST" style="display:inline">
-                                    @method('POST')
-                                    @csrf
-                                    <button class="btn btn-primary text-dark btn-taskRefund-sub"><i
-                                            class="cil-money"></i></button>
-                                </form>
-                            @endif
-
-
-                     @endif --}}
-
-
-
-
-                                <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
-                                class="text-white btn btn-success"><i class="cil-folder-open "></i>
-                                Project</a>
-                                @endforeach
-
-
-
-                                <a href="{{ route('contract.edit', $contract->hashid) }}" class="btn btn-warning  "><i class="cil-cog"></i></a>
-
-
-
-
-                                  {{--   <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
+                                {{--    <a href="{{ route('contract.editpay', ['contract' => $contract->hashid]) }}"
                                         class="btn-sm btn btn-warning text-white">fffff <i class="cil-cog">
                                           </i>
                                     </a> --}}
+
 
                                          <a href="{{ route('contract.index') }}" class="btn btn-secondary">Back</a>
                             </x-slot:toolbar>
@@ -109,7 +48,7 @@
                                     </div>
                                 </div>
 
-                               {{--  <div class="col-sm-6 col-md-3 col-lg-4">
+                                <div class="col-sm-6 col-md-3 col-lg-4">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="text-medium-emphasis text-end mb-4">
@@ -124,7 +63,7 @@
 
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
 
                                 <div class="col-sm-6 col-md-3 col-lg-4">
                                     <div class="card">
@@ -222,20 +161,22 @@
                             </div>
 
                             {{-- 27112566 - 2 --}}
-                            <div class="accordion" id="accordionPanelsStayOpenExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-coreui-toggle="collapse"
-                                            data-coreui-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                                            aria-controls="panelsStayOpen-collapseOne">
-                                            1. ข้อมูลการจัดซื้อจัดจ้าง ( MM, PR,PA,CN)
-                                        </button>
-                                    </h2>
-                                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
-                                        aria-labelledby="panelsStayOpen-headingOne">
-                                        <div class="accordion-body">
-                                            <div class="callout callout-primary row mt-3">
+
+                     <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="callout callout-info accordion-item">
+                                        <h2 class="accordion-header " id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-coreui-toggle="collapse"
+                                                data-coreui-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                ข้อมูลการจัดซื้อจัดจ้าง (เลขที่สัญญา,MM,PR)
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingOne"
+                                            data-coreui-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                            <div class="row  callout callout-primary mb-3">
                             <div class="card mb-3">
                                 <table class="table h6">
                                     <tr>
@@ -249,10 +190,10 @@
                                         <td>{{ $contract->contract_mm }}</td>
                                         <td>{{ $contract->contract_pr }}</td>
                                         <td>{{ $contract->contract_pa }}</td>
+
+
                                         <td>{{ $contract->contract_cn }}</td>
-                                        <td>       {{-- {{ __('คงเหลืองบประมาณ PA') }} --}} {!! isset($contract) && $contract->contract_refund_pa_status == 2
-                                            ? '<span class="text-blue">ดำเนินการ คืน แล้วเสร็จ</span>'
-                                            : '<span class="text-danger">ยังไม่ได้คืน</span>' !!}</td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <th>2.1 จำนวนเงิน MM</th>
@@ -262,17 +203,14 @@
                                         <th>2.5 จำนวนคงเหลือหลังเงิน PA</th>
                                     </tr>
                                     <tr>
-                                        <td>{{ number_format($contract->contract_mm_budget,2) }}</td>
+                                        <td>{{ $contract->contract_mm_bodget }}</td>
                                         <td>{{ number_format($contract->contract_pr_budget, 2) }}</td>
                                         <td>{{ number_format($contract->contract_pa_budget, 2) }}</td>
 
 
                                         <td>{{ number_format($contract->contract_cn_budget, 2) }}</td>
 
-                                        <td class="{{ $contract->contract_refund_pa_status == 2 ? 'text-blue' : 'text-danger' }}">
-                                            {{ number_format($contract->contract_refund_pa_budget, 2) }}
-                                          {{--   {!! $contract->contract_refund_pa_status == 2 ? 'ดำเนินการ คืน แล้วเสร็จ' : 'ยังไม่ได้คืน' !!} --}}
-                                        </td>
+                                        <td>{{ number_format($contract->contract_refund_pa_budget, 2) }}</td>
 
                                     </tr>
                                 </table>
@@ -280,126 +218,8 @@
                         </div>
                     </div>
                 </div>
-     <!-- Accordion item 2 -->
-     <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-            <button class="accordion-button collapsed" type="button"
-                data-coreui-toggle="collapse"
-                data-coreui-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                aria-controls="panelsStayOpen-collapseTwo">
-                2. รายละเอียดสัญญา
-            </button>
-        </h2>
-        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
-            aria-labelledby="panelsStayOpen-headingTwo">
-            <div class="accordion-body">
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
-                            <p class="card-text">
-                                {!! isset($contract) && $contract->contract_status == 2
-                                    ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>'
-                                    : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
-                            </p>
-
-                            <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
-                            <p class="card-text">{{ $contract->contract_number }}</p>
-
-                            <h5 class="card-title">{{ __('เลขที่ คู่ค้า') }}</h5>
-                            <p class="card-text">{{ $contract->contract_juristic_id }}</p>
-
-                            <h5 class="card-title">{{ __('เลขที่สั่งซื้อ') }}</h5>
-                            <p class="card-text">{{ $contract->contract_order_no }}</p>
-
-                            <h5 class="card-title">{{ __('ประเภท') }}</h5>
-                            <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}
-                            </p>
-                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
-                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
-                            <!-- Continue with the rest of your details -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-
-
-                            <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
-                            <p class="card-text">
-                                {{ \Helper::project_select($contract->contract_budget_type) }}</p>
-
-
-                            <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} -
-                                {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
-                            <p class="card-text">
-                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
-                                -
-                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
-                            </p>
-
-                            <h5 class="card-title">{{ __('วันที่สิ้นสุดสัญญา') }}</h5>
-                            <p class="card-text">
-                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
-                            </p>
-
-                            <h5 class="card-title">{{ __('จำนวนเดือน') }}</h5>
-                            <p class="card-text">
-                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
-                                เดือน</p>
-
-                            <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
-                            <p class="card-text">
-                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
-                                วัน</p>
-
-
-                            <!-- Continue with the rest of your details -->
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            @if (count($files_contract) > 0)
-                <table class="table table-bordered table-striped  mt-3">
-                    <thead>
-
-                        <th>เอกสารแนบ</th>
-
-                        <th>File</th>
-
-                    </thead>
-                    <tbody>
-                        @if (count($files_contract) > 0)
-                            @foreach ($files_contract as $file)
-                                <tr>
-                                    <td>{{ $file->name }}</td>
-
-                                    <td><a
-                                            href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/' . $file->name) }}">{{ $file->name }}</a>
-                                    </td>
-
-
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="5" class="text-center">No Table Data</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            @endif
-                    </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-
-                     {{--        <table class="table callout callout-danger">
+                            <table class="table callout callout-danger">
                                 <thead>
                                     <tr>
                                         <th>สำดับ</th>
@@ -422,16 +242,16 @@
                                                 <a href="{{ route('project.view', ['project' => $task->project_hashid]) }}"
                                                     class="text-white btn btn-success"><i class="cil-folder-open "></i>
                                                     Project</a>
-                                                 <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
+                                                {{-- <a href="{{ route('project.task.show', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                     class="text-white btn btn-primary"><i class="cil-folder-open "></i>
-                                                    Task</a>
-                                                 @if ($contract->contract_refund_pa_status == 1 )
+                                                    Task</a> --}}
+                                         @if ($contract->contract_refund_pa_status == 1 )
 
                                                     @if ($contract->contract_project_type == 'j' ||$task->task_budget_no == 1)
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
-                                                        @method('POST')
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
                                                         <button class="btn btn-primary text-dark btn-taskRefund"><i
                                                                 class="cil-money"></i></button>
@@ -440,7 +260,7 @@
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefund_con_one', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
-                                                        @method('POST')
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
                                                         <button class="btn btn-primary text-white btn-taskRefund-sub"><i
                                                                 class="cil-money">taskRefund</i></button>
@@ -453,7 +273,7 @@
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefund_con_two', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
-                                                        @method('POST')
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
                                                         <button class="btn btn-primary text-white btn-taskRefund-sub"><i
                                                                 class="cil-money">taskRefund_two</i></button>
@@ -467,7 +287,7 @@
                                                     <form class="taskRefund-form"
                                                         action="{{ route('project.task.taskRefundcontract_project_type_sub_2', ['project' => $task->project_hashid, 'task' => $task->hashid]) }}"
                                                         method="POST" style="display:inline">
-                                                        @method('POST')
+                                                        @method('POST') {{-- Use POST method to submit the form --}}
                                                         @csrf
                                                         <button class="btn btn-primary text-white btn-taskRefund-sub"><i
                                                                 class="cil-money"></i></button>
@@ -475,23 +295,23 @@
                                                 @endif
 
 
-                                         @endif
+                                                @endif
 
 
-                                                <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
+                                                {{-- <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 class="text-white btn btn-warning"><i class="cil-cog"></i></a>
                                             <form action="{{ route('contract.task.destroy', ['contract' => $contract->hashid, 'task' => $task->hashid]) }}"
                                                 method="POST" style="display:inline">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button class="text-white btn btn-danger"><i class="cil-trash"></i></button>
-                                            </form>
+                                            </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
- --}}
+
 
 
 
@@ -662,22 +482,114 @@
             </div> --}}
 
 
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ __('สถานะสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {!! isset($contract) && $contract->contract_status == 2
+                                                    ? '<span class="text-success">ดำเนินการแล้วเสร็จ</span>'
+                                                    : '<span class="text-warning">อยู่ในระหว่างดำเนินการ</span>' !!}
+                                            </p>
+
+                                            <h5 class="card-title">{{ __('เลขที่ สัญญา') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_number }}</p>
+
+                                            <h5 class="card-title">{{ __('เลขที่ คู่ค้า') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_juristic_id }}</p>
+
+                                            <h5 class="card-title">{{ __('เลขที่สั่งซื้อ') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_order_no }}</p>
+
+                                            <h5 class="card-title">{{ __('ประเภท') }}</h5>
+                                            <p class="card-text">{{ \Helper::contractType($contract->contract_type) }}
+                                            </p>
+                                            <h5 class="card-title">{{ __('หมายเหตุ') }}</h5>
+                                            <p class="card-text">{{ $contract->contract_projectplan }}</p>
+                                            <!-- Continue with the rest of your details -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+
+
+                                            <h5 class="card-title">{{ __('งบประมาณ') }} </h5>
+                                            <p class="card-text">
+                                                {{ \Helper::project_select($contract->contract_budget_type) }}</p>
+
+
+                                            <h5 class="card-title">{{ __('วันที่เริ่มสัญญา') }} -
+                                                {{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_start_date)) }}
+                                                -
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                            </p>
+
+                                            <h5 class="card-title">{{ __('วันที่สิ้นสุดสัญญา') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Helper::Date4(date('Y-m-d H:i:s', $contract->contract_end_date)) }}
+                                            </p>
+
+                                            <h5 class="card-title">{{ __('จำนวนเดือน') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInMonths(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                เดือน</p>
+
+                                            <h5 class="card-title">{{ __('จำนวนวัน') }}</h5>
+                                            <p class="card-text">
+                                                {{ \Carbon\Carbon::parse($contract->contract_start_date)->diffInDays(\Carbon\Carbon::parse($contract->contract_end_date)) }}
+                                                วัน</p>
+
+
+                                            <!-- Continue with the rest of your details -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
 
+
+
+
+
+                            @if (count($files_contract) > 0)
+                                <table class="table table-bordered table-striped  mt-3">
+                                    <thead>
+
+                                        <th>เอกสารแนบ</th>
+
+                                        <th>File</th>
+
+                                    </thead>
+                                    <tbody>
+                                        @if (count($files_contract) > 0)
+                                            @foreach ($files_contract as $file)
+                                                <tr>
+                                                    <td>{{ $file->name }}</td>
+
+                                                    <td><a
+                                                            href="{{ asset('storage/uploads/contracts/' . $file->contract_id . '/' . $file->name) }}">{{ $file->name }}</a>
+                                                    </td>
+
+
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5" class="text-center">No Table Data</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            @endif
 
 
 
                             <table class="table callout callout-primary">
-                                <div class="row">
-                                <div class="text-end col order-first  mt-3">
-                                    @if($contract->contract_pa_budget != $contractcons_taskcons['sum_taskcons_budget'])
-                                    <a href="{{ route('contract.task.create', $contract->hashid) }}" class="text-white btn btn-success">เพิ่มงวด</a>
-                                @endif
-
-                                </div>
-                            </div>
                                 <thead>
                                     <tr>
                                         {{-- <th width="50">ลำดับ</th> --}}
@@ -766,7 +678,8 @@
                                                     class="btn-sm btn btn-primary text-white"><i
                                                         class="cil-folder-open "> </i></a>
                                                 <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $taskcon->hashid]) }}"
-                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog"></i>
+                                                    class="btn-sm btn btn-warning text-white"> <i class="cil-cog">
+                                                        </i>
                                                 </a>
                                                 @if($contractgannt['total_pay']  < 1)
                                                 <form

@@ -141,13 +141,24 @@
                                 @endif
 
 
+                                <div class="row mt-3">
+                                    <div class="col-md-12 ">
+                                        <div class="d-none">
+                                        <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม mm') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name"
+                                            required autofocus>
+                                        <div class="invalid-feedback">
+                                            {{ __('กรุณากรอกชื่อกิจกรรม') }}
 
+                                    </div>
+                                </div>
 
                                 <div class="col-md-12 mt-3">
-                                    <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อรายการกิจกรรม') }} <span
+                                    <label for="task_name" class="form-label">{{ __('ชื่อรายการกิจกรรม') }} <span
                                         class="text-danger">*</span></label>
 
-                                    <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name" required
+                                    <input type="text" class="form-control" id="task_name" name="task_name" required
                                         autofocus>
                                     <div class="invalid-feedback">
                                         {{ __('ชื่อรายการ กิจกรรม') }}
@@ -420,8 +431,9 @@
 
 
 
-
-                    <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
+                    <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                        {{ __('Save') }}
+                    </x-button>
                     <x-button onclick="history.back()" class="text-black btn-light">
                         {{ __('coreuiforms.return') }}</x-button>
                     </form>
@@ -450,7 +462,17 @@
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
+        <script>
+            $(document).ready(function() {
+                // ตั้งค่าฟิลด์ taskcon_mm_name ให้มีค่าเท่ากับฟิลด์ task_name เมื่อหน้าเว็บโหลด
+                $("#taskcon_mm_name").val($("#task_name").val());
 
+                // หากคุณต้องการให้ค่าใน taskcon_mm_name อัพเดตเมื่อ task_name เปลี่ยนแปลง
+                $("#task_name").on("input", function() {
+                    $("#taskcon_mm_name").val($(this).val());
+                });
+            });
+        </script>
 
 
     <script>
@@ -465,17 +487,17 @@ $("#task_budget_it_investment, #task_budget_gov_utility, #task_budget_it_operati
         if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
-        max = parseFloat({{  $tasksDetails->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+        max = parseFloat({{  $tasksDetails->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] }});
     } else if (fieldId === "task_budget_it_operating") {
         if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0 ) {
                     $("#task_budget_it_operating").val('');
                 }
-        max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+        max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_refund_pa_budget['operating']['task_refund_pa_budget']}});
     } else if (fieldId === "task_budget_gov_utility") {
         if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
             }
-        max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+        max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_refund_pa_budget['utility']['task_refund_pa_budget']}});
     }
 
     var current = parseFloat($(this).val().replace(/,/g , ""));

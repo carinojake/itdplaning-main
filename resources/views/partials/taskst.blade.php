@@ -8,11 +8,17 @@
 
 
         @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif
-
-
+      {{--   <span class="badge bg-success"><i class="cil-check"></i></span>
+        $task->task_status == 2
         <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
         {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
-    </span></h2>
+    </span> --}}
+    @if(isset($task) && $task->task_status == 2)
+    <span class="badge bg-success"><i class="cil-check"></i></span>
+@else
+    <span class="badge bg-danger">-</span>
+@endif
+</h2>
     <div class="container">
 
         @if ($contract == null)
@@ -137,10 +143,10 @@
                         <th >กิจกรรม</th>
                         <th width="20">สถานะ</th>
                         <th>วันที่</th>
-                        <th >งบ</th>
+                        <th >งบ/บาท</th>
 
-                        <th >ที่ค่าใช้จ่าย</th>
-                        <th>เบิก</th>
+                        <th >ที่ค่าใช้จ่าย/บาท</th>
+                        <th>เบิก/บาท</th>
                         <th >ข้อมูล</th>
                     </tr>
                 </thead>
@@ -194,7 +200,7 @@
                                 </td>
 
                                 <td>{{ number_format($subtask->task_budget_it_operating + $subtask->task_budget_it_investment + $subtask->task_budget_gov_utility, 2) }}
-                                    บาท </td>
+                                     </td>
 
                                 <td>
                                     @if ($relatedData->totalLeastCost > 1 || $relatedData->total_Leasttask_cost_1 >1 || $relatedData->total_Leasttask_cost_2 > 1)
@@ -208,7 +214,7 @@
                                     @else
 
                                         {{ number_format($subtask->task_cost_it_operating + $subtask->task_cost_it_investment + $subtask->task_cost_gov_utility, 2) }}
-                                        บาท
+
                                     @endif
                                     </span>
 
@@ -217,11 +223,11 @@
                                     <span class="text-warning">
                                     @if ($relatedData->totalLeastconPay > 1)
 
-                                        {{ number_format($relatedData->totalLeastconPay+$relatedData->totalLeastPay, 2) }}     บาท
+                                        {{ number_format($relatedData->totalLeastconPay+$relatedData->totalLeastPay, 2) }}
                                     @elseif($relatedData->totalLeastPay > 1)
-                                        {{ number_format($relatedData->totalLeastPay, 2) }}     บาท
+                                        {{ number_format($relatedData->totalLeastPay, 2) }}
                                     @elseif($subtask->task_pay > 1)
-                                        {{ number_format($subtask->task_pay, 2) }}    บาท
+                                        {{ number_format($subtask->task_pay, 2) }}
 
                                     @endif
                                     </span>
@@ -246,6 +252,8 @@
 
 
                                     @foreach ($subtask->contract as $contract)
+                                    <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
+                                        class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
                                         <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}"
                                             class="btn btn-success btn-sm"><i class="cil-description"></i></a>
                                     @endforeach
@@ -348,7 +356,7 @@
                                     <div  class=" mt-3">
                                     {{ number_format($subtask_sub->task_budget_it_operating +
                                     $subtask_sub->task_budget_it_investment + $subtask_sub->task_budget_gov_utility, 2) }}
-                                    บาท
+
                                     </div>
                                 @endforeach
                              </td>
@@ -357,7 +365,7 @@
                                     <div  class=" mt-3">
                                     {{ number_format($subtask_sub->task_cost_it_operating +
                                     $subtask_sub->task_cost_it_investment + $subtask_sub->task_cost_gov_utility, 2) }}
-                                    บาท
+
                                     </div>
                                 @endforeach</td>
                                 <td>
@@ -372,9 +380,9 @@
 
                             <div  class=" mt-3">
                                 @if ($subtask_sub->task_pay > 1)
-                                {{ number_format($subtask_sub->task_pay ,2) }} บาท
+                                {{ number_format($subtask_sub->task_pay ,2) }}
                                 @else
-                                 {{ number_format($resulttwoItem?->total_pay_con, 2) }} บาท
+                                 {{ number_format($resulttwoItem?->total_pay_con, 2) }}
                                 @endif
 
                             </div>
@@ -548,7 +556,7 @@
                             <td class="text-end">
                                 <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
                                     class="btn-sm btn btn-primary text-white"><i class="cil-folder-open">
-                                        สัญญาข้อมูล</i></a>
+                                        ข้อมูลสัญญา</i></a>
 
 
                                 <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"

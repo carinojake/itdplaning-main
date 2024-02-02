@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Services\BudgetAllocationService;
 /**
  * @property int    $id
  * @property int    $type

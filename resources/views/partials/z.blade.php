@@ -1,7 +1,7 @@
 
 
                       <div class="container">
-                            @foreach ($taskcons as $taskcon)
+            @foreach ($taskcons as $taskcon)
                             <x-slot:toolbar>
                                 @if ($project['project_type'] == 2)
 
@@ -15,12 +15,15 @@
                             </form>
 
 
+
                             @elseif ($task['task_parent_sub'] == 99)
+                            @if ( ($task->task_budget_type < 0 ))
                             <form class="taskRefund-form" action="{{ route('project.task.taskRefundbudget_str_root_99', ['project' => $project->hashid, 'task' => $task->hashid]) }}" method="POST" style="display:inline">
                                 @method('POST')
                                 @csrf
                                 <button class="btn btn-primary text-white btn-taskRefund-sub">@if(auth()->user()->isAdmin())1.1 @endif <i class="cil-money"></i></button>
                             </form>
+                            @endif
 
                             @elseif ($project['project_type'] == 1)
 

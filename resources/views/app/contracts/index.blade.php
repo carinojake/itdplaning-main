@@ -18,6 +18,8 @@
                     <th>ลำดับ</th>
                     <th>ปีงบประมาณ</th>
                     <th>สัญญา</th>
+                    <th>ชื่อสัญญา</th>
+                    <th>mm</th>
 
                     <th></th>
                   </tr>
@@ -90,6 +92,8 @@
               data: 'contract_name_output',
               name: 'contract_name'
             },
+            {    data: 'contract_mm_budget_output',
+              name: 'contract_mm_budget'},
             {
               className: "text-end",
               data: 'action',

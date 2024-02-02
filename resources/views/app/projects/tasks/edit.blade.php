@@ -300,8 +300,9 @@
 
                     </div>
 
-                    <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                    <x-button link="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
+                    <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                        {{ __('Save') }}
+                    </x-button>                    <x-button link="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                         class="text-black btn-light">{{ __('show') }}</x-button>
                     </form>
                     </x-card>

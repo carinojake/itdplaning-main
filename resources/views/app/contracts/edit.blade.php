@@ -350,7 +350,9 @@
                     </div>
                 </div>
                 @endif
-                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
+                <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                    {{ __('Save') }}
+                </x-button>
                 <x-button link="{{ route('contract.index') }}" class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
               </form>
             </x-card>
@@ -491,16 +493,19 @@ $("#contract_cn_budget").val(''); // Set the value of the input field
 
 
 
-    <script>
-        $(document).ready(function() {
-          var isReadOnly = {{ $taskcons && $taskcons->taskcon_pay > 1 ? 'true' : 'false' }};
+<script>
+    $(document).ready(function() {
+        var isReadOnly = {{ $taskcons && $taskcons->taskcon_pay > 1 ? 'true' : 'false' }};
 
-          if (isReadOnly) {
-            // If the condition is true, set the fields to readonly
-            $('input').prop('readonly', true);
-          }
-        });
-      </script>
+        if (isReadOnly) {
+            // If the condition is true, set the fields to readonly or disabled
+            $('input, select, textarea').prop('readonly', true);
+           // $('select').prop('disabled', true); // Use 'disabled' for select elements
+            //$('input[type=radio], input[type=checkbox]').prop('disabled', true); // Use 'disabled' for radio and checkbox inputs
+        }
+    });
+</script>
+
 
 <script>
     $(function() {
@@ -724,6 +729,20 @@ $("#insurance_end_date").datepicker("setEndDate", fiscalYearEndDate);
 </script>
 
 
+{{--
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var contract_Status = {!! json_encode($contract_Status->contract_Status) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
+        if (contract_Status == 2) {
+            var formInputs = document.querySelectorAll(
+                '#pay_form input, #mm_form textarea, #mm_form select,#budget_form input'
+                ); // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+            formInputs.forEach(function(input) {
+                input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
+            });
+        }
+    });
+</script> --}}
 
 
 

@@ -199,7 +199,6 @@
                                                         </div> --}}
                                 </div>
 {{-- เพิ่ม 31/12/2566 --}}
-
 <div class="callout callout-primary row mt-3">
     <div class="row mt-3">
         <label
@@ -207,59 +206,79 @@
 </div>
 
 <div class="row">
-    <div class="col-2">{{ __('งบกลาง ICT ') }}</div>
-    <div class="col-2">{{ number_format($projectDetails->budget_it_operating, 2) }} บาท</div>   {{-- งบกลาง ICT --}}
+    @if($request->budget_it_operating > 0)
+    <div id='ICT' class="col-2">{{ __('งบกลาง ICT ') }}</div>
+    <div id='ICT' class="col-2">{{ number_format($projectDetails->budget_it_operating, 2) }} บาท</div>   {{-- งบกลาง ICT --}}
+    @endif
+    @if($request->budget_it_investment > 0)
     <div class="col-2">{{ __('งบดำเนินงาน') }}</div>
     <div class="col-2">{{ number_format($projectDetails->budget_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน --}}
+    @endif
+    @if($request->budget_gov_utility > 0)
     <div class="col-2">{{ __('งบค่าสาธารณูปโภค') }}</div>
     <div class="col-2">{{ number_format($projectDetails->budget_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค --}}
-
+    @endif
 </div>
-{{-- @if( $budget_task['sum_task_refund_budget_it_operating']||$budget_task['sum_task_refund_budget_it_investment']||$budget_task['sum_task_refund_budget_gov_utility']||$increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility) --}}  {{-- row --}}
+@if( $budget_task['sum_task_refund_budget_it_operating']||$budget_task['sum_task_refund_budget_it_investment']||$budget_task['sum_task_refund_budget_gov_utility']||$increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)  {{-- row --}}
 <div class="row">
-    @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
 
+
+    @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+    @if($request->budget_it_operating > 0)
     <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
     <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT เพิ่ม --}}
+    @endif
+    @if($request->budget_it_investment > 0)
     <div class="col-2">{{ __('งบดำเนินงาน เพิ่ม ') }}</div>
     <div class="col-2">{{ number_format($increasedData->first()->total_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน เพิ่ม --}}
+    @endif
+    @if($request->budget_gov_utility > 0)
     <div class="col-2">{{ __('งบค่าสาธารณูปโภค เพิ่ม ') }}</div>
     <div class="col-2">{{ number_format($increasedData->first()->total_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค เพิ่ม --}}
-   {{--  @endif --}}
+    @endif
+    @endif
 
 </div>
 <hr width="200px"/>{{-- row --}}
 <div class="row">
+    @if($request->budget_it_operating > 0)
     <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
     <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_it_operating'] -$budget_task['sum_task_refund_budget_type_it_operating'], 2) }} </b> บาท</div> {{-- งบกลาง ICT คืน --}}
+    @endif
+    @if($request->budget_it_investment > 0)
     <div class="col-2">{{ __('งบดำเนินงาน คืน') }}</div>
     <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_it_investment']-$budget_task['sum_task_refund_budget_type_it_investment'], 2) }}</b> บาท</div> {{-- งบดำเนินงาน คืน --}}
+    @endif
+    @if($request->budget_gov_utility > 0)
     <div class="col-2">{{ __('งบค่าสาธารณูปโภค คืน') }}</div>
     <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_gov_utility']-$budget_task['sum_task_refund_budget_type_gov_utility'], 2) }} </b>บาท</div> {{-- งบค่าสาธารณูปโภค คืน --}}
+    @endif
     <hr width="200px"/>
-</div>
-@endif {{-- row --}}
+
+</div>  {{-- row --}}
+
+
+@endif
 <div class="row">
-{{--     @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
- --}}    <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
-    <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
+{{--                                 @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
+--}}
+@if($request->budget_it_operating > 0)
+<div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
+                            <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
 
+                            @endif
+                            @if($request->budget_it_investment > 0)
+                            <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
+                            <div class="col-2"><b class=text-success>{{ number_format(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment) ,2) }}</b> บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
+                            @endif
+                            @if($request->budget_gov_utility > 0)
 
-    <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
-    <div class="col-2"><b class=text-success>{{ number_format(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment) ,2) }}</b> บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
-
-
-    <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
-    <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
-{{--     @endif --}}
-
-
-
-</div>
-</div>
-</div>
-
-{{-- </div> ปิด--}}
+                            <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
+                            <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
+                            @endif
+                            {{--  @endif --}}
+                    </div>
+</div>     {{-- </div> ปิด--}}
                                 <form method="POST"
                                 action="{{ route('project.task.store', $project) }}"
 
@@ -426,42 +445,7 @@
 
                                             </div> --}}
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-9 mt-3">
-                                                <div class="form-group">
-                                                    <label for="task_contract"
-                                                        class="form-label">{{ __('สัญญา') }}</label> <span
-                                                        class="text-danger"></span>
-                                                    <select name="task_contract" id="task_contract" class="form-control">
-                                                        <option value="">ไม่มี</option>
-                                                        @foreach ($contracts as $contract)
-                                                            <option value="{{ $contract->contract_id }}"
-                                                                {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                                [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
 
-
-                                                    <div class="invalid-feedback">
-                                                        {{ __('สัญญา') }}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            @if (session('contract_id') == 0)
-                                            <div class="col-md-3 mt-4">
-                                                {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
-                                    {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
-                                                    class="btn btn-success text-white"
-                                                    target="contractCreate">เพิ่มสัญญา</a> --}}
-
-                                                <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
-                                                    class="btn btn-success text-white"
-                                                    target="contractCreate">เพิ่มสัญญา</a>
-                                            </div>
-                                            @endif
-                                        </div>
                                         <div class="col-md-12 mt-3">
                                             <label for="task_name"
                                                 class="form-label">{{ __('ชื่อรายการ') }}</label>
@@ -760,6 +744,53 @@
 
 
                                 </div>
+                                <div class="callout callout-primary row mt-3 d-none">
+                                <div>
+                                    <div class="row mt-3">
+                                        <label
+                                        class="form-label">{{ __('บันทึกสัญญา') }}</label>
+                                </div>
+                                    <div class="row">
+                                        <div class="col-md-9 mt-3">
+                                            <div class="form-group">
+                                                <label for="task_contract"
+                                                    class="form-label">{{ __('สัญญา') }}</label> <span
+                                                    class="text-danger"></span>
+                                                <select name="task_contract" id="task_contract" class="form-control">
+                                                    <option value="">ไม่มี</option>
+                                                    @foreach ($contracts as $contract)
+                                                        <option value="{{ $contract->contract_id }}"
+                                                            {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                            [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+
+                                                <div class="invalid-feedback">
+                                                    {{ __('สัญญา') }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if (session('contract_id') == 0)
+                                        <div class="col-md-3 mt-5">
+                                            {{--  <a href="{{ route('contract.create', ['origin' => $project,'project'=>$project ,'taskHashid' => $task->hashid]) }}" class="btn btn-success text-white">เพิ่มสัญญา/ใบจ้าง</a> --}}
+                                {{--             <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project, 'taskHashid' => $task->hashid]) }}"
+                                                class="btn btn-success text-white"
+                                                target="contractCreate">เพิ่มสัญญา</a> --}}
+
+                                            <a href="{{ route('contract.create', ['origin' => $project, 'project' => $project]) }}"
+                                                class="btn btn-success text-white"
+                                                target="contractCreate">บันทึกสัญญา</a>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                </div>
+
+
+
                                 <div class="d-none col-md-3">
 
                                 </label>
@@ -832,8 +863,9 @@
 
                                 </div> --}}
 
-                                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                                <x-button onclick="history.back()" class="text-black btn-light">
+                                <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                                    {{ __('Save') }}
+                                </x-button>                                <x-button onclick="history.back()" class="text-black btn-light">
                                     {{ __('coreuiforms.return') }}</x-button>
                             </form>
                         </x-card>

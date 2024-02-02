@@ -987,9 +987,7 @@
 
 
 
-                                    <x-button class="btn-success" type="submit">
-                                        {{ __('coreuiforms.save') }}
-                                    </x-button>
+            <x-button class="btn-success" type="submit" preventDouble>{{ __('coreuiforms.save') }}</x-button>
                                     {{--
             @if ($origin && $task)
                 <x-button

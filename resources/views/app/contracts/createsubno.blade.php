@@ -793,8 +793,9 @@
                         </div>
                     </div>
                 -->
-                                <x-button class="btn-success" type="submit">{{ __('coreuiforms.save') }}</x-button>
-                                @if ($origin)
+                <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+                    {{ __('Save') }}
+                </x-button>                                @if ($origin)
                                     <x-button
                                         link="{{ route('project.task.createsub', ['project' => $origin, 'task' => $task]) }}"
                                         class="text-black btn-light">{{ __('coreuiforms.return') }}</x-button>

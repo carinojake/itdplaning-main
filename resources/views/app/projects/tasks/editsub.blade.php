@@ -12,7 +12,7 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row ">
+<div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('วงเงินที่ขออนุมัติ/การใช้จ่าย ของ') }}{{ $task->task_name }}">
                             <div id="budget_form">
@@ -34,7 +34,7 @@
                                     @csrf
                                     {{ method_field('PUT') }}
                                     <div class="row mt-3 callout callout-primary">
-
+                                        @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif
                                         <div class="col-md-6">
                                             <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                             <span class="text-danger">*</span>
@@ -48,8 +48,9 @@
                                                 {{ __('กิจกรรม') }}
                                             </div>
                                         </div>
-
-                                        <div class="col-md-3">
+{{--                                         @if($task->task_cost_it_operating == $task->task_pay||$task->task_cost_it_investment == $task->task_pay||$task->task_cost_gov_utility == $task->task_pay)
+ --}}                                        <div class="col-md-3">
+                                            <div id="task_status_form" >
                                             {{--  @if ($task->task_status == 1) --}}
                                             <label for="task_status"
                                                 class="form-label">{{ __('สถานะกิจกรรม') }}</label>
@@ -64,19 +65,37 @@
                                                     ระหว่างดำเนินการ
                                                 </label>
                                             </div>
-                                            <div class="form-check">
+                                            <div class="form-check-task_status2 {{ $task->task_cost_it_operating == $task->task_pay||$task->task_cost_it_investment == $task->task_pay||$task->task_cost_gov_utility == $task->task_pay ? '' : 'd-none' }}
+                                               ">
                                                 <input class="form-check-input" type="radio" name="task_status"
                                                     id="task_status2" value="2" @checked($task->task_status == 2)
                                                     {{ $task->task_status == 2 ? 'disabled' : '' }}
+                                                    {{ $task->task_cost_it_operating == $task->task_pay||$task->task_cost_it_investment == $task->task_pay||$task->task_cost_gov_utility == $task->task_pay ? '' : 'disabled readonly' }}
+
                                                     >
                                                 <label class="form-check-label" for="task_status2"
                                                     @checked($task->task_status == 2)>
                                                     ดำเนินการแล้วเสร็จ
                                                 </label>
                                             </div>
+                                        </div>
+
                                             {{-- @elseif($task->task_status == 2) --}}
                                             @if (auth()->user()->isAdmin())
                                                 <div class="form-check">
+                                                    <label for="task_status"
+                                                    class="form-label">{{ __('สถานะกิจกรรม') }}</label>
+                                                <span class="text-danger">*</span>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="task_status"
+                                                        id="task_status1" value="1" @checked($task->task_status == 1)
+
+                                                        >
+                                                    <label class="form-check-label" for="task_status1"
+                                                        @checked($task->task_status == 1)>
+                                                        ระหว่างดำเนินการ
+                                                    </label>
+                                                </div>
                                                     <input class="form-check-input" type="radio" name="task_status"
                                                         id="task_status2" value="2" @checked($task->task_status == 2)>
                                                     <label class="form-check-label" for="task_status2"
@@ -109,7 +128,7 @@
                                                 </label>
                                             </div>
                                         </div>
-
+                                    </div>
 
                                         <div class="d-none">
                                             @if (session('contract_id'))
@@ -187,7 +206,7 @@
                                             </div>
                                         </div> --}}
                                             @if ($task->task_type == 1)
-                                                <div class="row">
+                                                <div class="row d-none">
                                                     <div class="col-sm">
                                                         <label for="task_mm"
                                                         class="form-label">{{ __('mm') }}</label>
@@ -199,11 +218,12 @@
                                                 </div>
 
 
-                                                <div class="col-md-9">
+                                                <div class="col-md-9 d-none">
                                                     <div class="form-group">
                                                         <label for="task_contract"
-                                                            class="form-label">{{ __('สัญญา') }}</label> <span
-                                                            class="text-danger">*</span>
+                                                            class="form-label">{{ __('สัญญา') }}</label>
+                                                            <span class="text-danger">*</span>
+
 
 
                                                         @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
@@ -231,7 +251,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 mt-4">
+                                                <div class="col-md-3 mt-4 d-none">
                                                     <span class="text-danger"> <a
                                                             href="{{ route('contract.createsubcn', ['origin' => 2, 'project' => $project->hashid, 'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
                                                             class="btn btn-success text-white"
@@ -263,8 +283,44 @@
                                         </div>
                                     </div> --}}
 
+                           <div class="row mt-3 callout callout-primary">
 
-                                    <div class="row mt-3">
+                            <div class="col-md-4 mt-3">
+                                <div class="col-sm">
+                                    <label for="task_mm"
+                                    class="form-label">{{ __('MM / สก *') }}</label>
+                                    <span class="text-danger">*</span>
+                                    <input type="text" class="form-control" id='task_mm'
+                                        name="task_mm" value="{{ $task->task_mm }}"
+                                        {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mt-3">
+                                <label for="taskcon_mm_name"
+                                    class="form-label">{{ __('ชื่อ MM / ชื่อบันทึกข้อความ') }}</label>
+
+                                    <span class="text-danger">*</span>
+                                <input type="text" class="form-control"
+                                    id="taskcon_mm_name" name="taskcon_mm_name" value="{{ $task->task_mm_name }}" required value= {{ session('contract_mm_name') }} >
+                                <div class="invalid-feedback">
+                                    {{ __('ชื่อ MM / ชื่อบันทึกข้อความ *') }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="task_name"
+                                    class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
+                                    class="text-danger">*</span>
+                                <input type="text" class="form-control" id="task_name" name="task_name"
+                                    value="{{ $task->task_name }}" required autofocus
+                                    {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                <div class="invalid-feedback">
+                                    {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label for="task_start_date"
                                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
@@ -287,38 +343,29 @@
 
 
 
-                                    <div class="col-md-12 mt-3">
-                                        <label for="task_name"
-                                            class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="task_name" name="task_name"
-                                            value="{{ $task->task_name }}" required autofocus
-                                            {{ $task->task_status == 2 ? 'readonly' : '' }}>
-                                        <div class="invalid-feedback">
-                                            {{ __('ชื่อรายการที่ใช้จ่าย') }}
-                                        </div>
+
+
+                        </div>
+
+                        <div class="row mt-3 callout callout-warning">
+                            <div id="budget_form">
+                                <div class="col-md-3 mt-3">
+                                    <label for="task_mm_budget_1" class="form-label">{{ __('วงเงินที่ขออนุมัติ mm') }}</label>
+                                    <input type="text" placeholder="0.00" step="0.01"
+                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" class="form-control numeral-mask"
+                                        id="task_mm_budget" name="task_mm_budget" min="0" value={{ $task->task_mm_budget }}
+                                        onchange="calculateRefund1()">
+
+                                    <div class="invalid-feedback">
+                                        {{ __('mm') }}
                                     </div>
 
-                                    <div class="col-md-12 mt-3">
-                                        <label for="task_description"
-                                            class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
-                                        <textarea class="form-control" name="task_description" id="task_description" rows="10">
-
-
-                                {{ $task->task_description }}
-                            </textarea>
-                                        <div class="invalid-feedback">
-                                            {{ __('รายละเอียดการที่ใช้จ่าย') }}
-                                        </div>
-                                    </div>
-                            </div>
-
-                            <div id="budget_pay_form">
+                                </div>
 
                                 <div class="row mt-3">
                                     <div class="col-6 mt-3">
                                         <strong>
-                                            <h4>วงเงินที่ขออนุมัติ PR </h4>
+                                            <h5>วงเงินที่ขออนุมัติ PR </h5>
                                         </strong>
                                         @if ($task->task_budget_it_operating > 0)
                                             <div class="col-md-12">
@@ -389,7 +436,7 @@
                                     @if ($task->task_parent_sub < 2)
                                         <div class="col-6 mt-3">
                                             <strong>
-                                                <h4>ค่าใช้จ่าย (PA/ไม่มี PA)</h4>
+                                                <h5>ค่าใช้จ่าย (PA/ไม่มี PA)</h5>
                                             </strong>
 
                                             @if ($task->task_budget_it_operating > 0)
@@ -483,6 +530,13 @@
                                                             </div> --}}
                                                 </div>
                                             </div>
+
+
+                                    </div>
+
+
+
+
                                            {{--  @if (
                                                 ($task->task_cost_it_operating > 0 && $task->task_refund_pa_budget == 0) ||
                                                     ($task->task_cost_it_investment > 0 && $task->task_refund_pa_budget == 0) ||
@@ -511,7 +565,12 @@
                             </div>
                     </div>
 
-                    @if ($task->task_parent_sub < 2)
+
+
+            @if ($task->task_type == 2)
+            <div class="row mt-3 callout callout-primary">
+            <div class="row">
+
                         @if ($taskcon)
                             <div id="pay_form" class="mt-3">
                                 <div>
@@ -569,95 +628,68 @@
                                         </div>
                                     </div>
                         @endif
-                                    {{-- เอก --}}
 
-                       {{--  @if (auth()->user()->isAdmin())
-                            <div class="col-md-12 mt-3">
-                                @if ($task->task_refund_pa_status == null)
-                                    <label for="task_refund_pa_status"
-                                        class="form-label">{{ __('งบประมาณ ') }}</label> <span
-                                        class="text-danger"></span>
+                        <div class="col-md-12 mt-3">
+                            <label for="task_description"
+                                class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
+                            <textarea class="form-control" name="task_description" id="task_description"rows="5">
 
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="task_refund_pa_status"
-                                            id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
-                                        <label class="form-check-label" for="task_refund_pa_status1"
-                                            @checked($task->task_refund_pa_status == 1)>
-                                            ไม่ได้คืน322222
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline ms-5">
-                                        <input class="form-check-input" type="radio" name="task_refund_pa_status"
-                                            id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)>
-                                        <label class="form-check-label" for="task_refund_pa_status2"
-                                            @checked($task->task_refund_pa_status == 2)>
-                                            คืน323333
-                                        </label>
-                                    </div>
-                                @elseif($task->task_refund_pa_status == 2)
-                                    <div class=" d-nome form-check form-check-inline ms-5">
-                                        <input class="form-check-input" type="radio" name="task_refund_pa_status"
-                                            id="task_refund_pa_status" value="2" @checked($task->task_refund_pa_status == 2)
-                                          >
-                                        <label class="form-check-label" for="task_refund_pa_status3"
-                                            @checked($task->task_refund_pa_status == 2)>
-                                            คืน7777
-                                        </label>
-                                    </div>
-                                @endif
 
+                    {{ $task->task_description }}
+                </textarea>
+                            <div class="invalid-feedback">
+                                {{ __('รายละเอียดการที่ใช้จ่าย') }}
                             </div>
-
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="task_refund_pa_status"
-                                    id="task_refund_pa_status" value="1" @checked($task->task_refund_pa_status == 1)>
-                                <label class="form-check-label" for="task_refund_pa_status1"
-                                    @checked($task->task_refund_pa_status == 1)>
-                                    ไม่ได้คืน
-                                </label>
-                            </div>
- --}}
-                            {{-- Content for admin --}}
-
-
-
-                           {{--  <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="task_budget_type"
-                                    id="task_budget_type" value="1" @checked($task->task_budget_type == 1)>
-                                <label class="form-check-label" for="task_budget_type1" @checked($task->task_budget_type == 1)>
-                                    คืน  1task_budget_type1
-                                </label>
-                            </div>
-
-
-
-                            <div class=" d-nome form-check form-check-inline ms-5">
-                                <input class="form-check-input" type="radio" name="task_budget_type"
-                                    id="task_budget_type" value="2" @checked($task->task_refund_pa_status == 2)
-                                >
-                                <label class="form-check-label" for="task_budget_type2" @checked($task->task_refund_pa_status == 2)>
-                                    คืนtask_budget_type2
-                                </label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="task_budget_type"
-                                    id="task_budget_type" value="" @checked(is_null($task->task_refund_pa_status))>
-                                <label class="form-check-label" for="task_refund_pa_status0"
-                                    @checked(is_null($task->task_refund_pa_status))>
-                                    ไม่ได้คืน task_budget_type
-                                </label>
-                            </div>
-
-
-                        @endif
-                    @else
-
-                    @endif --}}
+                        </div>
+                    </div>
   @endif
+                            </div>
+  @if ($task->task_type == 1)
+  <div class="row mt-3 callout callout-primary">
+  <div class="row">
+
+
+
+
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="task_contract"
+                    class="form-label">{{ __('สัญญา') }}</label>
+                    <span class="text-danger">*</span>
+
+                    @if (isset($contract_task_st) && $contract_task_st->contract_number)
+    <input type="text" class="form-control" id="contract_number" value="[{{ $contract_task_st->contract_number }}] {{ $contract_task_st->contract_name}}" disabled readonly>
+@else
+    <select name="task_contract" id="task_contract" class="form-control">
+        <option value="">ไม่มี</option>
+        @foreach ($contracts_left as $contract)
+            <option value="{{ $contract->contract_id }}" {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+            </option>
+        @endforeach
+    </select>
+                    <div class="invalid-feedback">
+                        {{ __('สัญญา') }}
+                    </div>
+
+            </div>
+        </div>
+        <div class="col-md-3 mt-4">
+            <span class="text-danger"> <a
+
+                    href="{{ route('contract.createsubcn', ['origin' => 2, 'project' => $project->hashid, 'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                    class="btn btn-success text-white"
+                    target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
+        </div>
+    @endif
+</div>
+@endif
 
                 </div>
+
+            </div>
+
+
                 @if ($task->task_parent_sub == 2)
                     <div id="task_parent_sub_budget" {{-- style="display:none;" --}}>
                         <div class=" row mt-3 d-none ">
@@ -719,24 +751,16 @@
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
 
-        <div class="col-md-3 mt-3 d-none">
-            <label for="task_mm_budget_1" class="form-label">{{ __('budget') }}</label>
-            <input type="text" placeholder="0.00" step="0.01"
-                 data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" class="form-control numeral-mask"
-                id="task_mm_budget" name="task_mm_budget" min="0" value={{ $task->task_mm_budget }}
-                onchange="calculateRefund1()">
 
-            <div class="invalid-feedback">
-                {{ __('mm') }}
+
+
+
+
+
+
             </div>
 
-
-
-
-
         </div>
 
 
@@ -744,25 +768,48 @@
 
 
 
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="mt-3">
 
-            <button type="submit" class="btn btn-success"  {{ $task->task_status == 2 ? 'disabled' : '' }}>Save Changes</button>
-
-        <x-button link="{{ route('project.index') }}"
+        <x-button type="submit" class="btn-success" preventDouble icon="cil-save">
+            {{ __('Save') }}
+        </x-button>        <x-button link="{{ route('project.index') }}"
             class="btn-light text-black">{{ __('coreuiforms.return') }}</x-button>
         </div>
 
         </form>
         </x-card>
-        </div>
+    </div>
+</div>
 
 
 
 
 
-                <div class="row ">
+
+
+        <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
                         <x-card title="{{ __('เอกสารแนบ ของ') }}{{ $task->task_name }}">
                             <form id = 'formId' method="POST"
                                 action="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
@@ -860,6 +907,7 @@
 
 
                             </form>
+                        </div>
                     </div>
                     </x-card>
                 </div>
@@ -891,6 +939,46 @@
             {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+            <script>
+                $(document).ready(function() {
+                    // ตรวจสอบการเปลี่ยนแปลงของ radio buttons ที่มีชื่อ task_status
+                    $('input[type=radio][name=task_status]').change(function() {
+                        // ตรวจสอบค่าของ radio button ที่ถูกเลือก
+                        var task_status = $('input[name="task_status"]:checked').val();
+
+
+                        if (task_status == 1) {
+
+                            // โชว์ฟอร์มและยกเลิกการตั้งค่า readonly หรือ disabled
+                            $('#pay_form').find('input, select').prop('readonly', false).prop('disabled', false);
+                            $('#pay_form').show();
+                        } else if (task_status == 2) {
+                            // โชว์ฟอร์มและตั้งค่า readonly หรือ disabled
+                            $('#pay_form').find('input, select').prop('readonly', true).prop('disabled', false);
+                            $('#pay_form').show();
+                        }
+                    });
+                });
+                </script>
+
+
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function() {
+                    //var task_Status = {!! json_encode($task->task_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScriptvar
+                    var task_refund_pa_status_closs = {!! json_encode($task->task_refund_pa_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
+
+                    if (task_refund_pa_status_closs >1) {
+                        var formInputs = document.querySelectorAll(
+                            '#mm_form textarea, #mm_form select,#budget_form input'
+                            ); // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+                        formInputs.forEach(function(input) {
+                            input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
+                        });
+                    }
+                });
+            </script>
+
 
 
 
@@ -1324,6 +1412,29 @@
             });
 </script>
 
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var costInputs = ['task_cost_it_operating', 'task_cost_it_investment', 'task_cost_gov_utility'];
+        var payInput = 'task_pay';
+
+        function checkAndDisableFormElements() {
+            var payValue = parseFloat(document.getElementById(payInput).value.replace(/,/g, "")) || 0;
+            var formElements = document.querySelectorAll("#task_status_form input, #task_status_form select");
+
+            var shouldBeDisabled = costInputs.some(function(costId) {
+                var costValue = parseFloat(document.getElementById(costId).value.replace(/,/g, "")) || 0;
+                return costValue === payValue;
+            });
+
+            formElements.forEach(function(element) {
+                element.disabled = shouldBeDisabled; // Set `disabled` property instead of `readonly`
+            });
+        }
+
+        // Call this function to check and set the disable status on page load or when values change
+        checkAndDisableFormElements();
+    });
+    </script>
 
 
             <script>

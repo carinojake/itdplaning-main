@@ -15,19 +15,21 @@
     <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-warning text-dark"> <i class="cil-cog"></i>{{-- แก้ไขedit {{ Helper::projectsType($project->project_type) }} --}}
     </a>
-    @if ($task->task_budget_it_operating > 0)
+
+
+    @if ($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget'] > 0)
     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
     <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-@elseif ($task->task_budget_it_investment > 0)
+@elseif ($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] > 0)
     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
     <a href="{{ route('project.task.createsubnop', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-dark text-white">เพิ่มรายการที่ใช้จ่าย </a>
-@elseif ($task->task_budget_gov_utility > 0)
+@elseif ($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget'] > 0)
     <a href="{{ route('project.task.createsub', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
         class="btn btn-success text-white">เพิ่ม สัญญา</a>
 
@@ -55,19 +57,19 @@
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('งบกลาง ICT') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_operating), 2) }} บาท
+                    {{ number_format(floatval($task->task_budget_it_operating), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('งบดำเนินงาน') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_investment), 2) }} บาท
+                    {{ number_format(floatval($task->task_budget_it_investment), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('ค่าสาธารณูปโภค') }}</div>
-                    {{ number_format(floatval($task->task_budget_gov_utility), 2) }} บาท
+                    {{ number_format(floatval($task->task_budget_gov_utility), 2) }}
                 @endif
             </div>
         </div>
@@ -75,20 +77,20 @@
             <div class="row">
                 @if ($task->task_budget_it_operating > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบกลาง ICT') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }} บาท
+                    {{ number_format(floatval($task->task_budget_it_operating - $task_sub_sums['operating']['task_mm_budget'] + $task_sub_refund_pa_budget['operating']['task_refund_pa_budget']), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_it_investment > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบดำเนินงาน') }}</div>
-                    {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }} บาท
+                    {{ number_format(floatval($task->task_budget_it_investment - $task_sub_sums['investment']['task_mm_budget'] + $task_sub_refund_pa_budget['investment']['task_refund_pa_budget']), 2) }}
                 @endif
             </div>
             <div class="row">
                 @if ($task->task_budget_gov_utility > 0)
                     <div class="col-6 fw-semibold">{{ __('คงเหลือ งบสาธารณูปโภค') }}</div>
                     <div class="col-6">
-                        {{ number_format(floatval($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }} บาท
+                        {{ number_format(floatval($task->task_budget_gov_utility - $task_sub_sums['utility']['task_mm_budget'] + $task_sub_refund_pa_budget['utility']['task_refund_pa_budget']), 2) }}
 
                     </div>
                 @endif
@@ -113,10 +115,10 @@
             <th>กิจกรรม</th>
             <th>สถานะ</th>
             <th>วันที่</th>
-            <th>งบ</th>
+            <th>งบ/บาท</th>
             <th></th>
-            <th>ที่ค่าใช้จ่าย</th>
-            <th>เบิก</th>
+            <th>ที่ค่าใช้จ่าย/บาท</th>
+            <th>เบิก/บาท</th>
             <th width="200">ข้อมูล</th>
         </tr>
         @if ($task->subtask->count() > 0)
@@ -156,25 +158,25 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                         @endif --}}
                     </td>
                     <td>
-                        <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
-                        <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
+                        <span class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
+                        <span class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                     </td>
 
-                    <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}  บาท </td>
+                    <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}   </td>
                     <td></td>
                     <td>
                         <span style="color: red;">
-                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}    </span>บาท
+                        {{ number_format($subtask->task_cost_it_operating+$subtask->task_cost_it_investment+$subtask->task_cost_gov_utility,2) }}    </span>
 
                     </td>
                     <td>
 
                     @if ($subtask->task_pay > 1)
                     <span class="text-warning">
-                        {{ number_format($subtask?->task_pay,2) }} </span>บาท
+                        {{ number_format($subtask?->task_pay,2) }} </span>
                         @else
                         <span class="text-warning">
-                  {{ number_format($resultthItem?->total_pay_con,2) }}    </span>บาท
+                  {{ number_format($resultthItem?->total_pay_con,2) }}    </span>
                         @endif
 
 
@@ -185,13 +187,13 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
 
 
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+
                         @foreach ($subtask->contract as $contract)
                         <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success btn-sm"><i class="cil-description"></i></a>
                     @endforeach
 
-                    @if ($subtask->contract->count() < 1)
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
-                    @endif
+
 
                     @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1)
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -199,8 +201,8 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
                  @endif
 
-
-                @if($subtask->task_status == 2)
+                 @if ($subtask->task_pay < 1)
+                @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1 || $subtask->task_pay <1||$resultthItem?->total_pay_con < 1)
                  <form class="delete-form"
                  action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                  method="POST" style="display:inline">
@@ -209,7 +211,7 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                  <button class="btn btn-danger text-white btn-delete"><i class="cil-trash"></i></button>
              </form>
                 @endif
-
+                @endif
                     </td>
                 </tr>
                 <tr>

@@ -250,7 +250,7 @@
                     var form = $(this).closest('form');
 
                     Swal.fire({
-                        title: 'คืนเงิน กิจกรรม คุณแน่ใจหรือไม่?',
+                        title: 'คืนเงิน  คุณแน่ใจหรือไม่?',
                         text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
                         icon: 'warning',
                         showCancelButton: true,
@@ -272,7 +272,7 @@
                     var form = $(this).closest('form');
 
                     Swal.fire({
-                        title: 'คืนเงิน งานประจำ คุณแน่ใจหรือไม่?',
+                        title: 'คืนเงิน  คุณแน่ใจหรือไม่?',
                         text: "การกระทำนี้ไม่สามารถย้อนกลับได้!",
                         icon: 'warning',
                         showCancelButton: true,
