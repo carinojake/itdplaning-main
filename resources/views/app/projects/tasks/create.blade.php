@@ -165,15 +165,15 @@
 
 
                                 @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
-                                @if($request->budget_it_operating > 0)
+                                @if($request->budget_it_operating > 0 ||$increasedData->first()->total_it_operating)
                                 <div class="col-2">{{ __('งบกลาง ICT เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_it_operating, 2) }} บาท</div> {{-- งบกลาง ICT เพิ่ม --}}
                                 @endif
-                                @if($request->budget_it_investment > 0)
+                                @if($request->budget_it_investment > 0||$increasedData->first()->total_it_investment)
                                 <div class="col-2">{{ __('งบดำเนินงาน เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_it_investment, 2) }} บาท</div> {{-- งบดำเนินงาน เพิ่ม --}}
                                 @endif
-                                @if($request->budget_gov_utility > 0)
+                                @if($request->budget_gov_utility > 0||$increasedData->first()->total_gov_utility)
                                 <div class="col-2">{{ __('งบค่าสาธารณูปโภค เพิ่ม ') }}</div>
                                 <div class="col-2">{{ number_format($increasedData->first()->total_gov_utility, 2) }} บาท</div> {{-- งบค่าสาธารณูปโภค เพิ่ม --}}
                                 @endif
@@ -182,7 +182,7 @@
                             </div>
                             <hr width="200px"/>{{-- row --}}
                             <div class="row">
-                                @if($request->budget_it_operating > 0)
+                                @if($request->budget_it_operating > 0 )
                                 <div class="col-2">{{ __('งบกลาง ICT คืน ') }}</div>
                                 <div class="col-2"><b class=text-blue-ganll  >{{ number_format($budget_task['sum_task_refund_budget_it_operating'] -$budget_task['sum_task_refund_budget_type_it_operating'], 2) }} </b> บาท</div> {{-- งบกลาง ICT คืน --}}
                                 @endif
@@ -203,16 +203,16 @@
                     <div class="row">
                         {{--                                 @if($increasedData->first()->total_it_operating||$increasedData->first()->total_it_investment||$increasedData->first()->total_gov_utility)
                          --}}
-                         @if($request->budget_it_operating > 0)
+                         @if($request->budget_it_operating > 0 ||$increasedData->first()->total_it_operating)
                           <div class="col-2">{{ __('งบกลาง ICT คงเหลือ ') }}</div>
                                                         <div class="col-2"><b class=text-success>{{number_format(($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating+ $increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
 
                                                         @endif
-                                                        @if($request->budget_it_investment > 0)
+                                                        @if($request->budget_it_investment > 0||$increasedData->first()->total_it_investment)
                                                         <div class="col-2">{{ __('งบดำเนินงาน คงเหลือ ') }}</div>
                                                         <div class="col-2"><b class=text-success>{{ number_format(($request->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment+ $increasedData->first()->total_it_investment) ,2) }}</b> บาท</div> {{-- งบดำเนินงาน คงเหลือ --}}
                                                         @endif
-                                                        @if($request->budget_gov_utility > 0)
+                                                        @if($request->budget_gov_utility > 0 ||$increasedData->first()->total_gov_utility)
 
                                                         <div class="col-2">{{ __('งบค่าสาธารณูปโภค คงเหลือ ') }}</div>
                                                         <div class="col-2"><b class=text-success>{{ number_format(($request->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility+ $increasedData->first()->total_gov_utility) ,2) }}</b> บาท</div> {{-- งบค่าสาธารณูปโภค คงเหลือ --}}
@@ -229,10 +229,22 @@
 
 
                                 <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
+                                    <div class="col-md-12 ">
+                                        <div class="d-none">
+                                        <label for="taskcon_mm_name" class="form-label">{{ __('ชื่อกิจกรรม mm') }}</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" class="form-control" id="taskcon_mm_name" name="taskcon_mm_name"
+                                            required autofocus>
+                                        <div class="invalid-feedback">
+                                            {{ __('กรุณากรอกชื่อกิจกรรม') }}
+
+                                    </div>
+                                </div>
+
+                                    <div class="col-md-12">
+                                        <label for="task_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="task_name" name="task_name"
                                             required autofocus>
                                         <div class="invalid-feedback">
                                             {{ __('กรุณากรอกชื่อกิจกรรม') }}
@@ -632,6 +644,20 @@
        {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
         <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+                // ตั้งค่าฟิลด์ taskcon_mm_name ให้มีค่าเท่ากับฟิลด์ task_name เมื่อหน้าเว็บโหลด
+                $("#taskcon_mm_name").val($("#task_name").val());
+
+                // หากคุณต้องการให้ค่าใน taskcon_mm_name อัพเดตเมื่อ task_name เปลี่ยนแปลง
+                $("#task_name").on("input", function() {
+                    $("#taskcon_mm_name").val($(this).val());
+                });
+            });
+        </script>
+
+
 {{--
 
  <script>
@@ -747,7 +773,7 @@
             }
 
             return {
-                remainingBudget: totalBudget,
+                remainingBudget_op: totalBudget,
                 debt1Paid: debt1Paid,
                 debt2Paid: debt2Paid
             };
@@ -757,17 +783,26 @@
         $("#task_budget_it_operating").on("input", function() {
             var budgetItOperating = parseFloat($("#task_budget_it_operating").val().replace(/,/g, "")) || 0;
 
-            var totalRemainingBudget = budgetItOperating ;
+            var totalRemainingBudget_op = budgetItOperating ;
 
-        var debt1 = {{ json_encode($request->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating) }};
-        var debt2 = {{$increased['total_it_operating']}};
 
-        var result_operating = calculateDebtPayment(totalRemainingBudget, debt1, debt2);
+
+                var debt1 = {{ json_encode($request->budget_it_operating - $sum_task_budget_it_operating) }};
+        var debt2 = {{json_encode($sum_task_refund_budget_it_operating)}};
+
+
+
+
+
+        var result_operating = calculateDebtPayment(totalRemainingBudget_op, debt1, debt2);
+        console.log(totalRemainingBudget_op);
+        console.log(debt1);
+        console.log(debt2);
+
         console.log(result_operating);
 
-//        $("#task_refund_budget").val(result.debt1Paid);
-
-  //      $("#task_refund_budget_left").val(result.debt2Paid);
+        $("#task_refund_budget").val(result_operating.debt1Paid);
+$("#task_refund_budget_left").val(result_operating.debt2Paid);
     });
 
    // Event listener for input changes
@@ -908,10 +943,10 @@ $("#task_budget_gov_utility").on("input", function() {
         var fiscalYearStartDate = new Date(project_fiscal_year - 1, 9, 1); // 1st October of the previous year
         var fiscalYearEndDate = new Date(project_fiscal_year, 8, 30); // 30th September of the fiscal year
 
-        console.log(project_start_date_str);
-        console.log(project_end_date_str);
-        console.log(fiscalYearStartDate);
-        console.log(fiscalYearEndDate);
+      //  console.log(project_start_date_str);
+       // console.log(project_end_date_str);
+       // console.log(fiscalYearStartDate);
+        //console.log(fiscalYearEndDate);
 // Set the start and end dates for the project_start_date datepicker
 $("#task_start_date").datepicker("setStartDate", fiscalYearStartDate);
 $("#task_end_date").datepicker("setStartDate", fiscalYearStartDate);
@@ -1108,14 +1143,14 @@ $("#task_end_date").datepicker("setEndDate", project_end_date_str);
             var fieldId = $(this).attr('id');
             var fieldValue = parseFloat($(this).val().replace(/,/g, '')) || 0;
 
-            console.log(budgetGovUtilityMax);
-            console.log(budgetGovUtility_total);
-            console.log(budgetItOperatingMax);
-            console.log(budgetItOperating_total);
-            console.log(budgetItInvestmentMax);
-            console.log(budgetItInvestment_total);
-        console.log(fieldId);
-        console.log(fieldValue);
+         //   console.log(budgetGovUtilityMax);
+//console.log(budgetGovUtility_total);
+  //          console.log(budgetItOperatingMax);
+    //        console.log(budgetItOperating_total);
+     //       console.log(budgetItInvestmentMax);
+      //      console.log(budgetItInvestment_total);
+      //  console.log(fieldId);
+       // console.log(fieldValue);
 
         if (fieldId === "task_budget_it_investment") {
             if (  budgetItInvestmentMax  < fieldValue + budgetItInvestment_total && budget_sum_task_refund_budget_oiu > 1) {

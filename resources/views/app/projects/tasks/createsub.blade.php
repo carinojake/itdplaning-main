@@ -25,7 +25,6 @@
                             <form method="POST" action="{{ route('project.task.store', $project) }}" class="row g-3 needs-validation" novalidate>
                                 @csrf
 
-
                                 <h2>เพิ่ม สัญญา</h2>
 
 
@@ -163,12 +162,12 @@
 
                                     <div class="row">
                                         <div class="col-md-4 mt-3">
-                                            <label for="taskcon_mm"
+                                            <label for="task_mm"
                                                 class="form-label">{{ __('เลขที่ MM/เลขที่ สท.') }}</label>
                                             <span class="text-danger">*</span>
 
                                             <input type="text" class="form-control"
-                                                id="taskcon_mm" name="taskcon_mm" value="{{ session('contract_mm') }}" required>
+                                                id="task_mm" name="task_mm" value="{{ session('contract_mm') }}" required>
                                             <div class="invalid-feedback">
                                                 {{ __('เลขที่ MM/เลขที่ สท. ') }}
                                             </div>
@@ -466,6 +465,14 @@
                                     </div>
 
 
+                                    <div class=" col-md-3 d-none ">
+
+
+
+                                    <input type="text" class="form-control" name="task_budget_no"
+                                    id="task_budget_no" value= {{   $task_rs_get['rs']+1 }} >
+                                </div>
+
                                {{--      <div class="d-none col-md-3">
 
                                     </label>
@@ -562,17 +569,17 @@
 
                                     if (fieldId === "task_budget_it_investment") {
 
-                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_sums['investment']['task_refund_pa_budget'] }});
+                                                    max = parseFloat({{   $task->task_budget_it_investment-$task_sub_sums['investment']['task_mm_budget']+$task_sub_refund_pa_budget['investment']['task_refund_pa_budget'] }});
                                                     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
                 $("#task_budget_it_investment").val('');
             }
                                                 } else if (fieldId === "task_budget_it_operating") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_sums['operating']['task_refund_pa_budget']}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_it_operating -  $task_sub_sums['operating']['task_mm_budget']+$task_sub_refund_pa_budget['operating']['task_refund_pa_budget']}});
                                                     if (budgetItOperating === "0" || budgetItOperating === '' || parseFloat(budgetItOperating) < -0) {
                 $("#task_budget_it_operating").val('');
             }
                                                 } else if (fieldId === "task_budget_gov_utility") {
-                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_sums['utility']['task_refund_pa_budget']}});
+                                                    max = parseFloat({{ $tasksDetails->task_budget_gov_utility -  $task_sub_sums['utility']['task_mm_budget']+$task_sub_refund_pa_budget['utility']['task_refund_pa_budget']}});
                                                     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
                 $("#task_budget_gov_utility").val('');
                                                     }

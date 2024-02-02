@@ -448,7 +448,7 @@
 
                 // Check if the fieldId is "task_pay"
                 if (fieldId === "taskcon_pay") {
-                    if (taskcon_pay < -0) {
+                    if (parseFloat(taskcon_pay) < -0) {
 
                         $(this).val(0);
                     }

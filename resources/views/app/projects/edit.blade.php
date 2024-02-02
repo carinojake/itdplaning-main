@@ -151,15 +151,12 @@
                                     <label for="project_description"
                                         class="form-label">{{ __('รายละเอียดงาน/โครงการ') }}</label>
                                     <textarea class="form-control" name="project_description" id="project_description" rows="10">
-                    {{ $project->project_description }}
+                    {{$project->project_description}}
                   </textarea>
                                     <div class="invalid-feedback">
                                         {{ __('รายละเอียดงาน/โครงการ') }}
                                     </div>
                                 </div>
-
-
-
 
                                 <div  id='budget_form'class="row">
 
@@ -177,7 +174,7 @@
                                                     name="budget_it_operating" min="0"
                                                     value="{{ $project->budget_it_operating }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_it_operating  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
                                                     >
                                                   {{--   <div class="mt-3">
@@ -200,7 +197,7 @@
                                                     name="budget_it_investment" min="0"
                                                     value="{{ $project->budget_it_investment }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_it_investment  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
 
 
@@ -224,7 +221,7 @@
                                                     name="budget_gov_utility" min="0"
                                                     value="{{ $project->budget_gov_utility }}"
                                                     @foreach($increasedbudgetData as $key => $increaseData)
-                                                    {{ $increaseData->increased_budget_gov_utility  > 1 ? 'readonly' : '' }}
+                                                    {{ $increaseData->increased_budget_it_operating  > 1 ||$increaseData->increased_budget_it_investment  > 1 || $increaseData->increased_budget_gov_utility  > 1? 'readonly' : '' }}
                                                     @endforeach
 
                                                     >
@@ -336,7 +333,7 @@
 
                                 <div class="row mt-3  ">
 
-                                    <div class="col-md-3">
+                                    <div id='increased_budget_status'class="col-md-3">
                                         <label for="increased_budget_status"
                                             class="form-label">{{ __('งบประมาณ เพิ่ม') }}</label> <span
                                             class="text-danger"></span>
@@ -575,6 +572,22 @@
 
             });
         </script>
+
+
+
+            <script>
+                $(document).ready(function() {
+                    // Initial check
+                    $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
+
+                    // Listen for changes on the checkbox
+                    $('#increased_budget_status').change(function() {
+                        $('#increased_budget_new').toggle(this.checked);
+                    });
+                });
+            </script>
+
+
 {{--
         <script>
             $(document).ready(function() {
@@ -597,18 +610,20 @@
                 });
             });
         </script> --}}
-
+{{--
         <script>
             $(document).ready(function() {
                 // Initial check
+                var  totalbudget_budget = $budget['totalbudget_budget']
+                if (totalbudget_budget)
                 $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
-
                 // Listen for changes on the checkbox
                 $('#increased_budget_status').change(function() {
                     $('#increased_budget_new').toggle(this.checked);
                 });
+                else
             });
-        </script>
+        </script> --}}
 
 
 
@@ -779,7 +794,11 @@ var project_end_date_str = "{{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails
 $("#budget_it_operating,#budget_it_investment,#budget_gov_utility,#increased_budget_it_operating,#increased_budget_it_investment,#increased_budget_gov_utility,#increased_budget_it_operating_new,#increased_budget_it_investment_new,#increased_budget_gov_utility_new").on("input", function() {
  var max = 0;
  var fieldId = $(this).attr('id');
-var budgetItOperating = $("#budget_it_operating").val();
+    var key = $(this).data('key');
+
+
+
+ var budgetItOperating = $("#budget_it_operating").val();
  var budgetItInvestment = $("#budget_it_investment").val();
  var budgetGovUtility = $("#budget_gov_utility").val();
     var increasedBudgetItOperating = $("#increased_budget_it_operating").val();
@@ -790,9 +809,10 @@ var budgetItOperating = $("#budget_it_operating").val();
     var increasedBudgetItInvestment_new = $("#increased_budget_it_investment_new").val();
     var increasedBudgetGovUtility_new = $("#increased_budget_gov_utility_new").val();
 
- var olebudgetItOperating = {{$project->budget_it_operating}};
-    var olebudgetItInvestment = {{$project->budget_it_investment}};
-    var olebudgetGovUtility = {{$project->budget_gov_utility}};
+    var olebudgetItOperating = {{ $project->budget_it_operating }} || 0;
+var olebudgetItInvestment = {{ $project->budget_it_investment }} || 0;
+var olebudgetGovUtility = {{ $project->budget_gov_utility }} || 0;
+
 
     if (fieldId === "budget_it_investment") {
 
@@ -879,7 +899,40 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
 
+<script>
+    $(document).ready(function() {
+        $(document).ready(function() {
+    // Define a function to validate the input
+    function validateInput(value, oldValue, selector) {
+        if (value === "0" || value === '' || parseFloat(value) < 0) {
+            $(selector).val('');
+        }
+        if (parseFloat(value) < oldValue) {
+            $(selector).addClass('is-invalid');
+        } else {
+            $(selector).removeClass('is-invalid');
+        }
+    }
 
+    // Event listener for input fields
+    $("[id^=increased_budget_]").on("input", function() {
+        var fieldId = $(this).attr('id');
+        var key = fieldId.split('_').pop(); // Assuming the last part of ID is the key
+        var value = $(this).val().replace(/,/g , "");
+        var oldValue = 0; // Set the old value based on the fieldId
+
+        // Add your logic to determine oldValue here based on fieldId
+
+        validateInput(value, oldValue, '#' + fieldId);
+    });
+
+    // Similar event listeners for other fields...
+});
+
+
+    });
+
+        </script>
 
 <script>
     $(document).ready(function() {
@@ -902,8 +955,21 @@ var budgetItOperating = $("#budget_it_operating").val();
 
 
 
+
+
+
         console.log('oldValues:',oldValues);
         console.log('oldtaskValues:',oldtaskValues);
+
+         // Check if any of the values in oldtaskValues is greater than 0
+    var anyValueGreaterThanZero = Object.values(oldtaskValues).some(value => value > 0);
+    console.log('anyValueGreaterThanZero:',anyValueGreaterThanZero);
+if (anyValueGreaterThanZero === false) {
+    $('#increased_budget_status').hide();
+
+}
+
+
         //console.log('oldtaskValuesmm:',oldtaskValuesmm);
 
 

@@ -43,17 +43,14 @@
                                                     <div class="col-md-3">
                                                         <label for="project_fiscal_year"
                                                             class="form-label">{{ __('ปีงบประมาณ') }}</label>
-                                                        <input class="form-control" id="project_fiscal_year"
-                                                            name="project_fiscal_year"
-                                                            value="{{ $projectDetails->project_fiscal_year }}" disabled
-                                                            readonly>
+                                                       {{ $projectDetails->project_fiscal_year }}
+
                                                     </div>
                                                     <div class="col-md-9">
                                                         <label for="reguiar_id"
                                                             class="form-label">{{ __('ลำดับ งาน/โครงการ') }}</label>
-                                                        <input class="form-control" id="reguiar_id" name="reguiar_id"
-                                                            value="{{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}"
-                                                            disabled readonly>
+
+                                                           {{ $projectDetails->reguiar_id . '-' . $projectDetails->project_name }}
                                                     </div>
                                                     <div class="d-none col-md-3 ">
                                                         <label for="project_type"
@@ -87,20 +84,15 @@
                                                         <div class="col-md-6">
                                                             <label for="task_start_date2"
                                                                 class="form-label">{{ __('วันที่เริ่มต้น') }}</label>
-                                                            <span class="text-danger">*</span>
-                                                            <input class="form-control" id="task_start_date2"
-                                                                name="task_start_date2" name="task_start_date2"
-                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
-                                                                disabled readonly>
+
+                                                        {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_start_date)) }}
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="task_end_date2"
                                                                 class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
-                                                            <span class="text-danger">*</span>
-                                                            <input class="form-control" id="task_end_date2"
-                                                                name="task_end_date2" name="task_start_date2"
-                                                                value={{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
-                                                                disabled readonly>
+
+                                                     {{ Helper::Date4(date('Y-m-d H:i:s', $projectDetails->project_end_date)) }}
+
                                                         </div>
                                                     </div>
 
@@ -124,14 +116,9 @@
                                                                     <label for="budget_it_operating"
                                                                         class="form-label">{{ __('งบกลาง ICT ') }}</label>
                                                                     {{-- $project_task_budget_it_operating --}}
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท"
-                                                                        step="0.01"
-                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_it_operating"
-                                                                        name="budget_it_operating" min="0"
-                                                                        disabled readonly>
+
+                                                             {{ number_format($projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating, 2) }} บาท
+
                                                                 </div>
                                                             @endif
 
@@ -139,14 +126,8 @@
                                                                 <div class="col-4">
                                                                     <label for="budget_it_investment"
                                                                         class="form-label">{{ __('งบดำเนินงาน') }}</label>
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท"
-                                                                        step="0.01"
-                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_it_investment"
-                                                                        name="budget_it_investment" min="0"
-                                                                        disabled readonly>
+                                                         {{ number_format($projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment, 2) }} บาท
+
                                                                 </div>
                                                             @endif
 
@@ -154,14 +135,8 @@
                                                                 <div class="col-md-4">
                                                                     <label for="budget_gov_utility"
                                                                         class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
-                                                                    <input type="text"
-                                                                        placeholder="{{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท"
-                                                                        step="0.01"
-                                                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false"
-                                                                        class="form-control numeral-mask"
-                                                                        id="budget_gov_utility"
-                                                                        name="budget_gov_utility" min="0"
-                                                                        disabled readonly>
+                                                                   {{ number_format($projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility, 2) }} บาท
+
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -278,66 +253,6 @@
                                                                 </div>
                                                             </div>
 
-
-
-
-
-
-                                                            @if ($task->task_type == 1)
-                                                                <div class="col-md-9">
-                                                                    <div class="form-group">
-                                                                        <label for="task_contract"
-                                                                            class="form-label">{{ __('สัญญา') }}</label>
-                                                                        <span class="text-danger">*</span>
-                                                                        @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
-                                                                            <input type="text" class="form-control"
-                                                                                id="contract_number"
-                                                                                value=" {{ $contract_s->contract_number }}"
-                                                                                disabled readonly>
-                                                                        @else
-                                                                            <select name="task_contract"
-                                                                                id="task_contract"
-                                                                                class="form-control">
-                                                                                <option value="">ไม่มี</option>
-                                                                                @foreach ($contracts as $contract)
-                                                                                    <option
-                                                                                        value="{{ $contract->contract_id }}"
-                                                                                        {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
-                                                                                        [{{ $contract->contract_number }}]{{ $contract->contract_name }}
-                                                                                    </option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('สัญญา') }}
-                                                                            </div>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3 mt-4">
-                                                                    <span class="text-danger"> <a
-                                                                            href="{{ route('contract.create', ['origin' => 1, 'project' => $project->hashid, 'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
-                                                                            class="btn btn-success text-white"
-                                                                            target="contractCreate">เพิ่มสัญญา/ใบจ้าง</a>
-                                                                </div>
-                                                            @endif
-
-                                                            @endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                                         </div>
 
                                                         <div class="row mt-3">
@@ -377,7 +292,7 @@
                                                                 {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
                                                         </div>
                                                     </div>
-                                                    <div class="callout callout-warning">
+                                            <div class="callout callout-warning">
                                                         @if ($task->task_refund_pa_status == 1)
                                                             <div class="row ">
                                                                 <div class="col-md-4 mt-3">
@@ -542,7 +457,7 @@
                                                         </div>
                                                     @endif
 
-                                                </div>
+
                                                 <div id="refund" {{-- style="display:none;" --}}>
                                                     <div class=" row mt-3">
                                                         <div class="col-md-4">
@@ -564,6 +479,25 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class=" col-md-12 mt-3">
+                                                    <label for="task_description"
+                                                        class="form-label">{{ __('หมายเหตุ') }}</label>
+                                                    <textarea class="form-control" name="task_description" id="task_description" rows="5"
+                                                        value="{{ $task->task_description }}"></textarea>
+                                                    <div class="invalid-feedback">
+                                                        {{ __('รายละเอียดกิจกรรม') }}
+                                                    </div>
+                                                </div>
+
+
+
+
+
+
+
+
+                                            </div>
                                             </div>
                                             <div class="callout callout-light"
                                                 {{ $task->task_refund_pa_status == 3 ? 'readonly' : '' }}>
@@ -625,19 +559,78 @@
                                                     </div>
                                                 </div>
 
-                                                <div class=" col-md-12 mt-3">
-                                                    <label for="task_description"
-                                                        class="form-label">{{ __('หมายเหตุ') }}</label>
-                                                    <textarea class="form-control" name="task_description" id="task_description" rows="5"
-                                                        value="{{ $task->task_description }}"></textarea>
-                                                    <div class="invalid-feedback">
-                                                        {{ __('รายละเอียดกิจกรรม') }}
-                                                    </div>
-                                                </div>
                                             </div>
 
+
+
+                                                   {{--  --}}
+
+                                        <div class="row mt-3">
+                                            @if ($task->task_type == 1)
+                                            <div class="col-md-9">
+                                                <div class="form-group">
+                                                    <label for="task_contract"
+                                                        class="form-label">{{ __('สัญญา') }}</label>
+                                                    <span class="text-danger">*</span>
+                                                    @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
+                                                        <input type="text" class="form-control"
+                                                            id="contract_number"
+                                                            value=" {{ $contract_s->contract_number }}"
+                                                            disabled readonly>
+                                                    @else
+                                                        <select name="task_contract"
+                                                            id="task_contract"
+                                                            class="form-control">
+                                                            <option value="">ไม่มี</option>
+                                                            @foreach ($contracts as $contract)
+                                                                <option
+                                                                    value="{{ $contract->contract_id }}"
+                                                                    {{ session('contract_id') == $contract->contract_id ? 'selected' : '' }}>
+                                                                    [{{ $contract->contract_number }}]{{ $contract->contract_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            {{ __('สัญญา') }}
+                                                        </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mt-4">
+                                                <span class="text-danger"> <a
+                                                        href="{{ route('contract.create', ['origin' => 1, 'project' => $project->hashid, 'projecthashid' => $project->hashid, 'taskHashid' => $task->hashid]) }}"
+                                                        class="btn btn-success text-white"
+                                                        target="contractCreate">บันทึกสัญญา</a>
+                                            </div>
+                                        @endif
+
+                                        @endif
+
+                                    </div>
+
+
+
+
+
                                         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                         <div class=" row mt-3">
+
                                             <div class="d-none col-md-4">
                                                 <label for="task_status"
                                                     class="form-label">{{ __('สถานะกิจกรรม') }}</label>
@@ -838,7 +831,7 @@
                     </x-card>
                 </div>
 
-                <div class="accordion-item">
+                {{-- <div class="accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed" type="button"
                             data-coreui-toggle="collapse"
@@ -853,8 +846,8 @@
                         <div class="accordion-body">
 
                             <div class="row ">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <x-card title="{{ __('เอกสารแนบ ของ') }}{{ $task->task_name }}">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"> --}}
+                             {{--        <x-card title="{{ __('เอกสารแนบ ของ') }}{{ $task->task_name }}">
                                         <form id = 'formId' method="POST"
                                             action="{{ route('project.task.filesup', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                             enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -882,11 +875,9 @@
                                             @if (count($files) > 0)
                                             <table class="table table-bordered table-striped">
                                                 <thead>
-                                                    {{--  <th>Photo</th> --}}
+
                                                     <th>File Name</th>
-                                                    {{--   <th>File project_id</th>
-                                                        <th>File task_id</th>
-                                                        <th>File contract_id</th> --}}
+
                                                     <th>File Size</th>
                                                     <th>Date Uploaded</th>
                                                     <th>File Location</th>
@@ -897,11 +888,7 @@
                                                     @if (count($files) > 0)
                                                         @foreach ($files as $filedel)
                                                             <tr>
-                                                                {{--  <td><img src='storage/{{$file->name}}' name="{{$file->name}}" style="width:90px;height:90px;"></td> --}}
                                                                 <td>{{ $filedel->name }}</td>
-                                                                {{--          <td>{{ $file->project_id }}</td>
-                                                                    <td>{{ $file->task_id }}</td>
-                                                                    <td>{{ $file->contract_id }}</td> --}}
 
 
                                                                 <td>
@@ -928,7 +915,6 @@
                                                                 </td>
 
 
-                                                                {{--  <td><a href="{{ $file->location }}">{{ $file->location }}</a></td> --}}
 
 
 
@@ -944,7 +930,7 @@
                                         @endif
 
                                         <div class="col-md-12 mt-3">
-                                            <!-- Submit Button -->
+
                                             <button type="submit" class="btn btn-primary ">Upload</button>
                                             <x-button link="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $task->hashid]) }}"
                                                 class="btn-warning text-black">{{ __('show') }}</x-button>
@@ -954,11 +940,11 @@
 
                                         </form>
                                 </div>
-                                </x-card>
+                    </x-card> --}}
 
-                        </div>
+                    {{--     </div>
                     </div>
-            </div>
+                    </div> --}}
 
 
             </div>

@@ -390,8 +390,8 @@
                                                                                 name="contract_number" required
                                                                                 autofocus>
 
-                                                                            <div class="invalid-feedback">
-                                                                                {{ __('เลขที่สัญญา ซ้ำ') }}
+                                                                            <div id="contract_number" class="invalid-feedback">
+                                                                                {{ __('เลขที่สัญญา') }}
                                                                             </div>
                                                                         </div>
 
@@ -1471,15 +1471,15 @@
 
             <script>
                 $(document).ready(function() {
-
+                        //$increasedData->first()->total_it_operating) ,2)}}</b> บาท</div> {{-- งบกลาง ICT คงเหลือ --}}
                     var project_budget_it_operating =
-                        {{ isset($projectDetails) ? $projectDetails->budget_it_operating - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
+                        {{ isset($projectDetails) ? ($projectDetails->budget_it_operating+$increased['total_it_operating'] ) - $sum_task_budget_it_operating + $sum_task_refund_budget_it_operating : 0 }};
 
                     var project_budget_it_investment =
-                        {{ isset($projectDetails) ? $projectDetails->budget_it_investment - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
+                        {{ isset($projectDetails) ? ($projectDetails->budget_it_investment+$increased['total_it_investment'])  - $sum_task_budget_it_investment + $sum_task_refund_budget_it_investment : 0 }};
 
                     var project_budget_gov_utility =
-                        {{ isset($projectDetails) ? $projectDetails->budget_gov_utility - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
+                        {{ isset($projectDetails) ? ($projectDetails->budget_gov_utility+$increased['total_gov_utility'] ) - $sum_task_budget_gov_utility + $sum_task_refund_budget_gov_utility : 0 }};
 
 
                     $("#contract_mm_budget, #contract_pr_budget").on("input", function() {
@@ -2059,7 +2059,7 @@ $("#contract_pr_budget").val(''); // Set the value of the input field
         return remainingBudget;
     }
 
-    var sumOfExpenses = 0;
+             var sumOfExpenses = 0;
                 $('.expenses').each(function(index) {
                 sumOfExpenses += parseFloat($(this).val().replace(/,/g, "")) || 0;
                 // ลบคลาส 'is-invalid' ก่อนการตรวจสอบใหม่

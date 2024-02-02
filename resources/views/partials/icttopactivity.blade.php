@@ -1,6 +1,6 @@
 
 <h6>
-<div class=text-black-underline>งบกลาง ICT  : <b class=text-blue-ganll  >{{ number_format($budget['total_refund_pa_budget_it_operating']-$budget['totalBudgetItOperating'], 2) }}</b> บาท</div>
+<div class=text-black-underline>งบกลาง ICT  : <b class=text-blue-ganll  >{{ number_format($budget['total_refund_pa_budget_it_operating']-(($budget['totalBudgetItOperating']-$budget['total_task_refund_budget_ItOperating'])), 2) }}</b> บาท</div>
 </h6>
 <!-- Rest of your code -->
 <div>
@@ -31,7 +31,7 @@
     @if ($task->task_budget_it_operating   && $task->task_status == 1 && $task->task_refund_pa_status == 1 && $task->task_refund_budget_type == 1)
     - {{ $task->task_name }}: {{ number_format($task->task_budget_it_operating-$task->task_refund_budget, 2) }} บาท <br>
     @elseif ($task->task_budget_it_operating && $task->task_budget_type == 0 && $task->task_refund_pa_status == 3 && $task->task_refund_budget_type == 1)
-    -2 {{ $task->task_name }}: {{ number_format($task->task_budget_it_operating-$task->task_refund_budget, 2) }} บาท <br>
+    - {{ $task->task_name }}: {{ number_format($task->task_budget_it_operating, 2) }} บาท <br>
 
         @endif
 
@@ -40,7 +40,7 @@
     @endforeach
 
 
-    {{ 'รวม'}}:  <b class=text-red-crimson> {{ number_format($budget['totalBudgetItOperating'], 2) }}  </b>บาท
+    {{ 'รวม'}}:  <b class=text-red-crimson> {{ number_format($budget['totalBudgetItOperating']-$budget['total_task_refund_budget_ItOperating'], 2) }}  </b>บาท
 
 @endif
 <p>

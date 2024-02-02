@@ -8,11 +8,17 @@
 
 
         @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif
-
-
+      {{--   <span class="badge bg-success"><i class="cil-check"></i></span>
+        $task->task_status == 2
         <span class="badge {{ $task->task_status == 2 ? 'bg-success' : '' }}">
         {{ $task->task_status == 2 ? 'ดำเนินการแล้วเสร็จ' : '' }}
-    </span></h2>
+    </span> --}}
+    @if(isset($task) && $task->task_status == 2)
+    <span class="badge bg-success"><i class="cil-check"></i></span>
+@else
+    <span class="badge bg-danger">-</span>
+@endif
+</h2>
     <div class="container">
 
         @if ($contract == null)
@@ -548,7 +554,7 @@
                             <td class="text-end">
                                 <a href="{{ route('contract.task.show', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"
                                     class="btn-sm btn btn-primary text-white"><i class="cil-folder-open">
-                                        สัญญาข้อมูล</i></a>
+                                        ข้อมูลสัญญา</i></a>
 
 
                                 <a href="{{ route('contract.task.edit', ['contract' => $contract->hashid, 'taskcon' => $result->hashid]) }}"

@@ -16,6 +16,7 @@ use App\Models\ContractHasTaskcon;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\Increasedbudget;
 
 class ContractController extends Controller
 {
@@ -33,7 +34,7 @@ class ContractController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = contract::orderByRaw('CAST(contract_number AS UNSIGNED) ASC')->orderBy('contract_number', 'ASC');
+            $records = contract::orderBy('contract_fiscal_year', 'DESC')->orderByRaw('CAST(contract_number AS UNSIGNED) ASC')->orderBy('contract_number', 'ASC');
 
             return Datatables::eloquent($records)
                 ->addIndexColumn()
@@ -123,13 +124,15 @@ class ContractController extends Controller
         //    // คำนวณค่าเงินเบิกจ่ายทั้งหมดของContract
         ($contractgannt = Contract::select('contracts.*', 'a.total_cost', 'a.total_pay')
 
+
+
             ->leftJoin(
                 DB::raw('(select  taskcons.contract_id,
             sum(COALESCE(taskcons.taskcon_cost_gov_utility,0))
           +sum(COALESCE(taskcons.taskcon_cost_it_operating,0))
            +sum(COALESCE(taskcons.taskcon_cost_it_investment,0)) as total_cost ,
           sum( COALESCE(taskcons.taskcon_pay,0)) as total_pay
-          from taskcons  group by taskcons.contract_id) as a'),
+          from taskcons where taskcons.deleted_at IS NULL group by taskcons.contract_id) as a'),
                 'a.contract_id',
                 '=',
                 'contracts.contract_id'
@@ -162,11 +165,13 @@ class ContractController extends Controller
             // ->join('tasks', 'tasks.project_id', '=', 'projects.id')
             // ->groupBy('projects.project_id')
             ->where('contracts.contract_id', $id)
+            ->whereNull('contracts.deleted_at')
+
             ->first()
 
             ->toArray()
         );
-       //  dd ($contractgannt);
+       // dd ($contractgannt);
 
         //   คำนวณค่าเงินเบิกจ่ายทั้งหมดของโปรเจกต์
         //   (float) $__budget_gov = (float) $contract['budget_gov_operating'] + (float) $contract['budget_gov_utility'];
@@ -236,7 +241,7 @@ class ContractController extends Controller
 
 
 
-        ($taskcons =  Contract::find($id));
+        //($taskcons =  Contract::find($id));
         ($taskcons = DB::table('taskcons')
             ->select('taskcons.*', 'a.total_cost', 'a.total_pay', 'ab.cost_pa_1', 'ac.cost_no_pa_2')
             ->leftJoin(
@@ -277,6 +282,7 @@ class ContractController extends Controller
                 'taskcons.taskcon_id'
             )
             ->where('contract_id', ($id))
+            ->whereNull('taskcons.deleted_at')
             ->get()
             ->toArray());
 
@@ -367,7 +373,7 @@ class ContractController extends Controller
 
 
 
-        // dd($gantt);
+        //dd($gantt);
         //$sum = array($task);
         //dd($sum);
         ($taskcons);
@@ -473,7 +479,8 @@ public function checkContract(Request $request)
 
 
     public function create(Request $request, $project = null)
-    {
+    {  DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $origin = $request->origin;
         $project = $request->project;
         $task = $request->taskHashid;
@@ -485,6 +492,44 @@ public function checkContract(Request $request)
         $projectDetails = Project::where('project_id', $id)->orderBy('project_id', 'asc')->first();
 
         // dd($projecthashid);
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            'increasedbudgets.created_at',
+            'increasedbudgets.updated_at',
+            DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+
+
+            )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->first();
+
+                  //
+
+               // dd($increasedData['total_it_operating']);
+
+
+               if ($increasedData) {
+                $increased['total_it_operating'] = $increasedData->total_it_operating;
+                $increased['total_it_investment'] = $increasedData->total_it_investment;
+                $increased['total_gov_utility'] = $increasedData->total_gov_utility;
+            } else {
+                // Handle the case where no data is found
+                $increased['total_it_operating'] = 0;
+                $increased['total_it_investment'] = 0;
+                $increased['total_gov_utility'] = 0;
+            }
+
+            //  dd($increased,$increasedData);
 
 
         $id_project = $id_task = $pro = $ta = null;
@@ -566,11 +611,24 @@ public function checkContract(Request $request)
         $tasksDetails = $task;
 
 
+
+
+
+
+
+
+
+
+
+
         // dd($pro,$ta,$tasksData,$projectDetails, $sum_task_budget_gov_utility, $sum_task_refund_budget_gov_utility);
 
         $tasksJson = json_encode($tasksData);
 
         return view('app.contracts.create', compact(
+           // 'increased',
+            'increased',
+            'increasedData',
             'origin',
             'project',
             'task',
@@ -595,7 +653,8 @@ public function checkContract(Request $request)
 
 
     public function createsubcn(Request $request, $project = null)
-    {
+    { DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,"ONLY_FULL_GROUP_BY",""));');
+        DB::statement('SET SESSION sql_mode=@@global.sql_mode;');
         $origin = $request->origin;
         $project = $request->project;
 
@@ -790,7 +849,42 @@ public function checkContract(Request $request)
 
         $tasksJson = json_encode($tasksData);
 
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            'increasedbudgets.created_at',
+            'increasedbudgets.updated_at',
+            DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+
+
+            )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
+
+                  //
+
+               //  dd($increasedData['total_it_operating']);
+
+
+               $increased['total_it_operating']  =  $increasedData->first()->total_it_operating ?? 0;
+               $increased['total_it_investment']  =  $increasedData->first()->total_it_investment ?? 0;
+               $increased['total_gov_utility']  =  $increasedData->first()->total_gov_utility ?? 0;
+
+              //dd($increased);
+
         return view('app.contracts.createsubcn', compact(
+            'increased',
+            'increasedData',
+
             'origin',
             'project',
             'task',
@@ -1264,7 +1358,7 @@ public function checkContract(Request $request)
 
 
 
-        //dd($contract);
+      //  dd($contract);
 
         if ($contract->save()) {
 
@@ -1506,8 +1600,67 @@ public function checkContract(Request $request)
         ($taskcons     = Taskcon::where('contract_id', $id)->first());
 
         //dd($contract,$taskcons);
+        $increaseddetails = Increasedbudget::where('project_id', $id);
+        $increasedData = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+            'increasedbudgets.increased_budget_id',
+            'increasedbudgets.project_id',
+            'increasedbudgets.increased_budget_status',
+            'increasedbudgets.created_at',
+            'increasedbudgets.updated_at',
 
-        return view('app.contracts.edit', compact('contract', 'taskcons'));
+
+
+            )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
+
+        $increasedData_sum = DB::table('increasedbudgets')
+        ->join('projects', 'projects.project_id', '=', 'increasedbudgets.project_id')
+        ->select(
+    DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+
+
+
+            )
+        ->where('increasedbudgets.deleted_at', '=', null)
+        ->where('increasedbudgets.project_id', $id)
+        ->where('increasedbudgets.increased_budget_status', '=', 1)
+        //->groupBy('increasedbudgets.increased_budget_id', 'increasedbudgets.project_id')
+        ->get();
+
+            //DB::raw('SUM(increasedbudgets.increased_budget_it_operating) AS total_it_operating'),
+            //DB::raw('SUM(increasedbudgets.increased_budget_it_investment) AS total_it_investment'),
+            //DB::raw('SUM(increasedbudgets.increased_budget_gov_utility) AS total_gov_utility')
+
+
+
+
+
+
+
+
+            //  dd($increasedData['total_it_operating']);
+
+
+
+
+
+
+
+
+               $increased['total_it_operating']  =  $increasedData_sum->first()->total_it_operating ?? 0;
+               $increased['total_it_investment']  =  $increasedData_sum->first()->total_it_investment ?? 0;
+               $increased['total_gov_utility']  =  $increasedData_sum->first()->total_gov_utility ?? 0;
+
+              //dd($increased);
+        return view('app.contracts.edit', compact('increaseddetails','increasedData','increased','contract', 'taskcons'));
     }
 
 
@@ -1758,8 +1911,11 @@ public function checkContract(Request $request)
         ($id        = Hashids::decode($contract)[0]);
         ($taskcons     = Taskcon::where('contract_id', $id)->get());
         ($contractcons = Contract::get());
+        $contractconsst = Contract::where('contract_id', $id)->first();
 
-        return view('app.contracts.tasks.create', compact('contractcons', 'taskcons', 'contract'));
+
+        //dd($contractcons, $taskcons, $contractconsst);
+        return view('app.contracts.tasks.create', compact('contractcons', 'taskcons', 'contract', 'contractconsst'));
     }
 
 
@@ -1862,9 +2018,9 @@ public function checkContract(Request $request)
         $taskcon->taskcon_parent = $request->input('taskcon_parent') ?? null;
         //convert input to decimal or set it to null if empty
 
-        $taskcon->taskcon_budget_gov_utility    = $taskcon_budget_gov_utility;
-        $taskcon->taskcon_budget_it_operating   = $taskcon_budget_it_operating;
-        $taskcon->taskcon_budget_it_investment  = $taskcon_budget_it_investment;
+        $taskcon->taskcon_budget_gov_utility    = $taskcon_cost_gov_utility;
+        $taskcon->taskcon_budget_it_operating   = $taskcon_cost_it_operating;
+        $taskcon->taskcon_budget_it_investment  = $taskcon_cost_it_investment;
 
         $taskcon->taskcon_cost_gov_utility    = $taskcon_cost_gov_utility;
         $taskcon->taskcon_cost_it_operating   = $taskcon_cost_it_operating;
@@ -1984,7 +2140,7 @@ public function checkContract(Request $request)
 
             ;
 
-            //dd($totaltaskcons_Sum);
+           // dd($totaltaskcons_Sum);
 
         $tasks = task::get();
         $contractcons = Contract::get();

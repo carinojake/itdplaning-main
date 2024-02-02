@@ -156,8 +156,8 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                         @endif --}}
                     </td>
                     <td>
-                        <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
-                        <span class="badge bg-primary">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
+                        <span class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_start_date)) }}</span>
+                        <span class="badge bg-info">{{ \Helper::date4(date('Y-m-d H:i:s', $subtask->task_end_date)) }}</span>
                     </td>
 
                     <td>{{ number_format($subtask->task_budget_it_operating+$subtask->task_budget_it_investment+$subtask->task_budget_gov_utility,2) }}  บาท </td>
@@ -185,13 +185,13 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
 
 
+                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
+
                         @foreach ($subtask->contract as $contract)
                         <a href="{{ route('contract.show', ['contract' => $contract->hashid]) }}" class="btn btn-success btn-sm"><i class="cil-description"></i></a>
                     @endforeach
 
-                    @if ($subtask->contract->count() < 1)
-                        <a href="{{ route('project.task.show', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}" class="btn btn-primary btn-sm"><i class="cil-folder-open"></i></a>
-                    @endif
+
 
                     @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1)
                         <a href="{{ route('project.task.editsub', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
@@ -200,7 +200,7 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
                  @endif
 
 
-                @if($subtask->task_status == 2)
+                @if($subtask->task_status == 1)
                  <form class="delete-form"
                  action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                  method="POST" style="display:inline">

@@ -89,7 +89,7 @@ class PdfController extends Controller
 
 
 
-      dd($taskcosttotals);
+     // dd($taskcosttotals);
 
 
 

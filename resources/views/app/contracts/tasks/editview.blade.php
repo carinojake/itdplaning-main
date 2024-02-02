@@ -178,6 +178,62 @@
 
                                     </div>
 
+                                    <div class="col-md-12 mt-3">
+                                        <label for="taskcon_projectplan" class="form-label">{{ __('บันทึกข้อความ') }}</label>
+                               {{--          <input type="textarea" class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" value="{{ $taskcon->taskcon_projectplan }}" > --}}
+                                        <textarea class="form-control" id="taskcon_projectplan" name="taskcon_projectplan" style="height: 100px">{{ $taskcon->taskcon_projectplan }}</textarea>
+                                        <div class="invalid-feedback">
+                                          {{ __('บันทึกข้อความ') }}
+                                        </div>
+                                      </div>
+
+                                    <div  id="taskcon_pp_toto" class="row mt-3 d-none">
+                                        <h4>เบิกจ่าย</h4>
+
+
+
+
+
+
+                                        <div class="col-md-4 mt-3" >
+                                            <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
+                                            <input class="form-control" id="taskcon_pay_date" name="taskcon_pay_date"
+
+                                            value="{{ $taskcon->taskcon_pay_date ? \Helper::date4($taskcon->taskcon_pay_date) : '' }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+                                            >
+                                        </div>
+
+
+
+                                        <div class="col-md-4 mt-3">
+                                            <label for="taskcon_pp" class="form-label">{{ __('PP ใบเบิกจ่าย') }}</label>
+                                            <input class="form-control" id="taskcon_pp" name="taskcon_pp" value="{{ $taskcon->taskcon_pp }}"
+                                            {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+                                            >
+
+                                            <div class="invalid-feedback">
+                                                {{ __('ใบเบิกจ่าย') }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mt-3">
+                                            <label for="taskcon_pay" class="form-label">{{ __('เบิกจ่าย (บาท)') }}</label>
+                                            <input type="text" placeholder="0.00" step="0.01"
+                                             data-inputmask="'alias': 'decimal', 'groupSeparator': ','" class="form-control numeral-mask"
+                                             id="taskcon_pay" name="taskcon_pay" min="0" value="{{ $taskcon->taskcon_pay }}"
+                                             {{ $taskcon->task_status == 2 ? 'readonly' : '' }}
+
+
+                                             >
+                                            <div class="invalid-feedback">
+                                                {{ __('เบิกจ่าย (บาท)') }}
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
 
                                 </div>
                     </div>
@@ -227,7 +283,7 @@
 
                 // Check if the sum is greater than 0 (or any other condition you deem appropriate)
                 if (totaltaskcons_Sum > 1) {
-                    var formInputs = document.querySelectorAll('#taskcon_budget input ,#taskcon_cost input ,#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
+                    var formInputs = document.querySelectorAll('#taskcon_name textarea ,#taskcon_budget input ,#taskcon_cost input ,#taskcon_pay input, #taskcon_projectplan textarea, #taskcon_pp input, #taskcon_pay_date input');
                     formInputs.forEach(function(input) {
                         input.setAttribute('readonly', true); // Set to read-only
                     });

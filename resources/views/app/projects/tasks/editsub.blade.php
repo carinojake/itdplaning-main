@@ -34,7 +34,7 @@
                                     @csrf
                                     {{ method_field('PUT') }}
                                     <div class="row mt-3 callout callout-primary">
-
+                                        @if(auth()->user()->isAdmin()) [{{   $task_rs_get['rs'] }}]  @endif
                                         <div class="col-md-6">
                                             <label for="task_parent" class="form-label">{{ __('เป็นกิจกรรม') }}</label>
                                             <span class="text-danger">*</span>
@@ -202,8 +202,9 @@
                                                 <div class="col-md-9">
                                                     <div class="form-group">
                                                         <label for="task_contract"
-                                                            class="form-label">{{ __('สัญญา') }}</label> <span
-                                                            class="text-danger">*</span>
+                                                            class="form-label">{{ __('สัญญา') }}</label>
+                                                            <span class="text-danger">*</span>
+
 
 
                                                         @if (isset($contract_s->contract_number) && $contract_s->contract_number != null)
@@ -313,7 +314,7 @@
                                     </div>
                             </div>
 
-                            <div id="budget_pay_form">
+                            <div id="budget_form">
 
                                 <div class="row mt-3">
                                     <div class="col-6 mt-3">
@@ -510,6 +511,9 @@
                                 @endif
                             </div>
                     </div>
+                </div>
+            </div>
+
 
                     @if ($task->task_parent_sub < 2)
                         @if ($taskcon)
@@ -755,13 +759,14 @@
 
         </form>
         </x-card>
-        </div>
 
 
 
 
 
-                <div class="row ">
+
+
+
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <x-card title="{{ __('เอกสารแนบ ของ') }}{{ $task->task_name }}">
                             <form id = 'formId' method="POST"
@@ -891,6 +896,25 @@
             {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+
+
+
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function() {
+                    //var task_Status = {!! json_encode($task->task_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScriptvar
+                    var task_refund_pa_status_closs = {!! json_encode($task->task_refund_pa_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
+
+                    if (task_refund_pa_status_closs >1) {
+                        var formInputs = document.querySelectorAll(
+                            '#mm_form textarea, #mm_form select,#budget_form input'
+                            ); // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
+                        formInputs.forEach(function(input) {
+                            input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
+                        });
+                    }
+                });
+            </script>
+
 
 
 

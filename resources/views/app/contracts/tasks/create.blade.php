@@ -19,6 +19,42 @@
              <form method="POST" action="{{ route('contract.task.store', $contract) }}" class="row g-3">
 
                 @csrf
+
+
+                <div class="row  callout callout-primary mb-3">
+
+
+                    <div class="col-md-3">
+                        <label for="contract_fiscal_year"
+                            class="form-label">{{ __('ปีงบประมาณ') }}</label>
+                       {{ $contractconsst['contract_fiscal_year'] }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="contract_name"
+                            class="form-label">{{ __('สัญญา') }}</label>
+                       {{ $contractconsst['contract_name'] }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="contract_budget_type"
+                            class="form-label">{{ __('งบประมาณ') }}</label>
+                       {{ \Helper::project_select($contractconsst['contract_budget_type']) }}
+
+                        </div>
+
+                    <div class="col-md-3">
+                        <label for="contract_budget"
+                            class="form-label">{{ __('งบประมาณ') }}</label>
+                       {{  number_format($contractconsst['contract_pa_budget']) }}
+                    </div>
+
+
+
+
+                </div>
+
+
+
                 <div class="col-md-12">
                   <label for="taskcon_name" class="form-label">{{ __('ชื่อกิจกรรม') }}</label> <span class="text-danger">*</span>
                   <input type="text" class="form-control" id="taskcon_name" name="taskcon_name" required autofocus>
@@ -34,51 +70,15 @@
                   </div>
                 </div>
 
-              {{--  <div class="col-md-12">
-                  <label for="taskcon_parent" class="form-label">{{ __('เป็นกิจกรรมย่อย') }}</label> <span class="text-danger">*</span>
-           <input type="text" class="form-control" id="taskcon_parent" name="taskcon_parent">
-                  <select name="taskcon_parent" id="taskcon_parent" class="from-control">
-                    <option value="">ไม่มี</option>
-                     @foreach ($taskcons as $taskcon)
-                      <option value="{{ $taskcon->taskcon_id }}">{{ $taskcon->taskcon_name }}</option>
-                    @endforeach
-                  </select>
-                  <div class="invalid-feedback">
-                    {{ __('กิจกรรมย่อย') }}
-                  </div>
-                </div> --}}
-
-               {{-- <div class="col-md-12">
-                  <label for="taskcon_contract" class="form-label">{{ __('สัญญา') }}</label> <span class="text-danger">*</span>
-                   <input type="text" class="form-control" id="taskcon_contract" name="taskcon_contract">
-                  <select name="taskcon_contract" id="taskcon_contract" class="from-control">
-                    <option value="">ไม่มี</option>
-                    @foreach ($contractcons as $contract)
-                      <option value="{{ $contract->contract_id }}">[{{ $contract->contract_number }}]{{ $contract->contract_name }}</option>
-                    @endforeach
-                  </select>
-                  <div class="invalid-feedback">
-                    {{ __('สัญญา') }}
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <label for="datepicker-th" class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span class="text-danger">*</span>
-
-                  <div data-coreui-toggle="date-picker" id="taskcon_start_date"  data-coreui-locale="th-TH"  data-coreui-format="dd/MM/yyyy"></div>
-                </div>
-                <div class="col-md-6">
-                  <label for="datepicker-th-2" class="form-label">{{ __('วันที่สิ้นสุด') }}</label> <span class="text-danger">*</span>
-
-                  <div data-coreui-toggle="date-picker" id="taskcon_end_date"  data-coreui-locale="th-TH" data-coreui-format="dd/MM/yyyy"></div>
-                </div> --}}
-
 
                 <div class="row mt-3">
                     <div class="col-md-6">
-                        <label for="task_start_date"
-                            class="form-label">{{ __('วันที่เริ่มต้น') }}</label> <span
-                            class="text-danger"></span>
-                        <input class="form-control" id="taskcon_start_date" name="taskcon_start_date" >
+                        <label for="taskcon_start_date"
+                            class="form-label">{{ __('วันที่เริ่มต้น ประก้น') }}</label>
+                        <span class="text-danger"></span>
+                        <input type="text" class="form-control"
+                            id="taskcon_start_date"
+                            name="taskcon_start_date">
                     </div>
                     <div class="col-md-6">
                         <label for="task_end_date" class="form-label">{{ __('วันที่สิ้นสุด') }}</label>
@@ -92,8 +92,8 @@
                 <div class="row  mt-3" >
                   <h4>งบประมาณ</h4>
 
-                  <div class="row mt-3">
-                    <div class="col-6">
+                  <div class="row mt-3 ">
+                    <div   class="col-6 d-none">
                       <strong>เงินงบประมาณ (งวด/ต่อครั้ง)</strong>
 
 
@@ -137,6 +137,8 @@
 
                     <div class="col-6">
                       <strong>ค่าใช้จ่าย  (งวด/ต่อครั้ง)</strong>
+
+                      @if($contractconsst['contract_budget_type'] ==1)
                       <div class="col-md-12 mt-3">
                         <label for="taskcon_cost_it_operating" class="form-label">{{ __('งบกลาง ICT') }}</label>
                         <input type="text"
@@ -150,6 +152,8 @@
                           {{ __('งบกลาง ICT') }}
                         </div>
                       </div>
+                        @endif
+                        @if($contractconsst['contract_budget_type'] ==2)
                       <div class="col-md-12">
                         <label for="taskcon_cost_it_investment" class="form-label">{{ __('งบดำเนินงาน') }}</label>
                         <input type="text" placeholder="0.00" step="0.01"
@@ -162,6 +166,8 @@
                           {{ __('งบดำเนินงาน)') }}
                         </div>
                       </div>
+                        @endif
+                        @if($contractconsst['contract_budget_type'] ==3)
                      <div class="col-md-12">
                       <label for="taskcon_cost_gov_utility" class="form-label">{{ __('ค่าสาธารณูปโภค') }}</label>
                       <input type="text"  placeholder="0.00" step="0.01"
@@ -174,17 +180,15 @@
                         {{ __('ระบุค่าสาธารณูปโภค') }}
                       </div>
                     </div>
-
+                        @endif
 
                     </div>
+{{--
+                         <div class="row mt-3">
 
-                                  <div class="row mt-3">
-
-                    <h4>เบิกจ่าย</h4>
+                                <h4>เบิกจ่าย</h4>
                                 <div class="col-md-6">
-                                       {{--     <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
-                                 <input type="text" class="form-control" id="register_date" name="register_date" required>
-                                      id="taskcon_pay_date" data-coreui-format="dd/MM/yyyy" data-coreui-locale="th-TH"></div> --}}
+
 
                                       <label for="taskcon_pay_date" class="form-label">{{ __('วันที่เบิกจ่าย') }}</label>
                                       <span class="text-danger"></span>
@@ -205,17 +209,10 @@
                                       </div>
                                     </div>
                                   </div>
-
-
-
-
-
-
-
-
-                  </div>
-                </div>
-
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
 
             </div>
 
@@ -230,51 +227,92 @@
     </div>
   </x-slot:content>
   <x-slot:css>
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    rel="stylesheet" />
   </x-slot:css>
   <x-slot:javascript>
-    <script type="text/javascript">
-        $(function () {
-          var d = new Date();
-          var toDay = d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
+  <!-- Add the necessary CSS and JS files for Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js">
+  </script>
+  {{--  $projectDetails  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
+  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
 
 
-          // กรณีต้องการใส่ปฏิทินลงไปมากกว่า 1 อันต่อหน้า ก็ให้มาเพิ่ม Code ที่บรรทัดด้านล่างด้วยครับ (1 ชุด = 1 ปฏิทิน)
 
-          $("#taskcon_start_date").datepicker({ dateFormat: 'dd/mm/yy',
-          isBuddhist: true, defaultDate: toDay, dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-            dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-            monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-            monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+'use strict'
 
-          $("#taskcon_end_date").datepicker({
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms)
+.forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+        } else {
+            // เพิ่มเงื่อนไขการตรวจสอบความถูกต้องของข้อมูลของคุณที่นี่
+            // เช่น ตรวจสอบชื่อโครงการซ้ำ
+            if (someValidationCondition) {
+                event.preventDefault() // ป้องกันการส่งข้อมูลเซฟ
+            }
+        }
+
+        form.classList.add('was-validated')
+    }, false)
+})
+})()
+
+</script>
+
+
+<script>
+    $(function() {
+        $("#taskcon_start_date, #taskcon_end_date").datepicker({
+            dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
-            dateFormat: 'dd/mm/yy',
-            isBuddhist: true,
-             defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
-            dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-            monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-            monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
-
-
+            language: "th-th",
         });
 
-            $("#taskcon_pay_date").datepicker({ changeMonth: true, changeYear: true,dateFormat: 'dd/mm/yy', isBuddhist: true, defaultDate: toDay,dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
-            dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
-            monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
-            monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']});
+        $('#contract_fiscal_year').on('change', function() {
+            // Get the selected fiscal year from the datepicker
+            var fiscalYearDate = $(this).datepicker('getDate');
+            var fiscalYear = fiscalYearDate ? fiscalYearDate.getFullYear() : new Date().getFullYear();
+            // Calculate the start and end dates of the fiscal year
+            var fiscalYearStartDate = new Date(fiscalYear - 1, 9, 1); // 1st October of the previous year
+            var fiscalYearEndDate = new Date(fiscalYear, 8, 30); // 30th September of the fiscal year
+            var fiscalYearEnd = '30/09/' + fiscalYear;
+            // Set the date range for the project datepickers
+            $("#taskcon_start_date").datepicker("setStartDate", fiscalYearStartDate);
+      //$("#project_end_date").datepicker("setEndDate", fiscalYearEnd);
+        });
+
+        $('#taskcon_start_date').on('changeDate', function() {
+            var startDate = $(this).datepicker('getDate');
+          //  $("#project_end_date").datepicker("setStartDate", startDate);
+        });
+
+        $('#taskcon_end_date').on('changeDate', function() {
+            var endDate = $(this).datepicker('getDate');
+            $("#taskcon_start_date").datepicker("setEndDate", fiscalYearEnd);
+        });
+    });
+</script>
 
 
-
-
-
-               $("#datepicker-en").datepicker({ dateFormat: 'dd/mm/yy'});
-
-          $("#inline").datepicker({ dateFormat: 'dd/mm/yy', inline: true });
-
-
-          });
-      </script>
 
 
 
@@ -285,6 +323,63 @@
    $(":input").inputmask();
    });
    </script>
+
+
+
+<script>
+    $(document).ready(function() {
+$("#taskcon_budget_it_investment, #taskcon_budget_gov_utility, #taskcon_budget_it_operating,#taskcon_cost_it_operating,#taskcon_cost_it_investment,#taskcon_cost_gov_utility").on("input", function() {
+
+ var fieldId = $(this).attr('id');
+var budgetItOperating = $("#taskcon_budget_it_operating").val();
+ var budgetItInvestment = $("#taskcon_budget_it_investment").val();
+ var budgetGovUtility = $("#taskcon_budget_gov_utility").val();
+ var costItOperating = $("#taskcon_cost_it_operating").val();
+    var costItInvestment = $("#taskcon_cost_it_investment").val();
+    var costGovUtility = $("#taskcon_cost_gov_utility").val();
+
+     if (budgetItInvestment === "0" || budgetItInvestment === '' || parseFloat(budgetItInvestment) < -0) {
+         $("#taskcon_budget_it_investment").val('');
+     }
+
+
+
+     if (budgetGovUtility === "0" || budgetGovUtility === '' || parseFloat(budgetGovUtility) < -0) {
+         $("#taskcon_budget_gov_utility").val('');
+     }
+
+         if (budgetItOperating === "0" || budgetItOperating === ''|| parseFloat(budgetItOperating) < -0 ) {
+             $("#taskcon_budget_it_operating").val('');
+         }
+
+            if (costItOperating === "0" || costItOperating === ''|| parseFloat(costItOperating) < -0 ) {
+                $("#taskcon_cost_it_operating").val('');
+            }
+
+            if (costItInvestment === "0" || costItInvestment === ''|| parseFloat(costItInvestment) < -0 ) {
+                $("#taskcon_cost_it_investment").val('');
+            }
+
+            if (costGovUtility === "0" || costGovUtility === ''|| parseFloat(costGovUtility) < -0 ) {
+                $("#taskcon_cost_gov_utility").val('');
+            }
+});
+});
+ </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   </x-slot:javascript>
 </x-app-layout>

@@ -36,10 +36,7 @@
 
             </div>
               <div class="col-sm">
-               <div class="row">
-                <div class="col-3">{{ __('บันทึกข้อความ') }}</div>
-                <div class="col-9">{{ $taskcon->taskcon_projectplan }}</div>
-              </div>
+
               <div class="row">
                 <div class="col-3">{{ __('การเบิกจ่าย') }}</div>
 
@@ -73,6 +70,11 @@
                 <div class="col-3">{{ __('เวลา PP') }}</div>
                 <div class="col-9">  {{ $taskcon->taskcon_pay_date ? Helper::Date4($taskcon->taskcon_pay_date) : '' }}
                 </div>
+              </div>
+
+              <div class="row">
+                <div class="col-3">{{ __('บันทึกข้อความ') }}</div>
+                <div class="col-9">{{ $taskcon->taskcon_projectplan }}</div>
               </div>
   {{--             @if (count($files_contract) > 0)
                                 <table class="table table-bordered table-striped  mt-3">

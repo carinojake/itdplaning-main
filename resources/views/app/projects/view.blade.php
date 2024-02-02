@@ -689,10 +689,10 @@
                                 }).format(task.budget) + '</span>';
                             } else if (task.sumSubroot_task_task_parent_sub_value_plus == 0) {
                                 var tmp_class = task.balance < 0 ? 'blue' : 'blue';
-                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 ? 'blue' :
-                                    'green';
-                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
-                                    'green';
+                                var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 2 || task.task_status == 1? 'green' :
+                                    'blue';
+                            /*     var tmp_class = task.task_refund_pa_status == 3 && task.task_status == 1 ? 'blue' :
+                                    'green'; */
 
                                 return '<span style="color:' + tmp_class + ';">' + new Intl.NumberFormat('th-TH', {
                                     style: 'currency',
