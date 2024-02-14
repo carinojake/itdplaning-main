@@ -201,8 +201,8 @@ $resultthItem = collect($resultth)->firstWhere('taskid', $subtask->task_id);
 
                  @endif
 
-                 @if ($subtask->task_pay < 1)
-                @if($subtask->task_status == 1 ||$subtask->task_refund_pa_status == 1 || $subtask->task_pay <1||$resultthItem?->total_pay_con < 1)
+
+                @if($subtask->task_status == 2)
                  <form class="delete-form"
                  action="{{ route('project.task.destroy', ['project' => $project->hashid, 'task' => $subtask->hashid]) }}"
                  method="POST" style="display:inline">

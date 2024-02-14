@@ -383,27 +383,53 @@ var budgetItOperating = $("#budget_it_operating").val();
 });
  </script>
 
+{{-- <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict'
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
 
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script> --}}
 
 
         <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+    'use strict'
 
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.needs-validation')
-
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(form => {
-      form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                } else {
+                    // เพิ่มเงื่อนไขการตรวจสอบความถูกต้องของข้อมูลของคุณที่นี่
+                    // เช่น ตรวจสอบชื่อโครงการซ้ำ
+                    if (someValidationCondition) {
+                        event.preventDefault() // ป้องกันการส่งข้อมูลเซฟ
+                    }
+                }
 
         form.classList.add('was-validated')
       }, false)
@@ -655,60 +681,26 @@ var budgetItOperating = $("#budget_it_operating").val();
         });
 
 
-    });
-</script> --}}
 
 
 
-<!-- ใส่สคริปต์นี้ในเทมเพลต Blade ของคุณในแท็ก head หรือ body -->
-{{--  <script>
-    $(document).ready(function() {
-        function checkFiscalYear() {
-            var fiscalYear = $('#project_fiscal_year').val();
-            var projectType = $('input[name="project_type"]:checked').val();
-            console.log("Fiscal Year: " + fiscalYear + ", Project Type: " + projectType);
 
-            if(fiscalYear && projectType) {
-                // ทำการเรียก AJAX ไปยังเส้นทางของ Laravel ที่ส่งกลับค่า 'reguiar_id' สูงสุด
-                $.get('/api/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
-                    // สมมุติว่า 'data' มีค่า 'reguiar_id' สูงสุด
-                    $('#reguiar_id').val(data.max_reguiar_id);
-                });
-            } else {
-                $('#reguiar_id').val('Default Value');
-            }
+    $("form").on("submit", function(e) {
+        if (!formIsValid) {
+            e.preventDefault(); // ป้องกันการส่งข้อมูลเซฟ
+            var alertText = 'ลำดับ.ชื่องาน/โครงการซ้ำกับงาน/โครงการที่มีอยู่แล้ว';
+            Swal.fire({
+                title: 'เตือน!',
+                text: alertText,
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
         }
-
-        $('#project_fiscal_year, input[name="project_type"]').on('change', checkFiscalYear);
-        checkFiscalYear(); // ตรวจสอบค่าเริ่มต้น
     });
-</script> --}}
-
-
-<!-- Blade Template: resources/views/app/projects/create.blade.php -->
-{{-- <script>
-    $(document).ready(function() {
-        // Function to update 'reguiar_id' based on 'project_fiscal_year' and 'project_type'
-        function updateReguiarId() {
-            var fiscalYear = $('#project_fiscal_year').val();
-            var projectType = $('input[name="project_type"]:checked').val();
-
-           // ใน Blade template
-$.get('/getMaxRegularId', { fiscal_year: fiscalYear, project_type: projectType }, function(data) {
-    // อัปเดต 'reguiar_id' ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์
-    $('#reguiar_id').val(data.max_reguiar_id);
 });
-        }
-
-        // Event listener for when the fiscal year or project type changes
-        $('#project_fiscal_year, input[name="project_type"]').change(updateReguiarId);
-
-        // Initial update on page load
-        updateReguiarId();
-    });
-    </script> --}}
 
 
+</script>
 
 {{-- <script>
 $('#project_fiscal_year,#project_name').on('change', function() {

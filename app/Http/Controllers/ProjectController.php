@@ -6366,36 +6366,7 @@ if ($existingProjectname) {
         ->where('increasedbudgets.deleted_at', NULL)
         //->orderBy('projects.project_fiscal_year', 'DESC')
         ->get();
-       //dd($increasedbudgetData);
-       foreach ($increasedbudgetData as $increasedBudget) {
-        $gantt[] = [
-            'id'                    => $increasedBudget->increased_budget_id,
-            'parent'                => $project['project_id'],
-            'text'                  => $increasedBudget->increased_budget_name,
-
-            'budget_gov_utility'    => $increasedBudget->increased_budget_gov_utility,
-            'budget_it_operating'   => $increasedBudget->increased_budget_it_operating,
-            'budget_it_investment'  => $increasedBudget->increased_budget_it_investment,
-            'type'                  => 'increasedBudget'
-        ];
-    }
-
-   // dd($gantt);
-
-
-
-    $sum_project_increased_budget = collect($gantt)->sum('budget_it_operating');
-
-       // dd($sum_project_increased_budget);
-
-
-
-
-
-
-
-
-
+       // dd($increasedbudgetData);
 
        $increasedbudget_sum_budget_it_operating =  $increasedbudgetData->sum('increased_budget_it_operating');
         $increasedbudget_sum_budget_it_investment =  $increasedbudgetData->sum('increased_budget_it_investment');
@@ -6419,25 +6390,9 @@ if ($existingProjectname) {
 
 
        //dd($increaseData);
-       //$task_increased = task::select('task_id',sum'tasks_increased_amount')->where('project_id', $id)->whereNull('deleted_at')->get();
-       $taskIncreased = Task::select('tasks.task_id', 'increasedbudgets.increased_budget_id as in_id','projects.project_id'
-       ,'tasks.tasks_increased_amount as total_increased_amount')
-       ->join('projects', 'projects.project_id', '=', 'tasks.project_id')
-       ->join('increasedbudgets', 'increasedbudgets.project_id', '=', 'projects.project_id')
-      ->where('tasks.tasks_increased_amount','>', 0)
-       ->where('increasedbudgets.project_id', $id)
-       ->whereNull('tasks.deleted_at')
-      // ->groupBy('increasedbudgets.increased_budget_id')
-       ->get();
 
-   //  dd($taskIncreased,$increasedbudgetData,$increaseData);
-    //   $task_increased_json = json_encode($task_increased[0]->total_increased_amount);
-//dd($task_increased_json);
-//$task_increasedData['project_id'] = $task_increased['project_id'];
 
-// $task_increasedData['task_increased'] = $task_increased_json;
 
- //dd($task_increasedData);
 
 
 
@@ -6564,27 +6519,7 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
            $budget['$totalBudget_task_refund_budget_type'] = $totalBudget_task_refund_budget_type;
 
 
-
-
-        //dd($gantt,$budget,$increasedbudgetData,$increaseData,$project);
-
-
-/* foreach ($increasedBudgets as &$increasedBudget) {
-    // Subtract the increased budget operation from the total budget
-    $totalBudgetItOperating -= $increasedBudget['budget_it_operating'];
-
-    // If after subtraction, the total budget is less than zero,
-    // set the increased budget operation to the remaining budget (which would be zero or negative)
-    // and make the field 'readonly'
-    if ($totalBudgetItOperating <= 0) {
-        $increasedBudget['budget_it_operating'] = max($totalBudgetItOperating, 0);
-        $increasedBudget['readonly'] = true; // This is a new flag you can use in your view
-        break; // No need to continue if the budget has been used up
-    }
-}
- */
-
-
+        // dd($budget);
 
             $filesproject = File::where('project_id', $project->project_id)->get();
 
@@ -10105,7 +10040,7 @@ dd($resultthItem); */
        // dd($task->task_budget_it_operating,$refund, $taskRefundPaBudget,$total_refund,$refundItem);
 
 
-     // dd($task);
+       //  dd($task);
         if ($task->save()) {
 
 
@@ -11693,33 +11628,6 @@ foreach ($project->main_task as $tasksubmain) {
         ->get();
 
 
-        //$contracts_task_app = Contract::where('contract_id', $contracts_task['contract_id'])->first();
-       // dd($contracts_task);
-
-
-
-       $contract_task_st = Contract::join('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
-       ->join('tasks', 'contract_has_tasks.task_id', '=', 'tasks.task_id')
-      // ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
-       ->select('contracts.*', 'tasks.*')
-
-
-
-
-       //->where('projects.project_id', $project->project_id)
-       ->where('tasks.task_id', $task->task_id)
-       ->whereNull('tasks.deleted_at')
-       ->first();
-
-       //dd($contract_task_st);
-
-
-
-
-
-
-
-
         $contracts_without_task = Contract::leftJoin('contract_has_tasks', 'contracts.contract_id', '=', 'contract_has_tasks.contract_id')
 ->whereNull('contract_has_tasks.task_id')
         ->get();
@@ -12093,8 +12001,6 @@ foreach ($project->main_task as $tasksubmain) {
 
 
         return view('app.projects.tasks.editsub', compact(
-            'contract_task_st',
-            'task_rs_get',
             'contracts_left',
             'contracts_without_task',
             'projectDetails',

@@ -666,14 +666,8 @@
                     // Initial check
                     $('#increased_budget_new').toggle($('#increased_budget_status').prop('checked'));
 
-                    // Listen for changes on the checkbox
-                    $('#increased_budget_status').change(function() {
-                        $('#increased_budget_new').toggle(this.checked);
-                    });
-                });
-            </script>
-
-
+            });
+        </script>
 {{--
         <script>
             $(document).ready(function() {
@@ -1046,6 +1040,9 @@ var olebudgetGovUtility = {{ $project->budget_gov_utility }} || 0;
             'totalBudgetGovUtility': {{$budget['totalBudgetGovUtility']}}
 
         };
+
+
+
 
 
 

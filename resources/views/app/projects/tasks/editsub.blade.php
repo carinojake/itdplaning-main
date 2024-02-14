@@ -343,24 +343,33 @@
 
 
 
-
-
-                        </div>
-
-                        <div class="row mt-3 callout callout-warning">
-                            <div id="budget_form">
-                                <div class="col-md-3 mt-3">
-                                    <label for="task_mm_budget_1" class="form-label">{{ __('วงเงินที่ขออนุมัติ mm') }}</label>
-                                    <input type="text" placeholder="0.00" step="0.01"
-                                         data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false" class="form-control numeral-mask"
-                                        id="task_mm_budget" name="task_mm_budget" min="0" value={{ $task->task_mm_budget }}
-                                        onchange="calculateRefund1()">
-
-                                    <div class="invalid-feedback">
-                                        {{ __('mm') }}
+                                    <div class="col-md-12 mt-3">
+                                        <label for="task_name"
+                                            class="form-label">{{ __('ชื่อรายการที่ใช้จ่าย') }}</label> <span
+                                            class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="task_name" name="task_name"
+                                            value="{{ $task->task_name }}" required autofocus
+                                            {{ $task->task_status == 2 ? 'readonly' : '' }}>
+                                        <div class="invalid-feedback">
+                                            {{ __('ชื่อรายการที่ใช้จ่าย') }}
+                                        </div>
                                     </div>
 
-                                </div>
+                                    <div class="col-md-12 mt-3">
+                                        <label for="task_description"
+                                            class="form-label">{{ __('รายละเอียดที่ใช้จ่าย') }}</label>
+                                        <textarea class="form-control" name="task_description" id="task_description" rows="10">
+
+
+                                {{ $task->task_description }}
+                            </textarea>
+                                        <div class="invalid-feedback">
+                                            {{ __('รายละเอียดการที่ใช้จ่าย') }}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div id="budget_pay_form">
 
                                 <div class="row mt-3">
                                     <div class="col-6 mt-3">
@@ -564,6 +573,9 @@
                                 @endif
                             </div>
                     </div>
+                </div>
+            </div>
+
 
 
 
@@ -798,16 +810,13 @@
 
         </form>
         </x-card>
-    </div>
-</div>
+        </div>
 
 
 
 
 
-
-
-        <div class="row">
+                <div class="row ">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
                         <x-card title="{{ __('เอกสารแนบ ของ') }}{{ $task->task_name }}">
@@ -939,46 +948,6 @@
             {{--  <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script> --}}
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
             <script src="{{ asset('vendors/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
-
-            <script>
-                $(document).ready(function() {
-                    // ตรวจสอบการเปลี่ยนแปลงของ radio buttons ที่มีชื่อ task_status
-                    $('input[type=radio][name=task_status]').change(function() {
-                        // ตรวจสอบค่าของ radio button ที่ถูกเลือก
-                        var task_status = $('input[name="task_status"]:checked').val();
-
-
-                        if (task_status == 1) {
-
-                            // โชว์ฟอร์มและยกเลิกการตั้งค่า readonly หรือ disabled
-                            $('#pay_form').find('input, select').prop('readonly', false).prop('disabled', false);
-                            $('#pay_form').show();
-                        } else if (task_status == 2) {
-                            // โชว์ฟอร์มและตั้งค่า readonly หรือ disabled
-                            $('#pay_form').find('input, select').prop('readonly', true).prop('disabled', false);
-                            $('#pay_form').show();
-                        }
-                    });
-                });
-                </script>
-
-
-            <script type="text/javascript">
-                document.addEventListener("DOMContentLoaded", function() {
-                    //var task_Status = {!! json_encode($task->task_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScriptvar
-                    var task_refund_pa_status_closs = {!! json_encode($task->task_refund_pa_status) !!}; // รับค่าจาก Laravel ไปยัง JavaScript
-
-                    if (task_refund_pa_status_closs >1) {
-                        var formInputs = document.querySelectorAll(
-                            '#mm_form textarea, #mm_form select,#budget_form input'
-                            ); // เลือกทั้งหมด input, textarea, และ select ภายใน #mm_form
-                        formInputs.forEach(function(input) {
-                            input.setAttribute('readonly', true); // ตั้งค่าแอตทริบิวต์ readonly
-                        });
-                    }
-                });
-            </script>
-
 
 
 
