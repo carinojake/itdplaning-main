@@ -6486,10 +6486,10 @@ $totalBudget_task_refund_budget_type = $totalBudgetItOperating_task_refund_budge
 
 
 
-
+    //14/02/2567
        //dd($totalBudgetItOperating,$totalrefundpabudget_it_operating,$totaltaskrefunbudget_ItOperating,$totalBudgetItInvestment,$totalrefundpabudget_it_investment,$totaltaskrefunbudget_ItInvestment,$totalBudgetGovUtility,$totalrefundpabudget_gov_utility,$totaltaskrefunbudget_GovUtility);
             //budget_it_operating
-            $budget['sum_project_increased_budget'] =  $sum_project_increased_budget;
+           // $budget['sum_project_increased_budget'] =  $sum_project_increased_budget;
             $budget['totalBudgetItOperating'] = $totalBudgetItOperating;
             $budget['total_refund_pa_budget_it_operating'] = $totalrefundpabudget_it_operating;
                $budget['total_task_refun_budget_ItOperating'] = $totaltaskrefunbudget_ItOperating;
