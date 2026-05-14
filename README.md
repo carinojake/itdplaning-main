@@ -1,4 +1,4 @@
-# 📋 ITD Planning System — ระบบวางแผนงาน IT
+# 📋 Planning System — ระบบวางแผนงาน IT
 
 ระบบบริหารจัดการแผนงานและโครงการด้านเทคโนโลยีสารสนเทศ (IT) พัฒนาด้วย Laravel Framework
 
