@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContractRequest;
 use App\Http\Requests\UpdateContractRequest;
+use App\Http\Middleware\AuthorizeContractRoute;
 use App\Libraries\Helper;
 use App\Models\Contract;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class ContractController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(AuthorizeContractRoute::class);
     }
 
     public function index(Request $request)
@@ -42,6 +44,9 @@ class ContractController extends Controller
         ->whereNull('contracts.deleted_at')
         ->whereNull('taskcons.deleted_at')
         ->whereNull('taskcons.taskcon_pay')
+        ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+            $query->where('contracts.owner_user_id', $request->user()->getKey());
+        })
         ->groupBy('taskcons.contract_id')
         ->select('taskcons.contract_id', DB::raw('SUM(taskcons.taskcon_pay) as sum_taskcon_pay'))
 
@@ -51,13 +56,16 @@ class ContractController extends Controller
 
      // dd($contractsWithUnpaidTasks);
         if ($request->ajax()) {
-            $records = contract::orderBy('contract_fiscal_year', 'DESC')->orderByRaw('CAST(contract_number AS UNSIGNED) ASC')->orderBy('contract_number', 'ASC');
+            $records = Contract::visibleTo($request->user())->orderBy('contract_fiscal_year', 'DESC')->orderByRaw('CAST(contract_number AS UNSIGNED) ASC')->orderBy('contract_number', 'ASC');
        // Assume $contractsWithUnpaidTasks is an array with contract IDs that have unpaid tasks
        $contractsWithUnpaidTasks = DB::table('contracts')
        ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
        ->whereNull('contracts.deleted_at')
        ->whereNull('taskcons.deleted_at')
        ->whereNull('taskcons.taskcon_pay')
+       ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+           $query->where('contracts.owner_user_id', $request->user()->getKey());
+       })
        ->groupBy('taskcons.contract_id')
        ->select('taskcons.contract_id', DB::raw('SUM(taskcons.taskcon_pay) as sum_taskcon_pay'))
 
@@ -146,7 +154,7 @@ class ContractController extends Controller
     public function show(Request $request, $contract)
     {
         $id = Hashids::decode($contract)[0];
-        $latestContract = Contract::latest()->first();
+        $latestContract = Contract::visibleTo($request->user())->latest()->first();
         ($contract = Contract::find($id));
 
 
@@ -505,7 +513,8 @@ public function checkContract(Request $request)
         'contract_number' => ['required', 'string', 'max:50'],
     ]);
 
-    $exists = Contract::where('contract_fiscal_year', $validated['contract_fiscal_year'])
+    $exists = Contract::withoutGlobalScope(Contract::VISIBILITY_SCOPE)
+        ->where('contract_fiscal_year', $validated['contract_fiscal_year'])
         ->where('contract_number', trim($validated['contract_number']))
         ->whereNull('deleted_at')
         ->exists();
@@ -1609,6 +1618,7 @@ public function checkContract(Request $request)
     public function download($id)
     {
         $contract = Contract::findOrFail($id);
+        $this->authorize('view', $contract);
 
         if ($contract->contract_file) {
             $filePath = public_path('uploads/contracts/' . $id . $contract->contract_file);
@@ -1909,7 +1919,7 @@ public function checkContract(Request $request)
     {
         ($id        = Hashids::decode($contract)[0]);
         ($taskcons     = Taskcon::where('contract_id', $id)->get());
-        ($contractcons = Contract::get());
+        ($contractcons = Contract::visibleTo($request->user())->get());
 
         return view('app.contracts.tasks.create', compact('contractcons', 'taskcons', 'contract'));
     }
@@ -1944,7 +1954,7 @@ public function checkContract(Request $request)
     {
         ($id        = Hashids::decode($contract)[0]);
         ($taskcons     = Taskcon::where('contract_id', $id)->get());
-        ($contractcons = Contract::get());
+        ($contractcons = Contract::visibleTo($request->user())->get());
         $contractconsst = Contract::where('contract_id', $id)->first();
 
 
@@ -2123,7 +2133,7 @@ public function checkContract(Request $request)
 
             ->get();
         $tasks = task::get();
-        $contractcons = Contract::get();
+        $contractcons = Contract::visibleTo($request->user())->get();
         //  dd($id_contract,$id_taskcon);
         // Fetch top-level taskcons with pagination
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
@@ -2184,7 +2194,7 @@ public function checkContract(Request $request)
            // dd($totaltaskcons_Sum);
 
         $tasks = task::get();
-        $contractcons = Contract::get();
+        $contractcons = Contract::visibleTo($request->user())->get();
         // Fetch top-level taskcons with pagination
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
@@ -2577,7 +2587,7 @@ public function checkContract(Request $request)
             ;
 
         $tasks = task::get();
-        $contractcons = Contract::get();
+        $contractcons = Contract::visibleTo($request->user())->get();
         // Fetch top-level taskcons with pagination
         $relatedTaskcons = $contract->taskcon()->whereNull('taskcon_parent')->paginate(10); // Adjust the number as needed
 
@@ -2591,8 +2601,28 @@ public function checkContract(Request $request)
 
     public function updatepay(Request $request)
 {
-    foreach ($request->tasks as $taskData) {
-        $taskcon = Taskcon::find($taskData['id']);
+    $validated = $request->validate([
+        'tasks' => ['required', 'array', 'min:1'],
+        'tasks.*.id' => ['required', 'integer'],
+    ]);
+
+    $contract = $request->attributes->get('authorized_contract');
+    abort_unless($contract instanceof Contract, 404);
+
+    $taskIds = collect($validated['tasks'])
+        ->pluck('id')
+        ->map(fn ($id) => (int) $id)
+        ->unique()
+        ->values();
+    $authorizedTaskcons = Taskcon::where('contract_id', $contract->getKey())
+        ->whereIn('taskcon_id', $taskIds)
+        ->get()
+        ->keyBy('taskcon_id');
+
+    abort_unless($authorizedTaskcons->count() === $taskIds->count(), 404);
+
+    foreach ($request->input('tasks') as $taskData) {
+        $taskcon = $authorizedTaskcons->get((int) $taskData['id']);
 
         if ($taskcon) {
             $taskcon->taskcon_name = $taskData['task_name'];
@@ -2628,7 +2658,5 @@ public function checkContract(Request $request)
 
     return back();
 }
-
-
 
 }

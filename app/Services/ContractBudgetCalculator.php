@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Contract;
+use App\Models\User;
 
 final class ContractBudgetCalculator
 {
@@ -14,9 +15,13 @@ final class ContractBudgetCalculator
      *
      * @return array{pr_total: float, pa_total: float, per_year_pa_total: float, refund_pa_total: float}
      */
-    public function forFiscalYear(int|string|null $fiscalYear): array
+    public function forFiscalYear(int|string|null $fiscalYear, ?User $user = null): array
     {
         $query = Contract::query()->budgetCounted();
+
+        if ($user !== null) {
+            $query->visibleTo($user);
+        }
 
         if ($fiscalYear !== null) {
             $query->where('contract_fiscal_year', (int) $fiscalYear);

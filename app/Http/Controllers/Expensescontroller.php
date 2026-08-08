@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Middleware\AuthorizeContractRoute;
 use App\Libraries\Helper;
 use App\Models\Contract;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class ExpensesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(AuthorizeContractRoute::class);
     }
 
 
@@ -481,6 +483,7 @@ class ExpensesController extends Controller
      public function download($id)
      {
          $contract = Contract::findOrFail($id);
+         $this->authorize('view', $contract);
 
          if ($contract->contract_file) {
              $filePath = public_path('uploads/contracts/' . $id . $contract->contract_file);
