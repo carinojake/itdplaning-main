@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContractRequest;
+use App\Http\Requests\UpdateContractRequest;
 use App\Libraries\Helper;
 use App\Models\Contract;
 use Illuminate\Http\Request;
@@ -498,25 +500,23 @@ class ContractController extends Controller
 // ในส่วนของ create method
 public function checkContract(Request $request)
 {
-    if ($request->ajax()) {
-        $contract_fiscal_year = $request->input('contract_fiscal_year');
-         $contract_number = $request->input('contract_number');
-        // ตรวจสอบชื่อโครงการซ้ำ
+    $validated = $request->validate([
+        'contract_fiscal_year' => ['required', 'integer'],
+        'contract_number' => ['required', 'string', 'max:50'],
+    ]);
 
-
-       // ตรวจสอบ reguiar_id ซ้ำ
-      // ตรวจสอบ reguiar_id ซ้ำ
-      $exists_contract_number = Contract::where('contract_fiscal_year', $contract_fiscal_year)
-        ->where('contract_number', $contract_number)
+    $exists = Contract::where('contract_fiscal_year', $validated['contract_fiscal_year'])
+        ->where('contract_number', trim($validated['contract_number']))
         ->whereNull('deleted_at')
-      ->exists();
+        ->exists();
 
+    $response = ['exists_contract_number' => $exists];
 
-     // dd($data,$contract_fiscal_year,$contract_number,$exists_contract_number);
-     return response()->json(['error' => 'เลขที่สัญญามีอยู่แล้ว']);
-
-            return response()->json([ 'exists_contract_number' => $exists_contract_number]);
+    if ($exists) {
+        $response['error'] = 'เลขที่สัญญามีอยู่แล้ว';
     }
+
+    return response()->json($response);
 }
 
 
@@ -984,30 +984,11 @@ public function checkContract(Request $request)
 
 
 
-    public function store(Request $request)
+    public function store(StoreContractRequest $request)
     {
         $contract = new Contract;
         $task = new Task;
         // $tasks = Task::where('project_id', $id)->whereNull('task_parent')->get(); // Fetch all tasks for the project with no parent task
-
-        $messages = [
-            'date-picker-contract_end_date.after_or_equal' => 'วันที่สิ้นสุดต้องหลังจากวันที่เริ่มต้น',
-            'contract_name' => 'ชื่อสัญญา required.',
-            'contract_mm_budget' => 'วงเงิน (บาท) MM required.',
-            'contract_number' => 'เลขที่สัญญา required.',
-        ];
-        $request->validate([
-            'contract_name'                   => 'required',
-            'contract_number' => 'required|string',
-            'contract_pr_budget' => 'nullable',
-            'contract_pa_budget' => 'nullable',
-            'contract_mm_budget' => 'required',
-            // 'contract_number'                 => 'required',
-            //'date-picker-contract_start_date' => 'required|date_format:d/m/Y',
-            //'date-picker-contract_end_date'   => 'required|date_format:d/m/Y|after_or_equal:date-picker-contract_start_date',
-            //'start_date' => 'required|date_format:d/m/Y',
-            //'end_date' => 'required|date_format:d/m/Y|after_or_equal:start_date',
-        ], $messages);
         //convert date
         /*  function convertToGregorianDate($input_date)
         {
@@ -1724,16 +1705,10 @@ public function checkContract(Request $request)
      * @param  int  $contract
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $contract)
+    public function update(UpdateContractRequest $request, $contract)
     {
         $id       = Hashids::decode($contract)[0];
         $contract = Contract::find($id);
-
-        $request->validate([
-            'contract_name'                   => 'required',
-            //'date-picker-contract_start_date' => 'required',
-            //'date-picker-contract_end_date'   => 'required',
-        ]);
 
         //convert date
         //  $start_date_obj = date_format(date_create_from_format('d/m/Y', $request->input('contract_start_date')), 'Y-m-d');
