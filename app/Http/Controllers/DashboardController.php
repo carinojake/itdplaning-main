@@ -15,6 +15,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Increasedbudget;
+use App\Services\ContractBudgetCalculator;
 class DashboardController extends Controller
 
 
@@ -499,39 +500,17 @@ as d')
         ($json = json_decode($taskconcosttotal));
         ($a = $json[0]->a);
         ($coatcons = (float)$a);
-        $contracts_pr_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_pr_budget, 0)) AS cp')
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK);
-        ($json = json_decode($contracts_pr_budget));
-        ($cp = $json[0]->cp);
-        ($cpb = (float)$cp);
+        $contractBudgetSummary = app(ContractBudgetCalculator::class)
+            ->forFiscalYear($fiscal_year);
+        $cpb = $contractBudgetSummary['pr_total'];
+        $cpa = $contractBudgetSummary['pa_total'];
+        $cpr = $contractBudgetSummary['per_year_pa_total'];
+        $cpre = $contractBudgetSummary['refund_pa_total'];
 
-
-        // ->get()
-        // ->toJson(JSON_NUMERIC_CHECK);
-        // ($json = json_decode($contracts_pr_budget));
-        // ($cp = $json[0]->cp);
-        //   ($cpb = (float)$cp);
-        // $contracts_pr_budget is now a collection containing a single object
-        // with a 'cb' property representing the sum of the contract_pr_budget column
-        // If the contracts table is empty, the value of 'cb' will be null
-        $contract_peryear_pa_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_peryear_pa_budget, 0)) AS cby')
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK);
-        ($json = json_decode($contract_peryear_pa_budget));
-        ($cby = $json[0]->cby);
-        ($cpr = (float)$cby);
-
-        ($contracts_pa_budget = DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_pa_budget, 0)) AS cb')
-            ->where('contract_fiscal_year', '=',  $fiscal_year)
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK));
-        ($json = json_decode($contracts_pa_budget));
-        ($cb = $json[0]->cb);
-        ($cpa = (float)$cb);
+        // Keep the legacy compact variables available to the existing view.
+        $contracts_pr_budget = json_encode([['cp' => $cpb]], JSON_NUMERIC_CHECK);
+        $contracts_pa_budget = json_encode([['cb' => $cpa]], JSON_NUMERIC_CHECK);
+        $contract_peryear_pa_budget = json_encode([['cby' => $cpr]], JSON_NUMERIC_CHECK);
         ($contractsre = DB::table('contracts')
             ->select(
                 'contracts.contract_name',
@@ -553,6 +532,14 @@ as d')
             ->where('tasks.deleted_at', NULL)
             ->where('contracts.deleted_at', NULL)
             ->where('contracts.contract_fiscal_year', '=',  $fiscal_year)
+            ->where(function ($query) {
+                $query
+                    ->whereNull('contracts.contract_status')
+                    ->orWhereRaw(
+                        'LOWER(TRIM(contracts.contract_status)) NOT IN (?, ?, ?)',
+                        Contract::BUDGET_EXCLUDED_STATUSES
+                    );
+            })
             ->where('contracts.contract_pa_budget', '!=', null)
             ->where(DB::raw('contracts.contract_pr_budget - contracts.contract_pa_budget'), '!=', 0)
 
@@ -572,15 +559,7 @@ as d')
 
 
 
-        ($contract_refund_pa_budget =  DB::table('contracts')
-            ->selectRaw('SUM(COALESCE(contract_refund_pa_budget, 0)) AS cbr')
-            ->where('contract_fiscal_year', '=',  $fiscal_year)
-            ->where('contract_refund_pa_status', '=', 1)
-            ->get()
-            ->toJson(JSON_NUMERIC_CHECK));
-        ($json = json_decode($contract_refund_pa_budget));
-        ($cbrr = $json[0]->cbr);
-        ($cpre = (float)$cbrr);
+        $contract_refund_pa_budget = json_encode([['cbr' => $cpre]], JSON_NUMERIC_CHECK);
         ($project_bu_fiscal_years = Project::selectRaw('project_fiscal_year as fiscal_year, sum(COALESCE(budget_gov_operating,0) + COALESCE(budget_gov_investment,0) + COALESCE(budget_gov_utility,0) + COALESCE(budget_it_operating,0) + COALESCE(budget_it_investment,0)) as total_budget')
 
             ->groupBy('project_fiscal_year')

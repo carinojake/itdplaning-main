@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,6 +31,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contract extends Model
 {
      use SoftDeletes;
+
+    /**
+     * Contract statuses that must not contribute to PR/PA budget totals.
+     *
+     * The legacy application stores active/completed states as numeric values,
+     * while newer imports may use these string states.
+     */
+    public const BUDGET_EXCLUDED_STATUSES = ['draft', 'cancelled', 'canceled'];
+
+    /**
+     * Limit queries to contracts whose PR/PA budgets are committed.
+     */
+    public function scopeBudgetCounted(Builder $query): Builder
+    {
+        return $query->where(function (Builder $statusQuery): void {
+            $statusQuery
+                ->whereNull('contract_status')
+                ->orWhereRaw(
+                    'LOWER(TRIM(contract_status)) NOT IN (?, ?, ?)',
+                    self::BUDGET_EXCLUDED_STATUSES
+                );
+        });
+    }
     /**
      * The database table used by the model.
      *
