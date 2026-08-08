@@ -150,6 +150,9 @@ class DashboardController extends Controller
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+                $query->where('contracts.owner_user_id', $request->user()->getKey());
+            })
             //->where('tasks.task_cost_it_operating', '>', 1)
             //->where('tasks.task_type', 1)
             ->whereNull('tasks.deleted_at') // Replacing the original NULL check
@@ -202,6 +205,9 @@ class DashboardController extends Controller
          ->leftJoin('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
          ->leftJoin('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
          ->leftJoin('projects', 'tasks.project_id', '=', 'projects.project_id')
+         ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+             $query->where('contracts.owner_user_id', $request->user()->getKey());
+         })
 
 
             ->where('projects.project_fiscal_year', '=', $fiscal_year)
@@ -269,7 +275,7 @@ class DashboardController extends Controller
        // ($chart_data_xy = ($chart_data));
 
 
-        ($contracts = Contract::where('contract_fiscal_year', $fiscal_year)->count());
+        ($contracts = Contract::visibleTo($request->user())->where('contract_fiscal_year', $fiscal_year)->count());
         $projects  = Project::where('project_fiscal_year', $fiscal_year)->count();
         ($project_type_j  = Project::where('project_type', 'J')->where('project_fiscal_year', $fiscal_year)->count());
         ($project_type_p  = Project::where('project_type', 'P')->where('project_fiscal_year', $fiscal_year)->count());
@@ -501,7 +507,7 @@ as d')
         ($a = $json[0]->a);
         ($coatcons = (float)$a);
         $contractBudgetSummary = app(ContractBudgetCalculator::class)
-            ->forFiscalYear($fiscal_year);
+            ->forFiscalYear($fiscal_year, $request->user());
         $cpb = $contractBudgetSummary['pr_total'];
         $cpa = $contractBudgetSummary['pa_total'];
         $cpr = $contractBudgetSummary['per_year_pa_total'];
@@ -532,6 +538,9 @@ as d')
             ->where('tasks.deleted_at', NULL)
             ->where('contracts.deleted_at', NULL)
             ->where('contracts.contract_fiscal_year', '=',  $fiscal_year)
+            ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+                $query->where('contracts.owner_user_id', $request->user()->getKey());
+            })
             ->where(function ($query) {
                 $query
                     ->whereNull('contracts.contract_status')
@@ -567,7 +576,7 @@ as d')
 
             ->toJson(JSON_NUMERIC_CHECK));
 
-        ($contract_groupby_fiscal_years = Contract::selectRaw('contract_fiscal_year as fiscal_year, count(*) as total')
+        ($contract_groupby_fiscal_years = Contract::visibleTo($request->user())->selectRaw('contract_fiscal_year as fiscal_year, count(*) as total')
             ->GroupBy('contract_fiscal_year')
             ->orderBy('contract_fiscal_year', 'desc')
             ->where('contracts.deleted_at', NULL)
@@ -1132,7 +1141,7 @@ as d')
         // dd ($costsum = ($__project_cost))  ;
         ($gantt = json_encode($gantt));
 
-        $contractsstart = Contract::all();
+        $contractsstart = Contract::visibleTo($request->user())->get();
 
         foreach ($contractsstart as $contractdr) {
             $start_date = \Carbon\Carbon::createFromTimestamp($contractdr->contract_start_date);
@@ -1145,7 +1154,7 @@ as d')
                 -  \Carbon\Carbon::parse($contractdr->contract_start_date)
                 ->diffInMonths(\Carbon\Carbon::parse()));
             // do something with $duration and $duration_p
-            ($contractsstart = Contract::paginate(10));
+            ($contractsstart = Contract::visibleTo($request->user())->paginate(10));
         }
 
 
@@ -1157,6 +1166,9 @@ as d')
             ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
             ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
             ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+            ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+                $query->where('contracts.owner_user_id', $request->user()->getKey());
+            })
             ->where('tasks.task_cost_it_operating', '>', 1)
             ->where('tasks.task_type', 1)
             ->where('tasks.deleted_at', NULL)
@@ -1341,6 +1353,9 @@ as d')
  ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
  ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
  ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+ ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+     $query->where('contracts.owner_user_id', $request->user()->getKey());
+ })
 
 
 
@@ -1429,6 +1444,9 @@ as d')
                ->join('contracts', 'contract_has_tasks.contract_id', '=', 'contracts.contract_id')
                ->join('projects', 'tasks.project_id', '=', 'projects.project_id')
                ->join('taskcons', 'contracts.contract_id', '=', 'taskcons.contract_id')
+               ->when(! $request->user()->isAdmin(), function ($query) use ($request) {
+                   $query->where('contracts.owner_user_id', $request->user()->getKey());
+               })
 
 
 

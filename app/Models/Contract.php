@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int    $contract_id
@@ -30,7 +32,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Contract extends Model
 {
-     use SoftDeletes;
+    use SoftDeletes;
+
+    public const VISIBILITY_SCOPE = 'contract_visibility';
 
     /**
      * Contract statuses that must not contribute to PR/PA budget totals.
@@ -52,6 +56,37 @@ class Contract extends Model
                     'LOWER(TRIM(contract_status)) NOT IN (?, ?, ?)',
                     self::BUDGET_EXCLUDED_STATUSES
                 );
+        });
+    }
+
+    /**
+     * Limit contract records to the authenticated user's visibility boundary.
+     */
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        $query->withoutGlobalScope(self::VISIBILITY_SCOPE);
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        return $query->where($query->qualifyColumn('owner_user_id'), $user->getKey());
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(self::VISIBILITY_SCOPE, function (Builder $query): void {
+            $user = Auth::user();
+
+            if ($user !== null && ! $user->isAdmin()) {
+                $query->where($query->qualifyColumn('owner_user_id'), $user->getKey());
+            }
+        });
+
+        static::creating(function (Contract $contract): void {
+            if ($contract->owner_user_id === null && Auth::check()) {
+                $contract->owner_user_id = Auth::id();
+            }
         });
     }
     /**
@@ -146,6 +181,11 @@ class Contract extends Model
     }
 
     // Relations ...
+    public function ownerUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_user_id');
+    }
+
     public function taskcont()
     {
         return $this->belongsToMany('App\Models\Task', 'contract_has_tasks', 'contract_id', 'task_id');
